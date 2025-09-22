@@ -1,6 +1,7 @@
 // utils/api.ts or services/plans.ts
+import { TrainingPlan } from '@/models/plan.model';
 import axios from 'axios';
-import { TrainingPlan } from '../../models/plan.model';
+
 
 type PlansCommunityResponse = {
   myPlans: TrainingPlan[];

@@ -1,6 +1,6 @@
+import { IPaymentList } from "@/models/payment.model";
 import axios from "axios";
-import { Event } from "../../models/event.model";
-import { IPaymentList } from "../../models/payment.model";
+
 
 export const getEvents = async (communityId: string) => {
   try {
