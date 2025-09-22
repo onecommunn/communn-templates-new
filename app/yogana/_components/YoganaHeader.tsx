@@ -43,16 +43,16 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
             <Link href="/" className={linkClass("/")}>
               Home
             </Link>
-            <Link href="/about-us" className={linkClass("/about-us")}>
+            <Link href="#about-us" className={linkClass("/about-us")}>
               About us
             </Link>
-            <Link href="/events" className={linkClass("/events")}>
+            <Link href="#events" className={linkClass("/events")}>
               Events
             </Link>
-            <Link href="/plans" className={linkClass("/plans")}>
+            <Link href="#plans" className={linkClass("/plans")}>
               Plans
             </Link>
-            <Link href="/contact" className={linkClass("/contact")}>
+            <Link href="#contact" className={linkClass("/contact")}>
               Contact
             </Link>
           </nav>
@@ -90,7 +90,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                 </SheetHeader>
 
                 {/* Nav list */}
-                <nav className="flex flex-col space-y-1 py-2">
+                <nav className="flex flex-col space-y-1 py-2 md:hidden">
                   <SheetClose asChild>
                     <Link href="/" className={`px-4 text-white py-3 ${linkClass("/")}`}>
                       Home
@@ -98,7 +98,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/about-us"
+                      href="#about-us"
                       className={`px-4 text-white py-3 ${linkClass("/about-us")}`}
                     >
                       About us
@@ -106,7 +106,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/events"
+                      href="#events"
                       className={`px-4 text-white py-3 ${linkClass("/events")}`}
                     >
                       Events
@@ -114,7 +114,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/plans"
+                      href="#plans"
                       className={`px-4 text-white py-3 ${linkClass("/plans")}`}
                     >
                       Plans
@@ -122,13 +122,14 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/contact"
+                      href="#contact"
                       className={`px-4 text-white py-3 ${linkClass("/contact")}`}
                     >
                       Contact
                     </Link>
                   </SheetClose>
                 </nav>
+                
               </SheetContent>
             </Sheet>
           </div>

@@ -5,20 +5,11 @@ import { TrainingPlan } from "@/models/plan.model";
 import { getCommunityData } from "@/services/communityService";
 import { AuthContext } from "@/contexts/Auth.context";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import CreatorPlansCard from "./CreatorPlansCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
+import { capitalizeWords } from "@/components/utils/StringFunctions";
 
-export function capitalizeWords(text: string): string {
-  if (!text) return "";
-
-  return text
-    .replace(/_/g, " ") // replace underscores with spaces
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
-}
 
 const CreatorPlansSection = () => {
   const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } =

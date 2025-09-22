@@ -9,8 +9,6 @@ export default async function DynamicPage() {
   const rawHost = (await headersList).get("host") || "";
   const pathname = (await headersList).get("x-pathname") || "";
 
-  console.log('pathname')
-
   const host = rawHost.split(":")[0];
 
   const response = await getCommunityData(host);

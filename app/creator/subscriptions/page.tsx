@@ -14,6 +14,7 @@ import Image from "next/image";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/components/utils/StringFunctions";
 
 const PaymentScheduleItem = ({
   date,
@@ -84,22 +85,6 @@ interface Plan {
   endDate: string;
   pricing: string;
   description?: string;
-}
-
-function formatDate(dateStr?: string | null): string {
-  if (!dateStr) return ""; // handle undefined/null/empty
-
-  const date = new Date(dateStr);
-
-  if (isNaN(date.getTime())) {
-    return ""; // invalid date
-  }
-
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date);
 }
 
 const CreatorSubscriptions = () => {

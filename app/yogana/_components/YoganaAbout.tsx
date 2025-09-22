@@ -5,7 +5,7 @@ import React from "react";
 
 const YoganaAbout = () => {
   return (
-    <section className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden">
+    <section id="about-us" className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden">
       <div className="absolute inset-0">
         <Image
           src="/assets/yogana-about-bg-image.png"

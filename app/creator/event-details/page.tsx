@@ -16,6 +16,7 @@ import { Event } from "@/models/event.model";
 import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
+import { formatDate } from "@/components/utils/StringFunctions";
 
 export const formatTime = (time24: string) => {
   if (!time24) return "--:--";
@@ -36,18 +37,6 @@ export enum PaymentStatus {
   PENDING = "PENDING",
 }
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  if (isNaN(date.getTime())) return "";
-
-  const options: Intl.DateTimeFormatOptions = {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  };
-
-  return date.toLocaleDateString("en-US", options);
-}
 
 const CreatorEventDetail = () => {
   const searchParams = useSearchParams();

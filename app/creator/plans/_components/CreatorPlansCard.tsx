@@ -2,7 +2,6 @@
 import { Card, CardFooter, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
-import { capitalizeWords } from "./CreatorPlansSection";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -15,6 +14,7 @@ import {
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
 import { toast } from "sonner";
+import { capitalizeWords } from "@/components/utils/StringFunctions";
 interface ICreatorPlansCard {
   imageUrl: string;
   title: string;
