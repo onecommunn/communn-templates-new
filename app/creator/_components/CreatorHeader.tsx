@@ -49,7 +49,7 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
             <Link href="/" className={linkClass("/")}>
               Home
             </Link>
-            <Link href="/about" className={linkClass("/about-us")}>
+            <Link href="/about" className={linkClass("/about")}>
               About us
             </Link>
             <Link href="/events" className={linkClass("/events")}>

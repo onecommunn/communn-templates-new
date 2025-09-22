@@ -1,23 +1,38 @@
+// app/(_sites)/[subdomain]/[...page]/page.tsx
 import { headers } from "next/headers";
-import { getCommunityData, Community } from "@/services/communityService";
+import { notFound } from "next/navigation";
+import { getCommunityData, type Community } from "@/services/communityService";
 import { templates } from "@/template-registry";
 
-export default async function DynamicPage({ params }: { params: { subdomain: string; page: string[] } }) {
-  const rawHost = (await headers()).get("host") || "";
-  const subdomain = rawHost.split(".")[0];
-  const response = await getCommunityData(subdomain);
-  const community: Community = response.community;
-  const path = await params
+type RouteParams = {
+  subdomain: string;
+  page?: string[];
+};
 
-  const pagePath = path.page.slice(1).join("/");
+export default async function DynamicPage({
+  params,
+}: {
+  params: Promise<RouteParams>; // Next 15 dynamic params are a Promise
+}) {
+  // Await both dynamic APIs
+  const { subdomain: subParam, page = [] } = await params;
+  const hdrs = await headers(); // <-- await is required on Next 15
+  const rawHost = hdrs.get("host") ?? "";
 
-  const template = community?.template || "default";
+  // Prefer host-derived subdomain when present
+  const subdomain = rawHost.split(".")[0] || subParam;
 
+  const { community }: { community: Community } = await getCommunityData(subdomain);
+
+  // Keep your requested .slice(1)
+  const pagePath = page.slice(1).join("/");
+
+  const templateKey = community?.template || "default";
   const TemplateComponent =
-    templates[template]?.[pagePath] || templates["default"][""];
+    templates[templateKey]?.[pagePath] ?? templates["default"]?.[""];
 
   if (!TemplateComponent) {
-    return <div>404 – Page not found</div>;
+    notFound();
   }
 
   return <TemplateComponent community={community} />;
