@@ -10,17 +10,17 @@ import CreatorLogin from "./app/creator/login/page";
 
 export const templates: Record<string, Record<string, React.FC<{ community: Community }>>> = {
   creator: {
-    "": CreatorRoot,
-    about: CreatorAbout,
-    events:CreatorEvents,
-    plans:CreatorPlans,
-    contact:CreatorContact,
-    login:CreatorLogin
+    "/": CreatorRoot,
+    "/about": CreatorAbout,
+    "/events":CreatorEvents,
+    "/plans":CreatorPlans,
+    "/contact":CreatorContact,
+    "/login":CreatorLogin
   },
   default: {
-    "": DefaultRoot,
+    "/": DefaultRoot,
   },
   yogana:{
-    "":YoganaRoot,
+    "/":YoganaRoot,
   }
 };
