@@ -5,7 +5,7 @@ pipeline {
     AWS_REPO = "communn-templates"
     IMAGE_TAG = "v1.${env.BUILD_NUMBER}"
     AWS_REPOSITORY_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_REPO}"
-    AWS_IMAGE_NAME = "communn_templates"
+    
   }
   // credentialsId: 'gmail', 
   agent any
@@ -13,7 +13,7 @@ pipeline {
    
     stage('Checkout'){
       steps{
-      git branch: 'main', credentialsId: 'github-communn', url: 'https://github.com/onecommunn/communn-templates.git'
+      git branch: 'main', credentialsId: 'github-communn', url: 'https://github.com/onecommunn/communn-templates-new.git'
       }
     }
      stage('AWS ECR Login') {
