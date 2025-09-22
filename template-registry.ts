@@ -7,6 +7,8 @@ import YoganaRoot from "./app/yogana/page";
 import CreatorPlans from "./app/creator/plans/page";
 import CreatorContact from "./app/creator/contact/pages";
 import CreatorLogin from "./app/creator/login/page";
+import CreatorSubscriptions from "./app/creator/subscriptions/page";
+import CreatorEventDetail from "./app/creator/event-details/page";
 
 export const templates: Record<string, Record<string, React.FC<{ community: Community }>>> = {
   creator: {
@@ -15,7 +17,9 @@ export const templates: Record<string, Record<string, React.FC<{ community: Comm
     "/events":CreatorEvents,
     "/plans":CreatorPlans,
     "/contact":CreatorContact,
-    "/login":CreatorLogin
+    "/login":CreatorLogin,
+    "/subscriptions":CreatorSubscriptions,
+    "/event-details":CreatorEventDetail
   },
   default: {
     "/": DefaultRoot,

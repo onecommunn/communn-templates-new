@@ -1,7 +1,7 @@
 "use client";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Sheet,
@@ -12,26 +12,51 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/contexts/Auth.context";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { logoutService } from "@/services/logoutService";
 
 interface ICreatorHeader {
   logoUrl: string;
   logoWidth: number;
-  logoHight: number; // keeping your prop name as-is
+  logoHight: number;
 }
 
 const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const authContext = useContext(AuthContext);
 
   const linkClass = (href: string) =>
     `text-black font-inter ${
       pathname === href ? "underline" : "hover:underline"
     }`;
 
+  const handleLogout = async () => {
+    const success = await logoutService();
+    if (success) {
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
+      window.location.reload();
+    } else {
+      console.error("Logout failed, unable to navigate to login.");
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
+          {/* logo */}
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
@@ -73,14 +98,49 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex md:items-center">
-            <Link href={"/login"}>
-              <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
-                Login{" "}
-                <span>
-                  <ArrowRight />
-                </span>
-              </Button>
-            </Link>
+            {authContext.isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-4">
+                  <div className="text-center font-medium min-w-fit">
+                    Hi, {authContext.user?.firstName || authContext.user?.email}
+                  </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger className="cursor-pointer hover:bg-red-600 px-5 font-inter py-1.5 bg-black text-white rounded-[12px] text-sm w-fit">
+                      Logout
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="font-inter">
+                          Are you sure you want to logout?
+                        </AlertDialogTitle>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => {
+                            handleLogout();
+                          }}
+                          className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 cursor-pointer"
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link href={"/login"}>
+                  <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
+                    Login{" "}
+                    <span>
+                      <ArrowRight />
+                    </span>
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu (Sheet) */}

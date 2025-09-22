@@ -81,7 +81,7 @@ function CatalogCard({ item }: { item: Item }) {
         )}
 
         <CardTitle className="text-xl">{item.title}</CardTitle>
-        <CardDescription className="flex-1">{item.description}</CardDescription>
+        <CardDescription className="flex-1 line-clamp-5">{item.description}</CardDescription>
       </CardHeader>
 
       <CardFooter className="flex items-center justify-between gap-3">
