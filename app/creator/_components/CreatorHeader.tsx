@@ -24,7 +24,9 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
   const pathname = usePathname();
 
   const linkClass = (href: string) =>
-    `text-black font-inter ${pathname === href ? "underline" : "hover:underline"}`;
+    `text-black font-inter ${
+      pathname === href ? "underline" : "hover:underline"
+    }`;
 
   return (
     <header className="sticky top-0 z-50 bg-white">
@@ -71,12 +73,14 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex md:items-center">
-            <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
-              Login{" "}
-              <span>
-                <ArrowRight />
-              </span>
-            </Button>
+            <Link href={"/login"}>
+              <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
+                Login{" "}
+                <span>
+                  <ArrowRight />
+                </span>
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu (Sheet) */}
