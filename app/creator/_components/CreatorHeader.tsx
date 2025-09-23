@@ -147,9 +147,9 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <button>
+                <div className="cursor-pointer">
                   <Menu className="h-6 w-6" />
-                </button>
+                </div>
               </SheetTrigger>
 
               <SheetContent side="right" className="w-[85vw] sm:max-w-sm px-0">

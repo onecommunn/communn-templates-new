@@ -8,7 +8,7 @@ import CreatorPlans from "./app/creator/plans/page";
 import CreatorContact from "./app/creator/contact/pages";
 import CreatorLogin from "./app/creator/login/page";
 import CreatorSubscriptions from "./app/creator/subscriptions/page";
-import CreatorEventDetail from "./app/creator/event-details/page";
+import CreatorSubscriptionsPage from "./app/creator/subscriptions/page";
 
 export const templates: Record<string, Record<string, React.FC<{ community: Community }>>> = {
   creator: {
@@ -19,7 +19,7 @@ export const templates: Record<string, Record<string, React.FC<{ community: Comm
     "/contact":CreatorContact,
     "/login":CreatorLogin,
     "/subscriptions":CreatorSubscriptions,
-    "/event-details":CreatorEventDetail
+    "/event-details":CreatorSubscriptionsPage
   },
   default: {
     "/": DefaultRoot,
