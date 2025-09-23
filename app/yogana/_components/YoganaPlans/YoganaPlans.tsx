@@ -5,10 +5,14 @@ import { TrainingPlan } from "@/models/plan.model";
 import { getCommunityData } from "@/services/communityService";
 import React, { useContext, useEffect, useState } from "react";
 import YoganaPlanCard from "./YoganaPlanCard";
+import { Skeleton } from "@/components/ui/skeleton"; // ← shadcn skeleton
+
+const PlanSkeletonCard = () => (
+  <Skeleton className="h-100 w-full bg-gray-300 rounded-[30px]" />
+);
 
 const YoganaPlans = () => {
-  const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } =
-    usePlans();
+  const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } = usePlans();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -19,9 +23,7 @@ const YoganaPlans = () => {
 
   const getCommunityId = async () => {
     try {
-      const communityData: any = await getCommunityData(
-        window.location.hostname
-      );
+      const communityData: any = await getCommunityData(window.location.hostname);
       setCommunityId(communityData?.community?._id || "");
       return communityData?.community._id || "";
     } catch (error) {
@@ -42,7 +44,6 @@ const YoganaPlans = () => {
     if (!communityId) return;
     setIsLoading(true);
     try {
-      setIsLoading(true);
       let response;
       if (isAuthenticated) {
         response = await getCommunityPlansListAuth(communityId);
@@ -52,12 +53,7 @@ const YoganaPlans = () => {
 
       if (Array.isArray(response)) {
         setPlans(response as TrainingPlan[]);
-      } else if (
-        response &&
-        typeof response === "object" &&
-        "myPlans" in response &&
-        Array.isArray((response as any).myPlans)
-      ) {
+      } else if (response && typeof response === "object" && "myPlans" in response && Array.isArray((response as any).myPlans)) {
         setPlans((response as any).myPlans as TrainingPlan[]);
         setIsSubscribed((response as any).isSubscribedCommunity);
       } else {
@@ -73,11 +69,30 @@ const YoganaPlans = () => {
   useEffect(() => {
     fetchPlans();
   }, [communityId, isAuthenticated]);
+
+  if (isLoading) {
+    return (
+      <section id="plans" className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+          <div className="relative z-10 text-center md:mb-16 mb-6">
+            <p className="text-[#C2A74E] font-alex-brush text-3xl">Price</p>
+            <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
+              Choose Your Yoga Journey
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <PlanSkeletonCard key={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section
-      id="plans"
-      className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-    >
+    <section id="plans" className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="relative z-10 text-center md:mb-16 mb-6">
           <p className="text-[#C2A74E] font-alex-brush text-3xl">Price</p>
@@ -85,10 +100,11 @@ const YoganaPlans = () => {
             Choose Your Yoga Journey
           </h2>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {plans.map((plan, index) => (
             <YoganaPlanCard
-              key={index}
+              key={plan._id ?? index}
               index={index + 1}
               title={plan.name}
               description={plan.description || plan.summary}

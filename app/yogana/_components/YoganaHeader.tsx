@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -7,6 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
@@ -61,12 +63,15 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
           <div>
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <button aria-label="Open menu">
-                  <img src={'/assets/menu-icon-svg.svg'} className="w-8 h-8"/>
-                </button>
+                <div className="cursor-pointer">
+                  <img src={"/assets/menu-icon-svg.svg"} className="w-8 h-8" />
+                </div>
               </SheetTrigger>
 
-              <SheetContent side="right" className="w-[85vw] sm:max-w-sm px-0 bg-black text-white  font-plus-jakarta">
+              <SheetContent
+                side="right"
+                className="w-[85vw] sm:max-w-sm px-0 bg-black text-white  font-plus-jakarta h-full"
+              >
                 {/* Custom header inside sheet */}
                 <SheetHeader className="px-4 pb-2 text-white">
                   <div className="flex items-center justify-between">
@@ -78,9 +83,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={
-                          '/logo/yogana_Light_Logo.png'
-                        }
+                        src={"/logo/yogana_Light_Logo.png"}
                         alt="logo"
                         width={120}
                         height={logoHight}
@@ -90,16 +93,21 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                 </SheetHeader>
 
                 {/* Nav list */}
-                <nav className="flex flex-col space-y-1 py-2 md:hidden">
+                <nav className="flex flex-col  space-y-1 py-2 md:hidden">
                   <SheetClose asChild>
-                    <Link href="/" className={`px-4 text-white py-3 ${linkClass("/")}`}>
+                    <Link
+                      href="/"
+                      className={`px-4 text-white py-3 ${linkClass("/")}`}
+                    >
                       Home
                     </Link>
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
                       href="#about-us"
-                      className={`px-4 text-white py-3 ${linkClass("/about-us")}`}
+                      className={`px-4 text-white py-3 ${linkClass(
+                        "/about-us"
+                      )}`}
                     >
                       About us
                     </Link>
@@ -123,13 +131,66 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   <SheetClose asChild>
                     <Link
                       href="#contact"
-                      className={`px-4 text-white py-3 ${linkClass("/contact")}`}
+                      className={`px-4 text-white py-3 ${linkClass(
+                        "/contact"
+                      )}`}
                     >
                       Contact
                     </Link>
                   </SheetClose>
                 </nav>
-                
+                <div className="flex flex-col justify-between gap-4 px-6 mt-6 h-full relative">
+                  <div className="flex flex-col gap-4">
+                    {" "}
+                    <div className="flex items-center gap-4">
+                      <Phone className="text-white" />
+                      <p className="text-lg text-white">Free +92 (020)-9850</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Mail className="text-white" />
+                      <p className="text-lg text-white">needhelp@company.com</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-6 w-6 text-white"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2C8.14 2 5 5.14 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
+                      </svg>
+                      <p className="text-lg text-white">
+                        66 broklyn golden street. New York
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-center gap-10 mb-10">
+                    <Link
+                      href="#"
+                      aria-label="Facebook"
+                      className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
+                    >
+                      <Facebook size={20} className="transition-transform" />
+                      <p>Facebook</p>
+                    </Link>
+                    <Link
+                      href="#"
+                      aria-label="Instagram"
+                      className="text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
+                    >
+                      <Instagram size={20} className="transition-transform " />
+                      <p>Instagram</p>
+                    </Link>
+                    <Link
+                      href="#"
+                      aria-label="Linkedin"
+                      className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
+                    >
+                      <Linkedin size={20} className="transition-transform" />
+                      <p>Linkedin</p>
+                    </Link>
+                  </div>
+                </div>
               </SheetContent>
             </Sheet>
           </div>

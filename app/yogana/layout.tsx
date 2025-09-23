@@ -1,5 +1,6 @@
 import React from "react";
 import YoganaHeader from "./_components/YoganaHeader";
+import YoganaFooter from "./_components/YoganaFooter";
 
 const YoganaLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,6 +11,7 @@ const YoganaLayout = ({ children }: { children: React.ReactNode }) => {
         logoHight={100}
       />
       {children}
+      <YoganaFooter/>
     </>
   );
 };

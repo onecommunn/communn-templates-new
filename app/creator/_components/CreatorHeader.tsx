@@ -147,7 +147,7 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <button aria-label="Open menu">
+                <button>
                   <Menu className="h-6 w-6" />
                 </button>
               </SheetTrigger>
