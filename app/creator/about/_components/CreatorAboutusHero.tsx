@@ -1,50 +1,199 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCheck } from "lucide-react";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
+import { getCommunityData } from "@/services/communityService";
+import { fetchAboutCreator } from "@/services/creatorService";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+
+export interface AboutResponse {
+  _id: string;
+  templateId: string;
+  communityId: string;
+  pageName: string;
+  sections: Section[];
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface Section {
+  _id: string;
+  sectionName: string;
+  heading: string;
+  subHeading: string;
+  title: string;
+  description: string;
+  story: string;
+  order: number;
+  isActive: boolean;
+  media: string[];
+  bulletes: string[];
+  filters: string[];
+  cards: Card[];
+  mission: string;
+  vision: string;
+  buttons: Button[];
+  testimonies: Testimony[];
+  timeline: TimelineEvent[];
+  members: Member[];
+}
+
+export interface Card {
+  _id?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  link?: string;
+}
+
+export interface Button {
+  _id?: string;
+  label?: string;
+  url?: string;
+  variant?: string;
+}
+
+export interface Testimony {
+  _id?: string;
+  author?: string;
+  message?: string;
+  designation?: string;
+  avatar?: string;
+}
+
+export interface TimelineEvent {
+  _id?: string;
+  date?: string;
+  title?: string;
+  description?: string;
+}
+
+export interface Member {
+  _id?: string;
+  name?: string;
+  role?: string;
+  avatar?: string;
+  bio?: string;
+}
+
 
 const CreatorAboutusHero = () => {
+
+
+  const [communityId, setCommunityId] = useState<string>("");
+
+  console.log(communityId, "communityId");
+
+  const [data, setData] = useState<AboutResponse>()
+
+  const [sectionOne, setSectionOne] = useState<Section>()
+
+  console.log(sectionOne, "data")
+
+  const getCommunityId = async () => {
+    try {
+      const communityData: any = await getCommunityData(
+        window.location.hostname
+      );
+      setCommunityId(communityData?.community?._id || "");
+      return communityData?.community._id || "";
+    } catch (error) {
+      console.error("Error fetching community ID:", error);
+      return "";
+    }
+  };
+
+
+
+  const fetchAbout = async () => {
+    try {
+      console.log(communityId, "tello");
+      const response = await fetchAboutCreator(communityId || "");
+      console.log("Fetched:", response);
+      setData(response?.data)
+      setSectionOne(response?.data?.sections[0])
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching community ID:", error);
+      return null;
+    }
+  };
+
+
+
+  useEffect(() => {
+    const fetchCommunityId = async () => {
+      const id = await getCommunityId();
+      setCommunityId(id);
+    };
+    fetchCommunityId();
+
+  }, []);
+
+  useEffect(() => {
+    if (communityId) {
+      fetchAbout();
+    }
+  }, [communityId]);
+
+
   return (
     <section className="py-10 font-inter">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
-          title="About Us"
-          description="Ready to start your transformation journey? Have questions about my programs?
- I'd love to hear from you and help you take the next step."
+          title={sectionOne?.heading || "About us"}
+          description={
+            sectionOne?.subHeading ||
+            `Ready to start your transformation journey? 
+   Have questions about my programs? 
+   I'd love to hear from you and help you take the next step.`
+          }
+
         />
         <div className="grid md:grid-cols-2 grid-cols-1 gap-6 md:gap-10 lg:gap-28">
           {/* left  */}
           <div className="flex flex-col justify-center gap-6 order-2 md:order-1">
             <h1 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left">
-              Consistent growth, boundless potential
+              {sectionOne?.title}
             </h1>
             <p className="text-[#0C0407] align-middle text-[16px]/[24px] font-inter">
-              We met in college back in 2016, and ever since, life has been one
-              big adventure! From chasing the Northern Lights in Iceland to
-              plunging into Antarctica's icy waters and learning scuba diving in
-              Egypt, we've been living a dream and documenting it all along the
-              way. But our journey doesn't end there.
+              {sectionOne?.description}
             </p>
-            <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
-              We believe in empowering others with knowledge to help them live
-              their best, most fulfilling life.
-            </p>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row items-start gap-2">
-                <CheckCheck strokeWidth={2.8} size={26} />
-                <p className="font-bold text-[16px]/[20px] ">
-                  Through our blogs, Guides and Workshops we hope to share
-                  practical tips and inspirations for your own adventures.
+
+            <Tabs defaultValue="story" className="w-full mt-6">
+              <TabsList>
+                <TabsTrigger className="data-[state=active]:bg-black data-[state=active]:text-white" value="story">Our Story</TabsTrigger>
+                <TabsTrigger className="data-[state=active]:bg-black data-[state=active]:text-white" value="mission">Mission</TabsTrigger>
+                <TabsTrigger className="data-[state=active]:bg-black data-[state=active]:text-white" value="vision">Vision</TabsTrigger>
+              </TabsList>
+
+
+              <TabsContent value="story" className="mt-4">
+                <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
+                  {sectionOne?.story}
                 </p>
-              </div>
-              <div className="flex flex-row items-start gap-2">
-                <CheckCheck strokeWidth={2.8} size={26} />
-                <p className="font-bold text-[16px]/[20px] ">
-                  Whether you are seasoned wanderer or just starting to dream we
-                  invite you to join our ever evolving adventure we call Life!
+
+              </TabsContent>
+
+              <TabsContent value="mission" className="mt-4">
+                <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
+                  {sectionOne?.mission}
                 </p>
-              </div>
-            </div>
+              </TabsContent>
+
+              <TabsContent value="vision" className="mt-4">
+                <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
+                  {sectionOne?.vision}
+                </p>
+              </TabsContent>
+            </Tabs>
+
+
             <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
               Know More{" "}
               <span>
@@ -57,15 +206,27 @@ const CreatorAboutusHero = () => {
             <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
               {/* Left column */}
               <div className="flex flex-col gap-4">
-                {/* Top-left (near square) */}
+                {sectionOne?.media?.map((src: string, idx: number) => (
+                  <div key={idx} className="rounded-2xl overflow-hidden">
+                    <img
+                      src={src}
+                      alt={`media-${idx}`}
+                      className="w-full object-cover aspect-square"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* <div className="flex flex-col gap-4">
+
                 <div className="rounded-2xl overflow-hidden">
                   <img
                     src="/assets/colImage1.png"
                     alt=""
-                    className="w-full object-cover aspect-square" /* tweak to taste */
+                    className="w-full object-cover aspect-square"
                   />
                 </div>
-                {/* Bottom-left (square) */}
+
                 <div className="rounded-2xl overflow-hidden">
                   <img
                     src="/assets/colImage2.png"
@@ -73,7 +234,7 @@ const CreatorAboutusHero = () => {
                     className="w-full object-cover aspect-square"
                   />
                 </div>
-              </div>
+              </div> */}
 
               {/* Right column */}
               <div className="flex flex-col gap-4">
