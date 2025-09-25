@@ -93,3 +93,4 @@ export type HomeSection =
   | CollaborationSection
   | TestimoniesSection
   | CTASection;
+

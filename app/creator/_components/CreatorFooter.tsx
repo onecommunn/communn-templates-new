@@ -1,137 +1,91 @@
-import { Dribbble, Facebook, Instagram, Linkedin } from "lucide-react";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Instagram, Facebook, Linkedin, Dribbble, Globe } from "lucide-react";
+import { FooterSection } from "@/models/templates/creator/creator-footer-model";
 
-interface ICreatorFooter {
-  logoUrl: string;
-  logoWidth: number;
-  logoHight: number;
-}
+type Props = {
+  /** Preferred: pass the CMS section */
+  section: FooterSection;
+  /** Optional overrides for logo sizing */
+  logoWidth?: number;
+  logoHeight?: number;
+};
 
-const NavigateList = [
-  // {
-  //   name: "Courses",
-  //   href: "/",
-  // },
-  {
-    name: "Events",
-    href: "/events",
-  },
-  {
-    name: "Plans",
-    href: "/plans",
-  },
-  {
-    name: "About",
-    href: "/about",
-  },
-  // {
-  //   name: "Appointments",
-  //   href: "/appointments",
-  // },
-];
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+};
 
-const OtherLinksList = [
-  {
-    name: "Privacy Policy",
-    href: "/",
-  },
-  {
-    name: "Terms & Conditions",
-    href: "/",
-  },
-  {
-    name: "FAQ’s",
-    href: "/",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-];
+const normalize = (s?: string) => (s ?? "").trim();
 
-const socialMediaLinks = [
-  {
-    icon: Facebook,
-    href: "/",
-  },
-  {
-    icon: Instagram,
-    href: "/",
-  },
-  {
-    icon: Linkedin,
-    href: "/",
-  },
-  {
-    icon: Dribbble,
-    href: "/",
-  },
-];
+const CreatorFooter: React.FC<Props> = ({ section, logoWidth = 300, logoHeight = 100 }) => {
+  const footer = section.footer;
 
-const CreatorFooter = ({ logoUrl, logoHight, logoWidth }: ICreatorFooter) => {
+  const logo = normalize(footer.logo);
+  const columns = footer.navigationColumns ?? [];
+  const socials = footer.socialMedia ?? [];
+  const copyright = normalize(footer.copyrightText) || "© All rights reserved";
+
   return (
     <footer className="py-10 font-inter">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="flex flex-col  md:flex-row justify-center md:justify-between">
+        {/* Top: Logo + Columns */}
+        <div className="flex flex-col md:flex-row justify-center md:justify-between gap-8">
+          {/* Logo */}
           <Link
             href="/"
             className="flex items-center space-x-2 justify-center md:justify-start"
+            aria-label="Go home"
           >
             <img
               src={
-                logoUrl ||
+                logo ||
                 "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704"
               }
-              alt={"logo"}
+              alt="Logo"
               width={logoWidth}
-              height={logoHight || 300}
+              height={logoHeight}
+              className="object-contain"
             />
           </Link>
-          <div className="grid grid-cols-2 mx-16 md:mx-0">
-            <div className="flex flex-col gap-3">
-              <p className="text-xs">Navigate</p>
-              {NavigateList.map((item, idx) => (
-                <Link key={idx} href={item.href}>
-                  <p className="text-sm font-semibold">{item.name}</p>
-                </Link>
-              ))}
-            </div>
-            <div className="flex flex-col gap-3">
-              <p className="text-xs">Company</p>
-              {OtherLinksList.map((item, idx) => (
-                <Link key={idx} href={item.href}>
-                  <p className="text-sm font-semibold">{item.name}</p>
-                </Link>
-              ))}
-            </div>
+
+          {/* Navigation Columns */}
+          <div className="grid grid-cols-2 gap-10">
+            {columns.map((col, cIdx) => (
+              <div key={`${col.heading}-${cIdx}`} className="flex flex-col gap-3">
+                <p className="text-xs text-gray-600">{col.heading}</p>
+                {col.links?.map((lnk, lIdx) => (
+                  <Link key={`${lnk.label}-${lIdx}`} href={lnk.url || "/"} className="w-fit">
+                    <p className="text-sm font-semibold hover:underline">{lnk.label}</p>
+                  </Link>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
-        <hr className="my-4" />
-        <div className="flex flex-col md:flex-row justify-center gap-2 md:justify-between">
-          <div className="flex flex-row items-center gap-4 justify-center md:justify-start">
-            {socialMediaLinks.map((each, idx) => {
-              const Icon = each.icon;
+
+        <hr className="my-6" />
+
+        {/* Bottom: Socials + Copy */}
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4">
+          {/* Socials */}
+          <div className="flex flex-row items-center gap-4">
+            {socials.map((s, idx) => {
+              const key = normalize(s.platform).toLowerCase();
+              const Icon = PLATFORM_ICON[key] ?? Globe;
+              const url = normalize(s.url) || "/";
               return (
-                <Link href={each.href} key={idx}>
-                  <Icon className="w-5 h-5" />
+                <Link href={url} key={`${key}-${idx}`} aria-label={s.platform}>
+                  <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
                 </Link>
               );
             })}
-            <Link href={"/"}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988h-6.466v-14.967h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zm-3.466-8.988h3.584c2.508 0 2.906-3-.312-3h-3.272v3zm3.391 3h-3.391v3.016h3.341c3.055 0 2.868-3.016.05-3.016z" />
-              </svg>
-            </Link>
           </div>
-          <p className="text-[#0C0407] text-sm text-center md:text-left">
-            ©prachiandharsh., All rights reserved
-          </p>
+
+          {/* Copyright */}
+          <p className="text-[#0C0407] text-sm text-center md:text-left">{copyright}</p>
         </div>
       </div>
     </footer>

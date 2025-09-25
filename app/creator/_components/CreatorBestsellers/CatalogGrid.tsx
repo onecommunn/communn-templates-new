@@ -15,7 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, UserRoundCog } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useId } from "react";
 import { toast } from "sonner";
 
 /* ----------------------- Reusable Pieces ---------------------- */
@@ -143,6 +143,7 @@ const CatalogGrid = () => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const authContext = React.useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
+  const tabId = useId();
   
   React.useEffect(() => {
     if (!communityId) return;
@@ -231,6 +232,7 @@ const CatalogGrid = () => {
             <TabsTrigger
               key={t.key}
               value={t.key}
+              id={`${tabId}-${t.label}`}
               className="rounded-full px-4 data-[state=active]:bg-[#0C0407] data-[state=active]:text-white"
             >
               {t.label}

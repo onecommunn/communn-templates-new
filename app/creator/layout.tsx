@@ -1,24 +1,64 @@
 // app/creator/layout.tsx
-import React from "react";
+"use client";
+
+import React, { useContext, useEffect, useState } from "react";
 import CreatorHeader from "./_components/CreatorHeader";
 import CreatorFooter from "./_components/CreatorFooter";
-import CreatorCTA from "./_components/CreatorCTA";
+import { AuthContext } from "@/contexts/Auth.context";
+import {
+  fetchCreatorHeader,
+  fetchCreatorFooter,
+} from "@/services/creatorService";
+import { CreatorHeaderPage } from "@/models/templates/creator/creator-header.model";
+import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-model";
+import CreatorHeaderSkeleton from "./_components/Skeletons/CreatorHeaderSkeleton";
+import CreatorFooterSkeleton from "./_components/Skeletons/CreatorFooterSkeleton";
 
 const CreatorLayout = ({ children }: { children: React.ReactNode }) => {
+  const { communityId } = useContext(AuthContext);
+  const [header, setHeader] = useState<CreatorHeaderPage | null>(null);
+  const [footer, setFooter] = useState<CreatorFooterPage | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!communityId) return;
+    const run = async () => {
+      try {
+        const [h, f] = await Promise.all([
+          fetchCreatorHeader(communityId),
+          fetchCreatorFooter(communityId),
+        ]);
+        setHeader(h?.data ?? null);
+        setFooter(f?.data ?? null);
+      } catch (e) {
+        setError("Failed to load header/footer");
+      }
+    };
+    run();
+  }, [communityId]);
+
+  const headerSection = header?.sections?.[0];
+  const footerSection = footer?.sections?.[0];
+
   return (
     <>
-      <CreatorHeader
-        logoUrl="https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704"
-        logoWidth={180}
-        logoHight={100}
-      />
+      {headerSection ? (
+        <CreatorHeader
+          section={headerSection} // pass structured section instead of hardcoded logo
+        />
+      ) : (
+        <CreatorHeaderSkeleton />
+      )}
+
       <main>{children}</main>
-      <CreatorCTA/>
-      <CreatorFooter
-        logoUrl="https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704"
-        logoWidth={300}
-        logoHight={100}
-      />
+
+      {footerSection ? (
+        <CreatorFooter
+          section={footerSection} // pass structured footer section
+        />
+      ) : (
+        <CreatorFooterSkeleton />
+      )}
     </>
   );
 };

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCheck } from "lucide-react";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { getCommunityData } from "@/services/communityService";
-import { fetchAboutCreator } from "@/services/creatorService";
+import { fetchCreatorAbout } from "@/services/creatorService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export interface AboutResponse {
@@ -82,12 +82,9 @@ export interface Member {
 
 const CreatorAboutusHero = () => {
   const [communityId, setCommunityId] = useState<string>("");
-
   const [data, setData] = useState<AboutResponse>();
-
   const [sectionOne, setSectionOne] = useState<Section>();
-
-  console.log(sectionOne, "data");
+  const tabId = useId();
 
   const getCommunityId = async () => {
     try {
@@ -104,9 +101,7 @@ const CreatorAboutusHero = () => {
 
   const fetchAbout = async () => {
     try {
-      console.log(communityId, "tello");
-      const response = await fetchAboutCreator(communityId || "");
-      console.log("Fetched:", response);
+      const response = await fetchCreatorAbout(communityId || "");
       setData(response?.data);
       setSectionOne(response?.data?.sections[0]);
       return response.data;
@@ -157,18 +152,21 @@ const CreatorAboutusHero = () => {
                 <TabsTrigger
                   className="data-[state=active]:bg-black data-[state=active]:text-white"
                   value="story"
+                  id={`${tabId}-story`}
                 >
                   Our Story
                 </TabsTrigger>
                 <TabsTrigger
                   className="data-[state=active]:bg-black data-[state=active]:text-white"
                   value="mission"
+                  id={`${tabId}-mission`}
                 >
                   Mission
                 </TabsTrigger>
                 <TabsTrigger
                   className="data-[state=active]:bg-black data-[state=active]:text-white"
                   value="vision"
+                  id={`${tabId}-vision`}
                 >
                   Vision
                 </TabsTrigger>

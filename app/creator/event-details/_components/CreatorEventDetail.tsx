@@ -93,7 +93,6 @@ const CreatorEventDetail = () => {
       return;
     }
 
-    console.log(formData);
     try {
       setIsSubmitting(true);
       await new Promise((res) => setTimeout(res, 1000)); // Simulated API call
