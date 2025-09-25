@@ -1,11 +1,13 @@
-'use client';
+"use client";
 
-// import { createContext, useState } from "react";
-import { useAuth } from '../hooks/useAuth';
-import { AuthContext } from './Auth.context';
-import { useEffect, useMemo } from 'react';
+import { getCommunityData } from "@/services/communityService";
+import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "./Auth.context";
+import { useEffect, useMemo, useState } from "react";
 
 const AuthProvider = ({ children }: any) => {
+  const [communityId, setCommunityId] = useState<string>("");
+
   const {
     loading,
     user,
@@ -13,28 +15,47 @@ const AuthProvider = ({ children }: any) => {
     getAccessToken,
     autoLogin,
     autoCreate,
-    roleType
+    roleType,
   } = useAuth();
 
-  // Memoize the context value to prevent unnecessary re-renders
-  const contextValue = useMemo(() => ({
-    loading,
-    user,
-    isAuthenticated,
-    getAccessToken,
-    autoLogin,
-    autoCreate,
-    roleType
-  }), [loading, user, isAuthenticated, getAccessToken, autoLogin, autoCreate, roleType]);
+  // Memoize everything except communityId
+  const contextValue = useMemo(
+    () => ({
+      loading,
+      user,
+      isAuthenticated,
+      getAccessToken,
+      autoLogin,
+      autoCreate,
+      roleType,
+      communityId, // 👈 include here
+    }),
+    [
+      loading,
+      user,
+      isAuthenticated,
+      getAccessToken,
+      autoLogin,
+      autoCreate,
+      roleType,
+      communityId,
+    ]
+  );
 
-  // Log only when values actually change
+  // Fetch communityId once
   useEffect(() => {
-    // console.log('AuthProvider State Update:', {
-    //   loading,
-    //   user: user ? 'User exists' : 'No user',
-    //   isAuthenticated
-    // });
-  }, [loading, user, isAuthenticated]);
+    const fetchCommunity = async () => {
+      try {
+        const communityData: any = await getCommunityData(
+          window.location.hostname
+        );
+        setCommunityId(communityData?.community?._id || "");
+      } catch (error) {
+        console.error("Error fetching community ID:", error);
+      }
+    };
+    fetchCommunity();
+  }, []);
 
   return (
     <AuthContext.Provider value={contextValue}>

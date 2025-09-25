@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorS
 import { getCommunityData } from "@/services/communityService";
 import { fetchAboutCreator } from "@/services/creatorService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 
 export interface AboutResponse {
   _id: string;
@@ -81,19 +80,14 @@ export interface Member {
   bio?: string;
 }
 
-
 const CreatorAboutusHero = () => {
-
-
   const [communityId, setCommunityId] = useState<string>("");
 
-  console.log(communityId, "communityId");
+  const [data, setData] = useState<AboutResponse>();
 
-  const [data, setData] = useState<AboutResponse>()
+  const [sectionOne, setSectionOne] = useState<Section>();
 
-  const [sectionOne, setSectionOne] = useState<Section>()
-
-  console.log(sectionOne, "data")
+  console.log(sectionOne, "data");
 
   const getCommunityId = async () => {
     try {
@@ -108,15 +102,13 @@ const CreatorAboutusHero = () => {
     }
   };
 
-
-
   const fetchAbout = async () => {
     try {
       console.log(communityId, "tello");
       const response = await fetchAboutCreator(communityId || "");
       console.log("Fetched:", response);
-      setData(response?.data)
-      setSectionOne(response?.data?.sections[0])
+      setData(response?.data);
+      setSectionOne(response?.data?.sections[0]);
       return response.data;
     } catch (error) {
       console.error("Error fetching community ID:", error);
@@ -124,15 +116,12 @@ const CreatorAboutusHero = () => {
     }
   };
 
-
-
   useEffect(() => {
     const fetchCommunityId = async () => {
       const id = await getCommunityId();
       setCommunityId(id);
     };
     fetchCommunityId();
-
   }, []);
 
   useEffect(() => {
@@ -140,7 +129,6 @@ const CreatorAboutusHero = () => {
       fetchAbout();
     }
   }, [communityId]);
-
 
   return (
     <section className="py-10 font-inter">
@@ -153,7 +141,6 @@ const CreatorAboutusHero = () => {
    Have questions about my programs? 
    I'd love to hear from you and help you take the next step.`
           }
-
         />
         <div className="grid md:grid-cols-2 grid-cols-1 gap-6 md:gap-10 lg:gap-28">
           {/* left  */}
@@ -167,17 +154,30 @@ const CreatorAboutusHero = () => {
 
             <Tabs defaultValue="story" className="w-full mt-6">
               <TabsList>
-                <TabsTrigger className="data-[state=active]:bg-black data-[state=active]:text-white" value="story">Our Story</TabsTrigger>
-                <TabsTrigger className="data-[state=active]:bg-black data-[state=active]:text-white" value="mission">Mission</TabsTrigger>
-                <TabsTrigger className="data-[state=active]:bg-black data-[state=active]:text-white" value="vision">Vision</TabsTrigger>
+                <TabsTrigger
+                  className="data-[state=active]:bg-black data-[state=active]:text-white"
+                  value="story"
+                >
+                  Our Story
+                </TabsTrigger>
+                <TabsTrigger
+                  className="data-[state=active]:bg-black data-[state=active]:text-white"
+                  value="mission"
+                >
+                  Mission
+                </TabsTrigger>
+                <TabsTrigger
+                  className="data-[state=active]:bg-black data-[state=active]:text-white"
+                  value="vision"
+                >
+                  Vision
+                </TabsTrigger>
               </TabsList>
-
 
               <TabsContent value="story" className="mt-4">
                 <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
                   {sectionOne?.story}
                 </p>
-
               </TabsContent>
 
               <TabsContent value="mission" className="mt-4">
@@ -193,7 +193,6 @@ const CreatorAboutusHero = () => {
               </TabsContent>
             </Tabs>
 
-
             <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
               Know More{" "}
               <span>
@@ -205,36 +204,37 @@ const CreatorAboutusHero = () => {
           <div className="flex flex-col justify-center order-1 md:order-2">
             <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
               {/* Left column */}
-              <div className="flex flex-col gap-4">
-                {sectionOne?.media?.map((src: string, idx: number) => (
-                  <div key={idx} className="rounded-2xl overflow-hidden">
+              {sectionOne?.media && sectionOne.media.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  {sectionOne?.media?.map((src: string, idx: number) => (
+                    <div key={idx} className="rounded-2xl overflow-hidden">
+                      <img
+                        src={src}
+                        alt={`media-${idx}`}
+                        className="w-full object-cover aspect-square"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <div className="rounded-2xl overflow-hidden">
                     <img
-                      src={src}
-                      alt={`media-${idx}`}
+                      src="/assets/colImage1.png"
+                      alt=""
                       className="w-full object-cover aspect-square"
                     />
                   </div>
-                ))}
-              </div>
 
-              {/* <div className="flex flex-col gap-4">
-
-                <div className="rounded-2xl overflow-hidden">
-                  <img
-                    src="/assets/colImage1.png"
-                    alt=""
-                    className="w-full object-cover aspect-square"
-                  />
+                  <div className="rounded-2xl overflow-hidden">
+                    <img
+                      src="/assets/colImage2.png"
+                      alt=""
+                      className="w-full object-cover aspect-square"
+                    />
+                  </div>
                 </div>
-
-                <div className="rounded-2xl overflow-hidden">
-                  <img
-                    src="/assets/colImage2.png"
-                    alt=""
-                    className="w-full object-cover aspect-square"
-                  />
-                </div>
-              </div> */}
+              )}
 
               {/* Right column */}
               <div className="flex flex-col gap-4">

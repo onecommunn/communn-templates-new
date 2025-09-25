@@ -63,7 +63,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
           <div>
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <div className="cursor-pointer">
+                <div className="cursor-pointer" aria-controls={'yogana-mobile-menu'}>
                   <img src={"/assets/menu-icon-svg.svg"} className="w-8 h-8" />
                 </div>
               </SheetTrigger>

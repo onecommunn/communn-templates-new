@@ -1,7 +1,7 @@
 "use client";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Sheet,
@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { logoutService } from "@/services/logoutService";
+import { fetchCreatorHeader } from "@/services/creatorService";
 
 interface ICreatorHeader {
   logoUrl: string;
@@ -35,6 +36,19 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const authContext = useContext(AuthContext);
+  const { communityId } = authContext;
+  const [data, setData] = useState({});
+
+  const fetchHeader = async () => {
+    const responce = await fetchCreatorHeader(communityId);
+    console.log(responce, "respnce headerd");
+  };
+
+  useEffect(() => {
+    if (communityId) {
+      fetchHeader();
+    }
+  }, [communityId]);
 
   const linkClass = (href: string) =>
     `text-black font-inter ${
@@ -77,12 +91,13 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
             <Link href="/about" className={linkClass("/about")}>
               About us
             </Link>
-            <Link href="/events" className={linkClass("/events")}>
-              Events
-            </Link>
+
             {/* <Link href="/courses" className={linkClass("/courses")}>Courses</Link> */}
             <Link href="/plans" className={linkClass("/plans")}>
               Plans
+            </Link>
+            <Link href="/events" className={linkClass("/events")}>
+              Events
             </Link>
             {/* <Link
               href="/appointments"
@@ -147,7 +162,10 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <div className="cursor-pointer">
+                <div
+                  className="cursor-pointer"
+                  aria-controls={"creator-mobile-menu"}
+                >
                   <Menu className="h-6 w-6" />
                 </div>
               </SheetTrigger>
@@ -189,20 +207,13 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/about-us"
-                      className={`px-4 py-3 ${linkClass("/about-us")}`}
+                      href="/about"
+                      className={`px-4 py-3 ${linkClass("/about")}`}
                     >
                       About us
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/events"
-                      className={`px-4 py-3 ${linkClass("/events")}`}
-                    >
-                      Events
-                    </Link>
-                  </SheetClose>
+
                   {/* <SheetClose asChild>
                     <Link href="/courses" className={`px-4 py-3 ${linkClass("/courses")}`}>
                       Courses
@@ -214,6 +225,14 @@ const CreatorHeader = ({ logoHight, logoUrl, logoWidth }: ICreatorHeader) => {
                       className={`px-4 py-3 ${linkClass("/plans")}`}
                     >
                       Plans
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link
+                      href="/events"
+                      className={`px-4 py-3 ${linkClass("/events")}`}
+                    >
+                      Events
                     </Link>
                   </SheetClose>
                   {/* <SheetClose asChild>

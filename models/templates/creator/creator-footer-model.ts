@@ -1,0 +1,41 @@
+// Root payload
+export interface CreatorFooterPage {
+  templateId: "creator";
+  pageName: "Footer";
+  sections: FooterSection[];
+  status: "published" | "draft" | string;
+  __v?: number;
+}
+
+/** ---------------- Shared Types ---------------- */
+
+export interface FooterLink {
+  label: string;
+  url: string;
+}
+
+export interface NavigationColumn {
+  heading: string;
+  links: FooterLink[];
+}
+
+export interface SocialMedia {
+  platform: string;
+  url: string;
+}
+
+/** ---------------- Section Types ---------------- */
+
+export interface FooterContent {
+  logo: string; // URL
+  navigationColumns: NavigationColumn[];
+  socialMedia?: SocialMedia[];
+  copyrightText?: string;
+}
+
+export interface FooterSection {
+  sectionName: "Footer Section";
+  order: number;
+  isActive: boolean;
+  footer: FooterContent;
+}

@@ -15,6 +15,7 @@ export interface IAuthContext {
   autoLogin: (phoneNumber: string, emailId: string, token: any) => void;
   autoCreate: (a: any) => void;
   roleType: boolean;
+  communityId:string;
 }
 export const AuthContext = createContext<IAuthContext>({
   loading: true,
@@ -26,5 +27,6 @@ export const AuthContext = createContext<IAuthContext>({
   getCommunity: () => "",
   autoLogin: (phoneNumber: string) => { },
   autoCreate: (a: any) => { },
-  roleType: false
+  roleType: false,
+  communityId:'',
 });
