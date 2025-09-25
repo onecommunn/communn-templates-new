@@ -1,255 +1,180 @@
 "use client";
 
-import React, { useEffect, useId, useState } from "react";
+import React, { useId } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCheck } from "lucide-react";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
-import { getCommunityData } from "@/services/communityService";
-import { fetchCreatorAbout } from "@/services/creatorService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { TwoColumnSection } from "@/models/templates/creator/creator-about.model";
 
-export interface AboutResponse {
-  _id: string;
-  templateId: string;
-  communityId: string;
-  pageName: string;
-  sections: Section[];
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
+type Props = { data: TwoColumnSection };
 
-export interface Section {
-  _id: string;
-  sectionName: string;
-  heading: string;
-  subHeading: string;
-  title: string;
-  description: string;
-  story: string;
-  order: number;
-  isActive: boolean;
-  media: string[];
-  bulletes: string[];
-  filters: string[];
-  cards: Card[];
-  mission: string;
-  vision: string;
-  buttons: Button[];
-  testimonies: Testimony[];
-  timeline: TimelineEvent[];
-  members: Member[];
-}
+const FALLBACK_MEDIA = [
+  "/assets/colImage1.png",
+  "/assets/colImage2.png",
+  "/assets/colImage3.png",
+  "/assets/colImage4.png",
+];
 
-export interface Card {
-  _id?: string;
-  title?: string;
-  description?: string;
-  image?: string;
-  link?: string;
-}
+const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
+  const uid = useId();
+  const isMediaLeft = (data.mediaPlacement ?? "left") === "left";
 
-export interface Button {
-  _id?: string;
-  label?: string;
-  url?: string;
-  variant?: string;
-}
+  // Media (ensure 4 items with graceful fallback)
+  const media = (data.media?.length ? data.media : FALLBACK_MEDIA).slice(0, 4);
+  const [m1, m2, m3, m4] = [
+    media[0] ?? FALLBACK_MEDIA[0],
+    media[1] ?? FALLBACK_MEDIA[1],
+    media[2] ?? FALLBACK_MEDIA[2],
+    media[3] ?? FALLBACK_MEDIA[3],
+  ];
 
-export interface Testimony {
-  _id?: string;
-  author?: string;
-  message?: string;
-  designation?: string;
-  avatar?: string;
-}
-
-export interface TimelineEvent {
-  _id?: string;
-  date?: string;
-  title?: string;
-  description?: string;
-}
-
-export interface Member {
-  _id?: string;
-  name?: string;
-  role?: string;
-  avatar?: string;
-  bio?: string;
-}
-
-const CreatorAboutusHero = () => {
-  const [communityId, setCommunityId] = useState<string>("");
-  const [data, setData] = useState<AboutResponse>();
-  const [sectionOne, setSectionOne] = useState<Section>();
-  const tabId = useId();
-
-  const getCommunityId = async () => {
-    try {
-      const communityData: any = await getCommunityData(
-        window.location.hostname
-      );
-      setCommunityId(communityData?.community?._id || "");
-      return communityData?.community._id || "";
-    } catch (error) {
-      console.error("Error fetching community ID:", error);
-      return "";
-    }
-  };
-
-  const fetchAbout = async () => {
-    try {
-      const response = await fetchCreatorAbout(communityId || "");
-      setData(response?.data);
-      setSectionOne(response?.data?.sections[0]);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching community ID:", error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const fetchCommunityId = async () => {
-      const id = await getCommunityId();
-      setCommunityId(id);
-    };
-    fetchCommunityId();
-  }, []);
-
-  useEffect(() => {
-    if (communityId) {
-      fetchAbout();
-    }
-  }, [communityId]);
+  const bullets = data.bulletes ?? []; 
 
   return (
     <section className="py-10 font-inter">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
-          title={sectionOne?.heading || "About us"}
+          title={data?.heading || "About us"}
           description={
-            sectionOne?.subHeading ||
-            `Ready to start your transformation journey? 
-   Have questions about my programs? 
-   I'd love to hear from you and help you take the next step.`
+            data?.subHeading ||
+            `Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.`
           }
         />
+
         <div className="grid md:grid-cols-2 grid-cols-1 gap-6 md:gap-10 lg:gap-28">
-          {/* left  */}
-          <div className="flex flex-col justify-center gap-6 order-2 md:order-1">
-            <h1 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left">
-              {sectionOne?.title}
-            </h1>
-            <p className="text-[#0C0407] align-middle text-[16px]/[24px] font-inter">
-              {sectionOne?.description}
-            </p>
+          {/* Text column */}
+          <div
+            className={`flex flex-col justify-center gap-6 ${
+              isMediaLeft ? "order-2 md:order-1" : "order-2"
+            }`}
+          >
+            {data.title && (
+              <h1 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left">
+                {data.title}
+              </h1>
+            )}
 
-            <Tabs defaultValue="story" className="w-full mt-6">
-              <TabsList>
-                <TabsTrigger
-                  className="data-[state=active]:bg-black data-[state=active]:text-white"
-                  value="story"
-                  id={`${tabId}-story`}
-                >
-                  Our Story
-                </TabsTrigger>
-                <TabsTrigger
-                  className="data-[state=active]:bg-black data-[state=active]:text-white"
-                  value="mission"
-                  id={`${tabId}-mission`}
-                >
-                  Mission
-                </TabsTrigger>
-                <TabsTrigger
-                  className="data-[state=active]:bg-black data-[state=active]:text-white"
-                  value="vision"
-                  id={`${tabId}-vision`}
-                >
-                  Vision
-                </TabsTrigger>
-              </TabsList>
+            {data.description && (
+              <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
+                {data.description}
+              </p>
+            )}
 
-              <TabsContent value="story" className="mt-4">
-                <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
-                  {sectionOne?.story}
-                </p>
-              </TabsContent>
+            {/* Bullets (optional) */}
+            {bullets.length > 0 && (
+              <div className="flex flex-col gap-2">
+                {bullets.map((line, i) => (
+                  <div key={i} className="flex flex-row items-start gap-2">
+                    <CheckCheck strokeWidth={2.6} size={22} />
+                    <p className="font-bold text-[16px]/[20px]">{line}</p>
+                  </div>
+                ))}
+              </div>
+            )}
 
-              <TabsContent value="mission" className="mt-4">
-                <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
-                  {sectionOne?.mission}
-                </p>
-              </TabsContent>
+            {/* Tabs for story / mission / vision */}
+            {(data.story || data.mission || data.vision) && (
+              <Tabs defaultValue={data.story ? "story" : data.mission ? "mission" : "vision"} className="w-full mt-2">
+                <TabsList>
+                  {data.story && (
+                    <TabsTrigger
+                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      value="story"
+                      id={`${uid}-story`}
+                    >
+                      Our Story
+                    </TabsTrigger>
+                  )}
+                  {data.mission && (
+                    <TabsTrigger
+                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      value="mission"
+                      id={`${uid}-mission`}
+                    >
+                      Mission
+                    </TabsTrigger>
+                  )}
+                  {data.vision && (
+                    <TabsTrigger
+                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      value="vision"
+                      id={`${uid}-vision`}
+                    >
+                      Vision
+                    </TabsTrigger>
+                  )}
+                </TabsList>
 
-              <TabsContent value="vision" className="mt-4">
-                <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
-                  {sectionOne?.vision}
-                </p>
-              </TabsContent>
-            </Tabs>
+                {data.story && (
+                  <TabsContent value="story" className="mt-4">
+                    <p className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
+                      {data.story}
+                    </p>
+                  </TabsContent>
+                )}
+                {data.mission && (
+                  <TabsContent value="mission" className="mt-4">
+                    <p className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
+                      {data.mission}
+                    </p>
+                  </TabsContent>
+                )}
+                {data.vision && (
+                  <TabsContent value="vision" className="mt-4">
+                    <p className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
+                      {data.vision}
+                    </p>
+                  </TabsContent>
+                )}
+              </Tabs>
+            )}
 
-            <Button className="rounded-[12px] text-sm pr-[20px] pl-[20px] w-fit">
-              Know More{" "}
-              <span>
-                <ArrowRight />
-              </span>
-            </Button>
           </div>
-          {/* right */}
-          <div className="flex flex-col justify-center order-1 md:order-2">
+
+          {/* Media column */}
+          <div
+            className={`flex flex-col justify-center ${
+              isMediaLeft ? "order-1 md:order-2" : "order-1"
+            }`}
+          >
             <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
               {/* Left column */}
-              {sectionOne?.media && sectionOne.media.length > 0 ? (
-                <div className="flex flex-col gap-4">
-                  {sectionOne?.media?.map((src: string, idx: number) => (
-                    <div key={idx} className="rounded-2xl overflow-hidden">
-                      <img
-                        src={src}
-                        alt={`media-${idx}`}
-                        className="w-full object-cover aspect-square"
-                      />
-                    </div>
-                  ))}
+              <div className="flex flex-col gap-4">
+                <div className="rounded-2xl overflow-hidden">
+                  <img
+                    src={m1}
+                    alt="About image 1"
+                    className="w-full object-cover aspect-square"
+                    loading="lazy"
+                  />
                 </div>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  <div className="rounded-2xl overflow-hidden">
-                    <img
-                      src="/assets/colImage1.png"
-                      alt=""
-                      className="w-full object-cover aspect-square"
-                    />
-                  </div>
-
-                  <div className="rounded-2xl overflow-hidden">
-                    <img
-                      src="/assets/colImage2.png"
-                      alt=""
-                      className="w-full object-cover aspect-square"
-                    />
-                  </div>
+                <div className="rounded-2xl overflow-hidden">
+                  <img
+                    src={m2}
+                    alt="About image 2"
+                    className="w-full object-cover aspect-square"
+                    loading="lazy"
+                  />
                 </div>
-              )}
+              </div>
 
               {/* Right column */}
               <div className="flex flex-col gap-4">
-                {/* Top-right (portrait) */}
                 <div className="rounded-2xl overflow-hidden">
                   <img
-                    src="/assets/colImage3.png"
-                    alt=""
+                    src={m3}
+                    alt="About image 3"
                     className="w-full object-cover aspect-[3/4]"
+                    loading="lazy"
                   />
                 </div>
-                {/* Bottom-right (landscape) */}
                 <div className="rounded-2xl overflow-hidden">
                   <img
-                    src="/assets/colImage4.png"
-                    alt=""
+                    src={m4}
+                    alt="About image 4"
                     className="w-full object-cover aspect-[4/2.68]"
+                    loading="lazy"
                   />
                 </div>
               </div>

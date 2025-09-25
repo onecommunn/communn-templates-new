@@ -8,7 +8,7 @@ const CreatorAboutusSkeleton: React.FC<Props> = ({ mediaPlacement = "left" }) =>
   const isMediaLeft = mediaPlacement === "left";
 
   return (
-    <section className="pb-10 font-inter">
+    <section className="py-10 font-inter">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-8 md:mb-12 animate-pulse">

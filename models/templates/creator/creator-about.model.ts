@@ -2,7 +2,7 @@
 export interface CreatorAboutPage {
   templateId: "creator";
   pageName: "about";
-  sections: Section[];
+  sections: AboutSection[];
   status: "published" | "draft" | string;
   __v?: number;
 }
@@ -82,7 +82,7 @@ export interface CTASection extends SectionBase {
 
 /** ---------------- Discriminated Union ---------------- */
 
-export type Section =
+export type AboutSection =
   | TwoColumnSection
   | JourneyTimelineSection
   | OurTeamSection
