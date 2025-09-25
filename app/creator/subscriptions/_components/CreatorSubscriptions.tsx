@@ -389,6 +389,7 @@ const CreatorSubscriptions = () => {
                   fill
                   className="object-cover"
                   priority={false}
+                  unoptimized
                 />
               </div>
             </div>
