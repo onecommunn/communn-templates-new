@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import CreatorLayout from "../layout";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Mail, Phone } from "lucide-react";
@@ -52,14 +51,14 @@ const CreatorContact: React.FC = () => {
 
   if (isLoading) {
     return (
-      <CreatorLayout>
+      <>
         <CreatorContactSkeleton />
-      </CreatorLayout>
+      </>
     );
   }
 
   return (
-    <CreatorLayout>
+    <>
       <section className="py-10 md:py-20 font-inter">
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <CreatorSectionHeader
@@ -167,7 +166,7 @@ const CreatorContact: React.FC = () => {
       </section>
 
       {contactCTA ? <CreatorCTA data={contactCTA} /> : null}
-    </CreatorLayout>
+    </>
   );
 };
 

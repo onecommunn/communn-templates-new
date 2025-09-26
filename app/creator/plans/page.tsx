@@ -1,15 +1,15 @@
-import React from 'react'
-import CreatorLayout from '../layout'
-import CreatorPlansSection from './_components/CreatorPlansSection'
+import React from "react";
+import CreatorLayout from "../layout";
+import CreatorPlansSection from "./_components/CreatorPlansSection";
 
 const CreatorPlans = () => {
   return (
-    <CreatorLayout>
-        <div>
-            <CreatorPlansSection/>
-        </div>
-    </CreatorLayout>
-  )
-}
+    <>
+      <div>
+        <CreatorPlansSection />
+      </div>
+    </>
+  );
+};
 
-export default CreatorPlans
+export default CreatorPlans;

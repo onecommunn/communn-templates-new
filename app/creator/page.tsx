@@ -6,7 +6,6 @@ import CreatorBestsellers from "./_components/CreatorBestsellers/CreatorBestsell
 import CreatorAboutus from "./_components/CreatorAboutus";
 import CreatorCollaboration from "./_components/CreatorCollaboration";
 import CreatorTestimonies from "./_components/CreatorTestimonies";
-import CreatorLayout from "./layout";
 import { AuthContext } from "@/contexts/Auth.context";
 
 // Import your types
@@ -78,7 +77,7 @@ const CreatorRoot: React.FC = () => {
   );
 
   return (
-    <CreatorLayout>
+    <>
       {heroSection ? (
         <CreatorHero data={heroSection} />
       ) : isLoading ? (
@@ -119,7 +118,7 @@ const CreatorRoot: React.FC = () => {
       ) : (
         <></>
       )}
-    </CreatorLayout>
+    </>
   );
 };
 

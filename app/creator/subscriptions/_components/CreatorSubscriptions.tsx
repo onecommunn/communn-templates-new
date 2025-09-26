@@ -14,7 +14,6 @@ import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorS
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/components/utils/StringFunctions";
-import CreatorLayout from "../../layout";
 
 const PaymentScheduleItem = ({
   date,
@@ -375,7 +374,6 @@ const CreatorSubscriptions = () => {
   }
 
   return (
-    <CreatorLayout>
       <main className="flex-grow bg-white font-inter">
         <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
           <CreatorSectionHeader title={plan?.name || ""} />
@@ -556,7 +554,6 @@ const CreatorSubscriptions = () => {
           timer={timer}
         />
       </main>
-    </CreatorLayout>
   );
 };
 

@@ -15,7 +15,7 @@ import YoganaCTA from './_components/YoganaCTA'
 
 const YoganaRoot = () => {
   return (
-    <YoganaLayout>
+    <>
       <YoganaHero/>
       <YoganaServices/>
       <YoganaAbout/>
@@ -28,7 +28,7 @@ const YoganaRoot = () => {
       <YoganaBlogs/>
       <YoganaContact/>
       <YoganaCTA/>
-    </YoganaLayout>
+    </>
   )
 }
 

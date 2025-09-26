@@ -1,66 +1,38 @@
-// app/creator/layout.tsx
-"use client";
-
-import React, { useContext, useEffect, useState } from "react";
-import CreatorHeader from "./_components/CreatorHeader";
-import CreatorFooter from "./_components/CreatorFooter";
-import { AuthContext } from "@/contexts/Auth.context";
-import {
-  fetchCreatorHeader,
-  fetchCreatorFooter,
-} from "@/services/creatorService";
+import CreatorHeader from "@/app/creator/_components/CreatorHeader";
+import CreatorFooter from "@/app/creator/_components/CreatorFooter";
+import CreatorHeaderSkeleton from "@/app/creator/_components/Skeletons/CreatorHeaderSkeleton";
+import CreatorFooterSkeleton from "@/app/creator/_components/Skeletons/CreatorFooterSkeleton";
 import { CreatorHeaderPage } from "@/models/templates/creator/creator-header.model";
 import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-model";
-import CreatorHeaderSkeleton from "./_components/Skeletons/CreatorHeaderSkeleton";
-import CreatorFooterSkeleton from "./_components/Skeletons/CreatorFooterSkeleton";
+import { Community } from "@/services/communityService";
 
-const CreatorLayout = ({ children }: { children: React.ReactNode }) => {
-  const { communityId } = useContext(AuthContext);
-  const [header, setHeader] = useState<CreatorHeaderPage | null>(null);
-  const [footer, setFooter] = useState<CreatorFooterPage | null>(null);
-  const [error, setError] = useState<string | null>(null);
+/** Use native fetch + caching on the server */
+async function fetchHeaderFooter(communityId: string) {
+  const [h, f] = await Promise.all([
+    fetch(`https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Header`, { cache: "force-cache" }).then(r => r.json()).catch(() => null),
+    fetch(`https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Footer`, { cache: "force-cache" }).then(r => r.json()).catch(() => null),
+  ]);
+  return {
+    header: (h?.data ?? null) as CreatorHeaderPage | null,
+    footer: (f?.data ?? null) as CreatorFooterPage | null,
+  };
+}
 
-  useEffect(() => {
-    if (!communityId) return;
-    const run = async () => {
-      try {
-        const [h, f] = await Promise.all([
-          fetchCreatorHeader(communityId),
-          fetchCreatorFooter(communityId),
-        ]);
-        setHeader(h?.data ?? null);
-        setFooter(f?.data ?? null);
-      } catch (e) {
-        setError("Failed to load header/footer");
-      }
-    };
-    run();
-  }, [communityId]);
+export default async function CreatorShell({
+  community,
+  children,
+}: React.PropsWithChildren<{ community: Community }>) {
+  const communityId = community._id;
+  const { header, footer } = await fetchHeaderFooter(communityId);
 
   const headerSection = header?.sections?.[0];
   const footerSection = footer?.sections?.[0];
 
   return (
     <>
-      {headerSection ? (
-        <CreatorHeader
-          section={headerSection} // pass structured section instead of hardcoded logo
-        />
-      ) : (
-        <CreatorHeaderSkeleton />
-      )}
-
+      {headerSection ? <CreatorHeader section={headerSection} /> : <CreatorHeaderSkeleton />}
       <main>{children}</main>
-
-      {footerSection ? (
-        <CreatorFooter
-          section={footerSection} // pass structured footer section
-        />
-      ) : (
-        <CreatorFooterSkeleton />
-      )}
+      {footerSection ? <CreatorFooter section={footerSection} /> : <CreatorFooterSkeleton />}
     </>
   );
-};
-
-export default CreatorLayout;
+}

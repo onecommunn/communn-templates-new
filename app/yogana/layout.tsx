@@ -1,8 +1,12 @@
 import React from "react";
 import YoganaHeader from "./_components/YoganaHeader";
 import YoganaFooter from "./_components/YoganaFooter";
+import { Community } from "@/services/communityService";
 
-const YoganaLayout = ({ children }: { children: React.ReactNode }) => {
+const YoganaLayout = ({
+  community,
+  children,
+}: React.PropsWithChildren<{ community: Community }>) => {
   return (
     <>
       <YoganaHeader
@@ -11,7 +15,7 @@ const YoganaLayout = ({ children }: { children: React.ReactNode }) => {
         logoHight={100}
       />
       {children}
-      <YoganaFooter/>
+      <YoganaFooter />
     </>
   );
 };

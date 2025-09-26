@@ -134,7 +134,7 @@ const CreatorLogin = () => {
   };
 
   return (
-    <CreatorLayout>
+    <>
       <main className="flex-grow flex h-1/2 items-center justify-center py-12 px-4">
         <div className="w-full max-w-md">
           <div className="bg-white rounded-lg shadow-md border p-8">
@@ -278,7 +278,7 @@ const CreatorLogin = () => {
           </div>
         </div>
       </main>
-    </CreatorLayout>
+    </>
   );
 };
 

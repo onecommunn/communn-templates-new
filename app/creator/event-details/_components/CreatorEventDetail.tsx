@@ -16,7 +16,6 @@ import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { formatDate } from "@/components/utils/StringFunctions";
-import CreatorLayout from "../../layout";
 
 export const formatTime = (time24: string) => {
   if (!time24) return "--:--";
@@ -348,7 +347,7 @@ const CreatorEventDetail = () => {
     eventData.attendees.length >= eventData.limitCapacity;
 
   return (
-    <CreatorLayout>
+    <>
       <section className="py-10 font-inter">
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <CreatorSectionHeader title={eventData.title} />
@@ -530,7 +529,7 @@ const CreatorEventDetail = () => {
           </div>
         </div>
       </section>
-    </CreatorLayout>
+    </>
   );
 };
 

@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 import CreatorAboutusHero from "./_components/CreatorAboutusHero";
 import CreatorTimeline from "./_components/CreatorTimeline/CreatorTimeline";
 import CreatorOurTeam from "./_components/CreatorOurTeam";
-import CreatorLayout from "../layout";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   AboutSection,
@@ -59,7 +58,7 @@ const CreatorAbout = () => {
     (s: AboutSection): s is CTASection => s.sectionName === "CTA Section"
   );
   return (
-    <CreatorLayout>
+    <>
       {creatorAboutusHero ? (
         <CreatorAboutusHero data={creatorAboutusHero} />
       ) : isLoading ? (
@@ -89,7 +88,7 @@ const CreatorAbout = () => {
       ) : (
         <></>
       )}
-    </CreatorLayout>
+    </>
   );
 };
 
