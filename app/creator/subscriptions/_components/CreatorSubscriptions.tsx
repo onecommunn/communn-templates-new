@@ -386,7 +386,7 @@ const CreatorSubscriptions = () => {
                   alt={plan?.name || "plan Image"}
                   fill
                   className="object-cover"
-                  priority={false}
+                  priority
                   unoptimized
                 />
               </div>

@@ -82,6 +82,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                       className="data-[state=active]:bg-black data-[state=active]:text-white"
                       value="story"
                       id={`${uid}-story`}
+                      aria-controls={`${uid}-story`}
                     >
                       Our Story
                     </TabsTrigger>
@@ -91,6 +92,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                       className="data-[state=active]:bg-black data-[state=active]:text-white"
                       value="mission"
                       id={`${uid}-mission`}
+                      aria-controls={`${uid}-mission`}
                     >
                       Mission
                     </TabsTrigger>
@@ -100,6 +102,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                       className="data-[state=active]:bg-black data-[state=active]:text-white"
                       value="vision"
                       id={`${uid}-vision`}
+                      aria-controls={`${uid}-vision`}
                     >
                       Vision
                     </TabsTrigger>
@@ -146,7 +149,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                     src={m1}
                     alt="About image 1"
                     className="w-full object-cover aspect-square"
-                    loading="lazy"
+                    // loading="lazy"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden">
@@ -154,7 +157,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                     src={m2}
                     alt="About image 2"
                     className="w-full object-cover aspect-square"
-                    loading="lazy"
+                    // loading="lazy"
                   />
                 </div>
               </div>
@@ -166,7 +169,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                     src={m3}
                     alt="About image 3"
                     className="w-full object-cover aspect-[3/4]"
-                    loading="lazy"
+                    // loading="lazy"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden">
@@ -174,7 +177,7 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
                     src={m4}
                     alt="About image 4"
                     className="w-full object-cover aspect-[4/2.68]"
-                    loading="lazy"
+                    // loading="lazy"
                   />
                 </div>
               </div>

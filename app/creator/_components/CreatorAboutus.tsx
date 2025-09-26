@@ -78,7 +78,7 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
             {/* CTA */}
             {primaryBtn && (
               <a href={primaryBtn.url} aria-label={primaryBtn.label}>
-                <Button className="rounded-[12px] text-sm px-5 w-fit inline-flex items-center gap-2">
+                <Button className="cursor-pointer rounded-[12px] text-sm px-5 w-fit inline-flex items-center gap-2">
                   {primaryBtn.label}
                   <ArrowRight className="h-4 w-4" />
                 </Button>

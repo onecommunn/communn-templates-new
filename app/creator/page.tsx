@@ -26,52 +26,32 @@ import CreatorAboutusSkeleton from "./_components/Skeletons/CreatorAboutusSkelet
 import CreatorTestimoniesSkeleton from "./_components/Skeletons/CreatorTestimoniesSkeleton";
 import CreatorCTA from "./_components/CreatorCTA";
 import CreatorCTASkeleton from "./_components/Skeletons/CreatorCTASkeleton";
+import { useCMS } from "./CMSProvider.client";
 
 const CreatorRoot: React.FC = () => {
-  const { communityId } = useContext(AuthContext);
-  const [data, setData] = useState<CreatorHomePage | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const run = async () => {
-      if (!communityId) return;
-      try {
-        setIsLoading(true);
-        const response = await fetchCreatorHome(communityId);
-        setData(response.data as CreatorHomePage);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    run();
-  }, [communityId]);
+  const { home } = useCMS();
+  const data = home as CreatorHomePage | undefined;
+  const isLoading = !data;
 
   const heroSection = data?.sections.find(
     (s: HomeSection): s is HeroSection => s.sectionName === "Hero Section"
   );
-
   const creatorAboutus = data?.sections.find(
     (s: HomeSection): s is TwoColumnSection =>
       s.sectionName === "Two Column Section"
   );
-
   const creatorBestsellers = data?.sections.find(
     (s: HomeSection): s is OurBestsellersSection =>
       s.sectionName === "Our Bestsellers"
   );
-
   const creatorCollaboration = data?.sections.find(
     (s: HomeSection): s is CollaborationSection =>
       s.sectionName === "Collaboration"
   );
-
   const creatorTestimonies = data?.sections.find(
     (s: HomeSection): s is TestimoniesSection =>
       s.sectionName === "Testimonies Section"
   );
-
   const creatorCTA = data?.sections.find(
     (s: HomeSection): s is CTASection => s.sectionName === "CTA Section"
   );

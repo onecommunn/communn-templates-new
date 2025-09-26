@@ -9,23 +9,21 @@ import YoganaRoot from "./app/yogana/page";
 import CreatorPlans from "./app/creator/plans/page";
 import CreatorContact from "./app/creator/contact/pages";
 import CreatorLogin from "./app/creator/login/page";
-import CreatorSubscriptions from "./app/creator/subscriptions/page";
 import CreatorSubscriptionsPage from "./app/creator/subscriptions/page";
 
 /** LAYOUTS (per template) */
 import CreatorShell from "./app/creator/layout";
 import YoganaLayout from "./app/yogana/layout";
-
-// import DefaultShell from "./templates/default/DefaultShell";
-// import YoganaShell from "./templates/yogana/YoganaShell";
+import CreatorEventDetailsPage from "./app/creator/event-details/page";
+import DefaultShell from "./app/default/layout";
 
 export const templateLayouts: Record<
   string,
   React.FC<React.PropsWithChildren<{ community: Community }>>
 > = {
   creator: CreatorShell,
-  // default: DefaultShell,
   yogana: YoganaLayout,
+  default: DefaultShell,
 };
 
 export const templates: Record<
@@ -39,8 +37,8 @@ export const templates: Record<
     "/plans": CreatorPlans,
     "/contact": CreatorContact,
     "/login": CreatorLogin,
-    "/subscriptions": CreatorSubscriptions,
-    "/event-details": CreatorSubscriptionsPage,
+    "/subscriptions": CreatorSubscriptionsPage,
+    "/event-details": CreatorEventDetailsPage,
   },
   default: { "/": DefaultRoot },
   yogana: { "/": YoganaRoot },

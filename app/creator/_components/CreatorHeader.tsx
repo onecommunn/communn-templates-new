@@ -144,7 +144,7 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="rounded-[12px] text-sm px-5 w-fit inline-flex items-center gap-2">
+                <Button className="cursor-pointer rounded-[12px] text-sm !px-6 w-fit inline-flex items-center gap-2">
                   Login <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>

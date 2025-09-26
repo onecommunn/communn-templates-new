@@ -37,7 +37,7 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
               buttons.map((btn, idx) =>
                 isInternal(btn.url) ? (
                   <Link key={`${btn.label}-${idx}`} href={btn.url} aria-label={btn.label}>
-                    <Button variant="secondary" className="inline-flex items-center gap-2">
+                    <Button variant="secondary" className="cursor-pointer inline-flex items-center gap-2">
                       {btn.label}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
@@ -50,7 +50,7 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
                     rel="noopener noreferrer"
                     aria-label={btn.label}
                   >
-                    <Button variant="secondary" className="inline-flex items-center gap-2">
+                    <Button variant="secondary" className="cursor-pointer inline-flex items-center gap-2">
                       {btn.label}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
@@ -60,7 +60,7 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
             ) : (
               // Fallback CTA if no buttons provided
               <Link href="/" aria-label="Explore All Activities">
-                <Button variant="secondary" className="inline-flex items-center gap-2">
+                <Button variant="secondary" className="cursor-pointer inline-flex items-center gap-2">
                   Explore All Activities
                   <ArrowRight className="h-4 w-4" />
                 </Button>

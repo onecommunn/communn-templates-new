@@ -98,7 +98,7 @@ const CreatorEventsPage = () => {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
-                    priority={false}
+                    priority
                     unoptimized
                   />
                 </div>
@@ -152,7 +152,7 @@ const CreatorEventsPage = () => {
                   })();
 
                   return isBookable ? (
-                    <Link href={`/event-details?eventid=${event._id}`}>
+                    <Link prefetch={false} href={`/event-details?eventid=${event._id}`}>
                       <Button variant={"outline"} className="cursor-pointer">
                         Book Now{" "}
                         <span>

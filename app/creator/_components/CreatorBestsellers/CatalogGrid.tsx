@@ -61,7 +61,7 @@ function CatalogCard({ item }: { item: Item }) {
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"
-            priority={false}
+            priority
             unoptimized
           />
         </div>
@@ -234,7 +234,8 @@ const CatalogGrid = () => {
               key={t.key}
               value={t.key}
               id={`${tabId}-${t.label}`}
-              className="rounded-full px-4 data-[state=active]:bg-[#0C0407] data-[state=active]:text-white"
+              aria-controls={`${tabId}-${t.label}`}
+              className="cursor-pointer rounded-full px-4 data-[state=active]:bg-[#0C0407] data-[state=active]:text-white"
             >
               {t.label}
             </TabsTrigger>

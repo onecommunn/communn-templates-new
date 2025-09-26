@@ -77,7 +77,7 @@ const CreatorPlansCard = ({
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"
-            priority={false}
+            priority
             unoptimized
           />
         </div>
