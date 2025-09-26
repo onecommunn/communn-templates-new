@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import { useCommunity } from "@/hooks/useCommunity";
 import { getEvents } from "@/services/eventService";
@@ -10,7 +10,11 @@ import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
-import { capitalizeWords, formatDate, formatTime } from "@/components/utils/StringFunctions";
+import {
+  capitalizeWords,
+  formatDate,
+  formatTime,
+} from "@/components/utils/StringFunctions";
 
 const CreatorEventsPage = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -78,8 +82,9 @@ const CreatorEventsPage = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
           title="Events"
-          description="Discover our comprehensive collection of courses designed to accelerate your personal and professional growth. From mindset transformation to leadership excellence."
+          description="Join exclusive creator events designed to help you connect, collaborate, and grow. From hands-on workshops to networking sessions, discover opportunities that elevate your creative journey."
         />
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event: Event, index) => (
             <Card
@@ -118,7 +123,11 @@ const CreatorEventsPage = () => {
                   <div className="flex items-center gap-1 min-w-0">
                     <Calendar color="#4C4C4C" size={16} />
                     <p className="text-sm text-[#4C4C4C] font-inter truncate">
-                      {`${formatDate(event?.availability[0]?.day)} - ${formatDate(event?.availability[event?.availability.length - 1]?.day)}`}
+                      {`${formatDate(
+                        event?.availability[0]?.day
+                      )} - ${formatDate(
+                        event?.availability[event?.availability.length - 1]?.day
+                      )}`}
                     </p>
                   </div>
                   {event?.availability[0]?.availableTimes[0].startTime && (
@@ -152,7 +161,10 @@ const CreatorEventsPage = () => {
                   })();
 
                   return isBookable ? (
-                    <Link prefetch={false} href={`/event-details?eventid=${event._id}`}>
+                    <Link
+                      prefetch={false}
+                      href={`/event-details?eventid=${event._id}`}
+                    >
                       <Button variant={"outline"} className="cursor-pointer">
                         Book Now{" "}
                         <span>
@@ -161,7 +173,11 @@ const CreatorEventsPage = () => {
                       </Button>
                     </Link>
                   ) : (
-                    <Button disabled className="bg-gray-400 cursor-not-allowed" title="This event has already ended">
+                    <Button
+                      disabled
+                      className="bg-gray-400 cursor-not-allowed"
+                      title="This event has already ended"
+                    >
                       Booking Closed
                     </Button>
                   );

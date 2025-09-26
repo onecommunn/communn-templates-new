@@ -82,7 +82,9 @@ function CatalogCard({ item }: { item: Item }) {
         )}
 
         <CardTitle className="text-xl">{item.title}</CardTitle>
-        <CardDescription className="flex-1 line-clamp-5">{item.description}</CardDescription>
+        <CardDescription className="flex-1 line-clamp-3">
+          {item.description}
+        </CardDescription>
       </CardHeader>
 
       <CardFooter className="flex items-center justify-between gap-3">
@@ -101,7 +103,10 @@ function CatalogCard({ item }: { item: Item }) {
           variant={kindToCTAVariant[item.kind]}
           className="shrink-0 cursor-pointer"
         >
-          {item.cta} <span><ArrowRight /></span>
+          {item.cta}{" "}
+          <span>
+            <ArrowRight />
+          </span>
         </Button>
       </CardFooter>
     </Card>
@@ -145,7 +150,7 @@ const CatalogGrid = () => {
   const authContext = React.useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
   const tabId = useId();
-  
+
   React.useEffect(() => {
     if (!communityId) return;
 
@@ -253,11 +258,7 @@ const CatalogGrid = () => {
               ) : (
                 <>
                   <div
-                    className={`${
-                      active == "event"
-                        ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full"
-                        : "columns-1 md:columns-2 xl:columns-3 gap-4"
-                    }`}
+                    className={`${"grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full"}`}
                   >
                     {itemsForTab.map((item) => (
                       <CatalogCard key={item.id} item={item} />

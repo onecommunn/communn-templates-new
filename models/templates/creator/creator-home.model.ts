@@ -60,6 +60,7 @@ export interface OurBestsellersSection {
 
 export interface CollaborationSection {
   sectionName: "Collaboration";
+  heading:string
   description?: string;
   order: number;
   isActive: boolean;

@@ -20,7 +20,6 @@ import type {
   TwoColumnSection,
 } from "@/models/templates/creator/creator-home.model";
 
-import { fetchCreatorHome } from "@/services/creatorService";
 import HeroSkeleton from "./_components/Skeletons/CreatorHeroSkeleton";
 import CreatorAboutusSkeleton from "./_components/Skeletons/CreatorAboutusSkeleton";
 import CreatorTestimoniesSkeleton from "./_components/Skeletons/CreatorTestimoniesSkeleton";

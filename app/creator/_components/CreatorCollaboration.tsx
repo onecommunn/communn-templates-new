@@ -7,8 +7,8 @@ import type { CollaborationSection } from "@/models/templates/creator/creator-ho
 
 type Props = {
   data: CollaborationSection;
-  baseVelocity?: number;   // optional override
-  direction?: 1 | -1;      // optional override
+  baseVelocity?: number; // optional override
+  direction?: 1 | -1; // optional override
 };
 
 const FALLBACK_LOGOS = [
@@ -23,32 +23,43 @@ const FALLBACK_LOGOS = [
 
 // Fix common copy/paste issues like "https: //example.com"
 const normalizeUrl = (u: string) =>
-  u.replace(/^https:\s*\/\//i, "https://").replace(/^http:\s*\/\//i, "http://").trim();
+  u
+    .replace(/^https:\s*\/\//i, "https://")
+    .replace(/^http:\s*\/\//i, "http://")
+    .trim();
 
 const CreatorCollaboration: React.FC<Props> = ({
   data,
   baseVelocity = 6,
   direction = 1,
 }) => {
-  const heading =
+  const heading = data?.heading ?? "";
+  const description =
     data.description ??
     "Get in touch with the 250+ companies who collaborate with us";
 
-  const logos =
-    (data.media?.length ? data.media : FALLBACK_LOGOS).map(normalizeUrl);
+  const logos = (data.media?.length ? data.media : FALLBACK_LOGOS).map(
+    normalizeUrl
+  );
 
   return (
     <section className="py-10 font-inter">
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
-          <h6 className="font-semibold text-[16px]/[24px] md:tracking-[-0.48px] mb-4 text-[#0C0407]">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#0C0407] font-inter">
             {heading}
-          </h6>
+          </h2>
+          <p className="text-[16px] text-[#0C0407] max-w-2xl mx-auto font-inter">
+            {description}
+          </p>
         </div>
 
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
           <ScrollVelocityContainer className="text-4xl md:text-7xl md:leading-[5rem] font-bold tracking-[-0.02em]">
-            <ScrollVelocityRow baseVelocity={baseVelocity} direction={direction}>
+            <ScrollVelocityRow
+              baseVelocity={baseVelocity}
+              direction={direction}
+            >
               {logos.map((src, idx) => (
                 <img
                   key={`${src}-${idx}`}

@@ -1,5 +1,5 @@
 import React from "react";
-import CreatorLayout from "../layout";
+import CreatorLayout from "../CreatorShell";
 import CreatorPlansSection from "./_components/CreatorPlansSection";
 
 const CreatorPlans = () => {

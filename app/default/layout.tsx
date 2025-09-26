@@ -1,11 +1,5 @@
-import { Community } from "@/services/communityService";
-import React from "react";
-
-const DefaultShell = ({
-  community,
-  children,
-}: React.PropsWithChildren<{ community: Community }>) => {
-  return <div>{children}</div>;
-};
-
-export default DefaultShell;
+// app/default/layout.tsx
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // keep this minimal; no custom props allowed
+  return <>{children}</>;
+}

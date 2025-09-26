@@ -1,5 +1,5 @@
 import React from 'react'
-import YoganaLayout from './layout'
+import YoganaLayout from './YoganaShell'
 import YoganaHero from './_components/YoganaHero'
 import YoganaServices from './_components/YoganaServices'
 import YoganaAbout from './_components/YoganaAbout'

@@ -33,7 +33,7 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            {buttons.length > 0 ? (
+            {/* {buttons.length > 0 ? (
               buttons.map((btn, idx) =>
                 isInternal(btn.url) ? (
                   <Link key={`${btn.label}-${idx}`} href={btn.url} aria-label={btn.label}>
@@ -59,13 +59,22 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
               )
             ) : (
               // Fallback CTA if no buttons provided
-              <Link href="/" aria-label="Explore All Activities">
+              <Link href="/contact" aria-label="Explore All Activities">
                 <Button variant="secondary" className="cursor-pointer inline-flex items-center gap-2">
                   Explore All Activities
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-            )}
+            )} */}
+            <Link href="/contact" aria-label="Explore All Activities">
+              <Button
+                variant="secondary"
+                className="cursor-pointer inline-flex items-center gap-2"
+              >
+                Explore All Activities
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

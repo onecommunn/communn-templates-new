@@ -10,7 +10,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 
-
 const CreatorPlansSection = () => {
   const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } =
     usePlans();
@@ -135,8 +134,9 @@ const CreatorPlansSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
           title="Plans"
-          description="Discover our comprehensive collection of courses designed to accelerate your personal and professional growth. From mindset transformation to leadership excellence."
+          description="Explore flexible creator plans tailored to your growth journey. Unlock tools, resources, and support to help you monetize, scale, and elevate your creative projects with ease."
         />
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {plans.map((plan, index) => (
             <CreatorPlansCard
