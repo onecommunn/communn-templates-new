@@ -8,6 +8,7 @@ import { AuthContext } from "@/contexts/Auth.context";
 import {
   AboutSection,
   CreatorAboutPage,
+  CTASection,
   JourneyTimelineSection,
   OurTeamSection,
   TwoColumnSection,
@@ -16,6 +17,8 @@ import { fetchCreatorAbout } from "@/services/creatorService";
 import CreatorAboutusSkeleton from "../_components/Skeletons/CreatorAboutusSkeleton";
 import CreatorTimelineSkeleton from "./_components/Skeletons/CreatorTimelineSkeleton";
 import CreatorOurTeamSkeleton from "./_components/Skeletons/CreatorOurTeamSkeleton";
+import CreatorCTA from "../_components/CreatorCTA";
+import CreatorCTASkeleton from "../_components/Skeletons/CreatorCTASkeleton";
 
 const CreatorAbout = () => {
   const { communityId } = useContext(AuthContext);
@@ -52,6 +55,9 @@ const CreatorAbout = () => {
     (s: AboutSection): s is OurTeamSection => s.sectionName === "Our Team"
   );
 
+  const creatorCTA = data?.sections.find(
+    (s: AboutSection): s is CTASection => s.sectionName === "CTA Section"
+  );
   return (
     <CreatorLayout>
       {creatorAboutusHero ? (
@@ -73,6 +79,13 @@ const CreatorAbout = () => {
         <CreatorOurTeam data={creatorOurTeam} />
       ) : isLoading ? (
         <CreatorOurTeamSkeleton />
+      ) : (
+        <></>
+      )}
+      {creatorCTA ? (
+        <CreatorCTA data={creatorCTA} />
+      ) : isLoading ? (
+        <CreatorCTASkeleton />
       ) : (
         <></>
       )}

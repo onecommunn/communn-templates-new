@@ -16,8 +16,6 @@ const CreatorEventsPage = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isloading, setIsLoading] = useState<boolean>(true);
 
-  console.log(events[10].coverImage,'coverImage')
-
   const { communityId } = useCommunity();
 
   const fetchEvents = async () => {
