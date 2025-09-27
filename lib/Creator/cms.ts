@@ -12,7 +12,7 @@ type CreatorCMSBundle = {
 
 async function fetchJSON(url: string) {
   try {
-    const r = await fetch(url, { cache: "force-cache" });
+    const r = await fetch(url, { cache: "no-store" });
     return await r.json();
   } catch {
     return null;
