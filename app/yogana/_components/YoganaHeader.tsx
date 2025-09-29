@@ -22,6 +22,7 @@ interface IYoganaHeader {
 const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  console.log(pathname);
   const linkClass = (href: string) =>
     `font-inter ${pathname === href ? "font-semibold" : "hover:font-semibold"}`;
   return (
@@ -42,16 +43,19 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-16 font-plus-jakarta">
-            <Link href="/" className={linkClass("/")}>
+            <Link href="/" className={"font-inter hover:font-semibold"}>
               Home
             </Link>
-            <Link href="#about-us" className={linkClass("/about-us")}>
+            <Link href="#about-us" className={"font-inter hover:font-semibold"}>
               About us
             </Link>
-            <Link href="#events" className={linkClass("/events")}>
+            <Link href="#services" className={"font-inter hover:font-semibold"}>
+              Services
+            </Link>
+            <Link href="#events" className={"font-inter hover:font-semibold"}>
               Events
             </Link>
-            <Link href="#plans" className={linkClass("/plans")}>
+            <Link href="#plans" className={"font-inter hover:font-semibold"}>
               Plans
             </Link>
             <Link href="#contact" className={linkClass("/contact")}>
@@ -63,7 +67,10 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
           <div>
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <div className="cursor-pointer" aria-controls={'yogana-mobile-menu'}>
+                <div
+                  className="cursor-pointer"
+                  aria-controls={"yogana-mobile-menu"}
+                >
                   <img src={"/assets/menu-icon-svg.svg"} className="w-8 h-8" />
                 </div>
               </SheetTrigger>
@@ -97,7 +104,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   <SheetClose asChild>
                     <Link
                       href="/"
-                      className={`px-4 text-white py-3 ${linkClass("/")}`}
+                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Home
                     </Link>
@@ -105,17 +112,23 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   <SheetClose asChild>
                     <Link
                       href="#about-us"
-                      className={`px-4 text-white py-3 ${linkClass(
-                        "/about-us"
-                      )}`}
+                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       About us
                     </Link>
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
+                      href="#services"
+                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+                    >
+                      Services
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link
                       href="#events"
-                      className={`px-4 text-white py-3 ${linkClass("/events")}`}
+                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Events
                     </Link>
@@ -123,7 +136,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   <SheetClose asChild>
                     <Link
                       href="#plans"
-                      className={`px-4 text-white py-3 ${linkClass("/plans")}`}
+                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Plans
                     </Link>
@@ -131,9 +144,7 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                   <SheetClose asChild>
                     <Link
                       href="#contact"
-                      className={`px-4 text-white py-3 ${linkClass(
-                        "/contact"
-                      )}`}
+                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Contact
                     </Link>

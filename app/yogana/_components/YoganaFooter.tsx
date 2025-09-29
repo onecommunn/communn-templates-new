@@ -78,7 +78,7 @@ const YoganaFooter = () => {
                   <button
                     type="submit"
                     aria-label="Subscribe"
-                    className="absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-sm bg-[#111] text-[#C2A74E] hover:opacity-90"
+                    className="cursor-pointer absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-sm bg-[#111] text-[#C2A74E] hover:opacity-90"
                   >
                     <Send size={16} />
                   </button>

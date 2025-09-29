@@ -26,7 +26,7 @@ const yogaImages = [
 
 const YoganaServices: React.FC = () => {
   return (
-    <section className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
+    <section id="services" className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <Image
           src="/assets/yogana-services-bg-image1.png"
