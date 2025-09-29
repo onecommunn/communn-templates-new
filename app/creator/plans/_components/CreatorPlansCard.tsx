@@ -67,7 +67,7 @@ const CreatorPlansCard = ({
 
   if (authContext?.loading || !mounted) return null;
   return (
-    <Card className="p-0 rounded-xl border-none gap-1 shadow-none">
+    <Card className="p-0 rounded-xl border-none gap-1">
       {/* image */}
       <div className="rounded-xl overflow-hidden">
         <div className="relative aspect-[16/10]">

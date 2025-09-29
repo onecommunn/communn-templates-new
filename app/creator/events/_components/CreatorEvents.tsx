@@ -49,7 +49,7 @@ const CreatorEventsPage = () => {
           <Skeleton className="h-4 w-3/6 rounded-md" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-16 px-4 lg:px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 py-16 px-4 lg:px-20">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
@@ -85,10 +85,10 @@ const CreatorEventsPage = () => {
           description="Join exclusive creator events designed to help you connect, collaborate, and grow. From hands-on workshops to networking sessions, discover opportunities that elevate your creative journey."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {events.map((event: Event, index) => (
             <Card
-              className="p-0 rounded-xl border-none gap-1 shadow-none"
+              className="p-0 rounded-xl border-none gap-1"
               key={index}
             >
               {/* Image Section */}

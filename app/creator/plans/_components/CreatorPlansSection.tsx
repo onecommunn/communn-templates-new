@@ -100,7 +100,7 @@ const CreatorPlansSection = () => {
           <Skeleton className="h-4 w-3/6 rounded-md" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-16 px-4 lg:px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 py-16 px-4 lg:px-20">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
@@ -137,7 +137,7 @@ const CreatorPlansSection = () => {
           description="Explore flexible creator plans tailored to your growth journey. Unlock tools, resources, and support to help you monetize, scale, and elevate your creative projects with ease."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {plans.map((plan, index) => (
             <CreatorPlansCard
               key={index}
