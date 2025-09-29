@@ -25,7 +25,7 @@ const YoganaRoot = () => {
       <YoganaProducts />
       <YoganaTestimonial />
       <YoganaGallery />
-      <YoganaBlogs />
+      {/* <YoganaBlogs /> */}
       <YoganaContact />
       <YoganaCTA />
     </>

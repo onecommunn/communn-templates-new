@@ -6,8 +6,6 @@ import { TrainingPlan } from "@/models/plan.model";
 import { getCommunityData } from "@/services/communityService";
 import YoganaPlanCard from "./YoganaPlanCard";
 import { Skeleton } from "@/components/ui/skeleton";
-
-// shadcn/ui carousel (Embla)
 import {
   Carousel,
   CarouselContent,
@@ -17,6 +15,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
+import { useCommunity } from "@/hooks/useCommunity";
 
 const PlanSkeletonCard = () => (
   <Skeleton className="h-[420px] w-full bg-gray-300 rounded-[30px]" />
@@ -85,8 +84,7 @@ const YoganaPlans = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
-  const [communityId, setCommunityId] = useState<string>("");
-  const userId = authContext?.user?.id;
+  const { communityId } = useCommunity();
 
   // Persist the autoplay plugin instance
   const autoplay = useRef(
@@ -98,53 +96,39 @@ const YoganaPlans = () => {
   );
 
   // Embla API refs (one for each carousel instance)
-  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(undefined);
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
+  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
+    undefined
+  );
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
+    undefined
+  );
 
-  // Stop autoplay when we reach the last snap (since loop is disabled)
   useEffect(() => {
     const api = apiMain;
     if (!api) return;
 
-    const maybeStopAtEnd = () => {
-      const lastIndex = api.scrollSnapList().length - 1;
+    const maybeRestartAtEnd = () => {
+      const lastIndex = api.scrollSnapList().length;
       if (api.selectedScrollSnap() === lastIndex) {
-        try {
-          autoplay.current?.stop();
-        } catch {}
+        // Jump back to the first slide and keep autoplay ticking
+        // (omit the second arg to animate; pass `true` to jump instantly)
+        api.scrollTo(0);
+        // Reset the autoplay timer so it continues naturally
+        // (safe-optional chaining in case reset isn't present)
+        autoplay.current?.reset?.();
       }
     };
 
     // run once and on every selection/reInit
-    maybeStopAtEnd();
-    api.on("select", maybeStopAtEnd);
-    api.on("reInit", maybeStopAtEnd);
+    maybeRestartAtEnd();
+    api.on("select", maybeRestartAtEnd);
+    api.on("reInit", maybeRestartAtEnd);
 
     return () => {
-      api.off("select", maybeStopAtEnd);
-      api.off("reInit", maybeStopAtEnd);
+      api.off("select", maybeRestartAtEnd);
+      api.off("reInit", maybeRestartAtEnd);
     };
   }, [apiMain]);
-
-  const getCommunityId = async () => {
-    try {
-      const communityData: any = await getCommunityData(window.location.hostname);
-      setCommunityId(communityData?.community?._id || "");
-      return communityData?.community._id || "";
-    } catch (error) {
-      console.error("Error fetching community ID:", error);
-      return "";
-    }
-  };
-
-  useEffect(() => {
-    const fetchCommunityId = async () => {
-      const id = await getCommunityId();
-      setCommunityId(id);
-    };
-    fetchCommunityId();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const fetchPlans = async () => {
     if (!communityId) return;

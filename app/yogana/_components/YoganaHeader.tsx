@@ -22,7 +22,6 @@ interface IYoganaHeader {
 const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  console.log(pathname);
   const linkClass = (href: string) =>
     `font-inter ${pathname === href ? "font-semibold" : "hover:font-semibold"}`;
   return (
