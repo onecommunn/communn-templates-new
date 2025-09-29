@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Instagram, Facebook, Linkedin, Dribbble, Globe } from "lucide-react";
 import { FooterSection } from "@/models/templates/creator/creator-footer-model";
+import { ContactDetailsSection } from "@/models/templates/creator/creator-contact.model";
 
 type Props = {
   /** Preferred: pass the CMS section */
@@ -9,6 +10,7 @@ type Props = {
   /** Optional overrides for logo sizing */
   logoWidth?: number;
   logoHeight?: number;
+  address: ContactDetailsSection;
 };
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -20,13 +22,30 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
 
 const normalize = (s?: string) => (s ?? "").trim();
 
-const CreatorFooter: React.FC<Props> = ({ section, logoWidth = 300, logoHeight = 100 }) => {
+const CreatorFooter: React.FC<Props> = ({
+  section,
+  logoWidth = 300,
+  logoHeight = 100,
+  address,
+}) => {
   const footer = section.footer;
 
   const logo = normalize(footer.logo);
   const columns = footer.navigationColumns ?? [];
   const socials = footer.socialMedia ?? [];
   const copyright = normalize(footer.copyrightText) || "© All rights reserved";
+
+  const colClass =
+    {
+      1: "md:grid-cols-1",
+      2: "md:grid-cols-2",
+      3: "md:grid-cols-3",
+      4: "md:grid-cols-4",
+      5: "md:grid-cols-5",
+      6: "md:grid-cols-6",
+    }[columns.length + 1] || "md:grid-cols-3";
+
+  <div className={`grid grid-cols-2 gap-10 ${colClass}`}>...</div>;
 
   return (
     <footer className="py-10 font-inter">
@@ -52,17 +71,44 @@ const CreatorFooter: React.FC<Props> = ({ section, logoWidth = 300, logoHeight =
           </Link>
 
           {/* Navigation Columns */}
-          <div className="grid grid-cols-2 gap-10">
+          <div className={`grid grid-cols-2 gap-10 ${colClass}`}>
             {columns.map((col, cIdx) => (
-              <div key={`${col.heading}-${cIdx}`} className="flex flex-col gap-3">
+              <div
+                key={`${col.heading}-${cIdx}`}
+                className="flex flex-col gap-3"
+              >
                 <p className="text-xs text-gray-600">{col.heading}</p>
                 {col.links?.map((lnk, lIdx) => (
-                  <Link key={`${lnk.label}-${lIdx}`} href={lnk.url || "/"} className="w-fit">
-                    <p className="text-sm font-semibold hover:underline">{lnk.label}</p>
+                  <Link
+                    key={`${lnk.label}-${lIdx}`}
+                    href={lnk.url || "/"}
+                    className="w-fit"
+                  >
+                    <p className="text-sm font-semibold hover:underline">
+                      {lnk.label}
+                    </p>
                   </Link>
                 ))}
               </div>
             ))}
+            <div className="flex flex-col gap-3 overflow-hidden">
+              <p className="text-xs text-gray-600">Contact</p>
+              {address?.address?.value && (
+                <p className="text-sm font-semibold hover:underline break-words">
+                  {address?.address?.value}
+                </p>
+              )}
+              {address?.call?.value && (
+                <p className="text-sm font-semibold hover:underline">
+                  {address?.call?.value}
+                </p>
+              )}
+              {address?.email?.value && (
+                <p className="text-sm font-semibold hover:underline break-words">
+                  {address?.email?.value}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -83,9 +129,13 @@ const CreatorFooter: React.FC<Props> = ({ section, logoWidth = 300, logoHeight =
               );
             })}
           </div>
-
+          <p className="text-[#0C0407] text-sm text-center md:text-left">
+            Made with ❤️ by communn.io
+          </p>
           {/* Copyright */}
-          <p className="text-[#0C0407] text-sm text-center md:text-left">{copyright}</p>
+          <p className="text-[#0C0407] text-sm text-center md:text-left">
+            {copyright}
+          </p>
         </div>
       </div>
     </footer>

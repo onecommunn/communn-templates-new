@@ -25,12 +25,13 @@ export interface ContactField {
 // Contact details section
 export interface ContactDetailsSection {
   sectionName: "Contact details";
-  heading: string;
-  subHeading?: string;
+  title: string;
+  description?: string;
   order: number;
   isActive: boolean;
   email: ContactField;
   call: ContactField;
+  address: ContactField;
 }
 
 // CTA Section (reusable from other pages)
@@ -46,4 +47,3 @@ export interface CTASection {
 /** ---------------- Discriminated Union ---------------- */
 
 export type ContactSection = ContactDetailsSection | CTASection;
-

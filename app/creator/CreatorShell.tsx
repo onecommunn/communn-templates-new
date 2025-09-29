@@ -6,6 +6,116 @@ import CreatorFooterSkeleton from "@/app/creator/_components/Skeletons/CreatorFo
 import { Community } from "@/services/communityService";
 import { getCreatorCMSBundle } from "@/lib/Creator/cms";
 import { CMSProvider } from "./CMSProvider.client";
+import { CreatorHeaderPage } from "@/models/templates/creator/creator-header.model";
+import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-model";
+import { fetchCreatorContact } from "@/services/creatorService";
+
+const dummyHeaderData: CreatorHeaderPage = {
+  templateId: "creator",
+  pageName: "Header",
+  sections: [
+    {
+      sectionName: "Header",
+      order: 0,
+      isActive: true,
+      media: [
+        "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
+      ],
+      buttons: [
+        {
+          label: "Home",
+          url: "/",
+        },
+        {
+          label: "About us",
+          url: "/about",
+        },
+        {
+          label: "Plans",
+          url: "/plans",
+        },
+        {
+          label: "Events",
+          url: "/events",
+        },
+        {
+          label: "Contact",
+          url: "/contact",
+        },
+      ],
+    },
+  ],
+  status: "published",
+  __v: 2,
+};
+
+const dummyFooterData: CreatorFooterPage = {
+  templateId: "creator",
+  pageName: "Footer",
+  sections: [
+    {
+      footer: {
+        logo: "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
+        navigationColumns: [
+          {
+            heading: "Company",
+            links: [
+              {
+                label: "Privacy Policy",
+                url: "/privacy-policy",
+              },
+              {
+                label: "Terms and conditions",
+                url: "/terms-condition",
+              },
+              {
+                label: "Contact",
+                url: "/contact",
+              },
+            ],
+          },
+          {
+            heading: "Navigation",
+            links: [
+              {
+                label: "About us",
+                url: "/about",
+              },
+              {
+                label: "Plans",
+                url: "/plans",
+              },
+              {
+                label: "Events",
+                url: "/events",
+              },
+            ],
+          },
+        ],
+        socialMedia: [
+          {
+            platform: "Instagram",
+            url: "https://instagram/prachiandharsh",
+          },
+          {
+            platform: "Facebook",
+            url: "https://facebook/prachiandharsh",
+          },
+          {
+            platform: "Twitter",
+            url: "https://twitter/prachiandharsh",
+          },
+        ],
+        copyrightText: "©nammayoga, All rights reserved",
+      },
+      sectionName: "Footer Section",
+      order: 0,
+      isActive: true,
+    },
+  ],
+  status: "published",
+  __v: 0,
+};
 
 /** ---- Async server slots with fetch + "nothing if empty" behavior ---- **/
 
@@ -13,12 +123,12 @@ async function HeaderSlot({ communityId }: { communityId: string }) {
   // fetch just header (cached by fetch); if you prefer, extract a getHeader() cache helper
   const res = await fetch(
     `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Header`,
-    { cache: "force-cache" }
+    { cache: "no-store" }
   )
     .then((r) => r.json())
     .catch(() => null);
 
-  const section = res?.data?.sections?.[0];
+  const section = res?.data?.sections?.[0] || dummyHeaderData.sections[0];
   if (!section) return null; // <-- NO DATA ⇒ render nothing
   return <CreatorHeader section={section} />;
 }
@@ -26,14 +136,17 @@ async function HeaderSlot({ communityId }: { communityId: string }) {
 async function FooterSlot({ communityId }: { communityId: string }) {
   const res = await fetch(
     `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Footer`,
-    { cache: "force-cache" }
+    { cache: "no-store" }
   )
     .then((r) => r.json())
     .catch(() => null);
 
-  const section = res?.data?.sections?.[0];
+  const contact: any = await fetchCreatorContact(communityId);
+  const address = contact?.data?.sections[0];
+
+  const section = res?.data?.sections?.[0] || dummyFooterData.sections[0];
   if (!section) return null; // <-- NO DATA ⇒ render nothing
-  return <CreatorFooter section={section} />;
+  return <CreatorFooter section={section} address={address} />;
 }
 
 /** --------------------------- Shell --------------------------- **/

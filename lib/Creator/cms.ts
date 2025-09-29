@@ -1,6 +1,4 @@
 // lib/cms.ts (server)
-import { unstable_cache } from "next/cache";
-
 type CreatorCMSBundle = {
   header: any | null;
   footer: any | null;
@@ -43,8 +41,12 @@ async function fetchCreatorBundle(
 }
 
 // Cache by community, revalidate every 5 minutes (tune as you like)
-export const getCreatorCMSBundle = unstable_cache(
-  async (communityId: string) => fetchCreatorBundle(communityId),
-  ["creator-cms-bundle"],
-  { revalidate: 300 }
-);
+// export const getCreatorCMSBundle = unstable_cache(
+//   async (communityId: string) => fetchCreatorBundle(communityId),
+//   ["creator-cms-bundle"],
+//   { revalidate: false }
+// );
+
+export async function getCreatorCMSBundle(communityId: string) {
+  return fetchCreatorBundle(communityId);
+}

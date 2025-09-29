@@ -92,11 +92,11 @@ function CatalogCard({ item }: { item: Item }) {
           <span className="text-base font-semibold">
             {item.priceLabel ?? ""}
           </span>
-          {item.priceStrike && (
+          {/* {item.priceStrike && (
             <span className="text-sm text-muted-foreground line-through">
               {item.priceStrike}
             </span>
-          )}
+          )} */}
         </div>
 
         <Button
