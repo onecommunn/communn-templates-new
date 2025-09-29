@@ -101,7 +101,7 @@ const CreatorContact: React.FC = () => {
                 "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step."
               }
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 justify-center">
               {/* Left: Contact form */}
               <div className="flex flex-col gap-2">
                 <h3 className="font-semibold text-2xl md:text-5xl font-poppins">
@@ -153,64 +153,49 @@ const CreatorContact: React.FC = () => {
               </div>
 
               {/* Right: Email & Phone blocks */}
-              <div className="flex flex-col gap-10">
-                <div className="flex flex-col gap-4">
-                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 p-1 flex justify-center items-center">
+              <div className="flex flex-col gap-10 justify-center">
+                <div className="flex items-center gap-4">
+                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 flex justify-center items-center">
                     <MapPin />
                   </div>
-                  <div>
+                  <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
                       {contactDetailsSection?.address?.heading || "Find Us"}
                     </h4>
-                    {/* <p className="text-[16px] ">
-                      {contactDetailsSection?.call?.subHeading ||
-                        "The strength of our community has been pivotal since day one, and their encouragement is priceless."}
-                    </p> */}
-                  </div>
-                  <h4 className=" text-xl">
                     {contactDetailsSection?.address?.value ||
                       "66 broklyn golden street. New York"}
-                  </h4>
+                  </div>
                 </div>
-                {/* Email */}
-                <div className="flex flex-col gap-4">
-                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 p-1 flex justify-center items-center">
+
+                <div className="flex items-center gap-4">
+                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 flex justify-center items-center">
                     <Mail />
                   </div>
-                  <div>
+                  <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
                       {contactDetailsSection?.email?.heading ||
                         "Send us an email"}
                     </h4>
-                    {/* <p className="text-[16px] ">
-                      {contactDetailsSection?.email?.subHeading ||
-                        "Our community has been the heart of our journey from the start, their unwavering support means the world to us."}
-                    </p> */}
-                  </div>
-                  <h4 className="text-xl break-all">
                     {contactDetailsSection?.email?.value ||
                       "contact@example.com"}
-                  </h4>
+                  </div>
                 </div>
 
                 {/* Phone */}
-                <div className="flex flex-col gap-4">
-                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 p-1 flex justify-center items-center">
+                <div className="flex items-center gap-4">
+                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 flex justify-center items-center">
                     <Phone />
                   </div>
-                  <div>
+                  <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
                       {contactDetailsSection?.call?.heading || "Give us a call"}
                     </h4>
-                    {/* <p className="text-[16px] ">
-                      {contactDetailsSection?.call?.subHeading ||
-                        "The strength of our community has been pivotal since day one, and their encouragement is priceless."}
-                    </p> */}
+                    <p className="text-lg">
+                      {contactDetailsSection?.call?.value || "+91 0000000000"}
+                    </p>
                   </div>
-                  <h4 className=" text-xl">
-                    {contactDetailsSection?.call?.value || "+91 0000000000"}
-                  </h4>
                 </div>
+
               </div>
             </div>
           </div>
