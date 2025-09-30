@@ -1,6 +1,10 @@
 import { Marquee } from "@/components/CustomComponents/marquee";
+import {
+  Gallery,
+  YoganaHomePage,
+} from "@/models/templates/yogana/yogana-home-model";
 import Image from "next/image";
-import React from "react";
+import React, { FC } from "react";
 
 const images = [
   {
@@ -28,7 +32,11 @@ const images = [
     name: "yogana-gallery-image-6",
   },
 ];
-const YoganaGallery = () => {
+
+interface YoganaGalleryProps {
+  data: Gallery;
+}
+const YoganaGallery: FC<YoganaGalleryProps> = ({ data }) => {
   return (
     <section className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
       <div
@@ -69,14 +77,9 @@ const YoganaGallery = () => {
       </div>
       <div className="mt-6">
         <Marquee>
-          {images.map((item, idx) => (
+          {data?.media?.map((item, idx) => (
             <div key={idx} className="overflow-hidden rounded-xl">
-              <Image
-                src={item.url}
-                alt={item.name}
-                width={195}
-                height={195}
-              />
+              <Image src={item} alt={`image-${idx}`} width={195} height={195} unoptimized/>
             </div>
           ))}
         </Marquee>

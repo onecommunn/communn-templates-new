@@ -8,18 +8,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Header } from "@/models/templates/yogana/yogana-home-model";
 import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 interface IYoganaHeader {
-  logoUrl: string;
-  logoWidth: number;
-  logoHight: number;
+  data: Header;
 }
 
-const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
+const YoganaHeader = ({ data }: IYoganaHeader) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const linkClass = (href: string) =>
@@ -31,12 +30,12 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
-                logoUrl ||
+                data?.media?.[0] ||
                 "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2Faf41e301c5b247df80bb6243baf910cd"
               }
               alt="logo"
-              width={logoWidth || 180}
-              height={logoHight}
+              width={100}
+              height={100}
             />
           </Link>
 
@@ -89,10 +88,10 @@ const YoganaHeader = ({ logoHight, logoUrl, logoWidth }: IYoganaHeader) => {
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={"/logo/yogana_Light_Logo.png"}
+                        src={ data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
                         alt="logo"
                         width={120}
-                        height={logoHight}
+                        height={100}
                       />
                     </Link>
                   </div>

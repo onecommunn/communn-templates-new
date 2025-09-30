@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
@@ -16,6 +16,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useCommunity } from "@/hooks/useCommunity";
+import { Plans } from "@/models/templates/yogana/yogana-home-model";
 
 const PlanSkeletonCard = () => (
   <Skeleton className="h-[420px] w-full bg-gray-300 rounded-[30px]" />
@@ -77,7 +78,11 @@ function Dots({
   );
 }
 
-const YoganaPlans = () => {
+interface YoganaPlansProps {
+  data: Plans;
+}
+
+const YoganaPlans: FC<YoganaPlansProps> = ({ data }) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
@@ -168,9 +173,9 @@ const YoganaPlans = () => {
 
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
-      <p className="text-[#C2A74E] font-alex-brush text-3xl">Price</p>
+      <p className="text-[#C2A74E] font-alex-brush text-3xl">{data?.heading}</p>
       <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
-        Choose Your Yoga Journey
+        {data?.subHeading}
       </h2>
     </div>
   );

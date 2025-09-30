@@ -10,7 +10,7 @@ import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 // shadcn/ui carousel (Embla)
 import {
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
+import { Events } from "@/models/templates/yogana/yogana-home-model";
 
 const EventSkeletonCard = () => (
   <div className="flex items-center gap-3 flex-col">
@@ -88,7 +89,11 @@ function Dots({
   );
 }
 
-const YoganaEvents = () => {
+interface YoganaEventsProps {
+  data: Events;
+}
+
+const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
@@ -152,9 +157,9 @@ const YoganaEvents = () => {
 
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
-      <p className="text-[#C2A74E] font-alex-brush text-3xl">Events</p>
+      <p className="text-[#C2A74E] font-alex-brush text-3xl">{data?.heading}</p>
       <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
-        Upcoming Events & Retreats
+        {data?.subHeading}
       </h2>
       <div className="flex items-center justify-center w-full mt-3">
         <p className="font-plus-jakarta text-[16px] text-[#707070] md:max-w-xl">

@@ -73,6 +73,7 @@ const YoganaPlanCard = ({
             width={157}
             height={74}
             className="absolute top-0 left-0"
+            unoptimized
           />
           <Image
             src={"/assets/yogana-plans-card-bg-image-2.png"}
@@ -80,6 +81,7 @@ const YoganaPlanCard = ({
             width={157}
             height={74}
             className="absolute bottom-0 right-0"
+            unoptimized
           />
         </div>
         <div className="z-10 h-full border gap-6 border-dashed border-[#C2A74E] rounded-[30px] py-10 px-6 flex flex-col items-center justify-center">

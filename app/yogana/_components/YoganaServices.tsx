@@ -232,6 +232,7 @@ const YoganaServices: React.FC = () => {
                         alt={svc.alt}
                         width={800}
                         height={900}
+                        unoptimized
                         className="object-cover w-full h-full transform transition-transform duration-500 ease-out md:group-hover:scale-105"
                       />
                     </div>

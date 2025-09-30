@@ -2,22 +2,31 @@ import React from "react";
 import YoganaHeader from "./_components/YoganaHeader";
 import YoganaFooter from "./_components/YoganaFooter";
 import { Community } from "@/services/communityService";
+import { getYoganaCMSBundle } from "@/lib/Yogana/yogana-cms";
+import { CMSProvider } from "./CMSProvider.client";
+import { Header } from "@/models/templates/yogana/yogana-home-model";
 
-const YoganaShell = ({
+export default async function YoganaShell({
   community,
   children,
-}: React.PropsWithChildren<{ community: Community }>) => {
+}: React.PropsWithChildren<{ community: Community }>) {
+  const bundle = await getYoganaCMSBundle(community._id);
+
+   const headerData = bundle?.home?.sections.find(
+      (s: Header): s is Header => s.sectionName === "Header"
+    );
+
+  const initialLoading = !bundle?.home;
   return (
     <>
       <YoganaHeader
-        logoUrl="https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2Faf41e301c5b247df80bb6243baf910cd"
-        logoWidth={100}
-        logoHight={100}
+       data={headerData}
       />
-      {children}
+      <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
+        <main>{children}</main>
+      </CMSProvider>
       <YoganaFooter />
     </>
   );
-};
+}
 
-export default YoganaShell;

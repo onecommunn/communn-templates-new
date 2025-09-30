@@ -1,9 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { FC } from "react";
 import { Phone, Mail, Send } from "lucide-react";
+import { ContactDetails } from "@/models/templates/yogana/yogana-home-model";
 
-const YoganaContact = () => {
+interface YoganaContactProps {
+  data: ContactDetails;
+}
+
+const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
   const gold = "#C2A74E";
 
   return (
@@ -12,7 +17,9 @@ const YoganaContact = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
           {/* Left: Form */}
           <div>
-            <p className="font-alex-brush text-2xl text-[#C2A74E]">Send us email</p>
+            <p className="font-alex-brush text-2xl text-[#C2A74E]">
+              Send us email
+            </p>
             <h2 className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900">
               Send Us a Message
             </h2>
@@ -75,14 +82,14 @@ const YoganaContact = () => {
 
           {/* Right: Contact Info */}
           <div>
-            <p className="font-alex-brush text-2xl text-[#C2A74E]">Need any help?</p>
+            <p className="font-alex-brush text-2xl text-[#C2A74E]">
+              Need any help?
+            </p>
             <h3 className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900">
-              Get in touch
+              {data?.heading}
             </h3>
             <p className="mt-3 font-plus-jakarta max-w-md text-[16px] leading-relaxed text-neutral-600">
-              Lorem ipsum is simply free text available dolor sit amet consectetur
-              notted adipisicing elit sed do eiusmod tempor incididunt simply
-              dolore magna.
+              {data?.subHeading}
             </p>
 
             <div className="mt-8 space-y-6">
@@ -95,8 +102,12 @@ const YoganaContact = () => {
                   <Phone className="text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-700">Have any question?</p>
-                  <p className="mt-1 text-lg text-neutral-800">Free +92 (020)-9850</p>
+                  <p className="text-sm text-neutral-700">
+                    {data?.call?.heading}
+                  </p>
+                  <p className="mt-1 text-lg text-neutral-800">
+                    Free {data?.call?.value}
+                  </p>
                 </div>
               </div>
 
@@ -109,8 +120,12 @@ const YoganaContact = () => {
                   <Mail className="text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-700">Write email</p>
-                  <p className="mt-1 text-lg text-neutral-800">needhelp@company.com</p>
+                  <p className="text-sm text-neutral-700">
+                    {data?.email?.heading}
+                  </p>
+                  <p className="mt-1 text-lg text-neutral-800">
+                    {data?.email?.value}
+                  </p>
                 </div>
               </div>
 
@@ -129,9 +144,11 @@ const YoganaContact = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-700">Visit anytime</p>
+                  <p className="text-sm text-neutral-700">
+                    {data?.address?.heading}
+                  </p>
                   <p className="mt-1 text-lg text-neutral-800">
-                    66 broklyn golden street. New York
+                    {data?.address?.value}
                   </p>
                 </div>
               </div>
