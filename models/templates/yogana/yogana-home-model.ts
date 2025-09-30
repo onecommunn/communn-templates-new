@@ -41,20 +41,19 @@ export interface Aboutus {
   buttons?: Button[];
 }
 
-export interface Member {
-  name: string;
-  designation: string;
-  avatar: string;
+export interface Service {
+  serviceName: string;
   description: string;
+  media: string;
 }
 
-export interface Service {
+export interface ServiceSection {
   sectionName: "Service section";
   heading: string;
   subHeading?: string;
   order: number;
   isActive: boolean;
-  members: Member[];
+  services: Service[];
 }
 
 export interface Plans {
@@ -155,7 +154,7 @@ export type HomeSection =
   | Header
   | HeroSection
   | Aboutus
-  | Service
+  | ServiceSection
   | Plans
   | Events
   | Collaboration

@@ -19,6 +19,7 @@ import {
   HeroSection,
   HomeSection,
   Plans,
+  ServiceSection,
   TestimoniesSection,
   YoganaHomePage,
 } from "@/models/templates/yogana/yogana-home-model";
@@ -61,11 +62,15 @@ const YoganaRoot = () => {
     (s: HomeSection): s is ContactDetails => s.sectionName === "Contact details"
   );
 
+  const servicesSection = source?.sections.find(
+    (s: HomeSection): s is ServiceSection => s.sectionName === "Service section"
+  );
+
   return (
     <>
       {heroSection && <YoganaHero data={heroSection} />}
       {aboutUsSection && <YoganaAbout data={aboutUsSection} />}
-      <YoganaServices />
+      {servicesSection && <YoganaServices data={servicesSection} />}
       {plansSection && <YoganaPlans data={plansSection} />}
       {eventsSection && <YoganaEvents data={eventsSection} />}
 

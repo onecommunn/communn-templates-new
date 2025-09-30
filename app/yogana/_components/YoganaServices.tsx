@@ -22,49 +22,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-type Service = {
-  src: string;
-  alt: string;
-  title: string;
-  description: string;
-  href?: string;
-};
-
-const services: Service[] = [
-  {
-    src: "/assets/yogana-service-image-1.jpg",
-    alt: "Yoga pose meditation",
-    title: "Mindful Meditation",
-    description:
-      "Calm the mind with guided breathwork and mindfulness practices designed to reduce stress and improve focus.",
-    href: "/",
-  },
-  {
-    src: "/assets/yogana-service-image-2.jpg",
-    alt: "Yoga pose twist",
-    title: "Detox Twists",
-    description:
-      "Boost digestion and spinal mobility with a sequence of twists that gently detox the body.",
-    href: "/",
-  },
-  {
-    src: "/assets/yogana-service-image-3.jpg",
-    alt: "Pranayama Breath",
-    title: "Pranayama Breath",
-    description:
-      "Learn foundational and advanced breathing techniques to expand lung capacity and energize the body.",
-    href: "/",
-  },
-  {
-    src: "/assets/yogana-service-image-4.jpg",
-    alt: "Yoga pose stretch",
-    title: "Deep Stretch",
-    description:
-      "Target tight hips, hamstrings, and shoulders with a restorative flow that lengthens and releases.",
-    href: "/",
-  },
-];
+import {
+  Service,
+  ServiceSection,
+} from "@/models/templates/yogana/yogana-home-model";
+import { Button } from "@/components/ui/button";
 
 function Dots({
   api,
@@ -121,8 +83,14 @@ function Dots({
   );
 }
 
-const YoganaServices: React.FC = () => {
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
+interface YoganaServicesProps {
+  data: ServiceSection;
+}
+
+const YoganaServices: React.FC<YoganaServicesProps> = ({ data }) => {
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
+    undefined
+  );
 
   // Dialog state
   const [open, setOpen] = useState(false);
@@ -189,9 +157,11 @@ const YoganaServices: React.FC = () => {
       </div>
 
       <div className="relative z-10 text-center md:mb-16 mb-6">
-        <p className="text-[#C2A74E] font-alex-brush text-3xl">Services list</p>
+        <p className="text-[#C2A74E] font-alex-brush text-3xl">
+          {data?.heading}
+        </p>
         <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
-          Our Yoga Programs
+          {data?.subHeading}
         </h2>
       </div>
 
@@ -204,7 +174,7 @@ const YoganaServices: React.FC = () => {
           setApi={setApiMain}
         >
           <CarouselContent>
-            {services.map((svc, idx) => (
+            {data?.services?.map((svc: Service, idx) => (
               <CarouselItem
                 key={idx}
                 className="basis-1/2 md:basis-1/3 lg:basis-1/4"
@@ -220,16 +190,17 @@ const YoganaServices: React.FC = () => {
                     tabIndex={0}
                     onClick={() => handleViewMore(svc)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") handleViewMore(svc);
+                      if (e.key === "Enter" || e.key === " ")
+                        handleViewMore(svc);
                     }}
                     className="relative overflow-hidden rounded-t-[200px] rounded-b-[200px] shadow-md w-full h-[430px] group cursor-pointer md:cursor-default"
-                    aria-label={`Open details for ${svc.title}`}
+                    aria-label={`Open details for ${data.sectionName}`}
                   >
                     {/* Image */}
                     <div className="w-full h-full">
                       <Image
-                        src={svc.src}
-                        alt={svc.alt}
+                        src={svc.media}
+                        alt={data.sectionName}
                         width={800}
                         height={900}
                         unoptimized
@@ -259,7 +230,7 @@ const YoganaServices: React.FC = () => {
                       "
                     >
                       <h3 className="text-center text-white font-cormorant text-3xl md:text-3xl fontx`-extrabold drop-shadow">
-                        {svc.title}
+                        {svc.serviceName}
                       </h3>
                     </div>
 
@@ -280,7 +251,7 @@ const YoganaServices: React.FC = () => {
                           handleViewMore(svc);
                         }}
                         className="cursor-pointer font-plus-jakarta text-xs md:text-sm pointer-events-auto bg-[#C2A74E] text-white px-5 py-2 rounded-full font-medium shadow-lg transform transition-transform duration-200 ease-out hover:scale-105"
-                        aria-label={`View more about ${svc.alt}`}
+                        aria-label={`View more about ${data.sectionName}`}
                       >
                         View more
                       </button>
@@ -301,27 +272,23 @@ const YoganaServices: React.FC = () => {
 
       {/* Description Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="sm:max-w-md"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle className="font-cormorant text-2xl">
-              {activeService?.title}
+              {activeService?.serviceName}
             </DialogTitle>
             <DialogDescription className="font-plus-jakarta text-[15px] text-[#444]">
               {activeService?.description}
             </DialogDescription>
           </DialogHeader>
 
-          {activeService?.href ? (
-            <div className="mt-2">
-              <Link
-                href={activeService.href}
-                className="inline-flex items-center gap-2 rounded-full bg-[#C2A74E] px-5 py-2 text-white text-sm font-medium hover:opacity-95"
-              >
-                Explore Program
-                <span aria-hidden>→</span>
-              </Link>
-            </div>
-          ) : null}
+          <Button className=" cursor-pointer w-fit inline-flex items-center gap-2 rounded-full bg-[#C2A74E] px-5 py-2 text-white text-sm font-medium hover:opacity-95">
+            Explore Program
+            <span aria-hidden>→</span>
+          </Button>
         </DialogContent>
       </Dialog>
     </section>

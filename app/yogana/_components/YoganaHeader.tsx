@@ -210,7 +210,7 @@ const YoganaHeader = ({
                   </div>
 
                   <div className="flex items-center justify-center gap-10 mb-10">
-                    {socialMediaList.map(
+                    {socialMediaList?.map(
                       (each: SocialMediaLink, idx: number) => {
                         const key = normalize(each.platform).toLowerCase();
                         const Icon = PLATFORM_ICON[key] ?? Globe;

@@ -176,7 +176,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                 Open Hours
               </h4>
               <ul className="mt-5 space-y-4 text-sm">
-                {data.footer.contentDescription.map((each, idx) => (
+                {data?.footer?.contentDescription.map((each, idx) => (
                   <li className="flex justify-between gap-4" key={idx}>
                     <span className="text-neutral-300">{each?.title}</span>
                     <span className="font-medium text-neutral-100">
@@ -211,9 +211,12 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
         </div>
       </footer>
       {/* bottom bar */}
-      <div className="relative z-10 border-t border-white/10 bg-[#141215]">
-        <div className="mx-auto max-w-7xl px-4 py-6 text-center text-sm text-neutral-400">
-          {data.footer.copyrightText}
+      <div className="px-10 relative z-10 border-t border-white/10 bg-[#141215] flex flex-row items-center justify-between w-full">
+        <div className="max-w-7xl px-4 py-6 text-center text-sm text-neutral-400">
+          {data?.footer?.copyrightText}
+        </div>
+        <div className="max-w-7xl py-6 text-center text-sm text-neutral-400">
+          Made with ❤️ by communn.io
         </div>
       </div>
     </>

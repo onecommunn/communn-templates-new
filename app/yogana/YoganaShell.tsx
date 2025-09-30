@@ -46,7 +46,7 @@ export default async function YoganaShell({
       <YoganaHeader
         data={headerData}
         contactData={contactData}
-        socialMediaList={socialMediaList.footer.socialMedia}
+        socialMediaList={socialMediaList?.footer?.socialMedia}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
