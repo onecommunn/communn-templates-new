@@ -38,6 +38,8 @@ interface YoganaTestimonialProps {
   autoplayMs?: number;        // default 3000ms
 }
 
+
+
 const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
   data,
   autoplayMs = 3000,
