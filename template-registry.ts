@@ -17,6 +17,7 @@ import CreatorEventDetailsPage from "./app/creator/event-details/page";
 import DefaultShell from "./app/default/DefaultShell";
 import YoganaShell from "./app/yogana/YoganaShell";
 import YoganaEventDetailsPage from "./app/yogana/event-details/page";
+import YoganaLogin from "./app/yogana/login/page";
 
 export const templateLayouts: Record<
   string,
@@ -42,5 +43,9 @@ export const templates: Record<
     "/event-details": CreatorEventDetailsPage,
   },
   default: { "/": DefaultRoot },
-  yogana: { "/": YoganaRoot, "/event-details": YoganaEventDetailsPage },
+  yogana: {
+    "/": YoganaRoot,
+    "/event-details": YoganaEventDetailsPage,
+    "/login": YoganaLogin,
+  },
 };
