@@ -138,22 +138,22 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
               </h4>
               <ul className="mt-5 space-y-3 text-sm">
                 <li>
-                  <Link href="#about" className="hover:text-white">
+                  <Link href="/#about-us" className="hover:text-white">
                     About
                   </Link>
                 </li>
                 <li>
-                  <Link href="#plans" className="hover:text-white">
+                  <Link href="/#plans" className="hover:text-white">
                     Plans
                   </Link>
                 </li>
                 <li>
-                  <Link href="#services" className="hover:text-white">
+                  <Link href="/#services" className="hover:text-white">
                     Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="#events" className="hover:text-white">
+                  <Link href="/#events" className="hover:text-white">
                     Events
                   </Link>
                 </li>
@@ -163,7 +163,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                   </Link>
                 </li> */}
                 <li>
-                  <Link href="#contact" className="hover:text-white">
+                  <Link href="/#contact" className="hover:text-white">
                     Contact
                   </Link>
                 </li>
