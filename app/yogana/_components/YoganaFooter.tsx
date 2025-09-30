@@ -2,10 +2,35 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Send, Facebook, Search, Instagram, Linkedin } from "lucide-react";
-import React from "react";
+import {
+  Send,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Dribbble,
+  Globe,
+} from "lucide-react";
+import React, { FC } from "react";
+import {
+  ContactDetails,
+  FooterSection,
+  SocialMediaLink,
+} from "@/models/templates/yogana/yogana-home-model";
 
-const YoganaFooter = () => {
+interface YoganaFooterProps {
+  data: FooterSection;
+  contactData: ContactDetails;
+}
+
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+};
+
+const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
+  const normalize = (s?: string) => (s ?? "").trim();
   return (
     <>
       <footer
@@ -51,7 +76,7 @@ const YoganaFooter = () => {
                 className="inline-flex items-center"
               >
                 <img
-                  src="/logo/yogana_Light_Logo.png"
+                  src={data?.footer?.logo || "/logo/yogana_Light_Logo.png"}
                   alt="Yogana"
                   width={140}
                   height={40}
@@ -87,27 +112,22 @@ const YoganaFooter = () => {
 
               {/* socials */}
               <div className="mt-5 flex items-center gap-4 text-neutral-300">
-                <Link
-                  href="#"
-                  aria-label="Facebook"
-                  className="hover:text-white"
-                >
-                  <Facebook size={18} />
-                </Link>
-                <Link
-                  href="#"
-                  aria-label="Instagram"
-                  className="hover:text-white"
-                >
-                  <Instagram size={18} />
-                </Link>
-                <Link
-                  href="#"
-                  aria-label="Linkedin"
-                  className="hover:text-white"
-                >
-                  <Linkedin size={18} />
-                </Link>
+                {data?.footer?.socialMedia.map(
+                  (each: SocialMediaLink, idx: number) => {
+                    const key = normalize(each.platform).toLowerCase();
+                    const Icon = PLATFORM_ICON[key] ?? Globe;
+                    const url = normalize(each.url) || "/";
+                    return (
+                      <Link
+                        href={url}
+                        key={`${key}-${idx}`}
+                        aria-label={each.platform}
+                      >
+                        <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
+                      </Link>
+                    );
+                  }
+                )}
               </div>
             </div>
 
@@ -118,22 +138,32 @@ const YoganaFooter = () => {
               </h4>
               <ul className="mt-5 space-y-3 text-sm">
                 <li>
-                  <Link href="#" className="hover:text-white">
+                  <Link href="#about" className="hover:text-white">
                     About
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-white">
-                    Pricing
+                  <Link href="#plans" className="hover:text-white">
+                    Plans
                   </Link>
                 </li>
                 <li>
+                  <Link href="#services" className="hover:text-white">
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#events" className="hover:text-white">
+                    Events
+                  </Link>
+                </li>
+                {/* <li>
                   <Link href="#" className="hover:text-white">
                     Shop
                   </Link>
-                </li>
+                </li> */}
                 <li>
-                  <Link href="#" className="hover:text-white">
+                  <Link href="#contact" className="hover:text-white">
                     Contact
                   </Link>
                 </li>
@@ -146,24 +176,14 @@ const YoganaFooter = () => {
                 Open Hours
               </h4>
               <ul className="mt-5 space-y-4 text-sm">
-                <li className="flex justify-between gap-4">
-                  <span className="text-neutral-300">Monday to Friday :</span>
-                  <span className="font-medium text-neutral-100">
-                    09:00–20:00
-                  </span>
-                </li>
-                <li className="flex justify-between gap-4">
-                  <span className="text-neutral-300">Saturday:</span>
-                  <span className="font-medium text-neutral-100">
-                    09:00–18:00
-                  </span>
-                </li>
-                <li className="flex justify-between gap-4">
-                  <span className="text-neutral-300">Sunday:</span>
-                  <span className="font-medium text-neutral-100">
-                    09:00–18:00
-                  </span>
-                </li>
+                {data.footer.contentDescription.map((each, idx) => (
+                  <li className="flex justify-between gap-4" key={idx}>
+                    <span className="text-neutral-300">{each?.title}</span>
+                    <span className="font-medium text-neutral-100">
+                      {each?.description}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -174,15 +194,15 @@ const YoganaFooter = () => {
               </h4>
               <ul className="mt-5 space-y-5 text-sm">
                 <li className="text-neutral-300">
-                  2972 Westheimer Rd. Santa Ana, Illinois
+                  {contactData?.address?.value}
                 </li>
-                <li className="text-neutral-300">(907) 555–0101</li>
+                <li className="text-neutral-300">{contactData?.call?.value}</li>
                 <li>
                   <Link
                     href="mailto:yourmail@company.com"
                     className="underline hover:text-white"
                   >
-                    yourmail@company.com
+                    {contactData?.email?.value}
                   </Link>
                 </li>
               </ul>
@@ -193,7 +213,7 @@ const YoganaFooter = () => {
       {/* bottom bar */}
       <div className="relative z-10 border-t border-white/10 bg-[#141215]">
         <div className="mx-auto max-w-7xl px-4 py-6 text-center text-sm text-neutral-400">
-          © 2025 Yogana, All Rights Reserved
+          {data.footer.copyrightText}
         </div>
       </div>
     </>

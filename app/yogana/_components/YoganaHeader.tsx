@@ -8,17 +8,43 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Header } from "@/models/templates/yogana/yogana-home-model";
-import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
+import {
+  ContactDetails,
+  Header,
+  SocialMediaLink,
+} from "@/models/templates/yogana/yogana-home-model";
+import {
+  Dribbble,
+  Facebook,
+  Globe,
+  Instagram,
+  Linkedin,
+  Mail,
+  Phone,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 interface IYoganaHeader {
   data: Header;
+  contactData: ContactDetails;
+  socialMediaList: SocialMediaLink[];
 }
 
-const YoganaHeader = ({ data }: IYoganaHeader) => {
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+};
+
+const YoganaHeader = ({
+  data,
+  contactData,
+  socialMediaList,
+}: IYoganaHeader) => {
+  const normalize = (s?: string) => (s ?? "").trim();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const linkClass = (href: string) =>
@@ -44,19 +70,25 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
             <Link href="/" className={"font-inter hover:font-semibold"}>
               Home
             </Link>
-            <Link href="#about-us" className={"font-inter hover:font-semibold"}>
+            <Link
+              href="/#about-us"
+              className={"font-inter hover:font-semibold"}
+            >
               About us
             </Link>
-            <Link href="#services" className={"font-inter hover:font-semibold"}>
+            <Link
+              href="/#services"
+              className={"font-inter hover:font-semibold"}
+            >
               Services
             </Link>
-            <Link href="#events" className={"font-inter hover:font-semibold"}>
+            <Link href="/#events" className={"font-inter hover:font-semibold"}>
               Events
             </Link>
-            <Link href="#plans" className={"font-inter hover:font-semibold"}>
+            <Link href="/#plans" className={"font-inter hover:font-semibold"}>
               Plans
             </Link>
-            <Link href="#contact" className={linkClass("/contact")}>
+            <Link href="/#contact" className={linkClass("/contact")}>
               Contact
             </Link>
           </nav>
@@ -88,7 +120,7 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={ data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
+                        src={data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
                         alt="logo"
                         width={120}
                         height={100}
@@ -109,7 +141,7 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="#about-us"
+                      href="/#about-us"
                       className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       About us
@@ -117,7 +149,7 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="#services"
+                      href="/#services"
                       className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Services
@@ -125,7 +157,7 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="#events"
+                      href="/#events"
                       className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Events
@@ -133,7 +165,7 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="#plans"
+                      href="/#plans"
                       className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Plans
@@ -141,7 +173,7 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="#contact"
+                      href="/#contact"
                       className={`px-4 text-white py-3 font-inter hover:font-semibold`}
                     >
                       Contact
@@ -153,11 +185,15 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                     {" "}
                     <div className="flex items-center gap-4">
                       <Phone className="text-white" />
-                      <p className="text-lg text-white">Free +92 (020)-9850</p>
+                      <p className="text-lg text-white">
+                        {contactData?.call?.value}
+                      </p>
                     </div>
                     <div className="flex items-center gap-4">
                       <Mail className="text-white" />
-                      <p className="text-lg text-white">needhelp@company.com</p>
+                      <p className="text-lg text-white">
+                        {contactData?.email?.value}
+                      </p>
                     </div>
                     <div className="flex items-center gap-4">
                       <svg
@@ -168,36 +204,33 @@ const YoganaHeader = ({ data }: IYoganaHeader) => {
                         <path d="M12 2C8.14 2 5 5.14 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
                       </svg>
                       <p className="text-lg text-white">
-                        66 broklyn golden street. New York
+                        {contactData?.address?.value}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-center gap-10 mb-10">
-                    <Link
-                      href="#"
-                      aria-label="Facebook"
-                      className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
-                    >
-                      <Facebook size={20} className="transition-transform" />
-                      <p>Facebook</p>
-                    </Link>
-                    <Link
-                      href="#"
-                      aria-label="Instagram"
-                      className="text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
-                    >
-                      <Instagram size={20} className="transition-transform " />
-                      <p>Instagram</p>
-                    </Link>
-                    <Link
-                      href="#"
-                      aria-label="Linkedin"
-                      className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
-                    >
-                      <Linkedin size={20} className="transition-transform" />
-                      <p>Linkedin</p>
-                    </Link>
+                    {socialMediaList.map(
+                      (each: SocialMediaLink, idx: number) => {
+                        const key = normalize(each.platform).toLowerCase();
+                        const Icon = PLATFORM_ICON[key] ?? Globe;
+                        const url = normalize(each.url) || "/";
+                        return (
+                          <Link
+                            href={url}
+                            key={`${key}-${idx}`}
+                            aria-label={each.platform}
+                            className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
+                          >
+                            <Icon
+                              size={20}
+                              className="w-5 h-5 hover:opacity-80 transition-transform"
+                            />
+                            <p>{each.platform}</p>
+                          </Link>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               </SheetContent>

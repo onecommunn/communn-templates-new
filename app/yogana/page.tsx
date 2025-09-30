@@ -5,20 +5,15 @@ import YoganaServices from "./_components/YoganaServices";
 import YoganaAbout from "./_components/YoganaAbout";
 import YoganaPlans from "./_components/YoganaPlans/YoganaPlans";
 import YoganaEvents from "./_components/YoganaEvents";
-import YoganaCourses from "./_components/YoganaCourses/YoganaCourses";
-import YoganaProducts from "./_components/YoganaProducts";
 import YoganaTestimonial from "./_components/YoganaTestimonial";
 import YoganaGallery from "./_components/YoganaGallery";
-import YoganaBlogs from "./_components/YoganaBlogs";
 import YoganaContact from "./_components/YoganaContact";
-import YoganaCTA from "./_components/YoganaCTA";
 import YoganaCollaboration from "./_components/YoganaCollaboration";
 import { useCMS } from "./CMSProvider.client";
 import {
   Aboutus,
   Collaboration,
   ContactDetails,
-  CTASection,
   Events,
   Gallery,
   HeroSection,
@@ -66,10 +61,6 @@ const YoganaRoot = () => {
     (s: HomeSection): s is ContactDetails => s.sectionName === "Contact details"
   );
 
-  const CTAsection = source?.sections.find(
-    (s: HomeSection): s is CTASection => s.sectionName === "Whatsapp join"
-  );
-
   return (
     <>
       {heroSection && <YoganaHero data={heroSection} />}
@@ -87,7 +78,6 @@ const YoganaRoot = () => {
       {gallerySection && <YoganaGallery data={gallerySection} />}
       {/* <YoganaBlogs /> */}
       {contactSection && <YoganaContact data={contactSection} />}
-      {CTAsection && <YoganaCTA data={CTAsection} />}
     </>
   );
 };

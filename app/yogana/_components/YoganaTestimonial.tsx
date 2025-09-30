@@ -102,7 +102,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           <div className="relative flex items-center justify-center bg-[#F7F1E6] px-6 py-12 md:px-14">
             <div className="relative z-[1] max-w-xl text-center">
               {/* small script label */}
-              <div className="mb-3 flex items-center justify-center gap-2">
+              {/* <div className="mb-3 flex items-center justify-center gap-2">
                 <span className="font-alex-brush text-2xl text-[#C2A74E]">
                   {smallLabel}
                 </span>
@@ -110,7 +110,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
 
               <h2 className="mb-4 font-cormorant font-semibold text-3xl md:text-6xl text-neutral-900">
                 {bigHeading}
-              </h2>
+              </h2> */}
 
               {/* stars */}
               <div className="mb-5 flex items-center justify-center gap-1 text-[#C2A74E]">

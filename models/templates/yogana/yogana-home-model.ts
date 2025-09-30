@@ -41,15 +41,20 @@ export interface Aboutus {
   buttons?: Button[];
 }
 
+export interface Member {
+  name: string;
+  designation: string;
+  avatar: string;
+  description: string;
+}
+
 export interface Service {
-  sectionName: "Service";
+  sectionName: "Service section";
   heading: string;
   subHeading?: string;
-  title?: string;
-  description?: string;
   order: number;
   isActive: boolean;
-  media?: string[];
+  members: Member[];
 }
 
 export interface Plans {
@@ -126,7 +131,28 @@ export interface CTASection {
   isActive: boolean;
 }
 
+export interface SocialMediaLink {
+  platform: string;
+  url: string;
+}
+export interface Timming {
+  title: string;
+  description: string;
+}
+export interface FooterSection {
+  footer: {
+    logo: string;
+    socialMedia: SocialMediaLink[];
+    contentDescription: Timming[];
+    copyrightText: string;
+  };
+  order: number;
+  isActive: boolean;
+  sectionName: "Footer Section";
+}
+
 export type HomeSection =
+  | Header
   | HeroSection
   | Aboutus
   | Service
@@ -136,4 +162,5 @@ export type HomeSection =
   | TestimoniesSection
   | Gallery
   | ContactDetails
-  | CTASection;
+  | CTASection
+  | FooterSection;

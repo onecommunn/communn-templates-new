@@ -116,7 +116,9 @@ const YoganaPlanCard = ({
           ) : !isSubscribedCommunity ? (
             <Dialog>
               <DialogTrigger asChild>
-                <Button>Join Community</Button>
+                <Button className="group hover:text-[#C2A74E] border border-transparent hover:border-[#C2A74E] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[#C2A74E] text-white hover:rounded-full">
+                  Join Community
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogTitle>Join Community</DialogTitle>
@@ -128,6 +130,7 @@ const YoganaPlanCard = ({
                   <Button
                     onClick={() => handleClickJoin(communityId)}
                     disabled={isSubscribed}
+                    className="bg-[#C2A74E] text-white cursor-pointer"
                   >
                     Confirm Join
                   </Button>
