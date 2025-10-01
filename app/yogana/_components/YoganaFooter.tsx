@@ -171,7 +171,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
             </div>
 
             {/* col 3: open hours */}
-            <div className="lg:col-span-3">
+            {/* <div className="lg:col-span-3">
               <h4 className="font-cormorant text-2xl text-neutral-100">
                 Open Hours
               </h4>
@@ -185,7 +185,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
 
             {/* col 4: contact */}
             <div className="lg:col-span-3">

@@ -44,9 +44,8 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
         >
           {/* Text column */}
           <div
-            className={`flex flex-col justify-center gap-6 ${
-              isMediaLeft ? "order-2 md:order-1" : "order-2"
-            }`}
+            className={`flex flex-col justify-center gap-6 ${isMediaLeft ? "order-2 md:order-1" : "order-2"
+              }`}
           >
             {data.title && (
               <h1 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left">
@@ -59,7 +58,7 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
                 {data.description}
               </p>
             )}
-            
+
             {/* Bullets */}
             {bullets.length > 0 && (
               <div className="flex flex-col gap-2">
@@ -88,9 +87,8 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
 
           {/* Media column */}
           <div
-            className={`flex flex-col justify-center ${
-              isMediaLeft ? "order-1 md:order-2" : "order-1"
-            }`}
+            className={`flex flex-col justify-center ${isMediaLeft ? "order-1 md:order-2" : "order-1"
+              }`}
           >
             <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
               {/* Left column */}
@@ -124,6 +122,7 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
                     alt="About image 3"
                     className="w-full object-cover aspect-[3/4]"
                     loading="lazy"
+
                   />
                 </div>
                 {/* Bottom-right (landscape) */}
