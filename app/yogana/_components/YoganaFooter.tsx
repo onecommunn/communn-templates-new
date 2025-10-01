@@ -90,7 +90,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
               </p>
 
               {/* newsletter */}
-              <form
+              {/* <form
                 onSubmit={(e) => e.preventDefault()}
                 className="mt-5 flex items-stretch gap-2"
               >
@@ -108,7 +108,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                     <Send size={16} />
                   </button>
                 </div>
-              </form>
+              </form> */}
 
               {/* socials */}
               <div className="mt-5 flex items-center gap-4 text-neutral-300">
@@ -132,7 +132,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
             </div>
 
             {/* col 2: links */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-4">
               <h4 className="font-cormorant text-2xl text-neutral-100">
                 Links
               </h4>
@@ -188,7 +188,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
             </div> */}
 
             {/* col 4: contact */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-4">
               <h4 className="font-cormorant text-2xl text-neutral-100">
                 Contact
               </h4>
