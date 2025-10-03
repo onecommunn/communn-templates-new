@@ -103,10 +103,10 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                 </div>
                 <div>
                   <p className="text-sm text-neutral-700">
-                    {data?.call?.heading}
+                    Have any question?
                   </p>
                   <p className="mt-1 text-lg text-neutral-800">
-                    Free {data?.call?.value}
+                    {data?.call?.value}
                   </p>
                 </div>
               </div>
@@ -121,7 +121,7 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                 </div>
                 <div>
                   <p className="text-sm text-neutral-700">
-                    {data?.email?.heading}
+                    Write email
                   </p>
                   <p className="mt-1 text-lg text-neutral-800">
                     {data?.email?.value}
@@ -145,7 +145,7 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                 </div>
                 <div>
                   <p className="text-sm text-neutral-700">
-                    {data?.address?.heading}
+                    Visit anytime
                   </p>
                   <p className="mt-1 text-lg text-neutral-800">
                     {data?.address?.value}
