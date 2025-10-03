@@ -12,7 +12,6 @@ import {
   HomeSection,
 } from "@/models/templates/yogana/yogana-home-model";
 import YoganaCTA from "./_components/YoganaCTA";
-import { Home } from "lucide-react";
 
 export default async function YoganaShell({
   community,
@@ -21,23 +20,19 @@ export default async function YoganaShell({
   const bundle = await getYoganaCMSBundle(community._id);
 
   const headerData = bundle?.home?.sections.find(
-    (s: HomeSection): s is Header => s.sectionName === "Header"
+    (s: HomeSection): s is Header => s.sectionName === "headerSection"
   );
 
   const footerData = bundle?.home?.sections.find(
-    (s: HomeSection): s is FooterSection => s.sectionName === "Footer Section"
+    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
   const contactData = bundle?.home?.sections.find(
-    (s: HomeSection): s is ContactDetails => s.sectionName === "Contact details"
+    (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection"
   );
 
   const CTAsection = bundle?.home?.sections.find(
-    (s: HomeSection): s is CTASection => s.sectionName === "Whatsapp join"
-  );
-
-  const socialMediaList: FooterSection = bundle?.home?.sections.find(
-    (s: HomeSection): s is FooterSection => s.sectionName === "Footer Section"
+    (s: HomeSection): s is CTASection => s.sectionName === "whatsappSection"
   );
 
   const initialLoading = !bundle?.home;
@@ -46,7 +41,7 @@ export default async function YoganaShell({
       <YoganaHeader
         data={headerData}
         contactData={contactData}
-        socialMediaList={socialMediaList?.footer?.socialMedia}
+        socialMediaList={footerData?.footer?.socialMedia}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

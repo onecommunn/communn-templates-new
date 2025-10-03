@@ -65,13 +65,13 @@ const YoganaRoot = () => {
     (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection"
   );
 
-  const primaryColor = source?.color?.primary || "#dd0f0f";
-  const secondaryColor = source?.color?.secondary || "#fff200";
-  const neutralColor = source?.color?.neutral || "#09ff00";
+  // const primaryColor = source?.color?.primary || "#dd0f0f";
+  // const secondaryColor = source?.color?.secondary || "#fff200";
+  // const neutralColor = source?.color?.neutral || "#09ff00";
 
-  // const primaryColor = "#dd0f0f";
-  // const secondaryColor = "#fff200";
-  // const neutralColor = "#09ff00";
+  const primaryColor = "#dd0f0f";
+  const secondaryColor = "#fff200";
+  const neutralColor = "#09ff00";
 
   return (
     <>
