@@ -151,7 +151,9 @@ export interface FooterSection {
     socialMedia: SocialMediaLink[];
     contentDescription: Timming[];
     copyrightText: string;
+    description:string;
   };
+  media:string;
   order: number;
   isActive: boolean;
   sectionName: "footerSection";

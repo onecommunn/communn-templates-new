@@ -9,6 +9,9 @@ import {
   Linkedin,
   Dribbble,
   Globe,
+  MapPinIcon,
+  PhoneIcon,
+  MailIcon,
 } from "lucide-react";
 import React, { FC } from "react";
 import {
@@ -31,6 +34,8 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
 
 const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
   const normalize = (s?: string) => (s ?? "").trim();
+
+  console.log(data, "data");
   return (
     <>
       <footer
@@ -69,14 +74,14 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-14">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12">
             {/* col 1: brand + newsletter */}
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-6">
               <Link
                 href="/"
                 aria-label="Go home"
                 className="inline-flex items-center"
               >
                 <img
-                  src={data?.footer?.logo || "/logo/yogana_Light_Logo.png"}
+                  src={data?.media || "/logo/yogana_Light_Logo.png"}
                   alt="Yogana"
                   width={140}
                   height={40}
@@ -85,8 +90,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
               </Link>
 
               <p className="mt-5 max-w-sm text-sm leading-6 text-neutral-300">
-                Proin efficitur, mauris vel condimentum pulvinar, velit orci
-                consectetur ligula.
+                {data?.footer?.description}
               </p>
 
               {/* newsletter */}
@@ -132,7 +136,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
             </div>
 
             {/* col 2: links */}
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-2">
               <h4 className="font-cormorant text-2xl text-neutral-100">
                 Links
               </h4>
@@ -189,17 +193,20 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
 
             {/* col 4: contact */}
             <div className="lg:col-span-4">
-              <h4 className="font-cormorant text-2xl text-neutral-100">
-                Contact
-              </h4>
+              <h4 className="font-cormorant text-2xl text-neutral-100">Contact</h4>
               <ul className="mt-5 space-y-5 text-sm">
-                <li className="text-neutral-300">
+                <li className="flex items-center gap-2 text-neutral-300">
+                  <MapPinIcon className="w-5 h-5 text-neutral-400" />
                   {contactData?.address?.value}
                 </li>
-                <li className="text-neutral-300">{contactData?.call?.value}</li>
-                <li>
+                <li className="flex items-center gap-2 text-neutral-300">
+                  <PhoneIcon className="w-5 h-5 text-neutral-400" />
+                  {contactData?.call?.value}
+                </li>
+                <li className="flex items-center gap-2 text-neutral-300">
+                  <MailIcon className="w-5 h-5 text-neutral-400" />
                   <Link
-                    href="mailto:yourmail@company.com"
+                    href={`mailto:${contactData?.email?.value}`}
                     className="underline hover:text-white"
                   >
                     {contactData?.email?.value}
