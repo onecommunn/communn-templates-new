@@ -4,24 +4,30 @@ export interface YoganaHomePage {
   sections: HomeSection[];
   status: "published" | "draft" | string;
   __v?: number;
+  color: {
+    primary: string;
+    secondary: string;
+    neutral: string;
+  };
 }
 
 export interface Button {
   label: string;
-  url: string; // relative or absolute URL
+  url: string;
 }
 
 export interface Header {
-  sectionName: "Header";
+  sectionName: "headerSection";
   order: number;
   isActive: boolean;
   media?: string[];
 }
 
 export interface HeroSection {
-  sectionName: "Hero Section";
+  sectionName: "heroSection";
   heading: string;
   subHeading?: string;
+  tagLine?: string;
   description?: string;
   order: number;
   isActive: boolean;
@@ -30,7 +36,7 @@ export interface HeroSection {
 }
 
 export interface Aboutus {
-  sectionName: "About us";
+  sectionName: "aboutSection";
   heading: string;
   subHeading?: string;
   description?: string;
@@ -48,7 +54,7 @@ export interface Service {
 }
 
 export interface ServiceSection {
-  sectionName: "Service section";
+  sectionName: "serviceSection";
   heading: string;
   subHeading?: string;
   order: number;
@@ -57,7 +63,7 @@ export interface ServiceSection {
 }
 
 export interface Plans {
-  sectionName: "Plans";
+  sectionName: "plansSection";
   heading: string;
   subHeading?: string;
   order: number;
@@ -65,7 +71,7 @@ export interface Plans {
 }
 
 export interface Events {
-  sectionName: "Events";
+  sectionName: "eventsSection";
   heading: string;
   subHeading?: string;
   order: number;
@@ -73,7 +79,7 @@ export interface Events {
 }
 
 export interface Collaboration {
-  sectionName: "Collaboration logos section";
+  sectionName: "clientsSection";
   heading: string;
   order: number;
   isActive: boolean;
@@ -89,7 +95,7 @@ export interface Testimony {
 }
 
 export interface TestimoniesSection {
-  sectionName: "Testimonies Section";
+  sectionName: "testimoniesSection";
   heading: string;
   subHeading?: string;
   testimonies?: Testimony[];
@@ -98,7 +104,8 @@ export interface TestimoniesSection {
 }
 
 export interface Gallery {
-  sectionName: "Gallery";
+  sectionName: "gallerySection";
+  heading: string;
   media?: string[];
   order: number;
   isActive: boolean;
@@ -111,7 +118,7 @@ export interface ContactField {
 }
 
 export interface ContactDetails {
-  sectionName: "Contact details";
+  sectionName: "contactSection";
   heading: string;
   subHeading: string;
   email: ContactField;
@@ -122,7 +129,7 @@ export interface ContactDetails {
 }
 
 export interface CTASection {
-  sectionName: "Whatsapp join";
+  sectionName: "whatsappSection";
   heading: string;
   subHeading: string;
   buttons?: Button[];
@@ -147,7 +154,7 @@ export interface FooterSection {
   };
   order: number;
   isActive: boolean;
-  sectionName: "Footer Section";
+  sectionName: "footerSection";
 }
 
 export type HomeSection =

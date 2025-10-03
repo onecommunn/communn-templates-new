@@ -85,9 +85,17 @@ function Dots({
 
 interface YoganaServicesProps {
   data: ServiceSection;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaServices: React.FC<YoganaServicesProps> = ({ data }) => {
+const YoganaServices: React.FC<YoganaServicesProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
     undefined
   );
@@ -157,10 +165,14 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({ data }) => {
       </div>
 
       <div className="relative z-10 text-center md:mb-16 mb-6">
-        <p className="text-[#C2A74E] font-alex-brush text-3xl">
+        <p className="text-[#C2A74E] font-alex-brush text-3xl" style={{
+          color:primaryColor
+        }}>
           {data?.heading}
         </p>
-        <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
+        <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold" style={{
+          color:secondaryColor
+        }}>
           {data?.subHeading}
         </h2>
       </div>

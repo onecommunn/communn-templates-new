@@ -6,9 +6,17 @@ import React, { FC } from "react";
 
 interface YoganaAboutProps {
   data: Aboutus;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaAbout: FC<YoganaAboutProps> = ({ data }) => {
+const YoganaAbout: FC<YoganaAboutProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   return (
     <section
       id="about-us"
@@ -51,14 +59,29 @@ const YoganaAbout: FC<YoganaAboutProps> = ({ data }) => {
           </div>
           <div className="my-auto">
             <div>
-              <p className="text-[#C2A74E] font-alex-brush text-3xl">
+              <p
+                className="text-[#C2A74E] font-alex-brush text-3xl"
+                style={{
+                  color: primaryColor,
+                }}
+              >
                 {data?.heading}
               </p>
-              <h3 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
+              <h3
+                className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold"
+                style={{
+                  color: secondaryColor,
+                }}
+              >
                 {data?.subHeading}
               </h3>
             </div>
-            <p className="font-plus-jakarta font-semibold text-[16px] italic text-[#707070] my-4">
+            <p
+              className="font-plus-jakarta font-semibold text-[16px] italic text-[#707070] my-4"
+              style={{
+                color: neutralColor,
+              }}
+            >
               {data?.description}
             </p>
             <div>
@@ -69,18 +92,25 @@ const YoganaAbout: FC<YoganaAboutProps> = ({ data }) => {
                     <li className="flex items-center gap-2" key={idx}>
                       <Check
                         size={20}
-                        color="#c2a74e"
+                        color={primaryColor}
                         strokeWidth={3}
                         absoluteStrokeWidth
                       />
-                      <span className="font-plus-jakarta text-[16px] text-[#707070]">
+                      <span className="font-plus-jakarta text-[16px] text-[#707070]" style={{
+                        color:neutralColor
+                      }}>
                         {each}
                       </span>
                     </li>
                   ))}
               </ul>
             </div>
-            <Button className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4">
+            <Button
+              className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4"
+              style={{
+                backgroundColor: primaryColor,
+              }}
+            >
               Know more
             </Button>
           </div>

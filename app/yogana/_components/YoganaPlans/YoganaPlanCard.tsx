@@ -25,6 +25,9 @@ interface YoganaPlanCardProps {
   isSubscribedCommunity?: boolean;
   planId: string;
   communityId: string;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
 const YoganaPlanCard = ({
@@ -36,6 +39,9 @@ const YoganaPlanCard = ({
   isSubscribedCommunity,
   planId,
   communityId,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -84,7 +90,9 @@ const YoganaPlanCard = ({
             unoptimized
           />
         </div>
-        <div className="z-10 h-full border gap-6 border-dashed border-[#C2A74E] rounded-[30px] py-10 px-6 flex flex-col items-center justify-center">
+        <div
+          className={`z-10 h-full border gap-6 border-dashed border-[${primaryColor}] rounded-[30px] py-10 px-6 flex flex-col items-center justify-center`}
+        >
           <div
             style={{
               backgroundImage:
@@ -98,17 +106,21 @@ const YoganaPlanCard = ({
               {index}
             </p>
           </div>
-          <h4 className="text-[#C2A74E] font-cormorant font-semibold text-3xl text-center w-full">
+          <h4
+            className={`text-[${primaryColor}] font-cormorant font-semibold text-3xl text-center w-full`}
+          >
             {capitalizeWords(title)}
           </h4>
-          <p className="font-plus-jakarta text-md text-center w-full text-[#707070] line-clamp-5">
+          <p
+            className={`font-plus-jakarta text-md text-center w-full text-[${secondaryColor}] line-clamp-5`}
+          >
             {description}
           </p>
           {!isLoggedIn ? (
             <Link href="/login">
               <Button
                 variant="ghost"
-                className="group hover:text-[#C2A74E] border border-transparent hover:border-[#C2A74E] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[#C2A74E] text-white hover:rounded-full"
+                className={`group hover:text-[${primaryColor}] border border-transparent hover:border-[${primaryColor}] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[${primaryColor}] text-white hover:rounded-full`}
               >
                 Login to Subscribe
               </Button>
@@ -116,7 +128,7 @@ const YoganaPlanCard = ({
           ) : !isSubscribedCommunity ? (
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="group hover:text-[#C2A74E] border border-transparent hover:border-[#C2A74E] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[#C2A74E] text-white hover:rounded-full">
+                <Button className={`group hover:text-[${primaryColor}] border border-transparent hover:border-[${primaryColor}] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[${primaryColor}] text-white hover:rounded-full`}>
                   Join Community
                 </Button>
               </DialogTrigger>
@@ -130,7 +142,7 @@ const YoganaPlanCard = ({
                   <Button
                     onClick={() => handleClickJoin(communityId)}
                     disabled={isSubscribed}
-                    className="bg-[#C2A74E] text-white cursor-pointer"
+                    className={`bg-[${primaryColor}] text-white cursor-pointer`}
                   >
                     Confirm Join
                   </Button>
@@ -143,7 +155,7 @@ const YoganaPlanCard = ({
             >
               <Button
                 variant={isSubscribed ? "outline" : "ghost"}
-                className="group text-[#C2A74E] font-plus-jakarta font-semibold text-sm cursor-pointer hover:bg-[#C2A74E] hover:text-white hover:rounded-full"
+                className={`group text-[${primaryColor}] font-plus-jakarta font-semibold text-sm cursor-pointer hover:bg-[${primaryColor}] hover:text-white hover:rounded-full`}
               >
                 {isSubscribed ? "Subscribed" : "Subscribe"}
               </Button>

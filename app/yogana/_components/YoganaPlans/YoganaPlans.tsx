@@ -25,9 +25,11 @@ const PlanSkeletonCard = () => (
 function Dots({
   api,
   className = "",
+  primaryColor,
 }: {
   api: EmblaCarouselType | undefined;
   className?: string;
+  primaryColor: string;
 }) {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState(0);
@@ -68,7 +70,7 @@ function Dots({
             className={[
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
-                ? "w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
+                ? `w-6 bg-[${primaryColor}] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
                 : "bg-gray-300 hover:bg-gray-400",
             ].join(" ")}
           />
@@ -80,9 +82,17 @@ function Dots({
 
 interface YoganaPlansProps {
   data: Plans;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaPlans: FC<YoganaPlansProps> = ({ data }) => {
+const YoganaPlans: FC<YoganaPlansProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
@@ -173,8 +183,12 @@ const YoganaPlans: FC<YoganaPlansProps> = ({ data }) => {
 
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
-      <p className="text-[#C2A74E] font-alex-brush text-3xl">{data?.heading}</p>
-      <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
+      <p className={`text-[${primaryColor}] font-alex-brush text-3xl`}>
+        {data?.heading}
+      </p>
+      <h2
+        className={`text-[${secondaryColor}] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+      >
         {data?.subHeading}
       </h2>
     </div>
@@ -207,7 +221,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({ data }) => {
             <CarouselPrevious className="hidden sm:flex" />
             <CarouselNext className="hidden sm:flex" />
           </Carousel>
-          <Dots api={apiLoading} />
+          <Dots api={apiLoading} primaryColor={primaryColor} />
         </div>
       </section>
     );
@@ -250,6 +264,9 @@ const YoganaPlans: FC<YoganaPlansProps> = ({ data }) => {
                         isSubscribedCommunity={isSubscribed}
                         planId={plan._id}
                         communityId={communityId}
+                        primaryColor={primaryColor}
+                        secondaryColor={secondaryColor}
+                        neutralColor={neutralColor}
                       />
                     </div>
                   </CarouselItem>
@@ -257,17 +274,17 @@ const YoganaPlans: FC<YoganaPlansProps> = ({ data }) => {
               </CarouselContent>
 
               <CarouselPrevious
-                className="hidden sm:flex size-10 text-[#C2A74E] cursor-pointer hover:bg-[#C2A74E] hover:text-white"
+                className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
                 aria-label="Previous plans"
               />
               <CarouselNext
-                className="hidden sm:flex size-10 text-[#C2A74E] cursor-pointer hover:bg-[#C2A74E] hover:text-white"
+                className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
                 aria-label="Next plans"
               />
             </Carousel>
 
             {/* Dot indicators (will stay on last dot at the end) */}
-            <Dots api={apiMain} />
+            <Dots api={apiMain} primaryColor={primaryColor} />
           </>
         )}
       </div>

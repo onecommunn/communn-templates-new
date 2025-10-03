@@ -5,9 +5,17 @@ import React from "react";
 
 interface YoganaHeroProps {
   data: HeroSection;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaHero: React.FC<YoganaHeroProps> = ({ data }) => {
+const YoganaHero: React.FC<YoganaHeroProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   return (
     <section className="relative pb-10 md:pb-0 pt-10 font-cormorant bg-[#f4ede0] md:min-h-screen overflow-hidden">
       {/* Background Images */}
@@ -41,22 +49,49 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({ data }) => {
           <div>
             {/* Title */}
             <div>
-              <h1 className="font-cormorant text-[90px] md:text-[180px] text-[#1C1A1D]">
+              <h1
+                className="font-cormorant text-[90px] md:text-[180px] text-[#1C1A1D]"
+                style={{
+                  color: secondaryColor,
+                }}
+              >
                 {data?.heading}
               </h1>
-              <h3 className="font-alex-brush text-[65px]/[30px] text-[#C2A74E] md:text-[130px]/[60px]">
-                Studio
+              <h3
+                className="font-alex-brush text-[65px]/[30px] text-[#C2A74E] md:text-[130px]/[60px]"
+                style={{
+                  color: primaryColor,
+                }}
+              >
+                {data?.subHeading}
               </h3>
             </div>
 
             {/* Sub heading */}
             <div className="flex items-center flex-row mt-10">
-              <hr className="md:w-20 w-30 text-black border-black" />
-              <p className="font-cormorant text-2xl ml-2">{data?.subHeading}</p>
+              <hr
+                className="md:w-20 w-30 text-black border-black"
+                style={{
+                  borderColor: secondaryColor,
+                }}
+              />
+              <p
+                className="font-cormorant text-2xl ml-2"
+                style={{
+                  color: secondaryColor,
+                }}
+              >
+                {data?.tagLine}
+              </p>
             </div>
 
             {/* Description */}
-            <p className="text-[#707070] text-[16px] md:text-[16px]/[30px] font-plus-jakarta mt-4 md:max-w-2/3">
+            <p
+              className="text-[#707070] text-[16px] md:text-[16px]/[30px] font-plus-jakarta mt-4 md:max-w-2/3"
+              style={{
+                color: neutralColor,
+              }}
+            >
               {data?.description}
             </p>
 
@@ -67,11 +102,14 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({ data }) => {
                   <Button
                     key={idx}
                     asChild
-                    className={`${
-                      idx % 2 === 0
-                        ? "bg-[#C2A74E] text-white"
-                        : "bg-transparent text-[#C2A74E] border border-[#C2A74E]"
-                    } font-plus-jakarta rounded-[3px] font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto`}
+                    style={{
+                      backgroundColor:
+                        idx % 2 === 0 ? primaryColor : "transparent",
+                      color: idx % 2 === 0 ? "#ffffff" : primaryColor,
+                      border:
+                        idx % 2 === 0 ? "none" : `1px solid ${primaryColor}`,
+                    }}
+                    className="font-plus-jakarta rounded-[3px] font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto"
                   >
                     <a href={btn.url}>{btn.label}</a>
                   </Button>

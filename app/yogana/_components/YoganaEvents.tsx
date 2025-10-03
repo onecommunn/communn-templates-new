@@ -36,9 +36,11 @@ const EventSkeletonCard = () => (
 function Dots({
   api,
   className = "",
+  primaryColor,
 }: {
   api: EmblaCarouselType | undefined;
   className?: string;
+  primaryColor: string;
 }) {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState(0);
@@ -79,7 +81,7 @@ function Dots({
             className={[
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
-                ? "w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
+                ? `w-6 bg-[${primaryColor}] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
                 : "bg-gray-300 hover:bg-gray-400",
             ].join(" ")}
           />
@@ -91,9 +93,17 @@ function Dots({
 
 interface YoganaEventsProps {
   data: Events;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
+const YoganaEvents: FC<YoganaEventsProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
@@ -157,14 +167,19 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
 
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
-      <p className="text-[#C2A74E] font-alex-brush text-3xl">{data?.heading}</p>
-      <h2 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold">
-        {data?.subHeading}
+      <p className={`text-[${primaryColor}] font-alex-brush text-3xl`}>
+        Events
+      </p>
+      <h2
+        className={`text-[${secondaryColor}] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+      >
+        {data?.heading}
       </h2>
       <div className="flex items-center justify-center w-full mt-3">
-        <p className="font-plus-jakarta text-[16px] text-[#707070] md:max-w-xl">
-          A yoga shop is a place where practitioners of all levels can find
-          essential equipment, accessories,
+        <p
+          className={`font-plus-jakarta text-[16px] text-[${neutralColor}] md:max-w-xl`}
+        >
+          {data?.subHeading}
         </p>
       </div>
     </div>
@@ -201,7 +216,7 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
             </Carousel>
           </div>
 
-          <Dots api={apiLoading} />
+          <Dots api={apiLoading} primaryColor={primaryColor} />
         </div>
       </section>
     );
@@ -216,7 +231,9 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
         <Header />
         <div className="mx-auto max-w-6xl px-4">
           {events.length === 0 ? (
-            <p className="text-center text-gray-600">No events available.</p>
+            <p className={`text-center text-[${secondaryColor}] text-lg`}>
+              No events available.
+            </p>
           ) : (
             <>
               <Carousel
@@ -251,7 +268,9 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
 
                       <div className="flex items-center flex-col gap-2">
                         <div className="flex items-center flex-col mt-2">
-                          <h6 className="font-cormorant text-xl text-[#C2A74E] font-medium">
+                          <h6
+                            className={`font-cormorant text-xl text-[${primaryColor}] font-medium`}
+                          >
                             {`${formatDate(
                               event?.availability[0]?.day
                             )} - ${formatDate(
@@ -260,12 +279,16 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
                               ]?.day
                             )}`}
                           </h6>
-                          <h6 className="font-cormorant text-4xl text-[#C2A74E] font-semibold">
+                          <h6
+                            className={`font-cormorant text-4xl text-[${primaryColor}] font-semibold`}
+                          >
                             {event?.pricing != null && `₹${event.pricing}`}
                           </h6>
                         </div>
 
-                        <p className="text-black font-medium font-cormorant text-2xl">
+                        <p
+                          className={`text-[${secondaryColor}] font-medium font-cormorant text-2xl`}
+                        >
                           {capitalizeWords(event.title)}
                         </p>
 
@@ -284,7 +307,7 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
                             <Link href={`/event-details?eventid=${event._id}`}>
                               <Button
                                 variant="ghost"
-                                className="mt-2 font-semibold font-cormorant text-[16px] cursor-pointer hover:bg-[#C2A74E] bg-[#C2A74E] text-white rounded-full hover:text-white hover:scale-105"
+                                className={`mt-2 font-semibold font-cormorant text-[16px] cursor-pointer hover:bg-[${primaryColor}] bg-[${primaryColor}] text-white rounded-full hover:text-white hover:scale-105`}
                               >
                                 RESERVE SPOT
                               </Button>
@@ -306,17 +329,17 @@ const YoganaEvents: FC<YoganaEventsProps> = ({ data }) => {
                 </CarouselContent>
 
                 <CarouselPrevious
-                  className="hidden sm:flex size-10 text-[#C2A74E] cursor-pointer hover:bg-[#C2A74E] hover:text-white"
+                  className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
                   aria-label="Previous events"
                 />
                 <CarouselNext
-                  className="hidden sm:flex size-10 text-[#C2A74E] cursor-pointer hover:bg-[#C2A74E] hover:text-white"
+                  className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
                   aria-label="Next events"
                 />
               </Carousel>
 
               {/* Dots (derived count; stays on last dot; autoplay restarts from first) */}
-              <Dots api={apiMain} />
+              <Dots api={apiMain} primaryColor={primaryColor} />
             </>
           )}
         </div>

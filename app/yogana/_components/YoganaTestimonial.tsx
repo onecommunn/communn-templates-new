@@ -34,15 +34,19 @@ const FALLBACKS: Testimonial[] = [
 ];
 
 interface YoganaTestimonialProps {
-  data: TestimoniesSection;  
-  autoplayMs?: number;        // default 3000ms
+  data: TestimoniesSection;
+  autoplayMs?: number; // default 3000ms
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
-
-
 
 const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
   data,
   autoplayMs = 3000,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
 }) => {
   // Map CMS data -> slides; fallback if empty
   const slides = useMemo<Testimonial[]>(() => {
@@ -83,6 +87,16 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      <div className="relative z-10 text-center mb-4">
+        <h4 className={`text-[${primaryColor}] font-alex-brush text-3xl`}>
+          {data?.heading}
+        </h4>
+        <p
+          className={`font-plus-jakarta text-[16px] text-[${neutralColor}] w-full`}
+        >
+          {data?.subHeading}
+        </p>
+      </div>
       <div className="mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Image */}
@@ -113,26 +127,34 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
               </h2> */}
 
               {/* stars */}
-              <div className="mb-5 flex items-center justify-center gap-1 text-[#C2A74E]">
+              <div
+                className={`mb-5 flex items-center justify-center gap-1 text-[${primaryColor}]`}
+              >
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
                     size={18}
-                    className={i < (active.rating ?? 5) ? "fill-current" : "opacity-50"}
+                    className={
+                      i < (active.rating ?? 5) ? "fill-current" : "opacity-50"
+                    }
                   />
                 ))}
               </div>
 
               {/* quote */}
-              <p className="mx-auto mb-6 max-w-prose font-plus-jakarta text-xl font-medium leading-relaxed text-neutral-700">
+              <p
+                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-xl font-medium leading-relaxed text-[${secondaryColor}]`}
+              >
                 “{active.quote}”
               </p>
 
               {/* author */}
-              <p className="font-cormorant text-3xl text-neutral-900">
+              <p className={`font-cormorant text-3xl text-[${secondaryColor}]`}>
                 {active.author}{" "}
                 {active.role ? (
-                  <span className="text-[16px] text-neutral-500 font-plus-jakarta">
+                  <span
+                    className={`text-[16px] text-[${neutralColor}] font-plus-jakarta`}
+                  >
                     – {active.role}
                   </span>
                 ) : null}
@@ -149,8 +171,8 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
                       aria-label={`Go to slide ${i + 1}`}
                       className={`h-2.5 w-2.5 rounded-full cursor-pointer transition-transform ${
                         isActive
-                          ? "bg-[#C2A74E] scale-100"
-                          : "bg-neutral-300 hover:scale-110"
+                          ? `bg-[${primaryColor}] scale-100`
+                          : `bg-neutral-300 hover:scale-110`
                       }`}
                     />
                   );
