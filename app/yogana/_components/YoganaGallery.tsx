@@ -35,8 +35,9 @@ const images = [
 
 interface YoganaGalleryProps {
   data: Gallery;
+  primaryColor: string;
 }
-const YoganaGallery: FC<YoganaGalleryProps> = ({ data }) => {
+const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor }) => {
   return (
     <section className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
       <div
@@ -70,7 +71,10 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data }) => {
       {/* heading */}
       <div className="flex items-center justify-center gap-6 md:px-10">
         <div className="h-px w-full bg-neutral-200/80" />
-        <p className="font-medium text-3xl text-[#1C1A1D] min-w-fit">
+        <p
+          style={{ color: primaryColor }}
+          className="font-semibold text-3xl text-[#1C1A1D] min-w-fit"
+        >
           {data.heading}
         </p>
         <div className="h-px w-full bg-neutral-200/80" />
@@ -79,7 +83,13 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data }) => {
         <Marquee>
           {data?.media?.map((item, idx) => (
             <div key={idx} className="overflow-hidden rounded-xl">
-              <Image src={item} alt={`image-${idx}`} width={195} height={195} unoptimized/>
+              <Image
+                src={item}
+                alt={`image-${idx}`}
+                width={195}
+                height={195}
+                unoptimized
+              />
             </div>
           ))}
         </Marquee>

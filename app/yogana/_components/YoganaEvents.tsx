@@ -78,10 +78,13 @@ function Dots({
             key={i}
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => api.scrollTo(i)}
+            style={{
+              backgroundColor: isActive ? primaryColor : "",
+            }}
             className={[
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
-                ? `w-6 bg-[${primaryColor}] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
+                ? `w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
                 : "bg-gray-300 hover:bg-gray-400",
             ].join(" ")}
           />
@@ -167,17 +170,22 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
 
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
-      <p className={`text-[${primaryColor}] font-alex-brush text-3xl`}>
+      <p
+        style={{ color: primaryColor }}
+        className={`text-[#C2A74E] font-alex-brush text-3xl`}
+      >
         Events
       </p>
       <h2
-        className={`text-[${secondaryColor}] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+        style={{ color: secondaryColor }}
+        className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
       >
         {data?.heading}
       </h2>
       <div className="flex items-center justify-center w-full mt-3">
         <p
-          className={`font-plus-jakarta text-[16px] text-[${neutralColor}] md:max-w-xl`}
+          style={{ color: neutralColor }}
+          className={`font-plus-jakarta text-[16px] text-[#707070] md:max-w-xl`}
         >
           {data?.subHeading}
         </p>
@@ -269,7 +277,10 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                       <div className="flex items-center flex-col gap-2">
                         <div className="flex items-center flex-col mt-2">
                           <h6
-                            className={`font-cormorant text-xl text-[${primaryColor}] font-medium`}
+                            style={{
+                              color: primaryColor,
+                            }}
+                            className={`font-cormorant text-xl text-[#C2A74E] font-medium`}
                           >
                             {`${formatDate(
                               event?.availability[0]?.day
@@ -280,14 +291,16 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                             )}`}
                           </h6>
                           <h6
-                            className={`font-cormorant text-4xl text-[${primaryColor}] font-semibold`}
+                            style={{ color: primaryColor }}
+                            className={`font-cormorant text-4xl text-[#C2A74E] font-semibold`}
                           >
                             {event?.pricing != null && `₹${event.pricing}`}
                           </h6>
                         </div>
 
                         <p
-                          className={`text-[${secondaryColor}] font-medium font-cormorant text-2xl`}
+                          style={{ color: secondaryColor }}
+                          className={`text-[#000] font-medium font-cormorant text-2xl`}
                         >
                           {capitalizeWords(event.title)}
                         </p>
@@ -306,8 +319,11 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                           return isBookable ? (
                             <Link href={`/event-details?eventid=${event._id}`}>
                               <Button
+                                style={{
+                                  backgroundColor: primaryColor,
+                                }}
                                 variant="ghost"
-                                className={`mt-2 font-semibold font-cormorant text-[16px] cursor-pointer hover:bg-[${primaryColor}] bg-[${primaryColor}] text-white rounded-full hover:text-white hover:scale-105`}
+                                className={`mt-2 font-semibold font-cormorant text-[16px] cursor-pointer hover:bg-[#C2A74E] bg-[#C2A74E] text-white rounded-full hover:text-white hover:scale-105`}
                               >
                                 RESERVE SPOT
                               </Button>
@@ -329,12 +345,43 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                 </CarouselContent>
 
                 <CarouselPrevious
-                  className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
-                  aria-label="Previous events"
+                  aria-label="Previous plans"
+                  className="hidden sm:flex size-10 cursor-pointer"
+                  style={{
+                    color: primaryColor, // text color
+                    backgroundColor: "transparent", // default bg
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      primaryColor;
+                    (e.currentTarget as HTMLElement).style.color =
+                      secondaryColor;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      "transparent";
+                    (e.currentTarget as HTMLElement).style.color = primaryColor;
+                  }}
                 />
+
                 <CarouselNext
-                  className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
-                  aria-label="Next events"
+                  className="hidden sm:flex size-10 cursor-pointer"
+                  style={{
+                    color: primaryColor, // text color
+                    backgroundColor: "transparent", // default bg
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      primaryColor;
+                    (e.currentTarget as HTMLElement).style.color =
+                      secondaryColor;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      "transparent";
+                    (e.currentTarget as HTMLElement).style.color = primaryColor;
+                  }}
+                  aria-label="Next plans"
                 />
               </Carousel>
 

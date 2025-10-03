@@ -81,7 +81,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                 className="inline-flex items-center"
               >
                 <img
-                  src={data?.media || "/logo/yogana_Light_Logo.png"}
+                  src={data?.footer?.logo || "/logo/yogana_Light_Logo.png"}
                   alt="Yogana"
                   width={140}
                   height={40}
@@ -193,7 +193,9 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
 
             {/* col 4: contact */}
             <div className="lg:col-span-4">
-              <h4 className="font-cormorant text-2xl text-neutral-100">Contact</h4>
+              <h4 className="font-cormorant text-2xl text-neutral-100">
+                Contact
+              </h4>
               <ul className="mt-5 space-y-5 text-sm">
                 <li className="flex items-center gap-2 text-neutral-300">
                   <MapPinIcon className="w-5 h-5 text-neutral-400" />
@@ -218,7 +220,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
         </div>
       </footer>
       {/* bottom bar */}
-      <div className="px-10 relative z-10 border-t border-white/10 bg-[#141215] flex flex-row items-center justify-between w-full">
+      <div className="px-10 relative z-10 border-t border-white/10 bg-[#141215] flex flex-col md:flex-row items-center justify-between w-full">
         <div className="max-w-7xl px-4 py-6 text-center text-sm text-neutral-400">
           {data?.footer?.copyrightText}
         </div>

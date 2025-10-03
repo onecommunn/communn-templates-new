@@ -6,21 +6,41 @@ import { ContactDetails } from "@/models/templates/yogana/yogana-home-model";
 
 interface YoganaContactProps {
   data: ContactDetails;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
+const YoganaContact: FC<YoganaContactProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   const gold = "#C2A74E";
 
   return (
     <section id="contact" className="bg-white py-14">
+      <style jsx>{`
+        .dynamic-input::placeholder {
+          color: #888; /* gray placeholder */
+          opacity: 1; /* ensure it's visible */
+        }
+      `}</style>
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
           {/* Left: Form */}
           <div>
-            <p className="font-alex-brush text-2xl text-[#C2A74E]">
+            <p
+              className="font-alex-brush text-2xl text-[#C2A74E]"
+              style={{ color: primaryColor }}
+            >
               Send us email
             </p>
-            <h2 className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900">
+            <h2
+              className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900"
+              style={{ color: secondaryColor }}
+            >
               Send Us a Message
             </h2>
 
@@ -37,14 +57,37 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                   name="name"
                   placeholder="Enter Name"
                   required
-                  className="h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  className="dynamic-input h-12 w-full rounded-md px-4 text-sm outline-none transition-colors duration-200"
+                  style={{
+                    border: `1px solid #e5e5e5`,
+                    backgroundColor: `${neutralColor}10`,
+                    color: primaryColor,
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = primaryColor;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#e5e5e5";
+                  }}
                 />
+
                 <input
                   type="email"
                   name="email"
                   placeholder="Enter Email"
                   required
-                  className="h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  className="dynamic-input h-12 w-full rounded-md px-4 text-sm outline-none transition-colors duration-200"
+                  style={{
+                    border: `1px solid #e5e5e5`,
+                    backgroundColor: `${neutralColor}10`,
+                    color: primaryColor,
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = primaryColor;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#e5e5e5";
+                  }}
                 />
               </div>
 
@@ -53,13 +96,36 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                   type="text"
                   name="subject"
                   placeholder="Enter Subject"
-                  className="h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  className="dynamic-input h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  style={{
+                    border: `1px solid #e5e5e5`,
+                    backgroundColor: `${neutralColor}10`,
+                    color: primaryColor,
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = primaryColor;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#e5e5e5";
+                  }}
                 />
+
                 <input
                   type="tel"
                   name="phone"
                   placeholder="Enter Phone"
-                  className="h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  className="dynamic-input h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  style={{
+                    border: `1px solid #e5e5e5`,
+                    backgroundColor: `${neutralColor}10`,
+                    color: primaryColor,
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = primaryColor;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#e5e5e5";
+                  }}
                 />
               </div>
 
@@ -67,11 +133,23 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                 name="message"
                 placeholder="Enter Message"
                 rows={6}
-                className="w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-[#C2A74E]"
+                className="dynamic-input w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-[#C2A74E]"
+                style={{
+                  border: `1px solid #e5e5e5`,
+                  backgroundColor: `${neutralColor}10`,
+                  color: primaryColor,
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = primaryColor;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "#e5e5e5";
+                }}
               />
 
               <button
                 type="submit"
+                style={{ backgroundColor: primaryColor }}
                 className="inline-flex items-center gap-2 rounded-none cursor-pointer bg-[#C2A74E] px-6 py-3 text-sm font-medium text-white hover:opacity-95"
               >
                 <Send size={16} />
@@ -82,13 +160,22 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
 
           {/* Right: Contact Info */}
           <div>
-            <p className="font-alex-brush text-2xl text-[#C2A74E]">
+            <p
+              style={{ color: primaryColor }}
+              className="font-alex-brush text-2xl text-[#C2A74E]"
+            >
               Need any help?
             </p>
-            <h3 className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900">
+            <h3
+              style={{ color: secondaryColor }}
+              className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900"
+            >
               {data?.heading}
             </h3>
-            <p className="mt-3 font-plus-jakarta max-w-md text-[16px] leading-relaxed text-neutral-600">
+            <p
+              style={{ color: neutralColor }}
+              className="mt-3 font-plus-jakarta max-w-md text-[16px] leading-relaxed text-neutral-600"
+            >
               {data?.subHeading}
             </p>
 
@@ -96,16 +183,22 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
               {/* Phone */}
               <div className="flex items-start gap-4">
                 <div
-                  className="grid h-16 w-16 place-items-center"
-                  style={{ backgroundColor: gold }}
+                  className="grid h-16 w-16 min-h-16 min-w-16 place-items-center"
+                  style={{ backgroundColor: primaryColor }}
                 >
                   <Phone className="text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-700">
+                  <p
+                    style={{ color: neutralColor }}
+                    className="text-sm text-neutral-700"
+                  >
                     Have any question?
                   </p>
-                  <p className="mt-1 text-lg text-neutral-800">
+                  <p
+                    style={{ color: secondaryColor }}
+                    className="mt-1 text-lg text-neutral-800"
+                  >
                     {data?.call?.value}
                   </p>
                 </div>
@@ -114,16 +207,22 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
               {/* Email */}
               <div className="flex items-start gap-4">
                 <div
-                  className="grid h-16 w-16 place-items-center"
-                  style={{ backgroundColor: gold }}
+                  className="grid h-16 w-16 min-h-16 min-w-16 place-items-center"
+                  style={{ backgroundColor: primaryColor }}
                 >
-                  <Mail className="text-white" />
+                  <Mail className="text-white " />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-700">
+                  <p
+                    className="text-sm text-neutral-700"
+                    style={{ color: neutralColor }}
+                  >
                     Write email
                   </p>
-                  <p className="mt-1 text-lg text-neutral-800">
+                  <p
+                    style={{ color: secondaryColor }}
+                    className="mt-1 text-lg text-neutral-800"
+                  >
                     {data?.email?.value}
                   </p>
                 </div>
@@ -132,8 +231,8 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
               {/* Address */}
               <div className="flex items-start gap-4">
                 <div
-                  className="grid h-16 w-16 place-items-center"
-                  style={{ backgroundColor: gold }}
+                  className="grid h-16 w-16 min-h-16 min-w-16 place-items-center"
+                  style={{ backgroundColor: primaryColor }}
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -144,10 +243,16 @@ const YoganaContact: FC<YoganaContactProps> = ({ data }) => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-700">
+                  <p
+                    className="text-sm text-neutral-700"
+                    style={{ color: neutralColor }}
+                  >
                     Visit anytime
                   </p>
-                  <p className="mt-1 text-lg text-neutral-800">
+                  <p
+                    className="mt-1 text-lg text-neutral-800"
+                    style={{ color: secondaryColor }}
+                  >
                     {data?.address?.value}
                   </p>
                 </div>

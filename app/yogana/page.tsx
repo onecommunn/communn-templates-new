@@ -23,10 +23,16 @@ import {
   TestimoniesSection,
   YoganaHomePage,
 } from "@/models/templates/yogana/yogana-home-model";
+import { dummyData } from "./dummyData";
+
+
 
 const YoganaRoot = () => {
   const { home } = useCMS();
-  const source = home as YoganaHomePage | undefined;
+  const isLoading = home === undefined;
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined) ?? dummyData
+    : undefined;
 
   const heroSection = source?.sections.find(
     (s: HomeSection): s is HeroSection => s.sectionName === "heroSection"
@@ -65,13 +71,17 @@ const YoganaRoot = () => {
     (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection"
   );
 
-  const primaryColor = source?.color?.primary || "#dd0f0f";
-  const secondaryColor = source?.color?.secondary || "#fff200";
-  const neutralColor = source?.color?.neutral || "#09ff00";
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
 
   // const primaryColor = "#dd0f0f";
   // const secondaryColor = "#fff200";
   // const neutralColor = "#09ff00";
+
+  // const primaryColor = "#C2A74E";
+  // const secondaryColor = "#000";
+  // const neutralColor = "#707070";
 
   return (
     <>
@@ -117,7 +127,10 @@ const YoganaRoot = () => {
       )}
 
       {collaborationSection && (
-        <YoganaCollaboration data={collaborationSection} />
+        <YoganaCollaboration
+          data={collaborationSection}
+          primaryColor={primaryColor}
+        />
       )}
       {/* <YoganaCourses /> */}
       {/* <YoganaProducts /> */}
@@ -129,9 +142,18 @@ const YoganaRoot = () => {
           neutralColor={neutralColor}
         />
       )}
-      {gallerySection && <YoganaGallery data={gallerySection} />}
+      {gallerySection && (
+        <YoganaGallery data={gallerySection} primaryColor={primaryColor} />
+      )}
       {/* <YoganaBlogs /> */}
-      {contactSection && <YoganaContact data={contactSection} />}
+      {contactSection && (
+        <YoganaContact
+          data={contactSection}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
+        />
+      )}
     </>
   );
 };

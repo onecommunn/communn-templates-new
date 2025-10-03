@@ -225,7 +225,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                       if (e.key === "Enter" || e.key === " ")
                         handleViewMore(svc);
                     }}
-                    className="relative overflow-hidden rounded-t-[200px] rounded-b-[200px] shadow-md w-full h-full group cursor-pointer md:cursor-default"
+                    className="relative overflow-hidden rounded-t-[200px] rounded-b-[200px] shadow-md w-full h-[500px] md:h-[450px] group cursor-pointer md:cursor-default"
                     aria-label={`Open details for ${data.sectionName}`}
                   >
                     {/* Image */}
@@ -265,7 +265,6 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                     >
                       <h3
                         className="text-center text-white font-cormorant text-3xl md:text-3xl fontx`-extrabold drop-shadow"
-                        style={{ color: secondaryColor }}
                       >
                         {svc.serviceName}
                       </h3>
@@ -282,7 +281,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                         }}
                         style={{
                           backgroundColor: primaryColor,
-                          color: secondaryColor,
+                          color: '#fff',
                         }}
                         className="cursor-pointer font-plus-jakarta text-xs md:text-sm pointer-events-auto px-5 py-2 rounded-full font-medium shadow-lg transform transition-transform duration-200 ease-out hover:scale-105"
                         aria-label={`View more about ${data.sectionName}`}
@@ -329,7 +328,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
           </DialogHeader>
 
           <Button
-            style={{ backgroundColor: primaryColor, color: secondaryColor }}
+            style={{ backgroundColor: primaryColor }}
             className="cursor-pointer w-fit inline-flex items-center gap-2 rounded-full bg-[#C2A74E] px-5 py-2 text-white text-sm font-medium hover:opacity-95"
           >
             Explore Program

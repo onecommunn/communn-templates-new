@@ -153,7 +153,7 @@ export interface FooterSection {
     copyrightText: string;
     description:string;
   };
-  media:string;
+  media:string[];
   order: number;
   isActive: boolean;
   sectionName: "footerSection";

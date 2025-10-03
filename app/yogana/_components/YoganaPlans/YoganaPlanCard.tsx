@@ -10,7 +10,6 @@ import {
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
@@ -28,6 +27,8 @@ interface YoganaPlanCardProps {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  price: string;
+  period: string;
 }
 
 const YoganaPlanCard = ({
@@ -42,6 +43,8 @@ const YoganaPlanCard = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  price,
+  period,
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -91,7 +94,10 @@ const YoganaPlanCard = ({
           />
         </div>
         <div
-          className={`z-10 h-full border gap-6 border-dashed border-[${primaryColor}] rounded-[30px] py-10 px-6 flex flex-col items-center justify-center`}
+          style={{
+            borderColor: primaryColor,
+          }}
+          className={`z-10 h-full border gap-6 border-dashed border-[#C2A74E] rounded-[30px] py-10 px-6 flex flex-col items-center justify-center`}
         >
           <div
             style={{
@@ -102,25 +108,70 @@ const YoganaPlanCard = ({
             }}
             className="w-[103px] h-[103px] flex items-center justify-center"
           >
-            <p className="font-cormorant font-semibold text-[40px] pr-4">
+            <p
+              className="font-cormorant font-semibold text-[40px] pr-4"
+              style={{ color: secondaryColor }}
+            >
               {index}
             </p>
           </div>
           <h4
-            className={`text-[${primaryColor}] font-cormorant font-semibold text-3xl text-center w-full`}
+            style={{
+              color: primaryColor,
+            }}
+            className={`text-[#C2A74E] font-cormorant font-semibold text-3xl text-center w-full`}
           >
             {capitalizeWords(title)}
           </h4>
+
           <p
-            className={`font-plus-jakarta text-md text-center w-full text-[${secondaryColor}] line-clamp-5`}
+            style={{
+              color: neutralColor,
+            }}
+            className={`font-plus-jakarta text-md text-center w-full text-[#000] line-clamp-5`}
           >
             {description}
           </p>
+          <div className="flex items-baseline space-x-2">
+            <span
+              className="text-3xl font-bold text-[#C2A74E] font-plus-jakarta"
+              style={{ color: primaryColor }}
+            >
+              ₹{price}
+            </span>
+            <span
+              className="text-lg font-medium text-[#C2A74E] font-plus-jakarta"
+              style={{ color: primaryColor }}
+            >
+              / {period}
+            </span>
+          </div>
+
           {!isLoggedIn ? (
             <Link href="/login">
               <Button
                 variant="ghost"
-                className={`group hover:text-[${primaryColor}] border border-transparent hover:border-[${primaryColor}] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[${primaryColor}] text-white hover:rounded-full`}
+                className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer hover:rounded-full"
+                style={{
+                  backgroundColor: primaryColor, // button background
+                  color: "#fff", // button text
+                  border: `1px solid ${primaryColor}`, // optional: border same as primary
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    secondaryColor;
+                  (e.currentTarget as HTMLElement).style.color = primaryColor;
+                  (e.currentTarget as HTMLElement).style.borderColor =
+                    primaryColor;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    primaryColor;
+                  (e.currentTarget as HTMLElement).style.color = "#fff";
+                  (e.currentTarget as HTMLElement).style.borderColor =
+                    primaryColor;
+                }}
               >
                 Login to Subscribe
               </Button>
@@ -128,7 +179,9 @@ const YoganaPlanCard = ({
           ) : !isSubscribedCommunity ? (
             <Dialog>
               <DialogTrigger asChild>
-                <Button className={`group hover:text-[${primaryColor}] border border-transparent hover:border-[${primaryColor}] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[${primaryColor}] text-white hover:rounded-full`}>
+                <Button
+                  className={`group hover:text-[${primaryColor}] border border-transparent hover:border-[${primaryColor}] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[${primaryColor}] text-white hover:rounded-full`}
+                >
                   Join Community
                 </Button>
               </DialogTrigger>

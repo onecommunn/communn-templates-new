@@ -88,11 +88,19 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
       onMouseLeave={() => setPaused(false)}
     >
       <div className="relative z-10 text-center mb-4">
-        <h4 className={`text-[${primaryColor}] font-alex-brush text-3xl`}>
+        <h4
+          style={{
+            color: primaryColor,
+          }}
+          className={`text-[#C2A74E] font-alex-brush text-3xl`}
+        >
           {data?.heading}
         </h4>
         <p
-          className={`font-plus-jakarta text-[16px] text-[${neutralColor}] w-full`}
+          style={{
+            color: neutralColor,
+          }}
+          className={`font-plus-jakarta text-[16px] text-[#707070] w-full`}
         >
           {data?.subHeading}
         </p>
@@ -128,7 +136,10 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
 
               {/* stars */}
               <div
-                className={`mb-5 flex items-center justify-center gap-1 text-[${primaryColor}]`}
+                style={{
+                  color: primaryColor,
+                }}
+                className={`mb-5 flex items-center justify-center gap-1 text-[#C2A74E]`}
               >
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
@@ -143,17 +154,22 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
 
               {/* quote */}
               <p
-                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-xl font-medium leading-relaxed text-[${secondaryColor}]`}
+                style={{ color: secondaryColor }}
+                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-xl font-medium leading-relaxed text-[#000]`}
               >
                 “{active.quote}”
               </p>
 
               {/* author */}
-              <p className={`font-cormorant text-3xl text-[${secondaryColor}]`}>
+              <p
+                style={{ color: secondaryColor }}
+                className={`font-cormorant text-3xl text-[#000]`}
+              >
                 {active.author}{" "}
                 {active.role ? (
                   <span
-                    className={`text-[16px] text-[${neutralColor}] font-plus-jakarta`}
+                    style={{ color: neutralColor }}
+                    className={`text-[16px] text-[#707070] font-plus-jakarta`}
                   >
                     – {active.role}
                   </span>
@@ -169,9 +185,10 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
                       key={i}
                       onClick={() => setIndex(i)}
                       aria-label={`Go to slide ${i + 1}`}
+                      style={{ backgroundColor: isActive ? primaryColor : "" }}
                       className={`h-2.5 w-2.5 rounded-full cursor-pointer transition-transform ${
                         isActive
-                          ? `bg-[${primaryColor}] scale-100`
+                          ? `bg-[#C2A74E] scale-100`
                           : `bg-neutral-300 hover:scale-110`
                       }`}
                     />

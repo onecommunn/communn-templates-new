@@ -5,13 +5,24 @@ import React, { FC } from "react";
 
 interface YoganaCTAProps {
   data: CTASection;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
-const YoganaCTA: FC<YoganaCTAProps> = ({ data }) => {
+const YoganaCTA: FC<YoganaCTAProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   return (
     <section className="relative py-10 font-cormorant bg-white overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="relative overflow-hidden rounded-3xl border border-dashed border-[#C2A74E] p-10">
+        <div
+          className="relative overflow-hidden rounded-3xl border border-dashed border-[#C2A74E] p-10"
+          style={{ borderColor: primaryColor }}
+        >
           {/* BG overlay – no pointer events & behind */}
           <div
             className="pointer-events-none absolute inset-0 -z-10"
@@ -37,15 +48,24 @@ const YoganaCTA: FC<YoganaCTAProps> = ({ data }) => {
 
           {/* Content above */}
           <div className="relative z-10 mx-auto flex flex-col items-center justify-center gap-4">
-            <h4 className="text-center text-3xl font-semibold text-[#C2A74E]">
+            <h4
+              className="text-center text-3xl font-semibold text-[#C2A74E]"
+              style={{ color: primaryColor }}
+            >
               {data?.heading}
             </h4>
-            <p className="font-plus-jakarta md:max-w-3xl text-center text-[16px] text-[#707070]">
+            <p
+              className="font-plus-jakarta md:max-w-3xl text-center text-[16px] text-[#707070]"
+              style={{
+                color: neutralColor,
+              }}
+            >
               {data?.subHeading}
             </p>
             <Link href={data?.buttons?.[0]?.url || "/"}>
               <button
                 type="button"
+                style={{ color: primaryColor }}
                 className="group mt-2 inline-flex items-center gap-2 rounded-full font-plus-jakarta text-[13px] font-semibold uppercase tracking-wide text-[#C2A74E] cursor-pointer"
               >
                 {data?.buttons?.[0].label}

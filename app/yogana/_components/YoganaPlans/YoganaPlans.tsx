@@ -17,6 +17,7 @@ import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
+import { capitalizeWords } from "@/components/utils/StringFunctions";
 
 const PlanSkeletonCard = () => (
   <Skeleton className="h-[420px] w-full bg-gray-300 rounded-[30px]" />
@@ -67,6 +68,9 @@ function Dots({
             key={i}
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => api.scrollTo(i)}
+            style={{
+              backgroundColor: isActive ? primaryColor : "",
+            }}
             className={[
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
@@ -183,11 +187,19 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
 
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
-      <p className={`text-[${primaryColor}] font-alex-brush text-3xl`}>
+      <p
+        style={{
+          color: primaryColor,
+        }}
+        className={`text-[#C2A74E] font-alex-brush text-3xl`}
+      >
         {data?.heading}
       </p>
       <h2
-        className={`text-[${secondaryColor}] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+        style={{
+          color: secondaryColor,
+        }}
+        className={`text-[#000] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
       >
         {data?.subHeading}
       </h2>
@@ -267,6 +279,10 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         primaryColor={primaryColor}
                         secondaryColor={secondaryColor}
                         neutralColor={neutralColor}
+                        price={plan.pricing || `${plan.totalPlanValue}`}
+                        period={`${plan.interval} ${capitalizeWords(
+                          plan.duration
+                        )}`}
                       />
                     </div>
                   </CarouselItem>
@@ -274,11 +290,40 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
               </CarouselContent>
 
               <CarouselPrevious
-                className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
                 aria-label="Previous plans"
+                className="hidden sm:flex size-10 cursor-pointer"
+                style={{
+                  color: primaryColor, // text color
+                  backgroundColor: "transparent", // default bg
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    primaryColor;
+                  (e.currentTarget as HTMLElement).style.color = secondaryColor;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    "transparent";
+                  (e.currentTarget as HTMLElement).style.color = primaryColor;
+                }}
               />
+
               <CarouselNext
-                className={`hidden sm:flex size-10 text-[${primaryColor}] cursor-pointer hover:bg-[${primaryColor}] hover:text-white`}
+                className="hidden sm:flex size-10 cursor-pointer"
+                style={{
+                  color: primaryColor, // text color
+                  backgroundColor: "transparent", // default bg
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    primaryColor;
+                  (e.currentTarget as HTMLElement).style.color = secondaryColor;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    "transparent";
+                  (e.currentTarget as HTMLElement).style.color = primaryColor;
+                }}
                 aria-label="Next plans"
               />
             </Carousel>

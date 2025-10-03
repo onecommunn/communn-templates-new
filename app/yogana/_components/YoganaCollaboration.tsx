@@ -9,6 +9,7 @@ type Props = {
   data: Collaboration;
   baseVelocity?: number; // optional override
   direction?: 1 | -1; // optional override
+  primaryColor: string;
 };
 
 const FALLBACK_LOGOS = [
@@ -32,6 +33,7 @@ const YoganaCollaboration: React.FC<Props> = ({
   data,
   baseVelocity = 6,
   direction = 1,
+  primaryColor,
 }) => {
   const heading = data?.heading ?? "";
   const logos = (data.media?.length ? data.media : FALLBACK_LOGOS).map(
@@ -42,7 +44,10 @@ const YoganaCollaboration: React.FC<Props> = ({
     <section className="py-10 font-cormorant bg-[#C2A74E1A]">
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#C2A74E]  font-alex-brush">
+          <h2
+            style={{ color: primaryColor }}
+            className="text-3xl md:text-5xl font-bold mb-4 text-[#C2A74E]  font-alex-brush"
+          >
             {heading}
           </h2>
         </div>
