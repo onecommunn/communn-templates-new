@@ -48,6 +48,9 @@ export default async function YoganaShell({
         data={headerData}
         contactData={contactData}
         socialMediaList={footerData?.footer?.socialMedia}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

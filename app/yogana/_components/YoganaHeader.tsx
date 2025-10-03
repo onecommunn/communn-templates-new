@@ -1,4 +1,14 @@
 "use client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,11 +18,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactDetails,
   Header,
   SocialMediaLink,
 } from "@/models/templates/yogana/yogana-home-model";
+import { logoutService } from "@/services/logoutService";
 import {
   Dribbble,
   Facebook,
@@ -24,12 +36,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 interface IYoganaHeader {
   data: Header;
   contactData: ContactDetails;
   socialMediaList: SocialMediaLink[];
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 }
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -43,12 +58,27 @@ const YoganaHeader = ({
   data,
   contactData,
   socialMediaList,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
 }: IYoganaHeader) => {
   const normalize = (s?: string) => (s ?? "").trim();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const linkClass = (href: string) =>
     `font-inter ${pathname === href ? "font-semibold" : "hover:font-semibold"}`;
+  const auth = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    const success = await logoutService();
+    if (success) {
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
+      window.location.reload();
+    } else {
+      console.error("Logout failed, unable to navigate to login.");
+    }
+  };
   return (
     <header className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[#f4ede0]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
@@ -94,7 +124,26 @@ const YoganaHeader = ({
           </nav>
 
           {/* Mobile Menu (Sheet) */}
-          <div>
+          <div className="flex flex-row gap-4 items-center">
+            <>
+              {auth.user ? (
+                <>
+                  <div className="text-center min-w-fit font-alex-brush text-lg font-semibold">
+                    Hi, {auth.user?.firstName || auth.user?.email}
+                  </div>
+                </>
+              ) : (
+                <Link href={"/login"}>
+                  <Button
+                    className="rounded-[12px] py-1.5 px-6 h-fit! w-fit! cursor-pointer"
+                    style={{ background: primaryColor }}
+                  >
+                    Login
+                  </Button>
+                </Link>
+              )}
+            </>
+
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <div
@@ -207,6 +256,29 @@ const YoganaHeader = ({
                         {contactData?.address?.value}
                       </p>
                     </div>
+                    {auth?.user && (
+                      <AlertDialog>
+                        <AlertDialogTrigger className="cursor-pointer border-none focus-visible:border-none bg-red-600  font-inter  w-full text-white rounded-[12px] text-sm py-2">
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-inter">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-center gap-10 mb-10">
