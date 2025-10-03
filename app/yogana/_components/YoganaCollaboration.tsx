@@ -41,7 +41,12 @@ const YoganaCollaboration: React.FC<Props> = ({
   );
 
   return (
-    <section className="py-10 font-cormorant bg-[#C2A74E1A]">
+    <section
+      className="py-10 font-cormorant bg-[#C2A74E1A]"
+      style={{
+        backgroundColor: `${primaryColor}1A`,
+      }}
+    >
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
           <h2

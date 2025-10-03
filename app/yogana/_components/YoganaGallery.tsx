@@ -39,7 +39,12 @@ interface YoganaGalleryProps {
 }
 const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor }) => {
   return (
-    <section className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden">
+    <section
+      className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
+      style={{
+        backgroundColor: `${primaryColor}1A`,
+      }}
+    >
       <div
         className="absolute inset-0 -z-10 pointer-events-none select-none"
         aria-hidden="true"

@@ -159,6 +159,9 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     <section
       id="services"
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
+      style={{
+        backgroundColor: `${primaryColor}1A`,
+      }}
     >
       {/* background accents */}
       <div className="absolute inset-0 pointer-events-none">
@@ -263,9 +266,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                         transition-opacity duration-300 ease-out pointer-events-none
                       "
                     >
-                      <h3
-                        className="text-center text-white font-cormorant text-3xl md:text-3xl fontx`-extrabold drop-shadow"
-                      >
+                      <h3 className="text-center text-white font-cormorant text-3xl md:text-3xl fontx`-extrabold drop-shadow">
                         {svc.serviceName}
                       </h3>
                     </div>
@@ -281,7 +282,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                         }}
                         style={{
                           backgroundColor: primaryColor,
-                          color: '#fff',
+                          color: "#fff",
                         }}
                         className="cursor-pointer font-plus-jakarta text-xs md:text-sm pointer-events-auto px-5 py-2 rounded-full font-medium shadow-lg transform transition-transform duration-200 ease-out hover:scale-105"
                         aria-label={`View more about ${data.sectionName}`}

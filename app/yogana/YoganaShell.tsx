@@ -42,6 +42,10 @@ export default async function YoganaShell({
   const primaryColor = source?.color?.primary || "#C2A74E";
   const secondaryColor = source?.color?.secondary || "#000";
   const neutralColor = source?.color?.neutral || "#707070";
+
+   // const primaryColor = "#C2A74E";
+  // const secondaryColor = "#000";
+  // const neutralColor = "#707070";
   return (
     <>
       <YoganaHeader

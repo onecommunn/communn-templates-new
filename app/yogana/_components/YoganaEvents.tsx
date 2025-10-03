@@ -199,6 +199,9 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
       <section
         id="events"
         className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
+        style={{
+          backgroundColor: `${primaryColor}1A`,
+        }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <Header />
@@ -234,6 +237,9 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
     <section
       id="events"
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
+      style={{
+        backgroundColor: `${primaryColor}1A`,
+      }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <Header />
