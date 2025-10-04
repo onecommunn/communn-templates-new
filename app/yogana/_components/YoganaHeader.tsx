@@ -32,6 +32,7 @@ import {
   Instagram,
   Linkedin,
   Mail,
+  MapPin,
   Phone,
 } from "lucide-react";
 import Link from "next/link";
@@ -232,29 +233,36 @@ const YoganaHeader = ({
                 <div className="flex flex-col justify-between gap-4 px-6 mt-6 h-full relative">
                   <div className="flex flex-col gap-4">
                     {" "}
-                    <div className="flex items-center gap-4">
-                      <Phone className="text-white" />
-                      <p className="text-lg text-white">
-                        {contactData?.call?.value}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Mail className="text-white" />
-                      <p className="text-lg text-white">
-                        {contactData?.email?.value}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <svg
-                        viewBox="0 0 24 24"
-                        className="h-6 w-6 text-white"
-                        fill="currentColor"
-                      >
-                        <path d="M12 2C8.14 2 5 5.14 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
-                      </svg>
-                      <p className="text-lg text-white">
-                        {contactData?.address?.value}
-                      </p>
+                    <div className="flex flex-col gap-4">
+                      {/* Phone */}
+                      <div className="flex items-center gap-4">
+                        <Phone className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
+                        <a
+                          href={`tel:${contactData?.call?.value ?? ""}`}
+                          className="text-md text-white hover:underline"
+                        >
+                          {contactData?.call?.value}
+                        </a>
+                      </div>
+
+                      {/* Email */}
+                      <div className="flex items-center gap-4">
+                        <Mail className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
+                        <a
+                          href={`mailto:${contactData?.email?.value ?? ""}`}
+                          className="text-md text-white underline hover:no-underline"
+                        >
+                          {contactData?.email?.value}
+                        </a>
+                      </div>
+
+                      {/* Address */}
+                      <div className="flex items-start gap-4">
+                        <MapPin className="text-white w-6 h-6 mt-1 shrink-0" strokeWidth={1.5} />
+                        <p className="text-md text-white leading-relaxed break-words">
+                          {contactData?.address?.value}
+                        </p>
+                      </div>
                     </div>
                     {auth?.user && (
                       <AlertDialog>
