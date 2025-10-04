@@ -130,6 +130,8 @@ const YoganaRoot = () => {
         <YoganaCollaboration
           data={collaborationSection}
           primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
         />
       )}
       {/* <YoganaCourses /> */}
@@ -143,7 +145,10 @@ const YoganaRoot = () => {
         />
       )}
       {gallerySection && (
-        <YoganaGallery data={gallerySection} primaryColor={primaryColor} />
+        <YoganaGallery data={gallerySection}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor} />
       )}
       {/* <YoganaBlogs /> */}
       {contactSection && (

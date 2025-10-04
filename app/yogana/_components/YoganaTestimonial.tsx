@@ -94,18 +94,26 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           }}
           className={`text-[#C2A74E] font-alex-brush text-3xl`}
         >
+          Testimonials
+        </h4>
+        <h4
+          style={{
+            color: secondaryColor,
+          }}
+          className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+        >
           {data?.heading}
         </h4>
         <p
           style={{
             color: neutralColor,
           }}
-          className={`font-plus-jakarta text-[16px] text-[#707070] w-full`}
+          className={`font-plus-jakarta text-[16px] text-[#707070] w-full mt-2`}
         >
           {data?.subHeading}
         </p>
       </div>
-      <div className="mx-auto">
+      <div className="mx-auto mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Image */}
           <div className="relative aspect-[16/12] md:aspect-auto md:h-[720px] md:max-h-[700px]">
@@ -154,8 +162,8 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
 
               {/* quote */}
               <p
-                style={{ color: secondaryColor }}
-                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-xl font-medium leading-relaxed text-[#000]`}
+                style={{ color: neutralColor }}
+                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-lg font-small leading-relaxed text-[#000]`}
               >
                 “{active.quote}”
               </p>
@@ -186,11 +194,10 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
                       onClick={() => setIndex(i)}
                       aria-label={`Go to slide ${i + 1}`}
                       style={{ backgroundColor: isActive ? primaryColor : "" }}
-                      className={`h-2.5 w-2.5 rounded-full cursor-pointer transition-transform ${
-                        isActive
-                          ? `bg-[#C2A74E] scale-100`
-                          : `bg-neutral-300 hover:scale-110`
-                      }`}
+                      className={`h-2.5 w-2.5 rounded-full cursor-pointer transition-transform ${isActive
+                        ? `bg-[#C2A74E] scale-100`
+                        : `bg-neutral-300 hover:scale-110`
+                        }`}
                     />
                   );
                 })}

@@ -29,6 +29,7 @@ interface YoganaPlanCardProps {
   neutralColor: string;
   price: string;
   period: string;
+  coverImage: string
 }
 
 const YoganaPlanCard = ({
@@ -45,12 +46,15 @@ const YoganaPlanCard = ({
   neutralColor,
   price,
   period,
+  coverImage
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
   const isLoggedIn = !!userId;
   const { joinToPublicCommunity } = usePlans();
   const [mounted, setMounted] = useState(false);
+
+  console.log(coverImage, "coverImage")
 
   const handleClickJoin = async (id: string) => {
     try {
@@ -115,11 +119,26 @@ const YoganaPlanCard = ({
               {index}
             </p>
           </div>
+
+          {/* <div className="relative aspect-[13/16] rounded-2xl overflow-hidden">
+            <Image
+              src={
+                coverImage ||
+                "/assets/yogona-hero-image.jpg"
+              }
+              alt={title || "Plan Image"}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              sizes="(max-width:768px) 100vw, (max-width:1280px) 33vw, 33vw"
+              priority
+              unoptimized
+            />s
+          </div> */}
           <h4
             style={{
               color: primaryColor,
             }}
-            className={`text-[#C2A74E] font-cormorant font-semibold text-3xl text-center w-full`}
+            className={`text-[#C2A74E] font-cormorant font-semibold text-2xl text-center w-full`}
           >
             {capitalizeWords(title)}
           </h4>
@@ -128,13 +147,13 @@ const YoganaPlanCard = ({
             style={{
               color: neutralColor,
             }}
-            className={`font-plus-jakarta text-md text-center w-full text-[#000] line-clamp-5`}
+            className={`font-plus-jakarta text-sm text-center w-full text-[#000] line-clamp-5`}
           >
             {description}
           </p>
           <div className="flex items-baseline space-x-2">
             <span
-              className="text-3xl font-bold text-[#C2A74E] font-plus-jakarta"
+              className="text-lg font-bold text-[#C2A74E] font-plus-jakarta"
               style={{ color: primaryColor }}
             >
               ₹{price}
@@ -143,7 +162,7 @@ const YoganaPlanCard = ({
               className="text-lg font-medium text-[#C2A74E] font-plus-jakarta"
               style={{ color: primaryColor }}
             >
-              / {period}
+              /{" "}{period}
             </span>
           </div>
 

@@ -105,6 +105,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   const isAuthenticated = authContext?.isAuthenticated;
   const { communityId } = useCommunity();
 
+  console.log(plans, "plans");
+
   // Persist the autoplay plugin instance
   const autoplay = useRef(
     Autoplay({
@@ -283,6 +285,10 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         period={`${plan.interval} ${capitalizeWords(
                           plan.duration
                         )}`}
+                        coverImage={
+                          plan?.image?.value ||
+                          "/assets/creatorCoursesPlaceHolderImage.jpg"
+                        }
                       />
                     </div>
                   </CarouselItem>

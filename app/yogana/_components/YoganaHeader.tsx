@@ -129,8 +129,8 @@ const YoganaHeader = ({
             <>
               {auth.user ? (
                 <>
-                  <div className="text-center min-w-fit font-alex-brush text-lg font-semibold">
-                    Hi, {auth.user?.firstName || auth.user?.email}
+                  <div className="text-center min-w-fit text-lg font-semibold">
+                    Hi, {auth.user?.firstName}
                   </div>
                 </>
               ) : (
