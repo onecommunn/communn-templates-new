@@ -77,7 +77,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
               </h3>
             </div>
             <p
-              className="font-plus-jakarta font-semibold text-[16px] italic text-[#707070] my-4"
+              className="font-plus-jakarta font-[500] text-[14px] italic text-[#707070] my-4"
               style={{
                 color: neutralColor,
               }}
@@ -96,8 +96,8 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                         strokeWidth={3}
                         absoluteStrokeWidth
                       />
-                      <span className="font-plus-jakarta text-[16px] text-[#707070]" style={{
-                        color:neutralColor
+                      <span className="font-plus-jakarta text-[13px] text-[#707070]" style={{
+                        color: neutralColor
                       }}>
                         {each}
                       </span>

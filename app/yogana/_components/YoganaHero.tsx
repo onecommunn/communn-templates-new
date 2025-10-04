@@ -50,7 +50,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
             {/* Title */}
             <div>
               <h1
-                className="font-cormorant text-[90px] md:text-[180px] text-[#1C1A1D]"
+                className="font-cormorant text-[90px] md:text-[130px] text-[#1C1A1D]"
                 style={{
                   color: secondaryColor,
                 }}
@@ -58,7 +58,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                 {data?.heading}
               </h1>
               <h3
-                className="font-alex-brush text-[65px]/[30px] text-[#C2A74E] md:text-[130px]/[60px]"
+                className="font-alex-brush text-[65px]/[30px] text-[#C2A74E] md:text-[90px]/[60px]"
                 style={{
                   color: primaryColor,
                 }}
