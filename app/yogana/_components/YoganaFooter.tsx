@@ -81,7 +81,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                 className="inline-flex items-center"
               >
                 <img
-                  src={data?.footer?.logo || "/logo/yogana_Light_Logo.png"}
+                  src={data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
                   alt="Yogana"
                   width={140}
                   height={40}
@@ -193,29 +193,47 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
 
             {/* col 4: contact */}
             <div className="lg:col-span-4">
-              <h4 className="font-cormorant text-2xl text-neutral-100">
-                Contact
-              </h4>
+              <h4 className="font-cormorant text-2xl text-neutral-100">Contact</h4>
+
               <ul className="mt-5 space-y-5 text-sm">
-                <li className="flex items-center gap-2 text-neutral-300">
-                  <MapPinIcon className="w-5 h-5 text-neutral-400" />
-                  {contactData?.address?.value}
+                {/* Address */}
+                <li className="flex items-start gap-2 text-neutral-300">
+                  <MapPinIcon
+                    className="h-5 w-5 mt-[2px] flex-shrink-0 text-neutral-400"
+                    aria-hidden="true"
+                  />
+                  <span className="leading-relaxed break-words">
+                    {contactData?.address?.value}
+                  </span>
                 </li>
-                <li className="flex items-center gap-2 text-neutral-300">
-                  <PhoneIcon className="w-5 h-5 text-neutral-400" />
-                  {contactData?.call?.value}
+
+                {/* Phone */}
+                <li className="flex items-start gap-2 text-neutral-300">
+                  <PhoneIcon
+                    className="h-5 w-5 mt-[2px] flex-shrink-0 text-neutral-400"
+                    aria-hidden="true"
+                  />
+                  <a href={`tel:${contactData?.call?.value}`} className="hover:text-white">
+                    {contactData?.call?.value}
+                  </a>
                 </li>
-                <li className="flex items-center gap-2 text-neutral-300">
-                  <MailIcon className="w-5 h-5 text-neutral-400" />
-                  <Link
+
+                {/* Email */}
+                <li className="flex items-start gap-2 text-neutral-300">
+                  <MailIcon
+                    className="h-5 w-5 mt-[2px] flex-shrink-0 text-neutral-400"
+                    aria-hidden="true"
+                  />
+                  <a
                     href={`mailto:${contactData?.email?.value}`}
-                    className="underline hover:text-white"
+                    className="underline hover:text-white break-words"
                   >
                     {contactData?.email?.value}
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
+
           </div>
         </div>
       </footer>

@@ -136,8 +136,9 @@ const YoganaLogin = () => {
     <>
       <main className="flex-grow flex h-[50vh] items-center justify-center py-12 px-4 bg-[#C2A74E1A]">
         <div className="w-full max-w-md">
-          <div className="rounded-lg shadow-md border p-8">
-            <h2 className="text-3xl font-bold mb-8 text-center font-cormorant">Login</h2>
+          <div className="rounded-lg shadow-md border p-8 bg-[#ffffff]">
+            <h2 className="text-3xl font-bold mb-8 text-center font-cormorant"
+            >Login</h2>
 
             {step === "mobile" ? (
               <div className="space-y-6">
@@ -180,11 +181,10 @@ const YoganaLogin = () => {
                     <button
                       onClick={handleGetOtp}
                       disabled={!isInputValid() || loading}
-                      className={`${
-                        isInputValid() && !loading
-                          ? "bg-[#C2A74E] rounded-none cursor-pointer"
-                          : "bg-gray-300 cursor-not-allowed"
-                      } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                      className={`${isInputValid() && !loading
+                        ? "bg-[#C2A74E] rounded-none cursor-pointer"
+                        : "bg-gray-300 cursor-not-allowed"
+                        } text-white px-6 py-3 rounded-lg font-medium w-full`}
                     >
                       {loading ? "Sending..." : "Get OTP"}
                     </button>

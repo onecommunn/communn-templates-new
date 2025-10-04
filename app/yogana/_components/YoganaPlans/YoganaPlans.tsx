@@ -264,7 +264,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 {plans.map((plan, index) => (
                   <CarouselItem
                     key={plan._id ?? index}
-                    className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                    className="basis-full md:basis-1/3"
                   >
                     <div className="h-full">
                       <YoganaPlanCard

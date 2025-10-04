@@ -69,14 +69,18 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor }) => {
       </div>
 
       {/* heading */}
+
       <div className="flex items-center justify-center gap-6 md:px-10">
+
         <div className="h-px w-full bg-neutral-200/80" />
+
         <p
           style={{ color: primaryColor }}
           className="font-semibold text-3xl text-[#1C1A1D] min-w-fit"
         >
           {data.heading}
         </p>
+
         <div className="h-px w-full bg-neutral-200/80" />
       </div>
       <div className="mt-6">
