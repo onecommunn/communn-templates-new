@@ -29,7 +29,7 @@ interface YoganaPlanCardProps {
   neutralColor: string;
   price: string;
   period: string;
-  coverImage: string
+  coverImage: string;
 }
 
 const YoganaPlanCard = ({
@@ -46,7 +46,7 @@ const YoganaPlanCard = ({
   neutralColor,
   price,
   period,
-  coverImage
+  coverImage,
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -54,7 +54,7 @@ const YoganaPlanCard = ({
   const { joinToPublicCommunity } = usePlans();
   const [mounted, setMounted] = useState(false);
 
-  console.log(coverImage, "coverImage")
+  console.log(coverImage, "coverImage");
 
   const handleClickJoin = async (id: string) => {
     try {
@@ -162,7 +162,7 @@ const YoganaPlanCard = ({
               className="text-lg font-medium text-[#C2A74E] font-plus-jakarta"
               style={{ color: primaryColor }}
             >
-              /{" "}{period}
+              / {period}
             </span>
           </div>
 
@@ -199,7 +199,26 @@ const YoganaPlanCard = ({
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  className={`group hover:text-[${primaryColor}] border border-transparent hover:border-[${primaryColor}] rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer bg-[${primaryColor}] text-white hover:rounded-full`}
+                  className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer transition-all duration-300 hover:rounded-full"
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: "#fff",
+                    border: `1px solid transparent`,
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      "transparent";
+                    (e.currentTarget as HTMLElement).style.color = primaryColor;
+                    (e.currentTarget as HTMLElement).style.borderColor =
+                      primaryColor;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                      primaryColor;
+                    (e.currentTarget as HTMLElement).style.color = "#fff";
+                    (e.currentTarget as HTMLElement).style.borderColor =
+                      "transparent";
+                  }}
                 >
                   Join Community
                 </Button>
@@ -215,6 +234,9 @@ const YoganaPlanCard = ({
                     onClick={() => handleClickJoin(communityId)}
                     disabled={isSubscribed}
                     className={`bg-[${primaryColor}] text-white cursor-pointer`}
+                    style={{
+                      backgroundColor: primaryColor,
+                    }}
                   >
                     Confirm Join
                   </Button>

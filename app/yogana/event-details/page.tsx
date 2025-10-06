@@ -1,5 +1,8 @@
+"use client";
 import React, { Suspense } from "react";
 import YogansEventDetail from "./_components/YogansEventDetail";
+import { useCMS } from "../CMSProvider.client";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 
 function EventDetailsSkeleton() {
   return (
@@ -29,9 +32,21 @@ function EventDetailsSkeleton() {
 }
 
 const YoganaEventDetailsPage = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
   return (
     <Suspense fallback={<EventDetailsSkeleton />}>
-      <YogansEventDetail />
+      <YogansEventDetail
+        primaryColor={primaryColor}
+        neutralColor={neutralColor}
+        secondaryColor={secondaryColor}
+      />
     </Suspense>
   );
 };

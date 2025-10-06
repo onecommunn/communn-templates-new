@@ -10,8 +10,18 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
+import { useCMS } from "../CMSProvider.client";
 
 const YoganaLogin = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
@@ -134,11 +144,18 @@ const YoganaLogin = () => {
 
   return (
     <>
-      <main className="flex-grow flex h-[50vh] items-center justify-center py-12 px-4 bg-[#C2A74E1A]">
+      <main
+        className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[#C2A74E1A]"
+        style={{ backgroundColor: `${primaryColor}1A` }}
+      >
         <div className="w-full max-w-md">
           <div className="rounded-lg shadow-md border p-8 bg-[#ffffff]">
-            <h2 className="text-3xl font-bold mb-8 text-center font-cormorant"
-            >Login</h2>
+            <h2
+              className="text-3xl font-bold mb-8 text-center font-cormorant"
+              style={{ color: primaryColor }}
+            >
+              Login
+            </h2>
 
             {step === "mobile" ? (
               <div className="space-y-6">
@@ -147,13 +164,17 @@ const YoganaLogin = () => {
                     onClick={toggleAuthMethod}
                     className="cursor-pointer underline font-plus-jakarta text-sm font-medium"
                     disabled={loading}
+                    style={{ color: neutralColor }}
                   >
                     {useEmail ? "Use Mobile No" : "Use Email ID"}
                   </button>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-600 mb-2 font-plus-jakarta font-bold">
+                  <label
+                    className="block text-sm text-gray-600 mb-2 font-plus-jakarta font-bold"
+                    style={{ color: neutralColor }}
+                  >
                     {useEmail ? "Enter Email ID" : "Enter Mobile No"}
                   </label>
                   <div className="flex gap-3 flex-col">
@@ -176,15 +197,32 @@ const YoganaLogin = () => {
                       }
                       className="flex-1 px-4 py-2 border font-plus-jakarta border-gray-300 rounded-lg focus:ring-[#C2A74E] focus:outline-none focus:ring-2"
                       disabled={loading}
+                      style={{
+                        border: "1px solid #ddd",
+                        borderRadius: "6px",
+                        padding: "0.75rem 1rem",
+                        outline: "none",
+                        transition: "all 0.3s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 3px ${primaryColor}10`; // 25% opacity
+                        e.currentTarget.style.borderColor = primaryColor;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.borderColor = "#ddd";
+                      }}
                     />
 
                     <button
                       onClick={handleGetOtp}
                       disabled={!isInputValid() || loading}
-                      className={`${isInputValid() && !loading
-                        ? "bg-[#C2A74E] rounded-none cursor-pointer"
-                        : "bg-gray-300 cursor-not-allowed"
-                        } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                      className={`${
+                        isInputValid() && !loading
+                          ? "bg-[#C2A74E] rounded-none cursor-pointer"
+                          : "bg-gray-300 cursor-not-allowed"
+                      } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                      style={{ backgroundColor: primaryColor }}
                     >
                       {loading ? "Sending..." : "Get OTP"}
                     </button>

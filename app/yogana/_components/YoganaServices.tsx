@@ -297,11 +297,35 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
           </CarouselContent>
 
           <CarouselPrevious
-            style={{ color: primaryColor }}
+            style={{
+              color: primaryColor,
+              backgroundColor: "#fff",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                primaryColor;
+              (e.currentTarget as HTMLElement).style.color = "#fff";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
+              (e.currentTarget as HTMLElement).style.color = primaryColor;
+            }}
             className="hidden sm:flex size-10 text-[#C2A74E] cursor-pointer hover:bg-[#C2A74E] hover:text-white"
           />
           <CarouselNext
-            style={{ color: primaryColor }}
+            style={{
+              color: primaryColor,
+              backgroundColor: "#fff",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                primaryColor;
+              (e.currentTarget as HTMLElement).style.color = "#fff";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
+              (e.currentTarget as HTMLElement).style.color = primaryColor;
+            }}
             className="hidden sm:flex size-10 text-[#C2A74E] cursor-pointer hover:bg-[#C2A74E] hover:text-white"
           />
         </Carousel>

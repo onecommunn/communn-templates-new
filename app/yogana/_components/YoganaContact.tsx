@@ -1,8 +1,12 @@
 "use client";
 
-import React, { FC } from "react";
+import React, { FC, useContext, useState } from "react";
 import { Phone, Mail, Send } from "lucide-react";
 import { ContactDetails } from "@/models/templates/yogana/yogana-home-model";
+import { ContactForm } from "@/models/contact.model";
+import { sendNotification } from "@/services/contactService";
+import { toast } from "sonner";
+import { AuthContext } from "@/contexts/Auth.context";
 
 interface YoganaContactProps {
   data: ContactDetails;
@@ -17,58 +21,100 @@ const YoganaContact: FC<YoganaContactProps> = ({
   secondaryColor,
   neutralColor,
 }) => {
-  const gold = "#C2A74E";
+  const auth = useContext(AuthContext);
+  const { communityId } = auth;
+  const [form, setForm] = useState<ContactForm>({
+    name: "",
+    email: "",
+    subject: "",
+    phoneNumber: "",
+    message: "",
+    communityId: communityId,
+  });
+
+  console.log(communityId, "communityId");
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log(form, "form");
+
+    try {
+      const payload = { ...form, communityId };
+      const response = await sendNotification(payload);
+      toast.success("Message sent successfully!");
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        phoneNumber: "",
+        message: "",
+        communityId: communityId,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section id="contact" className="bg-white py-14">
       <style jsx>{`
         .dynamic-input::placeholder {
-          color: #888; /* gray placeholder */
-          opacity: 1; /* ensure it's visible */
+          color: #888;
+          opacity: 1;
         }
       `}</style>
+
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
           {/* Left: Form */}
           <div>
             <p
-              className="font-alex-brush text-2xl text-[#C2A74E]"
+              className="font-alex-brush text-2xl"
               style={{ color: primaryColor }}
             >
               Send us email
             </p>
             <h2
-              className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900"
+              className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl"
               style={{ color: secondaryColor }}
             >
               Send Us a Message
             </h2>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                // TODO: handle submit
-              }}
-              className="mt-8 space-y-4"
-            >
+            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <input
                   type="text"
                   name="name"
                   placeholder="Enter Name"
                   required
+                  value={form.name}
+                  onChange={handleChange}
                   className="dynamic-input h-12 w-full rounded-md px-4 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: `1px solid #e5e5e5`,
                     backgroundColor: `${neutralColor}10`,
-                    color: primaryColor,
+                    // color: primaryColor,
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = primaryColor;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#e5e5e5";
-                  }}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderColor = primaryColor)
+                  }
+                  onBlur={(e) =>
+                    (e.currentTarget.style.borderColor = "#e5e5e5")
+                  }
                 />
 
                 <input
@@ -76,18 +122,20 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   name="email"
                   placeholder="Enter Email"
                   required
+                  value={form.email}
+                  onChange={handleChange}
                   className="dynamic-input h-12 w-full rounded-md px-4 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: `1px solid #e5e5e5`,
                     backgroundColor: `${neutralColor}10`,
-                    color: primaryColor,
+                    // color: primaryColor,
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = primaryColor;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#e5e5e5";
-                  }}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderColor = primaryColor)
+                  }
+                  onBlur={(e) =>
+                    (e.currentTarget.style.borderColor = "#e5e5e5")
+                  }
                 />
               </div>
 
@@ -96,36 +144,40 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   type="text"
                   name="subject"
                   placeholder="Enter Subject"
-                  className="dynamic-input h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  value={form.subject}
+                  onChange={handleChange}
+                  className="dynamic-input h-12 w-full rounded-md px-4 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: `1px solid #e5e5e5`,
                     backgroundColor: `${neutralColor}10`,
-                    color: primaryColor,
+                    // color: primaryColor,
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = primaryColor;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#e5e5e5";
-                  }}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderColor = primaryColor)
+                  }
+                  onBlur={(e) =>
+                    (e.currentTarget.style.borderColor = "#e5e5e5")
+                  }
                 />
 
                 <input
                   type="tel"
-                  name="phone"
+                  name="phoneNumber"
                   placeholder="Enter Phone"
-                  className="dynamic-input h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none focus:border-[#C2A74E]"
+                  value={form.phoneNumber}
+                  onChange={handleChange}
+                  className="dynamic-input h-12 w-full rounded-md px-4 text-sm outline-none transition-colors duration-200"
                   style={{
                     border: `1px solid #e5e5e5`,
                     backgroundColor: `${neutralColor}10`,
-                    color: primaryColor,
+                    // color: primaryColor,
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = primaryColor;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#e5e5e5";
-                  }}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.borderColor = primaryColor)
+                  }
+                  onBlur={(e) =>
+                    (e.currentTarget.style.borderColor = "#e5e5e5")
+                  }
                 />
               </div>
 
@@ -133,27 +185,33 @@ const YoganaContact: FC<YoganaContactProps> = ({
                 name="message"
                 placeholder="Enter Message"
                 rows={6}
-                className="dynamic-input w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-[#C2A74E]"
+                required
+                value={form.message}
+                onChange={handleChange}
+                className="dynamic-input w-full rounded-md px-4 py-3 text-sm outline-none transition-colors duration-200"
                 style={{
                   border: `1px solid #e5e5e5`,
                   backgroundColor: `${neutralColor}10`,
-                  color: primaryColor,
+                  // color: primaryColor,
                 }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = primaryColor;
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "#e5e5e5";
-                }}
+                onFocus={(e) =>
+                  (e.currentTarget.style.borderColor = primaryColor)
+                }
+                onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e5e5")}
               />
 
               <button
                 type="submit"
+                disabled={loading}
                 style={{ backgroundColor: primaryColor }}
-                className="inline-flex items-center gap-2 rounded-none cursor-pointer bg-[#C2A74E] px-6 py-3 text-sm font-medium text-white hover:opacity-95"
+                className={`inline-flex items-center gap-2 rounded-none px-6 py-3 text-sm font-medium text-white ${
+                  loading
+                    ? "opacity-70 cursor-not-allowed"
+                    : "cursor-pointer hover:opacity-95"
+                }`}
               >
-                <Send size={16} />
-                SEND MESSAGE
+                {loading ? "SENDING..." : <Send size={16} />}
+                {!loading && "SEND MESSAGE"}
               </button>
             </form>
           </div>
@@ -162,19 +220,19 @@ const YoganaContact: FC<YoganaContactProps> = ({
           <div>
             <p
               style={{ color: primaryColor }}
-              className="font-alex-brush text-2xl text-[#C2A74E]"
+              className="font-alex-brush text-2xl"
             >
               Need any help?
             </p>
             <h3
               style={{ color: secondaryColor }}
-              className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl text-neutral-900"
+              className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl"
             >
               {data?.heading}
             </h3>
             <p
               style={{ color: neutralColor }}
-              className="mt-3 font-plus-jakarta max-w-md text-[16px] leading-relaxed text-neutral-600"
+              className="mt-3 font-plus-jakarta max-w-md text-[16px] leading-relaxed"
             >
               {data?.subHeading}
             </p>
@@ -189,16 +247,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   <Phone className="text-white" />
                 </div>
                 <div>
-                  <p
-                    style={{ color: neutralColor }}
-                    className="text-sm text-neutral-700"
-                  >
+                  <p style={{ color: neutralColor }} className="text-sm">
                     Have any question?
                   </p>
-                  <p
-                    style={{ color: secondaryColor }}
-                    className="mt-1 text-md text-neutral-800"
-                  >
+                  <p style={{ color: secondaryColor }} className="mt-1 text-md">
                     {data?.call?.value}
                   </p>
                 </div>
@@ -213,16 +265,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   <Mail className="text-white " />
                 </div>
                 <div>
-                  <p
-                    className="text-sm text-neutral-700"
-                    style={{ color: neutralColor }}
-                  >
+                  <p className="text-sm" style={{ color: neutralColor }}>
                     Write email
                   </p>
-                  <p
-                    style={{ color: secondaryColor }}
-                    className="mt-1 text-md text-neutral-800"
-                  >
+                  <p style={{ color: secondaryColor }} className="mt-1 text-md">
                     {data?.email?.value}
                   </p>
                 </div>
@@ -243,16 +289,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   </svg>
                 </div>
                 <div>
-                  <p
-                    className="text-sm text-neutral-700"
-                    style={{ color: neutralColor }}
-                  >
+                  <p className="text-sm" style={{ color: neutralColor }}>
                     Visit anytime
                   </p>
-                  <p
-                    className="mt-1 text-md text-neutral-800"
-                    style={{ color: secondaryColor }}
-                  >
+                  <p className="mt-1 text-md" style={{ color: secondaryColor }}>
                     {data?.address?.value}
                   </p>
                 </div>

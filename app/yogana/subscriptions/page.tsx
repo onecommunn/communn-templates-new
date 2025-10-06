@@ -1,6 +1,8 @@
-import React, { Suspense } from 'react'
-import CreatorSubscriptions from './_components/YoganaSubscriptions'
-
+"use client";
+import React, { Suspense } from "react";
+import CreatorSubscriptions from "./_components/YoganaSubscriptions";
+import { useCMS } from "../CMSProvider.client";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 
 function PlanDetailsSkeleton() {
   return (
@@ -30,11 +32,23 @@ function PlanDetailsSkeleton() {
 }
 
 const YoganaSubscriptionsPage = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
   return (
     <Suspense fallback={<PlanDetailsSkeleton />}>
-      <CreatorSubscriptions />
+      <CreatorSubscriptions
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
     </Suspense>
-  )
-}
+  );
+};
 
-export default YoganaSubscriptionsPage
+export default YoganaSubscriptionsPage;

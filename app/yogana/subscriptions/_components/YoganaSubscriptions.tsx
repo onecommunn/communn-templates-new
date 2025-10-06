@@ -86,7 +86,15 @@ interface Plan {
   description?: string;
 }
 
-const YoganaSubscriptions = () => {
+const YoganaSubscriptions = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   const [activeTab, setActiveTab] = useState("All");
   const [isExpanded, setIsExpanded] = useState(true);
   const [selectedPayments, setSelectedPayments] = useState<number[]>([]);
@@ -374,14 +382,25 @@ const YoganaSubscriptions = () => {
   }
 
   return (
-    <main className="flex-grow bg-[#C2A74E1A] font-plus-jakarta">
+    <main
+      className="flex-grow bg-[#C2A74E1A] font-plus-jakarta"
+      style={{
+        backgroundColor: `${primaryColor}1A`,
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
         <div className="text-center mb-6">
-          <h2 className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]">
+          <h2
+            className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]"
+            style={{ color: primaryColor }}
+          >
             {plan?.name}
           </h2>
           {plan?.description && (
-            <p className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta">
+            <p
+              className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta"
+              style={{ color: neutralColor }}
+            >
               {plan?.description}
             </p>
           )}
@@ -402,14 +421,20 @@ const YoganaSubscriptions = () => {
           </div>
           <div>
             <div>
-              <h2 className="font-cormorant font-semibold text-3xl mb-2">
+              <h2
+                className="font-cormorant font-semibold text-3xl mb-2"
+                style={{ color: secondaryColor }}
+              >
                 Description
               </h2>
-              <p className="font-plus-jakarta text-[16px]">
+              <p
+                className="font-plus-jakarta text-[16px]"
+                style={{ color: neutralColor }}
+              >
                 {plan?.description}
               </p>
             </div>
-            <h2 className="font-cormorant font-semibold text-5xl my-2">
+            <h2 className="font-cormorant font-semibold text-5xl my-2" style={{color:primaryColor}}>
               {new Intl.NumberFormat("en-IN", {
                 style: "currency",
                 currency: "INR",
@@ -417,7 +442,7 @@ const YoganaSubscriptions = () => {
               }).format(Number(plan?.pricing ?? 0))}
             </h2>
             <div className="mt-4">
-              <h2 className="font-cormorant font-semibold text-3xl mb-2">
+              <h2 className="font-cormorant font-semibold text-3xl mb-2" style={{color:secondaryColor}}>
                 Sequences
               </h2>
               <div>
@@ -527,6 +552,10 @@ const YoganaSubscriptions = () => {
                     <Link href={"/plans"}>
                       <Button
                         variant={"outline"}
+                        style={{
+                          color: primaryColor,
+                          borderColor: primaryColor,
+                        }}
                         className=" border border-[#C2A74E] rounded-none text-[#C2A74E] hover:text-[#C2A74E] cursor-pointer px-[37px] py-[22px]"
                       >
                         Cancel
@@ -537,6 +566,9 @@ const YoganaSubscriptions = () => {
                       onClick={() =>
                         handleClickPay(communityId || "", planID || "")
                       }
+                      style={{
+                        backgroundColor: primaryColor,
+                      }}
                       className={`bg-[#C2A74E] hover:bg-[#C2A74E] rounded-none px-[37px] py-[22px] ${
                         totalAmount === 0
                           ? "cursor-not-allowed"

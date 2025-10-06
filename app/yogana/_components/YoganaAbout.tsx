@@ -22,10 +22,10 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
       id="about-us"
       className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden"
       style={{
-        backgroundColor:`${primaryColor}1A`
+        backgroundColor: `${primaryColor}1A`,
       }}
     >
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         <Image
           src="/assets/yogana-about-bg-image.png"
           alt="bgImage-1"
@@ -34,7 +34,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
           height={446}
         />
       </div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-20 z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
           <div className="relative mx-auto px-10 md:px-10">
             <Image
@@ -59,6 +59,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
               height={227}
               className="rounded-3xl absolute -top-10 left-0 md:-left-0 w-30 md:w-[236px]"
             />
+            
           </div>
           <div className="my-auto">
             <div>
@@ -99,9 +100,12 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                         strokeWidth={3}
                         absoluteStrokeWidth
                       />
-                      <span className="font-plus-jakarta text-[13px] text-[#707070]" style={{
-                        color: neutralColor
-                      }}>
+                      <span
+                        className="font-plus-jakarta text-[13px] text-[#707070]"
+                        style={{
+                          color: neutralColor,
+                        }}
+                      >
                         {each}
                       </span>
                     </li>
@@ -109,7 +113,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
               </ul>
             </div>
             <Button
-              className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4"
+              className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] cursor-pointer font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4"
               style={{
                 backgroundColor: primaryColor,
               }}

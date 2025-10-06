@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Event } from "@/models/event.model";
 import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
-import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { formatDate } from "@/components/utils/StringFunctions";
 
 export const formatTime = (time24: string) => {
@@ -36,7 +35,15 @@ export enum PaymentStatus {
   PENDING = "PENDING",
 }
 
-const YogansEventDetail = () => {
+const YogansEventDetail = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const eventId = searchParams.get("eventid");
@@ -347,14 +354,27 @@ const YogansEventDetail = () => {
 
   return (
     <>
-      <section className="py-10 font-cormorant bg-[#C2A74E1A]">
+      <section
+        className="py-10 font-cormorant bg-[#C2A74E1A]"
+        style={{
+          backgroundColor: `${primaryColor}1A`,
+        }}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]">
+            <h2
+              className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]"
+              style={{
+                color: primaryColor,
+              }}
+            >
               {eventData?.title}
             </h2>
             {eventData?.description && (
-              <p className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta">
+              <p
+                className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta"
+                style={{ color: neutralColor }}
+              >
                 {eventData?.description}
               </p>
             )}
@@ -378,17 +398,29 @@ const YogansEventDetail = () => {
             <div className="grid md:grid-cols-3 gap-8">
               {/* Left: Event details */}
               <div className="md:col-span-2">
-                <h2 className="md:text-[32px] text-2xl font-semibold mb-4 font-cormorant">
+                <h2
+                  className="md:text-[32px] text-2xl font-semibold mb-4 font-cormorant"
+                  style={{ color: secondaryColor }}
+                >
                   {eventData.title}
                 </h2>
-                <p className="text-gray-600 text-[16px] mb-6 font-plus-jakarta">
+                <p
+                  className="text-gray-600 text-[16px] mb-6 font-plus-jakarta"
+                  style={{ color: neutralColor }}
+                >
                   {eventData.description}
                 </p>
 
-                <h3 className="md:text-[32px] text-2xl  font-semibold mb-2 font-cormorant">
+                <h3
+                  className="md:text-[32px] text-2xl  font-semibold mb-2 font-cormorant"
+                  style={{ color: secondaryColor }}
+                >
                   Access Information
                 </h3>
-                <ul className="space-y-2 text-[#707070] text-[16px] list-disc ml-6 font-plus-jakarta">
+                <ul
+                  className="space-y-2 text-[#707070] text-[16px] list-disc ml-6 font-plus-jakarta"
+                  style={{ color: neutralColor }}
+                >
                   <li className="font-semibold text-[16px] ">
                     {`${formatDate(
                       eventData?.availability[0]?.day
@@ -408,7 +440,10 @@ const YogansEventDetail = () => {
 
               {/* Right: Form */}
               <div className="rounded-xl  p-6 h-fit">
-                <h3 className="text-3xl font-bold mb-4 font-cormorant">
+                <h3
+                  className="text-3xl font-bold mb-4 font-cormorant"
+                  style={{ color: primaryColor }}
+                >
                   Enter Details
                 </h3>
                 <form className="space-y-4" onSubmit={handleSubmit}>
@@ -439,7 +474,10 @@ const YogansEventDetail = () => {
                     <>
                       {eventData?.guestApproval ? (
                         <Button
-                          className={`w-full rounded-none bg-[#C2A74E] font-plus-jakarta ${
+                          style={{
+                            backgroundColor: primaryColor,
+                          }}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
@@ -467,7 +505,10 @@ const YogansEventDetail = () => {
                       ) : eventData?.isPaidService &&
                         !eventData?.guestApproval ? (
                         <Button
-                          className={`w-full rounded-none bg-[#C2A74E] font-plus-jakarta ${
+                          style={{
+                            backgroundColor: primaryColor,
+                          }}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
@@ -499,7 +540,10 @@ const YogansEventDetail = () => {
                         </Button>
                       ) : (
                         <Button
-                          className={`w-full rounded-none bg-[#C2A74E] font-plus-jakarta ${
+                          style={{
+                            backgroundColor: primaryColor,
+                          }}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
                               : "cursor-pointer"

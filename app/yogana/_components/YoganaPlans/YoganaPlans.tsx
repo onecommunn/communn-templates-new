@@ -75,7 +75,7 @@ function Dots({
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
                 ? `w-6 bg-[${primaryColor}] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
-                : "bg-gray-300 hover:bg-gray-400",
+                : "bg-gray-300 hover:bg-gray-400 cursor-pointer",
             ].join(" ")}
           />
         );
@@ -305,17 +305,17 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 aria-label="Previous plans"
                 className="hidden sm:flex size-10 cursor-pointer"
                 style={{
-                  color: primaryColor, // text color
-                  backgroundColor: "transparent", // default bg
+                  color: primaryColor,
+                  backgroundColor: "#fff",
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor =
                     primaryColor;
-                  (e.currentTarget as HTMLElement).style.color = secondaryColor;
+                  (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor =
-                    "transparent";
+                    "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
               />
@@ -323,17 +323,17 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
               <CarouselNext
                 className="hidden sm:flex size-10 cursor-pointer"
                 style={{
-                  color: primaryColor, // text color
-                  backgroundColor: "transparent", // default bg
+                  color: primaryColor,
+                  backgroundColor: "#fff",
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor =
                     primaryColor;
-                  (e.currentTarget as HTMLElement).style.color = secondaryColor;
+                  (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor =
-                    "transparent";
+                    "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
                 aria-label="Next plans"

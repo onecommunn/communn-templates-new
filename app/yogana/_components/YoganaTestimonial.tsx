@@ -202,10 +202,12 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
                       onClick={() => setIndex(i)}
                       aria-label={`Go to slide ${i + 1}`}
                       style={{ backgroundColor: isActive ? primaryColor : "" }}
-                      className={`h-2.5 w-2.5 rounded-full cursor-pointer transition-transform ${isActive
-                        ? `bg-[#C2A74E] scale-100`
-                        : `bg-neutral-300 hover:scale-110`
-                        }`}
+                      className={[
+                        "h-2.5 w-2.5 rounded-full transition-all",
+                        isActive
+                          ? `w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
+                          : "bg-gray-400 hover:bg-gray-500 cursor-pointer",
+                      ].join(" ")}
                     />
                   );
                 })}
