@@ -36,8 +36,12 @@ const images = [
 interface YoganaGalleryProps {
   data: Gallery;
   primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string
+
+
 }
-const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor }) => {
+const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryColor, neutralColor }) => {
   return (
     <section
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
@@ -74,14 +78,37 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor }) => {
       </div>
 
       {/* heading */}
+
+      <div className="relative z-10 text-center mb-4">
+        <h4
+          style={{
+            color: primaryColor,
+          }}
+          className={`text-[#C2A74E] font-alex-brush text-3xl`}
+        >
+          Gallery
+        </h4>
+        <h4
+          style={{
+            color: secondaryColor,
+          }}
+          className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+        >
+          {data?.heading}
+        </h4>
+
+      </div>
+
       <div className="flex items-center justify-center gap-6 md:px-10">
+
         <div className="h-px w-full bg-neutral-200/80" />
         <p
-          style={{ color: primaryColor }}
+          style={{ color: neutralColor }}
           className="font-semibold text-3xl text-[#1C1A1D] min-w-fit"
         >
-          {data.heading}
+          Captured Moments
         </p>
+
         <div className="h-px w-full bg-neutral-200/80" />
       </div>
       <div className="mt-6">

@@ -197,7 +197,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   </p>
                   <p
                     style={{ color: secondaryColor }}
-                    className="mt-1 text-lg text-neutral-800"
+                    className="mt-1 text-md text-neutral-800"
                   >
                     {data?.call?.value}
                   </p>
@@ -221,7 +221,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   </p>
                   <p
                     style={{ color: secondaryColor }}
-                    className="mt-1 text-lg text-neutral-800"
+                    className="mt-1 text-md text-neutral-800"
                   >
                     {data?.email?.value}
                   </p>
@@ -250,7 +250,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
                     Visit anytime
                   </p>
                   <p
-                    className="mt-1 text-lg text-neutral-800"
+                    className="mt-1 text-md text-neutral-800"
                     style={{ color: secondaryColor }}
                   >
                     {data?.address?.value}

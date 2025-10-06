@@ -22,6 +22,8 @@ const CreatorPlansSection = () => {
   const userId = authContext?.user?.id;
   const isLoggedIn = !!userId;
 
+  console.log(plans, "plans");
+
   const getCommunityId = async () => {
     try {
       const communityData: any = await getCommunityData(
