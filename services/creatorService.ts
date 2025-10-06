@@ -4,7 +4,7 @@ import { toast } from "sonner";
 export const fetchCreatorHeader = async (communityId: string) => {
   try {
     const response = await axios.get(
-      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Header`
+      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=header`
     );
     return response.data;
   } catch (error) {
@@ -31,7 +31,7 @@ export const fetchCreatorAbout = async (communityId: string) => {
 export const fetchCreatorHome = async (communityId: string) => {
   try {
     const response = await axios.get(
-      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Home`
+      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=home`
     );
     console.log("Fetched:", response.data);
     return response.data;
@@ -45,7 +45,7 @@ export const fetchCreatorHome = async (communityId: string) => {
 export const fetchCreatorContact = async (communityId: string) => {
   try {
     const response = await axios.get(
-      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Contact`
+      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=contact`
     );
     console.log("Fetched:", response.data);
     return response.data;
@@ -59,7 +59,7 @@ export const fetchCreatorContact = async (communityId: string) => {
 export const fetchCreatorFooter = async (communityId: string) => {
   try {
     const response = await axios.get(
-      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Footer`
+      `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=footer`
     );
     console.log("Fetched:", response.data);
     return response.data;

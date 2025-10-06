@@ -28,10 +28,10 @@ import { useCMS } from "./CMSProvider.client";
 // --- your existing dummyData (must conform to CreatorHomePage) ---
 const dummyData: CreatorHomePage = {
   templateId: "creator",
-  pageName: "Home",
+  pageName: "home",
   sections: [
     {
-      sectionName: "Hero Section",
+      sectionName: "heroSection",
       heading: "Gain the skills to unlock your true potentials",
       subHeading:
         "Unlock a world of opportunities and take control of your future by mastering new skills that empower you to achieve your goals.",
@@ -48,7 +48,7 @@ const dummyData: CreatorHomePage = {
       buttons: [{ label: "Join Our Community", url: "https://communn.io" }],
     },
     {
-      sectionName: "Two Column Section",
+      sectionName: "twoColumnSection",
       heading: "Know About us",
       subHeading:
         "Our names are Prachi & Harsh and we’re multi-passionate content creators making videos about slow travel, love & relationships.",
@@ -71,14 +71,14 @@ const dummyData: CreatorHomePage = {
       buttons: [{ label: "Know More", url: "/about" }],
     },
     {
-      sectionName: "Our Bestsellers",
+      sectionName: "ourBestSellers",
       heading: "Our Bestsellers",
       subHeading: "Hi there! We're Prachi and Harsh, adventure enthusias new",
       order: 2,
       isActive: true,
     },
     {
-      sectionName: "Collaboration",
+      sectionName: "collaboration",
       heading: "Our Clients",
       description: "Get in touch with the 250+ companies who Collaboration us",
       order: 3,
@@ -89,7 +89,7 @@ const dummyData: CreatorHomePage = {
       ],
     },
     {
-      sectionName: "Testimonies Section",
+      sectionName: "testimoniesSection",
       heading: "Success Stories",
       subHeading:
         "Real transformations from real people who've taken action on their growth journey.",
@@ -153,7 +153,7 @@ const dummyData: CreatorHomePage = {
       ],
     },
     {
-      sectionName: "CTA Section",
+      sectionName: "ctaSection",
       title: "Stay Inspired",
       description:
         "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
@@ -185,58 +185,79 @@ const CreatorRoot: React.FC = () => {
     : undefined;
 
   const heroSection = source?.sections.find(
-    (s: HomeSection): s is HeroSection => s.sectionName === "Hero Section"
+    (s: HomeSection): s is HeroSection => s.sectionName === "heroSection"
   );
   const creatorAboutus = source?.sections.find(
     (s: HomeSection): s is TwoColumnSection =>
-      s.sectionName === "Two Column Section"
+      s.sectionName === "twoColumnSection"
   );
   const creatorBestsellers = source?.sections.find(
     (s: HomeSection): s is OurBestsellersSection =>
-      s.sectionName === "Our Bestsellers"
+      s.sectionName === "ourBestSellers"
   );
   const creatorCollaboration = source?.sections.find(
     (s: HomeSection): s is CollaborationSection =>
-      s.sectionName === "Collaboration"
+      s.sectionName === "collaboration"
   );
   const creatorTestimonies = source?.sections.find(
     (s: HomeSection): s is TestimoniesSection =>
-      s.sectionName === "Testimonies Section"
+      s.sectionName === "testimoniesSection"
   );
   const creatorCTA = source?.sections.find(
-    (s: HomeSection): s is CTASection => s.sectionName === "CTA Section"
+    (s: HomeSection): s is CTASection => s.sectionName === "ctaSection"
   );
+
+  const primaryColor = "#fff";
+  const secondaryColor = "#000";
 
   return (
     <>
       {heroSection ? (
-        <CreatorHero data={heroSection} />
+        <CreatorHero
+          data={heroSection}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <HeroSkeleton />
       ) : null}
 
       {creatorAboutus ? (
-        <CreatorAboutus data={creatorAboutus} />
+        <CreatorAboutus
+          data={creatorAboutus}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorAboutusSkeleton />
       ) : null}
 
       {creatorBestsellers ? (
-        <CreatorBestsellers data={creatorBestsellers} />
+        <CreatorBestsellers
+          data={creatorBestsellers}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : null}
 
       {creatorCollaboration ? (
-        <CreatorCollaboration data={creatorCollaboration} />
+        <CreatorCollaboration
+          data={creatorCollaboration}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : null}
 
       {creatorTestimonies ? (
-        <CreatorTestimonies data={creatorTestimonies} />
+        <CreatorTestimonies data={creatorTestimonies} primaryColor={primaryColor}
+          secondaryColor={secondaryColor}/>
       ) : isLoading ? (
         <CreatorTestimoniesSkeleton count={9} />
       ) : null}
 
       {creatorCTA ? (
-        <CreatorCTA data={creatorCTA} />
+        <CreatorCTA data={creatorCTA} primaryColor={primaryColor}
+          secondaryColor={secondaryColor}/>
       ) : isLoading ? (
         <CreatorCTASkeleton />
       ) : null}

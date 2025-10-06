@@ -4,7 +4,11 @@ import type { TwoColumnSection } from "@/models/templates/creator/creator-home.m
 import { ArrowRight, CheckCheck } from "lucide-react";
 import React from "react";
 
-type Props = { data: TwoColumnSection };
+type Props = {
+  data: TwoColumnSection;
+  primaryColor: string;
+  secondaryColor: string;
+};
 
 const fallbackMedia = [
   "/assets/colImage1.png",
@@ -13,7 +17,11 @@ const fallbackMedia = [
   "/assets/colImage4.png",
 ];
 
-const CreatorAboutus: React.FC<Props> = ({ data }) => {
+const CreatorAboutus: React.FC<Props> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+}) => {
   const isMediaLeft = (data.mediaPlacement ?? "left") === "left";
 
   // Media (ensure 4 slots with graceful fallback)
@@ -29,10 +37,14 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
   const primaryBtn = data.buttons?.[0];
 
   return (
-    <section className="pb-10 font-inter">
+    <section
+      className="pb-10 font-inter"
+      style={{ color: secondaryColor, backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
           title={data.heading || "Know About us"}
+          textColor={secondaryColor}
           description={
             data.subHeading ||
             "Our names are Prachi & Harsh and we’re multi-passionate content creators."
@@ -44,17 +56,24 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
         >
           {/* Text column */}
           <div
-            className={`flex flex-col justify-center gap-6 ${isMediaLeft ? "order-2 md:order-1" : "order-2"
-              }`}
+            className={`flex flex-col justify-center gap-6 ${
+              isMediaLeft ? "order-2 md:order-1" : "order-2"
+            }`}
           >
             {data.title && (
-              <h1 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left">
+              <h1
+                style={{ color: secondaryColor }}
+                className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left"
+              >
                 {data.title}
               </h1>
             )}
 
             {data.description && (
-              <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
+              <p
+                style={{ color: secondaryColor }}
+                className="text-[#0C0407] align-middle text-[16px]/[24px]"
+              >
                 {data.description}
               </p>
             )}
@@ -77,7 +96,13 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
             {/* CTA */}
             {primaryBtn && (
               <a href={primaryBtn.url} aria-label={primaryBtn.label}>
-                <Button className="cursor-pointer rounded-[12px] text-sm px-5 w-fit inline-flex items-center gap-2">
+                <Button
+                  style={{
+                    backgroundColor: secondaryColor,
+                    color: primaryColor,
+                  }}
+                  className="cursor-pointer rounded-[12px] text-sm px-5 w-fit inline-flex items-center gap-2"
+                >
                   {primaryBtn.label}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -87,8 +112,9 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
 
           {/* Media column */}
           <div
-            className={`flex flex-col justify-center ${isMediaLeft ? "order-1 md:order-2" : "order-1"
-              }`}
+            className={`flex flex-col justify-center ${
+              isMediaLeft ? "order-1 md:order-2" : "order-1"
+            }`}
           >
             <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
               {/* Left column */}
@@ -122,7 +148,6 @@ const CreatorAboutus: React.FC<Props> = ({ data }) => {
                     alt="About image 3"
                     className="w-full object-cover aspect-[3/4]"
                     loading="lazy"
-
                   />
                 </div>
                 {/* Bottom-right (landscape) */}

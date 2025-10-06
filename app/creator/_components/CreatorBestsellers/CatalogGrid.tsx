@@ -47,13 +47,24 @@ function IconRow({ meta }: { meta?: Item["meta"] }) {
 
 /* -------------------------- Card UI -------------------------- */
 
-function CatalogCard({ item }: { item: Item }) {
+function CatalogCard({
+  item,
+  primaryColor,
+  secondaryColor,
+}: {
+  item: Item;
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const hasImage = Boolean(item.image);
 
   return (
-    <Card className="relative rounded-xl mb-4 break-inside-avoid overflow-hidden border flex-1 pt-0">
+    <Card
+      style={{ backgroundColor: primaryColor }}
+      className="relative rounded-xl mb-4 break-inside-avoid border-none overflow-hidden flex-1 pt-0"
+    >
       {/* {hasImage && ( */}
-      <div className="m-1 rounded-xl overflow-hidden border bg-muted">
+      <div className="m-1 rounded-xl overflow-hidden bg-muted">
         <div className="relative aspect-[16/9]">
           <Image
             src={item.image || "/assets/creatorCoursesPlaceHolderImage.jpg"}
@@ -81,15 +92,23 @@ function CatalogCard({ item }: { item: Item }) {
           </div>
         )}
 
-        <CardTitle className="text-xl">{item.title}</CardTitle>
-        <CardDescription className="flex-1 line-clamp-3">
+        <CardTitle className="text-xl" style={{ color: secondaryColor }}>
+          {item.title}
+        </CardTitle>
+        <CardDescription
+          className="flex-1 line-clamp-3"
+          style={{ color: secondaryColor }}
+        >
           {item.description}
         </CardDescription>
       </CardHeader>
 
       <CardFooter className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-base font-semibold">
+          <span
+            className="text-base font-semibold"
+            style={{ color: secondaryColor }}
+          >
             {item.priceLabel ?? ""}
           </span>
           {/* {item.priceStrike && (
@@ -101,6 +120,7 @@ function CatalogCard({ item }: { item: Item }) {
 
         <Button
           variant={kindToCTAVariant[item.kind]}
+          style={{ backgroundColor: secondaryColor, color: primaryColor }}
           className="shrink-0 cursor-pointer"
         >
           {item.cta}{" "}
@@ -140,7 +160,13 @@ const TABS: Array<{ key: "all" | ItemKind; label: string }> = [
   { key: "plan", label: "Plans" },
 ];
 
-const CatalogGrid = () => {
+const CatalogGrid = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const { communityId } = useCommunity();
   const [items, setItems] = React.useState<Item[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -233,14 +259,25 @@ const CatalogGrid = () => {
         className="w-full items-center"
       >
         {/* Filter pills */}
-        <TabsList className="md:md-6 mb-12 flex h-10 w-fit flex-wrap gap-2 rounded-full bg-muted p-1">
+        <TabsList
+          style={{ backgroundColor: primaryColor }}
+          className="md:md-6 mb-12 flex h-10 w-fit flex-wrap gap-2 rounded-full bg-muted p-1"
+        >
           {TABS.map((t) => (
             <TabsTrigger
               key={t.key}
               value={t.key}
               id={`${tabId}-${t.label}`}
               aria-controls={`${tabId}-${t.label}`}
-              className="cursor-pointer rounded-full px-4 data-[state=active]:bg-[#0C0407] data-[state=active]:text-white"
+              className="cursor-pointer rounded-full px-4 transition-all duration-200"
+              style={{
+                backgroundColor:
+                  active === t.key ? secondaryColor : primaryColor,
+                color: active === t.key ? primaryColor : secondaryColor,
+                border: `1px solid ${
+                  active === t.key ? primaryColor : "transparent"
+                }`,
+              }}
             >
               {t.label}
             </TabsTrigger>
@@ -261,7 +298,12 @@ const CatalogGrid = () => {
                     className={`${"grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full"}`}
                   >
                     {itemsForTab.map((item) => (
-                      <CatalogCard key={item.id} item={item} />
+                      <CatalogCard
+                        key={item.id}
+                        item={item}
+                        primaryColor={primaryColor}
+                        secondaryColor={secondaryColor}
+                      />
                     ))}
                   </div>
                 </>

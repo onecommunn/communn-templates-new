@@ -1,13 +1,17 @@
 "use client";
 
-import React, { useId } from "react";
+import React, { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCheck } from "lucide-react";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { TwoColumnSection } from "@/models/templates/creator/creator-about.model";
 
-type Props = { data: TwoColumnSection };
+type Props = {
+  data: TwoColumnSection;
+  secondaryColor: string;
+  primaryColor: string;
+};
 
 const FALLBACK_MEDIA = [
   "/assets/colImage1.png",
@@ -16,9 +20,14 @@ const FALLBACK_MEDIA = [
   "/assets/colImage4.png",
 ];
 
-const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
+const CreatorAboutusHero: React.FC<Props> = ({
+  data,
+  secondaryColor,
+  primaryColor,
+}) => {
   const uid = useId();
   const isMediaLeft = (data.mediaPlacement ?? "left") === "left";
+  const [activeTab, setActiveTab] = useState("story");
 
   // Media (ensure 4 items with graceful fallback)
   const media = (data.media?.length ? data.media : FALLBACK_MEDIA).slice(0, 4);
@@ -29,12 +38,16 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
     media[3] ?? FALLBACK_MEDIA[3],
   ];
 
-  const bullets = data.bulletes ?? []; 
+  const bullets = data.bulletes ?? [];
 
   return (
-    <section className="py-10 font-inter">
+    <section
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
+          textColor={secondaryColor}
           title={data?.heading || "About us"}
           description={
             data?.subHeading ||
@@ -50,13 +63,19 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
             }`}
           >
             {data.title && (
-              <h1 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left">
+              <h1
+                style={{ color: secondaryColor }}
+                className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left"
+              >
                 {data.title}
               </h1>
             )}
 
             {data.description && (
-              <p className="text-[#0C0407] align-middle text-[16px]/[24px]">
+              <p
+                style={{ color: secondaryColor }}
+                className="text-[#0C0407] align-middle text-[16px]/[24px]"
+              >
                 {data.description}
               </p>
             )}
@@ -65,7 +84,11 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
             {bullets.length > 0 && (
               <div className="flex flex-col gap-2">
                 {bullets.map((line, i) => (
-                  <div key={i} className="flex flex-row items-start gap-2">
+                  <div
+                    key={i}
+                    className="flex flex-row items-start gap-2"
+                    style={{ color: secondaryColor }}
+                  >
                     <CheckCheck strokeWidth={2.6} size={22} />
                     <p className="font-bold text-[16px]/[20px]">{line}</p>
                   </div>
@@ -75,34 +98,76 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
 
             {/* Tabs for story / mission / vision */}
             {(data.story || data.mission || data.vision) && (
-              <Tabs defaultValue={data.story ? "story" : data.mission ? "mission" : "vision"} className="w-full mt-2">
-                <TabsList>
+              <Tabs
+                defaultValue={
+                  data.story ? "story" : data.mission ? "mission" : "vision"
+                }
+                className="w-full mt-2"
+                value={activeTab}
+                onValueChange={setActiveTab}
+              >
+                <TabsList style={{ backgroundColor: primaryColor }}>
                   {data.story && (
                     <TabsTrigger
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="data-[state=active]:bg-black data-[state=active]:text-white cursor-pointer"
                       value="story"
                       id={`${uid}-story`}
                       aria-controls={`${uid}-story`}
+                      style={{
+                        backgroundColor:
+                          activeTab === "story" ? secondaryColor : primaryColor,
+                        color:
+                          activeTab === "story" ? primaryColor : secondaryColor,
+                        border: `1px solid ${
+                          activeTab === "story" ? primaryColor : "transparent"
+                        }`,
+                      }}
                     >
                       Our Story
                     </TabsTrigger>
                   )}
                   {data.mission && (
                     <TabsTrigger
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="data-[state=active]:bg-black data-[state=active]:text-white cursor-pointer"
                       value="mission"
                       id={`${uid}-mission`}
                       aria-controls={`${uid}-mission`}
+                      style={{
+                        backgroundColor:
+                          activeTab === "mission"
+                            ? secondaryColor
+                            : primaryColor,
+                        color:
+                          activeTab === "mission"
+                            ? primaryColor
+                            : secondaryColor,
+                        border: `1px solid ${
+                          activeTab === "mission" ? primaryColor : "transparent"
+                        }`,
+                      }}
                     >
                       Mission
                     </TabsTrigger>
                   )}
                   {data.vision && (
                     <TabsTrigger
-                      className="data-[state=active]:bg-black data-[state=active]:text-white"
+                      className="data-[state=active]:bg-black data-[state=active]:text-white cursor-pointer"
                       value="vision"
                       id={`${uid}-vision`}
                       aria-controls={`${uid}-vision`}
+                      style={{
+                        backgroundColor:
+                          activeTab === "vision"
+                            ? secondaryColor
+                            : primaryColor,
+                        color:
+                          activeTab === "vision"
+                            ? primaryColor
+                            : secondaryColor,
+                        border: `1px solid ${
+                          activeTab === "vision" ? primaryColor : "transparent"
+                        }`,
+                      }}
                     >
                       Vision
                     </TabsTrigger>
@@ -111,28 +176,27 @@ const CreatorAboutusHero: React.FC<Props> = ({ data }) => {
 
                 {data.story && (
                   <TabsContent value="story" className="mt-4">
-                    <p className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
+                    <p style={{color:secondaryColor}} className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line ">
                       {data.story}
                     </p>
                   </TabsContent>
                 )}
                 {data.mission && (
-                  <TabsContent value="mission" className="mt-4">
-                    <p className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
+                  <TabsContent  value="mission" className="mt-4">
+                    <p style={{color:secondaryColor}} className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
                       {data.mission}
                     </p>
                   </TabsContent>
                 )}
                 {data.vision && (
-                  <TabsContent value="vision" className="mt-4">
-                    <p className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
+                  <TabsContent  value="vision" className="mt-4">
+                    <p style={{color:secondaryColor}} className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
                       {data.vision}
                     </p>
                   </TabsContent>
                 )}
               </Tabs>
             )}
-
           </div>
 
           {/* Media column */}

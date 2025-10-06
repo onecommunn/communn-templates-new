@@ -16,7 +16,13 @@ import {
   formatTime,
 } from "@/components/utils/StringFunctions";
 
-const CreatorEventsPage = () => {
+const CreatorEventsPage = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isloading, setIsLoading] = useState<boolean>(true);
 
@@ -42,8 +48,11 @@ const CreatorEventsPage = () => {
 
   if (isloading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="flex flex-col gap-2 justify-center items-center my-10">
+      <div
+        className="container mx-auto px-4 sm:px-6 lg:px-20"
+        style={{ backgroundColor: primaryColor }}
+      >
+        <div className="flex flex-col gap-2 justify-center items-center py-10">
           <Skeleton className="h-6 w-[200px]" />
           <Skeleton className="h-4 w-3/4 rounded-md" />
           <Skeleton className="h-4 w-3/6 rounded-md" />
@@ -53,7 +62,7 @@ const CreatorEventsPage = () => {
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="border rounded-lg overflow-hidden shadow-sm p-4 space-y-4"
+              className="rounded-lg overflow-hidden shadow-sm p-4 space-y-4"
             >
               <Skeleton className="h-48 w-full rounded-md" />
               <Skeleton className="h-6 w-3/4" />
@@ -78,9 +87,13 @@ const CreatorEventsPage = () => {
     );
   }
   return (
-    <section className="py-10 font-inter">
+    <section
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
+          textColor={secondaryColor}
           title="Events"
           description="Join exclusive creator events designed to help you connect, collaborate, and grow. From hands-on workshops to networking sessions, discover opportunities that elevate your creative journey."
         />
@@ -89,6 +102,7 @@ const CreatorEventsPage = () => {
           {events.map((event: Event, index) => (
             <Card
               className="p-0 rounded-xl border-none gap-1"
+              style={{ backgroundColor: primaryColor }}
               key={index}
             >
               {/* Image Section */}
@@ -112,17 +126,29 @@ const CreatorEventsPage = () => {
               {/* Info Section */}
               <div className="flex flex-col-reverse items-start gap-2 mt-2 px-2 ">
                 {event.location && (
-                  <div className="flex items-center gap-1 min-w-0">
-                    <MapPin color="#4C4C4C" size={16} />
-                    <p className="text-sm text-[#4C4C4C] font-inter truncate">
+                  <div
+                    className="flex items-center gap-1 min-w-0"
+                    style={{ color: secondaryColor }}
+                  >
+                    <MapPin size={16} />
+                    <p
+                      className="text-sm text-[#4C4C4C] font-inter truncate"
+                      style={{ color: secondaryColor }}
+                    >
                       {capitalizeWords(event.location)}
                     </p>
                   </div>
                 )}
                 <div className="flex items-center justify-between pr-2 w-full">
-                  <div className="flex items-center gap-1 min-w-0">
-                    <Calendar color="#4C4C4C" size={16} />
-                    <p className="text-sm text-[#4C4C4C] font-inter truncate">
+                  <div
+                    className="flex items-center gap-1 min-w-0"
+                    style={{ color: secondaryColor }}
+                  >
+                    <Calendar size={16} />
+                    <p
+                      className="text-sm text-[#4C4C4C] font-inter truncate"
+                      style={{ color: secondaryColor }}
+                    >
                       {`${formatDate(
                         event?.availability[0]?.day
                       )} - ${formatDate(
@@ -131,9 +157,15 @@ const CreatorEventsPage = () => {
                     </p>
                   </div>
                   {event?.availability[0]?.availableTimes[0].startTime && (
-                    <div className="flex items-center gap-1 min-w-0">
-                      <Clock color="#4C4C4C" size={16} />
-                      <p className="text-sm text-[#4C4C4C] font-inter truncate">
+                    <div
+                      className="flex items-center gap-1 min-w-0"
+                      style={{ color: secondaryColor }}
+                    >
+                      <Clock size={16} />
+                      <p
+                        className="text-sm text-[#4C4C4C] font-inter truncate"
+                        style={{ color: secondaryColor }}
+                      >
                         {formatTime(
                           event?.availability[0]?.availableTimes[0].startTime
                         )}
@@ -142,11 +174,20 @@ const CreatorEventsPage = () => {
                   )}
                 </div>
               </div>
-              <CardTitle className="text-[#0C0407] font-semibold text-[20px] font-inter px-2 transform-none mt-1">
+              <CardTitle
+                style={{ color: secondaryColor }}
+                className="text-[#0C0407] font-semibold text-[20px] font-inter px-2 transform-none mt-1"
+              >
                 {capitalizeWords(event.title)}
               </CardTitle>
-              <CardFooter className="flex flex-row justify-between items-center p-0 px-2 pb-2">
-                <span className="font-semibold text-[#0C0407] text-[16px]">
+              <CardFooter
+                style={{ color: secondaryColor }}
+                className="flex flex-row justify-between items-center p-0 px-2 pb-2"
+              >
+                <span
+                  style={{ color: secondaryColor }}
+                  className="font-semibold text-[#0C0407] text-[16px]"
+                >
                   {event?.pricing != null && `₹${event.pricing}`}
                 </span>
                 {(() => {
@@ -165,7 +206,14 @@ const CreatorEventsPage = () => {
                       prefetch={false}
                       href={`/event-details?eventid=${event._id}`}
                     >
-                      <Button variant={"outline"} className="cursor-pointer">
+                      <Button
+                        variant={"outline"}
+                        className="cursor-pointer"
+                        style={{
+                          color: primaryColor,
+                          backgroundColor: secondaryColor,
+                        }}
+                      >
                         Book Now{" "}
                         <span>
                           <ArrowRight />

@@ -23,7 +23,7 @@ const dummyData: CreatorAboutPage = {
   pageName: "about",
   sections: [
     {
-      sectionName: "Two Column Section",
+      sectionName: "twoColumnSection",
       heading: "About Us",
       subHeading:
         "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.",
@@ -51,7 +51,7 @@ const dummyData: CreatorAboutPage = {
         "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
     },
     {
-      sectionName: "Journey Timeline",
+      sectionName: "journeyTimelineSection",
       heading: "Our Journey Timeline",
       subHeading:
         "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.",
@@ -77,7 +77,7 @@ const dummyData: CreatorAboutPage = {
       ],
     },
     {
-      sectionName: "Our Team",
+      sectionName: "ourTeamSection",
       heading: "Our Team",
       subHeading:
         "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.",
@@ -111,7 +111,7 @@ const dummyData: CreatorAboutPage = {
       ],
     },
     {
-      sectionName: "CTA Section",
+      sectionName: "ctaSection",
       title: "Stay Inspiredss",
       description:
         "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
@@ -137,25 +137,32 @@ const CreatorAbout = () => {
     : undefined;
   const creatorAboutusHero = data?.sections.find(
     (s: AboutSection): s is TwoColumnSection =>
-      s.sectionName === "Two Column Section"
+      s.sectionName === "twoColumnSection"
   );
 
   const creatorTimeline = data?.sections.find(
     (s: AboutSection): s is JourneyTimelineSection =>
-      s.sectionName === "Journey Timeline"
+      s.sectionName === "journeyTimelineSection"
   );
 
   const creatorOurTeam = data?.sections.find(
-    (s: AboutSection): s is OurTeamSection => s.sectionName === "Our Team"
+    (s: AboutSection): s is OurTeamSection => s.sectionName === "ourTeamSection"
   );
 
   const creatorCTA = data?.sections.find(
-    (s: AboutSection): s is CTASection => s.sectionName === "CTA Section"
+    (s: AboutSection): s is CTASection => s.sectionName === "ctaSection"
   );
+
+  const primaryColor = "#fff";
+  const secondaryColor = "#000";
   return (
     <>
       {creatorAboutusHero ? (
-        <CreatorAboutusHero data={creatorAboutusHero} />
+        <CreatorAboutusHero
+          data={creatorAboutusHero}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorAboutusSkeleton />
       ) : (
@@ -163,21 +170,33 @@ const CreatorAbout = () => {
       )}
 
       {creatorTimeline ? (
-        <CreatorTimeline data={creatorTimeline} />
+        <CreatorTimeline
+          data={creatorTimeline}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorTimelineSkeleton />
       ) : (
         <></>
       )}
       {creatorOurTeam ? (
-        <CreatorOurTeam data={creatorOurTeam} />
+        <CreatorOurTeam
+          data={creatorOurTeam}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorOurTeamSkeleton />
       ) : (
         <></>
       )}
       {creatorCTA ? (
-        <CreatorCTA data={creatorCTA} />
+        <CreatorCTA
+          data={creatorCTA}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorCTASkeleton />
       ) : (

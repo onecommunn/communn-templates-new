@@ -15,6 +15,7 @@ type Props = {
   loop?: boolean;
   className?: string;
   autoplayDelayMs?: number;
+  primaryColor: string;
 };
 
 export default function ArcCarousel({
@@ -22,13 +23,17 @@ export default function ArcCarousel({
   loop = true,
   className,
   autoplayDelayMs = 1000,
+  primaryColor,
 }: Props) {
   const swiperRef = React.useRef<SwiperType | null>(null);
 
   return (
-    <section className={`slider ${className ?? ""}`}>
+    <section
+      className={`slider ${className ?? ""}`}
+      style={{ ['--bg-color' as any]: primaryColor }}
+    >
       <Swiper
-        modules={[Autoplay,FreeMode]}
+        modules={[Autoplay, FreeMode]}
         onBeforeInit={(swiper) => (swiperRef.current = swiper)}
         autoplay={{
           delay: autoplayDelayMs,
@@ -52,6 +57,7 @@ export default function ArcCarousel({
         //   });
         // }}
         className="swiper"
+        style={{ backgroundColor: primaryColor }}
       >
         {items.map((it) => (
           <SwiperSlide key={it.id} className="!h-auto arc-slide">

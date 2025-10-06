@@ -1,12 +1,16 @@
 import React from "react";
-import CreatorLayout from "../CreatorShell";
 import CreatorPlansSection from "./_components/CreatorPlansSection";
 
 const CreatorPlans = () => {
+  const primaryColor = "#fff";
+  const secondaryColor = "#000";
   return (
     <>
       <div>
-        <CreatorPlansSection />
+        <CreatorPlansSection
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       </div>
     </>
   );

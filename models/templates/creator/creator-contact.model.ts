@@ -1,7 +1,7 @@
 // Root payload
 export interface CreatorContactPage {
   templateId: "creator";
-  pageName: "Contact";
+  pageName: "contact";
   sections: ContactSection[];
   status: "published" | "draft" | string;
   __v?: number;
@@ -24,7 +24,7 @@ export interface ContactField {
 
 // Contact details section
 export interface ContactDetailsSection {
-  sectionName: "Contact details";
+  sectionName: "contactSection";
   title: string;
   description?: string;
   order: number;
@@ -36,7 +36,7 @@ export interface ContactDetailsSection {
 
 // CTA Section (reusable from other pages)
 export interface CTASection {
-  sectionName: "CTA Section";
+  sectionName: "ctaSection";
   title: string;
   description?: string;
   order: number;

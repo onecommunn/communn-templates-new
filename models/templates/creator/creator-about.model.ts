@@ -39,7 +39,7 @@ export interface CTAButton {
 
 // "Two Column Section"
 export interface TwoColumnSection extends SectionBase {
-  sectionName: "Two Column Section";
+  sectionName: "twoColumnSection";
   heading: string;
   subHeading?: string;
   title?: string;
@@ -58,7 +58,7 @@ export interface TwoColumnSection extends SectionBase {
 
 // "Journey Timeline"
 export interface JourneyTimelineSection extends SectionBase {
-  sectionName: "Journey Timeline";
+  sectionName: "journeyTimelineSection";
   heading: string;
   subHeading?: string;
   timeline: TimelineItem[];
@@ -66,7 +66,7 @@ export interface JourneyTimelineSection extends SectionBase {
 
 // "Our Team"
 export interface OurTeamSection extends SectionBase {
-  sectionName: "Our Team";
+  sectionName: "ourTeamSection";
   heading: string;
   subHeading?: string;
   members: TeamMember[];
@@ -74,7 +74,7 @@ export interface OurTeamSection extends SectionBase {
 
 // "CTA Section"
 export interface CTASection extends SectionBase {
-  sectionName: "CTA Section";
+  sectionName: "ctaSection";
   title: string;
   description?: string;
   buttons?: CTAButton[];

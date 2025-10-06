@@ -12,10 +12,14 @@ import { fetchCreatorContact } from "@/services/creatorService";
 
 const dummyHeaderData: CreatorHeaderPage = {
   templateId: "creator",
-  pageName: "Header",
+  pageName: "header",
+  color: {
+    primary: "#fff",
+    secondary: "#000",
+  },
   sections: [
     {
-      sectionName: "Header",
+      sectionName: "headerSection",
       order: 0,
       isActive: true,
       media: [
@@ -51,7 +55,7 @@ const dummyHeaderData: CreatorHeaderPage = {
 
 const dummyFooterData: CreatorFooterPage = {
   templateId: "creator",
-  pageName: "Footer",
+  pageName: "footer",
   sections: [
     {
       footer: {
@@ -108,7 +112,7 @@ const dummyFooterData: CreatorFooterPage = {
         ],
         copyrightText: "©nammayoga, All rights reserved",
       },
-      sectionName: "Footer Section",
+      sectionName: "footerSection",
       order: 0,
       isActive: true,
     },
@@ -119,7 +123,15 @@ const dummyFooterData: CreatorFooterPage = {
 
 /** ---- Async server slots with fetch + "nothing if empty" behavior ---- **/
 
-async function HeaderSlot({ communityId }: { communityId: string }) {
+async function HeaderSlot({
+  communityId,
+  primaryColor,
+  secondaryColor,
+}: {
+  communityId: string;
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   // fetch just header (cached by fetch); if you prefer, extract a getHeader() cache helper
   const res = await fetch(
     `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Header`,
@@ -130,10 +142,24 @@ async function HeaderSlot({ communityId }: { communityId: string }) {
 
   const section = res?.data?.sections?.[0] || dummyHeaderData.sections[0];
   if (!section) return null; // <-- NO DATA ⇒ render nothing
-  return <CreatorHeader section={section} />;
+  return (
+    <CreatorHeader
+      section={section}
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
+    />
+  );
 }
 
-async function FooterSlot({ communityId }: { communityId: string }) {
+async function FooterSlot({
+  communityId,
+  primaryColor,
+  secondaryColor,
+}: {
+  communityId: string;
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const res = await fetch(
     `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Footer`,
     { cache: "no-store" }
@@ -146,7 +172,14 @@ async function FooterSlot({ communityId }: { communityId: string }) {
 
   const section = res?.data?.sections?.[0] || dummyFooterData.sections[0];
   if (!section) return null; // <-- NO DATA ⇒ render nothing
-  return <CreatorFooter section={section} address={address} />;
+  return (
+    <CreatorFooter
+      section={section}
+      address={address}
+      secondaryColor={secondaryColor}
+      primaryColor={primaryColor}
+    />
+  );
 }
 
 /** --------------------------- Shell --------------------------- **/
@@ -162,11 +195,25 @@ export default async function CreatorShell({
   // Optional: decide an initial loading state for pages (not for header/footer).
   const initialLoading = !bundle?.home || !bundle?.about || !bundle?.contact;
 
+  const primaryColor = "#fff";
+  const secondaryColor = "#000";
+
   return (
     <>
       {/* Header: skeleton while fetching, nothing if API returns empty */}
-      <Suspense fallback={<CreatorHeaderSkeleton />}>
-        <HeaderSlot communityId={community._id} />
+      <Suspense
+        fallback={
+          <CreatorHeaderSkeleton
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+          />
+        }
+      >
+        <HeaderSlot
+          communityId={community._id}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       </Suspense>
 
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
@@ -174,8 +221,19 @@ export default async function CreatorShell({
       </CMSProvider>
 
       {/* Footer: skeleton while fetching, nothing if API returns empty */}
-      <Suspense fallback={<CreatorFooterSkeleton />}>
-        <FooterSlot communityId={community._id} />
+      <Suspense
+        fallback={
+          <CreatorFooterSkeleton
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+          />
+        }
+      >
+        <FooterSlot
+          communityId={community._id}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       </Suspense>
     </>
   );

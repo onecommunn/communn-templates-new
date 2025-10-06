@@ -7,17 +7,26 @@
 }
 
 @media (max-width: 639px) {
-  .slider { height: 50vw; } /* explicit mobile height for visibility */
+  .slider {
+    height: 50vw;
+  } /* explicit mobile height for visibility */
 
   /* Let Swiper fully control slide widths for 3-up */
-  .swiper-slide.arc-slide { flex: 0 0 auto; }
+  .swiper-slide.arc-slide {
+    flex: 0 0 auto;
+  }
 
   /* Hide the halo rings on small screens */
   .slider::before,
-  .slider::after { display: none; }
+  .slider::after {
+    display: none;
+  }
 }
 
-.swiper { width: 100%; height: 100%; }
+.swiper {
+  width: 100%;
+  height: 100%;
+}
 
 .swiper-slide.arc-slide {
   /* desktop/tablet: we rely on slidesPerView:'auto' + this flex-basis */
@@ -59,7 +68,9 @@
 
 /* Avoid forcing single-wide slides on mobile */
 @media (max-width: 639px) {
-  .snapper { min-width: 100px; }
+  .snapper {
+    min-width: 100px;
+  }
 }
 
 /* halo rings (desktop/tablet) */
@@ -69,11 +80,15 @@
   position: absolute;
   width: 500%;
   height: 500%;
-  background: #fff;
+  background-color: var(--bg-color);
   z-index: 2;
   border-radius: 50%;
   left: 50%;
   translate: -50%;
 }
-.slider::before { top: -480%; }
-.slider::after { bottom: -480%; }
+.slider::before {
+  top: -480%;
+}
+.slider::after {
+  bottom: -480%;
+}

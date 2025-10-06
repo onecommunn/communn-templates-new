@@ -11,6 +11,8 @@ type Props = {
   logoWidth?: number;
   logoHeight?: number;
   address: ContactDetailsSection;
+  primaryColor: string;
+  secondaryColor: string;
 };
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -27,6 +29,8 @@ const CreatorFooter: React.FC<Props> = ({
   logoWidth = 300,
   logoHeight = 100,
   address,
+  primaryColor,
+  secondaryColor,
 }) => {
   const footer = section.footer;
 
@@ -48,7 +52,10 @@ const CreatorFooter: React.FC<Props> = ({
   <div className={`grid grid-cols-2 gap-10 ${colClass}`}>...</div>;
 
   return (
-    <footer className="py-10 font-inter">
+    <footer
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor, color: secondaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Top: Logo + Columns */}
         <div className="flex flex-col md:flex-row justify-center md:justify-between gap-8">
@@ -77,7 +84,12 @@ const CreatorFooter: React.FC<Props> = ({
                 key={`${col.heading}-${cIdx}`}
                 className="flex flex-col gap-3"
               >
-                <p className="text-xs text-gray-600">{col.heading}</p>
+                <p
+                  className="text-xs text-gray-600"
+                  style={{ color: secondaryColor }}
+                >
+                  {col.heading}
+                </p>
                 {col.links?.map((lnk, lIdx) => (
                   <Link
                     key={`${lnk.label}-${lIdx}`}
@@ -92,7 +104,12 @@ const CreatorFooter: React.FC<Props> = ({
               </div>
             ))}
             <div className="flex flex-col gap-3 overflow-hidden">
-              <p className="text-xs text-gray-600">Contact</p>
+              <p
+                className="text-xs text-gray-600"
+                style={{ color: secondaryColor }}
+              >
+                Contact
+              </p>
               {address?.address?.value && (
                 <p className="text-sm font-semibold hover:underline break-words">
                   {address?.address?.value}
@@ -129,11 +146,17 @@ const CreatorFooter: React.FC<Props> = ({
               );
             })}
           </div>
-          <p className="text-[#0C0407] text-sm text-center md:text-left">
+          <p
+            className="text-[#0C0407] text-sm text-center md:text-left"
+            style={{ color: secondaryColor }}
+          >
             Made with ❤️ by communn.io
           </p>
           {/* Copyright */}
-          <p className="text-[#0C0407] text-sm text-center md:text-left">
+          <p
+            className="text-[#0C0407] text-sm text-center md:text-left"
+            style={{ color: secondaryColor }}
+          >
             {copyright}
           </p>
         </div>

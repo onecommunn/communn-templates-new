@@ -26,6 +26,8 @@ interface ICreatorPlansCard {
   isSubscribedCommunity?: boolean;
   fetchPlans?: () => void;
   subscribers: { _id: string }[];
+  primaryColor: string;
+  secondaryColor: string;
 }
 
 const CreatorPlansCard = ({
@@ -39,6 +41,8 @@ const CreatorPlansCard = ({
   isSubscribedCommunity,
   fetchPlans,
   subscribers,
+  primaryColor,
+  secondaryColor,
 }: ICreatorPlansCard) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -67,7 +71,10 @@ const CreatorPlansCard = ({
 
   if (authContext?.loading || !mounted) return null;
   return (
-    <Card className="p-0 rounded-xl border-none gap-1">
+    <Card
+      className="p-0 rounded-xl border-none gap-1"
+      style={{ backgroundColor: primaryColor }}
+    >
       {/* image */}
       <div className="rounded-xl overflow-hidden">
         <div className="relative aspect-[16/10]">
@@ -82,25 +89,49 @@ const CreatorPlansCard = ({
           />
         </div>
       </div>
-      <CardTitle className="text-[#0C0407] font-semibold text-[20px] font-inter px-2 transform-none mt-1 line-clamp-1">
+      <CardTitle
+        style={{ color: secondaryColor }}
+        className="text-[#0C0407] font-semibold text-[20px] font-inter px-2 transform-none mt-1 line-clamp-1"
+      >
         {capitalizeWords(title)}
       </CardTitle>
-      <p className="text-[#333333] text-[16px] px-2 line-clamp-2">
+      <p
+        style={{ color: secondaryColor }}
+        className="text-[#333333] text-[16px] px-2 line-clamp-2"
+      >
         {description}
       </p>
       <CardFooter className="flex flex-row justify-between items-center p-0 px-2 pb-2 mt-2">
-        <div className="flex items-center">
-          <span className="text-[16px] font-semibold mr-1">₹{price}</span>
-          <span className="text-[16px] font-semibold">/ {period}</span>
+        <div className="flex items-center" style={{ color: secondaryColor }}>
+          <span className="text-[16px] font-semibold mr-1 text-current">
+            ₹{price}
+          </span>
+          <span className="text-[16px] font-semibold text-current">
+            / {period}
+          </span>
         </div>
         {!isLoggedIn ? (
           <Link href="/login">
-            <Button>Login to Subscribe</Button>
+            <Button
+              style={{
+                color: primaryColor,
+                backgroundColor: secondaryColor,
+              }}
+            >
+              Login to Subscribe
+            </Button>
           </Link>
         ) : !isSubscribedCommunity ? (
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Join Community</Button>
+              <Button
+                style={{
+                  color: primaryColor,
+                  backgroundColor: secondaryColor,
+                }}
+              >
+                Join Community
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogTitle>Join Community</DialogTitle>
@@ -122,7 +153,14 @@ const CreatorPlansCard = ({
           <Link
             href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${imageUrl}`}
           >
-            <Button variant={isSubscribed ? 'outline' : 'default'} className={`w-full py-3 cursor-pointer rounded-md`}>
+            <Button
+              variant={isSubscribed ? "outline" : "default"}
+              className={`w-full py-3 cursor-pointer rounded-md`}
+              style={{
+                color: primaryColor,
+                backgroundColor: secondaryColor,
+              }}
+            >
               {isSubscribed ? "Subscribed" : "Subscribe"}
             </Button>
           </Link>

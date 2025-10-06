@@ -350,7 +350,7 @@ const CreatorEventDetail = () => {
     <>
       <section className="py-10 font-inter">
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-          <CreatorSectionHeader title={eventData.title} />
+          <CreatorSectionHeader title={eventData.title} textColor=""/>
           <div className="max-w-6xl mx-auto px-4 py-4">
             {/* Cover image */}
             <div className="rounded-2xl overflow-hidden mb-8">

@@ -9,6 +9,8 @@ type Props = {
   data: CollaborationSection;
   baseVelocity?: number; // optional override
   direction?: 1 | -1; // optional override
+  primaryColor: string;
+  secondaryColor: string;
 };
 
 const FALLBACK_LOGOS = [
@@ -32,6 +34,8 @@ const CreatorCollaboration: React.FC<Props> = ({
   data,
   baseVelocity = 6,
   direction = 1,
+  primaryColor,
+  secondaryColor,
 }) => {
   const heading = data?.heading ?? "";
   const description =
@@ -43,13 +47,24 @@ const CreatorCollaboration: React.FC<Props> = ({
   );
 
   return (
-    <section className="py-10 font-inter">
+    <section
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#0C0407] font-inter">
+          <h2
+            className="text-3xl md:text-5xl font-bold mb-4 text-[#0C0407] font-inter"
+            style={{ color: secondaryColor }}
+          >
             {heading}
           </h2>
-          <p className="text-[16px] text-[#0C0407] max-w-2xl mx-auto font-inter">
+          <p
+            className="text-[16px] text-[#0C0407] max-w-2xl mx-auto font-inter"
+            style={{
+              color: secondaryColor,
+            }}
+          >
             {description}
           </p>
         </div>

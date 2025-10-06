@@ -1,8 +1,19 @@
 import React from "react";
 
-const CreatorHeaderSkeleton: React.FC = () => {
+interface props {
+  primaryColor: string;
+  secondaryColor: string;
+}
+
+const CreatorHeaderSkeleton: React.FC<props> = ({
+  primaryColor,
+  secondaryColor,
+}) => {
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header
+      className="sticky top-0 z-50 bg-white"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}

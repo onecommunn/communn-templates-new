@@ -38,12 +38,20 @@ type Props = {
   /** Optional: override logo size if you need to constrain it */
   logoWidth?: number;
   logoHeight?: number;
+  primaryColor: string;
+  secondaryColor: string;
 };
 
 const FALLBACK_LOGO =
   "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704";
 
-const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight = 100 }) => {
+const CreatorHeader: React.FC<Props> = ({
+  section,
+  logoWidth = 180,
+  logoHeight = 100,
+  primaryColor,
+  secondaryColor,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const auth = useContext(AuthContext);
@@ -82,7 +90,9 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
   const buttons: HeaderButton[] = effectiveSection?.buttons ?? [];
 
   const linkClass = (href: string) =>
-    `text-black font-inter ${pathname === href ? "underline" : "hover:underline"}`;
+    `text-black font-inter ${
+      pathname === href ? "underline" : "hover:underline"
+    }`;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -96,18 +106,39 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header
+      className="sticky top-0 z-50 bg-white"
+      style={{ backgroundColor: primaryColor, color: secondaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" aria-label="Go home">
-            <img src={logoSrc} alt="Logo" width={logoWidth} height={logoHeight} />
+          <Link
+            href="/"
+            className="flex items-center space-x-2"
+            aria-label="Go home"
+          >
+            <img
+              src={logoSrc}
+              alt="Logo"
+              width={logoWidth}
+              height={logoHeight}
+            />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8" aria-label="Primary">
+          <nav
+            className="hidden md:flex items-center space-x-8"
+            style={{ color: secondaryColor }}
+            aria-label="Primary"
+          >
             {buttons.map((btn, idx) => (
-              <Link key={`${btn.label}-${idx}`} href={btn.url} className={linkClass(btn.url)}>
+              <Link
+                key={`${btn.label}-${idx}`}
+                href={btn.url}
+                className={linkClass(btn.url)}
+                style={{ color: secondaryColor }}
+              >
                 {btn.label}
               </Link>
             ))}
@@ -121,7 +152,13 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-red-600 px-5 font-inter py-1.5 bg-black text-white rounded-[12px] text-sm w-fit">
+                  <AlertDialogTrigger
+                    style={{
+                      backgroundColor: secondaryColor,
+                      color: primaryColor,
+                    }}
+                    className="cursor-pointer hover:bg-red-600 px-5 font-inter py-1.5 bg-black text-white rounded-[12px] text-sm w-fit"
+                  >
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -144,7 +181,13 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="cursor-pointer rounded-[12px] text-sm !px-6 w-fit inline-flex items-center gap-2">
+                <Button
+                  style={{
+                    backgroundColor: secondaryColor,
+                    color: primaryColor,
+                  }}
+                  className="cursor-pointer rounded-[12px] text-sm !px-6 w-fit inline-flex items-center gap-2"
+                >
                   Login <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -175,16 +218,27 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center space-x-2"
                     >
-                      <img src={logoSrc} alt="Logo" width={120} height={logoHeight} />
+                      <img
+                        src={logoSrc}
+                        alt="Logo"
+                        width={120}
+                        height={logoHeight}
+                      />
                     </Link>
                   </div>
                 </SheetHeader>
 
                 {/* Nav list */}
-                <nav className="flex flex-col space-y-1 py-2" aria-label="Mobile">
+                <nav
+                  className="flex flex-col space-y-1 py-2"
+                  aria-label="Mobile"
+                >
                   {buttons.map((btn, idx) => (
                     <SheetClose asChild key={`${btn.label}-${idx}`}>
-                      <Link href={btn.url} className={`px-4 py-3 ${linkClass(btn.url)}`}>
+                      <Link
+                        href={btn.url}
+                        className={`px-4 py-3 ${linkClass(btn.url)}`}
+                      >
                         {btn.label}
                       </Link>
                     </SheetClose>
@@ -203,7 +257,13 @@ const CreatorHeader: React.FC<Props> = ({ section, logoWidth = 180, logoHeight =
                       </Button>
                     ) : (
                       <Link href="/login" className="w-full">
-                        <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2">
+                        <Button
+                          style={{
+                            backgroundColor: secondaryColor,
+                            color: primaryColor,
+                          }}
+                          className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2"
+                        >
                           Login <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>

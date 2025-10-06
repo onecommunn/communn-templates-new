@@ -1,7 +1,7 @@
 // Root payload
 export interface CreatorHomePage {
   templateId: "creator";
-  pageName: "Home";
+  pageName: "home";
   sections: HomeSection[];
   status: "published" | "draft" | string;
   __v?: number;
@@ -25,7 +25,7 @@ export interface Testimony {
 /** ---------------- Section Types ---------------- */
 
 export interface HeroSection {
-  sectionName: "Hero Section";
+  sectionName: "heroSection";
   heading: string;
   subHeading?: string;
   order: number;
@@ -37,7 +37,7 @@ export interface HeroSection {
 export type MediaPlacement = "left" | "right";
 
 export interface TwoColumnSection {
-  sectionName: "Two Column Section";
+  sectionName: "twoColumnSection";
   heading: string;
   subHeading?: string;
   title?: string;
@@ -51,7 +51,7 @@ export interface TwoColumnSection {
 }
 
 export interface OurBestsellersSection {
-  sectionName: "Our Bestsellers";
+  sectionName: "ourBestSellers";
   heading: string;
   subHeading?: string;
   order: number;
@@ -59,7 +59,7 @@ export interface OurBestsellersSection {
 }
 
 export interface CollaborationSection {
-  sectionName: "Collaboration";
+  sectionName: "collaboration";
   heading:string
   description?: string;
   order: number;
@@ -68,7 +68,7 @@ export interface CollaborationSection {
 }
 
 export interface TestimoniesSection {
-  sectionName: "Testimonies Section";
+  sectionName: "testimoniesSection";
   heading: string;
   subHeading?: string;
   order: number;
@@ -77,7 +77,7 @@ export interface TestimoniesSection {
 }
 
 export interface CTASection {
-  sectionName: "CTA Section";
+  sectionName: "ctaSection";
   title: string;
   description?: string;
   order: number;

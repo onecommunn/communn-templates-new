@@ -1,8 +1,16 @@
 import React from "react";
 
-const CreatorFooterSkeleton: React.FC = () => {
+interface props {
+  primaryColor: string;
+  secondaryColor: string;
+}
+
+const CreatorFooterSkeleton: React.FC<props> = ({
+  primaryColor,
+  secondaryColor,
+}) => {
   return (
-    <footer className="py-10 font-inter">
+    <footer className="py-10 font-inter" style={{backgroundColor:primaryColor}}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="flex flex-col md:flex-row justify-center md:justify-between gap-8">
           {/* Logo */}

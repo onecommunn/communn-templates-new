@@ -10,7 +10,6 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import CreatorLayout from "../CreatorShell";
 
 const CreatorLogin = () => {
   const [mobileNumber, setMobileNumber] = useState("");

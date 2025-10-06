@@ -1,12 +1,17 @@
-import React from 'react'
-import CreatorEventsPage from './_components/CreatorEvents'
+import React from "react";
+import CreatorEventsPage from "./_components/CreatorEvents";
 
 const CreatorEvents = () => {
+  const primaryColor = "#fff";
+  const secondaryColor = "#000";
   return (
     <>
-        <CreatorEventsPage/>
+      <CreatorEventsPage
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </>
-  )
-}
+  );
+};
 
-export default CreatorEvents
+export default CreatorEvents;

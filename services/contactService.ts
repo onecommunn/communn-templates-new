@@ -12,7 +12,7 @@ export const sendNotification = async (
 ): Promise<ApiResponse> => {
   try {
     const response = await axios.post<ApiResponse>(
-      "http://localhost:5002/api/v2.0/cms/send-cms_notification",
+      "https://communn.io/api/v2.0/cms/send-cms_notification",
       contactForm
     );
     return response.data;

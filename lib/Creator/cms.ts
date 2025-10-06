@@ -22,11 +22,11 @@ async function fetchCreatorBundle(
 ): Promise<CreatorCMSBundle> {
   const base = "https://communn.io/api/v2.0/cms/get-section/community";
   const [header, footer, home, about, contact] = await Promise.all([
-    fetchJSON(`${base}/${communityId}?templateId=creator&page=Header`),
-    fetchJSON(`${base}/${communityId}?templateId=creator&page=Footer`),
-    fetchJSON(`${base}/${communityId}?templateId=creator&page=Home`),
+    fetchJSON(`${base}/${communityId}?templateId=creator&page=header`),
+    fetchJSON(`${base}/${communityId}?templateId=creator&page=footer`),
+    fetchJSON(`${base}/${communityId}?templateId=creator&page=home`),
     fetchJSON(`${base}/${communityId}?templateId=creator&page=about`),
-    fetchJSON(`${base}/${communityId}?templateId=creator&page=Contact`),
+    fetchJSON(`${base}/${communityId}?templateId=creator&page=contact`),
     // add more pages
   ]);
 

@@ -4,11 +4,15 @@ import { Button } from "@/components/ui/button";
 import type { CTASection } from "@/models/templates/creator/creator-home.model";
 import { ArrowRight } from "lucide-react";
 
-type Props = { data: CTASection };
+type Props = { data: CTASection; primaryColor: string; secondaryColor: string };
 
 const isInternal = (url: string) => url.startsWith("/");
 
-const CreatorCTA: React.FC<Props> = ({ data }) => {
+const CreatorCTA: React.FC<Props> = ({
+  data,
+  secondaryColor,
+  primaryColor,
+}) => {
   const title = data.title ?? "Stay Inspired";
   const description =
     data.description ??
@@ -18,9 +22,15 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
     data.buttons?.filter((b) => b?.label?.trim() && b?.url?.trim()) ?? [];
 
   return (
-    <section className="py-10 font-inter">
+    <section
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="bg-[#0C0407] text-white rounded-[20px] p-10 md:p-16 flex flex-col md:flex-row justify-center md:justify-between items-center gap-6">
+        <div
+          style={{ backgroundColor: secondaryColor, color: primaryColor }}
+          className="bg-[#0C0407] text-white rounded-[20px] p-10 md:p-16 flex flex-col md:flex-row justify-center md:justify-between items-center gap-6"
+        >
           <div className="flex flex-col gap-2">
             <h3 className="font-poppins font-semibold md:text-5xl text-3xl text-center md:text-left">
               {title}
@@ -70,6 +80,10 @@ const CreatorCTA: React.FC<Props> = ({ data }) => {
               <Button
                 variant="secondary"
                 className="cursor-pointer inline-flex items-center gap-2"
+                style={{
+                  backgroundColor: primaryColor,
+                  color: secondaryColor,
+                }}
               >
                 Explore All Activities
                 <ArrowRight className="h-4 w-4" />

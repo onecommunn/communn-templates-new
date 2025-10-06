@@ -19,68 +19,19 @@ import { sendNotification } from "@/services/contactService";
 import { toast } from "sonner";
 import { ContactForm } from "@/models/contact.model";
 
-const dummyData: CreatorContactPage = {
-  templateId: "creator",
-  pageName: "Contact",
-  sections: [
-    {
-      email: {
-        heading: "Send us an email",
-        subHeading:
-          "Our community has been the heart of our journey from the start, their unwavering support means the world to us",
-        value: "contact@prachiandharsh.com",
-      },
-      call: {
-        heading: "Give us a call",
-        subHeading:
-          "The strength of our community has been pivotal since day one, and their encouragement is priceless.",
-        value: "+91 000000000",
-      },
-      address: {
-        heading: "Find us",
-        subHeading:
-          "The strength of our community has been pivotal since day one, and their encouragement is priceless.",
-        value: "66 broklyn golden street. New York",
-      },
-      sectionName: "Contact details",
-      title: "We’d love to hear from you",
-      description:
-        "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.",
-      order: 0,
-      isActive: true,
-    },
-    {
-      sectionName: "CTA Section",
-      title: "Stay Inspired",
-      description:
-        "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
-      order: 1,
-      isActive: true,
-      buttons: [
-        {
-          label: "Explore All Activities",
-          url: "https://prachiandharsh/courses",
-        },
-      ],
-    },
-  ],
-  status: "published",
-  __v: 0,
-};
-
 const CreatorContact: React.FC = () => {
   const { contact } = useCMS();
   const isLoading = contact === undefined;
   const data: CreatorContactPage | undefined = !isLoading
-    ? (contact as CreatorContactPage | undefined) ?? dummyData
+    ? (contact as CreatorContactPage | undefined)
     : undefined;
 
   const contactDetailsSection = data?.sections.find(
     (s: ContactSection): s is ContactDetailsSection =>
-      s.sectionName === "Contact details"
+      s.sectionName === "contactSection"
   );
   const contactCTA = data?.sections.find(
-    (s: ContactSection): s is CTASection => s.sectionName === "CTA Section"
+    (s: ContactSection): s is CTASection => s.sectionName === "ctaSection"
   );
 
   const auth = useContext(AuthContext);
@@ -92,7 +43,7 @@ const CreatorContact: React.FC = () => {
     subject: "",
     phoneNumber: "",
     message: "",
-    communityId: communityId || "", // fallback in case auth not ready
+    communityId: communityId || "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -109,7 +60,7 @@ const CreatorContact: React.FC = () => {
 
     try {
       const payload: ContactForm = { ...form, communityId };
-      const response = await sendNotification(payload);
+      await sendNotification(payload);
 
       toast.success("Message sent successfully!");
       setForm({
@@ -130,17 +81,39 @@ const CreatorContact: React.FC = () => {
 
   if (isLoading) return <CreatorContactSkeleton />;
 
+  const primaryColor = "#fff";
+  const secondaryColor = "#000";
+
   return (
     <>
       {contactDetailsSection && (
-        <section className="py-10 md:py-20 font-inter">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+        <section
+          className="py-10 md:py-20 font-inter relative overflow-hidden"
+          style={{ backgroundColor: primaryColor }}
+        >
+          {/* ::before pseudo-element using CSS variable */}
+          <style jsx>{`
+            section::before {
+              content: "";
+              position: absolute;
+              inset: 0;
+              background-color: ${secondaryColor};
+              opacity: 0.05;
+              z-index: 0;
+            }
+          `}</style>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-20 relative z-10">
             <CreatorSectionHeader
               title={contactDetailsSection.title}
               description={contactDetailsSection.description}
+              textColor={secondaryColor}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 justify-center">
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-10 justify-center"
+              style={{ color: secondaryColor }}
+            >
               {/* Left: Contact Form */}
               <div className="flex flex-col gap-2">
                 <h3 className="font-semibold text-2xl md:text-5xl font-poppins">
@@ -155,7 +128,22 @@ const CreatorContact: React.FC = () => {
                     type="text"
                     name="name"
                     placeholder="Full Name"
-                    className="w-full rounded-md border px-3 py-2 text-sm"
+                    className="w-full rounded-md border px-3 py-2 text-sm shadow-none"
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      borderRadius: "6px",
+                      padding: "0.75rem 1rem",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                     value={form.name}
                     onChange={handleChange}
                     required
@@ -165,6 +153,21 @@ const CreatorContact: React.FC = () => {
                     name="email"
                     placeholder="Email Address"
                     className="w-full rounded-md border px-3 py-2 text-sm"
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      borderRadius: "6px",
+                      padding: "0.75rem 1rem",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                     value={form.email}
                     onChange={handleChange}
                     required
@@ -174,6 +177,21 @@ const CreatorContact: React.FC = () => {
                     name="subject"
                     placeholder="Subject"
                     className="w-full rounded-md border px-3 py-2 text-sm"
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      borderRadius: "6px",
+                      padding: "0.75rem 1rem",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                     value={form.subject}
                     onChange={handleChange}
                     required
@@ -183,20 +201,62 @@ const CreatorContact: React.FC = () => {
                     name="phoneNumber"
                     placeholder="Mobile Number"
                     className="w-full rounded-md border px-3 py-2 text-sm"
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      borderRadius: "6px",
+                      padding: "0.75rem 1rem",
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                     value={form.phoneNumber}
                     onChange={handleChange}
                   />
-                  <Textarea
-                    name="message"
-                    placeholder="Enter your Message..."
-                    className="min-h-40 pb-2"
-                    value={form.message}
-                    onChange={handleChange}
-                    required
-                  />
+                  <div className="relative">
+                    <Textarea
+                      name="message"
+                      placeholder="Enter your Message..."
+                      className="min-h-40 pb-2"
+                      style={{
+                        border: `1px solid ${secondaryColor}`,
+                        borderRadius: "6px",
+                        padding: "0.75rem 1rem",
+                        outline: "none",
+                        transition: "all 0.3s ease",
+                        color: secondaryColor,
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 10% opacity
+                        e.currentTarget.style.borderColor = secondaryColor;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.borderColor = secondaryColor;
+                      }}
+                      value={form.message}
+                      onChange={handleChange}
+                      required
+                    />
+
+                    {/* Placeholder color */}
+                    <style>{`
+                      textarea::placeholder {
+                        color: ${secondaryColor}80; /* 50% opacity for placeholder */
+                      }
+                    `}</style>
+                  </div>
+
                   <Button
                     type="submit"
                     className="cursor-pointer inline-flex items-center gap-2"
+                    style={{ backgroundColor: secondaryColor }}
                     disabled={loading}
                   >
                     {loading ? "Sending..." : "Send Message"}{" "}
@@ -207,24 +267,29 @@ const CreatorContact: React.FC = () => {
 
               {/* Right: Contact Info */}
               <div className="flex flex-col gap-10 justify-center">
+                {/** Address */}
                 <div className="flex items-center gap-4">
-                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 flex justify-center items-center">
-                    <MapPin />
+                  <div
+                    className="rounded-full w-12 h-12 flex justify-center items-center"
+                    style={{ backgroundColor: secondaryColor }}
+                  >
+                    <MapPin className="text-white" />
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
                       {contactDetailsSection?.address?.heading || "Find Us"}
                     </h4>
-                    <p>
-                      {contactDetailsSection?.address?.value ||
-                        "66 broklyn golden street. New York"}
-                    </p>
+                    <p>{contactDetailsSection?.address?.value}</p>
                   </div>
                 </div>
 
+                {/** Email */}
                 <div className="flex items-center gap-4">
-                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 flex justify-center items-center">
-                    <Mail />
+                  <div
+                    className="rounded-full w-12 h-12 flex justify-center items-center"
+                    style={{ backgroundColor: secondaryColor }}
+                  >
+                    <Mail className="text-white" />
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
@@ -234,9 +299,13 @@ const CreatorContact: React.FC = () => {
                   </div>
                 </div>
 
+                {/** Phone */}
                 <div className="flex items-center gap-4">
-                  <div className="rounded-full bg-[#F4F4F4] w-12 h-12 flex justify-center items-center">
-                    <Phone />
+                  <div
+                    className="rounded-full w-12 h-12 flex justify-center items-center"
+                    style={{ backgroundColor: secondaryColor }}
+                  >
+                    <Phone className="text-white" />
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
@@ -251,7 +320,13 @@ const CreatorContact: React.FC = () => {
         </section>
       )}
 
-      {contactCTA && <CreatorCTA data={contactCTA} />}
+      {contactCTA && (
+        <CreatorCTA
+          data={contactCTA}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
+      )}
     </>
   );
 };

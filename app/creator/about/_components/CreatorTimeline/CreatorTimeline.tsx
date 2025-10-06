@@ -5,11 +5,18 @@ import Timeline from "./Timeline";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import type { JourneyTimelineSection } from "@/models/templates/creator/creator-about.model";
 
-type Props = { data: JourneyTimelineSection };
+type Props = {
+  data: JourneyTimelineSection;
+  secondaryColor: string;
+  primaryColor: string;
+};
 
-const CreatorTimeline: React.FC<Props> = ({ data }) => {
-  const title =
-    data.heading || "Our Journey Timeline";
+const CreatorTimeline: React.FC<Props> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+}) => {
+  const title = data.heading || "Our Journey Timeline";
   const description =
     data.subHeading ||
     "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.";
@@ -23,14 +30,28 @@ const CreatorTimeline: React.FC<Props> = ({ data }) => {
     })) || [];
 
   return (
-    <section className="py-10 font-inter">
+    <section
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <CreatorSectionHeader title={title} description={description} />
+        <CreatorSectionHeader
+          title={title}
+          description={description}
+          textColor={secondaryColor}
+        />
 
         {steps.length > 0 ? (
-          <Timeline steps={steps} />
+          <Timeline
+            steps={steps}
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+          />
         ) : (
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p
+            className="text-center text-sm text-gray-500 mt-6"
+            style={{ color: secondaryColor }}
+          >
             No milestones yet. Check back soon!
           </p>
         )}

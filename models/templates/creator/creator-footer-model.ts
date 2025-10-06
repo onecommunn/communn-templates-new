@@ -1,7 +1,7 @@
 // Root payload
 export interface CreatorFooterPage {
   templateId: "creator";
-  pageName: "Footer";
+  pageName: "footer";
   sections: FooterSection[];
   status: "published" | "draft" | string;
   __v?: number;
@@ -34,7 +34,7 @@ export interface FooterContent {
 }
 
 export interface FooterSection {
-  sectionName: "Footer Section";
+  sectionName: "footerSection";
   order: number;
   isActive: boolean;
   footer: FooterContent;

@@ -10,7 +10,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 
-const CreatorPlansSection = () => {
+const CreatorPlansSection = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } =
     usePlans();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -95,8 +101,8 @@ const CreatorPlansSection = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="flex flex-col gap-2 justify-center items-center my-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-20" style={{backgroundColor:primaryColor}}>
+        <div className="flex flex-col gap-2 justify-center items-center py-10">
           <Skeleton className="h-6 w-[200px]" />
           <Skeleton className="h-4 w-3/4 rounded-md" />
           <Skeleton className="h-4 w-3/6 rounded-md" />
@@ -106,7 +112,7 @@ const CreatorPlansSection = () => {
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="border rounded-lg overflow-hidden shadow-sm p-4 space-y-4"
+              className="rounded-lg overflow-hidden shadow-sm p-4 space-y-4"
             >
               <Skeleton className="h-48 w-full rounded-md" />
               <Skeleton className="h-6 w-3/4" />
@@ -132,9 +138,13 @@ const CreatorPlansSection = () => {
   }
 
   return (
-    <section className="py-10 font-inter">
+    <section
+      className="py-10 font-inter"
+      style={{ backgroundColor: primaryColor }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
+          textColor={secondaryColor}
           title="Plans"
           description="Explore flexible creator plans tailored to your growth journey. Unlock tools, resources, and support to help you monetize, scale, and elevate your creative projects with ease."
         />
@@ -156,6 +166,8 @@ const CreatorPlansSection = () => {
               subscribers={plan?.subscribers}
               isSubscribedCommunity={isSubscribed}
               fetchPlans={fetchPlans}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
             />
           ))}
         </div>
