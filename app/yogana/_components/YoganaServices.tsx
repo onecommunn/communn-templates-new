@@ -159,9 +159,9 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     <section
       id="services"
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      style={{
-        backgroundColor: `${primaryColor}1A`,
-      }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       {/* background accents */}
       <div className="absolute inset-0 pointer-events-none">

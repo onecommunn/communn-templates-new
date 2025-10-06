@@ -21,9 +21,9 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
     <section
       id="about-us"
       className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      style={{
-        backgroundColor: `${primaryColor}1A`,
-      }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       <div className="absolute inset-0 pointer-events-none">
         <Image

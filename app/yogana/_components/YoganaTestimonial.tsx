@@ -84,9 +84,9 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
   return (
     <section
       className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      style={{
-        backgroundColor: `${primaryColor}1A`,
-      }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -134,9 +134,9 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           {/* Right Panel */}
           <div
             className="relative flex items-center justify-center bg-[#F7F1E6] px-6 py-12 md:px-14"
-            style={{
-              backgroundColor: `${primaryColor}1A`,
-            }}
+            // style={{
+            //   backgroundColor: `${primaryColor}1A`,
+            // }}
           >
             <div className="relative z-[1] max-w-xl text-center">
               {/* small script label */}

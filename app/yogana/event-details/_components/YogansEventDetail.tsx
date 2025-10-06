@@ -356,9 +356,9 @@ const YogansEventDetail = ({
     <>
       <section
         className="py-10 font-cormorant bg-[#C2A74E1A]"
-        style={{
-          backgroundColor: `${primaryColor}1A`,
-        }}
+        // style={{
+        //   backgroundColor: `${primaryColor}1A`,
+        // }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-6">

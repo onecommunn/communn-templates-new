@@ -19,9 +19,9 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
   return (
     <section
       className="relative pb-10 md:pb-0 pt-10 font-cormorant bg-[#f4ede0] md:min-h-screen overflow-hidden"
-      style={{
-        backgroundColor: `${primaryColor}1A`,
-      }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       {/* Background Images */}
       <div className="absolute inset-0">

@@ -146,7 +146,7 @@ const YoganaLogin = () => {
     <>
       <main
         className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[#C2A74E1A]"
-        style={{ backgroundColor: `${primaryColor}1A` }}
+        // style={{ backgroundColor: `${primaryColor}1A` }}
       >
         <div className="w-full max-w-md">
           <div className="rounded-lg shadow-md border p-8 bg-[#ffffff]">
