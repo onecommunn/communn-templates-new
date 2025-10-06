@@ -119,7 +119,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
       <div className="mx-auto mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Image */}
-          <div className="relative aspect-[16/12] md:aspect-auto md:h-[720px] md:max-h-[700px]">
+          <div className="relative aspect-[16/12] md:aspect-auto md:h-[720px] md:max-h-[550px]">
             <Image
               src={active.image}
               alt={`${active.author} testimonial`}
@@ -134,9 +134,9 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           {/* Right Panel */}
           <div
             className="relative flex items-center justify-center bg-[#F7F1E6] px-6 py-12 md:px-14"
-            // style={{
-            //   backgroundColor: `${primaryColor}1A`,
-            // }}
+          // style={{
+          //   backgroundColor: `${primaryColor}1A`,
+          // }}
           >
             <div className="relative z-[1] max-w-xl text-center">
               {/* small script label */}
