@@ -21,6 +21,10 @@ import { useCMS } from "../CMSProvider.client";
 const dummyData: CreatorAboutPage = {
   templateId: "creator",
   pageName: "about",
+  color: {
+    primary: "#fff",
+    secondary: "#000",
+  },
   sections: [
     {
       sectionName: "twoColumnSection",
@@ -153,8 +157,8 @@ const CreatorAbout = () => {
     (s: AboutSection): s is CTASection => s.sectionName === "ctaSection"
   );
 
-  const primaryColor = "#fff";
-  const secondaryColor = "#000";
+  const primaryColor = data?.color?.primary || "#fff";
+  const secondaryColor = data?.color?.secondary || "#000";
   return (
     <>
       {creatorAboutusHero ? (

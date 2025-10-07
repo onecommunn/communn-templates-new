@@ -2,6 +2,10 @@
 export interface CreatorHomePage {
   templateId: "creator";
   pageName: "home";
+  color: {
+    primary: string;
+    secondary: string;
+  };
   sections: HomeSection[];
   status: "published" | "draft" | string;
   __v?: number;
@@ -60,7 +64,7 @@ export interface OurBestsellersSection {
 
 export interface CollaborationSection {
   sectionName: "collaboration";
-  heading:string
+  heading: string;
   description?: string;
   order: number;
   isActive: boolean;
@@ -94,4 +98,3 @@ export type HomeSection =
   | CollaborationSection
   | TestimoniesSection
   | CTASection;
-

@@ -36,8 +36,13 @@ export enum PaymentStatus {
   PENDING = "PENDING",
 }
 
-
-const CreatorEventDetail = () => {
+const CreatorEventDetail = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const eventId = searchParams.get("eventid");
@@ -260,13 +265,19 @@ const CreatorEventDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div
+        className="container mx-auto px-4 sm:px-6 lg:px-20"
+        style={{ backgroundColor: primaryColor }}
+      >
         {" "}
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Cover image */}
           <div className="rounded-2xl overflow-hidden mb-8">
             <div className="relative aspect-[16/9] w-full">
-              <Skeleton className="absolute inset-0" />
+              <Skeleton
+                className="absolute inset-0"
+                style={{ backgroundColor: secondaryColor }}
+              />
             </div>
           </div>
 
@@ -274,41 +285,98 @@ const CreatorEventDetail = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Left: Event details */}
             <div className="md:col-span-2 space-y-4">
-              <Skeleton className="h-7 w-3/4" /> {/* title */}
+              <Skeleton
+                className="h-7 w-3/4"
+                style={{ backgroundColor: secondaryColor }}
+              />{" "}
+              {/* title */}
               <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-[92%]" />
-                <Skeleton className="h-4 w-[88%]" />
-                <Skeleton className="h-4 w-[80%]" />
+                <Skeleton
+                  className="h-4 w-full"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-4 w-[92%]"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-4 w-[88%]"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-4 w-[80%]"
+                  style={{ backgroundColor: secondaryColor }}
+                />
               </div>
               <Skeleton className="h-5 w-56 mt-6" /> {/* Access Information */}
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-64" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-64"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-52" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-52"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-40" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-40"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-72" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-72"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
               </div>
             </div>
 
             {/* Right: Form card */}
             <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton className="h-5 w-32" /> {/* Enter Details */}
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" /> {/* button */}
+              <Skeleton
+                className="h-5 w-32"
+                style={{ backgroundColor: secondaryColor }}
+              />{" "}
+              {/* Enter Details */}
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />{" "}
+              {/* button */}
             </div>
           </div>
         </div>
@@ -318,13 +386,24 @@ const CreatorEventDetail = () => {
 
   if (!eventData) {
     return (
-      <main className="flex-grow flex items-center justify-center h-2/5">
+      <main
+        className="flex-grow flex items-center justify-center h-2/5"
+        style={{ backgroundColor: primaryColor }}
+      >
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-black mb-4">
+          <h1
+            className="text-2xl font-bold text-black mb-4"
+            style={{ color: secondaryColor }}
+          >
             Event Not Found
           </h1>
           <Link href="/events">
-            <Button variant={"default"}>Back to Events</Button>
+            <Button
+              variant={"default"}
+              style={{ backgroundColor: secondaryColor, color: primaryColor }}
+            >
+              Back to Events
+            </Button>
           </Link>
         </div>
       </main>
@@ -348,9 +427,15 @@ const CreatorEventDetail = () => {
 
   return (
     <>
-      <section className="py-10 font-inter">
+      <section
+        className="py-10 font-inter"
+        style={{ backgroundColor: primaryColor, color: secondaryColor }}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-          <CreatorSectionHeader title={eventData.title} textColor=""/>
+          <CreatorSectionHeader
+            title={eventData.title}
+            textColor={secondaryColor}
+          />
           <div className="max-w-6xl mx-auto px-4 py-4">
             {/* Cover image */}
             <div className="rounded-2xl overflow-hidden mb-8">
@@ -373,14 +458,20 @@ const CreatorEventDetail = () => {
                 <h2 className="md:text-[32px] text-2xl font-semibold mb-4 font-poppins">
                   {eventData.title}
                 </h2>
-                <p className="text-gray-600 text-[16px] mb-6">
+                <p
+                  className="text-gray-600 text-[16px] mb-6"
+                  style={{ color: secondaryColor }}
+                >
                   {eventData.description}
                 </p>
 
                 <h3 className="md:text-[32px] text-2xl  font-semibold mb-2 font-poppins">
                   Access Information
                 </h3>
-                <ul className="space-y-2 text-black font-semibold text-[16px] list-disc ml-6">
+                <ul
+                  className="space-y-2 text-black font-semibold text-[16px] list-disc ml-6"
+                  style={{ color: secondaryColor }}
+                >
                   <li className="font-semibold text-[16px] ">
                     {`${formatDate(
                       eventData?.availability[0]?.day
@@ -399,15 +490,35 @@ const CreatorEventDetail = () => {
               </div>
 
               {/* Right: Form */}
-              <div className="bg-white rounded-xl shadow border p-6 h-fit">
+              <div
+                className="bg-white rounded-xl shadow border p-6 h-fit"
+                style={{
+                  backgroundColor: primaryColor,
+                  color: secondaryColor,
+                  borderColor: secondaryColor,
+                }}
+              >
                 <h3 className="text-lg font-semibold mb-4">Enter Details</h3>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <input
                     type="text"
                     name="name"
                     placeholder="Name"
-                    className="w-full rounded-md border px-3 py-2 text-sm"
+                    className="w-full rounded-md border px-3 py-2 text-sm shadow-none"
                     onChange={handleInputChange}
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                   />
                   <input
                     type="email"
@@ -415,12 +526,38 @@ const CreatorEventDetail = () => {
                     placeholder="Email Address"
                     onChange={handleInputChange}
                     className="w-full rounded-md border px-3 py-2 text-sm"
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                   />
                   <input
                     type="tel"
                     placeholder="Mobile Number"
                     name="phoneNumber"
                     className="w-full rounded-md border px-3 py-2 text-sm"
+                    style={{
+                      border: `1px solid ${secondaryColor}`,
+                      outline: "none",
+                      transition: "all 0.3s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`; // 25% opacity
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
                     onChange={handleInputChange}
                   />
                   {isSoldOut ? (
@@ -429,6 +566,10 @@ const CreatorEventDetail = () => {
                     <>
                       {eventData?.guestApproval ? (
                         <Button
+                          style={{
+                            backgroundColor: secondaryColor,
+                            color: primaryColor,
+                          }}
                           className={`w-full ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
@@ -457,6 +598,10 @@ const CreatorEventDetail = () => {
                       ) : eventData?.isPaidService &&
                         !eventData?.guestApproval ? (
                         <Button
+                          style={{
+                            backgroundColor: secondaryColor,
+                            color: primaryColor,
+                          }}
                           className={`w-full ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
@@ -489,6 +634,10 @@ const CreatorEventDetail = () => {
                         </Button>
                       ) : (
                         <Button
+                          style={{
+                            backgroundColor: secondaryColor,
+                            color: primaryColor,
+                          }}
                           className={`w-full ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"

@@ -10,6 +10,8 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useCMS } from "../CMSProvider.client";
+import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
 
 const CreatorLogin = () => {
   const [mobileNumber, setMobileNumber] = useState("");
@@ -20,6 +22,16 @@ const CreatorLogin = () => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
+
+  //-------------------------------------------------------
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: CreatorHomePage | undefined = !isLoading
+    ? (home as CreatorHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#fff";
+  const secondaryColor = source?.color?.secondary || "#000";
+  //-------------------------------------------------------------
   useEffect(() => {
     if (authContext?.isAuthenticated) {
       router.push("/");
@@ -134,9 +146,21 @@ const CreatorLogin = () => {
 
   return (
     <>
-      <main className="flex-grow flex h-1/2 items-center justify-center py-12 px-4">
+      <main
+        className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4"
+        style={{ backgroundColor: primaryColor, color: secondaryColor }}
+      >
+        <style jsx>{`
+          .dynamic-input::placeholder {
+            color: ${primaryColor}70;
+            opacity: 1;
+          }
+        `}</style>
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-lg shadow-md border p-8">
+          <div
+            className="bg-white rounded-lg shadow-md border p-8"
+            style={{ backgroundColor: secondaryColor, color: primaryColor }}
+          >
             <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
 
             {step === "mobile" ? (
@@ -152,7 +176,10 @@ const CreatorLogin = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-600 mb-2">
+                  <label
+                    className="block text-sm text-gray-600 mb-2"
+                    style={{ color: primaryColor }}
+                  >
                     {useEmail ? "Enter Email ID" : "Enter Mobile No"}
                   </label>
                   <div className="flex gap-3 flex-col">
@@ -173,7 +200,7 @@ const CreatorLogin = () => {
                           ? "Enter your email"
                           : "Enter your mobile number"
                       }
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
+                      className="dynamic-input flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
                       disabled={loading}
                     />
 
@@ -185,6 +212,10 @@ const CreatorLogin = () => {
                           ? "bg-black cursor-pointer"
                           : "bg-gray-300 cursor-not-allowed"
                       } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                      style={{
+                        backgroundColor: primaryColor,
+                        color: secondaryColor,
+                      }}
                     >
                       {loading ? "Sending..." : "Get OTP"}
                     </button>

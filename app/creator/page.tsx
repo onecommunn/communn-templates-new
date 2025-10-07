@@ -29,6 +29,10 @@ import { useCMS } from "./CMSProvider.client";
 const dummyData: CreatorHomePage = {
   templateId: "creator",
   pageName: "home",
+  color: {
+    primary: "#fff",
+    secondary: "#000",
+  },
   sections: [
     {
       sectionName: "heroSection",
@@ -207,8 +211,8 @@ const CreatorRoot: React.FC = () => {
     (s: HomeSection): s is CTASection => s.sectionName === "ctaSection"
   );
 
-  const primaryColor = "#fff";
-  const secondaryColor = "#000";
+  const primaryColor = source?.color?.primary || "#fff";
+  const secondaryColor = source?.color?.secondary || "#000";
 
   return (
     <>
@@ -249,15 +253,21 @@ const CreatorRoot: React.FC = () => {
       ) : null}
 
       {creatorTestimonies ? (
-        <CreatorTestimonies data={creatorTestimonies} primaryColor={primaryColor}
-          secondaryColor={secondaryColor}/>
+        <CreatorTestimonies
+          data={creatorTestimonies}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorTestimoniesSkeleton count={9} />
       ) : null}
 
       {creatorCTA ? (
-        <CreatorCTA data={creatorCTA} primaryColor={primaryColor}
-          secondaryColor={secondaryColor}/>
+        <CreatorCTA
+          data={creatorCTA}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
       ) : isLoading ? (
         <CreatorCTASkeleton />
       ) : null}

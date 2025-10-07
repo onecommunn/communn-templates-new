@@ -2,6 +2,10 @@
 export interface CreatorAboutPage {
   templateId: "creator";
   pageName: "about";
+  color: {
+    primary: string;
+    secondary: string;
+  };
   sections: AboutSection[];
   status: "published" | "draft" | string;
   __v?: number;

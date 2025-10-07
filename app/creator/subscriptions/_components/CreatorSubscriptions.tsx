@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react";
 import { ISequences, ISubscribers } from "@/models/plan.model";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useSearchParams } from "next/navigation";
@@ -86,7 +86,13 @@ interface Plan {
   description?: string;
 }
 
-const CreatorSubscriptions = () => {
+const CreatorSubscriptions = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
   const [activeTab, setActiveTab] = useState("All");
   const [isExpanded, setIsExpanded] = useState(true);
   const [selectedPayments, setSelectedPayments] = useState<number[]>([]);
@@ -323,49 +329,103 @@ const CreatorSubscriptions = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div
+        className="container mx-auto px-4 sm:px-6 lg:px-20"
+        style={{ backgroundColor: primaryColor }}
+      >
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="rounded-2xl overflow-hidden mb-8">
             <div className="relative aspect-[16/9] w-full">
-              <Skeleton className="absolute inset-0" />
+              <Skeleton className="absolute inset-0"  style={{ backgroundColor: secondaryColor }}/>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-1 gap-8">
             <div className="md:col-span-2 space-y-4">
-              <Skeleton className="h-7 w-3/4" />
+              <Skeleton className="h-7 w-3/4"  style={{ backgroundColor: secondaryColor }}/>
               <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-[92%]" />
-                <Skeleton className="h-4 w-[88%]" />
-                <Skeleton className="h-4 w-[80%]" />
+                <Skeleton
+                  className="h-4 w-full"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-4 w-[92%]"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-4 w-[88%]"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-4 w-[80%]"
+                  style={{ backgroundColor: secondaryColor }}
+                />
               </div>
-              <Skeleton className="h-5 w-56 mt-6" />
+              <Skeleton className="h-5 w-56 mt-6"  style={{ backgroundColor: secondaryColor }}/>
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-64" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-64"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-52" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-52"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-40" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-40"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-72" />
+                  <Skeleton
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
+                  <Skeleton
+                    className="h-4 w-72"
+                    style={{ backgroundColor: secondaryColor }}
+                  />
                 </div>
               </div>
             </div>
             <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton className="h-5 w-32" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
+              <Skeleton
+                className="h-5 w-32"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-10 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
             </div>
           </div>
         </div>
@@ -374,186 +434,193 @@ const CreatorSubscriptions = () => {
   }
 
   return (
-      <main className="flex-grow bg-white font-inter">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
-          <CreatorSectionHeader title={plan?.name || ""} />
-          <div className="mx-auto pb-4">
-            {/* Cover image */}
-            <div className="rounded-2xl overflow-hidden mb-8">
-              <div className="relative aspect-[18/9] w-full">
-                <Image
-                  src={imageUrl || "/assets/creatorCoursesPlaceHolderImage.jpg"}
-                  alt={plan?.name || "plan Image"}
-                  fill
-                  className="object-cover"
-                  priority
-                  unoptimized
-                />
-              </div>
+    <main
+      className="flex-grow bg-white font-inter"
+      style={{ backgroundColor: primaryColor, color: secondaryColor }}
+    >
+      <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
+        <CreatorSectionHeader
+          title={plan?.name || ""}
+          textColor={secondaryColor}
+        />
+        <div className="mx-auto pb-4">
+          {/* Cover image */}
+          <div className="rounded-2xl overflow-hidden mb-8">
+            <div className="relative aspect-[18/9] w-full">
+              <Image
+                src={imageUrl || "/assets/creatorCoursesPlaceHolderImage.jpg"}
+                alt={plan?.name || "plan Image"}
+                fill
+                className="object-cover"
+                priority
+                unoptimized
+              />
             </div>
+          </div>
+          <div>
             <div>
-              <div>
-                <h2 className="font-poppins font-semibold text-3xl mb-2">
-                  Description
-                </h2>
-                <p className="font-inter text-[16px]">{plan?.description}</p>
-              </div>
-              <h2 className="font-poppins font-semibold text-3xl my-2">
-                {new Intl.NumberFormat("en-IN", {
-                  style: "currency",
-                  currency: "INR",
-                  minimumFractionDigits: 2,
-                }).format(Number(plan?.pricing ?? 0))}
+              <h2 className="font-poppins font-semibold text-3xl mb-2">
+                Description
               </h2>
-              <div className="mt-4">
-                <h2 className="font-poppins font-semibold text-3xl mb-2">
-                  Sequences
-                </h2>
-                <div>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {tabs.map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 cursor-pointer rounded-md text-sm font-medium transition-colors ${
-                          activeTab === tab
-                            ? "bg-gray-100 text-gray-700"
-                            : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                        }`}
-                      >
-                        {formatStatus(tab)}
-                      </button>
-                    ))}
-                  </div>
+              <p className="font-inter text-[16px]">{plan?.description}</p>
+            </div>
+            <h2 className="font-poppins font-semibold text-3xl my-2">
+              {new Intl.NumberFormat("en-IN", {
+                style: "currency",
+                currency: "INR",
+                minimumFractionDigits: 2,
+              }).format(Number(plan?.pricing ?? 0))}
+            </h2>
+            <div className="mt-4">
+              <h2 className="font-poppins font-semibold text-3xl mb-2">
+                Sequences
+              </h2>
+              <div>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-4 py-2 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+                        activeTab === tab
+                          ? "bg-gray-100 text-gray-700"
+                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                      }`}
+                    >
+                      {formatStatus(tab)}
+                    </button>
+                  ))}
+                </div>
 
-                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-                    {sequencesList.map((payment, index) => {
-                      const isVisible =
-                        activeTab === "All" ||
-                        payment.previousStatus === activeTab;
-                      if (!isVisible) return null;
-                      return (
-                        <PaymentScheduleItem
-                          key={payment._id}
-                          date={
-                            payment?.startDate
-                              ? new Date(payment.startDate).toLocaleDateString(
-                                  "en-GB",
-                                  {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                  }
-                                )
-                              : "N/A"
-                          }
-                          amount={placePrice}
-                          status={payment.status}
-                          isSelected={selectedAmounts.some(
-                            (item) => item.id === payment._id
-                          )}
-                          onSelect={() =>
-                            handleSelectAmount(
-                              payment._id,
-                              Number(placePrice),
-                              payment?.startDate
-                            )
-                          }
-                        />
-                      );
-                    })}
-                  </div>
-                  <div className="border rounded-2xl p-6 mt-6">
-                    <div>
-                      <h6 className="font-semibold text-[16px] mb-3">
-                        Subscription Summary
-                      </h6>
-                      <hr />
-                    </div>
-                    <div className="grid grid-cols-2 mt-3">
-                      <div className="space-y-2">
-                        <h6 className="font-semibold text-[16px] mb-3">
-                          Plan Name
-                        </h6>
-                        <p className="text-[#646464] text-[16px]">Start Date</p>
-                        <p className="text-[#646464] text-[16px]">End Date</p>
-                        <p className="text-[#646464] text-[16px]">
-                          Subscription Fee
-                        </p>
-                      </div>
-                      <div className="text-right space-y-2">
-                        <h6 className="font-semibold text-[16px] mb-3">
-                          {plan?.name || " "}
-                        </h6>
-                        <p className="text-[#646464] text-[16px]">
-                          {formatDate(plan?.startDate || " ")}
-                        </p>
-                        <p className="text-[#646464] text-[16px]">
-                          {formatDate(plan?.endDate || " ")}
-                        </p>
-                        <p className="text-[#646464] text-[16px]">
-                          {new Intl.NumberFormat("en-IN", {
-                            style: "currency",
-                            currency: "INR",
-                            minimumFractionDigits: 2,
-                          }).format(Number(plan?.pricing ?? 0))}{" "}
-                          * {selectedAmounts.length}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="my-3" />
-                    <div className="grid grid-cols-2">
-                      <div>
-                        <h6 className="font-semibold text-[16px] mb-3">
-                          Total
-                        </h6>
-                      </div>
-                      <div className="text-right">
-                        <h6 className="font-semibold text-[16px] mb-3">
-                          ₹{totalAmount.toFixed(2)}
-                        </h6>
-                      </div>
-                    </div>
-                    <div className="flex flex-row items-center justify-end gap-3">
-                      <Link href={"/plans"}>
-                        <Button variant={"outline"}>Cancel</Button>
-                      </Link>
-                      <Button
-                        disabled={totalAmount === 0}
-                        onClick={() =>
-                          handleClickPay(communityId || "", planID || "")
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+                  {sequencesList.map((payment, index) => {
+                    const isVisible =
+                      activeTab === "All" ||
+                      payment.previousStatus === activeTab;
+                    if (!isVisible) return null;
+                    return (
+                      <PaymentScheduleItem
+                        key={payment._id}
+                        date={
+                          payment?.startDate
+                            ? new Date(payment.startDate).toLocaleDateString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                }
+                              )
+                            : "N/A"
                         }
-                        className={`${
-                          totalAmount === 0
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                        }`}
-                      >
-                        {/* Pay ₹{totalAmount.toFixed(2)} */}
-                        Continue to Payment
-                      </Button>
+                        amount={placePrice}
+                        status={payment.status}
+                        isSelected={selectedAmounts.some(
+                          (item) => item.id === payment._id
+                        )}
+                        onSelect={() =>
+                          handleSelectAmount(
+                            payment._id,
+                            Number(placePrice),
+                            payment?.startDate
+                          )
+                        }
+                      />
+                    );
+                  })}
+                </div>
+                <div
+                  className="border rounded-2xl p-6 mt-6"
+                  style={{ borderColor: secondaryColor }}
+                >
+                  <div>
+                    <h6 className="font-semibold text-[16px] mb-3">
+                      Subscription Summary
+                    </h6>
+                    <hr />
+                  </div>
+                  <div className="grid grid-cols-2 mt-3">
+                    <div className="space-y-2">
+                      <h6 className="font-semibold text-[16px] mb-3">
+                        Plan Name
+                      </h6>
+                      <p className="text-[#646464] text-[16px]">Start Date</p>
+                      <p className="text-[#646464] text-[16px]">End Date</p>
+                      <p className="text-[#646464] text-[16px]">
+                        Subscription Fee
+                      </p>
                     </div>
+                    <div className="text-right space-y-2">
+                      <h6 className="font-semibold text-[16px] mb-3">
+                        {plan?.name || " "}
+                      </h6>
+                      <p className="text-[#646464] text-[16px]">
+                        {formatDate(plan?.startDate || " ")}
+                      </p>
+                      <p className="text-[#646464] text-[16px]">
+                        {formatDate(plan?.endDate || " ")}
+                      </p>
+                      <p className="text-[#646464] text-[16px]">
+                        {new Intl.NumberFormat("en-IN", {
+                          style: "currency",
+                          currency: "INR",
+                          minimumFractionDigits: 2,
+                        }).format(Number(plan?.pricing ?? 0))}{" "}
+                        * {selectedAmounts.length}
+                      </p>
+                    </div>
+                  </div>
+                  <hr className="my-3" />
+                  <div className="grid grid-cols-2">
+                    <div>
+                      <h6 className="font-semibold text-[16px] mb-3">Total</h6>
+                    </div>
+                    <div className="text-right">
+                      <h6 className="font-semibold text-[16px] mb-3">
+                        ₹{totalAmount.toFixed(2)}
+                      </h6>
+                    </div>
+                  </div>
+                  <div className="flex flex-row items-center justify-end gap-3">
+                    <Link href={"/plans"}>
+                      <Button variant={"outline"}>Cancel</Button>
+                    </Link>
+                    <Button
+                      disabled={totalAmount === 0}
+                      onClick={() =>
+                        handleClickPay(communityId || "", planID || "")
+                      }
+                      className={`${
+                        totalAmount === 0
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                    >
+                      {/* Pay ₹{totalAmount.toFixed(2)} */}
+                      Continue to Payment
+                    </Button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <PaymentSuccess
-          txnid={transaction?.txnid || ""}
-          open={successOpen}
-          amount={transaction?.amount || ""}
-          timer={timer}
-          onClose={handleSuccessClose}
-        />
-        <PaymentFailure
-          open={failureOpen}
-          onClose={handleFailureClose}
-          amount={transaction?.amount || ""}
-          txnid={transaction?.txnid || ""}
-          timer={timer}
-        />
-      </main>
+      </div>
+      <PaymentSuccess
+        txnid={transaction?.txnid || ""}
+        open={successOpen}
+        amount={transaction?.amount || ""}
+        timer={timer}
+        onClose={handleSuccessClose}
+      />
+      <PaymentFailure
+        open={failureOpen}
+        onClose={handleFailureClose}
+        amount={transaction?.amount || ""}
+        txnid={transaction?.txnid || ""}
+        timer={timer}
+      />
+    </main>
   );
 };
 

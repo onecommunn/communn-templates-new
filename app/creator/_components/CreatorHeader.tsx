@@ -161,17 +161,30 @@ const CreatorHeader: React.FC<Props> = ({
                   >
                     Logout
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent style={{ backgroundColor: primaryColor }}>
                     <AlertDialogHeader>
                       <AlertDialogTitle className="font-inter">
                         Are you sure you want to logout?
                       </AlertDialogTitle>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel
+                        className="border"
+                        style={{
+                          borderColor: secondaryColor,
+                          color: secondaryColor,
+                          backgroundColor:"transparent"
+                        }}
+                      >
+                        Cancel
+                      </AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleLogout}
                         className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 cursor-pointer"
+                        style={{
+                          backgroundColor: secondaryColor,
+                          color: primaryColor,
+                        }}
                       >
                         Continue
                       </AlertDialogAction>

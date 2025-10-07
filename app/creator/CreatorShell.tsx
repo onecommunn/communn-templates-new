@@ -56,6 +56,10 @@ const dummyHeaderData: CreatorHeaderPage = {
 const dummyFooterData: CreatorFooterPage = {
   templateId: "creator",
   pageName: "footer",
+  color: {
+    primary: "#fff",
+    secondary: "#000",
+  },
   sections: [
     {
       footer: {
@@ -134,7 +138,7 @@ async function HeaderSlot({
 }) {
   // fetch just header (cached by fetch); if you prefer, extract a getHeader() cache helper
   const res = await fetch(
-    `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Header`,
+    `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=header`,
     { cache: "no-store" }
   )
     .then((r) => r.json())
@@ -145,8 +149,8 @@ async function HeaderSlot({
   return (
     <CreatorHeader
       section={section}
-      primaryColor={primaryColor}
-      secondaryColor={secondaryColor}
+      primaryColor={res?.data?.color?.primary || primaryColor}
+      secondaryColor={res?.data?.color?.secondary || secondaryColor}
     />
   );
 }
@@ -161,7 +165,7 @@ async function FooterSlot({
   secondaryColor: string;
 }) {
   const res = await fetch(
-    `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=Footer`,
+    `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=footer`,
     { cache: "no-store" }
   )
     .then((r) => r.json())
@@ -176,8 +180,8 @@ async function FooterSlot({
     <CreatorFooter
       section={section}
       address={address}
-      secondaryColor={secondaryColor}
-      primaryColor={primaryColor}
+      primaryColor={res?.data?.color?.primary || primaryColor}
+      secondaryColor={res?.data?.color?.secondary || secondaryColor}
     />
   );
 }

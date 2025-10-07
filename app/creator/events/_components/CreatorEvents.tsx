@@ -53,9 +53,18 @@ const CreatorEventsPage = ({
         style={{ backgroundColor: primaryColor }}
       >
         <div className="flex flex-col gap-2 justify-center items-center py-10">
-          <Skeleton className="h-6 w-[200px]" />
-          <Skeleton className="h-4 w-3/4 rounded-md" />
-          <Skeleton className="h-4 w-3/6 rounded-md" />
+          <Skeleton
+            className="h-6 w-[200px]"
+            style={{ backgroundColor: secondaryColor }}
+          />
+          <Skeleton
+            className="h-4 w-3/4 rounded-md"
+            style={{ backgroundColor: secondaryColor }}
+          />
+          <Skeleton
+            className="h-4 w-3/6 rounded-md"
+            style={{ backgroundColor: secondaryColor }}
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 py-16 px-4 lg:px-20">
@@ -64,13 +73,31 @@ const CreatorEventsPage = ({
               key={index}
               className="rounded-lg overflow-hidden shadow-sm p-4 space-y-4"
             >
-              <Skeleton className="h-48 w-full rounded-md" />
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
+              <Skeleton
+                className="h-48 w-full rounded-md"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-6 w-3/4"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-4 w-full"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <Skeleton
+                className="h-4 w-5/6"
+                style={{ backgroundColor: secondaryColor }}
+              />
               <div className="flex justify-between items-center">
-                <Skeleton className="h-6 w-20" />
-                <Skeleton className="h-10 w-24 rounded-md" />
+                <Skeleton
+                  className="h-6 w-20"
+                  style={{ backgroundColor: secondaryColor }}
+                />
+                <Skeleton
+                  className="h-10 w-24 rounded-md"
+                  style={{ backgroundColor: secondaryColor }}
+                />
               </div>
             </div>
           ))}

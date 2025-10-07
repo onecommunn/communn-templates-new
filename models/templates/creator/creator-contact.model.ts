@@ -2,6 +2,10 @@
 export interface CreatorContactPage {
   templateId: "creator";
   pageName: "contact";
+  color: {
+    primary: string;
+    secondary: string;
+  };
   sections: ContactSection[];
   status: "published" | "draft" | string;
   __v?: number;

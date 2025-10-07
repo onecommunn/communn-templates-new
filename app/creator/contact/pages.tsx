@@ -81,8 +81,8 @@ const CreatorContact: React.FC = () => {
 
   if (isLoading) return <CreatorContactSkeleton />;
 
-  const primaryColor = "#fff";
-  const secondaryColor = "#000";
+  const primaryColor = data?.color?.primary || "#fff";
+  const secondaryColor = data?.color?.secondary || "#000";
 
   return (
     <>
@@ -270,7 +270,7 @@ const CreatorContact: React.FC = () => {
                 {/** Address */}
                 <div className="flex items-center gap-4">
                   <div
-                    className="rounded-full w-12 h-12 flex justify-center items-center"
+                    className="rounded-full w-12 h-12 min-w-12 min-h-12 flex justify-center items-center"
                     style={{ backgroundColor: secondaryColor }}
                   >
                     <MapPin className="text-white" />
@@ -286,7 +286,7 @@ const CreatorContact: React.FC = () => {
                 {/** Email */}
                 <div className="flex items-center gap-4">
                   <div
-                    className="rounded-full w-12 h-12 flex justify-center items-center"
+                    className="rounded-full w-12 h-12 min-w-12 min-h-12 flex justify-center items-center"
                     style={{ backgroundColor: secondaryColor }}
                   >
                     <Mail className="text-white" />
@@ -302,7 +302,7 @@ const CreatorContact: React.FC = () => {
                 {/** Phone */}
                 <div className="flex items-center gap-4">
                   <div
-                    className="rounded-full w-12 h-12 flex justify-center items-center"
+                    className="rounded-full w-12 h-12 min-w-12 min-h-12 flex justify-center items-center"
                     style={{ backgroundColor: secondaryColor }}
                   >
                     <Phone className="text-white" />

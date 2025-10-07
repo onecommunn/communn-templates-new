@@ -1,6 +1,8 @@
-import React, { Suspense } from 'react'
-import CreatorSubscriptions from './_components/CreatorSubscriptions'
-
+"use client";
+import React, { Suspense } from "react";
+import CreatorSubscriptions from "./_components/CreatorSubscriptions";
+import { useCMS } from "../CMSProvider.client";
+import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
 
 function PlanDetailsSkeleton() {
   return (
@@ -30,11 +32,18 @@ function PlanDetailsSkeleton() {
 }
 
 const CreatorSubscriptionsPage = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: CreatorHomePage | undefined = !isLoading
+    ? (home as CreatorHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#fff";
+  const secondaryColor = source?.color?.secondary || "#000";
   return (
     <Suspense fallback={<PlanDetailsSkeleton />}>
-      <CreatorSubscriptions />
+      <CreatorSubscriptions primaryColor={primaryColor} secondaryColor={secondaryColor}/>
     </Suspense>
-  )
-}
+  );
+};
 
-export default CreatorSubscriptionsPage
+export default CreatorSubscriptionsPage;

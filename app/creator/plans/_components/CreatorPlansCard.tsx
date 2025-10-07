@@ -133,9 +133,14 @@ const CreatorPlansCard = ({
                 Join Community
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent
+              style={{ backgroundColor: primaryColor, color: secondaryColor }}
+            >
               <DialogTitle>Join Community</DialogTitle>
-              <DialogDescription className="text-gray-700">
+              <DialogDescription
+                className="text-gray-700"
+                style={{ color: secondaryColor }}
+              >
                 You're not a member of this community yet. Would you like to
                 join now?
               </DialogDescription>
@@ -143,6 +148,10 @@ const CreatorPlansCard = ({
                 <Button
                   onClick={() => handleClickJoin(communityId)}
                   disabled={isSubscribed}
+                  style={{
+                    backgroundColor: secondaryColor,
+                    color: primaryColor,
+                  }}
                 >
                   Confirm Join
                 </Button>
@@ -157,8 +166,9 @@ const CreatorPlansCard = ({
               variant={isSubscribed ? "outline" : "default"}
               className={`w-full py-3 cursor-pointer rounded-md`}
               style={{
-                color: primaryColor,
-                backgroundColor: secondaryColor,
+                color: isSubscribed ? secondaryColor : primaryColor,
+                backgroundColor: isSubscribed ? primaryColor : secondaryColor,
+                borderColor: isSubscribed ? secondaryColor : "",
               }}
             >
               {isSubscribed ? "Subscribed" : "Subscribe"}

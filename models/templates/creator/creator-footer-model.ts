@@ -2,6 +2,10 @@
 export interface CreatorFooterPage {
   templateId: "creator";
   pageName: "footer";
+  color: {
+    primary: string;
+    secondary: string;
+  };
   sections: FooterSection[];
   status: "published" | "draft" | string;
   __v?: number;

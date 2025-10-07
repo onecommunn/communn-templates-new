@@ -1,5 +1,8 @@
+"use client";
 import React, { Suspense } from "react";
 import CreatorEventDetail from "./_components/CreatorEventDetail";
+import { useCMS } from "../CMSProvider.client";
+import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
 
 function EventDetailsSkeleton() {
   return (
@@ -29,9 +32,19 @@ function EventDetailsSkeleton() {
 }
 
 const CreatorEventDetailsPage = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: CreatorHomePage | undefined = !isLoading
+    ? (home as CreatorHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#fff";
+  const secondaryColor = source?.color?.secondary || "#000";
   return (
     <Suspense fallback={<EventDetailsSkeleton />}>
-      <CreatorEventDetail />
+      <CreatorEventDetail
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </Suspense>
   );
 };

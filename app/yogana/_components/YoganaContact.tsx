@@ -72,7 +72,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
     <section id="contact" className="bg-white py-14">
       <style jsx>{`
         .dynamic-input::placeholder {
-          color: #888;
+          color: ${primaryColor}70;
           opacity: 1;
         }
       `}</style>
