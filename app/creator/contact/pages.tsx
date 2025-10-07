@@ -91,18 +91,6 @@ const CreatorContact: React.FC = () => {
           className="py-10 md:py-20 font-inter relative overflow-hidden"
           style={{ backgroundColor: primaryColor }}
         >
-          {/* ::before pseudo-element using CSS variable */}
-          <style jsx>{`
-            section::before {
-              content: "";
-              position: absolute;
-              inset: 0;
-              background-color: ${secondaryColor};
-              opacity: 0.05;
-              z-index: 0;
-            }
-          `}</style>
-
           <div className="container mx-auto px-4 sm:px-6 lg:px-20 relative z-10">
             <CreatorSectionHeader
               title={contactDetailsSection.title}

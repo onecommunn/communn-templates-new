@@ -223,9 +223,12 @@ const YoganaPlanCard = ({
                   Join Community
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent style={{ color: primaryColor }}>
                 <DialogTitle>Join Community</DialogTitle>
-                <DialogDescription className="text-gray-700">
+                <DialogDescription
+                  className="text-gray-700"
+                  style={{ color: neutralColor }}
+                >
                   You're not a member of this community yet. Would you like to
                   join now?
                 </DialogDescription>
@@ -250,6 +253,9 @@ const YoganaPlanCard = ({
               <Button
                 variant={isSubscribed ? "outline" : "ghost"}
                 className={`group text-[${primaryColor}] font-plus-jakarta font-semibold text-sm cursor-pointer hover:bg-[${primaryColor}] hover:text-white hover:rounded-full`}
+                style={{
+                  backgroundColor: primaryColor,
+                }}
               >
                 {isSubscribed ? "Subscribed" : "Subscribe"}
               </Button>

@@ -1,6 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import { Instagram, Facebook, Linkedin, Dribbble, Globe } from "lucide-react";
+import {
+  Instagram,
+  Facebook,
+  Linkedin,
+  Dribbble,
+  Globe,
+  MapPin,
+  Phone,
+  Mail,
+} from "lucide-react";
 import { FooterSection } from "@/models/templates/creator/creator-footer-model";
 import { ContactDetailsSection } from "@/models/templates/creator/creator-contact.model";
 
@@ -58,27 +67,46 @@ const CreatorFooter: React.FC<Props> = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Top: Logo + Columns */}
-        <div className="flex flex-col md:flex-row justify-center md:justify-between gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center space-x-2 justify-center md:justify-start"
-            aria-label="Go home"
-          >
-            <img
-              src={
-                logo ||
-                "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704"
-              }
-              alt="Logo"
-              width={logoWidth}
-              height={logoHeight}
-              className="object-contain"
-            />
-          </Link>
+          <div className="flex flex-col md:items-start items-center gap-6">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 justify-center md:justify-start"
+              aria-label="Go home"
+            >
+              <img
+                src={
+                  logo ||
+                  "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704"
+                }
+                alt="Logo"
+                width={logoWidth}
+                height={logoHeight}
+                className="object-contain"
+              />
+            </Link>{" "}
+            {/* Socials */}
+            <div className="flex flex-row items-center gap-4">
+              {socials.map((s, idx) => {
+                const key = normalize(s.platform).toLowerCase();
+                const Icon = PLATFORM_ICON[key] ?? Globe;
+                const url = normalize(s.url) || "/";
+                return (
+                  <Link
+                    href={url}
+                    key={`${key}-${idx}`}
+                    aria-label={s.platform}
+                  >
+                    <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Navigation Columns */}
-          <div className={`grid grid-cols-2 gap-10 ${colClass}`}>
+          <div className={`grid md:grid-cols-2 gap-10 ${colClass}`}>
             {columns.map((col, cIdx) => (
               <div
                 key={`${col.heading}-${cIdx}`}
@@ -111,19 +139,37 @@ const CreatorFooter: React.FC<Props> = ({
                 Contact
               </p>
               {address?.address?.value && (
-                <p className="text-sm font-semibold hover:underline break-words">
-                  {address?.address?.value}
-                </p>
+                <div className="flex flex-row items-start gap-2">
+                  <MapPin
+                    className="w-4 h-4 min-h-4 min-w-4 mt-1"
+                    color={secondaryColor}
+                  />
+                  <p className="text-sm font-semibold hover:underline break-words">
+                    {address?.address?.value}
+                  </p>
+                </div>
               )}
               {address?.call?.value && (
-                <p className="text-sm font-semibold hover:underline">
-                  {address?.call?.value}
-                </p>
+                <div className="flex flex-row items-start gap-2">
+                  <Phone
+                    className="w-4 h-4 min-h-4 min-w-4"
+                    color={secondaryColor}
+                  />
+                  <p className="text-sm font-semibold hover:underline">
+                    {address?.call?.value}
+                  </p>
+                </div>
               )}
               {address?.email?.value && (
-                <p className="text-sm font-semibold hover:underline break-words">
-                  {address?.email?.value}
-                </p>
+                <div className="flex flex-row items-center gap-2">
+                  <Mail
+                    className="w-4 h-4 min-h-4 min-w-4"
+                    color={secondaryColor}
+                  />
+                  <p className="text-sm font-semibold hover:underline break-words">
+                    {address?.email?.value}
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -133,31 +179,18 @@ const CreatorFooter: React.FC<Props> = ({
 
         {/* Bottom: Socials + Copy */}
         <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4">
-          {/* Socials */}
-          <div className="flex flex-row items-center gap-4">
-            {socials.map((s, idx) => {
-              const key = normalize(s.platform).toLowerCase();
-              const Icon = PLATFORM_ICON[key] ?? Globe;
-              const url = normalize(s.url) || "/";
-              return (
-                <Link href={url} key={`${key}-${idx}`} aria-label={s.platform}>
-                  <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
-                </Link>
-              );
-            })}
-          </div>
-          <p
-            className="text-[#0C0407] text-sm text-center md:text-left"
-            style={{ color: secondaryColor }}
-          >
-            Made with ❤️ by communn.io
-          </p>
           {/* Copyright */}
           <p
             className="text-[#0C0407] text-sm text-center md:text-left"
             style={{ color: secondaryColor }}
           >
             {copyright}
+          </p>
+          <p
+            className="text-[#0C0407] text-sm text-center md:text-left"
+            style={{ color: secondaryColor }}
+          >
+            Made with ❤️ by communn.io
           </p>
         </div>
       </div>
