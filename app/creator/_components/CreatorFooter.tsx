@@ -44,21 +44,21 @@ const CreatorFooter: React.FC<Props> = ({
   const footer = section.footer;
 
   const logo = normalize(footer.logo);
-  const columns = footer.navigationColumns ?? [];
+  const columns = footer.navigationColumns[0] ?? [];
   const socials = footer.socialMedia ?? [];
   const copyright = normalize(footer.copyrightText) || "© All rights reserved";
 
-  const colClass =
-    {
-      1: "md:grid-cols-1",
-      2: "md:grid-cols-2",
-      3: "md:grid-cols-3",
-      4: "md:grid-cols-4",
-      5: "md:grid-cols-5",
-      6: "md:grid-cols-6",
-    }[columns.length + 1] || "md:grid-cols-3";
+  // const colClass =
+  //   {
+  //     1: "md:grid-cols-1",
+  //     2: "md:grid-cols-2",
+  //     3: "md:grid-cols-3",
+  //     4: "md:grid-cols-4",
+  //     5: "md:grid-cols-5",
+  //     6: "md:grid-cols-6",
+  //   }[columns.length + 1] || "md:grid-cols-3";
 
-  <div className={`grid grid-cols-2 gap-10 ${colClass}`}>...</div>;
+  // <div className={`grid grid-cols-2 gap-10 ${colClass}`}>...</div>;
 
   return (
     <footer
@@ -67,7 +67,7 @@ const CreatorFooter: React.FC<Props> = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Top: Logo + Columns */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-8">
           {/* Logo */}
           <div className="flex flex-col md:items-start items-center gap-6">
             <Link
@@ -106,31 +106,48 @@ const CreatorFooter: React.FC<Props> = ({
           </div>
 
           {/* Navigation Columns */}
-          <div className={`grid md:grid-cols-2 gap-10 ${colClass}`}>
-            {columns.map((col, cIdx) => (
-              <div
-                key={`${col.heading}-${cIdx}`}
-                className="flex flex-col gap-3"
+          <div className={`grid md:grid-cols-3`}>
+            <div className="flex flex-col gap-3">
+              <p
+                className="text-xs text-gray-600"
+                style={{ color: secondaryColor }}
               >
-                <p
-                  className="text-xs text-gray-600"
-                  style={{ color: secondaryColor }}
+                {columns?.heading}
+              </p>
+              {columns?.links?.map((lnk, lIdx) => (
+                <Link
+                  key={`${lnk?.label}-${lIdx}`}
+                  href={lnk?.url || "/"}
+                  className="w-fit"
                 >
-                  {col.heading}
+                  <p className="text-sm font-semibold hover:underline">
+                    {lnk?.label}
+                  </p>
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3">
+              <p
+                className="text-xs text-gray-600"
+                style={{ color: secondaryColor }}
+              >
+                Navigate
+              </p>
+              <Link href={"/"} className="w-fit">
+                <p className="text-sm font-semibold hover:underline">Home</p>
+              </Link>
+              <Link href={"/about"} className="w-fit">
+                <p className="text-sm font-semibold hover:underline">
+                  About us
                 </p>
-                {col.links?.map((lnk, lIdx) => (
-                  <Link
-                    key={`${lnk.label}-${lIdx}`}
-                    href={lnk.url || "/"}
-                    className="w-fit"
-                  >
-                    <p className="text-sm font-semibold hover:underline">
-                      {lnk.label}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            ))}
+              </Link>
+              <Link href={"/plans"} className="w-fit">
+                <p className="text-sm font-semibold hover:underline">Plans</p>
+              </Link>
+              <Link href={"/events"} className="w-fit">
+                <p className="text-sm font-semibold hover:underline">Events</p>
+              </Link>
+            </div>
             <div className="flex flex-col gap-3 overflow-hidden">
               <p
                 className="text-xs text-gray-600"

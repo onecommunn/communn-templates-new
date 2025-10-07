@@ -87,7 +87,28 @@ const CreatorHeader: React.FC<Props> = ({
   }, [section, pageData]);
 
   const logoSrc = effectiveSection?.media?.[0] || FALLBACK_LOGO;
-  const buttons: HeaderButton[] = effectiveSection?.buttons ?? [];
+  const buttons: HeaderButton[] = [
+    {
+      label: "Home",
+      url: "/",
+    },
+    {
+      label: "About Us",
+      url: "/about",
+    },
+    {
+      label: "Plans",
+      url: "/plans",
+    },
+    {
+      label: "Events",
+      url: "/events",
+    },
+    {
+      label: "Contact",
+      url: "/contact",
+    },
+  ];
 
   const linkClass = (href: string) =>
     `text-black font-inter ${
@@ -107,7 +128,7 @@ const CreatorHeader: React.FC<Props> = ({
 
   return (
     <header
-      className="sticky top-0 z-50 bg-white"
+      className="sticky top-0 z-50 bg-white overflow-hidden"
       style={{ backgroundColor: primaryColor, color: secondaryColor }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
@@ -173,7 +194,7 @@ const CreatorHeader: React.FC<Props> = ({
                         style={{
                           borderColor: secondaryColor,
                           color: secondaryColor,
-                          backgroundColor:"transparent"
+                          backgroundColor: "transparent",
                         }}
                       >
                         Cancel
