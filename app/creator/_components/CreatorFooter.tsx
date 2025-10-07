@@ -41,12 +41,12 @@ const CreatorFooter: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const footer = section.footer;
+  const footer = section?.footer;
 
   const logo = normalize(footer.logo);
-  const columns = footer.navigationColumns[0] ?? [];
-  const socials = footer.socialMedia ?? [];
-  const copyright = normalize(footer.copyrightText) || "© All rights reserved";
+  const columns = footer?.navigationColumns?.[0] ?? [];
+  const socials = footer?.socialMedia ?? [];
+  const copyright = normalize(footer?.copyrightText) || "© All rights reserved";
 
   // const colClass =
   //   {

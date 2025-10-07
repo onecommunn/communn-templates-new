@@ -38,7 +38,7 @@ const CreatorAboutus: React.FC<Props> = ({
 
   return (
     <section
-      className="pb-10 font-inter"
+      className="pb-10 font-inter overflow-hidden"
       style={{ color: secondaryColor, backgroundColor: primaryColor }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
@@ -84,10 +84,16 @@ const CreatorAboutus: React.FC<Props> = ({
                 {bullets.map((line, i) => (
                   <div
                     key={i}
-                    className="flex flex-row items-start gap-2 text-left"
+                    className="flex flex-row items-start gap-2 text-left overflow-wrap"
                   >
-                    <CheckCheck strokeWidth={2.6} size={22} />
-                    <p className="font-bold text-[16px]/[20px]">{line}</p>
+                    <CheckCheck
+                      strokeWidth={2.6}
+                      size={22}
+                      className="h-4 w-4 min-w-4 min-h-4 flex-shrink-0"
+                    />
+                    <p className="font-bold text-[16px]/[20px] break-words break-all break-anywhere overflow-wrap">
+                      {line}
+                    </p>
                   </div>
                 ))}
               </div>

@@ -199,8 +199,8 @@ export default async function CreatorShell({
   // Optional: decide an initial loading state for pages (not for header/footer).
   const initialLoading = !bundle?.home || !bundle?.about || !bundle?.contact;
 
-  const primaryColor = "#fff";
-  const secondaryColor = "#000";
+  const primaryColor = bundle?.header?.color?.primary || "#fff";
+  const secondaryColor = bundle?.header?.color?.secondary || "#000";
 
   return (
     <>

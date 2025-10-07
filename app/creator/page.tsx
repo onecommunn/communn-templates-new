@@ -213,6 +213,7 @@ const CreatorRoot: React.FC = () => {
 
   const primaryColor = source?.color?.primary || "#fff";
   const secondaryColor = source?.color?.secondary || "#000";
+  
 
   return (
     <>
