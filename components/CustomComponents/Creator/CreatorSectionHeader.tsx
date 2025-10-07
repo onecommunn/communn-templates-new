@@ -3,7 +3,7 @@ import React from "react";
 interface ICreatorSectionHeader {
   title: string;
   description?: string;
-  textColor: string;
+  textColor?: string;
 }
 
 const CreatorSectionHeader = ({
