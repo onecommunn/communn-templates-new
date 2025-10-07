@@ -106,7 +106,7 @@ const CreatorFooter: React.FC<Props> = ({
           </div>
 
           {/* Navigation Columns */}
-          <div className={`grid md:grid-cols-3`}>
+          <div className={`grid md:grid-cols-3 gap-10 md:gap-0`}>
             <div className="flex flex-col gap-3">
               <p
                 className="text-xs text-gray-600"
