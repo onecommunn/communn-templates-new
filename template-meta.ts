@@ -56,6 +56,16 @@ export const templatePageMeta: Record<
       description: community?.description || "",
       alternates: { canonical: "/" },
     }),
+    "/event-details": ({ community }) => ({
+      title: `${community.name} - Event`,
+      description: "Event details",
+      alternates: { canonical: "/event-details" },
+    }),
+    "/login": () => ({ title: "Login", alternates: { canonical: "/login" } }),
+    "/subscriptions": ({ community }) => ({
+      title: `${community.name} - Subscriptions`,
+      alternates: { canonical: "/subscriptions" },
+    }),
   },
 
   yogana: {

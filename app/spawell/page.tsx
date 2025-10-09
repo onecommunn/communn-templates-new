@@ -10,6 +10,7 @@ import SpawellTeam from "./_components/SpawellTeam";
 import SpawellTestimonials from "./_components/SpawellTestimonials";
 import SpawellContact from "./_components/SpawellConatct";
 import SpawellFAQ from "./_components/SpawellFAQ";
+import SpawellPlans from "./_components/SpawellPlans";
 
 const SpawellRoot = () => {
   return (
@@ -19,6 +20,7 @@ const SpawellRoot = () => {
       <SpawellFeaturedAppointments />
       <SpawellCourses />
       <SpawellServices />
+      <SpawellPlans/>
       <SpawellEvents />
       <SpawellWhyChooseus />
       <SpawellTeam/> 
