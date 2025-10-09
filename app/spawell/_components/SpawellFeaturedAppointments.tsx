@@ -33,23 +33,40 @@ const items: Item[] = [
   },
 ];
 
-const SpawellFeaturedAppointments: React.FC = () => {
+const SpawellFeaturedAppointments = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   return (
-    <section className="relative overflow-hidden bg-[#F7F1EB] py-20 md:pb-28 font-plus-jakarta">
+    <section
+      className="relative overflow-hidden bg-[var(--neu)] py-20 md:pb-28 font-plus-jakarta"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
         <div className="mb-2 flex justify-center">
-          <span className="text-sm text-[#5D3222] font-lora">
+          <span className="text-[16px] text-[var(--pri)] font-lora">
             • Featured Appointments
           </span>
         </div>
 
         {/* Heading */}
         <div className="text-center">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
             Let our featured treatments elevate
           </h2>
-          <p className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]">
+          <p className="mt-1 text-2xl font-lora italic text-[var(--pri)]/90 md:text-[34px]">
             your wellness journey
           </p>
         </div>
@@ -66,16 +83,16 @@ const SpawellFeaturedAppointments: React.FC = () => {
               {/* Corner arrow badge */}
               <div className="flex justify-between items-center mb-8">
                 {/* Icon */}
-                <div className="flex h-12 w-12 items-center justify-center text-[#5D3222]">
+                <div className="flex h-12 w-12 items-center justify-center text-[var(--pri)]">
                   <Icon className="h-14 w-14" strokeWidth={1} />
                 </div>{" "}
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 text-[#5D3222] transition-colors group-hover:bg-[#5D3222] group-hover:text-white">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--pri)]/10 text-[var(--pri)] transition-colors group-hover:bg-[var(--pri)] group-hover:text-[var(--sec)]">
                   <ArrowUpRight className="h-8 w-8" />
                 </span>
               </div>
 
               {/* Title */}
-              <h3 className="mt-2 text-xl font-bold leading-6 text-[#5D3222]">
+              <h3 className="mt-2 text-xl font-bold leading-6 text-[var(--pri)]">
                 {title}
               </h3>
             </Link>
@@ -83,11 +100,11 @@ const SpawellFeaturedAppointments: React.FC = () => {
         </div>
 
         {/* Footer note */}
-        <p className="mx-auto mt-14 max-w-3xl text-center text-sm text-[#866559]">
+        <p className="mx-auto mt-14 max-w-3xl text-center text-sm text-[var(--pri)]">
           Elevate your brand with creative design solutions.{" "}
           <Link
             href="/contact"
-            className="underline underline-offset-4 text-[#5D3222] decoration-[#5D3222]/40 hover:font-medium"
+            className="underline underline-offset-4 text-[var(--pri)] decoration-[var(--pri)]/40 hover:font-medium"
           >
             Let’s bring your vision to life today!
           </Link>

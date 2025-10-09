@@ -25,7 +25,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useContext, useState } from "react";
 
-const SpawellHeader = () => {
+const SpawellHeader = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const auth = useContext(AuthContext);
@@ -43,17 +51,23 @@ const SpawellHeader = () => {
   };
 
   return (
-    <header className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[#F9F6F1]">
-      <div className="py-2  mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[#5D3222] hidden md:flex md:flex-row items-center justify-between">
+    <header className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[var(--neu)]"  style={
+            {
+              "--pri": primaryColor,
+              "--sec": secondaryColor,
+              "--neu": neutralColor,
+            } as React.CSSProperties
+          }>
+      <div className="py-2  mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[var(--pri)] hidden md:flex md:flex-row items-center justify-between">
         <div>
-          <p className="text-white text-[14px] font-normal">
+          <p className="text-[var(--sec)] text-[14px] font-normal">
             Our agents work with you to customize policies{" "}
             <span className="font-bold hover:underline">
               <Link href="/">Explore Our Services</Link>
             </span>
           </p>
         </div>
-        <div className="grid grid-cols-2 text-white">
+        <div className="grid grid-cols-2 text-[var(--sec)]">
           <div className="flex flex-row items-center justify-center gap-6">
             <Link href={"/"}>Get a Quotes</Link>
             <span>|</span>
@@ -61,13 +75,13 @@ const SpawellHeader = () => {
           </div>
           <div className="flex flex-row items-center justify-end gap-6">
             <Link href={"/"}>
-              <Facebook className="size-5 hover:size-6"/>
+              <Facebook className="size-5 hover:size-6" />
             </Link>
             <Link href={"/"}>
-              <Twitter className="size-5 hover:size-6"/>
+              <Twitter className="size-5 hover:size-6" />
             </Link>
             <Link href={"/"}>
-              <Linkedin className="size-5 hover:size-6"/>
+              <Linkedin className="size-5 hover:size-6" />
             </Link>
           </div>
         </div>
@@ -88,37 +102,37 @@ const SpawellHeader = () => {
           >
             <Link
               href="/"
-              className={"font-inter hover:font-semibold text-[#5D3222]"}
+              className={"font-inter hover:font-semibold text-[var(--pri)]"}
             >
               Home
             </Link>
             <Link
               href="/#about-us"
-              className={"font-inter hover:font-semibold text-[#5D3222]"}
+              className={"font-inter hover:font-semibold text-[var(--pri)]"}
             >
               About us
             </Link>
             <Link
               href="/#services"
-              className={"font-inter hover:font-semibold text-[#5D3222]"}
+              className={"font-inter hover:font-semibold text-[var(--pri)]"}
             >
               Services
             </Link>
             <Link
               href="/#events"
-              className={"font-inter hover:font-semibold text-[#5D3222]"}
+              className={"font-inter hover:font-semibold text-[var(--pri)]"}
             >
               Events
             </Link>
             <Link
               href="/#plans"
-              className={"font-inter hover:font-semibold text-[#5D3222]"}
+              className={"font-inter hover:font-semibold text-[var(--pri)]"}
             >
               Plans
             </Link>
             <Link
               href="/#contact"
-              className={"font-inter hover:font-semibold text-[#5D3222]"}
+              className={"font-inter hover:font-semibold text-[var(--pri)]"}
             >
               Contact
             </Link>
@@ -128,11 +142,11 @@ const SpawellHeader = () => {
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="text-center font-medium min-w-fit text-[#5D3222]">
+                <div className="text-center font-medium min-w-fit text-[var(--pri)]">
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-inter py-2 bg-[#5D3222] text-white rounded-[10px] text-sm w-fit">
+                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-inter py-2 bg-[var(--pri)] text-[var(--sec)] rounded-[10px] text-sm w-fit">
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -147,7 +161,7 @@ const SpawellHeader = () => {
                       </AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleLogout}
-                        className="bg-[#ba1c26] text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                        className="bg-[#ba1c26] text-[var(--pri)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
                       >
                         Continue
                       </AlertDialogAction>
@@ -157,7 +171,7 @@ const SpawellHeader = () => {
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="cursor-pointer hover:bg-transparent hover:text-[#5D3222] border border-[#5D3222] rounded-[10px] text-sm bg-[#5D3222] px-6 w-fit inline-flex items-center gap-2">
+                <Button className="cursor-pointer hover:bg-transparent hover:text-[var(--pri)] border border-[var(--pri)] rounded-[10px] text-sm bg-[var(--pri)] px-6 w-fit inline-flex items-center gap-2">
                   Login
                   <span>
                     <ArrowRight className="h-4 w-4" />
@@ -209,6 +223,7 @@ const SpawellHeader = () => {
                     <Link
                       href="/"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
+                      style={{color:primaryColor}}
                     >
                       Home
                     </Link>
@@ -217,6 +232,7 @@ const SpawellHeader = () => {
                     <Link
                       href="/#about-us"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
+                      style={{color:primaryColor}}
                     >
                       About us
                     </Link>
@@ -225,6 +241,7 @@ const SpawellHeader = () => {
                     <Link
                       href="/#services"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
+                      style={{color:primaryColor}}
                     >
                       Services
                     </Link>
@@ -233,6 +250,7 @@ const SpawellHeader = () => {
                     <Link
                       href="/#events"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
+                      style={{color:primaryColor}}
                     >
                       Events
                     </Link>
@@ -241,6 +259,7 @@ const SpawellHeader = () => {
                     <Link
                       href="/#plans"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
+                      style={{color:primaryColor}}
                     >
                       Plans
                     </Link>
@@ -249,6 +268,7 @@ const SpawellHeader = () => {
                     <Link
                       href="/#contact"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
+                      style={{color:primaryColor}}
                     >
                       Contact
                     </Link>

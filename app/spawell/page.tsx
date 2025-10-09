@@ -13,20 +13,71 @@ import SpawellFAQ from "./_components/SpawellFAQ";
 import SpawellPlans from "./_components/SpawellPlans";
 
 const SpawellRoot = () => {
+  const primaryColor = "#5D3222";
+  const secondaryColor = "#fff";
+  const neutralColor = "#F9F6F1";
   return (
     <>
-      <SpawellHero />
-      <SpawellAboutus />
-      <SpawellFeaturedAppointments />
-      <SpawellCourses />
-      <SpawellServices />
-      <SpawellPlans/>
-      <SpawellEvents />
-      <SpawellWhyChooseus />
-      <SpawellTeam/> 
-      <SpawellTestimonials/>
-      <SpawellFAQ/>
-      <SpawellContact/>
+      <SpawellHero
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellAboutus
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellFeaturedAppointments
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellCourses
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellServices
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellPlans
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellEvents
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellWhyChooseus
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellTeam
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellTestimonials
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellFAQ
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+      <SpawellContact
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
     </>
   );
 };

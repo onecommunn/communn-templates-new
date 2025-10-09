@@ -34,7 +34,9 @@ export interface ContactForm {
 }
 
 type Props = {
-  primaryColor?: string; // brand color (default cocoa)
+  primaryColor?: string;
+  secondaryColor: string;
+  neutralColor: string;
 };
 
 const services = [
@@ -45,7 +47,28 @@ const services = [
   "Herbal Body Scrub & Wrap",
 ];
 
-const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
+const hexToRgba = (hex: string, alpha = 1) => {
+  const h = hex.replace("#", "");
+  const bigint = parseInt(
+    h.length === 3
+      ? h
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : h,
+    16
+  );
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
+const SpawellContact: React.FC<Props> = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
   const auth = useContext(AuthContext);
   const { communityId } = auth;
   const [first, setFirst] = useState("");
@@ -56,7 +79,7 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
   const [service, setService] = useState<string>(""); // shadcn Select value
   const [date, setDate] = useState<Date | undefined>(undefined); // shadcn Calendar date
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canSubmit = useMemo(() => {
     return first && email && phone && service && date && !isSubmitting;
@@ -95,16 +118,26 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#F7F1EB] py-14 md:py-20 font-plus-jakarta">
+    <section
+      id="contact"
+      className="relative overflow-hidden bg-[var(--neu)] py-14 md:py-20 font-plus-jakarta"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
           {/* Left: Heading + Form */}
           <div>
-            <h2 className="text-[34px] md:text-[44px] font-semibold tracking-[-0.02em] text-[#4b2a1d]">
+            <h2 className="text-[34px] md:text-[44px] font-semibold tracking-[-0.02em] text-[var(--pri)]">
               <span>Time to unwind?</span>{" "}
               <span className="font-lora italic font-normal">Book now.</span>
             </h2>
-            <p className="mt-2 text-sm md:text-base text-[#866F64] max-w-xl">
+            <p className="mt-2 text-sm md:text-base text-[var(--pri)] max-w-xl">
               Take a break from the busy and step into serenity. Our expert
               therapists are ready to guide you on a journey of relaxation,
               healing.
@@ -118,14 +151,14 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
                   onChange={(e) => setFirst(e.target.value)}
                   placeholder="First Name"
                   style={{ color: primaryColor }}
-                  className="h-12 rounded-xl border border-[#E7DAD3] bg-white px-4 text-sm outline-none focus:border-[#CDB7A8]"
+                  className="h-12 rounded-xl border border-[var(--pri)]/20 bg-white px-4 text-sm outline-none focus:border-[var(--pri)]/20"
                 />
                 <input
                   value={last}
                   onChange={(e) => setLast(e.target.value)}
                   placeholder="Last Name"
                   style={{ color: primaryColor }}
-                  className="h-12 rounded-xl border border-[#E7DAD3] bg-white px-4 text-sm outline-none focus:border-[#CDB7A8]"
+                  className="h-12 rounded-xl border border-[var(--pri)]/20 bg-white px-4 text-sm outline-none focus:border-[var(--pri)]/20"
                 />
               </div>
 
@@ -137,14 +170,14 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="E-mail"
                   style={{ color: primaryColor }}
-                  className="h-12 rounded-xl border border-[#E7DAD3] bg-white px-4 text-sm outline-none focus:border-[#CDB7A8]"
+                  className="h-12 rounded-xl border border-[var(--pri)]/20 bg-white px-4 text-sm outline-none focus:border-[var(--pri)]/20"
                 />
                 <input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Phone"
                   style={{ color: primaryColor }}
-                  className="h-12 rounded-xl border border-[#E7DAD3] bg-white px-4 text-sm outline-none focus:border-[#CDB7A8]"
+                  className="h-12 rounded-xl border border-[var(--pri)]/20 bg-white px-4 text-sm outline-none focus:border-[var(--pri)]/20"
                 />
               </div>
 
@@ -154,7 +187,7 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
                 <Select value={service} onValueChange={setService}>
                   <SelectTrigger
                     style={{ color: primaryColor }}
-                    className="w-full rounded-xl border border-[#E7DAD3] bg-white px-4 py-6 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="w-full rounded-xl border border-[var(--pri)]/20 bg-white px-4 py-6 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                   >
                     <SelectValue placeholder="Choose Services" />
                   </SelectTrigger>
@@ -177,7 +210,7 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
                     <Button
                       type="button"
                       variant="outline"
-                      className="h-12 w-full justify-between rounded-xl border border-[#E7DAD3] bg-white px-4 text-left text-sm font-normal hover:bg-white"
+                      className="h-12 w-full justify-between rounded-xl border border-[var(--pri)]/20 bg-white px-4 text-left text-sm font-normal hover:bg-white"
                       style={{ color: primaryColor }}
                     >
                       {date ? formatDateFns(date, "dd-MM-yyyy") : "dd-mm-yyyy"}
@@ -190,6 +223,13 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
                       selected={date}
                       onSelect={setDate}
                       initialFocus
+                      classNames={{
+                        day_selected:
+                          "bg-[var(--calendar-selected-bg,#7e1d53)] text-white hover:bg-[var(--calendar-selected-bg-hover,#9b2a6e)]",
+                        day_today: "border border-[#7e1d53]",
+                        day_outside: "text-gray-400 opacity-50",
+                        nav_button: "text-[#7e1d53] hover:bg-[#7e1d5320]",
+                      }}
                     />
                   </PopoverContent>
                 </Popover>
@@ -198,7 +238,7 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
               <Button
                 type="submit"
                 disabled={!canSubmit}
-                className="mt-2 rounded-xl bg-[#4b2a1d] px-6 py-6 text-white hover:bg-[#432314] disabled:opacity-60"
+                className="mt-2 rounded-xl bg-[#4b2a1d] px-6 py-6 text-[var(--sec)] hover:bg-[#432314] disabled:opacity-60"
                 style={{ backgroundColor: primaryColor }}
               >
                 {isSubmitting ? "Submitting..." : "Book An Appointment"}
@@ -220,15 +260,17 @@ const SpawellContact: React.FC<Props> = ({ primaryColor = "#5D3222" }) => {
               <div
                 className="absolute inset-0"
                 style={{
-                  background:
-                    "linear-gradient(180deg, rgba(93, 50, 34, 0) 37.07%, rgba(93, 50, 34, 0.8) 100%)",
+                  background: `linear-gradient(180deg, ${hexToRgba(
+                    primaryColor ?? "",
+                    0
+                  )} 37.07%, ${hexToRgba(primaryColor ?? "", 0.8)} 100%)`,
                 }}
               />
             </div>
 
             <div className="absolute bottom-4 left-4 right-4 md:left-6 md:right-6">
-              <div className="flex items-center gap-3 rounded-2xl px-4 py-3 text-white">
-                <div className="flex p-2 items-center justify-center rounded-full bg-[#5D3222]">
+              <div className="flex items-center gap-3 rounded-2xl px-4 py-3 text-[var(--sec)]">
+                <div className="flex p-2 items-center justify-center rounded-full bg-[var(--pri)]">
                   <Clock className="h-10 w-10" strokeWidth={1} />
                 </div>
                 <div className="text-[16px] space-y-2">

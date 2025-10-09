@@ -20,6 +20,15 @@ import { AuthContext } from "@/contexts/Auth.context";
 import { useCommunity } from "@/hooks/useCommunity";
 import { TrainingPlan } from "@/models/plan.model";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type Plan = {
   index: number;
@@ -39,58 +48,13 @@ type Plan = {
 };
 
 type Props = {
-  eyebrow?: string;
-  heading?: string;
-  subheading?: string;
-  plans?: Plan[];
-  primaryColor?: string;
-  secondaryColor?: string;
-  neutralColor?: string;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
 };
 
-// const DEFAULT_PLANS: Plan[] = [
-//   {
-//     title: "Relaxation & Glow – Monthly",
-//     price: "$79 / mo",
-//     image: "/assets/spawell-plans-image-1.jpg",
-//     href: "/plans/relaxation-glow",
-//   },
-//   {
-//     title: "Skin Rejuvenation – Quarterly",
-//     price: "$199 / qtr",
-//     image: "/assets/spawell-plans-image-2.jpg",
-//     href: "/plans/skin-rejuvenation",
-//   },
-//   {
-//     title: "Hot Stone Therapy – Premium",
-//     price: "$129 / visit",
-//     image: "/assets/spawell-plans-image-3.jpg",
-//     href: "/plans/hot-stone-premium",
-//   },
-//   {
-//     title: "Relaxation & Glow – Monthly",
-//     price: "$79 / mo",
-//     image: "/assets/spawell-plans-image-1.jpg",
-//     href: "/plans/relaxation-glow",
-//   },
-//   {
-//     title: "Skin Rejuvenation – Quarterly",
-//     price: "$199 / qtr",
-//     image: "/assets/spawell-plans-image-2.jpg",
-//     href: "/plans/skin-rejuvenation",
-//   },
-//   {
-//     title: "Hot Stone Therapy – Premium",
-//     price: "$129 / visit",
-//     image: "/assets/spawell-plans-image-3.jpg",
-//     href: "/plans/hot-stone-premium",
-//   },
-// ];
-
 const Card: React.FC<Plan> = ({
-  index,
   title,
-  description,
   subscribers,
   fetchPlans,
   isSubscribedCommunity,
@@ -98,50 +62,144 @@ const Card: React.FC<Plan> = ({
   communityId,
   primaryColor,
   secondaryColor,
-  neutralColor,
   price,
   period,
   coverImage,
-}) => (
-  <div
-    className="group block rounded-3xl bg-white p-3 transition-shadow"
-    aria-label={title}
-  >
-    {/* Image */}
-    <div className="relative overflow-hidden rounded-2xl">
-      <div className="relative aspect-[16/11]">
-        <Image
-          src={coverImage}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-          sizes="(max-width:1024px) 100vw, 33vw"
-          priority={false}
-        />
-      </div>
-    </div>
+}) => {
+  const authContext = useContext(AuthContext);
+  const userId = authContext?.user?.id;
+  const isLoggedIn = !!userId;
+  const { joinToPublicCommunity } = usePlans();
+  const [mounted, setMounted] = useState(false);
 
-    {/* Title + price */}
-    <div className="mt-4">
-      <h3 className="text-lg font-semibold leading-6 text-[#3c2318]">
-        {title}
-      </h3>
-      {price && (
-        <p className="mt-1 text-sm text-[#7a675f]">
-          <span className="text-lg font-semibold text-[#5D3222]">₹{price}</span> / {period}
-        </p>
+  const isSubscribed =
+    isLoggedIn && subscribers?.some((sub) => sub._id === userId);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (authContext?.loading || !mounted) return null;
+
+  const handleClickJoin = async (id: string) => {
+    try {
+      await joinToPublicCommunity(id);
+      if (fetchPlans) {
+        fetchPlans();
+      }
+      toast.success("Successfully joined the community");
+    } catch (error) {
+      console.error("Error joining community:", error);
+    }
+  };
+  return (
+    <div
+      className="group block rounded-3xl bg-white p-3 transition-shadow"
+      aria-label={title}
+    >
+      {/* Image */}
+      <div className="relative overflow-hidden rounded-2xl">
+        <div className="relative aspect-[16/11]">
+          <Image
+            src={coverImage}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width:1024px) 100vw, 33vw"
+            priority={true}
+            unoptimized
+          />
+        </div>
+      </div>
+
+      {/* Title + price */}
+      <div className="mt-4">
+        <h3
+          className="text-lg font-semibold leading-6 text-[#3c2318]"
+          style={{ color: primaryColor }}
+        >
+          {title}
+        </h3>
+        {price && (
+          <p
+            className="mt-1 text-sm text-[#7a675f]"
+            style={{ color: primaryColor }}
+          >
+            <span
+              className="text-lg font-semibold text-[#5D3222]"
+              style={{ color: primaryColor }}
+            >
+              ₹{price}
+            </span>{" "}
+            / {period}
+          </p>
+        )}
+      </div>
+
+      {/* CTA */}
+      {!isLoggedIn ? (
+        <Link href="/login">
+          <div
+            className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
+            style={{ color: primaryColor }}
+          >
+            Login to Subscribe
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </div>
+        </Link>
+      ) : !isSubscribedCommunity ? (
+        <Dialog>
+          <DialogTrigger asChild>
+            <div
+              className="mt-4 cursor-pointer inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
+              style={{ color: primaryColor }}
+            >
+              Join Community
+              <span>
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
+            </div>
+          </DialogTrigger>
+          <DialogContent style={{ color: primaryColor }}>
+            <DialogTitle>Join Community</DialogTitle>
+            <DialogDescription
+              className="text-gray-700"
+              style={{ color: primaryColor }}
+            >
+              You're not a member of this community yet. Would you like to join
+              now?
+            </DialogDescription>
+            <div className="mt-4 flex justify-end">
+              <Button
+                onClick={() => handleClickJoin(communityId)}
+                disabled={isSubscribed}
+                className={`bg-[${primaryColor}] text-white cursor-pointer`}
+                style={{
+                  backgroundColor: primaryColor,
+                  color: secondaryColor,
+                }}
+              >
+                Confirm Join
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Link
+          href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
+        >
+          <div
+            className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
+            style={{ color: primaryColor }}
+          >
+            View Plan
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </div>
+        </Link>
       )}
     </div>
-
-    {/* CTA */}
-    <Link href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}>
-      <div className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]">
-        View Plan
-        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-      </div>
-    </Link>
-  </div>
-);
+  );
+};
 
 function Dots({
   api,
@@ -205,13 +263,9 @@ function Dots({
 }
 
 const SpawellPlans: React.FC<Props> = ({
-  eyebrow = "• Latest Blog",
-  heading = "Inside the ultimate luxury",
-  subheading = "spa experience",
-  //   plans = DEFAULT_PLANS,
-  primaryColor = "#5D3222",
-  secondaryColor = "",
-  neutralColor = "",
+  primaryColor,
+  secondaryColor,
+  neutralColor,
 }) => {
   const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
     undefined
@@ -300,22 +354,25 @@ const SpawellPlans: React.FC<Props> = ({
   }, [communityId, isAuthenticated]);
 
   if (isLoading) {
-    // Skeleton with dots
     return (
       <section
         id="plans"
         className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-        // style={{
-        //   backgroundColor: `${primaryColor}1A`,
-        // }}
+        style={{ color: primaryColor }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-4">
-            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl">
-              {heading}
+            <h2
+              className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl"
+              style={{ color: primaryColor }}
+            >
+              Inside the ultimate luxury
             </h2>
-            <p className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]">
-              {subheading}
+            <p
+              className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]"
+              style={{ color: primaryColor }}
+            >
+              spa experience
             </p>
           </div>
           <Carousel
@@ -329,7 +386,10 @@ const SpawellPlans: React.FC<Props> = ({
                   key={i}
                   className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3"
                 >
-                  <Skeleton className="h-[420px] w-full bg-gray-300 rounded-[30px]" />
+                  <Skeleton
+                    className="h-[420px] w-full bg-gray-300 rounded-[30px]"
+                    style={{ backgroundColor: primaryColor }}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -343,22 +403,31 @@ const SpawellPlans: React.FC<Props> = ({
   }
 
   return (
-    <section className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta">
+    <section className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta" id="plans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
         <div className="mb-2 flex justify-center">
-          <span className="text-sm text-[#5D3222]">
-            {eyebrow.replace("Blog", "Plans")}
+          <span
+            className="text-sm text-[#5D3222]"
+            style={{ color: primaryColor }}
+          >
+            • Plans
           </span>
         </div>
 
         {/* Heading */}
         <div className="text-center mb-4">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl">
-            {heading}
+          <h2
+            className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl"
+            style={{ color: primaryColor }}
+          >
+            Inside the ultimate luxury
           </h2>
-          <p className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]">
-            {subheading}
+          <p
+            className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]"
+            style={{ color: primaryColor }}
+          >
+            spa experience
           </p>
         </div>
 
@@ -390,8 +459,7 @@ const SpawellPlans: React.FC<Props> = ({
                   price={plan.pricing || `${plan.totalPlanValue}`}
                   period={`${plan.interval} ${capitalizeWords(plan.duration)}`}
                   coverImage={
-                    plan?.image?.value ||
-                    "/assets/spawell-plans-image-1.jpg"
+                    plan?.image?.value || "/assets/spawell-plans-image-1.jpg"
                   }
                 />
               </CarouselItem>

@@ -10,12 +10,14 @@ import {
   ScrollText,
   CalendarClock,
 } from "lucide-react";
+import { color } from "motion/react";
 
 type Point = {
   title: string;
   desc: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   direction: "Right" | "Left";
+  color?: string;
 };
 
 const LEFT_POINTS: Point[] = [
@@ -60,38 +62,64 @@ const RIGHT_POINTS: Point[] = [
   },
 ];
 
-const Bullet = ({ title, desc, Icon,direction }: Point) => (
-  <div className="grid grid-cols-[2.25rem,1fr] gap-3">
-    <div className={`flex items-center gap-4 ${direction === "Left" ? "flex-row-reverse" : "flex-row"}`}>
+const Bullet = ({ title, desc, Icon, direction }: Point) => (
+  <div
+    className="grid grid-cols-[2.25rem,1fr] gap-3"
+    style={
+      {
+        "--sec": color,
+      } as React.CSSProperties
+    }
+  >
+    <div
+      className={`flex items-center gap-4 ${
+        direction === "Left" ? "flex-row-reverse" : "flex-row"
+      }`}
+    >
       <div className="flex p-3 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
-        <Icon className="h-10 w-10 text-white/90" strokeWidth={1}/>
+        <Icon className="h-10 w-10 text-[var(--sec)]/90" strokeWidth={1} />
       </div>
       <div className={`${direction === "Left" ? "text-right" : "text-left"}`}>
-        <h4 className="text-[15px] font-semibold text-white">{title}</h4>
-        <p className="mt-1 text-sm leading-6 text-white/70">{desc}</p>
+        <h4 className="text-[15px] font-semibold text-[var(--sec)]">{title}</h4>
+        <p className="mt-1 text-sm leading-6 text-[var(--sec)]/70">{desc}</p>
       </div>
     </div>
   </div>
 );
 
-const SpawellServices: React.FC = () => {
+const SpawellServices = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   return (
     <section
       id="services"
-      className="relative overflow-hidden bg-[#5D3222] py-16 md:py-24 font-plus-jakarta"
+      className="relative overflow-hidden bg-[var(--pri)] text-[var(--sec)] py-16 md:py-24 font-plus-jakarta"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
         <div className="mb-2 flex justify-center">
-          <span className="text-sm text-white/80">• Our Services</span>
+          <span className="text-sm text-[var(--sec)]/80">• Our Services</span>
         </div>
 
         {/* Heading */}
         <div className="text-center">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-white md:text-5xl">
+          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--sec)] md:text-5xl">
             Wellness benefits that soothe, heal,
           </h2>
-          <p className="mt-1 text-2xl font-lora italic text-white/90 md:text-[34px]">
+          <p className="mt-1 text-2xl font-lora italic text-[var(--sec)]/90 md:text-[34px]">
             and uplift every guest
           </p>
         </div>
@@ -122,7 +150,7 @@ const SpawellServices: React.FC = () => {
           {/* Right bullets */}
           <div className="space-y-7">
             {RIGHT_POINTS.map((p) => (
-              <Bullet key={p.title} {...p} />
+              <Bullet key={p.title} {...p} color={secondaryColor} />
             ))}
           </div>
         </div>

@@ -9,6 +9,7 @@ type Point = {
   title: string;
   desc: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  color?: string;
 };
 
 const POINTS: Point[] = [
@@ -29,21 +30,45 @@ const POINTS: Point[] = [
   },
 ];
 
-const Bullet = ({ title, desc, Icon }: Point) => (
-  <div className="grid grid-cols-[3rem,1fr] items-start gap-4">
-    <div className="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-[#5D3222]/25">
-      <Icon className="h-5 w-5 text-[#5D3222]" />
+const Bullet = ({ title, desc, Icon, color }: Point) => (
+  <div
+    className="grid grid-cols-[3rem,1fr] items-start gap-4"
+    style={
+      {
+        "--pri": color,
+      } as React.CSSProperties
+    }
+  >
+    <div className="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-[var(--pri)]/25">
+      <Icon className="h-5 w-5 text-[var(--pri)]" />
     </div>
     <div>
-      <h4 className="text-[15px] font-semibold text-[#3c2318]">{title}</h4>
-      <p className="mt-1 text-sm leading-6 text-neutral-600">{desc}</p>
+      <h4 className="text-[15px] font-semibold text-[var(--pri)]">{title}</h4>
+      <p className="mt-1 text-sm leading-6 text-[var(--pri)]">{desc}</p>
     </div>
   </div>
 );
 
-const SpawellWhyChooseus: React.FC = () => {
+const SpawellWhyChooseus = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   return (
-    <section className="relative bg-[#F7F1EB] py-16 md:py-24 font-plus-jakarta">
+    <section
+      className="relative bg-[var(--neu)] py-16 md:py-24 font-plus-jakarta"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
           {/* Left big image */}
@@ -63,13 +88,13 @@ const SpawellWhyChooseus: React.FC = () => {
           {/* Middle content */}
           <div className="order-3 md:order-2">
             {/* Eyebrow */}
-            <div className="mb-2 font-lora italic inline-flex items-center gap-2 text-sm text-[#5D3222]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#5D3222]/80" />
+            <div className="mb-2 font-lora italic inline-flex items-center gap-2 text-sm text-[var(--pri)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--pri)]/80" />
               Why Choose us
             </div>
 
             {/* Heading */}
-            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl">
+            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
               Your journey to{" "}
               <span className="font-lora italic font-normal">
                 wellness begins
@@ -79,14 +104,14 @@ const SpawellWhyChooseus: React.FC = () => {
             {/* Bullets */}
             <div className="mt-6 space-y-6">
               {POINTS.map((p) => (
-                <Bullet key={p.title} {...p} />
+                <Bullet key={p.title} {...p} color={primaryColor} />
               ))}
             </div>
           </div>
 
           {/* Right sidebar */}
           <aside className="order-2 md:order-3">
-            <p className="text-[16px] leading-6 text-[#866559]">
+            <p className="text-[16px] leading-6 text-[var(--pri)]">
               Empowering you to achieve optimal health and wellness with
               personalized coaching, support.
             </p>
@@ -94,7 +119,7 @@ const SpawellWhyChooseus: React.FC = () => {
             {/* CTA with shine sweep animation (matches your other buttons) */}
             <Link
               href="/contact"
-              className="group relative mt-5 inline-flex items-center gap-2 rounded-xl bg-[#5D3222] px-5 py-3 text-white transition-all hover:-translate-y-0.5"
+              className="group relative mt-5 inline-flex items-center gap-2 rounded-xl bg-[var(--pri)] px-5 py-3 text-[var(--sec)] transition-all hover:-translate-y-0.5"
               aria-label="Contact Us"
             >
               {/* shine */}

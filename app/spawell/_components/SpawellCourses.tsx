@@ -25,21 +25,38 @@ const COURSES: Course[] = [
   },
 ];
 
-const SpawellCourses: React.FC = () => {
+const SpawellCourses = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   return (
-    <section className="relative py-16 md:py-24 font-plus-jakarta">
+    <section
+      className="relative py-16 md:py-24 font-plus-jakarta"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[2fr_1fr] md:gap-16">
           {/* Left: Copy */}
           <div>
             {/* Eyebrow */}
-            <div className="mb-2 inline-flex items-center gap-2 text-sm text-[#5D3222]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#5D3222]/80" />
+            <div className="mb-2 inline-flex items-center gap-2 text-sm text-[var(--pri)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--pri)]/80" />
               Courses
             </div>
 
             {/* Heading */}
-            <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[#4b2a1d] md:text-5xl">
+            <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
               Where healing, comfort, and{" "}
               <span className="font-lora italic font-normal">
                 luxury come together
@@ -47,7 +64,7 @@ const SpawellCourses: React.FC = () => {
             </h2>
 
             {/* Blurb */}
-            <p className="mt-4 text-[16px] leading-7 text-neutral-600">
+            <p className="mt-4 text-[16px] leading-7 text-[var(--pri)]">
               At our spa, you’re more than a client — you’re family. Our
               experienced therapists bring compassion, skill, and personalized
               attention to every treatment.
@@ -57,15 +74,18 @@ const SpawellCourses: React.FC = () => {
             <div className="mt-6 divide-y divide-neutral-200 rounded-2xl border-neutral-200 bg-white">
               {COURSES.map(({ title, description, Icon }, idx) => (
                 <div key={idx} className="grid grid-cols-[auto,1fr] gap-4 py-6">
-                  <div className="flex items-center gap-4">                    
-                    <div className="mt-0.5 flex items-center justify-center rounded-full bg-[#F9F6F1] p-4">
-                      <Icon className="h-12 w-12 text-[#5D3222]" strokeWidth={1}/>
+                  <div className="flex items-center gap-4">
+                    <div className="mt-0.5 flex items-center justify-center rounded-full bg-[var(--pri)]/10 p-4">
+                      <Icon
+                        className="h-12 w-12 text-[var(--pri)]"
+                        strokeWidth={1}
+                      />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-[#5D3222]">
+                      <h3 className="text-xl font-bold text-[var(--pri)]">
                         {title}
                       </h3>
-                      <p className="mt-1 text-[16px] leading-6 text-[#866559]">
+                      <p className="mt-1 text-[16px] leading-6 text-[var(--pri)]">
                         {description}
                       </p>
                     </div>

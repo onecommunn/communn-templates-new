@@ -20,6 +20,7 @@ type Testimonial = {
   role: string;
   avatar: string;
   quote: string;
+  color?: string;
 };
 
 const TESTIMONIALS: Testimonial[] = [
@@ -67,8 +68,22 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-const GoogleRatingPill = () => (
-  <div className="hidden md:flex items-center gap-4 rounded-2xl bg-white/10 px-5 py-4 text-white/90 ring-1 ring-white/15 backdrop-blur">
+const GoogleRatingPill = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => (
+  <div
+    style={
+      {
+        "--pri": primaryColor,
+        "--sec": secondaryColor,
+      } as React.CSSProperties
+    }
+    className="hidden md:flex items-center gap-4 rounded-2xl bg-[var(--sec)]/10 px-5 py-4 text-[var(--sec)]/90 ring-1 ring-[var(--sec)]/15 backdrop-blur"
+  >
     <div className="flex items-center justify-center">
       <Image
         src={"/assets/google-logo.svg"}
@@ -94,13 +109,18 @@ const GoogleRatingPill = () => (
         "/assets/spawell-Testimonials-image-4.jpg",
         "/assets/spawell-Testimonials-image-5.jpg",
       ].map((src, i) => (
-        <Avatar key={i} className="inline-block h-8 w-8 ring-2 ring-[#5D3222]">
+        <Avatar
+          key={i}
+          className="inline-block h-8 w-8 ring-2 ring-[var(--pri)]"
+        >
           <AvatarImage src={src} alt={`Client ${i + 1}`} />
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
       ))}
-      <Avatar className="inline-block h-8 w-8 ring-2 ring-[#5D3222]">
-        <AvatarFallback className="text-[#5D3222] font-medium">5K</AvatarFallback>
+      <Avatar className="inline-block h-8 w-8 ring-2 ring-[var(--pri)]">
+        <AvatarFallback className="text-[var(--pri)] font-medium bg-[var(--sec)]">
+          5K
+        </AvatarFallback>
       </Avatar>
     </div>
     {/* <div className="ml-3 rounded-full bg-white/15 px-3 py-1 text-xs">5k</div> */}
@@ -152,6 +172,11 @@ function Dots({
         const isActive = i === selected;
         return (
           <button
+            style={
+              {
+                "--pri": primaryColor,
+              } as React.CSSProperties
+            }
             key={i}
             role="tab"
             aria-selected={isActive}
@@ -162,12 +187,12 @@ function Dots({
               if (e.key === "ArrowRight") api.scrollNext();
               if (e.key === "ArrowLeft") api.scrollPrev();
             }}
-            style={{ backgroundColor: isActive ? primaryColor : "" }}
+            // style={{ backgroundColor: isActive ? primaryColor : "" }}
             className={[
-              "h-2.5 w-2.5 rounded-full transition-all outline-none focus:ring-2 focus:ring-white/40",
+              "h-2.5 w-2.5 rounded-full transition-all outline-none focus:ring-2 focus:ring-[var(--pri)]/40",
               isActive
-                ? "w-6 shadow-[0_0_0_4px_rgba(255,255,255,0.18)]"
-                : "bg-white/40 hover:bg-white/60 cursor-pointer",
+                ? "w-6 shadow-[0_0_0_4px_rgba(255,255,255,0.18)] bg-[var(--pri)]"
+                : "bg-[var(--pri)]/40 hover:bg-[var(--pri)]/60 cursor-pointer",
             ].join(" ")}
           />
         );
@@ -176,38 +201,64 @@ function Dots({
   );
 }
 
-const TCard: React.FC<Testimonial> = ({ name, role, avatar, quote }) => (
-  <Card className="h-full group relative overflow-hidden rounded-3xl border-white/10 backdrop-blur bg-white/10 text-white shadow-xl ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl">
-    <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-[140%] -skew-x-12 bg-white/10 opacity-0 blur-[1px] transition-all duration-700 ease-out group-hover:translate-x-[140%] group-hover:opacity-100" />
+const TCard: React.FC<Testimonial> = ({ name, role, avatar, quote, color }) => (
+  <Card
+    style={
+      {
+        "--pri": color,
+      } as React.CSSProperties
+    }
+    className="h-full group relative overflow-hidden rounded-3xl border-[var(--pri)]/10 backdrop-blur bg-[var(--pri)]/10 text-[var(--pri)] ring-1 ring-[var(--pri)]/10 transition-all duration-300 hover:-translate-y-0.5"
+  >
+    <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-[140%] -skew-x-12 bg-[var(--pri)]/10 opacity-0 blur-[1px] transition-all duration-700 ease-out group-hover:translate-x-[140%] group-hover:opacity-100" />
     <CardContent className="p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 ring-2 ring-white/20">
+          <Avatar className="h-12 w-12 ring-2 ring-[var(--pri)]/20">
             <AvatarImage src={avatar} alt={name} />
             <AvatarFallback>{name?.[0]}</AvatarFallback>
           </Avatar>
           <div>
-            <div className="text-sm font-semibold text-white">{name}</div>
-            <div className="text-xs text-white/70">{role}</div>
+            <div className="text-sm font-semibold text-[var(--pri)]">
+              {name}
+            </div>
+            <div className="text-xs text-[var(--pri)]/70">{role}</div>
           </div>
         </div>
-        <Quote className="h-5 w-5 text-white/70" />
+        <Quote className="h-5 w-5 text-[var(--pri)]/70" />
       </div>
 
-      <div className="mt-5 border-top border-white/10 pt-5">
-        <p className="text-[16px] leading-6 text-white/85">“{quote}”</p>
+      <div className="mt-5 border-top border-[var(--pri)]/10 pt-5">
+        <p className="text-[16px] leading-6 text-[var(--pri)]/85">“{quote}”</p>
       </div>
     </CardContent>
   </Card>
 );
 
-const SpawellTestimonials: React.FC = () => {
+const SpawellTestimonials = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | undefined>(
     undefined
   );
 
   return (
-    <section className="relative overflow-hidden bg-[#5D3222] py-16 md:py-24 font-plus-jakarta">
+    <section
+      className="relative overflow-hidden bg-[var(--pri)] py-16 md:py-24 font-plus-jakarta"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       {/* dotted texture */}
       <div
         aria-hidden
@@ -223,15 +274,20 @@ const SpawellTestimonials: React.FC = () => {
         {/* Header */}
         <div className="mb-8 flex items-start justify-between gap-6">
           <div>
-            <div className="mb-2 text-sm text-white/80">• Testimonials</div>
-            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-white md:text-5xl">
+            <div className="mb-2 text-sm text-[var(--sec)]/80">
+              • Testimonials
+            </div>
+            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--sec)] md:text-5xl">
               Heartfelt stories of hope and
             </h2>
-            <p className="mt-1 text-3xl font-lora italic text-white/90 md:text-[34px]">
+            <p className="mt-1 text-3xl font-lora italic text-[var(--sec)]/90 md:text-[34px]">
               success
             </p>
           </div>
-          <GoogleRatingPill />
+          <GoogleRatingPill
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+          />
         </div>
 
         {/* Carousel with loop + autoplay + synced dots */}
@@ -253,17 +309,52 @@ const SpawellTestimonials: React.FC = () => {
                 key={idx}
                 className="pl-3 basis-full sm:basis-1/2 lg:basis-1/3"
               >
-                <TCard {...t} />
+                <TCard {...t} color={secondaryColor} />
               </CarouselItem>
             ))}
           </CarouselContent>
 
-          <CarouselPrevious className=" bg-white/15 text-white hover:bg-white/25 border-white/20" />
-          <CarouselNext className="bg-white/15 text-white hover:bg-white/25 border-white/20" />
+          <CarouselPrevious
+            aria-label="Previous plans"
+            className="hidden sm:flex size-10 cursor-pointer"
+            style={{
+              color: primaryColor,
+              backgroundColor: secondaryColor,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                primaryColor;
+              (e.currentTarget as HTMLElement).style.color = secondaryColor;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                secondaryColor;
+              (e.currentTarget as HTMLElement).style.color = primaryColor;
+            }}
+          />
+
+          <CarouselNext
+            className="hidden sm:flex size-10 cursor-pointer"
+            style={{
+              color: primaryColor,
+              backgroundColor: secondaryColor,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                primaryColor;
+              (e.currentTarget as HTMLElement).style.color = secondaryColor;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                secondaryColor;
+              (e.currentTarget as HTMLElement).style.color = primaryColor;
+            }}
+            aria-label="Next plans"
+          />
         </Carousel>
 
         {/* Dynamic dots (active = white pill) */}
-        <Dots api={emblaApi} primaryColor="#ffffff" />
+        <Dots api={emblaApi} primaryColor={secondaryColor} />
       </div>
     </section>
   );
