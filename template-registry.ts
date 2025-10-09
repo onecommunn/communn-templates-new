@@ -19,6 +19,8 @@ import YoganaShell from "./app/yogana/YoganaShell";
 import YoganaEventDetailsPage from "./app/yogana/event-details/page";
 import YoganaLogin from "./app/yogana/login/page";
 import YoganaSubscriptionsPage from "./app/yogana/subscriptions/page";
+import SpawellRoot from "./app/spawell/page";
+import SpawellShell from "./app/spawell/SpawellShell";
 
 export const templateLayouts: Record<
   string,
@@ -27,6 +29,7 @@ export const templateLayouts: Record<
   creator: CreatorShell,
   yogana: YoganaShell,
   default: DefaultShell,
+  spawell: SpawellShell,
 };
 
 export const templates: Record<
@@ -49,5 +52,8 @@ export const templates: Record<
     "/event-details": YoganaEventDetailsPage,
     "/login": YoganaLogin,
     "/subscriptions": YoganaSubscriptionsPage,
+  },
+  spawell: {
+    "/": SpawellRoot,
   },
 };

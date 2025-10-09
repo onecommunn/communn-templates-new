@@ -6,6 +6,7 @@ import {
   Cormorant_Garamond,
   Alex_Brush,
   Plus_Jakarta_Sans,
+  Lora,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -36,7 +37,7 @@ const cormorant = Cormorant_Garamond({
 
 const alexBrush = Alex_Brush({
   subsets: ["latin"],
-  weight: ["400"], // single weight
+  weight: ["400"],
   variable: "--font-alex-brush",
 });
 
@@ -44,6 +45,13 @@ const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-plus-jakarta",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-lora",
 });
 
 export default function RootLayout({
@@ -54,7 +62,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

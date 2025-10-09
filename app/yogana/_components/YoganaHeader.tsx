@@ -220,7 +220,7 @@ const YoganaHeader = ({
             <Link href="/#plans" className={"font-inter hover:font-semibold"}>
               Plans
             </Link>
-            <Link href="/#contact" className={linkClass("/contact")}>
+            <Link href="/#contact" className={"font-inter hover:font-semibold"}>
               Contact
             </Link>
           </nav>

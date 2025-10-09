@@ -6,13 +6,17 @@
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-montserrat: var(--font-montserrat), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
+  --font-poppins: var(--font-poppins), sans-serif;
+  --font-cormorant: var(--font-cormorant), serif;
+  --font-alex-brush: var(--font-alex-brush), cursive;
+  --font-plus-jakarta: var(--font-plus-jakarta), sans-serif;
+  --font-lora: var(--font-lora), serif;
+}
 
-  --font-montserrat: "Montserrat", sans-serif;
-  --font-inter: "Inter", sans-serif;
-  --font-poppins: var(--font-poppins);
-  --font-cormorant: var(--font-cormorant);
-  --font-alex-brush: var(--font-alex-brush);
-  --font-plus-jakarta: var(--font-plus-jakarta);
+.font-lora {
+  font-family: var(--font-lora), serif;
 }
 
 @theme inline {
@@ -56,19 +60,19 @@
   --animate-marquee: marquee var(--duration) infinite linear;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   @keyframes marquee {
-  from {
-    transform: translateX(0);
+    from {
+      transform: translateX(0);
     }
-  to {
-    transform: translateX(calc(-100% - var(--gap)));
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
     }
   }
   @keyframes marquee-vertical {
-  from {
-    transform: translateY(0);
+    from {
+      transform: translateY(0);
     }
-  to {
-    transform: translateY(calc(-100% - var(--gap)));
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
     }
   }
 }
