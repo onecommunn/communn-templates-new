@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { Flower2, Star } from "lucide-react";
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 
 type Course = {
   title: string;
@@ -50,64 +51,80 @@ const SpawellCourses = ({
           {/* Left: Copy */}
           <div>
             {/* Eyebrow */}
-            <div className="mb-2 inline-flex items-center gap-2 text-sm text-[var(--pri)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--pri)]/80" />
-              Courses
-            </div>
+            <AnimatedContent distance={20} duration={0.45} ease="power2.out">
+              <div className="mb-2 inline-flex items-center gap-2 text-sm text-[var(--pri)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--pri)]/80" />
+                Courses
+              </div>
+            </AnimatedContent>
 
             {/* Heading */}
-            <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
-              Where healing, comfort, and{" "}
-              <span className="font-lora italic font-normal">
-                luxury come together
-              </span>
-            </h2>
+            <AnimatedContent distance={40} duration={0.65} ease="power3.out">
+              <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
+                Where healing, comfort, and{" "}
+                <span className="font-lora italic font-normal">
+                  luxury come together
+                </span>
+              </h2>
+            </AnimatedContent>
 
             {/* Blurb */}
-            <p className="mt-4 text-[16px] leading-7 text-[var(--pri)]">
-              At our spa, you’re more than a client — you’re family. Our
-              experienced therapists bring compassion, skill, and personalized
-              attention to every treatment.
-            </p>
+            <AnimatedContent distance={30} duration={0.55} ease="power2.out" delay={0.05}>
+              <p className="mt-4 text-[16px] leading-7 text-[var(--pri)]">
+                At our spa, you’re more than a client — you’re family. Our
+                experienced therapists bring compassion, skill, and personalized
+                attention to every treatment.
+              </p>
+            </AnimatedContent>
 
-            {/* Courses list */}
-            <div className="mt-6 divide-y divide-neutral-200 rounded-2xl border-neutral-200 bg-white">
-              {COURSES.map(({ title, description, Icon }, idx) => (
-                <div key={idx} className="grid grid-cols-[auto,1fr] gap-4 py-6">
-                  <div className="flex items-center gap-4">
-                    <div className="mt-0.5 flex items-center justify-center rounded-full bg-[var(--pri)]/10 p-4">
-                      <Icon
-                        className="h-12 w-12 text-[var(--pri)]"
-                        strokeWidth={1}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-[var(--pri)]">
-                        {title}
-                      </h3>
-                      <p className="mt-1 text-[16px] leading-6 text-[var(--pri)]">
-                        {description}
-                      </p>
+            {/* Courses list (stagger items) */}
+            <AnimatedContent
+              distance={60}
+              duration={0.75}
+              ease="power3.out"
+              stagger={0.12}
+            >
+              <div className="mt-6 divide-y divide-neutral-200 rounded-2xl border-neutral-200 bg-white">
+                {COURSES.map(({ title, description, Icon }, idx) => (
+                  <div key={idx} className="grid grid-cols-[auto,1fr] gap-4 py-6">
+                    <div className="flex items-center gap-4">
+                      <div className="mt-0.5 flex items-center justify-center rounded-full bg-[var(--pri)]/10 p-4">
+                        <Icon className="h-12 w-12 text-[var(--pri)]" strokeWidth={1} />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-[var(--pri)]">{title}</h3>
+                        <p className="mt-1 text-[16px] leading-6 text-[var(--pri)]">
+                          {description}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </AnimatedContent>
           </div>
 
-          {/* Right: Image */}
-          <div className="relative">
-            <div className="relative aspect-[73/90] overflow-hidden rounded-3xl shadow-xl">
-              <Image
-                src={"/assets/spawell-course-image-1.jpg"}
-                alt="Therapist providing a relaxing massage"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 540px"
-                priority
-              />
+          {/* Right: Image (slide in from right) */}
+          <AnimatedContent
+            direction="horizontal"
+            reverse
+            distance={80}
+            duration={0.8}
+            ease="power3.out"
+          >
+            <div className="relative">
+              <div className="relative aspect-[73/90] overflow-hidden rounded-3xl shadow-xl">
+                <Image
+                  src={"/assets/spawell-course-image-1.jpg"}
+                  alt="Therapist providing a relaxing massage"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 540px"
+                  priority
+                />
+              </div>
             </div>
-          </div>
+          </AnimatedContent>
         </div>
       </div>
     </section>

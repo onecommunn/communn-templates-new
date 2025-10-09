@@ -11,6 +11,7 @@ import SpawellTestimonials from "./_components/SpawellTestimonials";
 import SpawellContact from "./_components/SpawellConatct";
 import SpawellFAQ from "./_components/SpawellFAQ";
 import SpawellPlans from "./_components/SpawellPlans";
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 
 const SpawellRoot = () => {
   const primaryColor = "#5D3222";
@@ -28,56 +29,123 @@ const SpawellRoot = () => {
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
+
       <SpawellFeaturedAppointments
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
+
       <SpawellCourses
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
+
       <SpawellServices
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
-      <SpawellPlans
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-      />
-      <SpawellEvents
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-      />
+
+      <AnimatedContent
+        distance={150}
+        direction="vertical"
+        reverse={false}
+        duration={1.2}
+        initialOpacity={0.2}
+        animateOpacity
+        scale={1}
+        threshold={0.2}
+        delay={0.3}
+      >
+        <SpawellPlans
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
+        />
+      </AnimatedContent>
+      <AnimatedContent
+        distance={150}
+        direction="vertical"
+        reverse={false}
+        duration={1.2}
+        initialOpacity={0.2}
+        animateOpacity
+        scale={1}
+        threshold={0.2}
+        delay={0.3}
+      >
+        <SpawellEvents
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
+        />
+      </AnimatedContent>
+
       <SpawellWhyChooseus
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
+
       <SpawellTeam
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
-      <SpawellTestimonials
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-      />
-      <SpawellFAQ
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-      />
-      <SpawellContact
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-      />
+
+      <AnimatedContent
+        distance={150}
+        direction="vertical"
+        reverse={false}
+        duration={1.2}
+        initialOpacity={0.2}
+        animateOpacity
+        scale={1}
+        threshold={0.2}
+        delay={0.3}
+      >
+        <SpawellTestimonials
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
+        />
+      </AnimatedContent>
+      <AnimatedContent
+        distance={150}
+        direction="vertical"
+        reverse={false}
+        duration={1.2}
+        initialOpacity={0.2}
+        animateOpacity
+        scale={1}
+        threshold={0.2}
+        delay={0.3}
+      >
+        <SpawellFAQ
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
+        />
+      </AnimatedContent>
+      <AnimatedContent
+        distance={150}
+        direction="vertical"
+        reverse={false}
+        duration={1.2}
+        initialOpacity={0.2}
+        animateOpacity
+        scale={1}
+        threshold={0.2}
+        delay={0.3}
+      >
+        <SpawellContact
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          neutralColor={neutralColor}
+        />
+      </AnimatedContent>
     </>
   );
 };

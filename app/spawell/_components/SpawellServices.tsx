@@ -11,6 +11,7 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { color } from "motion/react";
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 
 type Point = {
   title: string;
@@ -110,26 +111,57 @@ const SpawellServices = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
-        <div className="mb-2 flex justify-center">
-          <span className="text-sm text-[var(--sec)]/80">• Our Services</span>
-        </div>
+        <AnimatedContent
+          distance={50}
+          direction="vertical"
+          duration={1}
+          initialOpacity={0}
+          animateOpacity
+          delay={0.2}
+          threshold={0.1}
+        >
+          <div className="mb-2 flex justify-center">
+            <span className="text-sm text-[var(--sec)]/80">• Our Services</span>
+          </div>
+        </AnimatedContent>
 
         {/* Heading */}
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--sec)] md:text-5xl">
-            Wellness benefits that soothe, heal,
-          </h2>
-          <p className="mt-1 text-2xl font-lora italic text-[var(--sec)]/90 md:text-[34px]">
-            and uplift every guest
-          </p>
-        </div>
+        <AnimatedContent
+          distance={80}
+          direction="vertical"
+          duration={1.2}
+          initialOpacity={0}
+          animateOpacity
+          delay={0.3}
+          threshold={0.1}
+        >
+          <div className="text-center">
+            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--sec)] md:text-5xl">
+              Wellness benefits that soothe, heal,
+            </h2>
+            <p className="mt-1 text-2xl font-lora italic text-[var(--sec)]/90 md:text-[34px]">
+              and uplift every guest
+            </p>
+          </div>
+        </AnimatedContent>
 
         {/* Content */}
         <div className="mt-12 grid grid-cols-1 items-center gap-10 md:grid-cols-3 md:gap-0">
           {/* Left bullets */}
           <div className="space-y-7">
             {LEFT_POINTS.map((p) => (
-              <Bullet key={p.title} {...p} />
+              <AnimatedContent
+                key={p.title}
+                distance={50}
+                direction="horizontal"
+                duration={1}
+                initialOpacity={0}
+                animateOpacity
+                delay={0.1} // optional small stagger
+                threshold={0.1}
+              >
+                <Bullet key={p.title} {...p} />
+              </AnimatedContent>
             ))}
           </div>
 
@@ -150,7 +182,19 @@ const SpawellServices = ({
           {/* Right bullets */}
           <div className="space-y-7">
             {RIGHT_POINTS.map((p) => (
-              <Bullet key={p.title} {...p} color={secondaryColor} />
+              <AnimatedContent
+                key={p.title}
+                distance={50}
+                direction="horizontal"
+                reverse
+                duration={1}
+                initialOpacity={0}
+                animateOpacity
+                delay={0.1}
+                threshold={0.1}
+              >
+                <Bullet key={p.title} {...p} color={secondaryColor} />
+              </AnimatedContent>
             ))}
           </div>
         </div>
