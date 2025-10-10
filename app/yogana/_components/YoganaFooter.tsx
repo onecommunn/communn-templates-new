@@ -121,7 +121,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                     const url = normalize(each.url) || "/";
                     return (
                       <Link
-                        href={url}
+                        href={url || "/"}
                         key={`${key}-${idx}`}
                         aria-label={each.platform}
                       >
@@ -223,7 +223,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                     aria-hidden="true"
                   />
                   <a
-                    href={`mailto:${contactData?.email?.value}`}
+                    href={`mailto:${contactData?.email?.value}` || "/"}
                     className="underline hover:text-white break-words"
                   >
                     {contactData?.email?.value}

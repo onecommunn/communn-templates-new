@@ -94,7 +94,7 @@ const CreatorFooter: React.FC<Props> = ({
                 const url = normalize(s.url) || "/";
                 return (
                   <Link
-                    href={url}
+                    href={url ?? "/"}
                     key={`${key}-${idx}`}
                     aria-label={s.platform}
                   >

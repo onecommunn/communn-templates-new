@@ -55,7 +55,7 @@ const CreatorHero: React.FC<Props> = ({
           )}
 
           {primaryBtn && (
-            <Link href={primaryBtn.url} aria-label={primaryBtn.label}>
+            <Link href={primaryBtn.url || "/"} aria-label={primaryBtn.label}>
               <Button
                 className="cursor-pointer rounded-[12px] text-sm px-5 w-fit inline-flex items-center gap-2"
                 style={{

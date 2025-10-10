@@ -156,7 +156,7 @@ const CreatorHeader: React.FC<Props> = ({
             {buttons.map((btn, idx) => (
               <Link
                 key={`${btn.label}-${idx}`}
-                href={btn.url}
+                href={btn.url || "/"}
                 className={linkClass(btn.url)}
                 style={{ color: secondaryColor }}
               >
@@ -270,7 +270,7 @@ const CreatorHeader: React.FC<Props> = ({
                   {buttons.map((btn, idx) => (
                     <SheetClose asChild key={`${btn.label}-${idx}`}>
                       <Link
-                        href={btn.url}
+                        href={btn.url || "/"}
                         className={`px-4 py-3 ${linkClass(btn.url)}`}
                       >
                         {btn.label}

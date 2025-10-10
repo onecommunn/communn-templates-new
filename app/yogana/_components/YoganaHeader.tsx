@@ -398,7 +398,7 @@ const YoganaHeader = ({
                         const url = normalize(each.url) || "/";
                         return (
                           <Link
-                            href={url}
+                            href={url || "/"}
                             key={`${key}-${idx}`}
                             aria-label={each.platform}
                             className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"
