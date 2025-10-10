@@ -189,7 +189,7 @@ const YoganaHeader = ({
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
-                data?.media?.[0] ||
+                data?.content?.media?.[0] ||
                 "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2Faf41e301c5b247df80bb6243baf910cd"
               }
               alt="logo"
@@ -271,7 +271,7 @@ const YoganaHeader = ({
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
+                        src={data?.content?.media?.[0] || "/logo/yogana_Light_Logo.png"}
                         alt="logo"
                         width={120}
                         height={100}

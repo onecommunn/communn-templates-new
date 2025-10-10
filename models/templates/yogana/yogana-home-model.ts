@@ -18,9 +18,11 @@ export interface Button {
 
 export interface Header {
   sectionName: "headerSection";
+  content: {
+    media?: string[];
+  };
   order: number;
   isActive: boolean;
-  media?: string[];
 }
 
 export interface HeroSection {
@@ -151,9 +153,9 @@ export interface FooterSection {
     socialMedia: SocialMediaLink[];
     contentDescription: Timming[];
     copyrightText: string;
-    description:string;
+    description: string;
   };
-  media:string[];
+  media: string[];
   order: number;
   isActive: boolean;
   sectionName: "footerSection";
