@@ -13,13 +13,13 @@ const CreatorCTA: React.FC<Props> = ({
   secondaryColor,
   primaryColor,
 }) => {
-  const title = data.title ?? "Stay Inspired";
+  const title = data?.content?.title ?? "Stay Inspired";
   const description =
-    data.description ??
+    data?.content?.description ??
     "Get weekly insights, tips, and exclusive content delivered to your inbox.";
 
   const buttons =
-    data.buttons?.filter((b) => b?.label?.trim() && b?.url?.trim()) ?? [];
+    data?.content?.buttons?.filter((b) => b?.label?.trim() && b?.url?.trim()) ?? [];
 
   return (
     <section

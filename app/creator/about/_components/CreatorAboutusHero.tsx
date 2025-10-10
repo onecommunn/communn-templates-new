@@ -26,11 +26,11 @@ const CreatorAboutusHero: React.FC<Props> = ({
   primaryColor,
 }) => {
   const uid = useId();
-  const isMediaLeft = (data.mediaPlacement ?? "left") === "left";
+  const isMediaLeft = (data?.content?.mediaPlacement ?? "left") === "left";
   const [activeTab, setActiveTab] = useState("story");
 
   // Media (ensure 4 items with graceful fallback)
-  const media = (data.media?.length ? data.media : FALLBACK_MEDIA).slice(0, 4);
+  const media = (data?.content?.media?.length ? data?.content?.media : FALLBACK_MEDIA).slice(0, 4);
   const [m1, m2, m3, m4] = [
     media[0] ?? FALLBACK_MEDIA[0],
     media[1] ?? FALLBACK_MEDIA[1],
@@ -38,7 +38,7 @@ const CreatorAboutusHero: React.FC<Props> = ({
     media[3] ?? FALLBACK_MEDIA[3],
   ];
 
-  const bullets = data.bulletes ?? [];
+  const bullets = data?.content?.bulletes ?? [];
 
   return (
     <section
@@ -48,9 +48,9 @@ const CreatorAboutusHero: React.FC<Props> = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
           textColor={secondaryColor}
-          title={data?.heading || "About us"}
+          title={data?.content?.heading || "About us"}
           description={
-            data?.subHeading ||
+            data?.content?.subHeading ||
             `Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.`
           }
         />
@@ -62,21 +62,21 @@ const CreatorAboutusHero: React.FC<Props> = ({
               isMediaLeft ? "order-2 md:order-1" : "order-2"
             }`}
           >
-            {data.title && (
+            {data?.content?.title && (
               <h1
                 style={{ color: secondaryColor }}
                 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left"
               >
-                {data.title}
+                {data?.content?.title}
               </h1>
             )}
 
-            {data.description && (
+            {data?.content?.description && (
               <p
                 style={{ color: secondaryColor }}
                 className="text-[#0C0407] align-middle text-[16px]/[24px]"
               >
-                {data.description}
+                {data?.content?.description}
               </p>
             )}
 
@@ -97,17 +97,17 @@ const CreatorAboutusHero: React.FC<Props> = ({
             )}
 
             {/* Tabs for story / mission / vision */}
-            {(data.story || data.mission || data.vision) && (
+            {(data?.content?.story || data?.content?.mission || data?.content?.vision) && (
               <Tabs
                 defaultValue={
-                  data.story ? "story" : data.mission ? "mission" : "vision"
+                  data?.content?.story ? "story" : data?.content?.mission ? "mission" : "vision"
                 }
                 className="w-full mt-2"
                 value={activeTab}
                 onValueChange={setActiveTab}
               >
                 <TabsList style={{ backgroundColor: primaryColor }}>
-                  {data.story && (
+                  {data?.content?.story && (
                     <TabsTrigger
                       className="data-[state=active]:bg-black data-[state=active]:text-white cursor-pointer"
                       value="story"
@@ -126,7 +126,7 @@ const CreatorAboutusHero: React.FC<Props> = ({
                       Our Story
                     </TabsTrigger>
                   )}
-                  {data.mission && (
+                  {data?.content?.mission && (
                     <TabsTrigger
                       className="data-[state=active]:bg-black data-[state=active]:text-white cursor-pointer"
                       value="mission"
@@ -149,7 +149,7 @@ const CreatorAboutusHero: React.FC<Props> = ({
                       Mission
                     </TabsTrigger>
                   )}
-                  {data.vision && (
+                  {data?.content?.vision && (
                     <TabsTrigger
                       className="data-[state=active]:bg-black data-[state=active]:text-white cursor-pointer"
                       value="vision"
@@ -174,24 +174,24 @@ const CreatorAboutusHero: React.FC<Props> = ({
                   )}
                 </TabsList>
 
-                {data.story && (
+                {data?.content?.story && (
                   <TabsContent value="story" className="mt-4">
                     <p style={{color:secondaryColor}} className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line ">
-                      {data.story}
+                      {data?.content?.story}
                     </p>
                   </TabsContent>
                 )}
-                {data.mission && (
+                {data?.content?.mission && (
                   <TabsContent  value="mission" className="mt-4">
                     <p style={{color:secondaryColor}} className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
-                      {data.mission}
+                      {data?.content?.mission}
                     </p>
                   </TabsContent>
                 )}
-                {data.vision && (
+                {data?.content?.vision && (
                   <TabsContent  value="vision" className="mt-4">
                     <p style={{color:secondaryColor}} className="text-[#0C0407] align-middle text-[16px]/[24px] whitespace-pre-line">
-                      {data.vision}
+                      {data?.content?.vision}
                     </p>
                   </TabsContent>
                 )}

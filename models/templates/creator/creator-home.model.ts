@@ -30,63 +30,71 @@ export interface Testimony {
 
 export interface HeroSection {
   sectionName: "heroSection";
-  heading: string;
-  subHeading?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    media?: string[]; // URLs for slider images
+    buttons?: Button[];
+  };
   order: number;
   isActive: boolean;
-  media?: string[]; // URLs for slider images
-  buttons?: Button[];
 }
 
 export type MediaPlacement = "left" | "right";
 
 export interface TwoColumnSection {
   sectionName: "twoColumnSection";
-  heading: string;
-  subHeading?: string;
-  title?: string;
-  description?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    title?: string;
+    description?: string;
+    mediaPlacement?: MediaPlacement;
+    media?: string[];
+    bulletes?: string[]; // NOTE: spelled as "bulletes" in API
+    buttons?: Button[];
+  };
   order: number;
   isActive: boolean;
-  mediaPlacement?: MediaPlacement;
-  media?: string[];
-  bulletes?: string[]; // NOTE: spelled as "bulletes" in API
-  buttons?: Button[];
 }
 
 export interface OurBestsellersSection {
   sectionName: "ourBestSellers";
-  heading: string;
-  subHeading?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+  };
   order: number;
   isActive: boolean;
 }
 
 export interface CollaborationSection {
   sectionName: "collaboration";
-  heading: string;
-  description?: string;
+  content: {
+    heading: string;
+    description?: string;
+    media?: string[]; // logo URLs
+  };
   order: number;
   isActive: boolean;
-  media?: string[]; // logo URLs
 }
 
 export interface TestimoniesSection {
   sectionName: "testimoniesSection";
-  heading: string;
-  subHeading?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    testimonies: Testimony[];
+  };
   order: number;
   isActive: boolean;
-  testimonies: Testimony[];
 }
 
 export interface CTASection {
   sectionName: "ctaSection";
-  title: string;
-  description?: string;
+  content: { title: string; description?: string; buttons?: Button[] };
   order: number;
   isActive: boolean;
-  buttons?: Button[];
 }
 
 /** ---------------- Discriminated Union ---------------- */

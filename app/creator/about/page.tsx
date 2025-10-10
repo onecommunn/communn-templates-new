@@ -28,31 +28,33 @@ const dummyData: CreatorAboutPage = {
   sections: [
     {
       sectionName: "twoColumnSection",
-      heading: "About Us",
-      subHeading:
-        "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.",
-      title: "Consistent growth, boundless potential",
-      description:
-        "We met in college back in 2016, and ever since, life has been one big adventure! From chasing the Northern Lights in Iceland to plunging into Antarctica's icy waters and learning scuba diving in Egypt, we've been living a dream and documenting it all along the way. But our journey doesn't end there.",
-      story:
-        "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
+      content: {
+        heading: "About Us",
+        subHeading:
+          "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.",
+        title: "Consistent growth, boundless potential",
+        description:
+          "We met in college back in 2016, and ever since, life has been one big adventure! From chasing the Northern Lights in Iceland to plunging into Antarctica's icy waters and learning scuba diving in Egypt, we've been living a dream and documenting it all along the way. But our journey doesn't end there.",
+        story:
+          "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
+        mediaPlacement: "left",
+        media: [
+          "/assets/colImage1.png",
+          "/assets/colImage2.png",
+          "/assets/colImage3.png",
+          "/assets/colImage4.png",
+        ],
+        bulletes: [
+          "Through our blogs, Guides  and Workshops we hope to share practical tips and inspirations for your own adventures.",
+          "Whether you are seasoned wanderer or just starting to dream we invite you to join our ever evolving adventure we call Life!",
+        ],
+        mission:
+          "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
+        vision:
+          "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
+      },
       order: 0,
       isActive: true,
-      mediaPlacement: "left",
-      media: [
-        "/assets/colImage1.png",
-        "/assets/colImage2.png",
-        "/assets/colImage3.png",
-        "/assets/colImage4.png",
-      ],
-      bulletes: [
-        "Through our blogs, Guides  and Workshops we hope to share practical tips and inspirations for your own adventures.",
-        "Whether you are seasoned wanderer or just starting to dream we invite you to join our ever evolving adventure we call Life!",
-      ],
-      mission:
-        "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
-      vision:
-        "We believe in empowering others with knowledge to help them live their best, most fulfilling life.",
     },
     {
       sectionName: "journeyTimelineSection",
@@ -116,17 +118,20 @@ const dummyData: CreatorAboutPage = {
     },
     {
       sectionName: "ctaSection",
-      title: "Stay Inspiredss",
-      description:
-        "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
+      content: {
+        title: "Stay Inspiredss",
+        description:
+          "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
+        buttons: [
+          {
+            label: "Explore All Activities",
+            url: "https://prachiandharsh/courses",
+          },
+        ],
+      },
+
       order: 3,
       isActive: true,
-      buttons: [
-        {
-          label: "Explore All Activities",
-          url: "https://prachiandharsh/courses",
-        },
-      ],
     },
   ],
   status: "published",

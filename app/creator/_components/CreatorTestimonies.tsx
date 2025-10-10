@@ -63,12 +63,12 @@ const CreatorTestimonies: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const title = data.heading || "Success Stories";
+  const title = data?.content?.heading || "Success Stories";
   const description =
-    data.subHeading ||
+    data?.content?.subHeading ||
     "Real transformations from real people who've taken action on their growth journey.";
 
-  const testimonials = data.testimonies ?? [];
+  const testimonials = data?.content?.testimonies ?? [];
 
   return (
     <section

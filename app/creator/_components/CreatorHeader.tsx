@@ -86,7 +86,7 @@ const CreatorHeader: React.FC<Props> = ({
     return pageData?.sections?.[0];
   }, [section, pageData]);
 
-  const logoSrc = effectiveSection?.media?.[0] || FALLBACK_LOGO;
+  const logoSrc = effectiveSection?.content?.media?.[0] || FALLBACK_LOGO;
   const buttons: HeaderButton[] = [
     {
       label: "Home",

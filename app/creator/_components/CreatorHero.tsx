@@ -24,10 +24,10 @@ const CreatorHero: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const media = (data.media?.length ? data.media : fallbackMedia).slice(0, 12);
+  const media = (data?.content?.media?.length ? data?.content?.media : fallbackMedia).slice(0, 12);
   const items = media.map((src, idx) => ({ id: idx + 1, src }));
 
-  const primaryBtn = data.buttons?.[0];
+  const primaryBtn = data?.content?.buttons?.[0];
 
   return (
     <section
@@ -40,17 +40,17 @@ const CreatorHero: React.FC<Props> = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 relative mb-4 md:mb-0">
         <div className="max-w-4xl mx-auto text-center flex flex-col justify-center items-center gap-5">
           <h1 className="text-center font-semibold text-3xl md:text-[72px]/[79px] font-poppins md:tracking-[-3.6px]">
-            {data.heading}
+            {data?.content?.heading}
           </h1>
 
-          {data.subHeading && (
+          {data?.content?.subHeading && (
             <p
               className="tracking-[-0.48px] text-black text-[16px] text-center md:max-w-[643px]"
               style={{
                 color: secondaryColor,
               }}
             >
-              {data.subHeading}
+              {data?.content?.subHeading}
             </p>
           )}
 

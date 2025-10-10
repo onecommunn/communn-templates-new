@@ -41,11 +41,13 @@ export interface ContactDetailsSection {
 // CTA Section (reusable from other pages)
 export interface CTASection {
   sectionName: "ctaSection";
-  title: string;
-  description?: string;
+  content: {
+    title: string;
+    description?: string;
+    buttons?: Button[];
+  };
   order: number;
   isActive: boolean;
-  buttons?: Button[];
 }
 
 /** ---------------- Discriminated Union ---------------- */
