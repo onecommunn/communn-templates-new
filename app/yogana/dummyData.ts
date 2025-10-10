@@ -21,26 +21,28 @@ export const dummyData: YoganaHomePage = {
     },
     {
       sectionName: "heroSection",
-      heading: "Yogana",
-      subHeading: "Studio",
-      tagLine: "You Looking For Yoga Studio",
-      description:
-        "Yoga encompasses various styles, including hatha vinyasa ashtanga bikram kundalini restorative each with its unique approach movement and mindfulness.",
+      content: {
+        heading: "Yogana",
+        subHeading: "Studio",
+        tagLine: "You Looking For Yoga Studio",
+        description:
+          "Yoga encompasses various styles, including hatha vinyasa ashtanga bikram kundalini restorative each with its unique approach movement and mindfulness.",
+        media: [
+          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogona-hero-image.jpg",
+        ],
+        buttons: [
+          {
+            label: "BOOK A CLASS",
+            url: "/class",
+          },
+          {
+            label: "JOIN A PLAN",
+            url: "/plans",
+          },
+        ],
+      },
       order: 1,
       isActive: true,
-      media: [
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogona-hero-image.jpg",
-      ],
-      buttons: [
-        {
-          label: "BOOK A CLASS",
-          url: "/class",
-        },
-        {
-          label: "JOIN A PLAN",
-          url: "/plans",
-        },
-      ],
     },
     {
       sectionName: "aboutSection",

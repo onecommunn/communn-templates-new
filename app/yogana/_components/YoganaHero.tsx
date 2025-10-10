@@ -60,7 +60,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                   color: secondaryColor,
                 }}
               >
-                {data?.heading}
+                {data?.content?.heading}
               </h1>
               <h3
                 className="font-alex-brush text-[65px]/[30px] text-[#C2A74E] md:text-[90px]/[60px]"
@@ -68,7 +68,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                   color: primaryColor,
                 }}
               >
-                {data?.subHeading}
+                {data?.content?.subHeading}
               </h3>
             </div>
 
@@ -86,7 +86,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                   color: secondaryColor,
                 }}
               >
-                {data?.tagLine}
+                {data?.content?.tagLine}
               </p>
             </div>
 
@@ -97,13 +97,13 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                 color: neutralColor,
               }}
             >
-              {data?.description}
+              {data?.content?.description}
             </p>
 
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 w-full">
-              {data?.buttons &&
-                data?.buttons.map((btn, idx) => (
+              {data?.content?.buttons &&
+                data?.content?.buttons.map((btn, idx) => (
                   <Button
                     key={idx}
                     asChild
@@ -125,7 +125,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
           <div className="z-10 mt-auto hidden md:block">
             <div className="rounded-t-[400px] overflow-hidden">
               <Image
-                src={data?.media?.[0] || "/assets/yogona-hero-image.jpg"}
+                src={data?.content?.media?.[0] || "/assets/yogona-hero-image.jpg"}
                 alt="yogona-hero-image"
                 width={636}
                 height={772}

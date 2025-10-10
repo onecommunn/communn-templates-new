@@ -27,14 +27,16 @@ export interface Header {
 
 export interface HeroSection {
   sectionName: "heroSection";
-  heading: string;
-  subHeading?: string;
-  tagLine?: string;
-  description?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    tagLine?: string;
+    description?: string;
+    media?: string[]; // URLs for slider images
+    buttons?: Button[];
+  };
   order: number;
   isActive: boolean;
-  media?: string[]; // URLs for slider images
-  buttons?: Button[];
 }
 
 export interface Aboutus {
