@@ -252,7 +252,7 @@ const YoganaPlanCard = ({
             >
               <Button
                 variant={isSubscribed ? "outline" : "ghost"}
-                className={`group text-[${primaryColor}] font-plus-jakarta font-semibold text-sm cursor-pointer hover:bg-[${primaryColor}] hover:text-white hover:rounded-full`}
+                className={`group text-[${primaryColor}] text-white font-plus-jakarta font-semibold text-sm cursor-pointer hover:bg-[${primaryColor}] hover:text-white hover:rounded-full`}
                 style={{
                   backgroundColor: primaryColor,
                 }}

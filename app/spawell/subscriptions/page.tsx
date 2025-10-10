@@ -1,0 +1,55 @@
+"use client";
+import React, { Suspense } from "react";
+import SpawellSubscriptions from "./_components/SpawellSubscriptions";
+import { useCMS } from "../CMSProvider.client";
+import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
+
+function PlanDetailsSkeleton() {
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="rounded-2xl overflow-hidden mb-8">
+          <div className="relative aspect-[16/9] w-full bg-gray-200 animate-pulse" />
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 space-y-3">
+            <div className="h-7 w-3/4 bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-11/12 bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-10/12 bg-gray-200 rounded animate-pulse" />
+          </div>
+          <div className="bg-white rounded-xl shadow border p-6 space-y-4">
+            <div className="h-5 w-32 bg-gray-200 rounded animate-pulse" />
+            <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const SpawellSubscriptionsPage = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: CreatorHomePage | undefined = !isLoading
+    ? (home as CreatorHomePage | undefined)
+    : undefined;
+
+  const primaryColor = "#5D3222";
+  const secondaryColor = "#fff";
+  const neutralColor = "#F9F6F1";
+  return (
+    <Suspense fallback={<PlanDetailsSkeleton />}>
+      <SpawellSubscriptions
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+    </Suspense>
+  );
+};
+
+export default SpawellSubscriptionsPage;
