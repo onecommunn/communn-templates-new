@@ -64,7 +64,7 @@ const dummyFooterData: CreatorFooterPage = {
   },
   sections: [
     {
-      footer: {
+      content: {
         logo: "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
         navigationColumns: [
           {

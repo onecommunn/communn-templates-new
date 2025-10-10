@@ -16,14 +16,14 @@ const CreatorTimeline: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const title = data.heading || "Our Journey Timeline";
+  const title = data?.content?.heading || "Our Journey Timeline";
   const description =
-    data.subHeading ||
+    data?.content?.subHeading ||
     "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.";
 
   // Map CMS timeline -> Timeline steps
   const steps =
-    (data.timeline ?? []).map((t, idx) => ({
+    (data?.content?.timeline ?? []).map((t, idx) => ({
       id: idx + 1,
       title: t.title,
       subtitle: t.description,

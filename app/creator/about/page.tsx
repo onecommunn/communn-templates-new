@@ -58,63 +58,68 @@ const dummyData: CreatorAboutPage = {
     },
     {
       sectionName: "journeyTimelineSection",
-      heading: "Our Journey Timeline",
-      subHeading:
-        "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.",
+      content: {
+        heading: "Our Journey Timeline",
+        subHeading:
+          "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.",
+        timeline: [
+          {
+            title: "Started My Journey - 2015",
+            description: "Began my first coaching certificate",
+          },
+          {
+            title: "Started My Journey - 2016",
+            description: "Began my first coaching certificate",
+          },
+          {
+            title: "Started My Journey - 2017",
+            description: "Began my first coaching certificate",
+          },
+          {
+            title: "Started My Journey - 2018",
+            description: "Began my first coaching certificate",
+          },
+        ],
+      },
+
       order: 1,
       isActive: true,
-      timeline: [
-        {
-          title: "Started My Journey - 2015",
-          description: "Began my first coaching certificate",
-        },
-        {
-          title: "Started My Journey - 2016",
-          description: "Began my first coaching certificate",
-        },
-        {
-          title: "Started My Journey - 2017",
-          description: "Began my first coaching certificate",
-        },
-        {
-          title: "Started My Journey - 2018",
-          description: "Began my first coaching certificate",
-        },
-      ],
     },
     {
       sectionName: "ourTeamSection",
-      heading: "Our Team",
-      subHeading:
-        "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.",
+      content: {
+        heading: "Our Team",
+        subHeading:
+          "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.",
+        members: [
+          {
+            name: "Jonathan Jones",
+            designation: "Founder & CEO",
+            avatar: "/assets/teamImage1.png",
+            description: "Began my first coaching certificate ",
+          },
+          {
+            name: "Jean Lang",
+            designation: "Manager",
+            avatar: "/assets/teamImage2.png",
+            description: "Began my first coaching certificate ",
+          },
+          {
+            name: "Katrina Towne",
+            designation: "Instructor",
+            avatar: "/assets/teamImage3.png",
+            description: "Began my first coaching certificate",
+          },
+          {
+            name: "Nicolas Rohan",
+            designation: "Assistant Instructor",
+            avatar: "/assets/teamImage4.png",
+            description: "Began my first coaching certificate ",
+          },
+        ],
+      },
       order: 2,
       isActive: true,
-      members: [
-        {
-          name: "Jonathan Jones",
-          designation: "Founder & CEO",
-          avatar: "/assets/teamImage1.png",
-          description: "Began my first coaching certificate ",
-        },
-        {
-          name: "Jean Lang",
-          designation: "Manager",
-          avatar: "/assets/teamImage2.png",
-          description: "Began my first coaching certificate ",
-        },
-        {
-          name: "Katrina Towne",
-          designation: "Instructor",
-          avatar: "/assets/teamImage3.png",
-          description: "Began my first coaching certificate",
-        },
-        {
-          name: "Nicolas Rohan",
-          designation: "Assistant Instructor",
-          avatar: "/assets/teamImage4.png",
-          description: "Began my first coaching certificate ",
-        },
-      ],
     },
     {
       sectionName: "ctaSection",

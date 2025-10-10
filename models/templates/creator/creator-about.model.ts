@@ -61,17 +61,21 @@ export interface TwoColumnSection extends SectionBase {
 // "Journey Timeline"
 export interface JourneyTimelineSection extends SectionBase {
   sectionName: "journeyTimelineSection";
-  heading: string;
-  subHeading?: string;
-  timeline: TimelineItem[];
+  content: {
+    heading: string;
+    subHeading?: string;
+    timeline: TimelineItem[];
+  };
 }
 
 // "Our Team"
 export interface OurTeamSection extends SectionBase {
   sectionName: "ourTeamSection";
-  heading: string;
-  subHeading?: string;
-  members: TeamMember[];
+  content: {
+    heading: string;
+    subHeading?: string;
+    members: TeamMember[];
+  };
 }
 
 // "CTA Section"

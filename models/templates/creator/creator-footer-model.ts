@@ -30,16 +30,15 @@ export interface SocialMedia {
 
 /** ---------------- Section Types ---------------- */
 
-export interface FooterContent {
-  logo: string; // URL
-  navigationColumns: NavigationColumn[];
-  socialMedia?: SocialMedia[];
-  copyrightText?: string;
-}
 
 export interface FooterSection {
   sectionName: "footerSection";
+  content: {
+    logo: string; // URL
+    navigationColumns: NavigationColumn[];
+    socialMedia?: SocialMedia[];
+    copyrightText?: string;
+  };
   order: number;
   isActive: boolean;
-  footer: FooterContent;
 }

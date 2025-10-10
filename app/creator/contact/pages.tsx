@@ -93,8 +93,8 @@ const CreatorContact: React.FC = () => {
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-20 relative z-10">
             <CreatorSectionHeader
-              title={contactDetailsSection.title}
-              description={contactDetailsSection.description}
+              title={contactDetailsSection?.content?.title}
+              description={contactDetailsSection?.content?.description}
               textColor={secondaryColor}
             />
 
@@ -265,9 +265,9 @@ const CreatorContact: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
-                      {contactDetailsSection?.address?.heading || "Find Us"}
+                      {contactDetailsSection?.content?.address?.heading || "Find Us"}
                     </h4>
-                    <p>{contactDetailsSection?.address?.value}</p>
+                    <p>{contactDetailsSection?.content?.address?.value}</p>
                   </div>
                 </div>
 
@@ -281,9 +281,9 @@ const CreatorContact: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
-                      {contactDetailsSection.email.heading}
+                      {contactDetailsSection?.content?.email?.heading}
                     </h4>
-                    <p>{contactDetailsSection.email.value}</p>
+                    <p>{contactDetailsSection?.content?.email?.value}</p>
                   </div>
                 </div>
 
@@ -297,9 +297,9 @@ const CreatorContact: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
-                      {contactDetailsSection.call.heading}
+                      {contactDetailsSection?.content?.call?.heading}
                     </h4>
-                    <p>{contactDetailsSection.call.value}</p>
+                    <p>{contactDetailsSection?.content?.call?.value}</p>
                   </div>
                 </div>
               </div>
