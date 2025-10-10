@@ -39,8 +39,8 @@ const YoganaCollaboration: React.FC<Props> = ({
   secondaryColor,
   neutralColor
 }) => {
-  const heading = data?.heading ?? "";
-  const logos = (data.media?.length ? data.media : FALLBACK_LOGOS).map(
+  const heading = data?.content?.heading ?? "";
+  const logos = (data?.content?.media?.length ? data?.content?.media : FALLBACK_LOGOS).map(
     normalizeUrl
   );
 

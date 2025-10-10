@@ -339,10 +339,10 @@ const YoganaHeader = ({
                       <div className="flex items-center gap-4">
                         <Phone className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
                         <a
-                          href={`tel:${contactData?.call?.value ?? ""}`}
+                          href={`tel:${contactData?.content?.call?.value ?? ""}`}
                           className="text-md text-white hover:underline"
                         >
-                          {contactData?.call?.value}
+                          {contactData?.content?.call?.value}
                         </a>
                       </div>
 
@@ -350,10 +350,10 @@ const YoganaHeader = ({
                       <div className="flex items-center gap-4">
                         <Mail className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
                         <a
-                          href={`mailto:${contactData?.email?.value ?? ""}`}
+                          href={`mailto:${contactData?.content?.email?.value ?? ""}`}
                           className="text-md text-white underline hover:no-underline"
                         >
-                          {contactData?.email?.value}
+                          {contactData?.content?.email?.value}
                         </a>
                       </div>
 
@@ -361,7 +361,7 @@ const YoganaHeader = ({
                       <div className="flex items-start gap-4">
                         <MapPin className="text-white w-6 h-6 mt-1 shrink-0" strokeWidth={1.5} />
                         <p className="text-md text-white leading-relaxed break-words">
-                          {contactData?.address?.value}
+                          {contactData?.content?.address?.value}
                         </p>
                       </div>
                     </div>

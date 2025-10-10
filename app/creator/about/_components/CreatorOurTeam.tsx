@@ -17,11 +17,11 @@ const CreatorOurTeam: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const title = data.heading || "Our Team";
+  const title = data?.content?.heading || "Our Team";
   const description =
-    data.subHeading ||
+    data?.content?.subHeading ||
     "Join our vibrant community! Explore uplifting stories and experiences from learners as they embark on their educational journeys.";
-  const members = data.members ?? [];
+  const members = data?.content?.members ?? [];
 
   return (
     <section

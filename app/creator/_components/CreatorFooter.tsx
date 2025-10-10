@@ -43,7 +43,7 @@ const CreatorFooter: React.FC<Props> = ({
 }) => {
   const footer = section?.content
 
-  const logo = normalize(footer.logo);
+  const logo = normalize(footer?.logo);
   const columns = footer?.navigationColumns?.[0] ?? [];
   const socials = footer?.socialMedia ?? [];
   const copyright = normalize(footer?.copyrightText) || "© All rights reserved";

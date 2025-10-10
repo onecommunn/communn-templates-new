@@ -195,7 +195,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         }}
         className={`text-[#C2A74E] font-alex-brush text-3xl`}
       >
-        {data?.heading}
+        {data?.content?.heading}
       </p>
       <h2
         style={{
@@ -203,7 +203,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         }}
         className={`text-[#000] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
       >
-        {data?.subHeading}
+        {data?.content?.subHeading}
       </h2>
     </div>
   );

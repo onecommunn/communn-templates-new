@@ -51,7 +51,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
   // Map CMS data -> slides; fallback if empty
   const slides = useMemo<Testimonial[]>(() => {
     const fromData =
-      data?.testimonies?.map((t) => ({
+      data?.content?.testimonies?.map((t) => ({
         quote: t?.message ?? "",
         author: t?.name ?? "",
         role: t?.designation ?? "",
@@ -78,8 +78,8 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
   // Guard against truly empty (shouldn’t happen due to fallback)
   if (!active) return null;
 
-  const smallLabel = data?.subHeading || "Testimonial";
-  const bigHeading = data?.heading || "What Our Students Say";
+  const smallLabel = data?.content?.subHeading || "Testimonial";
+  const bigHeading = data?.content?.heading || "What Our Students Say";
 
   return (
     <section
@@ -105,7 +105,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           }}
           className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
         >
-          {data?.heading}
+          {data?.content?.heading}
         </h4>
         <p
           style={{
@@ -113,7 +113,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           }}
           className={`font-plus-jakarta text-[16px] text-[#707070] w-full mt-2`}
         >
-          {data?.subHeading}
+          {data?.content?.subHeading}
         </p>
       </div>
       <div className="mx-auto mt-6">
@@ -173,7 +173,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
                 style={{ color: neutralColor }}
                 className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-lg font-small leading-relaxed text-[#000]`}
               >
-                “{active.quote}”
+                “{active?.quote}”
               </p>
 
               {/* author */}
@@ -181,8 +181,8 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
                 style={{ color: secondaryColor }}
                 className={`font-cormorant text-3xl text-[#000]`}
               >
-                {active.author}{" "}
-                {active.role ? (
+                {active?.author}{" "}
+                {active?.role ? (
                   <span
                     style={{ color: neutralColor }}
                     className={`text-[16px] text-[#707070] font-plus-jakarta`}
@@ -194,7 +194,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
 
               {/* dots/pagination */}
               <div className="mt-6 flex items-center justify-center gap-3">
-                {slides.map((_, i) => {
+                {slides?.map((_, i) => {
                   const isActive = i === index;
                   return (
                     <button

@@ -41,14 +41,16 @@ export interface HeroSection {
 
 export interface Aboutus {
   sectionName: "aboutSection";
-  heading: string;
-  subHeading?: string;
-  description?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    description?: string;
+    media?: string[];
+    bulletes?: string[];
+    buttons?: Button[];
+  };
   order: number;
   isActive: boolean;
-  media?: string[];
-  bulletes?: string[];
-  buttons?: Button[];
 }
 
 export interface Service {
@@ -59,35 +61,43 @@ export interface Service {
 
 export interface ServiceSection {
   sectionName: "serviceSection";
-  heading: string;
-  subHeading?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    services: Service[];
+  };
   order: number;
   isActive: boolean;
-  services: Service[];
 }
 
 export interface Plans {
   sectionName: "plansSection";
-  heading: string;
-  subHeading?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+  };
   order: number;
   isActive: boolean;
 }
 
 export interface Events {
   sectionName: "eventsSection";
-  heading: string;
-  subHeading?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+  };
   order: number;
   isActive: boolean;
 }
 
 export interface Collaboration {
   sectionName: "clientsSection";
-  heading: string;
+  content: {
+    heading: string;
+    media: string[];
+  };
   order: number;
   isActive: boolean;
-  media: string[];
 }
 
 export interface Testimony {
@@ -100,17 +110,18 @@ export interface Testimony {
 
 export interface TestimoniesSection {
   sectionName: "testimoniesSection";
-  heading: string;
-  subHeading?: string;
-  testimonies?: Testimony[];
+  content: {
+    heading: string;
+    subHeading?: string;
+    testimonies?: Testimony[];
+  };
   order: number;
   isActive: boolean;
 }
 
 export interface Gallery {
   sectionName: "gallerySection";
-  heading: string;
-  media?: string[];
+  content: { heading: string; media?: string[] };
   order: number;
   isActive: boolean;
 }
@@ -123,20 +134,20 @@ export interface ContactField {
 
 export interface ContactDetails {
   sectionName: "contactSection";
-  heading: string;
-  subHeading: string;
-  email: ContactField;
-  call: ContactField;
+  content: {
+    heading: string;
+    subHeading: string;
+    email: ContactField;
+    call: ContactField;
+    address: ContactField;
+  };
   order: number;
   isActive: boolean;
-  address: ContactField;
 }
 
 export interface CTASection {
   sectionName: "whatsappSection";
-  heading: string;
-  subHeading: string;
-  buttons?: Button[];
+  content: { heading: string; subHeading: string; buttons?: Button[] };
   order: number;
   isActive: boolean;
 }
@@ -150,7 +161,7 @@ export interface Timming {
   description: string;
 }
 export interface FooterSection {
-  footer: {
+  content: {
     logo: string;
     socialMedia: SocialMediaLink[];
     contentDescription: Timming[];

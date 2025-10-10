@@ -94,7 +94,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
           }}
           className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
         >
-          {data?.heading}
+          {data?.content?.heading}
         </h4>
 
       </div>
@@ -113,7 +113,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
       </div>
       <div className="mt-6">
         <Marquee>
-          {data?.media?.map((item, idx) => (
+          {data?.content?.media?.map((item, idx) => (
             <div key={idx} className="overflow-hidden rounded-xl">
               <Image
                 src={item}
