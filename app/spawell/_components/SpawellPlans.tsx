@@ -188,7 +188,7 @@ const Card: React.FC<Plan> = ({
         </Dialog>
       ) : (
         <Link
-          href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
+          href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${coverImage}`}
         >
           <div
             className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"

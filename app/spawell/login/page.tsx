@@ -10,10 +10,18 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 import { useCMS } from "../CMSProvider.client";
-import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
 
-const CreatorLogin = () => {
+const SpawellLogin = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
@@ -22,16 +30,6 @@ const CreatorLogin = () => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
-
-  //-------------------------------------------------------
-  const { home } = useCMS();
-  const isLoading = home === undefined;
-  const source: CreatorHomePage | undefined = !isLoading
-    ? (home as CreatorHomePage | undefined)
-    : undefined;
-  const primaryColor = source?.color?.primary || "#fff";
-  const secondaryColor = source?.color?.secondary || "#000";
-  //-------------------------------------------------------------
   useEffect(() => {
     if (authContext?.isAuthenticated) {
       router.push("/");
@@ -147,29 +145,26 @@ const CreatorLogin = () => {
   return (
     <>
       <main
-        className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4"
-        style={{ backgroundColor: primaryColor, color: secondaryColor }}
+        className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[#C2A74E1A]"
+        // style={{ backgroundColor: `${primaryColor}1A` }}
       >
-        <style jsx>{`
-          .dynamic-input::placeholder {
-            color: ${primaryColor}70;
-            opacity: 1;
-          }
-        `}</style>
         <div className="w-full max-w-md">
-          <div
-            className="bg-white rounded-lg shadow-md border p-8"
-            style={{ backgroundColor: secondaryColor, color: primaryColor }}
-          >
-            <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
+          <div className="rounded-lg shadow-md border p-8 bg-[#ffffff]">
+            <h2
+              className="text-3xl font-bold mb-8 text-center font-cormorant"
+              style={{ color: primaryColor }}
+            >
+              Login
+            </h2>
 
             {step === "mobile" ? (
               <div className="space-y-6">
                 <div className="text-center mb-6">
                   <button
                     onClick={toggleAuthMethod}
-                    className="cursor-pointer text-sm font-medium"
+                    className="cursor-pointer underline font-plus-jakarta text-sm font-medium"
                     disabled={loading}
+                    style={{ color: primaryColor }}
                   >
                     {useEmail ? "Use Mobile No" : "Use Email ID"}
                   </button>
@@ -177,7 +172,7 @@ const CreatorLogin = () => {
 
                 <div>
                   <label
-                    className="block text-sm text-gray-600 mb-2"
+                    className="block text-sm text-gray-600 mb-2 font-plus-jakarta font-bold"
                     style={{ color: primaryColor }}
                   >
                     {useEmail ? "Enter Email ID" : "Enter Mobile No"}
@@ -200,8 +195,23 @@ const CreatorLogin = () => {
                           ? "Enter your email"
                           : "Enter your mobile number"
                       }
-                      className="dynamic-input flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
+                      className="flex-1 px-4 py-2 border font-plus-jakarta border-gray-300 rounded-lg focus:ring-[#C2A74E] focus:outline-none focus:ring-2"
                       disabled={loading}
+                      style={{
+                        border: "1px solid #ddd",
+                        borderRadius: "6px",
+                        padding: "0.75rem 1rem",
+                        outline: "none",
+                        transition: "all 0.3s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 3px ${primaryColor}10`; // 25% opacity
+                        e.currentTarget.style.borderColor = primaryColor;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.borderColor = "#ddd";
+                      }}
                     />
 
                     <button
@@ -209,13 +219,10 @@ const CreatorLogin = () => {
                       disabled={!isInputValid() || loading}
                       className={`${
                         isInputValid() && !loading
-                          ? "bg-black cursor-pointer"
+                          ? "bg-[#C2A74E] rounded-none cursor-pointer"
                           : "bg-gray-300 cursor-not-allowed"
                       } text-white px-6 py-3 rounded-lg font-medium w-full`}
-                      style={{
-                        backgroundColor: primaryColor,
-                        color: secondaryColor,
-                      }}
+                      style={{ backgroundColor: primaryColor }}
                     >
                       {loading ? "Sending..." : "Get OTP"}
                     </button>
@@ -235,9 +242,7 @@ const CreatorLogin = () => {
             ) : (
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-4" style={{
-                    color:primaryColor
-                  }}>
+                  <label className="block text-sm font-medium text-gray-600 mb-4" style={{color:primaryColor}}>
                     Enter OTP
                   </label>
                   <div className="flex justify-center">
@@ -281,10 +286,8 @@ const CreatorLogin = () => {
                 <button
                   onClick={handleLogin}
                   disabled={otp.length !== 6 || loading}
-                  className="w-full bg-black cursor-pointer text-white py-3 rounded-lg font-medium"
-                  style={{
-                    backgroundColor:primaryColor
-                  }}
+                  className="w-full bg-[#C2A74E] rounded-none cursor-pointer text-white py-3 font-medium"
+                  style={{backgroundColor:primaryColor}}
                 >
                   {loading ? "Verifying..." : "Login"}
                 </button>
@@ -292,8 +295,9 @@ const CreatorLogin = () => {
                 <div className="text-center">
                   <button
                     onClick={() => setStep("mobile")}
-                    className="text-sm text-gray-600 cursor-pointer font-medium underline"
+                    className="text-sm text-gray-600 cursor-pointer font-medium underline font-plus-jakarta"
                     disabled={loading}
+                    style={{color:primaryColor}}
                   >
                     Change {useEmail ? "email" : "mobile number"}?
                   </button>
@@ -317,4 +321,4 @@ const CreatorLogin = () => {
   );
 };
 
-export default CreatorLogin;
+export default SpawellLogin;

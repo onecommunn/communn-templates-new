@@ -261,7 +261,7 @@ const SpawellContact: React.FC<Props> = ({
                 alt="Therapist providing a relaxing massage"
                 width={900}
                 height={650}
-                className="h-auto w-full object-cover"
+                className="h-full w-full object-cover"
                 priority
               />
               <div
@@ -290,7 +290,7 @@ const SpawellContact: React.FC<Props> = ({
               </div>
             </div>
 
-            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
+            {/* <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" /> */}
           </div>
         </div>
       </div>

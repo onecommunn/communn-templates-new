@@ -221,7 +221,7 @@ const YoganaLogin = () => {
                         isInputValid() && !loading
                           ? "bg-[#C2A74E] rounded-none cursor-pointer"
                           : "bg-gray-300 cursor-not-allowed"
-                      } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                      } text-white px-6 py-3 rounded-none font-medium w-full`}
                       style={{ backgroundColor: primaryColor }}
                     >
                       {loading ? "Sending..." : "Get OTP"}
@@ -287,6 +287,7 @@ const YoganaLogin = () => {
                   onClick={handleLogin}
                   disabled={otp.length !== 6 || loading}
                   className="w-full bg-[#C2A74E] rounded-none cursor-pointer text-white py-3 font-medium"
+                  style={{backgroundColor:primaryColor }}
                 >
                   {loading ? "Verifying..." : "Login"}
                 </button>

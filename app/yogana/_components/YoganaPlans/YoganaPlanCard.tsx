@@ -248,7 +248,7 @@ const YoganaPlanCard = ({
             </Dialog>
           ) : (
             <Link
-              href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
+              href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${coverImage}`}
             >
               <Button
                 variant={isSubscribed ? "outline" : "ghost"}

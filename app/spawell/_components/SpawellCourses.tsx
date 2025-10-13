@@ -47,7 +47,7 @@ const SpawellCourses = ({
             <AnimatedContent distance={20} duration={0.45} ease="power2.out">
               <div className="mb-2 inline-flex items-center gap-2 text-sm text-[var(--pri)]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--pri)]/80" />
-                Courses
+                More About us
               </div>
             </AnimatedContent>
 

@@ -155,6 +155,10 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     setOpen(true);
   };
 
+  if (data?.content?.services?.length <= 0) {
+    return null;
+  }
+
   return (
     <section
       id="services"
