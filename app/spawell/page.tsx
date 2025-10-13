@@ -30,12 +30,13 @@ import {
   TestimoniesSection,
   WhyChooseUsSection,
 } from "@/models/templates/spawell/spawell-home-model";
+import { dummyData } from "./DummyData";
 
 const SpawellRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: SpawellHomePage | undefined = !isLoading
-    ? (home as SpawellHomePage | undefined)
+    ? (home as SpawellHomePage | undefined) ?? dummyData
     : undefined;
 
   const heroSectionData = source?.sections?.find(

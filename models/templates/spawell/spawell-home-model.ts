@@ -80,7 +80,7 @@ export interface ServiceSection extends SectionBase {
     heading: string;
     subHeading: string;
     services: { serviceName: string; media: string; description: string }[];
-    media: string;
+    media: string[];
   };
 }
 

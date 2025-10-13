@@ -8,13 +8,14 @@ import {
   Header,
   HomeSection,
 } from "@/models/templates/spawell/spawell-home-model";
+import { dummyData } from "./DummyData";
 
 export default async function SpawellShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getSpawellCMSBundle(community._id);
-  const source = bundle?.home;
+  const source = bundle?.home ?? dummyData;
 
   const headerData = source?.sections.find(
     (s: HomeSection): s is Header => s.sectionName === "headerSection"
