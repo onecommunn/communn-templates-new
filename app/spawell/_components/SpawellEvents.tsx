@@ -18,6 +18,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Event } from "@/models/event.model";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { EventsSection } from "@/models/templates/spawell/spawell-home-model";
 
 // type EventItem = {
 //   image: string;
@@ -156,11 +157,14 @@ const SpawellEvents = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: EventsSection;
 }) => {
+  const source = data?.content;
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
@@ -240,14 +244,13 @@ const SpawellEvents = ({
           {/* Heading */}
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[#5D3222] md:text-5xl">
-              Holistic programs to restore
+              {source?.heading}
             </h2>
             <p className="mt-1 text-2xl font-lora italic text-[#5D3222] md:text-[34px]">
-              balance and vitality
+              {source?.subHeading}
             </p>
           </div>
           <div className="mx-auto mt-6 px-4">
-            {" "}
             <Carousel
               opts={{ align: "start", loop: false }}
               className="w-full"
@@ -297,10 +300,10 @@ const SpawellEvents = ({
         {/* Heading */}
         <div className="text-center">
           <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
-            Holistic programs to restore
+            {source?.heading}
           </h2>
           <p className="mt-1 text-2xl font-lora italic text-[var(--pri)] md:text-[34px]">
-            balance and vitality
+            {source?.subHeading}
           </p>
         </div>
 

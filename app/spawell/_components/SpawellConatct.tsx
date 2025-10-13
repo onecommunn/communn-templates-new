@@ -22,6 +22,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { format as formatDateFns } from "date-fns";
 import { toast } from "sonner";
+import { ContactSection } from "@/models/templates/spawell/spawell-home-model";
 
 // Given by you
 export interface ContactForm {
@@ -37,6 +38,7 @@ type Props = {
   primaryColor?: string;
   secondaryColor: string;
   neutralColor: string;
+  data: ContactSection;
 };
 
 const services = [
@@ -68,6 +70,7 @@ const SpawellContact: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }) => {
   const auth = useContext(AuthContext);
   const { communityId } = auth;
@@ -80,6 +83,8 @@ const SpawellContact: React.FC<Props> = ({
   const [date, setDate] = useState<Date | undefined>(undefined); // shadcn Calendar date
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const source = data?.content;
 
   const canSubmit = useMemo(() => {
     return first && email && phone && service && date && !isSubmitting;
@@ -134,13 +139,13 @@ const SpawellContact: React.FC<Props> = ({
           {/* Left: Heading + Form */}
           <div>
             <h2 className="text-[34px] md:text-[44px] font-semibold tracking-[-0.02em] text-[var(--pri)]">
-              <span>Time to unwind?</span>{" "}
-              <span className="font-lora italic font-normal">Book now.</span>
+              <span>{source?.heading}</span>{" "}
+              <span className="font-lora italic font-normal">
+                {source?.subHeading}
+              </span>
             </h2>
             <p className="mt-2 text-sm md:text-base text-[var(--pri)] max-w-xl">
-              Take a break from the busy and step into serenity. Our expert
-              therapists are ready to guide you on a journey of relaxation,
-              healing.
+              {source?.description}
             </p>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -250,7 +255,9 @@ const SpawellContact: React.FC<Props> = ({
           <div className="relative">
             <div className="relative overflow-hidden rounded-3xl shadow-xl">
               <Image
-                src={"/assets/spawell-contact-image-1.png"}
+                src={
+                  source?.media?.[0] || "/assets/spawell-contact-image-1.png"
+                }
                 alt="Therapist providing a relaxing massage"
                 width={900}
                 height={650}
@@ -274,8 +281,11 @@ const SpawellContact: React.FC<Props> = ({
                   <Clock className="h-10 w-10" strokeWidth={1} />
                 </div>
                 <div className="text-[16px] space-y-2">
-                  <div>Monday - Friday: 08:00 – 18:00</div>
-                  <div>Saturday: 08:00 – 12:00</div>
+                  {source?.availableTimings?.map((item, idx) => (
+                    <div key={idx}>
+                      {item?.day} : {item?.time}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

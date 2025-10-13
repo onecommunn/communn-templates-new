@@ -2,39 +2,32 @@
 
 import React from "react";
 import Image from "next/image";
-import { Flower2, Star } from "lucide-react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { AboutTwoSection } from "@/models/templates/spawell/spawell-home-model";
+import type { LucideProps } from "lucide-react";
+import * as Lucide from "lucide-react";
 
-type Course = {
-  title: string;
-  description: string;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-};
+const isUrl = (v: string) => /^https?:\/\//i.test(v) || v.startsWith("/");
 
-const COURSES: Course[] = [
-  {
-    title: "Course Name",
-    description:
-      "Experience the warmth of volcanic stones placed on key points to release tension and promote deep relaxation.",
-    Icon: Flower2,
-  },
-  {
-    title: "Wellness Consultation & Personal Plan",
-    description:
-      "Meet with our wellness experts to create a custom self-care routine based on your goals and lifestyle.",
-    Icon: Star,
-  },
-];
+type LucideIconType = React.ComponentType<LucideProps>;
+function getLucideIcon(name: string): LucideIconType | null {
+  // Cast through unknown to satisfy TS (avoids the 2352 error)
+  const lib = Lucide as unknown as Record<string, LucideIconType>;
+  return lib[name] ?? null;
+}
 
 const SpawellCourses = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: AboutTwoSection;
 }) => {
+  const source = data?.content;
   return (
     <section
       className="relative py-16 md:py-24 font-plus-jakarta"
@@ -61,19 +54,22 @@ const SpawellCourses = ({
             {/* Heading */}
             <AnimatedContent distance={40} duration={0.65} ease="power3.out">
               <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
-                Where healing, comfort, and{" "}
+                {source?.heading}{" "}
                 <span className="font-lora italic font-normal">
-                  luxury come together
+                  {source?.subHeading}
                 </span>
               </h2>
             </AnimatedContent>
 
             {/* Blurb */}
-            <AnimatedContent distance={30} duration={0.55} ease="power2.out" delay={0.05}>
+            <AnimatedContent
+              distance={30}
+              duration={0.55}
+              ease="power2.out"
+              delay={0.05}
+            >
               <p className="mt-4 text-[16px] leading-7 text-[var(--pri)]">
-                At our spa, you’re more than a client — you’re family. Our
-                experienced therapists bring compassion, skill, and personalized
-                attention to every treatment.
+                {source?.description}
               </p>
             </AnimatedContent>
 
@@ -85,21 +81,45 @@ const SpawellCourses = ({
               stagger={0.12}
             >
               <div className="mt-6 divide-y divide-neutral-200 rounded-2xl border-neutral-200 bg-white">
-                {COURSES.map(({ title, description, Icon }, idx) => (
-                  <div key={idx} className="grid grid-cols-[auto,1fr] gap-4 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="mt-0.5 flex items-center justify-center rounded-full bg-[var(--pri)]/10 p-4">
-                        <Icon className="h-12 w-12 text-[var(--pri)]" strokeWidth={1} />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-[var(--pri)]">{title}</h3>
-                        <p className="mt-1 text-[16px] leading-6 text-[var(--pri)]">
-                          {description}
-                        </p>
+                {source?.services?.map((item, idx) => {
+                  const LucideIcon = !isUrl(item.media)
+                    ? getLucideIcon(item.media)
+                    : null;
+                  return (
+                    <div
+                      key={idx}
+                      className="grid grid-cols-[auto,1fr] gap-4 py-6"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="mt-0.5 flex items-center justify-center rounded-full bg-[var(--pri)]/10 p-4">
+                          {LucideIcon ? (
+                            <LucideIcon
+                              strokeWidth={1}
+                              className="h-12 w-12 text-[var(--pri)]"
+                            />
+                          ) : (
+                            <Image
+                              src={item.media || ""}
+                              alt={item.serviceName || "feature icon"}
+                              width={48}
+                              height={48}
+                              className="object-contain"
+                              priority={false}
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-[var(--pri)]">
+                            {item.serviceName}
+                          </h3>
+                          <p className="mt-1 text-[16px] leading-6 text-[var(--pri)]">
+                            {item.description}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </AnimatedContent>
           </div>
