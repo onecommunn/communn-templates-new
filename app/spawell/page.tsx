@@ -91,9 +91,9 @@ const SpawellRoot = () => {
     (s: HomeSection): s is ContactSection => s.sectionName === "contactSection"
   );
 
-  const primaryColor = "#5D3222";
-  const secondaryColor = "#fff";
-  const neutralColor = "#F9F6F1";
+  const primaryColor = source?.color?.primary || "#5D3222";
+  const secondaryColor = source?.color?.secondary || "#fff";
+  const neutralColor = source?.color?.neutral || "#F9F6F1";
   return (
     <>
       {heroSectionData && (

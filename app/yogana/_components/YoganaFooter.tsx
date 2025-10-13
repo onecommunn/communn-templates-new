@@ -114,16 +114,16 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
 
               {/* socials */}
               <div className="mt-5 flex items-center gap-4 text-neutral-300">
-                {data?.content?.socialMedia.map(
+                {data?.content?.socialMedia?.map(
                   (each: SocialMediaLink, idx: number) => {
-                    const key = normalize(each.platform).toLowerCase();
+                    const key = normalize(each?.platform).toLowerCase();
                     const Icon = PLATFORM_ICON[key] ?? Globe;
-                    const url = normalize(each.url) || "/";
+                    const url = normalize(each?.url) || "/";
                     return (
                       <Link
                         href={url || "/"}
                         key={`${key}-${idx}`}
-                        aria-label={each.platform}
+                        aria-label={each?.platform}
                       >
                         <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
                       </Link>

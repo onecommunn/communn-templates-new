@@ -16,7 +16,7 @@ async function fetchSpawellBundle(
 ): Promise<SpawellCMSBundle> {
   const base = "https://communn.io/api/v2.0/cms/get-section/community";
   const [home] = await Promise.all([
-    fetchJSON(`${base}/${communityId}?templateId=spawell&page=home2`),
+    fetchJSON(`${base}/${communityId}?templateId=spawell&page=home`),
     // add more pages
   ]);
 

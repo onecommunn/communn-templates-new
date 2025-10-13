@@ -253,7 +253,7 @@ const SpawellContact: React.FC<Props> = ({
 
           {/* Right: Image + timings */}
           <div className="relative">
-            <div className="relative overflow-hidden rounded-3xl shadow-xl">
+            <div className="relative overflow-hidden rounded-3xl shadow-xl aspect-square">
               <Image
                 src={
                   source?.media?.[0] || "/assets/spawell-contact-image-1.png"

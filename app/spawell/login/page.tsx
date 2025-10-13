@@ -10,18 +10,18 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 import { useCMS } from "../CMSProvider.client";
+import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 
 const SpawellLogin = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
-  const source: YoganaHomePage | undefined = !isLoading
-    ? (home as YoganaHomePage | undefined)
+  const source: SpawellHomePage | undefined = !isLoading
+    ? (home as SpawellHomePage | undefined)
     : undefined;
-  const primaryColor = source?.color?.primary || "#C2A74E";
-  const secondaryColor = source?.color?.secondary || "#000";
-  const neutralColor = source?.color?.neutral || "#707070";
+  const primaryColor = source?.color?.primary || "#5D3222";
+  const secondaryColor = source?.color?.secondary || "#fff";
+  const neutralColor = source?.color?.neutral || "#F9F6F1";
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");

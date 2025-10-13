@@ -20,78 +20,6 @@ import { Event } from "@/models/event.model";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 import { EventsSection } from "@/models/templates/spawell/spawell-home-model";
 
-// type EventItem = {
-//   image: string;
-//   title: string;
-// };
-
-// const EVENTS: EventItem[] = [
-//   {
-//     title: "Relaxation & Stress Relief Program",
-//     href: "/",
-//     image: "/assets/spawell-event-image-1.png",
-//   },
-//   {
-//     title: "Skin Rejuvenation Program",
-//     href: "/",
-//     image: "/assets/spawell-event-image-2.png",
-//   },
-//   {
-//     title: "Monthly Wellness Memberships",
-//     href: "/",
-//     image: "/assets/spawell-event-image-3.png",
-//   },
-// ];
-
-// const Card: React.FC<EventItem> = ({ image }) => (
-//   <Link
-//     href={href}
-//     className="group relative block overflow-hidden rounded-3xl bg-neutral-200 shadow-sm ring-1 ring-neutral-200/60 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-//     aria-label={title}
-//   >
-//     {/* Image */}
-//     <div className="relative aspect-[13/16]">
-//       <Image
-//         src={image}
-//         alt={title}
-//         fill
-//         className="object-cover"
-//         sizes="(max-width: 1024px) 100vw, 33vw"
-//         priority={false}
-//       />
-//     </div>
-
-//     {/* Bottom gradient for legibility */}
-//     <div
-//       className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"
-//       style={{
-//         background:
-//           "background: linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, #5D3222 100%)",
-//       }}
-//     />
-
-//     {/* Shine sweep (same logic as buttons) */}
-//     <span
-//       className="pointer-events-none absolute inset-y-0 -left-1/2 w-[140%]
-//                  -skew-x-12 bg-white/30 blur-[1px] opacity-0 translate-x-0
-//                  transition-all duration-700 ease-out
-//                  group-hover:translate-x-[140%] group-hover:opacity-100"
-//     />
-
-//     {/* Content */}
-//     <div className="absolute inset-0 flex items-end justify-between p-5">
-//       <h3 className="max-w-[80%] text-white text-[20px] font-medium leading-6 drop-shadow-sm">
-//         {title}
-//       </h3>
-
-//       {/* Corner arrow badge */}
-//       <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/85 text-[#5D3222] transition-colors group-hover:bg-[#5D3222] group-hover:text-white">
-//         <ArrowUpRight className="h-5 w-5 transition-transform" />
-//       </span>
-//     </div>
-//   </Link>
-// );
-
 function Dots({
   api,
   className = "",
@@ -243,10 +171,10 @@ const SpawellEvents = ({
 
           {/* Heading */}
           <div className="text-center">
-            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[#5D3222] md:text-5xl">
+            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
               {source?.heading}
             </h2>
-            <p className="mt-1 text-2xl font-lora italic text-[#5D3222] md:text-[34px]">
+            <p className="mt-1 text-2xl font-lora italic text-[var(--pri)] md:text-[34px]">
               {source?.subHeading}
             </p>
           </div>
@@ -354,7 +282,7 @@ const SpawellEvents = ({
                   className="pointer-events-none absolute inset-0"
                   style={{
                     background:
-                      "linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, #5D3222 100%)",
+                      `linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, ${primaryColor} 100%)`,
                   }}
                 />
 
@@ -382,7 +310,7 @@ const SpawellEvents = ({
                     className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors
             ${
               isBookable
-                ? "bg-white/85 text-[#5D3222] group-hover:bg-[#5D3222] group-hover:text-white"
+                ? "bg-white/85 text-[var(--pri)] group-hover:bg-[var(--pri)] group-hover:text-white"
                 : "bg-gray-400 text-gray-200"
             }`}
                   >

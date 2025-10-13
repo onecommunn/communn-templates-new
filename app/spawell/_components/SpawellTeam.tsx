@@ -30,7 +30,7 @@ const Card: React.FC<Member> = ({
         <h3 className="text-lg font-bold text-[var(--pri)]">{title}</h3>
         <p className="mt-1 text-[16px] text-[var(--pri)]">{description}</p>
       </div>
-      <div className="relative mt-4 h-56 md:h-100">
+      <div className="relative mt-4 h-56 md:h-80">
         <Image
           src={media}
           alt={title}

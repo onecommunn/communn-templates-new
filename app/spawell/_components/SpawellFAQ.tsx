@@ -138,6 +138,7 @@ const SpawellFAQ = ({
               collapsible
               className="space-y-3"
               defaultValue="faq-0"
+              
             >
               {FAQS.map((item, i) => (
                 <AccordionItem
