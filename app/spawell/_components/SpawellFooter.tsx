@@ -102,17 +102,27 @@ const SpawellFooter = ({
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:text-[var(--sec)]">
+                  <Link href="/#about-us" className="hover:text-[var(--sec)]">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="hover:text-[var(--sec)]">
-                    Blog
+                  <Link href="/#services" className="hover:text-[var(--sec)]">
+                    Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-[var(--sec)]">
+                  <Link href="/#events" className="hover:text-[var(--sec)]">
+                    Events
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#plans" className="hover:text-[var(--sec)]">
+                    Plans
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#contact" className="hover:text-[var(--sec)]">
                     Contact Us
                   </Link>
                 </li>
