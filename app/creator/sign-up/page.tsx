@@ -1,21 +1,21 @@
 "use client";
+import React, { useContext, useEffect, useState } from "react";
+import { useCMS } from "../CMSProvider.client";
+import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
+import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthContext } from "@/contexts/Auth.context";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useCMS } from "../CMSProvider.client";
-import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 
-const SpawellSignup = () => {
+const CreatorSignup = () => {
   const { home } = useCMS();
   const Loading = home === undefined;
-  const source: SpawellHomePage | undefined = !Loading
-    ? (home as SpawellHomePage | undefined)
+  const source: CreatorHomePage | undefined = !Loading
+    ? (home as CreatorHomePage | undefined)
     : undefined;
-  const primaryColor = source?.color?.primary || "#5D3222";
-  const secondaryColor = source?.color?.secondary || "#fff";
-  const neutralColor = source?.color?.neutral || "#F9F6F1";
+  const primaryColor = source?.color?.primary || "#fff";
+  const secondaryColor = source?.color?.secondary || "#000";
+
   const [formData, setFormData] = useState({
     firstName: "",
     phoneNumber: "",
@@ -103,7 +103,6 @@ const SpawellSignup = () => {
 
   const showError = (field: keyof typeof touched, isValid: boolean) =>
     (touched[field] || submitted) && !isValid;
-
   return (
     <main
       className="flex-grow flex items-center justify-center py-12 px-4 bg-[var(--neu)]"
@@ -111,13 +110,12 @@ const SpawellSignup = () => {
         {
           "--pri": primaryColor,
           "--sec": secondaryColor,
-          "--neu": neutralColor,
         } as React.CSSProperties
       }
     >
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-3xl font-bold mb-8 text-center font-cormorant text-[var(--pri)]">
+        <div className="bg-white rounded-lg shadow-md p-8 border">
+          <h2 className="text-3xl font-bold mb-8 text-center font-inter text-[var(--sec)]">
             Create Account
           </h2>
           <form
@@ -129,7 +127,7 @@ const SpawellSignup = () => {
           >
             {/* Name */}
             <div>
-              <label className="block text-sm text-[var(--pri)] font-semibold mb-2">
+              <label className="block text-sm text-[var(--sec)] font-semibold mb-2">
                 Full Name
               </label>
               <input
@@ -144,7 +142,7 @@ const SpawellSignup = () => {
                   showError("firstName", isNameValid)
                     ? "border-[var(--pri)]"
                     : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
+                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
               />
               {showError("firstName", isNameValid) && (
                 <p className="text-sm text-red-500 mt-1">
@@ -155,7 +153,7 @@ const SpawellSignup = () => {
 
             {/* Mobile */}
             <div>
-              <label className="block text-sm text-[var(--pri)] font-semibold mb-2">
+              <label className="block text-sm text-[var(--sec)] font-semibold mb-2">
                 Mobile Number
               </label>
               <input
@@ -168,9 +166,9 @@ const SpawellSignup = () => {
                 required
                 className={`w-full px-4 py-3 border ${
                   showError("phoneNumber", isMobileValid)
-                    ? "border-[var(--pri)]"
+                    ? "border-[var(--sec)]"
                     : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
+                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
               />
               {showError("phoneNumber", isMobileValid) && (
                 <p className="text-sm text-red-500 mt-1">
@@ -181,7 +179,7 @@ const SpawellSignup = () => {
 
             {/* Email */}
             <div>
-              <label className="block text-sm text-[var(--pri)] font-semibold mb-2">
+              <label className="block text-sm text-[var(--sec)] font-semibold mb-2">
                 Email Address
               </label>
               <input
@@ -194,9 +192,9 @@ const SpawellSignup = () => {
                 required
                 className={`w-full px-4 py-3 border ${
                   showError("emailId", isEmailValid)
-                    ? "border-[var(--pri)]"
+                    ? "border-[var(--sec)]"
                     : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
+                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
               />
               {showError("emailId", isEmailValid) && (
                 <p className="text-sm text-red-500 mt-1">Enter a valid email</p>
@@ -210,7 +208,7 @@ const SpawellSignup = () => {
                 disabled={!isFormValid || isLoading}
                 className={`${
                   isFormValid && !isLoading
-                    ? "bg-[var(--pri)] cursor-pointer"
+                    ? "bg-[var(--sec)] cursor-pointer"
                     : "bg-gray-300 cursor-not-allowed"
                 } text-white px-6 py-3 rounded-lg font-medium w-full`}
               >
@@ -218,11 +216,11 @@ const SpawellSignup = () => {
               </button>
             </div>
           </form>
-          <p className="text-center text-sm text-[var(--pri)] mt-8">
+          <p className="text-center text-sm text-[var(--sec)] mt-8">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-medium text-[var(--pri)] hover:underline"
+              className="font-medium text-[var(--sec)] hover:underline"
             >
               Login
             </Link>
@@ -233,4 +231,4 @@ const SpawellSignup = () => {
   );
 };
 
-export default SpawellSignup;
+export default CreatorSignup;

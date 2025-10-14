@@ -28,6 +28,8 @@ import FitkitRoot from "./app/fitkit/page";
 import RestraintRoot from "./app/restraint/page";
 import MartivoRoot from "./app/martivo/page";
 import SpawellSignup from "./app/spawell/sign-up/page";
+import YoganaSignup from "./app/yogana/sign-up/page";
+import CreatorSignup from "./app/creator/sign-up/page";
 
 export const templateLayouts: Record<
   string,
@@ -52,12 +54,14 @@ export const templates: Record<
     "/login": CreatorLogin,
     "/subscriptions": CreatorSubscriptionsPage,
     "/event-details": CreatorEventDetailsPage,
+    "/sign-up": CreatorSignup,
   },
   default: { "/": DefaultRoot },
   yogana: {
     "/": YoganaRoot,
     "/event-details": YoganaEventDetailsPage,
     "/login": YoganaLogin,
+    "/sign-up": YoganaSignup,
     "/subscriptions": YoganaSubscriptionsPage,
   },
   spawell: {

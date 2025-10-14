@@ -81,9 +81,9 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                 className="inline-flex items-center"
               >
                 <img
-                  src={data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
+                  src={data?.content?.logo || "/logo/yogana_Light_Logo.png"}
                   alt="Yogana"
-                  className="w-20 h-15 object-contain"
+                  className="w-28 h-auto object-contain"
                 />
               </Link>
 

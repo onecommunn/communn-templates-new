@@ -12,6 +12,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCMS } from "../CMSProvider.client";
 import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
+import Link from "next/link";
 
 const CreatorLogin = () => {
   const [mobileNumber, setMobileNumber] = useState("");
@@ -159,7 +160,7 @@ const CreatorLogin = () => {
         <div className="w-full max-w-md">
           <div
             className="bg-white rounded-lg shadow-md border p-8"
-            style={{ backgroundColor: secondaryColor, color: primaryColor }}
+            style={{ backgroundColor: primaryColor, color: secondaryColor }}
           >
             <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
 
@@ -178,7 +179,7 @@ const CreatorLogin = () => {
                 <div>
                   <label
                     className="block text-sm text-gray-600 mb-2"
-                    style={{ color: primaryColor }}
+                    style={{ color: secondaryColor }}
                   >
                     {useEmail ? "Enter Email ID" : "Enter Mobile No"}
                   </label>
@@ -213,8 +214,8 @@ const CreatorLogin = () => {
                           : "bg-gray-300 cursor-not-allowed"
                       } text-white px-6 py-3 rounded-lg font-medium w-full`}
                       style={{
-                        backgroundColor: primaryColor,
-                        color: secondaryColor,
+                        backgroundColor: secondaryColor,
+                        color: primaryColor,
                       }}
                     >
                       {loading ? "Sending..." : "Get OTP"}
@@ -222,22 +223,26 @@ const CreatorLogin = () => {
                   </div>
                 </div>
 
-                {/* <p className="text-center text-sm text-gray-600 mt-8">
-                Don't have an account?{" "}
-                <Link
-                  href="/sign-up"
-                  className="font-medium text-[#FF6347] hover:text-[#FF6347]-dark"
-                >
-                  Sign up now
-                </Link>
-              </p> */}
+                <p className="text-center text-sm text-gray-600">
+                  Don't have an account?{" "}
+                  <Link
+                    href="/sign-up"
+                    className="text-[#FF6347] hover:text-[#FF6347]-dark font-semibold"
+                    style={{ color: secondaryColor }}
+                  >
+                    Sign up now
+                  </Link>
+                </p>
               </div>
             ) : (
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-4" style={{
-                    color:primaryColor
-                  }}>
+                  <label
+                    className="block text-sm font-medium text-gray-600 mb-4"
+                    style={{
+                      color: primaryColor,
+                    }}
+                  >
                     Enter OTP
                   </label>
                   <div className="flex justify-center">
@@ -283,7 +288,7 @@ const CreatorLogin = () => {
                   disabled={otp.length !== 6 || loading}
                   className="w-full bg-black cursor-pointer text-white py-3 rounded-lg font-medium"
                   style={{
-                    backgroundColor:primaryColor
+                    backgroundColor: primaryColor,
                   }}
                 >
                   {loading ? "Verifying..." : "Login"}
@@ -299,15 +304,16 @@ const CreatorLogin = () => {
                   </button>
                 </div>
 
-                {/* <p className="text-center text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link
-                  href="/signup"
-                  className="font-medium text-[#FF6347] hover:text-[#FF6347]-dark"
-                >
-                  Sign up now
-                </Link>
-              </p> */}
+                <p className="text-center text-sm text-gray-600">
+                  Don't have an account?{" "}
+                  <Link
+                    href="/sign-up"
+                    className="text-[#FF6347] hover:text-[#FF6347]-dark font-semibold"
+                    style={{ color: secondaryColor }}
+                  >
+                    Sign up now
+                  </Link>
+                </p>
               </div>
             )}
           </div>

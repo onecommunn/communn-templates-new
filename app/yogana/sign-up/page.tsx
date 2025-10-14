@@ -1,21 +1,22 @@
 "use client";
-import { AuthContext } from "@/contexts/Auth.context";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 import { useCMS } from "../CMSProvider.client";
-import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
+import { useRouter, useSearchParams } from "next/navigation";
+import { AuthContext } from "@/contexts/Auth.context";
+import { toast } from "sonner";
+import Link from "next/link";
 
-const SpawellSignup = () => {
+const YoganaSignup = () => {
   const { home } = useCMS();
   const Loading = home === undefined;
-  const source: SpawellHomePage | undefined = !Loading
-    ? (home as SpawellHomePage | undefined)
+  const source: YoganaHomePage | undefined = !Loading
+    ? (home as YoganaHomePage | undefined)
     : undefined;
-  const primaryColor = source?.color?.primary || "#5D3222";
-  const secondaryColor = source?.color?.secondary || "#fff";
-  const neutralColor = source?.color?.neutral || "#F9F6F1";
+
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
   const [formData, setFormData] = useState({
     firstName: "",
     phoneNumber: "",
@@ -103,10 +104,9 @@ const SpawellSignup = () => {
 
   const showError = (field: keyof typeof touched, isValid: boolean) =>
     (touched[field] || submitted) && !isValid;
-
   return (
     <main
-      className="flex-grow flex items-center justify-center py-12 px-4 bg-[var(--neu)]"
+      className="flex-grow flex items-center justify-center py-12 px-4"
       style={
         {
           "--pri": primaryColor,
@@ -233,4 +233,4 @@ const SpawellSignup = () => {
   );
 };
 
-export default SpawellSignup;
+export default YoganaSignup;

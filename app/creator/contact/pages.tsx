@@ -19,11 +19,66 @@ import { sendNotification } from "@/services/contactService";
 import { toast } from "sonner";
 import { ContactForm } from "@/models/contact.model";
 
+const dummyData: CreatorContactPage = {
+  templateId: "creator",
+  pageName: "contact",
+  color: {
+    primary: "#fff",
+    secondary: "#000",
+  },
+  sections: [
+    {
+      sectionName: "contactSection",
+      order: 0,
+      isActive: true,
+      content: {
+        title: "We’d love to hear from you",
+        description:
+          "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.",
+        email: {
+          heading: "Send us an email",
+          subHeading:
+            "Our community has been the heart of our journey from the start, their unwavering support means the world to us",
+          value: "contact@prachiandharsh.com",
+        },
+        call: {
+          heading: "Give us a call",
+          subHeading:
+            "The strength of our community has been pivotal since day one, and their encouragement is priceless.",
+          value: "+91 7904125027",
+        },
+        address: {
+          heading: "Visit us",
+          value:
+            "NO.25/1, BDA SITE, NO.735/A, 3rd Main Rd, 2nd Phase, Gokula 1st Stage, MATHIKERE, Yeswanthpur, Bengaluru, Karnataka 560054",
+        },
+      },
+    },
+    {
+      sectionName: "ctaSection",
+      order: 1,
+      isActive: true,
+      content: {
+        title: "Stay Inspired",
+        description:
+          "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
+        buttons: [
+          {
+            label: "Explore All Activities",
+            url: "https://prachiandharsh/courses",
+          },
+        ],
+      },
+    },
+  ],
+  status: "published",
+};
+
 const CreatorContact: React.FC = () => {
   const { contact } = useCMS();
   const isLoading = contact === undefined;
   const data: CreatorContactPage | undefined = !isLoading
-    ? (contact as CreatorContactPage | undefined)
+    ? (contact as CreatorContactPage | undefined) ?? dummyData
     : undefined;
 
   const contactDetailsSection = data?.sections.find(
@@ -265,7 +320,8 @@ const CreatorContact: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold font-poppins text-2xl md:text-3xl">
-                      {contactDetailsSection?.content?.address?.heading || "Find Us"}
+                      {contactDetailsSection?.content?.address?.heading ||
+                        "Find Us"}
                     </h4>
                     <p>{contactDetailsSection?.content?.address?.value}</p>
                   </div>

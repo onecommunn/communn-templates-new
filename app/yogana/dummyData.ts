@@ -2,9 +2,9 @@ import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 
 export const dummyData: YoganaHomePage = {
   color: {
-    primary: "#7E1D53",
-    secondary: "#1E5285",
-    neutral: "#2D2D2D",
+    primary: "#C2A74E",
+    secondary: "#000",
+    neutral: "#707070",
   },
   templateId: "yogana",
   pageName: "home",
@@ -300,7 +300,7 @@ export const dummyData: YoganaHomePage = {
       content: {
         description:
           "Proin efficitur, mauris vel condimentum pulvinar, velit orci consectetur ligula.",
-        logo: "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
+        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana_Light_Logo.png",
         socialMedia: [
           {
             platform: "Instagram",

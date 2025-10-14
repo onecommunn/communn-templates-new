@@ -10,17 +10,11 @@ import { useOtp } from "@/hooks/useOtp";
 import { getOtp, sendOtpEmailService, verifyOtp } from "@/services/otpService";
 import { useCMS } from "../CMSProvider.client";
 import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/CustomComponents/CustomInputOtp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/CustomComponents/CustomInputOtp";
 
 const SpawellLogin = () => {
   const { home } = useCMS();
-  const source: SpawellHomePage | undefined = home as
-    | SpawellHomePage
-    | undefined;
+  const source: SpawellHomePage | undefined = home as SpawellHomePage | undefined;
   const primaryColor = source?.color?.primary || "#5D3222";
   const secondaryColor = source?.color?.secondary || "#fff";
   const neutralColor = source?.color?.neutral || "#F9F6F1";
@@ -31,58 +25,62 @@ const SpawellLogin = () => {
   const [useEmail, setUseEmail] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [resendTimer, setResendTimer] = useState(0);
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
 
   // Redirect authenticated users
   useEffect(() => {
-    if (authContext?.isAuthenticated) {
-      router.push("/");
-    }
+    if (authContext?.isAuthenticated) router.push("/");
   }, [authContext?.isAuthenticated]);
+
+  // Countdown timer for resend OTP
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [resendTimer]);
 
   // Input validation
   const isInputValid = () => {
-    if (useEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(mobileNumber);
-    } else {
-      return /^\d{10}$/.test(mobileNumber); // exactly 10 digits
-    }
+    if (useEmail) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mobileNumber);
+    return /^\d{10}$/.test(mobileNumber);
   };
 
   // Request OTP
-  const handleGetOtp = async () => {
+  const requestOtp = async () => {
     if (!mobileNumber) {
-      toast.error(
-        `Please enter a valid ${useEmail ? "email" : "mobile number"}`
-      );
+      toast.error(`Please enter a valid ${useEmail ? "email" : "mobile number"}`);
       return;
     }
 
     setLoading(true);
     try {
       let response: any;
-      if (useEmail) {
-        response = await sendOtpEmailService(mobileNumber);
-      } else {
-        response = await getOtp(mobileNumber);
-      }
+      if (useEmail) response = await sendOtpEmailService(mobileNumber);
+      else response = await getOtp(mobileNumber);
 
       if (response?.status === 200) {
-        toast.success(
-          `OTP sent to your ${useEmail ? "email" : "mobile number"}`
-        );
+        toast.success(`OTP sent to your ${useEmail ? "email" : "mobile number"}`);
         setStep("otp");
+        setResendTimer(30); // 30-second cooldown for resend
       } else {
         toast.error(response?.data?.message || "Failed to send OTP");
       }
-    } catch (error) {
+    } catch (err) {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGetOtp = () => requestOtp();
+
+  // Resend OTP
+  const handleResendOtp = () => {
+    if (resendTimer > 0) return;
+    requestOtp();
   };
 
   // Handle login / OTP verification
@@ -95,13 +93,8 @@ const SpawellLogin = () => {
     setLoading(true);
     try {
       let verifyResponse: any;
-      if (useEmail) {
-        verifyResponse = await verifyEmailOtp(otp, mobileNumber);
-      } else {
-        verifyResponse = await verifyOtp(mobileNumber, otp);
-      }
-
-      console.log(verifyResponse, "verifyResponse");
+      if (useEmail) verifyResponse = await verifyEmailOtp(otp, mobileNumber);
+      else verifyResponse = await verifyOtp(mobileNumber, otp);
 
       if (verifyResponse.status === 200) {
         const res: any = await authContext.autoLogin(
@@ -116,19 +109,13 @@ const SpawellLogin = () => {
         } else if (res.status === 500) {
           toast.error("User not found. Please sign up.");
           const queryKey = useEmail ? "email" : "mobile";
-          router.push(
-            `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
-          );
-        } else {
-          toast.error("Login failed. Please try again.");
-        }
+          router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
+        } else toast.error("Login failed. Please try again.");
       } else if (verifyResponse.status === 500) {
         toast.error("User not found. Please sign up.");
         const queryKey = useEmail ? "email" : "mobile";
         router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
-      } else {
-        toast.error("Invalid OTP. Please try again.");
-      }
+      } else toast.error("Invalid OTP. Please try again.");
     } catch (error) {
       toast.error("Verification failed. Please try again.");
     } finally {
@@ -164,7 +151,6 @@ const SpawellLogin = () => {
             Login
           </h2>
 
-          {/* Step 1: Mobile/Email input */}
           {step === "mobile" ? (
             <div className="space-y-6">
               <div className="text-center mb-6">
@@ -189,24 +175,13 @@ const SpawellLogin = () => {
                   <input
                     type={useEmail ? "email" : "tel"}
                     value={mobileNumber}
-                    onChange={(e) => {
-                      const input = e.target.value;
-                      setMobileNumber(
-                        useEmail ? input : input.replace(/\D/g, "")
-                      );
-                    }}
-                    placeholder={
-                      useEmail ? "Enter your email" : "Enter your mobile number"
+                    onChange={(e) =>
+                      setMobileNumber(useEmail ? e.target.value : e.target.value.replace(/\D/g, ""))
                     }
+                    placeholder={useEmail ? "Enter your email" : "Enter your mobile number"}
                     className="flex-1 px-4 py-2 border font-plus-jakarta border-gray-300 rounded-lg focus:ring-[#C2A74E] focus:outline-none focus:ring-2"
                     disabled={loading}
-                    style={{
-                      border: "1px solid #ddd",
-                      borderRadius: "6px",
-                      padding: "0.75rem 1rem",
-                      outline: "none",
-                      transition: "all 0.3s ease",
-                    }}
+                    style={{ border: "1px solid #ddd", borderRadius: "6px", padding: "0.75rem 1rem" }}
                     onFocus={(e) => {
                       e.currentTarget.style.boxShadow = `0 0 0 3px ${primaryColor}10`;
                       e.currentTarget.style.borderColor = primaryColor;
@@ -221,9 +196,7 @@ const SpawellLogin = () => {
                     onClick={handleGetOtp}
                     disabled={!isInputValid() || loading}
                     className={`text-white px-6 py-3 rounded-lg font-medium w-full ${
-                      isInputValid() && !loading
-                        ? ""
-                        : "bg-gray-300 cursor-not-allowed"
+                      isInputValid() && !loading ? "" : "bg-gray-300 cursor-not-allowed"
                     }`}
                     style={{ backgroundColor: primaryColor }}
                   >
@@ -240,23 +213,13 @@ const SpawellLogin = () => {
               </p>
             </div>
           ) : (
-            // Step 2: OTP input
             <div className="space-y-6">
               <div>
-                <label
-                  className="block text-sm font-medium mb-4"
-                  style={{ color: primaryColor }}
-                >
+                <label className="block text-sm font-medium mb-4" style={{ color: primaryColor }}>
                   Enter OTP
                 </label>
                 <div className="flex justify-center">
-                  <InputOTP
-                    maxLength={6}
-                    value={otp}
-                    onChange={setOtp}
-                    className="gap-2"
-                    disabled={loading}
-                  >
+                  <InputOTP maxLength={6} value={otp} onChange={setOtp} className="gap-2" disabled={loading}>
                     <InputOTPGroup>
                       {Array.from({ length: 6 }).map((_, i) => (
                         <InputOTPSlot
@@ -279,7 +242,19 @@ const SpawellLogin = () => {
                 {loading ? "Verifying..." : "Login"}
               </button>
 
-              <div className="text-center">
+              <div className="flex justify-center gap-4 mt-2">
+                <button
+                  onClick={handleResendOtp}
+                  disabled={resendTimer > 0 || loading}
+                  className={`text-sm underline font-medium ${
+                    resendTimer > 0 ? "text-gray-400 cursor-not-allowed" : "text-[var(--pri)]"
+                  }`}
+                >
+                  {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : "Resend OTP"}
+                </button>
+              </div>
+
+              <div className="text-center mt-2">
                 <button
                   onClick={() => setStep("mobile")}
                   className="text-sm cursor-pointer font-medium underline font-plus-jakarta"
@@ -290,7 +265,7 @@ const SpawellLogin = () => {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-gray-600">
+              <p className="text-center text-sm text-gray-600 mt-2">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now

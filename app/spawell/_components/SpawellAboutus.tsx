@@ -86,7 +86,7 @@ const SpawellAboutus = ({
 
               {/* Circular badge */}
               <Link href={"/"}>
-                <div className="absolute right-12 top-10 md:-right-14 hidden md:flex h-32 w-32 items-center justify-center rounded-full bg-[var(--pri)] text-[var(--sec)] shadow-lg">
+                <div className="absolute right-12 top-10 md:right-6 hidden md:flex h-32 w-32 items-center justify-center rounded-full bg-[var(--pri)] text-[var(--sec)] shadow-lg">
                   <ArrowUpRight className="absolute w-10 h-10" />
                   <SpinningText radius={4.5}>
                     contact us • contact us • contact us •
