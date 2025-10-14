@@ -105,6 +105,7 @@ const SpawellCourses = ({
                               height={48}
                               className="object-contain"
                               priority={false}
+                              unoptimized
                             />
                           )}
                         </div>

@@ -273,7 +273,7 @@ const SpawellEvents = ({
                       !isBookable ? "grayscale" : ""
                     }`}
                     sizes="(max-width: 1024px) 100vw, 33vw"
-                    priority={false}
+                    unoptimized
                   />
                 </div>
 

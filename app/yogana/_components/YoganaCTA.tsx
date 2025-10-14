@@ -34,7 +34,6 @@ const YoganaCTA: FC<YoganaCTAProps> = ({
               width={100}
               height={100}
               className="absolute left-0 top-0"
-              unoptimized
             />
             <Image
               src="/assets/yogana-cta-bg-image-2.png"
@@ -42,7 +41,6 @@ const YoganaCTA: FC<YoganaCTAProps> = ({
               width={100}
               height={100}
               className="absolute right-0 bottom-0"
-              unoptimized
             />
           </div>
 

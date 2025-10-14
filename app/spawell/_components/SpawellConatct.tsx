@@ -263,6 +263,7 @@ const SpawellContact: React.FC<Props> = ({
                 height={650}
                 className="h-full w-full object-cover"
                 priority
+                unoptimized
               />
               <div
                 className="absolute inset-0"

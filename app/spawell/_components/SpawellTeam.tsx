@@ -37,7 +37,7 @@ const Card: React.FC<Member> = ({
           fill
           className="object-contain object-bottom transition-transform duration-300 group-hover:scale-[1.03]"
           sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 22vw"
-          priority={false}
+          unoptimized
         />
       </div>
     </div>

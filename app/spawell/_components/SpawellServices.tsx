@@ -49,6 +49,7 @@ const Bullet = ({
               width={40}
               height={40}
               className="h-10 w-10 object-contain"
+              unoptimized
             />
           ) : (
             <div className="h-10 w-10" />
@@ -169,6 +170,7 @@ const SpawellServices = ({
                 className="object-cover"
                 sizes="(max-width: 768px) 18rem, 20rem"
                 priority
+                unoptimized
               />
             </div>
           </div>

@@ -66,6 +66,7 @@ const SpawellAboutus = ({
                   height={700}
                   className="h-auto w-[94%] md:w-full object-cover rounded-[28px]"
                   priority
+                  unoptimized
                 />
               </div>
 
@@ -79,6 +80,7 @@ const SpawellAboutus = ({
                   width={920}
                   height={560}
                   className="h-auto w-full object-cover"
+                  unoptimized
                 />
               </div>
 

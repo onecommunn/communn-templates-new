@@ -63,6 +63,7 @@ const SpawellWhyChooseus = ({
                   height={586}
                   className="w-full object-cover"
                   priority
+                  unoptimized
                 />
               </div>
             </div>
@@ -125,7 +126,7 @@ const SpawellWhyChooseus = ({
                             width={30}
                             height={30}
                             className="object-contain h-5 w-5 text-[var(--pri)]"
-                            priority={false}
+                            unoptimized
                           />
                         )}
                       </div>
@@ -182,6 +183,7 @@ const SpawellWhyChooseus = ({
                     width={720}
                     height={480}
                     className="h-auto w-full object-cover"
+                    unoptimized
                   />
                 </div>
               </div>

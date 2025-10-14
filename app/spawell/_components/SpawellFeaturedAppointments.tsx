@@ -93,7 +93,7 @@ const SpawellFeaturedAppointments = ({
                           width={30}
                           height={30}
                           className="object-contain"
-                          priority={false}
+                          unoptimized
                         />
                       )}
                     </div>

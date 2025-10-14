@@ -111,7 +111,7 @@ const SpawellFAQ = ({
                             width={16}
                             height={16}
                             className="object-contain"
-                            priority={false}
+                            unoptimized
                           />
                         )}
                       </div>
