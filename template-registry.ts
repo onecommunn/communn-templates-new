@@ -56,4 +56,8 @@ export const templates: Record<
   spawell: {
     "/": SpawellRoot,
   },
+  fitkit : 
+  { "/": DefaultRoot
+
+  }
 };
