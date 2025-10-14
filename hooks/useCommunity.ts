@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
-import { getCommunityData } from "../services/communityService";
+import {
+  CommunityResponse,
+  getCommunityData,
+} from "../services/communityService";
 
 export const useCommunity = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [communityId, setCommunityId] = useState<string>("");
+  const [communityData, setCommunityData] = useState<CommunityResponse>();
 
   useEffect(() => {
     const fetchCommunityId = async () => {
@@ -15,6 +19,7 @@ export const useCommunity = () => {
 
         if (response?.community?._id) {
           setCommunityId(response.community._id);
+          setCommunityData(response);
         }
       } catch (err) {
         console.error("Error in fetching community data", err);
@@ -41,6 +46,7 @@ export const useCommunity = () => {
   return {
     isLoading,
     getSocialLinks,
-    communityId
+    communityId,
+    communityData,
   };
 };

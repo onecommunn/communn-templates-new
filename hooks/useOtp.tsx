@@ -22,7 +22,7 @@ export const useOtp = () => {
       const response = await emailOtpVerify(email, otp);
       return response;
     } catch {
-      console.log(`Error while verifying OTP for email - ${email}`);
+      // console.log(`Error while verifying OTP for email - ${email}`);
     } finally {
       setIsLoading(false);
     }

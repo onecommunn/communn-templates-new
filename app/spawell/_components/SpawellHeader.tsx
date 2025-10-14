@@ -168,7 +168,8 @@ const SpawellHeader = ({
                       </AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleLogout}
-                        className="bg-[#ba1c26] text-[var(--pri)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                        className="bg-[#ba1c26] text-[var(--sec)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                        style={{color:secondaryColor}}
                       >
                         Continue
                       </AlertDialogAction>

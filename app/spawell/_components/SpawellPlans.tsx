@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +12,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-
 import type { EmblaCarouselType } from "embla-carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePlans } from "@/hooks/usePlan";
@@ -30,11 +29,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PlansSection } from "@/models/templates/spawell/spawell-home-model";
+import { useRequests } from "@/hooks/useRequests";
 
-type Plan = {
-  index: number;
+type PlanCardProps = {
   title: string;
-  description: string;
+  description?: string;
   subscribers: { _id: string }[];
   fetchPlans?: () => void;
   isSubscribedCommunity?: boolean;
@@ -43,9 +42,10 @@ type Plan = {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
-  price: string;
-  period: string;
+  price?: string | number;
+  period?: string;
   coverImage: string;
+  isPrivate: boolean;
 };
 
 type Props = {
@@ -55,7 +55,7 @@ type Props = {
   data: PlansSection;
 };
 
-const Card: React.FC<Plan> = ({
+const Card: React.FC<PlanCardProps> = ({
   title,
   subscribers,
   fetchPlans,
@@ -67,38 +67,52 @@ const Card: React.FC<Plan> = ({
   price,
   period,
   coverImage,
+  isPrivate,
 }) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
   const isLoggedIn = !!userId;
   const { joinToPublicCommunity } = usePlans();
+  const { SendCommunityRequest } = useRequests();
   const [mounted, setMounted] = useState(false);
 
-  const isSubscribed =
-    isLoggedIn && subscribers?.some((sub) => sub._id === userId);
+  const isSubscribed = isLoggedIn && subscribers?.some((sub) => sub._id === userId);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  useEffect(() => setMounted(true), []);
   if (authContext?.loading || !mounted) return null;
 
   const handleClickJoin = async (id: string) => {
     try {
       await joinToPublicCommunity(id);
-      if (fetchPlans) {
-        fetchPlans();
-      }
+      fetchPlans?.();
       toast.success("Successfully joined the community");
     } catch (error) {
       console.error("Error joining community:", error);
+      toast.error("Could not join the community. Please try again.");
     }
   };
+
+  const handleClickSendRequest = async (community: string, message: string) => {
+    try {
+      const formData = new FormData();
+      formData.append("community", community);
+      // Keeping the existing capitalized key since your backend expects it this way
+      formData.append("Message", message || "Request to join the community.");
+      const response = await SendCommunityRequest(formData);
+      if (response && response.status === 201) {
+        fetchPlans?.();
+        // toast.success("Request sent to the admin.");
+      } else {
+        // toast.info("Your request has been recorded.");
+      }
+    } catch (error) {
+      console.error("Error while sending community request:", error);
+      toast.error("Could not send the request. Please try again.");
+    }
+  };
+
   return (
-    <div
-      className="group block rounded-3xl bg-white p-3 transition-shadow"
-      aria-label={title}
-    >
+    <div className="group block rounded-3xl bg-white p-3 transition-shadow" aria-label={title}>
       {/* Image */}
       <div className="relative overflow-hidden rounded-2xl">
         <div className="relative aspect-[16/11]">
@@ -108,7 +122,7 @@ const Card: React.FC<Plan> = ({
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             sizes="(max-width:1024px) 100vw, 33vw"
-            priority={true}
+            priority
             unoptimized
           />
         </div>
@@ -117,23 +131,17 @@ const Card: React.FC<Plan> = ({
       {/* Title + price */}
       <div className="mt-4">
         <h3
-          className="text-lg font-semibold leading-6 text-[#3c2318]"
+          className="text-lg font-semibold leading-6"
           style={{ color: primaryColor }}
         >
           {title}
         </h3>
-        {price && (
-          <p
-            className="mt-1 text-sm text-[#7a675f]"
-            style={{ color: primaryColor }}
-          >
-            <span
-              className="text-lg font-semibold text-[#5D3222]"
-              style={{ color: primaryColor }}
-            >
+        {price !== undefined && price !== null && String(price).length > 0 && (
+          <p className="mt-1 text-sm" style={{ color: primaryColor }}>
+            <span className="text-lg font-semibold" style={{ color: primaryColor }}>
               ₹{price}
             </span>{" "}
-            / {period}
+            {period ? `/ ${period}` : null}
           </p>
         )}
       </div>
@@ -142,57 +150,87 @@ const Card: React.FC<Plan> = ({
       {!isLoggedIn ? (
         <Link href="/login">
           <div
-            className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
-            style={{ color: primaryColor }}
+            className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
+            style={{ color: primaryColor, cursor: "pointer" }}
           >
+            {isPrivate && (
+              <span>
+                <LockKeyhole size={20} strokeWidth={1.5} />
+              </span>
+            )}
             Login to Subscribe
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </Link>
       ) : !isSubscribedCommunity ? (
-        <Dialog>
-          <DialogTrigger asChild>
-            <div
-              className="mt-4 cursor-pointer inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
-              style={{ color: primaryColor }}
-            >
-              Join Community
-              <span>
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </span>
-            </div>
-          </DialogTrigger>
-          <DialogContent style={{ color: primaryColor }}>
-            <DialogTitle>Join Community</DialogTitle>
-            <DialogDescription
-              className="text-gray-700"
-              style={{ color: primaryColor }}
-            >
-              You're not a member of this community yet. Would you like to join
-              now?
-            </DialogDescription>
-            <div className="mt-4 flex justify-end">
-              <Button
-                onClick={() => handleClickJoin(communityId)}
-                disabled={isSubscribed}
-                className={`bg-[${primaryColor}] text-white cursor-pointer`}
-                style={{
-                  backgroundColor: primaryColor,
-                  color: secondaryColor,
-                }}
+        !isPrivate ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <div
+                className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
+                style={{ color: primaryColor, cursor: "pointer" }}
               >
-                Confirm Join
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+                Join Community
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle style={{ color: primaryColor }}>Join Community</DialogTitle>
+              <DialogDescription style={{ color: primaryColor }}>
+                You're not a member of this community yet. Would you like to join now?
+              </DialogDescription>
+              <div className="mt-4 flex justify-end">
+                <Button
+                  onClick={() => handleClickJoin(communityId)}
+                  disabled={isSubscribed}
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: secondaryColor,
+                  }}
+                >
+                  Confirm Join
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <Dialog>
+            <DialogTrigger asChild>
+              <div
+                className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
+                style={{ color: primaryColor, cursor: "pointer" }}
+              >
+                <LockKeyhole size={20} strokeWidth={1.5} />
+                Send Join Request
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle style={{ color: primaryColor }}>Send Join Request</DialogTitle>
+              <DialogDescription style={{ color: primaryColor }}>
+                This is a private community. Your request will be sent to the admin. You can proceed with payment once approved.
+              </DialogDescription>
+              <div className="mt-4 flex justify-end">
+                <Button
+                  onClick={() => handleClickSendRequest(communityId, "Request to join the community.")}
+                  disabled={isSubscribed}
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: secondaryColor,
+                  }}
+                  className="cursor-pointer"
+                >
+                  Send Request
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )
       ) : (
-        <Link
-          href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${coverImage}`}
-        >
+        <Link href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(coverImage)}`}>
           <div
-            className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
-            style={{ color: primaryColor }}
+            className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
+            style={{ color: primaryColor, cursor: "pointer" }}
           >
             View Plan
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -246,17 +284,16 @@ function Dots({
         return (
           <button
             key={i}
+            type="button"
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => api.scrollTo(i)}
+            className="h-2.5 w-2.5 rounded-full transition-all"
             style={{
-              backgroundColor: isActive ? primaryColor : "",
+              width: isActive ? 24 : 10,
+              backgroundColor: isActive ? primaryColor : "#D1D5DB", // gray-300 fallback
+              boxShadow: isActive ? "0 0 0 4px rgba(194,167,78,0.15)" : "none",
+              cursor: isActive ? "default" : "pointer",
             }}
-            className={[
-              "h-2.5 w-2.5 rounded-full transition-all",
-              isActive
-                ? `w-6 bg-[${primaryColor}] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
-                : "bg-gray-300 hover:bg-gray-400 cursor-pointer",
-            ].join(" ")}
           />
         );
       })}
@@ -270,12 +307,8 @@ const SpawellPlans: React.FC<Props> = ({
   neutralColor,
   data,
 }) => {
-  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
-    undefined
-  );
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
-    undefined
-  );
+  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(undefined);
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
   const source = data?.content;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
@@ -283,7 +316,7 @@ const SpawellPlans: React.FC<Props> = ({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
-  const { communityId } = useCommunity();
+  const { communityId, communityData } = useCommunity();
 
   // Persist the autoplay plugin instance
   const autoplay = useRef(
@@ -299,18 +332,13 @@ const SpawellPlans: React.FC<Props> = ({
     if (!api) return;
 
     const maybeRestartAtEnd = () => {
-      const lastIndex = api.scrollSnapList().length;
+      const lastIndex = api.scrollSnapList().length - 1; // FIX: off-by-one
       if (api.selectedScrollSnap() === lastIndex) {
-        // Jump back to the first slide and keep autoplay ticking
-        // (omit the second arg to animate; pass `true` to jump instantly)
-        api.scrollTo(0);
-        // Reset the autoplay timer so it continues naturally
-        // (safe-optional chaining in case reset isn't present)
+        api.scrollTo(0, true); // jump instantly to avoid visual rewind
         autoplay.current?.reset?.();
       }
     };
 
-    // run once and on every selection/reInit
     maybeRestartAtEnd();
     api.on("select", maybeRestartAtEnd);
     api.on("reInit", maybeRestartAtEnd);
@@ -325,7 +353,7 @@ const SpawellPlans: React.FC<Props> = ({
     if (!communityId) return;
     setIsLoading(true);
     try {
-      let response;
+      let response: any;
       if (isAuthenticated) {
         response = await getCommunityPlansListAuth(communityId);
       } else {
@@ -334,19 +362,15 @@ const SpawellPlans: React.FC<Props> = ({
 
       if (Array.isArray(response)) {
         setPlans(response as TrainingPlan[]);
-      } else if (
-        response &&
-        typeof response === "object" &&
-        "myPlans" in response &&
-        Array.isArray((response as any).myPlans)
-      ) {
-        setPlans((response as any).myPlans as TrainingPlan[]);
-        setIsSubscribed((response as any).isSubscribedCommunity);
+      } else if (response && typeof response === "object" && "myPlans" in response) {
+        setPlans(response.myPlans as TrainingPlan[]);
+        setIsSubscribed(!!response.isSubscribedCommunity);
       } else {
         setPlans([]);
       }
     } catch (error) {
       console.error("Failed to fetch plans:", error);
+      setPlans([]);
     } finally {
       setIsLoading(false);
     }
@@ -361,38 +385,25 @@ const SpawellPlans: React.FC<Props> = ({
     return (
       <section
         id="plans"
-        className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-        style={{ color: primaryColor }}
+        className="relative py-20 font-cormorant overflow-hidden"
+        style={{ color: primaryColor, backgroundColor: "#C2A74E1A" }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-4">
-            <h2
-              className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl"
-              style={{ color: primaryColor }}
-            >
+            <h2 className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl" style={{ color: primaryColor }}>
               {source?.heading}
             </h2>
-            <p
-              className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]"
-              style={{ color: primaryColor }}
-            >
+            <p className="mt-1 text-2xl font-lora italic md:text-[34px]" style={{ color: primaryColor }}>
               {source?.subHeading}
             </p>
           </div>
-          <Carousel
-            opts={{ align: "start", loop: false }}
-            className="w-full"
-            setApi={setApiLoading}
-          >
+          <Carousel opts={{ align: "start", loop: false }} className="w-full" setApi={setApiLoading}>
             <CarouselContent>
               {Array.from({ length: 8 }).map((_, i) => (
-                <CarouselItem
-                  key={i}
-                  className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3"
-                >
+                <CarouselItem key={i} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
                   <Skeleton
-                    className="h-[420px] w-full bg-gray-300 rounded-[30px]"
-                    style={{ backgroundColor: primaryColor }}
+                    className="h-[420px] w-full rounded-[30px]"
+                    style={{ backgroundColor: "#E5E7EB" }} // gray-200 for skeleton
                   />
                 </CarouselItem>
               ))}
@@ -407,107 +418,93 @@ const SpawellPlans: React.FC<Props> = ({
   }
 
   return (
-    <section
-      className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta"
-      id="plans"
-    >
+    <section className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta" id="plans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
         <div className="mb-2 flex justify-center">
-          <span
-            className="text-sm text-[#5D3222]"
-            style={{ color: primaryColor }}
-          >
+          <span className="text-sm" style={{ color: primaryColor }}>
             • Plans
           </span>
         </div>
 
         {/* Heading */}
         <div className="text-center mb-4">
-          <h2
-            className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl"
-            style={{ color: primaryColor }}
-          >
+          <h2 className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl" style={{ color: primaryColor }}>
             Inside the ultimate luxury
           </h2>
-          <p
-            className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]"
-            style={{ color: primaryColor }}
-          >
+          <p className="mt-1 text-2xl font-lora italic md:text-[34px]" style={{ color: primaryColor }}>
             spa experience
           </p>
         </div>
 
         {/* Cards */}
         <Carousel
-          opts={{
-            align: "start",
-            loop: false, // <-- no loop: don't go back to first after last
-          }}
+          opts={{ align: "start", loop: false }}
           plugins={[autoplay.current]}
           className="w-full"
           setApi={setApiMain}
         >
           <CarouselContent>
             {plans.map((plan, index) => (
-              <CarouselItem key={index} className="basis-full md:basis-1/3">
+              <CarouselItem key={plan._id ?? index} className="basis-full md:basis-1/3">
                 <Card
-                  index={index + 1}
                   title={plan.name}
                   description={plan.description || plan.summary}
-                  subscribers={plan?.subscribers}
+                  subscribers={plan?.subscribers ?? []}
                   fetchPlans={fetchPlans}
-                  isSubscribedCommunity={isSubscribed}
+                  isSubscribedCommunity={communityData?.community?.members?.some(
+                    (m: any) => m?.user?._id === authContext?.user?.id
+                  )}
                   planId={plan._id}
                   communityId={communityId}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   neutralColor={neutralColor}
-                  price={plan.pricing || `${plan.totalPlanValue}`}
-                  period={`${plan.interval} ${capitalizeWords(plan.duration)}`}
-                  coverImage={
-                    plan?.image?.value || "/assets/spawell-plans-image-1.jpg"
+                  price={plan.pricing ?? plan.totalPlanValue}
+                  period={
+                    plan.interval && plan.duration
+                      ? `${plan.interval} ${capitalizeWords(plan.duration)}`
+                      : undefined
                   }
+                  coverImage={plan?.image?.value || "/assets/spawell-plans-image-1.jpg"}
+                  isPrivate={communityData?.community?.type === "PRIVATE"}
                 />
               </CarouselItem>
             ))}
           </CarouselContent>
+
           <CarouselPrevious
             aria-label="Previous plans"
             className="hidden sm:flex size-10 cursor-pointer"
-            style={{
-              color: primaryColor,
-              backgroundColor: "#fff",
-            }}
+            style={{ color: primaryColor, backgroundColor: "#fff" }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor =
-                primaryColor;
-              (e.currentTarget as HTMLElement).style.color = "#fff";
+              const el = e.currentTarget as HTMLElement;
+              el.style.backgroundColor = primaryColor;
+              el.style.color = "#fff";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
-              (e.currentTarget as HTMLElement).style.color = primaryColor;
+              const el = e.currentTarget as HTMLElement;
+              el.style.backgroundColor = "#fff";
+              el.style.color = primaryColor;
             }}
           />
-
           <CarouselNext
+            aria-label="Next plans"
             className="hidden sm:flex size-10 cursor-pointer"
-            style={{
-              color: primaryColor,
-              backgroundColor: "#fff",
-            }}
+            style={{ color: primaryColor, backgroundColor: "#fff" }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor =
-                primaryColor;
-              (e.currentTarget as HTMLElement).style.color = "#fff";
+              const el = e.currentTarget as HTMLElement;
+              el.style.backgroundColor = primaryColor;
+              el.style.color = "#fff";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
-              (e.currentTarget as HTMLElement).style.color = primaryColor;
+              const el = e.currentTarget as HTMLElement;
+              el.style.backgroundColor = "#fff";
+              el.style.color = primaryColor;
             }}
-            aria-label="Next plans"
           />
         </Carousel>
+
         <Dots api={apiMain} primaryColor={primaryColor} />
       </div>
     </section>
