@@ -19,7 +19,6 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 
-
 function Dots({
   api,
   className = "",
@@ -100,7 +99,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
-  const { communityId } = useCommunity();
+  const { communityId, communityData } = useCommunity();
 
   // console.log(plans, "plans");
 
@@ -246,6 +245,12 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     );
   }
 
+  const isRequested = Boolean(
+    communityData?.community?.requests?.some(
+      (req: any) => req.createdBy?._id === authContext?.user?.id
+    )
+  );
+
   return (
     <section
       id="plans"
@@ -283,7 +288,9 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         description={plan.description || plan.summary}
                         subscribers={plan?.subscribers}
                         fetchPlans={fetchPlans}
-                        isSubscribedCommunity={isSubscribed}
+                        isSubscribedCommunity={communityData?.community?.members?.some(
+                          (m: any) => m?.user?._id === authContext?.user?.id
+                        )}
                         planId={plan._id}
                         communityId={communityId}
                         primaryColor={primaryColor}
@@ -297,6 +304,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                           plan?.image?.value ||
                           "/assets/creatorCoursesPlaceHolderImage.jpg"
                         }
+                        isPrivate={communityData?.community?.type === "PRIVATE"}
+                        isRequested={!!isRequested}
                       />
                     </div>
                   </CarouselItem>
