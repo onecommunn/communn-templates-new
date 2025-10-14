@@ -1,7 +1,8 @@
 import { AuthContext, IAuthContext } from "@/contexts/Auth.context";
 import { ICommunity } from "@/models/community.model";
 import { IUserInfo } from "@/models/user.model";
-import { sendRequestToJoin } from "@/services/requestsservice";
+import { sendRequestToJoin } from "@/services/requestsService";
+
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 
