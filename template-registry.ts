@@ -24,6 +24,9 @@ import SpawellShell from "./app/spawell/SpawellShell";
 import SpawellSubscriptionsPage from "./app/spawell/subscriptions/page";
 import SpawellEventDetailsPage from "./app/spawell/event-details/page";
 import SpawellLogin from "./app/spawell/login/page";
+import FitkitRoot from "./app/fitkit/page";
+import RestraintRoot from "./app/restraint/page";
+import MartivoRoot from "./app/martivo/page";
 
 export const templateLayouts: Record<
   string,
@@ -62,8 +65,7 @@ export const templates: Record<
     "/login": SpawellLogin,
     "/event-details": SpawellEventDetailsPage,
   },
-  fitkit : 
-  { "/": DefaultRoot
-
-  }
+  fitkit: { "/": FitkitRoot },
+  restraint: { "/": RestraintRoot },
+  martivo: { "/": MartivoRoot },
 };
