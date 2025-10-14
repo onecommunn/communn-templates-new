@@ -41,9 +41,9 @@ const CreatorFooter: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const footer = section?.footer;
+  const footer = section?.content
 
-  const logo = normalize(footer.logo);
+  const logo = normalize(footer?.logo);
   const columns = footer?.navigationColumns?.[0] ?? [];
   const socials = footer?.socialMedia ?? [];
   const copyright = normalize(footer?.copyrightText) || "© All rights reserved";
@@ -94,7 +94,7 @@ const CreatorFooter: React.FC<Props> = ({
                 const url = normalize(s.url) || "/";
                 return (
                   <Link
-                    href={url}
+                    href={url ?? "/"}
                     key={`${key}-${idx}`}
                     aria-label={s.platform}
                   >
@@ -155,36 +155,36 @@ const CreatorFooter: React.FC<Props> = ({
               >
                 Contact
               </p>
-              {address?.address?.value && (
+              {address?.content?.address?.value && (
                 <div className="flex flex-row items-start gap-2">
                   <MapPin
                     className="w-4 h-4 min-h-4 min-w-4 mt-1"
                     color={secondaryColor}
                   />
                   <p className="text-sm font-semibold hover:underline break-words">
-                    {address?.address?.value}
+                    {address?.content?.address?.value}
                   </p>
                 </div>
               )}
-              {address?.call?.value && (
+              {address?.content?.call?.value && (
                 <div className="flex flex-row items-start gap-2">
                   <Phone
                     className="w-4 h-4 min-h-4 min-w-4"
                     color={secondaryColor}
                   />
                   <p className="text-sm font-semibold hover:underline">
-                    {address?.call?.value}
+                    {address?.content?.call?.value}
                   </p>
                 </div>
               )}
-              {address?.email?.value && (
+              {address?.content?.email?.value && (
                 <div className="flex flex-row items-center gap-2">
                   <Mail
                     className="w-4 h-4 min-h-4 min-w-4"
                     color={secondaryColor}
                   />
                   <p className="text-sm font-semibold hover:underline break-words">
-                    {address?.email?.value}
+                    {address?.content?.email?.value}
                   </p>
                 </div>
               )}

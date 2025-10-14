@@ -22,31 +22,33 @@ const dummyHeaderData: CreatorHeaderPage = {
       sectionName: "headerSection",
       order: 0,
       isActive: true,
-      media: [
-        "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
-      ],
-      buttons: [
-        {
-          label: "Home",
-          url: "/",
-        },
-        {
-          label: "About us",
-          url: "/about",
-        },
-        {
-          label: "Plans",
-          url: "/plans",
-        },
-        {
-          label: "Events",
-          url: "/events",
-        },
-        {
-          label: "Contact",
-          url: "/contact",
-        },
-      ],
+      content: {
+        media: [
+          "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
+        ],
+        buttons: [
+          {
+            label: "Home",
+            url: "/",
+          },
+          {
+            label: "About us",
+            url: "/about",
+          },
+          {
+            label: "Plans",
+            url: "/plans",
+          },
+          {
+            label: "Events",
+            url: "/events",
+          },
+          {
+            label: "Contact",
+            url: "/contact",
+          },
+        ],
+      },
     },
   ],
   status: "published",
@@ -62,7 +64,7 @@ const dummyFooterData: CreatorFooterPage = {
   },
   sections: [
     {
-      footer: {
+      content: {
         logo: "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2F062e0f3cd667449793b24103817a0704",
         navigationColumns: [
           {

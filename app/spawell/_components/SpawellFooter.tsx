@@ -2,17 +2,32 @@
 
 import React from "react";
 import Link from "next/link";
-import { Instagram, Facebook, Linkedin } from "lucide-react";
+import { Instagram, Facebook, Linkedin, Dribbble, Globe } from "lucide-react";
+import {
+  FooterSection,
+  SocialMediaLink,
+} from "@/models/templates/spawell/spawell-home-model";
+
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+};
 
 const SpawellFooter = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: FooterSection;
 }) => {
+  const source = data?.content;
+  const normalize = (s?: string) => (s ?? "").trim();
   return (
     <footer
       className="bg-[var(--pri)] text-[var(--sec)]/90 font-plus-jakarta"
@@ -30,7 +45,7 @@ const SpawellFooter = ({
           <div className="space-y-6">
             <Link href="/" className="flex items-center space-x-2">
               <img
-                src={"/assets/spawell-logo-light.png"}
+                src={source?.logo || "/assets/spawell-logo-light.png"}
                 alt="logo"
                 className="w-44 h-auto object-contain"
               />
@@ -39,11 +54,15 @@ const SpawellFooter = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <div>
                 <p className="text-[var(--sec)]/70">Toll free customer care</p>
-                <p className="mt-1 text-base font-medium">+1 (246) 333–0085</p>
+                <p className="mt-1 text-base font-medium">
+                  {source?.contact?.phoneNumber}
+                </p>
               </div>
               <div>
                 <p className="text-[var(--sec)]/70">Need live support?</p>
-                <p className="mt-1 text-base font-medium">support@domain.com</p>
+                <p className="mt-1 text-base font-medium">
+                  {source?.contact?.email}
+                </p>
               </div>
             </div>
 
@@ -51,27 +70,23 @@ const SpawellFooter = ({
             <div>
               <p className="mb-3 text-sm text-[var(--sec)]/70">Follow On</p>
               <div className="flex items-center gap-3">
-                <Link
-                  href="#"
-                  aria-label="Pinterest"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sec)] hover:bg-white[var(--sec)]/85 text-[var(--pri)] transition"
-                >
-                  <Linkedin className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="#"
-                  aria-label="Facebook"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sec)] hover:bg-white[var(--sec)]/85 text-[var(--pri)] transition"
-                >
-                  <Facebook className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="#"
-                  aria-label="Instagram"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sec)] hover:bg-white[var(--sec)]/85 text-[var(--pri)] transition"
-                >
-                  <Instagram className="h-4 w-4" />
-                </Link>
+                {source?.socialMedia?.map(
+                  (each: SocialMediaLink, idx: number) => {
+                    const key = normalize(each.platform).toLowerCase();
+                    const Icon = PLATFORM_ICON[key] ?? Globe;
+                    const url = normalize(each.url) || "/";
+                    return (
+                      <Link
+                        key={idx}
+                        href={url}
+                        aria-label="Pinterest"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sec)] hover:bg-white[var(--sec)]/85 text-[var(--pri)] transition"
+                      >
+                        <Icon className="h-4 w-4" />
+                      </Link>
+                    );
+                  }
+                )}
               </div>
             </div>
           </div>
@@ -163,7 +178,7 @@ const SpawellFooter = ({
       <div className="bg-[var(--pri)]">
         <div className="container mx-auto px-6 md:px-20 flex items-center justify-between">
           <div className="py-4 text-center text-xs text-[var(--sec)]/80">
-            Copyright © 2025 All Rights Reserved.
+            {source?.copyrightText}
           </div>
           <div className="py-4 text-center text-xs text-[var(--sec)]/80">
             Made with ❤️ by communn.io

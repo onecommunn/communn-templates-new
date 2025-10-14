@@ -1,4 +1,4 @@
-type YoganaCMSBundle = {
+type SpawellCMSBundle = {
   home: any | null;
 };
 
@@ -11,12 +11,12 @@ async function fetchJSON(url: string) {
   }
 }
 
-async function fetchYoganaBundle(
+async function fetchSpawellBundle(
   communityId: string
-): Promise<YoganaCMSBundle> {
+): Promise<SpawellCMSBundle> {
   const base = "https://communn.io/api/v2.0/cms/get-section/community";
   const [home] = await Promise.all([
-    fetchJSON(`${base}/${communityId}?templateId=yogana&page=home`),
+    fetchJSON(`${base}/${communityId}?templateId=spawell&page=home`),
     // add more pages
   ]);
 
@@ -26,6 +26,6 @@ async function fetchYoganaBundle(
   };
 }
 
-export async function getYoganaCMSBundle(communityId: string) {
-  return fetchYoganaBundle(communityId);
+export async function getSpawellCMSBundle(communityId: string) {
+  return fetchSpawellBundle(communityId);
 }

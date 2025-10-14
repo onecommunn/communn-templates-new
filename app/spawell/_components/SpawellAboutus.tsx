@@ -15,16 +15,20 @@ import {
 } from "lucide-react";
 import { SpinningText } from "@/components/CustomComponents/spinning-text";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { AboutSection } from "@/models/templates/spawell/spawell-home-model";
 
 const SpawellAboutus = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: AboutSection;
 }) => {
+  const source = data?.content;
   return (
     <section
       id="about-us"
@@ -39,7 +43,7 @@ const SpawellAboutus = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* TOP: Media + Content */}
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
+        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-20">
           {/* Left: Overlapping photos */}
           <AnimatedContent
             distance={100}
@@ -54,9 +58,11 @@ const SpawellAboutus = ({
               {/* Back card */}
               <div className="relative w-full max-w-[560px] rounded-[28px] overflow-hidden">
                 <Image
-                  src={"/assets/spawell-aboutus-image-1.jpg"}
+                  src={
+                    source?.media?.[0] || "/assets/spawell-aboutus-image-1.jpg"
+                  }
                   alt="Relaxing spa massage"
-                  width={1120}
+                  width={437}
                   height={700}
                   className="h-auto w-[94%] md:w-full object-cover rounded-[28px]"
                   priority
@@ -66,7 +72,9 @@ const SpawellAboutus = ({
               {/* Front card */}
               <div className="absolute -bottom-6 -right-2 md:-bottom-10 md:-right-10 border-[10px] border-white w-[78%] max-w-[460px] rounded-[22px] overflow-hidden">
                 <Image
-                  src={"/assets/spawell-aboutus-image-2.jpg"}
+                  src={
+                    source?.media?.[1] || "/assets/spawell-aboutus-image-2.jpg"
+                  }
                   alt="Aromatherapy and wellness"
                   width={920}
                   height={560}
@@ -76,7 +84,7 @@ const SpawellAboutus = ({
 
               {/* Circular badge */}
               <Link href={"/"}>
-                <div className="absolute right-12 top-10 hidden md:flex h-32 w-32 items-center justify-center rounded-full bg-[var(--pri)] text-[var(--sec)] shadow-lg">
+                <div className="absolute right-12 top-10 md:-right-14 hidden md:flex h-32 w-32 items-center justify-center rounded-full bg-[var(--pri)] text-[var(--sec)] shadow-lg">
                   <ArrowUpRight className="absolute w-10 h-10" />
                   <SpinningText radius={4.5}>
                     contact us • contact us • contact us •
@@ -108,9 +116,9 @@ const SpawellAboutus = ({
               {/* Heading */}
               <AnimatedContent distance={60} direction="vertical" delay={0.2}>
                 <h2 className="mt-3 text-4xl font-semibold leading-tight tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
-                  Where passion meet purpose{" "}
+                  {source?.heading}{" "}
                   <span className="font-lora italic font-normal">
-                    in every treatment
+                    {source?.subHeading}
                   </span>
                 </h2>
               </AnimatedContent>
@@ -118,9 +126,7 @@ const SpawellAboutus = ({
               {/* Paragraph */}
               <AnimatedContent distance={50} direction="vertical" delay={0.3}>
                 <p className="mt-4 max-w-xl text-[15px] leading-7 text-[var(--pri)]">
-                  Every service we offer is guided by a deep passion for healing
-                  and a clear purpose to help you feel your best, inside and
-                  out.
+                  {source?.description}
                 </p>
               </AnimatedContent>
 
@@ -130,13 +136,9 @@ const SpawellAboutus = ({
                   {/* Left: Bullets + CTA */}
                   <div>
                     <ul className="mt-6 space-y-3 text-[15px] text-[var(--pri)]">
-                      {[
-                        "Passionate and Certified Wellness Experts",
-                        "Personalized programs tailored to your needs",
-                        "Holistic rituals designed for mind & body",
-                      ].map((item, idx) => (
+                      {source?.bulletes?.map((item, idx) => (
                         <AnimatedContent
-                          key={item}
+                          key={idx}
                           distance={30}
                           direction="horizontal"
                           delay={0.1 * idx}
@@ -154,9 +156,9 @@ const SpawellAboutus = ({
                       direction="vertical"
                       delay={0.5}
                     >
-                      <Link href="/about">
+                      <Link href={source?.buttons?.[0]?.url || "#about-us"}>
                         <Button className="bg-[var(--pri)] cursor-pointer font-bold hover:bg-[var(--pri)]/90 text-[var(--sec)] px-6 py-5 mt-7">
-                          About More
+                          {source?.buttons?.[0]?.label}
                           <span>
                             <ArrowUpRight
                               className="min-w-4 min-h-4 font-bold"
@@ -184,9 +186,9 @@ const SpawellAboutus = ({
                         </div>
                         <div>
                           <div className="text-5xl font-semibold text-[var(--pri)] text-center font-lora">
-                            29 <span className="text-5xl">+</span>
+                            {source?.teamCount} <span className="text-5xl">+</span>
                           </div>
-                          <p className="text-[16px] text-[var(--pri)]">
+                          <p className="text-[16px] text-[var(--pri)] text-center">
                             Team Members
                           </p>
                         </div>

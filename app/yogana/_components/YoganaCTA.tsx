@@ -52,7 +52,7 @@ const YoganaCTA: FC<YoganaCTAProps> = ({
               className="text-center text-3xl font-semibold text-[#C2A74E]"
               style={{ color: primaryColor }}
             >
-              {data?.heading}
+              {data?.content?.heading}
             </h4>
             <p
               className="font-plus-jakarta md:max-w-3xl text-center text-[16px] text-[#707070]"
@@ -60,15 +60,15 @@ const YoganaCTA: FC<YoganaCTAProps> = ({
                 color: neutralColor,
               }}
             >
-              {data?.subHeading}
+              {data?.content?.subHeading}
             </p>
-            <Link href={data?.buttons?.[0]?.url || "/"}>
+            <Link href={data?.content?.buttons?.[0]?.url || "/"}>
               <button
                 type="button"
                 style={{ color: primaryColor }}
                 className="group mt-2 inline-flex items-center gap-2 rounded-full font-plus-jakarta text-[13px] font-semibold uppercase tracking-wide text-[#C2A74E] cursor-pointer"
               >
-                {data?.buttons?.[0].label}
+                {data?.content?.buttons?.[0].label}
                 <span className="transition-transform group-hover:translate-x-1">
                   →
                 </span>

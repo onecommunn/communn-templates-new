@@ -86,12 +86,14 @@ interface Plan {
   description?: string;
 }
 
-const CreatorSubscriptions = ({
+const SpawellSubscriptions = ({
   primaryColor,
   secondaryColor,
+  neutralColor,
 }: {
   secondaryColor: string;
   primaryColor: string;
+  neutralColor: string;
 }) => {
   const [activeTab, setActiveTab] = useState("All");
   const [isExpanded, setIsExpanded] = useState(true);
@@ -330,15 +332,15 @@ const CreatorSubscriptions = ({
   if (isLoading) {
     return (
       <div
-        className="container mx-auto px-4 sm:px-6 lg:px-20"
-        style={{ backgroundColor: primaryColor }}
+        className="mx-auto px-4 sm:px-6 lg:px-20"
+        style={{ backgroundColor: neutralColor }}
       >
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="rounded-2xl overflow-hidden mb-8">
             <div className="relative aspect-[16/9] w-full">
               <Skeleton
                 className="absolute inset-0"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
             </div>
           </div>
@@ -347,69 +349,69 @@ const CreatorSubscriptions = ({
             <div className="md:col-span-2 space-y-4">
               <Skeleton
                 className="h-7 w-3/4"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
               <div className="space-y-2">
                 <Skeleton
                   className="h-4 w-full"
-                  style={{ backgroundColor: secondaryColor }}
+                  style={{ backgroundColor: primaryColor }}
                 />
                 <Skeleton
                   className="h-4 w-[92%]"
-                  style={{ backgroundColor: secondaryColor }}
+                  style={{ backgroundColor: primaryColor }}
                 />
                 <Skeleton
                   className="h-4 w-[88%]"
-                  style={{ backgroundColor: secondaryColor }}
+                  style={{ backgroundColor: primaryColor }}
                 />
                 <Skeleton
                   className="h-4 w-[80%]"
-                  style={{ backgroundColor: secondaryColor }}
+                  style={{ backgroundColor: primaryColor }}
                 />
               </div>
               <Skeleton
                 className="h-5 w-56 mt-6"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-3">
                   <Skeleton
                     className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                   <Skeleton
                     className="h-4 w-64"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                 </div>
                 <div className="flex items-center gap-3">
                   <Skeleton
                     className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                   <Skeleton
                     className="h-4 w-52"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                 </div>
                 <div className="flex items-center gap-3">
                   <Skeleton
                     className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                   <Skeleton
                     className="h-4 w-40"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                 </div>
                 <div className="flex items-center gap-3">
                   <Skeleton
                     className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                   <Skeleton
                     className="h-4 w-72"
-                    style={{ backgroundColor: secondaryColor }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                 </div>
               </div>
@@ -417,23 +419,23 @@ const CreatorSubscriptions = ({
             <div className="bg-white rounded-xl shadow border p-6 space-y-4">
               <Skeleton
                 className="h-5 w-32"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
               <Skeleton
                 className="h-10 w-full rounded-md"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
               <Skeleton
                 className="h-10 w-full rounded-md"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
               <Skeleton
                 className="h-10 w-full rounded-md"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
               <Skeleton
                 className="h-10 w-full rounded-md"
-                style={{ backgroundColor: secondaryColor }}
+                style={{ backgroundColor: primaryColor }}
               />
             </div>
           </div>
@@ -445,19 +447,19 @@ const CreatorSubscriptions = ({
   return (
     <main
       className="flex-grow bg-white font-inter"
-      style={{ backgroundColor: primaryColor, color: secondaryColor }}
+      style={{ backgroundColor: neutralColor, color: primaryColor }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
         <CreatorSectionHeader
           title={plan?.name || ""}
-          textColor={secondaryColor}
+          textColor={primaryColor}
         />
         <div className="mx-auto pb-4">
           {/* Cover image */}
           <div className="rounded-2xl overflow-hidden mb-8">
             <div className="relative aspect-[18/9] w-full">
               <Image
-                src={imageUrl || "/assets/creatorCoursesPlaceHolderImage.jpg"}
+                src={imageUrl || "/assets/spawell-event-image-3.png "}
                 alt={plan?.name || "plan Image"}
                 fill
                 className="object-cover"
@@ -495,6 +497,11 @@ const CreatorSubscriptions = ({
                           ? "bg-gray-100 text-gray-700"
                           : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                       }`}
+                      style={{
+                        backgroundColor:
+                          activeTab === tab ? primaryColor : neutralColor,
+                        color: activeTab === tab ? neutralColor : primaryColor,
+                      }}
                     >
                       {formatStatus(tab)}
                     </button>
@@ -540,7 +547,7 @@ const CreatorSubscriptions = ({
                 </div>
                 <div
                   className="border rounded-2xl p-6 mt-6"
-                  style={{ borderColor: secondaryColor }}
+                  style={{ borderColor: primaryColor }}
                 >
                   <div>
                     <h6 className="font-semibold text-[16px] mb-3">
@@ -604,6 +611,10 @@ const CreatorSubscriptions = ({
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
                       }`}
+                      style={{
+                        backgroundColor: primaryColor,
+                        color: "#fff",
+                      }}
                     >
                       {/* Pay ₹{totalAmount.toFixed(2)} */}
                       Continue to Payment
@@ -633,4 +644,4 @@ const CreatorSubscriptions = ({
   );
 };
 
-export default CreatorSubscriptions;
+export default SpawellSubscriptions;

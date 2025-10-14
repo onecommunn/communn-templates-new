@@ -22,10 +22,10 @@ const CreatorAboutus: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const isMediaLeft = (data.mediaPlacement ?? "left") === "left";
+  const isMediaLeft = (data?.content?.mediaPlacement ?? "left") === "left";
 
   // Media (ensure 4 slots with graceful fallback)
-  const media = (data.media?.length ? data.media : fallbackMedia).slice(0, 4);
+  const media = (data?.content?.media?.length ? data?.content?.media : fallbackMedia).slice(0, 4);
   const [m1, m2, m3, m4] = [
     media[0] ?? fallbackMedia[0],
     media[1] ?? fallbackMedia[1],
@@ -33,8 +33,8 @@ const CreatorAboutus: React.FC<Props> = ({
     media[3] ?? fallbackMedia[3],
   ];
 
-  const bullets = data.bulletes ?? []; // NOTE: key is 'bulletes' in API
-  const primaryBtn = data.buttons?.[0];
+  const bullets = data?.content?.bulletes ?? []; // NOTE: key is 'bulletes' in API
+  const primaryBtn = data?.content?.buttons?.[0];
 
   return (
     <section
@@ -43,10 +43,10 @@ const CreatorAboutus: React.FC<Props> = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <CreatorSectionHeader
-          title={data.heading || "Know About us"}
+          title={data?.content?.heading || "Know About us"}
           textColor={secondaryColor}
           description={
-            data.subHeading ||
+            data?.content?.subHeading ||
             "Our names are Prachi & Harsh and we’re multi-passionate content creators."
           }
         />
@@ -60,21 +60,21 @@ const CreatorAboutus: React.FC<Props> = ({
               isMediaLeft ? "order-2 md:order-1" : "order-2"
             }`}
           >
-            {data.title && (
+            {data?.content?.title && (
               <h1
                 style={{ color: secondaryColor }}
                 className="text-[#0C0407] font-semibold min-w-fit font-poppins text-2xl md:text-4xl lg:text-5xl/[53px] md:tracking-[-1.44px] text-left"
               >
-                {data.title}
+                {data?.content?.title}
               </h1>
             )}
 
-            {data.description && (
+            {data?.content?.description && (
               <p
                 style={{ color: secondaryColor }}
                 className="text-[#0C0407] align-middle text-[16px]/[24px]"
               >
-                {data.description}
+                {data?.content?.description}
               </p>
             )}
 

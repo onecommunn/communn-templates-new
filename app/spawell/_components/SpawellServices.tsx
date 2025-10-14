@@ -2,101 +2,95 @@
 
 import React from "react";
 import Image from "next/image";
-import {
-  Grid3X3,
-  Leaf,
-  ShieldCheck,
-  Coffee,
-  ScrollText,
-  CalendarClock,
-} from "lucide-react";
-import { color } from "motion/react";
+import * as Lucide from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { ServiceSection } from "@/models/templates/spawell/spawell-home-model";
 
+/** ----- helpers ----- */
+const isUrl = (v?: string) => !!v && (/^(https?:)?\/\//i.test(v) || v.startsWith("/"));
+type LucideIconType = React.ComponentType<LucideProps>;
+function getLucideIcon(name?: string): LucideIconType | null {
+  if (!name) return null;
+  const lib = Lucide as unknown as Record<string, LucideIconType>;
+  return lib[name] ?? null;
+}
+
+/** ----- local types (for rendering) ----- */
 type Point = {
   title: string;
   desc: string;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  direction: "Right" | "Left";
-  color?: string;
+  icon?: string; // Lucide name or image URL
+  direction: "Left" | "Right";
 };
 
-const LEFT_POINTS: Point[] = [
-  {
-    title: "Service Name",
-    desc: "Tailored treatments to meet your unique health and relaxation needs.",
-    Icon: Grid3X3,
-    direction: "Left",
-  },
-  {
-    title: "Natural & Organic Products",
-    desc: "We use only clean, skin-safe, and eco-friendly ingredients.",
-    Icon: Leaf,
-    direction: "Left",
-  },
-  {
-    title: "Tranquil, Hygienic Environment",
-    desc: "Enjoy peace of mind and total serenity in our spa sanctuary.",
-    Icon: ShieldCheck,
-    direction: "Left",
-  },
-];
+const Bullet = ({
+  title,
+  desc,
+  icon,
+  direction,
+}: Point) => {
+  const LucideIcon = icon && !isUrl(icon) ? getLucideIcon(icon) : null;
 
-const RIGHT_POINTS: Point[] = [
-  {
-    title: "Wide Range of Services",
-    desc: "From massages and facials to holistic therapies and coaching.",
-    Icon: Coffee,
-    direction: "Right",
-  },
-  {
-    title: "Holistic Wellness Approach",
-    desc: "We treat the whole you — not just symptoms — mind, body, and spirit.",
-    Icon: ScrollText,
-    direction: "Right",
-  },
-  {
-    title: "Flexible Appointments",
-    desc: "Convenient scheduling that fits your lifestyle — online or in-person.",
-    Icon: CalendarClock,
-    direction: "Right",
-  },
-];
-
-const Bullet = ({ title, desc, Icon, direction }: Point) => (
-  <div
-    className="grid grid-cols-[2.25rem,1fr] gap-3"
-    style={
-      {
-        "--sec": color,
-      } as React.CSSProperties
-    }
-  >
-    <div
-      className={`flex items-center gap-4 ${
-        direction === "Left" ? "flex-row-reverse" : "flex-row"
-      }`}
-    >
-      <div className="flex p-3 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
-        <Icon className="h-10 w-10 text-[var(--sec)]/90" strokeWidth={1} />
-      </div>
-      <div className={`${direction === "Left" ? "text-right" : "text-left"}`}>
-        <h4 className="text-[15px] font-semibold text-[var(--sec)]">{title}</h4>
-        <p className="mt-1 text-sm leading-6 text-[var(--sec)]/70">{desc}</p>
+  return (
+    <div className="grid grid-cols-[2.25rem,1fr] gap-3">
+      <div
+        className={`flex items-center gap-4 ${
+          direction === "Left" ? "flex-row-reverse" : "flex-row"
+        }`}
+      >
+        <div className="flex p-3 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
+          {LucideIcon ? (
+            <LucideIcon className="h-10 w-10 text-[var(--sec)]/90" strokeWidth={1} />
+          ) : icon ? (
+            <Image
+              src={icon}
+              alt={`${title} icon`}
+              width={40}
+              height={40}
+              className="h-10 w-10 object-contain"
+            />
+          ) : (
+            <div className="h-10 w-10" />
+          )}
+        </div>
+        <div className={`${direction === "Left" ? "text-right" : "text-left"}`}>
+          <h4 className="text-[15px] font-semibold text-[var(--sec)]">{title}</h4>
+          <p className="mt-1 text-sm leading-6 text-[var(--sec)]/70">{desc}</p>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const SpawellServices = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: ServiceSection;
 }) => {
+  const source = data?.content;
+
+  // Map incoming services -> alternating left/right points
+  const services = source?.services ?? [];
+  const points: Point[] = services.map((s, idx) => ({
+    title: s.serviceName,
+    desc: s.description,
+    icon: s.media, // can be a Lucide name (e.g., "Leaf") or an image URL
+    direction: idx % 2 === 0 ? "Left" : "Right",
+  }));
+
+  // Split by direction for layout columns
+  const LEFT_POINTS = points.filter((p) => p.direction === "Left");
+  const RIGHT_POINTS = points.filter((p) => p.direction === "Right");
+
+  const centerImage = source?.media?.[0] || "/assets/spawell-services-image-1.jpg"; // fallback
+
   return (
     <section
       id="services"
@@ -137,17 +131,17 @@ const SpawellServices = ({
         >
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--sec)] md:text-5xl">
-              Wellness benefits that soothe, heal,
+              {source?.heading}
             </h2>
             <p className="mt-1 text-2xl font-lora italic text-[var(--sec)]/90 md:text-[34px]">
-              and uplift every guest
+              {source?.subHeading}
             </p>
           </div>
         </AnimatedContent>
 
         {/* Content */}
         <div className="mt-12 grid grid-cols-1 items-center gap-10 md:grid-cols-3 md:gap-0">
-          {/* Left bullets */}
+          {/* Left bullets (mapped) */}
           <div className="space-y-7">
             {LEFT_POINTS.map((p) => (
               <AnimatedContent
@@ -157,20 +151,20 @@ const SpawellServices = ({
                 duration={1}
                 initialOpacity={0}
                 animateOpacity
-                delay={0.1} // optional small stagger
+                delay={0.1}
                 threshold={0.1}
               >
-                <Bullet key={p.title} {...p} />
+                <Bullet {...p} />
               </AnimatedContent>
             ))}
           </div>
 
-          {/* Center circular image */}
+          {/* Center circular image (from data.content.media) */}
           <div className="order-first mx-auto md:order-none">
             <div className="relative w-[353px] h-[522px] md:w-[353px] md:h-[522px] rounded-full overflow-hidden ring-1 ring-white/20 shadow-2xl">
               <Image
-                src={"/assets/spawell-services-image-1.jpg"}
-                alt="Wellness therapist and serene spa ambience"
+                src={centerImage}
+                alt="Spa services"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 18rem, 20rem"
@@ -179,7 +173,7 @@ const SpawellServices = ({
             </div>
           </div>
 
-          {/* Right bullets */}
+          {/* Right bullets (mapped) */}
           <div className="space-y-7">
             {RIGHT_POINTS.map((p) => (
               <AnimatedContent
@@ -193,7 +187,7 @@ const SpawellServices = ({
                 delay={0.1}
                 threshold={0.1}
               >
-                <Bullet key={p.title} {...p} color={secondaryColor} />
+                <Bullet {...p} />
               </AnimatedContent>
             ))}
           </div>

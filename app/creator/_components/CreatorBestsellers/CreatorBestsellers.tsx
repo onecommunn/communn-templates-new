@@ -21,9 +21,9 @@ const CreatorBestsellers: React.FC<props> = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-26">
         <CreatorSectionHeader
-          title={data.heading || "Our Bestsellers"}
+          title={data?.content?.heading || "Our Bestsellers"}
           textColor={secondaryColor}
-          description={`${data?.subHeading || ""}`}
+          description={`${data?.content?.subHeading || ""}`}
         />
         <CatalogGrid
           primaryColor={primaryColor}

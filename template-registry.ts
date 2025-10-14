@@ -21,6 +21,9 @@ import YoganaLogin from "./app/yogana/login/page";
 import YoganaSubscriptionsPage from "./app/yogana/subscriptions/page";
 import SpawellRoot from "./app/spawell/page";
 import SpawellShell from "./app/spawell/SpawellShell";
+import SpawellSubscriptionsPage from "./app/spawell/subscriptions/page";
+import SpawellEventDetailsPage from "./app/spawell/event-details/page";
+import SpawellLogin from "./app/spawell/login/page";
 
 export const templateLayouts: Record<
   string,
@@ -55,6 +58,9 @@ export const templates: Record<
   },
   spawell: {
     "/": SpawellRoot,
+    "/subscriptions": SpawellSubscriptionsPage,
+    "/login": SpawellLogin,
+    "/event-details": SpawellEventDetailsPage,
   },
   fitkit : 
   { "/": DefaultRoot

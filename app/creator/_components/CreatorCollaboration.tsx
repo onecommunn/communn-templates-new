@@ -37,12 +37,12 @@ const CreatorCollaboration: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
 }) => {
-  const heading = data?.heading ?? "";
+  const heading = data?.content?.heading ?? "";
   const description =
-    data.description ??
+    data?.content?.description ??
     "Get in touch with the 250+ companies who collaborate with us";
 
-  const logos = (data.media?.length ? data.media : FALLBACK_LOGOS).map(
+  const logos = (data?.content?.media?.length ? data?.content?.media : FALLBACK_LOGOS).map(
     normalizeUrl
   );
 

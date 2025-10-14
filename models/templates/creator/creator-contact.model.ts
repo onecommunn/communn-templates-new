@@ -29,23 +29,27 @@ export interface ContactField {
 // Contact details section
 export interface ContactDetailsSection {
   sectionName: "contactSection";
-  title: string;
-  description?: string;
+  content: {
+    title: string;
+    description?: string;
+    email: ContactField;
+    call: ContactField;
+    address: ContactField;
+  };
   order: number;
   isActive: boolean;
-  email: ContactField;
-  call: ContactField;
-  address: ContactField;
 }
 
 // CTA Section (reusable from other pages)
 export interface CTASection {
   sectionName: "ctaSection";
-  title: string;
-  description?: string;
+  content: {
+    title: string;
+    description?: string;
+    buttons?: Button[];
+  };
   order: number;
   isActive: boolean;
-  buttons?: Button[];
 }
 
 /** ---------------- Discriminated Union ---------------- */

@@ -180,14 +180,14 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
         style={{ color: secondaryColor }}
         className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
       >
-        {data?.heading}
+        {data?.content?.heading}
       </h2>
       <div className="flex items-center justify-center w-full mt-3">
         <p
           style={{ color: neutralColor }}
           className={`font-plus-jakarta text-[16px] text-[#707070] md:max-w-xl`}
         >
-          {data?.subHeading}
+          {data?.content?.subHeading}
         </p>
       </div>
     </div>

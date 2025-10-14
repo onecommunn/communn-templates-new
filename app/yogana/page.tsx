@@ -101,7 +101,7 @@ const YoganaRoot = () => {
           neutralColor={neutralColor}
         />
       )}
-      {servicesSection && (
+      {servicesSection  && (
         <YoganaServices
           data={servicesSection}
           primaryColor={primaryColor}

@@ -44,44 +44,44 @@ export interface CTAButton {
 // "Two Column Section"
 export interface TwoColumnSection extends SectionBase {
   sectionName: "twoColumnSection";
-  heading: string;
-  subHeading?: string;
-  title?: string;
-  description?: string;
-  story?: string;
-  mediaPlacement?: MediaPlacement;
-  media?: string[]; // URLs
-  /**
-   * NOTE: Key is 'bulletes' in the payload (intentional misspelling).
-   * Keep the same key to match backend shape.
-   */
-  bulletes?: string[];
-  mission?: string;
-  vision?: string;
+  content: {
+    heading: string;
+    subHeading?: string;
+    title?: string;
+    description?: string;
+    story?: string;
+    mediaPlacement?: MediaPlacement;
+    media?: string[];
+    bulletes?: string[];
+    mission?: string;
+    vision?: string;
+  };
 }
 
 // "Journey Timeline"
 export interface JourneyTimelineSection extends SectionBase {
   sectionName: "journeyTimelineSection";
-  heading: string;
-  subHeading?: string;
-  timeline: TimelineItem[];
+  content: {
+    heading: string;
+    subHeading?: string;
+    timeline: TimelineItem[];
+  };
 }
 
 // "Our Team"
 export interface OurTeamSection extends SectionBase {
   sectionName: "ourTeamSection";
-  heading: string;
-  subHeading?: string;
-  members: TeamMember[];
+  content: {
+    heading: string;
+    subHeading?: string;
+    members: TeamMember[];
+  };
 }
 
 // "CTA Section"
 export interface CTASection extends SectionBase {
   sectionName: "ctaSection";
-  title: string;
-  description?: string;
-  buttons?: CTAButton[];
+  content: { title: string; description?: string; buttons?: CTAButton[] };
 }
 
 /** ---------------- Discriminated Union ---------------- */

@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { PlansSection } from "@/models/templates/spawell/spawell-home-model";
 
 type Plan = {
   index: number;
@@ -51,6 +52,7 @@ type Props = {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: PlansSection;
 };
 
 const Card: React.FC<Plan> = ({
@@ -186,7 +188,7 @@ const Card: React.FC<Plan> = ({
         </Dialog>
       ) : (
         <Link
-          href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
+          href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${coverImage}`}
         >
           <div
             className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold text-[#5D3222]"
@@ -266,6 +268,7 @@ const SpawellPlans: React.FC<Props> = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }) => {
   const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
     undefined
@@ -273,6 +276,7 @@ const SpawellPlans: React.FC<Props> = ({
   const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
     undefined
   );
+  const source = data?.content;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
@@ -366,13 +370,13 @@ const SpawellPlans: React.FC<Props> = ({
               className="text-3xl font-semibold tracking-[-0.02em] text-[#4b2a1d] md:text-5xl"
               style={{ color: primaryColor }}
             >
-              Inside the ultimate luxury
+              {source?.heading}
             </h2>
             <p
               className="mt-1 text-2xl font-lora italic text-[#4b2a1d]/90 md:text-[34px]"
               style={{ color: primaryColor }}
             >
-              spa experience
+              {source?.subHeading}
             </p>
           </div>
           <Carousel
@@ -403,7 +407,10 @@ const SpawellPlans: React.FC<Props> = ({
   }
 
   return (
-    <section className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta" id="plans">
+    <section
+      className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta"
+      id="plans"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
         <div className="mb-2 flex justify-center">

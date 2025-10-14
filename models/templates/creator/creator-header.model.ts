@@ -24,6 +24,8 @@ export interface HeaderSection {
   sectionName: "headerSection";
   order: number;
   isActive: boolean;
-  media?: string[]; // image URLs
-  buttons?: HeaderButton[];
+  content: {
+    media?: string[]; // image URLs
+    buttons?: HeaderButton[];
+  };
 }

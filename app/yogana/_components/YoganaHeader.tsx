@@ -189,7 +189,7 @@ const YoganaHeader = ({
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
-                data?.media?.[0] ||
+                data?.content?.media?.[0] ||
                 "https://cdn.builder.io/api/v1/image/assets%2F228d3b2c4554432dbdd1f0f27ee6ba7c%2Faf41e301c5b247df80bb6243baf910cd"
               }
               alt="logo"
@@ -271,7 +271,7 @@ const YoganaHeader = ({
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={data?.media?.[0] || "/logo/yogana_Light_Logo.png"}
+                        src={data?.content?.media?.[0] || "/logo/yogana_Light_Logo.png"}
                         alt="logo"
                         width={120}
                         height={100}
@@ -339,10 +339,10 @@ const YoganaHeader = ({
                       <div className="flex items-center gap-4">
                         <Phone className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
                         <a
-                          href={`tel:${contactData?.call?.value ?? ""}`}
+                          href={`tel:${contactData?.content?.call?.value ?? ""}`}
                           className="text-md text-white hover:underline"
                         >
-                          {contactData?.call?.value}
+                          {contactData?.content?.call?.value}
                         </a>
                       </div>
 
@@ -350,10 +350,10 @@ const YoganaHeader = ({
                       <div className="flex items-center gap-4">
                         <Mail className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
                         <a
-                          href={`mailto:${contactData?.email?.value ?? ""}`}
+                          href={`mailto:${contactData?.content?.email?.value ?? ""}`}
                           className="text-md text-white underline hover:no-underline"
                         >
-                          {contactData?.email?.value}
+                          {contactData?.content?.email?.value}
                         </a>
                       </div>
 
@@ -361,7 +361,7 @@ const YoganaHeader = ({
                       <div className="flex items-start gap-4">
                         <MapPin className="text-white w-6 h-6 mt-1 shrink-0" strokeWidth={1.5} />
                         <p className="text-md text-white leading-relaxed break-words">
-                          {contactData?.address?.value}
+                          {contactData?.content?.address?.value}
                         </p>
                       </div>
                     </div>
@@ -398,7 +398,7 @@ const YoganaHeader = ({
                         const url = normalize(each.url) || "/";
                         return (
                           <Link
-                            href={url}
+                            href={url || "/"}
                             key={`${key}-${idx}`}
                             aria-label={each.platform}
                             className="group text-white flex flex-col items-center gap-2 hover:text-[#C2A74E]"

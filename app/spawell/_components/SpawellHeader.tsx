@@ -19,6 +19,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AuthContext } from "@/contexts/Auth.context";
+import { Header } from "@/models/templates/spawell/spawell-home-model";
 import { logoutService } from "@/services/logoutService";
 import { ArrowRight, Facebook, Linkedin, Menu, Twitter } from "lucide-react";
 import Link from "next/link";
@@ -29,15 +30,18 @@ const SpawellHeader = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: Header;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const auth = useContext(AuthContext);
   const { communityId } = auth;
+  const source = data?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -51,19 +55,22 @@ const SpawellHeader = ({
   };
 
   return (
-    <header className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[var(--neu)]"  style={
-            {
-              "--pri": primaryColor,
-              "--sec": secondaryColor,
-              "--neu": neutralColor,
-            } as React.CSSProperties
-          }>
+    <header
+      className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[var(--neu)]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="py-2  mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[var(--pri)] hidden md:flex md:flex-row items-center justify-between">
         <div>
           <p className="text-[var(--sec)] text-[14px] font-normal">
-            Our agents work with you to customize policies{" "}
+            {source?.subHeading}{" "}
             <span className="font-bold hover:underline">
-              <Link href="/">Explore Our Services</Link>
+              <Link href="/">{source?.heading}</Link>
             </span>
           </p>
         </div>
@@ -90,7 +97,7 @@ const SpawellHeader = ({
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
-              src={"/assets/spawell-logo.png"}
+              src={source?.media?.[0] || "/assets/spawell-logo.png"}
               alt="logo"
               className="w-32 h-15 object-contain"
             />
@@ -223,7 +230,7 @@ const SpawellHeader = ({
                     <Link
                       href="/"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{color:primaryColor}}
+                      style={{ color: primaryColor }}
                     >
                       Home
                     </Link>
@@ -232,7 +239,7 @@ const SpawellHeader = ({
                     <Link
                       href="/#about-us"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{color:primaryColor}}
+                      style={{ color: primaryColor }}
                     >
                       About us
                     </Link>
@@ -241,7 +248,7 @@ const SpawellHeader = ({
                     <Link
                       href="/#services"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{color:primaryColor}}
+                      style={{ color: primaryColor }}
                     >
                       Services
                     </Link>
@@ -250,7 +257,7 @@ const SpawellHeader = ({
                     <Link
                       href="/#events"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{color:primaryColor}}
+                      style={{ color: primaryColor }}
                     >
                       Events
                     </Link>
@@ -259,7 +266,7 @@ const SpawellHeader = ({
                     <Link
                       href="/#plans"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{color:primaryColor}}
+                      style={{ color: primaryColor }}
                     >
                       Plans
                     </Link>
@@ -268,7 +275,7 @@ const SpawellHeader = ({
                     <Link
                       href="/#contact"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{color:primaryColor}}
+                      style={{ color: primaryColor }}
                     >
                       Contact
                     </Link>

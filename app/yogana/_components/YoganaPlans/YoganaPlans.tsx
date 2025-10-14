@@ -19,9 +19,6 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 
-const PlanSkeletonCard = () => (
-  <Skeleton className="h-[420px] w-full bg-gray-300 rounded-[30px]" />
-);
 
 function Dots({
   api,
@@ -195,7 +192,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         }}
         className={`text-[#C2A74E] font-alex-brush text-3xl`}
       >
-        {data?.heading}
+        {data?.content?.heading}
       </p>
       <h2
         style={{
@@ -203,7 +200,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         }}
         className={`text-[#000] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
       >
-        {data?.subHeading}
+        {data?.content?.subHeading}
       </h2>
     </div>
   );
@@ -231,7 +228,12 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                   key={i}
                   className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <PlanSkeletonCard />
+                  <Skeleton
+                    className="h-[420px] w-full bg-gray-300 rounded-[30px]"
+                    style={{
+                      backgroundColor: primaryColor,
+                    }}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>

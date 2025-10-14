@@ -38,14 +38,14 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
           <div className="relative mx-auto px-10 md:px-10">
             <Image
-              src={data?.media?.[0] || "/assets/yogana-about-image-1.jpg"}
+              src={data?.content?.media?.[0] || "/assets/yogana-about-image-1.jpg"}
               alt="yogana-about-image-1"
               width={526}
               height={636}
               unoptimized
             />
             <Image
-              src={data?.media?.[1] || "/assets/yogana-about-image-2.jpg"}
+              src={data?.content?.media?.[1] || "/assets/yogana-about-image-2.jpg"}
               alt="yogana-about-image-2"
               width={197}
               height={226}
@@ -69,7 +69,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                   color: primaryColor,
                 }}
               >
-                {data?.heading}
+                {data?.content?.heading}
               </p>
               <h3
                 className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold"
@@ -77,7 +77,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                   color: secondaryColor,
                 }}
               >
-                {data?.subHeading}
+                {data?.content?.subHeading}
               </h3>
             </div>
             <p
@@ -86,13 +86,13 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                 color: neutralColor,
               }}
             >
-              {data?.description}
+              {data?.content?.description}
             </p>
             <div>
               <ul className="space-y-2.5">
-                {data?.bulletes &&
-                  data?.bulletes?.length > 0 &&
-                  data?.bulletes?.map((each, idx) => (
+                {data?.content?.bulletes &&
+                  data?.content?.bulletes?.length > 0 &&
+                  data?.content?.bulletes?.map((each, idx) => (
                     <li className="flex items-center gap-2" key={idx}>
                       <Check
                         size={20}

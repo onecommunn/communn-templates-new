@@ -228,13 +228,13 @@ const YoganaContact: FC<YoganaContactProps> = ({
               style={{ color: secondaryColor }}
               className="mt-1 font-cormorant font-semibold text-4xl md:text-5xl"
             >
-              {data?.heading}
+              {data?.content?.heading}
             </h3>
             <p
               style={{ color: neutralColor }}
               className="mt-3 font-plus-jakarta max-w-md text-[16px] leading-relaxed"
             >
-              {data?.subHeading}
+              {data?.content?.subHeading}
             </p>
 
             <div className="mt-8 space-y-6">
@@ -251,7 +251,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
                     Have any question?
                   </p>
                   <p style={{ color: secondaryColor }} className="mt-1 text-md">
-                    {data?.call?.value}
+                    {data?.content?.call?.value}
                   </p>
                 </div>
               </div>
@@ -269,7 +269,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
                     Write email
                   </p>
                   <p style={{ color: secondaryColor }} className="mt-1 text-md">
-                    {data?.email?.value}
+                    {data?.content?.email?.value}
                   </p>
                 </div>
               </div>
@@ -293,7 +293,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
                     Visit anytime
                   </p>
                   <p className="mt-1 text-md" style={{ color: secondaryColor }}>
-                    {data?.address?.value}
+                    {data?.content?.address?.value}
                   </p>
                 </div>
               </div>

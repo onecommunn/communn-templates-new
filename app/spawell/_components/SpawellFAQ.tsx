@@ -7,7 +7,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CheckCircle2, Gem } from "lucide-react";
+import { FaqSection } from "@/models/templates/spawell/spawell-home-model";
+import type { LucideProps } from "lucide-react";
+import * as Lucide from "lucide-react";
+import Image from "next/image";
 
 const FAQS = [
   {
@@ -28,47 +31,28 @@ const FAQS = [
   },
 ];
 
-const StatRow = ({
-  icon,
-  title,
-  desc,
-  primaryColor,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-  primaryColor: string;
-}) => (
-  <div
-    className="py-4"
-    style={
-      {
-        "--pri": primaryColor,
-      } as React.CSSProperties
-    }
-  >
-    <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex p-1 items-center justify-center rounded-full bg-[var(--pri)] text-white">
-        {icon}
-      </div>
-      <div>
-        <h4 className="text-sm font-semibold text-[var(--pri)]">{title}</h4>
-        <p className="mt-1 text-sm leading-6 text-[var(--pri)]">{desc}</p>
-      </div>
-    </div>
-    <div className="mt-4 border-t border-neutral-200" />
-  </div>
-);
+const isUrl = (v: string) => /^https?:\/\//i?.test(v) || v?.startsWith("/");
+
+type LucideIconType = React.ComponentType<LucideProps>;
+function getLucideIcon(name: string): LucideIconType | null {
+  // Cast through unknown to satisfy TS (avoids the 2352 error)
+  const lib = Lucide as unknown as Record<string, LucideIconType>;
+  return lib[name] ?? null;
+}
 
 const SpawellFAQ = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: FaqSection;
 }) => {
+  const source = data?.content;
+  const FAQS = source?.faqItem;
   return (
     <section
       className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta"
@@ -88,28 +72,62 @@ const SpawellFAQ = ({
               • FAQ
             </div>
             <h2 className="text-3xl font-semibold tracking-[-0.02em] text-[var(--pri)] md:text-5xl">
-              Frequently Asked{" "}
-              <span className="font-lora italic font-normal">Questions</span>
+              {source?.heading}{" "}
+              <span className="font-lora italic font-normal">
+                {source?.subHeading}
+              </span>
             </h2>
             <p className="mt-3 max-w-lg text-sm leading-7 text-[var(--pri)]">
-              Explore our Frequently Asked Questions for quick answers on
-              services, bookings, and care—helping you make informed wellness
-              decisions.
+              {source?.description}
             </p>
 
             <div className="mt-6 rounded-2xl bg-white">
-              <StatRow
-                icon={<CheckCircle2 className="h-4 w-4" />}
-                title="10+ Years of Experience"
-                desc="With over a decade of dedicated service, we’ve built a reputation for excellence and trust."
-                primaryColor={primaryColor}
-              />
-              <StatRow
-                icon={<Gem className="h-4 w-4" />}
-                title="30+ Unique Treatments Offered"
-                desc="From soothing massages and revitalizing facials to holistic therapies."
-                primaryColor={primaryColor}
-              />
+              {source?.itemBox?.map((item, idx) => {
+                const LucideIcon = !isUrl(item?.media)
+                  ? getLucideIcon(item?.media)
+                  : null;
+                return (
+                  <div
+                    className="py-4"
+                    style={
+                      {
+                        "--pri": primaryColor,
+                      } as React.CSSProperties
+                    }
+                    key={idx}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5 flex p-1 items-center justify-center rounded-full bg-[var(--pri)] text-white">
+                        {LucideIcon ? (
+                          <LucideIcon
+                            strokeWidth={1}
+                            size={30}
+                            className="h-4 w-4"
+                          />
+                        ) : (
+                          <Image
+                            src={item?.media || ""}
+                            alt={item?.title || "feature icon"}
+                            width={16}
+                            height={16}
+                            className="object-contain"
+                            priority={false}
+                          />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-[var(--pri)]">
+                          {item?.title}
+                        </h4>
+                        <p className="mt-1 text-sm leading-6 text-[var(--pri)]">
+                          {item?.description}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-4 border-t border-neutral-200" />
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -120,6 +138,7 @@ const SpawellFAQ = ({
               collapsible
               className="space-y-3"
               defaultValue="faq-0"
+              
             >
               {FAQS.map((item, i) => (
                 <AccordionItem
@@ -128,10 +147,10 @@ const SpawellFAQ = ({
                   className="overflow-hidden rounded-2xl bg-[var(--neu)] border border-[var(--pri)]/10 data-[state=open]:border-transparent data-[state=open]:bg-[var(--pri)] data-[state=open]:text-[var(--sec)]"
                 >
                   <AccordionTrigger className="cursor-pointer  px-4 py-4 text-left text-sm font-semibold text-[var(--pri)] hover:no-underline data-[state=open]:text-[var(--sec)]">
-                    {item.q}
+                    {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="px-4 pb-4 text-sm leading-6 text-[var(--sec)] data-[state=open]:text-[var(--sec)]/90">
-                    {item.a}
+                    {item.answer}
                   </AccordionContent>
                 </AccordionItem>
               ))}

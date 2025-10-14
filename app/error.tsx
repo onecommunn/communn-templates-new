@@ -24,7 +24,7 @@ export default function Error({
           }
           alt="bg_vido"
         />
-        <h1 className="absolute bottom-20 text-xl font-inter font-semibold">Oops! Something went wrong</h1>
+        <h1 className="absolute md:bottom-20 text-xl font-inter font-semibold">Oops! Something went wrong</h1>
       </div>
     </section>
   );

@@ -88,7 +88,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
               </Link>
 
               <p className="mt-5 max-w-sm text-sm leading-6 text-neutral-300">
-                {data?.footer?.description}
+                {data?.content?.description}
               </p>
 
               {/* newsletter */}
@@ -114,16 +114,16 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
 
               {/* socials */}
               <div className="mt-5 flex items-center gap-4 text-neutral-300">
-                {data?.footer?.socialMedia.map(
+                {data?.content?.socialMedia?.map(
                   (each: SocialMediaLink, idx: number) => {
-                    const key = normalize(each.platform).toLowerCase();
+                    const key = normalize(each?.platform).toLowerCase();
                     const Icon = PLATFORM_ICON[key] ?? Globe;
-                    const url = normalize(each.url) || "/";
+                    const url = normalize(each?.url) || "/";
                     return (
                       <Link
-                        href={url}
+                        href={url || "/"}
                         key={`${key}-${idx}`}
-                        aria-label={each.platform}
+                        aria-label={each?.platform}
                       >
                         <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
                       </Link>
@@ -191,7 +191,9 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
 
             {/* col 4: contact */}
             <div className="lg:col-span-4">
-              <h4 className="font-cormorant text-2xl text-neutral-100">Contact</h4>
+              <h4 className="font-cormorant text-2xl text-neutral-100">
+                Contact
+              </h4>
 
               <ul className="mt-5 space-y-5 text-sm">
                 {/* Address */}
@@ -201,7 +203,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                     aria-hidden="true"
                   />
                   <span className="leading-relaxed break-words">
-                    {contactData?.address?.value}
+                    {contactData?.content?.address?.value}
                   </span>
                 </li>
 
@@ -211,8 +213,11 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                     className="h-5 w-5 mt-[2px] flex-shrink-0 text-neutral-400"
                     aria-hidden="true"
                   />
-                  <a href={`tel:${contactData?.call?.value}`} className="hover:text-white">
-                    {contactData?.call?.value}
+                  <a
+                    href={`tel:${contactData?.content?.call?.value}`}
+                    className="hover:text-white"
+                  >
+                    {contactData?.content?.call?.value}
                   </a>
                 </li>
 
@@ -223,22 +228,21 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                     aria-hidden="true"
                   />
                   <a
-                    href={`mailto:${contactData?.email?.value}`}
+                    href={`mailto:${contactData?.content?.email?.value}` || "/"}
                     className="underline hover:text-white break-words"
                   >
-                    {contactData?.email?.value}
+                    {contactData?.content?.email?.value}
                   </a>
                 </li>
               </ul>
             </div>
-
           </div>
         </div>
       </footer>
       {/* bottom bar */}
       <div className="px-10 relative z-10 border-t border-white/10 bg-[#141215] flex flex-col md:flex-row items-center justify-between w-full">
         <div className="max-w-7xl px-4 py-6 text-center text-sm text-neutral-400">
-          {data?.footer?.copyrightText}
+          {data?.content?.copyrightText}
         </div>
         <div className="max-w-7xl py-6 text-center text-sm text-neutral-400">
           Made with ❤️ by communn.io

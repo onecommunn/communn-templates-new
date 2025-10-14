@@ -155,6 +155,10 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     setOpen(true);
   };
 
+  if (data?.content?.services?.length <= 0) {
+    return null;
+  }
+
   return (
     <section
       id="services"
@@ -188,7 +192,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
             color: primaryColor,
           }}
         >
-          {data?.heading}
+          {data?.content?.heading}
         </p>
         <h2
           className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold"
@@ -196,7 +200,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
             color: secondaryColor,
           }}
         >
-          {data?.subHeading}
+          {data?.content?.subHeading}
         </h2>
       </div>
 
@@ -209,7 +213,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
           setApi={setApiMain}
         >
           <CarouselContent>
-            {data?.services?.map((svc: Service, idx) => (
+            {data?.content?.services?.map((svc: Service, idx) => (
               <CarouselItem
                 key={idx}
                 className="basis-1/2 md:basis-1/3 lg:basis-1/4"
