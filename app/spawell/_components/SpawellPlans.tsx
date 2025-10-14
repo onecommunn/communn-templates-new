@@ -46,6 +46,7 @@ type PlanCardProps = {
   period?: string;
   coverImage: string;
   isPrivate: boolean;
+  isRequested: boolean;
 };
 
 type Props = {
@@ -68,6 +69,7 @@ const Card: React.FC<PlanCardProps> = ({
   period,
   coverImage,
   isPrivate,
+  isRequested,
 }) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -76,7 +78,8 @@ const Card: React.FC<PlanCardProps> = ({
   const { SendCommunityRequest } = useRequests();
   const [mounted, setMounted] = useState(false);
 
-  const isSubscribed = isLoggedIn && subscribers?.some((sub) => sub._id === userId);
+  const isSubscribed =
+    isLoggedIn && subscribers?.some((sub) => sub._id === userId);
 
   useEffect(() => setMounted(true), []);
   if (authContext?.loading || !mounted) return null;
@@ -112,7 +115,16 @@ const Card: React.FC<PlanCardProps> = ({
   };
 
   return (
-    <div className="group block rounded-3xl bg-white p-3 transition-shadow" aria-label={title}>
+    <div
+      className="group block rounded-3xl bg-white p-3 transition-shadow"
+      aria-label={title}
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       {/* Image */}
       <div className="relative overflow-hidden rounded-2xl">
         <div className="relative aspect-[16/11]">
@@ -138,7 +150,10 @@ const Card: React.FC<PlanCardProps> = ({
         </h3>
         {price !== undefined && price !== null && String(price).length > 0 && (
           <p className="mt-1 text-sm" style={{ color: primaryColor }}>
-            <span className="text-lg font-semibold" style={{ color: primaryColor }}>
+            <span
+              className="text-lg font-semibold"
+              style={{ color: primaryColor }}
+            >
               ₹{price}
             </span>{" "}
             {period ? `/ ${period}` : null}
@@ -175,9 +190,12 @@ const Card: React.FC<PlanCardProps> = ({
               </div>
             </DialogTrigger>
             <DialogContent>
-              <DialogTitle style={{ color: primaryColor }}>Join Community</DialogTitle>
+              <DialogTitle style={{ color: primaryColor }}>
+                Join Community
+              </DialogTitle>
               <DialogDescription style={{ color: primaryColor }}>
-                You're not a member of this community yet. Would you like to join now?
+                You're not a member of this community yet. Would you like to
+                join now?
               </DialogDescription>
               <div className="mt-4 flex justify-end">
                 <Button
@@ -193,6 +211,14 @@ const Card: React.FC<PlanCardProps> = ({
               </div>
             </DialogContent>
           </Dialog>
+        ) : isRequested ? (
+          <div className="mt-4 inline-flex flex-col text-[var(--pri)] gap-2 text-[16px] font-bold">
+            <h5>Already Requested</h5>
+            <p className="font-normal text-sm">
+              * Your request will be sent to the admin. You can proceed with
+              payment once approved.
+            </p>
+          </div>
         ) : (
           <Dialog>
             <DialogTrigger asChild>
@@ -206,13 +232,21 @@ const Card: React.FC<PlanCardProps> = ({
               </div>
             </DialogTrigger>
             <DialogContent>
-              <DialogTitle style={{ color: primaryColor }}>Send Join Request</DialogTitle>
+              <DialogTitle style={{ color: primaryColor }}>
+                Send Join Request
+              </DialogTitle>
               <DialogDescription style={{ color: primaryColor }}>
-                This is a private community. Your request will be sent to the admin. You can proceed with payment once approved.
+                This is a private community. Your request will be sent to the
+                admin. You can proceed with payment once approved.
               </DialogDescription>
               <div className="mt-4 flex justify-end">
                 <Button
-                  onClick={() => handleClickSendRequest(communityId, "Request to join the community.")}
+                  onClick={() =>
+                    handleClickSendRequest(
+                      communityId,
+                      "Request to join the community."
+                    )
+                  }
                   disabled={isSubscribed}
                   style={{
                     backgroundColor: primaryColor,
@@ -227,7 +261,11 @@ const Card: React.FC<PlanCardProps> = ({
           </Dialog>
         )
       ) : (
-        <Link href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(coverImage)}`}>
+        <Link
+          href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(
+            coverImage
+          )}`}
+        >
           <div
             className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
             style={{ color: primaryColor, cursor: "pointer" }}
@@ -307,8 +345,12 @@ const SpawellPlans: React.FC<Props> = ({
   neutralColor,
   data,
 }) => {
-  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(undefined);
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
+  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
+    undefined
+  );
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
+    undefined
+  );
   const source = data?.content;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
@@ -317,6 +359,8 @@ const SpawellPlans: React.FC<Props> = ({
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
   const { communityId, communityData } = useCommunity();
+
+  console.log(authContext, "authContext");
 
   // Persist the autoplay plugin instance
   const autoplay = useRef(
@@ -362,7 +406,11 @@ const SpawellPlans: React.FC<Props> = ({
 
       if (Array.isArray(response)) {
         setPlans(response as TrainingPlan[]);
-      } else if (response && typeof response === "object" && "myPlans" in response) {
+      } else if (
+        response &&
+        typeof response === "object" &&
+        "myPlans" in response
+      ) {
         setPlans(response.myPlans as TrainingPlan[]);
         setIsSubscribed(!!response.isSubscribedCommunity);
       } else {
@@ -390,17 +438,30 @@ const SpawellPlans: React.FC<Props> = ({
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-4">
-            <h2 className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl" style={{ color: primaryColor }}>
+            <h2
+              className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl"
+              style={{ color: primaryColor }}
+            >
               {source?.heading}
             </h2>
-            <p className="mt-1 text-2xl font-lora italic md:text-[34px]" style={{ color: primaryColor }}>
+            <p
+              className="mt-1 text-2xl font-lora italic md:text-[34px]"
+              style={{ color: primaryColor }}
+            >
               {source?.subHeading}
             </p>
           </div>
-          <Carousel opts={{ align: "start", loop: false }} className="w-full" setApi={setApiLoading}>
+          <Carousel
+            opts={{ align: "start", loop: false }}
+            className="w-full"
+            setApi={setApiLoading}
+          >
             <CarouselContent>
               {Array.from({ length: 8 }).map((_, i) => (
-                <CarouselItem key={i} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
+                <CarouselItem
+                  key={i}
+                  className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3"
+                >
                   <Skeleton
                     className="h-[420px] w-full rounded-[30px]"
                     style={{ backgroundColor: "#E5E7EB" }} // gray-200 for skeleton
@@ -417,8 +478,17 @@ const SpawellPlans: React.FC<Props> = ({
     );
   }
 
+  const isRequested = Boolean(
+    communityData?.community?.requests?.some(
+      (req: any) => req.createdBy?._id === authContext?.user?.id
+    )
+  );
+
   return (
-    <section className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta" id="plans">
+    <section
+      className="relative overflow-hidden bg-white py-16 md:py-24 font-plus-jakarta"
+      id="plans"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Eyebrow */}
         <div className="mb-2 flex justify-center">
@@ -429,10 +499,16 @@ const SpawellPlans: React.FC<Props> = ({
 
         {/* Heading */}
         <div className="text-center mb-4">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl" style={{ color: primaryColor }}>
+          <h2
+            className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl"
+            style={{ color: primaryColor }}
+          >
             Inside the ultimate luxury
           </h2>
-          <p className="mt-1 text-2xl font-lora italic md:text-[34px]" style={{ color: primaryColor }}>
+          <p
+            className="mt-1 text-2xl font-lora italic md:text-[34px]"
+            style={{ color: primaryColor }}
+          >
             spa experience
           </p>
         </div>
@@ -446,7 +522,10 @@ const SpawellPlans: React.FC<Props> = ({
         >
           <CarouselContent>
             {plans.map((plan, index) => (
-              <CarouselItem key={plan._id ?? index} className="basis-full md:basis-1/3">
+              <CarouselItem
+                key={plan._id ?? index}
+                className="basis-full md:basis-1/3"
+              >
                 <Card
                   title={plan.name}
                   description={plan.description || plan.summary}
@@ -466,8 +545,11 @@ const SpawellPlans: React.FC<Props> = ({
                       ? `${plan.interval} ${capitalizeWords(plan.duration)}`
                       : undefined
                   }
-                  coverImage={plan?.image?.value || "/assets/spawell-plans-image-1.jpg"}
+                  coverImage={
+                    plan?.image?.value || "/assets/spawell-plans-image-1.jpg"
+                  }
                   isPrivate={communityData?.community?.type === "PRIVATE"}
+                  isRequested={!!isRequested}
                 />
               </CarouselItem>
             ))}

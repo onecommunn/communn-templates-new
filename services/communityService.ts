@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 /** ---------------- Interfaces ------------------ **/
 
@@ -17,10 +17,10 @@ export interface Community {
   fullAddress: string;
   city: string;
   gstNumber: string;
-  type: 'PRIVATE' | 'PUBLIC';
-  collectSubscription: 'YES' | 'NO';
+  type: "PRIVATE" | "PUBLIC";
+  collectSubscription: "YES" | "NO";
   createdBy: string;
-  status: 'CREATED' | 'ACTIVE' | 'INACTIVE';
+  status: "CREATED" | "ACTIVE" | "INACTIVE";
   banner: string;
   logo: string;
   gallery: string[];
@@ -41,6 +41,7 @@ export interface Community {
   createdAt: string;
   updatedAt: string;
   template: string;
+  requests: any[];
 }
 
 export interface EnabledService {
@@ -94,7 +95,7 @@ export interface User {
 export interface Plan {
   _id: string;
   name: string;
-  duration: 'MONTH' | 'WEEK' | 'YEAR';
+  duration: "MONTH" | "WEEK" | "YEAR";
   interval: string;
   endDateDuration: string;
   endDateDurationCount: string;
@@ -116,31 +117,33 @@ export interface Plan {
 
 /** ---------------- API Constants ------------------ **/
 
-const COMMUNITY_API_BASE = 'https://communn.io/api/v2.0/community';
-const DOMAIN_API_BASE = 'https://communn.io/api/v2.0/domain';
+const COMMUNITY_API_BASE = "https://communn.io/api/v2.0/community";
+const DOMAIN_API_BASE = "https://communn.io/api/v2.0/domain";
 
 /** ---------------- API Function ------------------ **/
 
-export async function getCommunityData(hostOrSubdomain: string): Promise<CommunityResponse> {
-  const cleanedHost = hostOrSubdomain.split(':')[0];
-  let endpoint = '';
+export async function getCommunityData(
+  hostOrSubdomain: string
+): Promise<CommunityResponse> {
+  const cleanedHost = hostOrSubdomain.split(":")[0];
+  let endpoint = "";
 
   const isCustomDomain =
-    cleanedHost.includes('.') &&
-    !cleanedHost.includes('localhost') &&
-    !cleanedHost.includes('mycommunn.com');
+    cleanedHost.includes(".") &&
+    !cleanedHost.includes("localhost") &&
+    !cleanedHost.includes("mycommunn.com");
 
   if (isCustomDomain) {
     endpoint = `${DOMAIN_API_BASE}/${cleanedHost}`;
   } else {
-    const subdomain = cleanedHost.split('.')[0];
+    const subdomain = cleanedHost.split(".")[0];
     endpoint = `${COMMUNITY_API_BASE}/by-subdomain/${subdomain}`;
   }
   try {
     const response = await axios.get<CommunityResponse>(endpoint);
     return response.data;
   } catch (error) {
-    console.error('❌ Axios error fetching community:', error);
+    console.error("❌ Axios error fetching community:", error);
 
     return {
       status: false,
@@ -155,24 +158,24 @@ export async function getCommunityData(hostOrSubdomain: string): Promise<Communi
           member: false,
           custompay: false,
         },
-        _id: '',
-        name: 'Unknown Community',
-        category: '',
-        description: '',
+        _id: "",
+        name: "Unknown Community",
+        category: "",
+        description: "",
         zipCode: null,
-        fullAddress: '',
-        city: '',
-        gstNumber: '',
-        type: 'PRIVATE',
-        collectSubscription: 'NO',
-        createdBy: '',
-        status: 'CREATED',
-        banner: '',
-        logo: '',
+        fullAddress: "",
+        city: "",
+        gstNumber: "",
+        type: "PRIVATE",
+        collectSubscription: "NO",
+        createdBy: "",
+        status: "CREATED",
+        banner: "",
+        logo: "",
         gallery: [],
         members: [],
         maxMembers: 0,
-        otherCategory: '',
+        otherCategory: "",
         teams: [],
         faq: [],
         services: [],
@@ -182,11 +185,12 @@ export async function getCommunityData(hostOrSubdomain: string): Promise<Communi
         slidings: [],
         testimonial: [],
         contactus: [],
-        googleAuth: '',
+        googleAuth: "",
         socialLinks: [],
-        createdAt: '',
-        updatedAt: '',
-        template: 'default',
+        requests: [],
+        createdAt: "",
+        updatedAt: "",
+        template: "default",
       },
     };
   }
