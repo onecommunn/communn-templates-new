@@ -35,7 +35,7 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
 const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
   const normalize = (s?: string) => (s ?? "").trim();
 
-  console.log(data, "data");
+  // console.log(data, "data");
   return (
     <>
       <footer
