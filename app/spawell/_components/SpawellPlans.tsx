@@ -211,7 +211,8 @@ const Card: React.FC<PlanCardProps> = ({
               </div>
             </DialogContent>
           </Dialog>
-        ) : isRequested ? (
+        ) : isRequested ?
+         (
           <div className="mt-4 inline-flex flex-col text-[var(--pri)] gap-2 text-[16px] font-bold">
             <h5>Already Requested</h5>
             <p className="font-normal text-sm">

@@ -17,6 +17,7 @@ import { ArrowRight, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import React, { useId } from "react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 /* ----------------------- Reusable Pieces ---------------------- */
 function TopMeta({ by }: { by?: string }) {
@@ -58,12 +59,16 @@ function CatalogCard({
 }) {
   const hasImage = Boolean(item.image);
 
+  // Determine target path
+  const targetPath =
+    item.kind === "plan" ? `/plans` : `/events`;
+
   return (
     <Card
       style={{ backgroundColor: primaryColor }}
       className="relative rounded-xl mb-4 break-inside-avoid border-none overflow-hidden flex-1 pt-0"
     >
-      {/* {hasImage && ( */}
+      {/* Image Section */}
       <div className="m-1 rounded-xl overflow-hidden bg-muted">
         <div className="relative aspect-[16/9]">
           <Image
@@ -77,8 +82,8 @@ function CatalogCard({
           />
         </div>
       </div>
-      {/* )} */}
 
+      {/* Card Content */}
       <CardHeader className="gap-2">
         {item.by && (
           <div className="flex items-start justify-between">
@@ -103,6 +108,7 @@ function CatalogCard({
         </CardDescription>
       </CardHeader>
 
+      {/* Footer */}
       <CardFooter className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span
@@ -111,23 +117,18 @@ function CatalogCard({
           >
             {item.priceLabel ?? ""}
           </span>
-          {/* {item.priceStrike && (
-            <span className="text-sm text-muted-foreground line-through">
-              {item.priceStrike}
-            </span>
-          )} */}
         </div>
 
-        <Button
-          variant={kindToCTAVariant[item.kind]}
-          style={{ backgroundColor: secondaryColor, color: primaryColor }}
-          className="shrink-0 cursor-pointer"
-        >
-          {item.cta}{" "}
-          <span>
-            <ArrowRight />
-          </span>
-        </Button>
+        <Link href={targetPath} className="shrink-0">
+          <Button
+            variant={kindToCTAVariant[item.kind]}
+            style={{ backgroundColor: secondaryColor, color: primaryColor }}
+            className="cursor-pointer"
+          >
+            {item.cta}
+            <ArrowRight className="ml-1" />
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

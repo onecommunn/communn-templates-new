@@ -9,6 +9,7 @@ import CreatorPlansCard from "./CreatorPlansCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { useCommunity } from "@/hooks/useCommunity";
 
 const CreatorPlansSection = ({
   primaryColor,
@@ -24,24 +25,10 @@ const CreatorPlansSection = ({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
-  const [communityId, setCommunityId] = useState<string>("");
+  // const [communityId, setCommunityId] = useState<string>("");
   const userId = authContext?.user?.id;
   const isLoggedIn = !!userId;
-
-  // console.log(plans, "plans");
-
-  const getCommunityId = async () => {
-    try {
-      const communityData: any = await getCommunityData(
-        window.location.hostname
-      );
-      setCommunityId(communityData?.community?._id || "");
-      return communityData?.community._id || "";
-    } catch (error) {
-      console.error("Error fetching community ID:", error);
-      return "";
-    }
-  };
+  const { communityId, communityData } = useCommunity();
 
   const handleClickJoin = async (id: string) => {
     try {
@@ -55,13 +42,13 @@ const CreatorPlansSection = ({
     }
   };
 
-  useEffect(() => {
-    const fetchCommunityId = async () => {
-      const id = await getCommunityId();
-      setCommunityId(id);
-    };
-    fetchCommunityId();
-  }, []); // Run only once on mount
+  // useEffect(() => {
+  //   const fetchCommunityId = async () => {
+  //     const id = await getCommunityId();
+  //     setCommunityId(id);
+  //   };
+  //   fetchCommunityId();
+  // }, []); // Run only once on mount
 
   const fetchPlans = async () => {
     if (!communityId) return;
@@ -167,6 +154,12 @@ const CreatorPlansSection = ({
     );
   }
 
+  const isRequested = Boolean(
+    communityData?.community?.requests?.some(
+      (req: any) => req.createdBy?._id === authContext?.user?.id
+    )
+  );
+
   return (
     <section
       className="py-10 font-inter"
@@ -194,10 +187,14 @@ const CreatorPlansSection = ({
               period={`${plan.interval} ${capitalizeWords(plan.duration)}`}
               communityId={communityId}
               subscribers={plan?.subscribers}
-              isSubscribedCommunity={isSubscribed}
+              isSubscribedCommunity={communityData?.community?.members?.some(
+                (m: any) => m?.user?._id === authContext?.user?.id
+              )}
               fetchPlans={fetchPlans}
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
+              isPrivate={communityData?.community?.type === "PRIVATE"}
+              isRequested={!!isRequested}
             />
           ))}
         </div>
