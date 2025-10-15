@@ -47,9 +47,9 @@ const YoganaCollaboration: React.FC<Props> = ({
   return (
     <section
       className="py-10 font-cormorant bg-[#C2A74E1A]"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
@@ -68,7 +68,7 @@ const YoganaCollaboration: React.FC<Props> = ({
 
         </div>
 
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
+        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-15">
           <ScrollVelocityContainer className="text-4xl md:text-7xl md:leading-[5rem] font-bold tracking-[-0.02em]">
             <ScrollVelocityRow
               baseVelocity={baseVelocity}
@@ -81,7 +81,7 @@ const YoganaCollaboration: React.FC<Props> = ({
                   alt={`Partner logo ${idx + 1}`}
                   loading="lazy"
                   decoding="async"
-                  className="mx-6 h-8 sm:h-10 md:h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                  className="mx-6 h-8 sm:h-10 md:h-18 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
                 />
               ))}
             </ScrollVelocityRow>
