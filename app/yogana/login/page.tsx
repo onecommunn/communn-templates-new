@@ -18,7 +18,6 @@ import Link from "next/link";
 const YoganaLogin = () => {
   const { home } = useCMS();
   const source: YoganaHomePage | undefined = home as YoganaHomePage | undefined;
-  console.log(source?.color?.primary, "source?.color?.primary");
   const primaryColor = source?.color?.primary || "#C2A74E";
   const secondaryColor = source?.color?.secondary || "#000";
   const neutralColor = source?.color?.neutral || "#707070";

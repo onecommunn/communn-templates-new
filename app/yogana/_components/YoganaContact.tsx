@@ -32,7 +32,6 @@ const YoganaContact: FC<YoganaContactProps> = ({
     communityId: communityId,
   });
 
-  console.log(communityId, "communityId");
 
   const [loading, setLoading] = useState(false);
 
