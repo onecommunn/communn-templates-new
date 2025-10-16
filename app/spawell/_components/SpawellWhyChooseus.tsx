@@ -30,7 +30,7 @@ const SpawellWhyChooseus = ({
   data: WhyChooseUsSection;
 }) => {
   const source = data?.content;
-  const POINTS = source?.itembox;
+  const POINTS = source?.itemBox;
   return (
     <section
       className="relative bg-[var(--neu)] py-16 md:py-24 font-plus-jakarta"
@@ -92,7 +92,7 @@ const SpawellWhyChooseus = ({
             {/* Bullets (stagger each item) */}
 
             <div className="mt-6 space-y-6">
-              {POINTS.map((p, idx) => {
+              {POINTS?.map((p, idx) => {
                 const LucideIcon = !isUrl(p.media)
                   ? getLucideIcon(p.media)
                   : null;

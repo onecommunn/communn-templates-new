@@ -98,7 +98,7 @@ export interface WhyChooseUsSection extends SectionBase {
     heading: string;
     subHeading: string;
     description: string;
-    itembox: { title: string; media: string; description: string }[];
+    itemBox: { title: string; media: string; description: string }[];
     media: string[];
     buttons: Button[];
   };
