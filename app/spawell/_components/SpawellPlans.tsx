@@ -116,7 +116,7 @@ const Card: React.FC<PlanCardProps> = ({
 
   return (
     <div
-      className="group block rounded-3xl bg-white p-3 transition-shadow"
+      className="group block rounded-3xl bg-white p-3 transition-shadow border md:shadow-lg my-6"
       aria-label={title}
       style={
         {
@@ -361,8 +361,6 @@ const SpawellPlans: React.FC<Props> = ({
   const isAuthenticated = authContext?.isAuthenticated;
   const { communityId, communityData } = useCommunity();
 
-  console.log(authContext, "authContext");
-
   // Persist the autoplay plugin instance
   const autoplay = useRef(
     Autoplay({
@@ -515,6 +513,7 @@ const SpawellPlans: React.FC<Props> = ({
         </div>
 
         {/* Cards */}
+        <div></div>
         <Carousel
           opts={{ align: "start", loop: false }}
           plugins={[autoplay.current]}

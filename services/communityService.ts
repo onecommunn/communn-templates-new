@@ -122,21 +122,45 @@ const DOMAIN_API_BASE = "https://communn.io/api/v2.0/domain";
 
 /** ---------------- API Function ------------------ **/
 
+function extractHostname(input: string): string {
+  // Accepts: full URL, host:port, plain host
+  try {
+    // If no protocol, prepend http:// so URL() can parse it
+    const url = new URL(input.includes("://") ? input : `http://${input}`);
+    return url.hostname.toLowerCase();
+  } catch {
+    // Fallback: strip path/port crud
+    return input.split("/")[0].split(":")[0].trim().toLowerCase();
+  }
+}
+
+function stripWww(host: string): string {
+  return host.startsWith("www.") ? host.slice(4) : host;
+}
+
 export async function getCommunityData(
   hostOrSubdomain: string
 ): Promise<CommunityResponse> {
-  const cleanedHost = hostOrSubdomain.split(":")[0];
+  const rawHost = extractHostname(hostOrSubdomain); // e.g. "www.website.com" or "sub.mycommunn.com"
+  const cleanedHost = stripWww(rawHost); // e.g. "website.com" or "sub.mycommunn.com"
+
+  // Consider localhost and IPs as non-custom (dev)
+  const isLocal =
+    cleanedHost === "localhost" ||
+    cleanedHost.endsWith(".localhost") ||
+    /^[0-9.]+$/.test(cleanedHost); // simple IPv4 check
+
+  const isMyCommunn = cleanedHost.endsWith("mycommunn.com");
+
+  const isCustomDomain = !isLocal && !isMyCommunn;
+
   let endpoint = "";
-
-  const isCustomDomain =
-    cleanedHost.includes(".") &&
-    !cleanedHost.includes("localhost") &&
-    !cleanedHost.includes("mycommunn.com");
-
   if (isCustomDomain) {
+    // Custom domain path (e.g., website.com)
     endpoint = `${DOMAIN_API_BASE}/${cleanedHost}`;
   } else {
-    const subdomain = cleanedHost.split(".")[0];
+    // Platform subdomain path (e.g., sub.mycommunn.com)
+    const subdomain = cleanedHost.split(".")[0]; // "sub"
     endpoint = `${COMMUNITY_API_BASE}/by-subdomain/${subdomain}`;
   }
   try {

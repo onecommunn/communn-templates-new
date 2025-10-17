@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Instagram, Facebook, Linkedin, Dribbble, Globe } from "lucide-react";
+import { Instagram, Facebook, Linkedin, Dribbble, Globe, Twitter } from "lucide-react";
 import {
   FooterSection,
   SocialMediaLink,
@@ -13,6 +13,7 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
   facebook: Facebook,
   linkedin: Linkedin,
   dribbble: Dribbble,
+  twitter:Twitter,
 };
 
 const SpawellFooter = ({

@@ -111,7 +111,7 @@ const SpawellHero = ({
                       <Button
                         className={`${
                           idx % 2 === 0
-                            ? "group cursor-pointer relative overflow-hidden px-[30px] py-[18px] text-[16px] font-bold border transition-all duration-300 ease-out bg-[var(--sec)] text-[var(--pri)] border-[var(--sec)] hover:bg-[var(--pri)] hover:text-[var(--sec)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"
+                            ? "group cursor-pointer relative overflow-hidden px-[30px] py-[18px] text-[16px] font-bold border transition-all duration-300 ease-out bg-[var(--sec)] text-[var(--pri)] border-[var(--sec)] hover:bg-[var(--pri)] hover:text-[var(--sec)] hover:border-[var(--sec)] hover:-translate-y-0.5 active:translate-y-0"
                             : "group cursor-pointer relative overflow-hidden px-[30px] py-[18px] text-[16px] font-bold bg-transparent text-[var(--sec)] border border-[var(--sec)] transition-all duration-300 ease-out hover:bg-[var(--sec)] hover:text-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"
                         }`}
                       >
