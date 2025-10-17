@@ -106,7 +106,7 @@ const SpawellSignupPage = () => {
 
   return (
     <main
-      className="flex-grow flex items-center justify-center py-12 px-4 bg-[var(--neu)]"
+      className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[#C2A74E1A]"
       style={
         {
           "--pri": primaryColor,
@@ -140,11 +140,10 @@ const SpawellSignupPage = () => {
                 onBlur={() => handleBlur("firstName")}
                 placeholder="Enter your full name"
                 required
-                className={`w-full px-4 py-3 border ${
-                  showError("firstName", isNameValid)
-                    ? "border-[var(--pri)]"
-                    : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
+                className={`w-full px-4 py-3 border ${showError("firstName", isNameValid)
+                  ? "border-[var(--pri)]"
+                  : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
               />
               {showError("firstName", isNameValid) && (
                 <p className="text-sm text-red-500 mt-1">
@@ -166,11 +165,10 @@ const SpawellSignupPage = () => {
                 onBlur={() => handleBlur("phoneNumber")}
                 placeholder="Enter your mobile number"
                 required
-                className={`w-full px-4 py-3 border ${
-                  showError("phoneNumber", isMobileValid)
-                    ? "border-[var(--pri)]"
-                    : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
+                className={`w-full px-4 py-3 border ${showError("phoneNumber", isMobileValid)
+                  ? "border-[var(--pri)]"
+                  : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
               />
               {showError("phoneNumber", isMobileValid) && (
                 <p className="text-sm text-red-500 mt-1">
@@ -192,11 +190,10 @@ const SpawellSignupPage = () => {
                 onBlur={() => handleBlur("emailId")}
                 placeholder="Enter your email"
                 required
-                className={`w-full px-4 py-3 border ${
-                  showError("emailId", isEmailValid)
-                    ? "border-[var(--pri)]"
-                    : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
+                className={`w-full px-4 py-3 border ${showError("emailId", isEmailValid)
+                  ? "border-[var(--pri)]"
+                  : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--pri)]`}
               />
               {showError("emailId", isEmailValid) && (
                 <p className="text-sm text-red-500 mt-1">Enter a valid email</p>
@@ -208,17 +205,16 @@ const SpawellSignupPage = () => {
                 onClick={handleSignup}
                 type="submit"
                 disabled={!isFormValid || isLoading}
-                className={`${
-                  isFormValid && !isLoading
-                    ? "bg-[var(--pri)] cursor-pointer"
-                    : "bg-gray-300 cursor-not-allowed"
-                } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                className={`${isFormValid && !isLoading
+                  ? "bg-[var(--pri)] cursor-pointer"
+                  : "bg-gray-300 cursor-not-allowed"
+                  } text-white px-6 py-3 rounded-lg font-medium w-full`}
               >
                 {isLoading ? "Submitting..." : "Save & Continue"}
               </button>
             </div>
           </form>
-          <p className="text-center text-sm text-[var(--pri)] mt-8">
+          {/* <p className="text-center text-sm text-[var(--pri)] mt-8">
             Already have an account?{" "}
             <Link
               href="/login"
@@ -226,7 +222,7 @@ const SpawellSignupPage = () => {
             >
               Login
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </main>

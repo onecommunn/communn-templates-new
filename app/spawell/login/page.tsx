@@ -195,9 +195,8 @@ const SpawellLogin = () => {
                   <button
                     onClick={handleGetOtp}
                     disabled={!isInputValid() || loading}
-                    className={`text-white px-6 py-3 rounded-lg font-medium w-full ${
-                      isInputValid() && !loading ? "" : "bg-gray-300 cursor-not-allowed"
-                    }`}
+                    className={`text-white px-6 py-3 rounded-lg font-medium w-full ${isInputValid() && !loading ? "" : "bg-gray-300 cursor-not-allowed"
+                      }`}
                     style={{ backgroundColor: primaryColor }}
                   >
                     {loading ? "Sending..." : "Get OTP"}
@@ -205,12 +204,12 @@ const SpawellLogin = () => {
                 </div>
               </div>
 
-              <p className="text-center text-sm text-gray-600 mt-8">
+              {/* <p className="text-center text-sm text-gray-600 mt-8">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now
                 </Link>
-              </p>
+              </p> */}
             </div>
           ) : (
             <div className="space-y-6">
@@ -246,9 +245,8 @@ const SpawellLogin = () => {
                 <button
                   onClick={handleResendOtp}
                   disabled={resendTimer > 0 || loading}
-                  className={`text-sm underline font-medium ${
-                    resendTimer > 0 ? "text-gray-400 cursor-not-allowed" : "text-[var(--pri)]"
-                  }`}
+                  className={`text-sm underline font-medium ${resendTimer > 0 ? "text-gray-400 cursor-not-allowed" : "text-[var(--pri)]"
+                    }`}
                 >
                   {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : "Resend OTP"}
                 </button>
@@ -264,13 +262,13 @@ const SpawellLogin = () => {
                   Change {useEmail ? "email" : "mobile number"}?
                 </button>
               </div>
-
+              {/* 
               <p className="text-center text-sm text-gray-600 mt-2">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now
                 </Link>
-              </p>
+              </p> */}
             </div>
           )}
         </div>

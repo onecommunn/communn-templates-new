@@ -138,11 +138,10 @@ const CreatorSignupPage = () => {
                 onBlur={() => handleBlur("firstName")}
                 placeholder="Enter your full name"
                 required
-                className={`w-full px-4 py-3 border ${
-                  showError("firstName", isNameValid)
-                    ? "border-[var(--pri)]"
-                    : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
+                className={`w-full px-4 py-3 border ${showError("firstName", isNameValid)
+                  ? "border-[var(--pri)]"
+                  : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
               />
               {showError("firstName", isNameValid) && (
                 <p className="text-sm text-red-500 mt-1">
@@ -164,11 +163,10 @@ const CreatorSignupPage = () => {
                 onBlur={() => handleBlur("phoneNumber")}
                 placeholder="Enter your mobile number"
                 required
-                className={`w-full px-4 py-3 border ${
-                  showError("phoneNumber", isMobileValid)
-                    ? "border-[var(--sec)]"
-                    : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
+                className={`w-full px-4 py-3 border ${showError("phoneNumber", isMobileValid)
+                  ? "border-[var(--sec)]"
+                  : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
               />
               {showError("phoneNumber", isMobileValid) && (
                 <p className="text-sm text-red-500 mt-1">
@@ -190,11 +188,10 @@ const CreatorSignupPage = () => {
                 onBlur={() => handleBlur("emailId")}
                 placeholder="Enter your email"
                 required
-                className={`w-full px-4 py-3 border ${
-                  showError("emailId", isEmailValid)
-                    ? "border-[var(--sec)]"
-                    : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
+                className={`w-full px-4 py-3 border ${showError("emailId", isEmailValid)
+                  ? "border-[var(--sec)]"
+                  : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--sec)]`}
               />
               {showError("emailId", isEmailValid) && (
                 <p className="text-sm text-red-500 mt-1">Enter a valid email</p>
@@ -206,11 +203,10 @@ const CreatorSignupPage = () => {
                 onClick={handleSignup}
                 type="submit"
                 disabled={!isFormValid || isLoading}
-                className={`${
-                  isFormValid && !isLoading
-                    ? "bg-[var(--sec)] cursor-pointer"
-                    : "bg-gray-300 cursor-not-allowed"
-                } text-white px-6 py-3 rounded-lg font-medium w-full`}
+                className={`${isFormValid && !isLoading
+                  ? "bg-[var(--sec)] cursor-pointer"
+                  : "bg-gray-300 cursor-not-allowed"
+                  } text-white px-6 py-3 rounded-lg font-medium w-full`}
               >
                 {isLoading ? "Submitting..." : "Save & Continue"}
               </button>
