@@ -205,7 +205,7 @@ export const dummyData: SpawellHomePage = {
         subHeading: "wellness begins",
         description:
           "Empowering you to achieve optimal health and wellness with personalized coaching, support.",
-        itembox: [
+        itemBox: [
           {
             title: "Personalized Spa Treatments",
             media: "Calendar",
