@@ -141,10 +141,10 @@ const SpawellServices = ({
         </AnimatedContent>
 
         {/* Content */}
-        <div className="mt-12 grid grid-cols-1 items-center gap-10 md:grid-cols-3 md:gap-0">
+        <div className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-3 md:gap-0">
           {/* Left bullets (mapped) */}
           <div className="space-y-7">
-            {LEFT_POINTS.map((p) => (
+            {LEFT_POINTS?.map((p) => (
               <AnimatedContent
                 key={p.title}
                 distance={50}
@@ -177,7 +177,7 @@ const SpawellServices = ({
 
           {/* Right bullets (mapped) */}
           <div className="space-y-7">
-            {RIGHT_POINTS.map((p) => (
+            {RIGHT_POINTS?.map((p) => (
               <AnimatedContent
                 key={p.title}
                 distance={50}
