@@ -7,6 +7,7 @@ import {
   Alex_Brush,
   Plus_Jakarta_Sans,
   Lora,
+  Lato,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -54,6 +55,13 @@ const lora = Lora({
   variable: "--font-lora",
 });
 
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
+  style: ["italic", "normal"],
+  variable: "--font-plus-lato",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -62,7 +70,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable}`}
     >
       <body>
         <Providers>{children}</Providers>
