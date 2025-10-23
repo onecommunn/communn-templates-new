@@ -40,55 +40,55 @@ const SpawellRoot = () => {
     : undefined;
 
   const heroSectionData = source?.sections?.find(
-    (s: HomeSection): s is HeroSection => s.sectionName === "heroSection"
+    (s: HomeSection): s is HeroSection => s.sectionName === "heroSection" && s.isActive
   );
 
   const aboutSectionData = source?.sections?.find(
-    (s: HomeSection): s is AboutSection => s.sectionName === "aboutSection"
+    (s: HomeSection): s is AboutSection => s.sectionName === "aboutSection" && s.isActive
   );
 
   const featuredAppointmentSection = source?.sections?.find(
     (s: HomeSection): s is FeaturedAppointmentSection =>
-      s.sectionName === "featuredAppointmentSection"
+      s.sectionName === "featuredAppointmentSection" && s.isActive
   );
 
   const aboutTwoSection = source?.sections?.find(
     (s: HomeSection): s is AboutTwoSection =>
-      s.sectionName === "aboutTwoSection"
+      s.sectionName === "aboutTwoSection" && s.isActive
   );
 
   const serviceSection = source?.sections?.find(
-    (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection"
+    (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection" && s.isActive
   );
 
   const eventsSection = source?.sections?.find(
-    (s: HomeSection): s is EventsSection => s.sectionName === "eventsSection"
+    (s: HomeSection): s is EventsSection => s.sectionName === "eventsSection" && s.isActive
   );
 
   const plansSection = source?.sections?.find(
-    (s: HomeSection): s is PlansSection => s.sectionName === "plansSection"
+    (s: HomeSection): s is PlansSection => s.sectionName === "plansSection" && s.isActive
   );
 
   const whyChooseUsSection = source?.sections?.find(
     (s: HomeSection): s is WhyChooseUsSection =>
-      s.sectionName === "whyChooseUsSection"
+      s.sectionName === "whyChooseUsSection" && s.isActive
   );
 
   const ourTeamSection = source?.sections?.find(
-    (s: HomeSection): s is OurTeamSection => s.sectionName === "ourTeamSection"
+    (s: HomeSection): s is OurTeamSection => s.sectionName === "ourTeamSection" && s.isActive
   );
 
   const testimoniesSection = source?.sections?.find(
     (s: HomeSection): s is TestimoniesSection =>
-      s.sectionName === "testimoniesSection"
+      s.sectionName === "testimoniesSection" && s.isActive
   );
 
   const faqSection = source?.sections?.find(
-    (s: HomeSection): s is FaqSection => s.sectionName === "faqSection"
+    (s: HomeSection): s is FaqSection => s.sectionName === "faqSection" && s.isActive
   );
 
   const contactSection = source?.sections?.find(
-    (s: HomeSection): s is ContactSection => s.sectionName === "contactSection"
+    (s: HomeSection): s is ContactSection => s.sectionName === "contactSection" && s.isActive
   );
 
   const primaryColor = source?.color?.primary || "#5D3222";

@@ -35,53 +35,49 @@ const YoganaRoot = () => {
     : undefined;
 
   const heroSection = source?.sections.find(
-    (s: HomeSection): s is HeroSection => s.sectionName === "heroSection"
+    (s: HomeSection): s is HeroSection => s.sectionName === "heroSection" && s.isActive
   );
 
   const aboutUsSection = source?.sections.find(
-    (s: HomeSection): s is Aboutus => s.sectionName === "aboutSection"
+    (s: HomeSection): s is Aboutus => s.sectionName === "aboutSection" && s.isActive
   );
 
   const plansSection = source?.sections.find(
-    (s: HomeSection): s is Plans => s.sectionName === "plansSection"
+    (s: HomeSection): s is Plans => s.sectionName === "plansSection" && s.isActive
   );
 
   const eventsSection = source?.sections.find(
-    (s: HomeSection): s is Events => s.sectionName === "eventsSection"
+    (s: HomeSection): s is Events => s.sectionName === "eventsSection" && s.isActive
   );
 
   const collaborationSection = source?.sections.find(
-    (s: HomeSection): s is Collaboration => s.sectionName === "clientsSection"
+    (s: HomeSection): s is Collaboration => s.sectionName === "clientsSection" && s.isActive
   );
 
   const testimonialSection = source?.sections.find(
     (s: HomeSection): s is TestimoniesSection =>
-      s.sectionName === "testimoniesSection"
+      s.sectionName === "testimoniesSection" && s.isActive
   );
 
   const gallerySection = source?.sections.find(
-    (s: HomeSection): s is Gallery => s.sectionName === "gallerySection"
+    (s: HomeSection): s is Gallery => s.sectionName === "gallerySection" && s.isActive
   );
 
   const contactSection = source?.sections.find(
-    (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection"
+    (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection" && s.isActive
   );
 
   const servicesSection = source?.sections.find(
-    (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection"
+    (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection" && s.isActive
   );
 
   const primaryColor = source?.color?.primary || "#C2A74E";
   const secondaryColor = source?.color?.secondary || "#000";
   const neutralColor = source?.color?.neutral || "#707070";
 
-  // const primaryColor = "#dd0f0f";
-  // const secondaryColor = "#fff200";
-  // const neutralColor = "#09ff00";
 
-  // const primaryColor = "#C2A74E";
-  // const secondaryColor = "#000";
-  // const neutralColor = "#707070";
+
+
 
   return (
     <>
@@ -101,7 +97,7 @@ const YoganaRoot = () => {
           neutralColor={neutralColor}
         />
       )}
-      {servicesSection  && (
+      {servicesSection && (
         <YoganaServices
           data={servicesSection}
           primaryColor={primaryColor}
