@@ -28,15 +28,15 @@ const COURSES = [
   },
 ];
 
-const MartivoCourses = () => {
+const MartivoServices = () => {
   return (
     <section className="relative py-16 md:py-24 font-lato bg-[#FF7300]/10">
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-         <p className="mb-2 text-[16px] font-bold text-[#F67C00] uppercase">
-            OUR COURSES
+         <p className="mb-2 text-[16px] font-semibold text-[#F67C00] uppercase">
+            OUR SERVICES
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
             Elevate your mind, body, and
@@ -102,4 +102,4 @@ const MartivoCourses = () => {
   );
 };
 
-export default MartivoCourses;
+export default MartivoServices;

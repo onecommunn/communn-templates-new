@@ -383,8 +383,12 @@ const MartivoPlans: React.FC = () => {
     };
   });
 
+  if(normalized?.length < 0){
+    return null
+  }
+
   return (
-    <section className="relative py-16 md:py-24 font-plus-jakarta">
+    <section className="relative py-16 md:py-24 font-lato" id="plans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
@@ -407,7 +411,7 @@ const MartivoPlans: React.FC = () => {
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-slate-100/60"
+                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-[#F67C00]"
               />
             ))}
           </div>

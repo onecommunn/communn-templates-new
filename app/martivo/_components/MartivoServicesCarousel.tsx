@@ -115,7 +115,7 @@ export default function MartivoServicesCarousel() {
   };
 
   return (
-    <section className="w-full py-10">
+    <section className="w-full py-10 overflow-hidden">
       <div className="embla" ref={emblaRef}>
         <div className="embla__container flex">
           {SERVICES.map((s, i) => {

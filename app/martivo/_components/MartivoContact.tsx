@@ -1,0 +1,270 @@
+// app/(site)/_components/MartivoContact.tsx
+"use client";
+
+import React, { useMemo, useState } from "react";
+import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
+import { WavyStroke } from "./Icons/WavyStroke";
+import { useCommunity } from "@/hooks/useCommunity";
+import { format as formatDateFns } from "date-fns";
+import { toast } from "sonner";
+import { sendNotification } from "@/services/contactService";
+import { ContactForm } from "@/models/contact.model";
+
+
+const ORANGE = "#F67C00";
+
+export default function MartivoContact() {
+  // left column is static, right column is the form
+  const { communityId } = useCommunity();
+
+  // form state
+  const [first, setFirst] = useState("");
+  const [last, setLast] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [service, setService] = useState("");
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const emailOk = useMemo(
+    () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()),
+    [email]
+  );
+  const canSubmit = useMemo(() => {
+    return first && email && phone && service && date && !isSubmitting;
+  }, [first, email, phone, service, date, isSubmitting]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit || !date) return;
+
+    try {
+      setIsSubmitting(true);
+      const payload: ContactForm = {
+        name: `${first.trim()} ${last.trim()}`.trim(),
+        email: email.trim(),
+        subject: "Appointment Request",
+        phoneNumber: phone.trim(),
+        message: `Service: ${service}\nPreferred date: ${formatDateFns(
+          date,
+          "dd-MM-yyyy"
+        )}`,
+        communityId,
+      };
+
+      await sendNotification(payload);
+      toast.success("Request submitted! We’ll contact you shortly.");
+      setFirst("");
+      setLast("");
+      setEmail("");
+      setPhone("");
+      setService("");
+      setDate(undefined);
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section id="contact" className="relative py-16 md:py-24 font-plus-jakarta">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+        {/* Header */}
+        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
+            Contact Us
+          </p>
+          <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
+            Have questions? We’re here to help
+          </h2>
+          <div className="mx-auto mt-3 flex items-center justify-center">
+            <WavyStroke color={ORANGE} size={120} />
+          </div>
+        </div>
+
+        {/* Card */}
+        <div className="grid gap-8 rounded-2xl border border-[#E6E8EE] bg-white p-6 shadow-[0_1px_0_rgba(16,24,40,0.04)] md:grid-cols-2 md:p-8">
+          {/* Left: contact info */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-slate-900">
+              Get in touch
+            </h3>
+            <p className="max-w-md text-[14px] leading-6 text-slate-600">
+              Tell us what you need and we’ll get back to you as soon as
+              possible. You can also reach us directly using the details below.
+            </p>
+
+            <ul className="mt-4 space-y-4 text-[14px] text-slate-700">
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 rounded-full bg-[#FFF3E6] p-2">
+                  <MapPin size={18} color={ORANGE} />
+                </span>
+                <div>
+                  <p className="font-medium text-slate-900">Address</p>
+                  <p className="text-slate-600">
+                    3600 Las Vegas Blvd S, Las Vegas, NV
+                  </p>
+                </div>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 rounded-full bg-[#FFF3E6] p-2">
+                  <Phone size={18} color={ORANGE} />
+                </span>
+                <div>
+                  <p className="font-medium text-slate-900">Phone</p>
+                  <a
+                    href="tel:+9856554544"
+                    className="text-slate-600 hover:text-slate-800"
+                  >
+                    +9856 55 45 44
+                  </a>
+                </div>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 rounded-full bg-[#FFF3E6] p-2">
+                  <Mail size={18} color={ORANGE} />
+                </span>
+                <div>
+                  <p className="font-medium text-slate-900">Email</p>
+                  <a
+                    href="mailto:support@example.com"
+                    className="text-slate-600 hover:text-slate-800"
+                  >
+                    support@example.com
+                  </a>
+                </div>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 rounded-full bg-[#FFF3E6] p-2">
+                  <Clock size={18} color={ORANGE} />
+                </span>
+                <div>
+                  <p className="font-medium text-slate-900">Hours</p>
+                  <p className="text-slate-600">Mon–Sat: 8:00 AM – 8:00 PM</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Right: form */}
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 gap-4 md:grid-cols-2"
+          >
+            <div>
+              <label className="mb-1 block text-[13px] text-slate-700">
+                First name *
+              </label>
+              <input
+                value={first}
+                onChange={(e) => setFirst(e.target.value)}
+                type="text"
+                required
+                placeholder="Sarah"
+                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[13px] text-slate-700">
+                Last name
+              </label>
+              <input
+                value={last}
+                onChange={(e) => setLast(e.target.value)}
+                type="text"
+                placeholder="Taylor"
+                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[13px] text-slate-700">
+                Email *
+              </label>
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                required
+                placeholder="you@example.com"
+                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[13px] text-slate-700">
+                Phone
+              </label>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                type="tel"
+                placeholder="+1 555 000 1234"
+                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[13px] text-slate-700">
+                Service *
+              </label>
+              <input
+                value={service}
+                onChange={(e) => setService(e.target.value)}
+                type="text"
+                required
+                placeholder="Kickboxing Intro Class"
+                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[13px] text-slate-700">
+                Preferred date *
+              </label>
+              <input
+                value={date ? formatDateFns(date, "yyyy-MM-dd") : ""}
+                onChange={(e) =>
+                  setDate(e.target.value ? new Date(e.target.value) : undefined)
+                }
+                type="date"
+                required
+                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
+              />
+            </div>
+
+            <div className="md:col-span-2 mt-2">
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className={[
+                  "group relative inline-flex items-center gap-3 rounded-full px-6 py-3 text-white shadow-md transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2",
+                  canSubmit
+                    ? "bg-[#F67C00] hover:-translate-y-0.5"
+                    : "bg-[#F67C00]/60 cursor-not-allowed",
+                ].join(" ")}
+              >
+                <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
+                <span className="relative z-[1] text-[15px]">
+                  {isSubmitting ? "Sending…" : "Send Message"}
+                </span>
+                <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[#F67C00]">
+                  <ArrowRight size={18} />
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* subtle flourish */}
+      <div className="pointer-events-none absolute -left-8 top-10 hidden h-20 w-20 rounded-full bg-[#F67C00]/10 blur-xl md:block" />
+    </section>
+  );
+}
