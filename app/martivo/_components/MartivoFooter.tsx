@@ -15,7 +15,7 @@ const ORANGE = "#F67C00";
 
 export default function MartivoFooter() {
   return (
-    <footer className="relative bg-[#0A2640] text-white/90">
+    <footer className="relative bg-[#0A2640] text-white/90 font-lato">
       {/* decorative shapes (optional) */}
       <div className="pointer-events-none absolute left-4 top-10 hidden md:block">
         <Image
@@ -84,7 +84,7 @@ export default function MartivoFooter() {
           {/* About links */}
           <nav className="text-[13px]">
             <h4 className="mb-3 text-[12px] font-semibold tracking-[0.22em] uppercase text-white/80">
-              About Martivo
+              Links
             </h4>
             <ul className="space-y-3 text-white/80">
               <li>
@@ -154,8 +154,13 @@ export default function MartivoFooter() {
         <div className="mt-8 h-px w-full bg-white/15" />
 
         {/* Copyright */}
-        <div className="py-4 text-center text-[12px] text-white/70">
-          Copyright © {new Date().getFullYear()} Martivo All Right Reserved.
+        <div className="flex items-center justify-between">
+          <div className="py-4 text-center text-[12px] text-white/70">
+            Copyright © {new Date().getFullYear()} Martivo All Right Reserved.
+          </div>
+          <div className="py-4 text-center text-[12px] text-white/70">
+            Made with ❤️ by communn.io
+          </div>
         </div>
       </div>
     </footer>

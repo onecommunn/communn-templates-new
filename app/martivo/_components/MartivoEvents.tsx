@@ -19,7 +19,6 @@ import { getEvents } from "@/services/eventService";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
-
 /* ---------- Utils ---------- */
 const formatMonthDay = (iso: string) =>
   new Intl.DateTimeFormat("en-US", {
@@ -92,7 +91,7 @@ export default function MartivoEvents() {
   if (isLoading) {
     // Loading: carousel with skeleton slides + dots
     return (
-      <section id="events" className="w-full py-12 md:py-16">
+      <section id="events" className="w-full py-12 md:py-16 font-lato">
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center">
             <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
@@ -190,7 +189,10 @@ export default function MartivoEvents() {
                         <p className="text-xs text-slate-500 mb-2">
                           {formatMonthDay(availability[0].day)}
                         </p>
-                        <ViewAllButton label="View More" href={`/event-details?eventid=${event._id}`}/>
+                        <ViewAllButton
+                          label="View More"
+                          href={`/event-details?eventid=${event._id}`}
+                        />
                       </article>
                     </CarouselItem>
                   );
@@ -203,24 +205,26 @@ export default function MartivoEvents() {
             </Carousel>
 
             {/* Dots */}
-            <div className="mt-5 flex items-center justify-center gap-2">
-              {Array.from({ length: snapCount }).map((_, i) => {
-                const active = i === selectedIndex;
-                return (
-                  <button
-                    key={i}
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => api?.scrollTo(i)}
-                    className={[
-                      "h-2.5 w-2.5 rounded-full transition-all",
-                      active
-                        ? "bg-[#F67C00]"
-                        : "bg-slate-200 hover:bg-slate-300",
-                    ].join(" ")}
-                  />
-                );
-              })}
-            </div>
+            {events.length > 1 && (
+              <div className="mt-5 flex items-center justify-center gap-2">
+                {Array.from({ length: snapCount }).map((_, i) => {
+                  const active = i === selectedIndex;
+                  return (
+                    <button
+                      key={i}
+                      aria-label={`Go to slide ${i + 1}`}
+                      onClick={() => api?.scrollTo(i)}
+                      className={[
+                        "h-2.5 w-2.5 rounded-full transition-all",
+                        active
+                          ? "bg-[#F67C00]"
+                          : "bg-slate-200 hover:bg-slate-300",
+                      ].join(" ")}
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>

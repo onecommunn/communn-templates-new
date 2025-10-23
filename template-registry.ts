@@ -30,6 +30,7 @@ import MartivoRoot from "./app/martivo/page";
 import SpawellSignup from "./app/spawell/sign-up/page";
 import YoganaSignup from "./app/yogana/sign-up/page";
 import CreatorSignup from "./app/creator/sign-up/page";
+import MartivoShell from "./app/martivo/MartivoShell";
 
 export const templateLayouts: Record<
   string,
@@ -39,6 +40,7 @@ export const templateLayouts: Record<
   yogana: YoganaShell,
   default: DefaultShell,
   spawell: SpawellShell,
+  martivo:MartivoShell
 };
 
 export const templates: Record<

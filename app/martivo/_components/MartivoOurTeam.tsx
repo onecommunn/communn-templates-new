@@ -59,7 +59,7 @@ const MartivoOurTeam = () => {
   }, [api]);
 
   return (
-    <section className="relative py-16 md:py-24 font-plus-jakarta">
+    <section className="relative py-16 md:py-24 font-lato">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
@@ -85,10 +85,7 @@ const MartivoOurTeam = () => {
           >
             <CarouselContent>
               {data.map((each, idx) => (
-                <CarouselItem
-                  key={idx}
-                 className="basis-full md:basis-1/4"
-                >
+                <CarouselItem key={idx} className="basis-full md:basis-1/4">
                   <article
                     className="
                       h-full rounded-2xl border border-[#E6E8EE] bg-white p-6 text-center
@@ -130,22 +127,26 @@ const MartivoOurTeam = () => {
           </Carousel>
 
           {/* Dots */}
-          <div className="mt-5 flex items-center justify-center gap-2">
-            {Array.from({ length: snapCount }).map((_, i) => {
-              const active = i === selectedIndex;
-              return (
-                <button
-                  key={i}
-                  aria-label={`Go to slide ${i + 1}`}
-                  onClick={() => api?.scrollTo(i)}
-                  className={[
-                    "h-2.5 w-2.5 rounded-full transition-all",
-                    active ? "bg-[#F67C00]" : "bg-slate-200 hover:bg-slate-300",
-                  ].join(" ")}
-                />
-              );
-            })}
-          </div>
+          {data.length > 1 && (
+            <div className="mt-5 flex items-center justify-center gap-2">
+              {Array.from({ length: snapCount }).map((_, i) => {
+                const active = i === selectedIndex;
+                return (
+                  <button
+                    key={i}
+                    aria-label={`Go to slide ${i + 1}`}
+                    onClick={() => api?.scrollTo(i)}
+                    className={[
+                      "h-2.5 w-2.5 rounded-full transition-all",
+                      active
+                        ? "bg-[#F67C00]"
+                        : "bg-slate-200 hover:bg-slate-300",
+                    ].join(" ")}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </section>

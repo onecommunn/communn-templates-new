@@ -10,7 +10,7 @@ const MartivoAbout = () => {
   return (
     <section
       id="about-us"
-      className="relative overflow-hidden py-20 md:pb-28 font-plus-jakarta"
+      className="relative overflow-hidden py-20 md:pb-28 font-lato"
     >
       {/* subtle right radial wash to echo the design */}
       <span className="pointer-events-none absolute -right-32 top-0 aspect-[1/1] w-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(246,124,0,0.10),transparent_70%)]" />

@@ -69,7 +69,7 @@ export default function MartivoContact() {
   };
 
   return (
-    <section id="contact" className="relative py-16 md:py-24 font-plus-jakarta">
+    <section id="contact" className="relative py-16 md:py-24 font-lato">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">

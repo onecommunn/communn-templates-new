@@ -125,7 +125,11 @@ const MartivoTestimonials = () => {
                       key={s.id}
                       className="embla__slide shrink-0 grow-0 px-2 md:px-0  basis-1/3 md:basis-1/5 relative"
                     >
-                      <div className="relative w-[200px] h-[400px] rounded-full overflow-hidden mx-auto transition-all duration-300">
+                      <div
+                        className={`relative w-[200px] h-[400px] rounded-full overflow-hidden mx-auto transition-all duration-300 ${
+                          isActive ? "scale-105" : "scale-95"
+                        }`}
+                      >
                         <Image
                           src={s.img}
                           alt={s.name}
