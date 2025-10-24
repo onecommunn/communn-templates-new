@@ -11,11 +11,23 @@ import {
   Mail,
 } from "lucide-react";
 
-const ORANGE = "#F67C00";
-
-export default function MartivoFooter() {
+export default function MartivoFooter({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   return (
-    <footer className="relative bg-[#0A2640] text-white/90 font-lato">
+    <footer
+      className="relative bg-[var(--pri)] text-white/90 font-lato"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       {/* decorative shapes (optional) */}
       <div className="pointer-events-none absolute left-4 top-10 hidden md:block">
         <Image
@@ -124,21 +136,20 @@ export default function MartivoFooter() {
             <ul className="space-y-4 text-white/80">
               <li className="flex items-start gap-3">
                 <span className="mt-0.5 text-[var(--accent,#ff8a1f)]">
-                  <MapPin size={16} color={ORANGE} />
+                  <MapPin size={16} color={secondaryColor} />
                 </span>
-                <p>
-                  3600 Las Vegas Blvd S, Las
-                  <br /> Vegas, NV
+                <p className="break-words">
+                  3600 Las Vegas Blvd S, Las Vegas, NV
                 </p>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={16} color={ORANGE} />
+                <Phone size={16} color={secondaryColor} />
                 <a href="tel:+9856554544" className="hover:text-white">
                   +9856 55 45 44
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={16} color={ORANGE} />
+                <Mail size={16} color={secondaryColor} />
                 <a
                   href="mailto:support@example.com"
                   className="hover:text-white"

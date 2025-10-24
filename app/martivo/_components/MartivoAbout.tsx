@@ -6,14 +6,31 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-const MartivoAbout = () => {
+const MartivoAbout = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   return (
     <section
       id="about-us"
       className="relative overflow-hidden py-20 md:pb-28 font-lato"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
     >
       {/* subtle right radial wash to echo the design */}
-      <span className="pointer-events-none absolute -right-32 top-0 aspect-[1/1] w-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(246,124,0,0.10),transparent_70%)]" />
+      <span
+        className="pointer-events-none absolute -right-32 top-0 aspect-[1/1] w-[520px] rounded-full"
+        style={{
+          background: `radial-gradient(closest-side, ${primaryColor}1A, transparent 70%)`,
+        }}
+      />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-20">
@@ -25,7 +42,7 @@ const MartivoAbout = () => {
               <figure className="relative rounded-[36px] border border-[#EDEFF3] bg-white p-2 shadow-[0_4px_30px_rgba(16,24,40,0.06)]">
                 {/* top-left spark */}
                 <span className="absolute -left-3 -top-3 z-[1]">
-                  <StarIcon color="#FF7300" size={56} />
+                  <StarIcon color={secondaryColor} size={56} />
                 </span>
                 <Image
                   src={"/assets/martivo-courses-image-1.png"}
@@ -36,7 +53,7 @@ const MartivoAbout = () => {
                 />
                 {/* bottom-center spark */}
                 <span className="absolute  -right-3 -bottom-2">
-                  <SparkIcon color="#FF7300" size={56} />
+                  <SparkIcon color={secondaryColor} size={56} />
                 </span>
               </figure>
             </div>
@@ -45,9 +62,14 @@ const MartivoAbout = () => {
           {/* RIGHT — copy + CTA */}
           <div className="relative">
             {/* orange wash behind text, very subtle */}
-            <span className="pointer-events-none absolute left-20 -top-8 -z-10 hidden aspect-[1/1] w-80 rounded-full bg-[radial-gradient(closest-side,rgba(246,124,0,0.10),transparent_30%)] md:block" />
+            <span
+              className="pointer-events-none absolute left-20 -top-8 -z-10 hidden aspect-[1/1] w-[300px] rounded-full md:block"
+              style={{
+                background: `radial-gradient(closest-side, ${primaryColor}1A, transparent 30%)`,
+              }}
+            />
 
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#FF7300]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--sec)]">
               About Us
             </p>
 
@@ -57,7 +79,7 @@ const MartivoAbout = () => {
 
             {/* tiny accent line + wavy stroke */}
             <div className="mb-6 flex items-center gap-3">
-              <WavyStroke color="#FF7300" size={120} />
+              <WavyStroke color={secondaryColor} size={120} />
             </div>
 
             <div className="space-y-4 text-sm leading-7 text-slate-600 md:text-base md:leading-8">
@@ -77,12 +99,12 @@ const MartivoAbout = () => {
 
             {/* CTA */}
             <Link href={"/"} className="cursor-pointer">
-              <button className="mt-6 md:mt-10 cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[#F67C00] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2">
+              <button className="mt-6 md:mt-10 cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2">
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
                 <span className="relative z-[1] text-[16px] font-medium">
                   Discover More 
                 </span>
-                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-white text-[#F67C00] transition-transform duration-200 group-hover:translate-x-0.5">
+                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
                   <ArrowRight size={18} />
                 </span>
               </button>

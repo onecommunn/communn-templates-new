@@ -39,7 +39,7 @@ const ViewAllButton: React.FC<{ href?: string; label?: string }> = ({
 }) => (
   <Link
     href={href}
-    className="group relative inline-flex items-center gap-3 rounded-full bg-[#F67C00] px-5 py-3 md:py-2 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2"
+    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--sec)] px-5 py-3 md:py-2 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sec)] focus-visible:ring-offset-2"
   >
     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
     <span className="relative z-[1] text-sm font-medium">{label}</span>
@@ -49,7 +49,13 @@ const ViewAllButton: React.FC<{ href?: string; label?: string }> = ({
   </Link>
 );
 
-export default function MartivoEvents() {
+export default function MartivoEvents({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [snapCount, setSnapCount] = useState(0);
@@ -91,10 +97,19 @@ export default function MartivoEvents() {
   if (isLoading) {
     // Loading: carousel with skeleton slides + dots
     return (
-      <section id="events" className="w-full py-12 md:py-16 font-lato">
+      <section
+        id="events"
+        className="w-full py-12 md:py-16 font-lato"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+          } as React.CSSProperties
+        }
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center">
-            <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
+            <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
               Events
             </p>
             <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:text-3xl">
@@ -114,7 +129,7 @@ export default function MartivoEvents() {
                     key={i}
                     className="basis-full sm:basis-1/2 lg:basis-1/4"
                   >
-                    <Skeleton className="h-[250px] w-full bg-[#F67C00] rounded-[30px]" />
+                    <Skeleton className="h-[250px] w-full bg-[var(--sec)] rounded-[30px]" />
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -128,12 +143,21 @@ export default function MartivoEvents() {
   }
 
   return (
-    <section className="w-full py-12 md:py-16" id="events">
+    <section
+      className="w-full py-12 md:py-16"
+      id="events"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="grid items-start gap-8 md:grid-cols-[1fr,3fr] md:gap-10">
           {/* Left intro */}
           <div className="text-center">
-            <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
+            <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
               Events
             </p>
             <h2 className="mb-2 text-2xl font-semibold text-slate-900 md:text-3xl">
@@ -217,7 +241,7 @@ export default function MartivoEvents() {
                       className={[
                         "h-2.5 w-2.5 rounded-full transition-all",
                         active
-                          ? "bg-[#F67C00]"
+                          ? "bg-[var(--sec)]"
                           : "bg-slate-200 hover:bg-slate-300",
                       ].join(" ")}
                     />

@@ -23,13 +23,21 @@ import { useRequests } from "@/hooks/useRequests";
 
 type Feature = { text: string; available?: boolean };
 
-const Check: React.FC<{ muted?: boolean }> = ({ muted }) => (
+const Check: React.FC<{ muted?: boolean; color: string }> = ({
+  muted,
+  color,
+}) => (
   <span
     className={[
       "mt-1 grid h-4 w-4 place-items-center rounded-full",
-      muted ? "bg-[#F67C00]/30" : "bg-[#F67C00]",
+      muted ? "bg-[var(--sec)]/30" : "bg-[var(--color)]",
     ].join(" ")}
     aria-hidden
+    style={
+      {
+        "--color": color,
+      } as React.CSSProperties
+    }
   >
     <svg viewBox="0 0 16 16" width="10" height="10" fill="none">
       <path
@@ -44,9 +52,17 @@ const Check: React.FC<{ muted?: boolean }> = ({ muted }) => (
   </span>
 );
 
-const FeatureItem: React.FC<Feature> = ({ text, available = true }) => (
+const FeatureItem = ({
+  text,
+  available = true,
+  color,
+}: {
+  text: string;
+  available?: boolean;
+  color: string;
+}) => (
   <li className="flex items-start gap-2">
-    <Check muted={!available} />
+    <Check muted={!available} color={color} />
     <span
       className={[
         "text-[14px] leading-6",
@@ -59,17 +75,23 @@ const FeatureItem: React.FC<Feature> = ({ text, available = true }) => (
 );
 
 /* Orange CTA with dashed inset */
-const ChooseButton: React.FC<{ href?: string; text: string }> = ({
-  href = "/",
-  text,
-}) => (
+const ChooseButton: React.FC<{
+  href?: string;
+  text: string;
+  color: string;
+}> = ({ href = "/", text, color }) => (
   <Link
     href={href}
-    className="group relative inline-flex items-center gap-3 rounded-full bg-[#F67C00] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2"
+    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+    style={
+      {
+        "--color": color,
+      } as React.CSSProperties
+    }
   >
     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
     <span className="relative z-[1] text-[15px] font-medium">{text}</span>
-    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[#F67C00] transition-transform duration-200 group-hover:translate-x-0.5">
+    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
       <ArrowRight size={18} />
     </span>
   </Link>
@@ -90,6 +112,7 @@ type CardProps = {
   communityId: string;
   coverImage: string;
   planId: string;
+  color: string;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -105,6 +128,7 @@ const Card: React.FC<CardProps> = ({
   communityId,
   coverImage,
   planId,
+  color,
 }) => {
   // split features into two columns (balanced)
   const mid = Math.ceil(features.length / 2);
@@ -155,9 +179,14 @@ const Card: React.FC<CardProps> = ({
       className={[
         "rounded-2xl bg-white p-5 shadow-[0_1px_0_rgba(16,24,40,0.04)] md:p-7",
         featured
-          ? "border border-[#F67C00] ring-1 ring-[#F67C00]"
+          ? "border border-[var(--color)] ring-1 ring-[var(--color)]"
           : "border border-[#E6E8EE]",
       ].join(" ")}
+      style={
+        {
+          "--color": color,
+        } as React.CSSProperties
+      }
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4 md:gap-8 items-center">
         {/* Title */}
@@ -172,12 +201,12 @@ const Card: React.FC<CardProps> = ({
           <div className="grid grid-cols-1 md:gap-5 sm:grid-cols-2">
             <ul className="space-y-2">
               {left.map((f, i) => (
-                <FeatureItem key={i} {...f} />
+                <FeatureItem key={i} {...f} color={color} />
               ))}
             </ul>
             <ul className="space-y-2">
               {right.map((f, i) => (
-                <FeatureItem key={i} {...f} />
+                <FeatureItem key={i} {...f} color={color} />
               ))}
             </ul>
           </div>
@@ -196,7 +225,7 @@ const Card: React.FC<CardProps> = ({
           {!isLoggedIn ? (
             <Link
               href={"/login"}
-              className="group relative inline-flex items-center gap-3 rounded-full bg-[#F67C00] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2"
+              className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
             >
               <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
               <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
@@ -207,7 +236,7 @@ const Card: React.FC<CardProps> = ({
                 )}
                 Login to Subscribe
               </span>
-              <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[#F67C00] transition-transform duration-200 group-hover:translate-x-0.5">
+              <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
                 <ArrowRight size={18} />
               </span>
             </Link>
@@ -216,7 +245,7 @@ const Card: React.FC<CardProps> = ({
               <Dialog>
                 <DialogTrigger asChild>
                   <div
-                    className="group relative inline-flex items-center gap-3 rounded-full bg-[#F67C00] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2"
+                    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
                     style={{ cursor: "pointer" }}
                   >
                     <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
@@ -227,7 +256,7 @@ const Card: React.FC<CardProps> = ({
                       )}
                       Join Community
                     </span>
-                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[#F67C00] transition-transform duration-200 group-hover:translate-x-0.5">
+                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
                       <ArrowRight size={18} />
                     </span>
                   </div>
@@ -256,7 +285,7 @@ const Card: React.FC<CardProps> = ({
               <Dialog>
                 <DialogTrigger asChild>
                   <div
-                    className="group relative inline-flex items-center gap-3 rounded-full bg-[#F67C00] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2"
+                    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
                     style={{ cursor: "pointer" }}
                   >
                     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
@@ -268,7 +297,7 @@ const Card: React.FC<CardProps> = ({
                       )}
                       Send Join Request
                     </span>
-                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[#F67C00] transition-transform duration-200 group-hover:translate-x-0.5">
+                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
                       <ArrowRight size={18} />
                     </span>
                   </div>
@@ -306,6 +335,7 @@ const Card: React.FC<CardProps> = ({
               href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(
                 coverImage
               )}`}
+              color={color}
             />
           )}
         </div>
@@ -316,7 +346,13 @@ const Card: React.FC<CardProps> = ({
 
 /* ---------- Main ---------- */
 
-const MartivoPlans: React.FC = () => {
+const MartivoPlans = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -383,16 +419,25 @@ const MartivoPlans: React.FC = () => {
     };
   });
 
-  if(normalized?.length < 0){
-    return null
+  if (normalized?.length < 0) {
+    return null;
   }
 
   return (
-    <section className="relative py-16 md:py-24 font-lato" id="plans">
+    <section
+      className="relative py-16 md:py-24 font-lato"
+      id="plans"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
             Pricing Plans
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
@@ -400,7 +445,7 @@ const MartivoPlans: React.FC = () => {
             Martial Arts Programs
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color="#F67C00" size={120} />
+            <WavyStroke color={secondaryColor} size={120} />
           </div>
         </div>
 
@@ -411,7 +456,7 @@ const MartivoPlans: React.FC = () => {
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-[#F67C00]"
+                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-[var(--sec)]"
               />
             ))}
           </div>
@@ -437,6 +482,7 @@ const MartivoPlans: React.FC = () => {
                 subscribers={p?.subscribers ?? []}
                 coverImage={p?.image || "/assets/spawell-plans-image-1.jpg"}
                 planId={p.id}
+                color={secondaryColor}
               />
             ))}
           </div>

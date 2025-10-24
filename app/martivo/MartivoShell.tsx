@@ -11,13 +11,21 @@ export default async function MartivoShell({
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getMartivoCMSBundle(community._id);
   const initialLoading = !bundle?.home;
+  const primaryColor = "#29400a";
+  const secondaryColor = "#7bd900";
   return (
     <>
-      <MartivoHeader />
+      <MartivoHeader
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
       </CMSProvider>
-      <MartivoFooter />
+      <MartivoFooter
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </>
   );
 }

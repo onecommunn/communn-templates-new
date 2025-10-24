@@ -64,7 +64,13 @@ const OPTIONS: EmblaOptionsType = {
   align: "center",
 };
 
-const MartivoTestimonials = () => {
+const MartivoTestimonials = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS, [
     Autoplay({ delay: 3500, stopOnInteraction: false }),
   ]);
@@ -90,7 +96,15 @@ const MartivoTestimonials = () => {
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
   const activeTestimonial = TESTIMONIALS[selectedIndex];
   return (
-    <section className="font-lato">
+    <section
+      className="font-lato"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div
         className="relative overflow-hidden py-16 md:py-24"
         style={{
@@ -100,10 +114,10 @@ const MartivoTestimonials = () => {
         }}
       >
         {/* dark overlay */}
-        <div className="absolute inset-0 bg-[#0A223B]/80" />
+        <div className="absolute inset-0 bg-[var(--pri)]/80" />
         <div className="relative container mx-auto px-0 sm:px-0 md:px-20 text-center text-white">
           {/* Header */}
-          <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
+          <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
             Testimonials
           </p>
           <h2 className="text-2xl font-semibold md:text-4xl">
@@ -111,7 +125,7 @@ const MartivoTestimonials = () => {
             <br className="hidden md:block" /> with us!
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color="#F67C00" size={120} />
+            <WavyStroke color={secondaryColor} size={120} />
           </div>
 
           {/* Carousel */}
@@ -137,7 +151,7 @@ const MartivoTestimonials = () => {
                           className="object-cover rounded-full"
                         />
                         {!isActive && (
-                          <div className="absolute inset-0 bg-[#0A223B]/60 rounded-full" />
+                          <div className="absolute inset-0 bg-[var(--pri)]/40 rounded-full" />
                         )}
                       </div>
                     </div>
@@ -151,7 +165,7 @@ const MartivoTestimonials = () => {
                 <p className="text-lg italic text-gray-200">
                   “{activeTestimonial.text}”
                 </p>
-                <h4 className="mt-4 text-xl font-semibold text-[#F67C00]">
+                <h4 className="mt-4 text-xl font-semibold text-[var(--sec)]">
                   {activeTestimonial.name}
                 </h4>
                 <p className="text-sm text-gray-300">
@@ -170,7 +184,7 @@ const MartivoTestimonials = () => {
                     onClick={() => scrollTo(i)}
                     className={`h-2.5 w-2.5 rounded-full transition-all ${
                       active
-                        ? "bg-[#F67C00]"
+                        ? "bg-[var(--sec)]"
                         : "bg-slate-200 hover:bg-slate-300"
                     }`}
                   />
@@ -193,7 +207,7 @@ const MartivoTestimonials = () => {
         <div className="rounded-2xl font-lato border border-[#E6E8EE] bg-white shadow-[0_1px_0_rgba(16,24,40,0.04)]">
           <dl className="grid grid-cols-1 divide-y divide-[#EEF1F6] sm:grid-cols-2 sm:divide-y-0 md:grid-cols-4 md:divide-x">
             <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[#F67C00] md:text-[28px] leading-none font-lato">
+              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none font-lato">
                 1500+
               </dt>
               <dd className="mt-3 text-[16px] text-slate-600">
@@ -201,7 +215,7 @@ const MartivoTestimonials = () => {
               </dd>
             </div>
             <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[#F67C00] md:text-[28px] leading-none">
+              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none">
                 250+
               </dt>
               <dd className="mt-3 text-[16px] text-slate-600">
@@ -209,7 +223,7 @@ const MartivoTestimonials = () => {
               </dd>
             </div>
             <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[#F67C00] md:text-[28px] leading-none">
+              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none">
                 50+
               </dt>
               <dd className="mt-3 text-[16px] text-slate-600">
@@ -217,7 +231,7 @@ const MartivoTestimonials = () => {
               </dd>
             </div>
             <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[#F67C00] md:text-[28px] leading-none">
+              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none">
                 100+
               </dt>
               <dd className="mt-3 text-[16px] text-slate-600">Awards Won</dd>

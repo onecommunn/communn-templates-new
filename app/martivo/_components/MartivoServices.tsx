@@ -28,14 +28,27 @@ const COURSES = [
   },
 ];
 
-const MartivoServices = () => {
+const MartivoServices = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   return (
-    <section className="relative py-16 md:py-24 font-lato bg-[#FF7300]/10">
-
+    <section
+      className="relative py-16 md:py-24 font-lato bg-[var(--sec)]/10"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-         <p className="mb-2 text-[16px] font-semibold text-[#F67C00] uppercase">
+          <p className="mb-2 text-[16px] font-semibold text-[var(--sec)] uppercase">
             OUR SERVICES
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
@@ -45,15 +58,13 @@ const MartivoServices = () => {
 
           {/* wavy accent */}
           <div className="mx-auto mt-3 flex items-center justify-center gap-3">
-           
-            <WavyStroke color="#F67C00" size={120}/>
-          
+            <WavyStroke color={secondaryColor} size={120} />
           </div>
         </div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          {COURSES.map((c,idx) => {
+          {COURSES.map((c, idx) => {
             const reverseOnDesktop = Math.floor(idx / 2) % 2 === 1;
             return (
               <article
@@ -73,7 +84,7 @@ const MartivoServices = () => {
                   />
 
                   {/* orange number chip */}
-                  <div className="absolute -left-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[#F67C00] text-[11px] font-semibold text-white shadow-md ring-4 ring-white">
+                  <div className="absolute -left-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[var(--sec)] text-[11px] font-semibold text-white shadow-md ring-4 ring-white">
                     {String(c.id).padStart(2, "0")}
                   </div>
                 </div>
@@ -88,7 +99,7 @@ const MartivoServices = () => {
                   </p>
                   <a
                     href="#"
-                    className="text-xs font-semibold uppercase tracking-wide text-[#F67C00] hover:underline"
+                    className="text-xs font-semibold uppercase tracking-wide text-[var(--sec)] hover:underline"
                   >
                     Learn more
                   </a>

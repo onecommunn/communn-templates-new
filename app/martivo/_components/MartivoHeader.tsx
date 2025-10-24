@@ -24,7 +24,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const MartivoHeader = () => {
+const MartivoHeader = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
 
@@ -40,7 +46,15 @@ const MartivoHeader = () => {
   };
 
   return (
-    <header className="sticky font-lato top-0 z-50 backdrop-blur bg-[#0A2640]">
+    <header
+      className="sticky font-lato top-0 z-50 backdrop-blur bg-[var(--pri)]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
@@ -145,7 +159,7 @@ const MartivoHeader = () => {
                   aria-controls="creator-mobile-menu"
                   aria-label="Open menu"
                 >
-                  <Menu className="h-6 w-6 text-[#FF7300]" />
+                  <Menu className="h-6 w-6 text-[var(--sec)]" />
                 </button>
               </SheetTrigger>
 
@@ -236,7 +250,7 @@ const MartivoHeader = () => {
                       </Button>
                     ) : (
                       <Link href="/login" className="w-full">
-                        <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2 bg-[#FF7300]">
+                        <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2 bg-[var(--sec)]">
                           Login <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>

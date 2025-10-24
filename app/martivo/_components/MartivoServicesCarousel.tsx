@@ -63,14 +63,18 @@ const SERVICES: Service[] = [
   },
 ];
 
-const orange = "#F67C00";
-
 const OPTIONS: EmblaOptionsType = {
   loop: true,
   align: "center",
 };
 
-export default function MartivoServicesCarousel() {
+export default function MartivoServicesCarousel({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS, [
     Autoplay({ delay: 3500, stopOnInteraction: false }),
   ]);
@@ -95,7 +99,7 @@ export default function MartivoServicesCarousel() {
 
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
 
-  const renderIcon = (Iconish: Iconish, alt: string) => {
+  const renderIcon = (Iconish: Iconish, alt: string, color: string) => {
     if (typeof Iconish === "string") {
       // Image path
       return (
@@ -111,11 +115,19 @@ export default function MartivoServicesCarousel() {
     }
 
     const LucideIcon = Iconish;
-    return <LucideIcon width={56} height={56} stroke={orange} strokeWidth={1}/>;
+    return <LucideIcon width={56} height={56} stroke={color} strokeWidth={1} />;
   };
 
   return (
-    <section className="w-full py-10 overflow-hidden font-lato">
+    <section
+      className="w-full py-10 overflow-hidden font-lato"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="embla" ref={emblaRef}>
         <div className="embla__container flex">
           {SERVICES.map((s, i) => {
@@ -130,12 +142,18 @@ export default function MartivoServicesCarousel() {
                     "h-full rounded-2xl border bg-white px-6 py-8 text-center transition-all duration-300",
                     "border-slate-200 shadow-[0_1px_0_rgba(16,24,40,0.04)]",
                     isActive
-                      ? "border-orange-300 ring-1 ring-orange-300 shadow-[0_10px_30px_rgba(246,124,0,0.12)]"
+                      ? "border-[var(--sec)] ring-1 ring-[var(--sec)] shadow-[0_10px_30px_rgba(246,124,0,0.12)]"
                       : "hover:shadow-[0_6px_20px_rgba(16,24,40,0.06)]",
                   ].join(" ")}
+                  style={{
+                    borderColor: isActive ? "var(--sec)" : undefined,
+                    boxShadow: isActive
+                      ? `0 10px 30px ${secondaryColor}1F`
+                      : undefined,
+                  }}
                 >
                   <div className="mb-4 flex items-center justify-center">
-                    {renderIcon(s.Icon, s.title)}
+                    {renderIcon(s.Icon, s.title, secondaryColor)}
                   </div>
                   <h3 className="mb-2 text-lg font-semibold text-slate-900">
                     {s.title}
@@ -161,7 +179,7 @@ export default function MartivoServicesCarousel() {
               onClick={() => scrollTo(i)}
               className={[
                 "h-2.5 w-2.5 rounded-full transition-all",
-                active ? "bg-[#F67C00]" : "bg-slate-200 hover:bg-slate-300",
+                active ? "bg-[var(--sec)]" : "bg-slate-200 hover:bg-slate-300",
               ].join(" ")}
             />
           );

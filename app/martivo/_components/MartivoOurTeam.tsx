@@ -39,7 +39,13 @@ const data = [
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
-const MartivoOurTeam = () => {
+const MartivoOurTeam = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [snapCount, setSnapCount] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -59,11 +65,19 @@ const MartivoOurTeam = () => {
   }, [api]);
 
   return (
-    <section className="relative py-16 md:py-24 font-lato">
+    <section
+      className="relative py-16 md:py-24 font-lato"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[#F67C00] uppercase">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
             Our Team
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
@@ -71,7 +85,7 @@ const MartivoOurTeam = () => {
             arts masters
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color="#F67C00" size={120} />
+            <WavyStroke color={secondaryColor} size={120} />
           </div>
         </div>
 
@@ -113,7 +127,7 @@ const MartivoOurTeam = () => {
                     <h3 className="text-[15px] font-semibold text-slate-900">
                       {each.name}
                     </h3>
-                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-wide text-[#F67C00]">
+                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-wide text-[var(--sec)]">
                       {each.role}
                     </p>
                   </article>
@@ -139,7 +153,7 @@ const MartivoOurTeam = () => {
                     className={[
                       "h-2.5 w-2.5 rounded-full transition-all",
                       active
-                        ? "bg-[#F67C00]"
+                        ? "bg-[var(--sec)]"
                         : "bg-slate-200 hover:bg-slate-300",
                     ].join(" ")}
                   />
