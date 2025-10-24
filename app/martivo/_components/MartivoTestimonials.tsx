@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { WavyStroke } from "./Icons/WavyStroke";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -64,6 +64,8 @@ const OPTIONS: EmblaOptionsType = {
   align: "center",
 };
 
+const MIN_SLIDES = 6;
+
 const MartivoTestimonials = ({
   primaryColor,
   secondaryColor,
@@ -71,30 +73,44 @@ const MartivoTestimonials = ({
   primaryColor: string;
   secondaryColor: string;
 }) => {
+  const realItems = TESTIMONIALS;
+  const realLen = realItems.length;
+
+  // Virtualize to ensure enough slides for the centered layout & looping
+  const slides: Testimonial[] = useMemo(() => {
+    if (realLen === 0) return [];
+    const count = Math.max(MIN_SLIDES, realLen);
+    return Array.from({ length: count }, (_, i) => realItems[i % realLen]);
+  }, [realItems, realLen]);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS, [
     Autoplay({ delay: 3500, stopOnInteraction: false }),
   ]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [selectedVirtual, setSelectedVirtual] = useState(0);
+  const [snapCount, setSnapCount] = useState(0);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setSelectedVirtual(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
+    setSnapCount(emblaApi.scrollSnapList().length);
     onSelect();
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", () => {
-      setScrollSnaps(emblaApi.scrollSnapList());
+      setSnapCount(emblaApi.scrollSnapList().length);
       onSelect();
     });
   }, [emblaApi, onSelect]);
 
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
-  const activeTestimonial = TESTIMONIALS[selectedIndex];
+
+  // Map the current virtual index back to the real item for the message/name/role and the dots
+  const activeRealIndex = realLen ? selectedVirtual % realLen : 0;
+  const activeForText = realLen ? realItems[activeRealIndex] : undefined;
+
   return (
     <section
       className="font-lato"
@@ -132,12 +148,12 @@ const MartivoTestimonials = ({
           <div className="w-full py-10 overflow-hidden">
             <div className="embla" ref={emblaRef}>
               <div className="embla__container flex">
-                {TESTIMONIALS.map((s, i) => {
-                  const isActive = i === selectedIndex;
+                {slides.map((s, i) => {
+                  const isActive = i === selectedVirtual;
                   return (
                     <div
-                      key={s.id}
-                      className="embla__slide shrink-0 grow-0 px-2 md:px-0  basis-1/3 md:basis-1/5 relative"
+                      key={`${s.id}-${i}`} // stable across virtualization
+                      className="embla__slide shrink-0 grow-0 px-2 md:px-0 basis-1/3 md:basis-1/5 relative"
                     >
                       <div
                         className={`relative w-[200px] h-[400px] rounded-full overflow-hidden mx-auto transition-all duration-300 ${
@@ -149,6 +165,7 @@ const MartivoTestimonials = ({
                           alt={s.name}
                           fill
                           className="object-cover rounded-full"
+                          unoptimized
                         />
                         {!isActive && (
                           <div className="absolute inset-0 bg-[var(--pri)]/40 rounded-full" />
@@ -160,23 +177,22 @@ const MartivoTestimonials = ({
               </div>
             </div>
 
-            {activeTestimonial && (
+            {activeForText && (
               <div className="mt-10 max-w-2xl mx-auto text-center">
                 <p className="text-lg italic text-gray-200">
-                  “{activeTestimonial.text}”
+                  “{activeForText.text}”
                 </p>
                 <h4 className="mt-4 text-xl font-semibold text-[var(--sec)]">
-                  {activeTestimonial.name}
+                  {activeForText.name}
                 </h4>
-                <p className="text-sm text-gray-300">
-                  {activeTestimonial.role}
-                </p>
+                <p className="text-sm text-gray-300">{activeForText.role}</p>
               </div>
             )}
-            {/* Dots */}
+
+            {/* Dots reflect the real items count */}
             <div className="mt-5 flex items-center justify-center gap-3">
-              {scrollSnaps.map((_, i) => {
-                const active = i === selectedIndex;
+              {realItems.map((_, i) => {
+                const active = i === activeRealIndex;
                 return (
                   <button
                     key={i}
@@ -194,6 +210,8 @@ const MartivoTestimonials = ({
           </div>
         </div>
       </div>
+
+      {/* Stats bar */}
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-20 py-10">
         <div className="pointer-events-none absolute -left-10 top-4 opacity-60">
           <img

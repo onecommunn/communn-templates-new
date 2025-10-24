@@ -1,10 +1,10 @@
 "use client";
 import React, { Suspense } from "react";
-import SpawellSubscriptions from "./_components/SpawellSubscriptions";
 import { useCMS } from "../CMSProvider.client";
 import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
+import MartivoEventDetail from "./_components/MartivoEventDetail";
 
-function PlanDetailsSkeleton() {
+function EventDetailsSkeleton() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-20">
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -31,25 +31,17 @@ function PlanDetailsSkeleton() {
   );
 }
 
-const SpawellSubscriptionsPage = () => {
-  const { home } = useCMS();
-  const isLoading = home === undefined;
-  const source: SpawellHomePage | undefined = !isLoading
-    ? (home as SpawellHomePage | undefined)
-    : undefined;
-
-  const primaryColor = source?.color?.primary || "#5D3222";
-  const secondaryColor = source?.color?.secondary || "#fff";
-  const neutralColor = source?.color?.neutral || "#F9F6F1";
+const MartivoEventDetailsPage = () => {
+  const primaryColor = "#29400a";
+  const secondaryColor = "#7bd900";
   return (
-    <Suspense fallback={<PlanDetailsSkeleton />}>
-      <SpawellSubscriptions
+    <Suspense fallback={<EventDetailsSkeleton />}>
+      <MartivoEventDetail
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
       />
     </Suspense>
   );
 };
 
-export default SpawellSubscriptionsPage;
+export default MartivoEventDetailsPage;

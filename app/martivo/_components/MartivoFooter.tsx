@@ -105,22 +105,22 @@ export default function MartivoFooter({
                 </Link>
               </li>
               <li>
-                <Link href="#" className="transition hover:text-white">
+                <Link href="/#services" className="transition hover:text-white">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="#" className="transition hover:text-white">
+                <Link href="/#events" className="transition hover:text-white">
                   Events
                 </Link>
               </li>
               <li>
-                <Link href="#" className="transition hover:text-white">
+                <Link href="/#plans" className="transition hover:text-white">
                   Plans
                 </Link>
               </li>
               <li>
-                <Link href="#" className="transition hover:text-white">
+                <Link href="/#contact" className="transition hover:text-white">
                   Contact Us
                 </Link>
               </li>

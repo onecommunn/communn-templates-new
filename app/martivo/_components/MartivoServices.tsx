@@ -44,6 +44,7 @@ const MartivoServices = ({
           "--sec": secondaryColor,
         } as React.CSSProperties
       }
+      id="services"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
@@ -97,12 +98,6 @@ const MartivoServices = ({
                   <p className="mb-3 max-w-[48ch] text-sm leading-6 text-slate-600">
                     {c.desc}
                   </p>
-                  <a
-                    href="#"
-                    className="text-xs font-semibold uppercase tracking-wide text-[var(--sec)] hover:underline"
-                  >
-                    Learn more
-                  </a>
                 </div>
               </article>
             );
