@@ -1,122 +1,78 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaOptionsType } from "embla-carousel";
 import type { LucideProps } from "lucide-react";
-import { Dumbbell, Shield, Sparkles, HeartPulse, Activity } from "lucide-react";
 import Image from "next/image";
+import { AboutSection } from "@/models/templates/martivo/martivo-home-model";
+import * as Lucide from "lucide-react";
 
-type Iconish = string | React.ComponentType<LucideProps>;
+const OPTIONS: EmblaOptionsType = { loop: true, align: "center" };
+const MIN_SLIDES = 6;
 
-type Service = {
-  id: number;
-  title: string;
-  desc: string;
-  Icon: Iconish;
-};
+const isUrl = (v: string) => /^https?:\/\//i.test(v) || v?.startsWith("/");
 
-const SERVICES: Service[] = [
-  // Lucide icon examples
-  {
-    id: 1,
-    title: "Kickboxing",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: Activity,
-  },
-  {
-    id: 2,
-    title: "Self Defense",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: Shield,
-  },
-  {
-    id: 3,
-    title: "Kickboxing",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: "/assets/martivo-service-image-1.svg",
-  },
-  {
-    id: 4,
-    title: "Self Defense",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: "/assets/martivo-service-image-2.svg",
-  },
-  // Mix more
-  {
-    id: 5,
-    title: "Increase Strength",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: Dumbbell,
-  },
-  {
-    id: 6,
-    title: "Heart & Balance",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: HeartPulse,
-  },
-  {
-    id: 7,
-    title: "Mindfulness",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
-    Icon: Sparkles,
-  },
-];
-
-const OPTIONS: EmblaOptionsType = {
-  loop: true,
-  align: "center",
-};
+type LucideIconType = React.ComponentType<LucideProps>;
+function getLucideIcon(name?: string): LucideIconType | null {
+  if (!name) return null;
+  const lib = Lucide as unknown as Record<string, LucideIconType>;
+  return lib[name] ?? null;
+}
 
 export default function MartivoServicesCarousel({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: AboutSection;
 }) {
+  const features = data?.content?.features ?? [];
+  const realLen = features.length;
+
+  // Build a virtualized slides array to guarantee enough slides for loop + center
+  const slides = useMemo(() => {
+    if (realLen === 0) return [];
+    const count = Math.max(MIN_SLIDES, realLen);
+    return Array.from({ length: count }, (_, i) => ({
+      ...features[i % realLen],
+      __virtualIndex: i, // keep a stable key base
+    }));
+  }, [features, realLen]);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS, [
     Autoplay({ delay: 3500, stopOnInteraction: false }),
   ]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [selectedVirtual, setSelectedVirtual] = useState(0);
+  const [virtualSnapCount, setVirtualSnapCount] = useState(0);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setSelectedVirtual(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
+    setVirtualSnapCount(emblaApi.scrollSnapList().length);
     onSelect();
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", () => {
-      setScrollSnaps(emblaApi.scrollSnapList());
+      setVirtualSnapCount(emblaApi.scrollSnapList().length);
       onSelect();
     });
   }, [emblaApi, onSelect]);
 
-  const scrollTo = (index: number) => emblaApi?.scrollTo(index);
-
-  const renderIcon = (Iconish: Iconish, alt: string, color: string) => {
-    if (typeof Iconish === "string") {
-      // Image path
-      return (
-        <Image
-          unoptimized
-          src={Iconish}
-          alt={alt}
-          width={60}
-          height={60}
-          className="h-[60px] w-[60px]"
-        />
-      );
-    }
-
-    const LucideIcon = Iconish;
-    return <LucideIcon width={56} height={56} stroke={color} strokeWidth={1} />;
+  const scrollTo = (realIdx: number) => {
+    // scroll to the first virtual occurrence of that real index
+    emblaApi?.scrollTo(realIdx);
   };
+
+  // Map currently selected virtual slide back to the real index for dot state
+  const activeRealIndex = realLen ? selectedVirtual % realLen : 0;
+
+  if (realLen === 0) return null;
 
   return (
     <section
@@ -130,11 +86,14 @@ export default function MartivoServicesCarousel({
     >
       <div className="embla" ref={emblaRef}>
         <div className="embla__container flex">
-          {SERVICES.map((s, i) => {
-            const isActive = i === selectedIndex;
+          {slides.map((s, i) => {
+            const isActive = i === selectedVirtual;
+            const LucideIcon =
+              s?.icon && !isUrl(s.icon) ? getLucideIcon(s.icon) : null;
+
             return (
               <div
-                key={s.id}
+                key={`${s?.title || "feat"}-${i}`}
                 className="embla__slide shrink-0 grow-0 basis-[86%] px-3 sm:basis-[48%] md:basis-[40%] lg:basis-[22%]"
               >
                 <article
@@ -147,19 +106,33 @@ export default function MartivoServicesCarousel({
                   ].join(" ")}
                   style={{
                     borderColor: isActive ? "var(--sec)" : undefined,
-                    boxShadow: isActive
-                      ? `0 10px 30px ${secondaryColor}1F`
-                      : undefined,
+                    boxShadow: isActive ? `0 10px 30px ${secondaryColor}1F` : undefined,
                   }}
                 >
                   <div className="mb-4 flex items-center justify-center">
-                    {renderIcon(s.Icon, s.title, secondaryColor)}
+                    {LucideIcon ? (
+                      <LucideIcon
+                        width={56}
+                        height={56}
+                        stroke={secondaryColor}
+                        strokeWidth={1}
+                      />
+                    ) : (
+                      <Image
+                        unoptimized
+                        src={s?.icon || ""}
+                        alt={s?.title || "feature"}
+                        width={60}
+                        height={60}
+                        className="h-[60px] w-[60px]"
+                      />
+                    )}
                   </div>
                   <h3 className="mb-2 text-lg font-semibold text-slate-900">
-                    {s.title}
+                    {s?.title}
                   </h3>
                   <p className="mx-auto max-w-[28ch] text-sm leading-6 text-slate-600">
-                    {s.desc}
+                    {s?.description}
                   </p>
                 </article>
               </div>
@@ -168,10 +141,10 @@ export default function MartivoServicesCarousel({
         </div>
       </div>
 
-      {/* Dots */}
+      {/* Dots — reflect REAL items, not virtualized count */}
       <div className="mt-5 flex items-center justify-center gap-3">
-        {scrollSnaps.map((_, i) => {
-          const active = i === selectedIndex;
+        {features.map((_, i) => {
+          const active = i === activeRealIndex;
           return (
             <button
               key={i}

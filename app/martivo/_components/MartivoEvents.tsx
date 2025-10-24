@@ -18,6 +18,7 @@ import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { EventsSection } from "@/models/templates/martivo/martivo-home-model";
 
 /* ---------- Utils ---------- */
 const formatMonthDay = (iso: string) =>
@@ -52,9 +53,11 @@ const ViewAllButton: React.FC<{ href?: string; label?: string }> = ({
 export default function MartivoEvents({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: EventsSection;
 }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -63,6 +66,8 @@ export default function MartivoEvents({
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
+
+  const content = data?.content;
 
   useEffect(() => {
     if (!api) return;
@@ -108,13 +113,12 @@ export default function MartivoEvents({
         }
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-          <div className="text-center">
+          <div className="text-center md:max-w-lg">
             <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
               Events
             </p>
             <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:text-3xl">
-              Learn from the best martial
-              <br className="hidden md:block" /> arts instructors around
+              {content?.heading}
             </h2>
           </div>
           <div className="mx-auto mt-2 px-4">
@@ -154,16 +158,17 @@ export default function MartivoEvents({
       }
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="grid items-start gap-8 md:grid-cols-[1fr,3fr] md:gap-10">
+        <div className="grid items-center gap-8 md:grid-cols-[1fr,3fr] md:gap-10">
           {/* Left intro */}
-          <div className="text-center">
-            <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
-              Events
-            </p>
-            <h2 className="mb-2 text-2xl font-semibold text-slate-900 md:text-3xl">
-              Learn from the best martial
-              <br className="hidden md:block" /> arts instructors around
-            </h2>
+          <div className="flex justify-center">
+            <div className="text-center md:max-w-lg">
+              <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
+                Events
+              </p>
+              <h2 className="mb-2 text-2xl font-semibold text-slate-900 md:text-3xl">
+                {content?.heading}
+              </h2>
+            </div>
           </div>
 
           {/* Right: shadcn Carousel */}

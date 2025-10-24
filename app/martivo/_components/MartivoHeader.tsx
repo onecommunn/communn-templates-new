@@ -23,16 +23,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Header } from "@/models/templates/martivo/martivo-home-model";
 
 const MartivoHeader = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: Header;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
+
+  const content = data.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -59,7 +64,7 @@ const MartivoHeader = ({
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
-              src={"/assets/martivoLogo.png"}
+              src={content?.media?.[0] || "/assets/martivoLogo.png"}
               alt="logo"
               className="w-32 h-15 object-contain"
             />

@@ -5,59 +5,14 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaOptionsType } from "embla-carousel";
 import Image from "next/image";
+import { TestimoniesSection } from "@/models/templates/martivo/martivo-home-model";
 
 type Testimonial = {
-  id: number;
-  img: string;
-  text: string;
   name: string;
-  role: string;
+  designation: string;
+  avatar: string;
+  message: string;
 };
-
-const TESTIMONIALS: Testimonial[] = [
-  {
-    id: 1,
-    img: "/assets/martivo-testimonials-image-1.png",
-    text: "Sed rutrum leo ante, vel lobortis odio pellentesque. Suspendisse faucibus elementum pharetra. Aenean quis vehicula dolor. Sed condimentum interdum convallis.",
-    name: "Sarah Taylor",
-    role: "Student",
-  },
-  {
-    id: 2,
-    img: "/assets/martivo-testimonials-image-2.png",
-    text: "Duis aliquet nulla vel tellus rhoncus, et malesuada purus pharetra. Integer eu sem felis.",
-    name: "John Carter",
-    role: "Black Belt Trainer",
-  },
-  {
-    id: 3,
-    img: "/assets/martivo-testimonials-image-3.png",
-    text: "Quisque volutpat, ipsum id ullamcorper cursus, lectus justo iaculis lacus.",
-    name: "Emily Chen",
-    role: "Karate Champion",
-  },
-  {
-    id: 4,
-    img: "/assets/martivo-testimonials-image-4.png",
-    text: "Maecenas eget sagittis libero. Ut cursus magna ut tincidunt fermentum.",
-    name: "Hiro Tanaka",
-    role: "Dojo Instructor",
-  },
-  {
-    id: 5,
-    img: "/assets/martivo-testimonials-image-1.png",
-    text: "Etiam rhoncus faucibus urna, ac interdum lacus mattis a.",
-    name: "David Park",
-    role: "Self Defense Coach",
-  },
-  {
-    id: 6,
-    img: "/assets/martivo-testimonials-image-3.png",
-    text: "Quisque volutpat, ipsum id ullamcorper cursus, lectus justo iaculis lacus.",
-    name: "Emily Chen",
-    role: "Karate Champion",
-  },
-];
 
 const OPTIONS: EmblaOptionsType = {
   loop: true,
@@ -69,11 +24,14 @@ const MIN_SLIDES = 6;
 const MartivoTestimonials = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: TestimoniesSection;
 }) => {
-  const realItems = TESTIMONIALS;
+  const content = data?.content;
+  const realItems = content?.testimonies;
   const realLen = realItems.length;
 
   // Virtualize to ensure enough slides for the centered layout & looping
@@ -136,9 +94,8 @@ const MartivoTestimonials = ({
           <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
             Testimonials
           </p>
-          <h2 className="text-2xl font-semibold md:text-4xl">
-            Start your martial arts journey
-            <br className="hidden md:block" /> with us!
+          <h2 className="text-2xl font-semibold md:text-4xl md:max-w-lg mx-auto">
+            {content?.heading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
             <WavyStroke color={secondaryColor} size={120} />
@@ -152,7 +109,7 @@ const MartivoTestimonials = ({
                   const isActive = i === selectedVirtual;
                   return (
                     <div
-                      key={`${s.id}-${i}`} // stable across virtualization
+                      key={`item-${i}`} // stable across virtualization
                       className="embla__slide shrink-0 grow-0 px-2 md:px-0 basis-1/3 md:basis-1/5 relative"
                     >
                       <div
@@ -161,7 +118,7 @@ const MartivoTestimonials = ({
                         }`}
                       >
                         <Image
-                          src={s.img}
+                          src={s.avatar}
                           alt={s.name}
                           fill
                           className="object-cover rounded-full"
@@ -180,12 +137,14 @@ const MartivoTestimonials = ({
             {activeForText && (
               <div className="mt-10 max-w-2xl mx-auto text-center">
                 <p className="text-lg italic text-gray-200">
-                  “{activeForText.text}”
+                  “{activeForText.message}”
                 </p>
                 <h4 className="mt-4 text-xl font-semibold text-[var(--sec)]">
                   {activeForText.name}
                 </h4>
-                <p className="text-sm text-gray-300">{activeForText.role}</p>
+                <p className="text-sm text-gray-300">
+                  {activeForText.designation}
+                </p>
               </div>
             )}
 
@@ -223,37 +182,17 @@ const MartivoTestimonials = ({
         </div>
 
         <div className="rounded-2xl font-lato border border-[#E6E8EE] bg-white shadow-[0_1px_0_rgba(16,24,40,0.04)]">
-          <dl className="grid grid-cols-1 divide-y divide-[#EEF1F6] sm:grid-cols-2 sm:divide-y-0 md:grid-cols-4 md:divide-x">
-            <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none font-lato">
-                1500+
-              </dt>
-              <dd className="mt-3 text-[16px] text-slate-600">
-                Happy Students
-              </dd>
-            </div>
-            <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none">
-                250+
-              </dt>
-              <dd className="mt-3 text-[16px] text-slate-600">
-                Expert Trainers
-              </dd>
-            </div>
-            <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none">
-                50+
-              </dt>
-              <dd className="mt-3 text-[16px] text-slate-600">
-                Martial Arts Programs
-              </dd>
-            </div>
-            <div className="px-8 py-8 text-center">
-              <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none">
-                100+
-              </dt>
-              <dd className="mt-3 text-[16px] text-slate-600">Awards Won</dd>
-            </div>
+          <dl className="grid grid-cols-1 items-center divide-y divide-[#EEF1F6] sm:grid-cols-2 sm:divide-y-0 md:grid-cols-4 md:divide-x">
+            {content?.itemBox?.map((item, idx) => (
+              <div className="px-8 py-8 text-center" key={idx}>
+                <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none font-lato">
+                  {item?.count}+
+                </dt>
+                <dd className="mt-3 text-[16px] text-slate-600">
+                  {item?.title}
+                </dd>
+              </div>
+            ))}
           </dl>
         </div>
       </div>

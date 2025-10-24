@@ -1,5 +1,6 @@
 import React from "react";
 import { WavyStroke } from "./Icons/WavyStroke";
+import { ServiceSection } from "@/models/templates/martivo/martivo-home-model";
 
 const COURSES = [
   {
@@ -31,10 +32,13 @@ const COURSES = [
 const MartivoServices = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: ServiceSection;
 }) => {
+  const content = data?.content
   return (
     <section
       className="relative py-16 md:py-24 font-lato bg-[var(--sec)]/10"
@@ -48,13 +52,12 @@ const MartivoServices = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
-        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+        <div className="mx-auto mb-10 md:max-w-lg text-center md:mb-14">
           <p className="mb-2 text-[16px] font-semibold text-[var(--sec)] uppercase">
             OUR SERVICES
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
-            Elevate your mind, body, and
-            <br className="hidden md:block" /> spirit here
+            {content?.heading}
           </h2>
 
           {/* wavy accent */}
@@ -65,11 +68,11 @@ const MartivoServices = ({
 
         {/* Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          {COURSES.map((c, idx) => {
+          {content?.itemBox?.map((c, idx) => {
             const reverseOnDesktop = Math.floor(idx / 2) % 2 === 1;
             return (
               <article
-                key={c.id}
+                key={idx}
                 className={[
                   "relative flex items-center md:items-start gap-5 rounded-2xl justify-around p-3",
                   "flex-col md:flex-row",
@@ -79,14 +82,14 @@ const MartivoServices = ({
                 {/* Image with soft frame */}
                 <div className="relative shrink-0 rounded-xl border border-[#dddddd] border-dashed p-1">
                   <img
-                    src={c.img}
+                    src={c.media}
                     alt={c.title}
                     className="h-full w-full rounded-lg object-cover md:h-48 md:w-48"
                   />
 
                   {/* orange number chip */}
                   <div className="absolute -left-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[var(--sec)] text-[11px] font-semibold text-white shadow-md ring-4 ring-white">
-                    {String(c.id).padStart(2, "0")}
+                    {String(idx+1).padStart(2, "0")}
                   </div>
                 </div>
 
@@ -96,7 +99,7 @@ const MartivoServices = ({
                     {c.title}
                   </h3>
                   <p className="mb-3 max-w-[48ch] text-sm leading-6 text-slate-600">
-                    {c.desc}
+                    {c.description}
                   </p>
                 </div>
               </article>

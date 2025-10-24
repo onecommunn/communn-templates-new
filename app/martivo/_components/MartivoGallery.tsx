@@ -1,7 +1,7 @@
 import { Marquee } from "@/components/CustomComponents/marquee";
+import { GallerySection } from "@/models/templates/martivo/martivo-home-model";
 import Image from "next/image";
 import React from "react";
-
 
 const images = [
   {
@@ -26,15 +26,16 @@ const images = [
   },
 ];
 
-const MartivoGallery = () => {
+const MartivoGallery = ({ data }: { data: GallerySection }) => {
+  const content = data?.content;
   return (
     <section>
-      <hr className="mx-10 mb-2"/>
+      <hr className="mx-10 mb-2" />
       <Marquee>
-        {images?.map((item, idx) => (
+        {content?.media?.map((item, idx) => (
           <div key={idx} className="overflow-hidden rounded-xl">
             <Image
-              src={item?.url}
+              src={item}
               alt={`image-${idx}`}
               width={195}
               height={195}

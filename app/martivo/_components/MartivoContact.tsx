@@ -9,17 +9,21 @@ import { format as formatDateFns } from "date-fns";
 import { toast } from "sonner";
 import { sendNotification } from "@/services/contactService";
 import { ContactForm } from "@/models/contact.model";
-
+import { ContactSection } from "@/models/templates/martivo/martivo-home-model";
 
 export default function MartivoContact({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: ContactSection;
 }) {
   // left column is static, right column is the form
   const { communityId } = useCommunity();
+
+  const content = data?.content;
 
   // form state
   const [first, setFirst] = useState("");
@@ -90,7 +94,7 @@ export default function MartivoContact({
             Contact Us
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
-            Have questions? We’re here to help
+            {content?.heading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
             <WavyStroke color={secondaryColor} size={120} />
@@ -102,11 +106,10 @@ export default function MartivoContact({
           {/* Left: contact info */}
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-slate-900">
-              Get in touch
+              {content?.subHeading}
             </h3>
             <p className="max-w-md text-[14px] leading-6 text-slate-600">
-              Tell us what you need and we’ll get back to you as soon as
-              possible. You can also reach us directly using the details below.
+              {content?.description}
             </p>
 
             <ul className="mt-4 space-y-4 text-[14px] text-slate-700">
@@ -116,9 +119,7 @@ export default function MartivoContact({
                 </span>
                 <div>
                   <p className="font-medium text-slate-900">Address</p>
-                  <p className="text-slate-600">
-                    3600 Las Vegas Blvd S, Las Vegas, NV
-                  </p>
+                  <p className="text-slate-600">{content?.contact?.address}</p>
                 </div>
               </li>
 
@@ -132,7 +133,7 @@ export default function MartivoContact({
                     href="tel:+9856554544"
                     className="text-slate-600 hover:text-slate-800"
                   >
-                    +9856 55 45 44
+                    {content?.contact?.phoneNumber}
                   </a>
                 </div>
               </li>
@@ -147,7 +148,7 @@ export default function MartivoContact({
                     href="mailto:support@example.com"
                     className="text-slate-600 hover:text-slate-800"
                   >
-                    support@example.com
+                    {content?.contact?.email}
                   </a>
                 </div>
               </li>
@@ -158,7 +159,7 @@ export default function MartivoContact({
                 </span>
                 <div>
                   <p className="font-medium text-slate-900">Hours</p>
-                  <p className="text-slate-600">Mon–Sat: 8:00 AM – 8:00 PM</p>
+                  <p className="text-slate-600">{content?.availableTimings}</p>
                 </div>
               </li>
             </ul>
@@ -268,7 +269,7 @@ export default function MartivoContact({
                   {isSubmitting ? "Sending…" : "Send Message"}
                 </span>
                 <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--sec)]">
-                  <ArrowRight size={18} color={secondaryColor}/>
+                  <ArrowRight size={18} color={secondaryColor} />
                 </span>
               </button>
             </div>

@@ -13,42 +13,47 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { WavyStroke } from "./Icons/WavyStroke";
+import { OurTeamSection } from "@/models/templates/martivo/martivo-home-model";
 
-const data = [
-  {
-    image: "/assets/Martivo-team-image-1.jpg",
-    name: "Sara Lee",
-    role: "SR. MARTIAL ARTS",
-  },
-  {
-    image: "/assets/Martivo-team-image-2.jpg",
-    name: "Savanna Hahn",
-    role: "STRENGTH TRAINERS",
-  },
-  {
-    image: "/assets/Martivo-team-image-3.jpg",
-    name: "Mike Johnson",
-    role: "SELF DEFENSE EXPERT",
-  },
-  {
-    image: "/assets/Martivo-team-image-4.jpg",
-    name: "Leilani Smitham",
-    role: "PUNCHING EXPERTS",
-  },
-];
+// const data = [
+//   {
+//     image: "/assets/Martivo-team-image-1.jpg",
+//     name: "Sara Lee",
+//     role: "SR. MARTIAL ARTS",
+//   },
+//   {
+//     image: "/assets/Martivo-team-image-2.jpg",
+//     name: "Savanna Hahn",
+//     role: "STRENGTH TRAINERS",
+//   },
+//   {
+//     image: "/assets/Martivo-team-image-3.jpg",
+//     name: "Mike Johnson",
+//     role: "SELF DEFENSE EXPERT",
+//   },
+//   {
+//     image: "/assets/Martivo-team-image-4.jpg",
+//     name: "Leilani Smitham",
+//     role: "PUNCHING EXPERTS",
+//   },
+// ];
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
 const MartivoOurTeam = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: OurTeamSection;
 }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [snapCount, setSnapCount] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const content = data?.content
 
   useEffect(() => {
     if (!api) return;
@@ -98,7 +103,7 @@ const MartivoOurTeam = ({
             className="w-full"
           >
             <CarouselContent>
-              {data.map((each, idx) => (
+              {content?.itemBox?.map((each, idx) => (
                 <CarouselItem key={idx} className="basis-full md:basis-1/4">
                   <article
                     className="
@@ -112,7 +117,7 @@ const MartivoOurTeam = ({
                       <div className="relative rounded-xl p-2">
                         <div className="overflow-hidden rounded-full">
                           <Image
-                            src={each.image}
+                            src={each.media}
                             alt={`${each.name} photo`}
                             width={320}
                             height={320}
@@ -141,7 +146,7 @@ const MartivoOurTeam = ({
           </Carousel>
 
           {/* Dots */}
-          {data.length > 1 && (
+          {content?.itemBox?.length > 1 && (
             <div className="mt-5 flex items-center justify-center gap-2">
               {Array.from({ length: snapCount }).map((_, i) => {
                 const active = i === selectedIndex;

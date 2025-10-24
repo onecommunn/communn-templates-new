@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRequests } from "@/hooks/useRequests";
+import { PlansSection } from "@/models/templates/martivo/martivo-home-model";
 
 /* ---------- tiny helpers ---------- */
 
@@ -349,14 +350,17 @@ const Card: React.FC<CardProps> = ({
 const MartivoPlans = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: PlansSection;
 }) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const content = data?.content;
   const auth = useContext(AuthContext);
   const { communityId, communityData } = useCommunity();
   const isAuthenticated = !!auth?.isAuthenticated;
@@ -436,13 +440,12 @@ const MartivoPlans = ({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
-        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+        <div className="mx-auto mb-10 md:max-w-lg text-center md:mb-14">
           <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
             Pricing Plans
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
-            Best Plan for Your <br className="hidden md:block" />
-            Martial Arts Programs
+            {content?.heading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
             <WavyStroke color={secondaryColor} size={120} />

@@ -1,8 +1,8 @@
 "use client";
 import React, { Suspense } from "react";
 import { useCMS } from "../CMSProvider.client";
-import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
 import MartivoSubscriptions from "./_components/MartivoSubscriptions";
+import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 
 function PlanDetailsSkeleton() {
   return (
@@ -32,8 +32,13 @@ function PlanDetailsSkeleton() {
 }
 
 const MartivoSubscriptionsPage = () => {
-  const primaryColor = "#29400a";
-  const secondaryColor = "#7bd900";
+  const { home } = useCMS();
+  const loading = home === undefined;
+  const source: MartivoHomePage | undefined = !loading
+    ? (home as MartivoHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#29400a";
+  const secondaryColor = source?.color?.secondary || "#7bd900";
 
   return (
     <Suspense fallback={<PlanDetailsSkeleton />}>

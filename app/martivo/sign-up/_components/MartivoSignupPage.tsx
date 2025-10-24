@@ -3,13 +3,18 @@ import { AuthContext } from "@/contexts/Auth.context";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 import { useCMS } from "../../CMSProvider.client";
 import Link from "next/link";
+import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 
 const MartivoSignupPage = () => {
-  const primaryColor = "#29400a";
-  const secondaryColor = "#7bd900";
+  const { home } = useCMS();
+  const loading = home === undefined;
+  const source: MartivoHomePage | undefined = !loading
+    ? (home as MartivoHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#29400a";
+  const secondaryColor = source?.color?.secondary || "#7bd900";
   const [formData, setFormData] = useState({
     firstName: "",
     phoneNumber: "",
@@ -100,7 +105,7 @@ const MartivoSignupPage = () => {
 
   return (
     <main
-      className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[var(--sec)]/10 font-lato"
+      className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[var(--pri)]/10 font-lato"
       style={
         {
           "--pri": primaryColor,

@@ -1,8 +1,8 @@
 "use client";
 import React, { Suspense } from "react";
 import { useCMS } from "../CMSProvider.client";
-import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 import MartivoEventDetail from "./_components/MartivoEventDetail";
+import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 
 function EventDetailsSkeleton() {
   return (
@@ -32,8 +32,13 @@ function EventDetailsSkeleton() {
 }
 
 const MartivoEventDetailsPage = () => {
-  const primaryColor = "#29400a";
-  const secondaryColor = "#7bd900";
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: MartivoHomePage | undefined = !isLoading
+    ? (home as MartivoHomePage | undefined)
+    : undefined;
+  const primaryColor = source?.color?.primary || "#29400a";
+  const secondaryColor = source?.color?.secondary || "#7bd900";
   return (
     <Suspense fallback={<EventDetailsSkeleton />}>
       <MartivoEventDetail

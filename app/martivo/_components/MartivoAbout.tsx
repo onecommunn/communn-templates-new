@@ -5,14 +5,18 @@ import { WavyStroke } from "./Icons/WavyStroke";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { AboutSection } from "@/models/templates/martivo/martivo-home-model";
 
 const MartivoAbout = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: AboutSection;
 }) => {
+  const content = data?.content;
   return (
     <section
       id="about-us"
@@ -45,11 +49,14 @@ const MartivoAbout = ({
                   <StarIcon color={secondaryColor} size={56} />
                 </span>
                 <Image
-                  src={"/assets/martivo-courses-image-1.png"}
+                  src={
+                    content?.media?.[0] || "/assets/martivo-courses-image-1.png"
+                  }
                   alt="Martial artist pose"
                   className="h-[360px] w-full rounded-[28px] object-cover md:h-[500px] md:w-full"
                   width={620}
                   height={510}
+                  unoptimized
                 />
                 {/* bottom-center spark */}
                 <span className="absolute  -right-3 -bottom-2">
@@ -74,7 +81,7 @@ const MartivoAbout = ({
             </p>
 
             <h2 className="mb-4 max-w-[35ch] text-2xl font-semibold text-slate-900 md:text-4xl">
-              Bodies Strengthening &amp; Balancing Minds
+              {content?.heading}
             </h2>
 
             {/* tiny accent line + wavy stroke */}
@@ -83,26 +90,15 @@ const MartivoAbout = ({
             </div>
 
             <div className="space-y-4 text-sm leading-7 text-slate-600 md:text-base md:leading-8">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                venenatis imperdiet tortor sodales vulputate. Phasellus in enim
-                euismod, efficitur felis a, facilisis ligula. Suspendisse
-                potenti. Sed at libero nec nisi tincidunt facilisis.
-              </p>
-              <p>
-                Quisque euismod, nisl vel consectetur interdum, nisl nisi
-                aliquet nunc, quis facilisis enim erat in est. Sed at libero nec
-                nisi tincidunt facilisis. Suspendisse potenti. Phasellus in enim
-                euismod, efficitur felis a, facilisis ligula.
-              </p>
+              <p>{content?.description}</p>
             </div>
 
             {/* CTA */}
-            <Link href={"/"} className="cursor-pointer">
+            <Link href={content?.buttons?.[0].url} className="cursor-pointer">
               <button className="mt-6 md:mt-10 cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2">
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
                 <span className="relative z-[1] text-[16px] font-medium">
-                  Discover More 
+                  {content?.buttons?.[0].label}
                 </span>
                 <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
                   <ArrowRight size={18} />
