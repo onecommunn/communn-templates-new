@@ -115,10 +115,10 @@ export default function MartivoEvents({
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center md:max-w-lg">
             <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
-              Events
+              {content?.heading}
             </p>
             <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:text-3xl">
-              {content?.heading}
+              {content?.subHeading}
             </h2>
           </div>
           <div className="mx-auto mt-2 px-4">
@@ -146,7 +146,7 @@ export default function MartivoEvents({
     );
   }
 
-  if (!(events?.length) ||events?.length < 0) {
+  if (!(events?.length) || events?.length < 0) {
     return null;
   }
 

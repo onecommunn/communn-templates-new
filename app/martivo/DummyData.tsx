@@ -154,6 +154,7 @@ export const dummyData: MartivoHomePage = {
       sectionName: "eventsSection",
       content: {
         heading: "Learn from the best martial arts instructors around",
+        subHeading: "Best Plan for Your Martial Arts Programs"
       },
       order: 5,
       isActive: true,
@@ -161,7 +162,8 @@ export const dummyData: MartivoHomePage = {
     {
       sectionName: "ourTeamSection",
       content: {
-        heading: "Learn from expert martial arts masters",
+        heading: "Our Team",
+        subHeading: 'Learn from expert martial arts masters',
         itemBox: [
           {
             name: "Sara Lee",

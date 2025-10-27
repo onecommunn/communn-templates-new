@@ -69,6 +69,7 @@ export interface EventsSection extends SectionBase {
   sectionName: "eventsSection";
   content: {
     heading: string;
+    subHeading: string;
   };
 }
 
@@ -76,6 +77,7 @@ export interface OurTeamSection extends SectionBase {
   sectionName: "ourTeamSection";
   content: {
     heading: string;
+    subHeading: string;
     itemBox: {
       name: string;
       media: string;

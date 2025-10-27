@@ -46,7 +46,7 @@ const MartivoOurTeam = ({
     api.on("select", onSelect);
   }, [api]);
 
-  if(!(content?.itemBox?.length) || content?.itemBox?.length < 0){
+  if (!(content?.itemBox?.length) || content?.itemBox?.length < 0) {
     return null
   }
 
@@ -65,9 +65,10 @@ const MartivoOurTeam = ({
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
           <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
             Our Team
+            {content?.heading}
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
-           {content?.heading}
+            {content?.subHeading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
             <WavyStroke color={secondaryColor} size={120} />
