@@ -272,10 +272,10 @@ const Card: React.FC<CardProps> = ({
                     <Button
                       onClick={() => handleClickJoin(communityId)}
                       disabled={isSubscribed}
-                      //   style={{
-                      //     backgroundColor: primaryColor,
-                      //     color: secondaryColor,
-                      //   }}
+                    //   style={{
+                    //     backgroundColor: primaryColor,
+                    //     color: secondaryColor,
+                    //   }}
                     >
                       Confirm Join
                     </Button>
@@ -400,13 +400,12 @@ const MartivoPlans = ({
         text: `Next Due: ${p.nextDueDate ? p.nextDueDate : "No Dues"}`,
       },
       {
-        text: `Status: ${
-          !p.nextDueDate
-            ? "Not Subscribed"
-            : new Date(p.nextDueDate) >= new Date()
+        text: `Status: ${!p.nextDueDate
+          ? "Not Subscribed"
+          : new Date(p.nextDueDate) >= new Date()
             ? "Active"
             : "Expired"
-        }`,
+          }`,
       },
     ];
 
@@ -442,10 +441,11 @@ const MartivoPlans = ({
         {/* Header */}
         <div className="mx-auto mb-10 md:max-w-lg text-center md:mb-14">
           <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
-            Pricing Plans
+
+            {content?.heading}
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
-            {content?.heading}
+            {content?.subHeading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
             <WavyStroke color={secondaryColor} size={120} />

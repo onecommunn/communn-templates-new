@@ -63,7 +63,7 @@ export interface ServiceSection extends SectionBase {
 
 export interface PlansSection extends SectionBase {
   sectionName: "plansSection";
-  content: { heading: string };
+  content: { heading: string; subHeading: string };
 }
 export interface EventsSection extends SectionBase {
   sectionName: "eventsSection";
