@@ -38,6 +38,7 @@ export interface AboutSection extends SectionBase {
   content: {
     heading: string;
     description: string;
+    subHeading: string;
     features: {
       icon: string;
       title: string;
@@ -62,7 +63,7 @@ export interface ServiceSection extends SectionBase {
 
 export interface PlansSection extends SectionBase {
   sectionName: "plansSection";
-  content: { heading: string };
+  content: { heading: string; subHeading: string };
 }
 export interface EventsSection extends SectionBase {
   sectionName: "eventsSection";

@@ -42,7 +42,8 @@ export const dummyData: MartivoHomePage = {
     {
       sectionName: "aboutSection",
       content: {
-        heading: "Bodies Strengthening & Balancing Minds",
+        heading: "About us",
+        subHeading: 'Bodies Strengthening & Balancing Minds',
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet tortor sodales vulputate. Phasellus in enim euismod, efficitur felis a, facilisis ligula. Suspendisse potenti. Sed at libero nec nisi tincidunt facilisis.",
         features: [
@@ -143,7 +144,8 @@ export const dummyData: MartivoHomePage = {
     {
       sectionName: "plansSection",
       content: {
-        heading: "Best Plan for Your Martial Arts Programs",
+        heading: "Our Plans",
+        subHeading: "Best Plan for Your Martial Arts Programs"
       },
       order: 4,
       isActive: true,

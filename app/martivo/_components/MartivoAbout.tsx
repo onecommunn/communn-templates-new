@@ -77,11 +77,11 @@ const MartivoAbout = ({
             />
 
             <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--sec)]">
-              About Us
+              {content?.heading}
             </p>
 
             <h2 className="mb-4 max-w-[35ch] text-2xl font-semibold text-slate-900 md:text-4xl">
-              {content?.heading}
+              {content?.subHeading}
             </h2>
 
             {/* tiny accent line + wavy stroke */}
