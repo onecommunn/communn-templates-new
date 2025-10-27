@@ -40,7 +40,6 @@ const MartivoServices = ({
 }) => {
   const content = data?.content;
 
-  console.log(content?.itemBox?.length,'lentn')
 
   if (!(content?.itemBox?.length) || content?.itemBox?.length < 0 ) {
     return null;

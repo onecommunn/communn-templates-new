@@ -23,7 +23,7 @@ const hexToRgba = (hex: string, alpha = 1) => {
 const RestraintHero = () => {
   return (
     <section
-      className="relative flex items-center justify-center min-h-screen bg-cover bg-left md:bg-center bg-no-repeat font-sora"
+      className="relative flex items-center justify-center min-h-screen bg-cover bg-right md:bg-center bg-no-repeat font-sora"
       style={{
         backgroundImage: `url(${"/assets/restraint-hero-bg-image.png"})`,
       }}
@@ -33,20 +33,20 @@ const RestraintHero = () => {
         style={{
           background: `linear-gradient(
       270deg,
-      ${hexToRgba("#1E1E1E00", 0)} 0%,
-      ${hexToRgba("#1E1E1E00", 0.9)} 82.7%
+      ${hexToRgba("#1E1E1E", 0)} 0%,
+      ${hexToRgba("#1E1E1E", 0.9)} 82.7%
     )`,
         }}
       />
       <div className="relative z-10 container mx-auto px-6 md:px-20 text-white">
-        <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr]">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr]">
           <div>
-            <p className="uppercase text-sm mb-4">WELCOME RESTRAINT</p>
-            <h2 className="md:text-6xl/[72px] text-4xl font-semibold font-marcellus uppercase">
+            <p className="uppercase text-sm mb-4 font-normal tracking-[4.2px]">WELCOME RESTRAINT</p>
+            <h2 className="md:text-6xl/[72px] text-4xl font-marcellus uppercase font-normal">
               TRANSFORM YOUR LIFE THROUGH YOGA AND MEDITATION
             </h2>
-            <hr className="my-10 border border-white/20" />
-            <p className="text-[16px]">
+            <hr className="my-8 border border-white/20" />
+            <p className="text-[16px]/[36px]">
               Discover the path to holistic well-being through yoga meditation
               practices are designed to enhance your physical strength, mental
               clarity.

@@ -14,14 +14,14 @@ import { FaPinterest } from "react-icons/fa";
 
 export default function RestraintFooter() {
   return (
-    <footer className="relative bg-[#303B31] text-[#D6D9D1] font-sora">
+    <footer className="relative bg-[#303B31] text-[#D6D9D1] font-sora overflow-hidden">
       <div className="inset-0 pointer-events-auto">
         <Image
           src={"/assets/restraint-footer-bg-image.svg"}
           alt="restraint-footer-bg-image"
           width={800}
           height={300}
-          className="absolute -left-80 -bottom-10"
+          className="absolute -left-75 -bottom-10"
         />
         <Image
           src={"/assets/restraint-footer-bg-image.svg"}
