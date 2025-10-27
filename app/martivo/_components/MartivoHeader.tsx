@@ -37,7 +37,7 @@ const MartivoHeader = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
 
-  const content = data.content;
+  const content = data?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();

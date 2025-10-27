@@ -1,4 +1,14 @@
 "use client";
+import Link from "next/link";
+import React, { useContext, useState } from "react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,36 +19,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { ArrowRight, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { AuthContext } from "@/contexts/Auth.context";
-import { Header } from "@/models/templates/spawell/spawell-home-model";
 import { logoutService } from "@/services/logoutService";
-import { ArrowRight, Facebook, Linkedin, Menu, Twitter } from "lucide-react";
-import Link from "next/link";
-import React, { useContext, useState } from "react";
 
-const SpawellHeader = ({
-  primaryColor,
-  secondaryColor,
-  neutralColor,
-  data,
-}: {
-  primaryColor: string;
-  secondaryColor: string;
-  neutralColor: string;
-  data: Header;
-}) => {
+const RestraintHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
-  const source = data?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -50,51 +38,13 @@ const SpawellHeader = ({
       console.error("Logout failed, unable to navigate to login.");
     }
   };
-
   return (
-    <header
-      className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[var(--neu)]"
-      style={
-        {
-          "--pri": primaryColor,
-          "--sec": secondaryColor,
-          "--neu": neutralColor,
-        } as React.CSSProperties
-      }
-    >
-      <div className="py-2  mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[var(--pri)] hidden md:flex md:flex-row items-center justify-between">
-        <div>
-          <p className="text-[var(--sec)] text-[14px] font-normal">
-            {source?.subHeading}{" "}
-            <span className="font-bold hover:underline">
-              <Link href="/">{source?.heading}</Link>
-            </span>
-          </p>
-        </div>
-        <div className="grid grid-cols-2 text-[var(--sec)]">
-          <div className="flex flex-row items-center justify-center gap-6">
-            <Link href={"/"}>Get a Quotes</Link>
-            <span>|</span>
-            <Link href={"/"}>Need help ?</Link>
-          </div>
-          <div className="flex flex-row items-center justify-end gap-6">
-            <Link href={"/"}>
-              <Facebook className="size-5 hover:size-6" />
-            </Link>
-            <Link href={"/"}>
-              <Twitter className="size-5 hover:size-6" />
-            </Link>
-            <Link href={"/"}>
-              <Linkedin className="size-5 hover:size-6" />
-            </Link>
-          </div>
-        </div>
-      </div>
+    <header className="font-sora top-0 z-50 backdrop-blur bg-[#3D493A]">
       <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
-              src={source?.media?.[0] || "/assets/spawell-logo.png"}
+              src={"/assets/restraint-logo.png"}
               alt="logo"
               className="w-32 h-15 object-contain"
             />
@@ -106,37 +56,37 @@ const SpawellHeader = ({
           >
             <Link
               href="/"
-              className={"font-inter hover:font-semibold text-[var(--pri)]"}
+              className={"font-sora hover:font-semibold text-white text-sm"}
             >
               Home
             </Link>
             <Link
               href="/#about-us"
-              className={"font-inter hover:font-semibold text-[var(--pri)]"}
+              className={"font-sora hover:font-semibold text-white text-sm"}
             >
               About us
             </Link>
             <Link
               href="/#services"
-              className={"font-inter hover:font-semibold text-[var(--pri)]"}
+              className={"font-sora hover:font-semibold text-white text-sm"}
             >
               Services
             </Link>
             <Link
               href="/#events"
-              className={"font-inter hover:font-semibold text-[var(--pri)]"}
+              className={"font-sora hover:font-semibold text-white text-sm"}
             >
               Events
             </Link>
             <Link
               href="/#plans"
-              className={"font-inter hover:font-semibold text-[var(--pri)]"}
+              className={"font-sora hover:font-semibold text-white text-sm"}
             >
               Plans
             </Link>
             <Link
               href="/#contact"
-              className={"font-inter hover:font-semibold text-[var(--pri)]"}
+              className={"font-sora hover:font-semibold text-white text-sm"}
             >
               Contact
             </Link>
@@ -146,16 +96,16 @@ const SpawellHeader = ({
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="text-center font-medium min-w-fit text-[var(--pri)]">
+                <div className="text-center min-w-fit text-white">
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-inter py-2 bg-[var(--pri)] text-[var(--sec)] rounded-[10px] text-sm w-fit">
+                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-semibold font-sora py-2 bg-white text-[#0A2640] rounded-[10px] text-sm w-fit">
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle className="font-inter">
+                      <AlertDialogTitle className="font-sora">
                         Are you sure you want to logout?
                       </AlertDialogTitle>
                     </AlertDialogHeader>
@@ -166,7 +116,6 @@ const SpawellHeader = ({
                       <AlertDialogAction
                         onClick={handleLogout}
                         className="bg-[#ba1c26] text-[var(--sec)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
-                        style={{color:secondaryColor}}
                       >
                         Continue
                       </AlertDialogAction>
@@ -176,7 +125,7 @@ const SpawellHeader = ({
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="cursor-pointer hover:bg-transparent hover:text-[var(--pri)] border border-[var(--pri)] rounded-[10px] text-sm bg-[var(--pri)] px-6 w-fit inline-flex items-center gap-2">
+                <Button className="cursor-pointer bg-white hover:bg-transparent hover:text-white text-[#0A2640] border border-white rounded-[10px] text-sm px-6 w-fit inline-flex items-center gap-2">
                   Login
                   <span>
                     <ArrowRight className="h-4 w-4" />
@@ -211,7 +160,7 @@ const SpawellHeader = ({
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={source?.media?.[0] || "/assets/spawell-logo.png"}
+                        src={"/assets/restraint-logo.png"}
                         alt="Logo"
                         className="w-25 h-15 object-contain"
                       />
@@ -228,7 +177,6 @@ const SpawellHeader = ({
                     <Link
                       href="/"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{ color: primaryColor }}
                     >
                       Home
                     </Link>
@@ -237,7 +185,6 @@ const SpawellHeader = ({
                     <Link
                       href="/#about-us"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{ color: primaryColor }}
                     >
                       About us
                     </Link>
@@ -246,7 +193,6 @@ const SpawellHeader = ({
                     <Link
                       href="/#services"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{ color: primaryColor }}
                     >
                       Services
                     </Link>
@@ -255,7 +201,6 @@ const SpawellHeader = ({
                     <Link
                       href="/#events"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{ color: primaryColor }}
                     >
                       Events
                     </Link>
@@ -264,7 +209,6 @@ const SpawellHeader = ({
                     <Link
                       href="/#plans"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{ color: primaryColor }}
                     >
                       Plans
                     </Link>
@@ -273,7 +217,6 @@ const SpawellHeader = ({
                     <Link
                       href="/#contact"
                       className={`px-4 py-3 font-inter hover:font-semibold`}
-                      style={{ color: primaryColor }}
                     >
                       Contact
                     </Link>
@@ -308,4 +251,4 @@ const SpawellHeader = ({
   );
 };
 
-export default SpawellHeader;
+export default RestraintHeader;

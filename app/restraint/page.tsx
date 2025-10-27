@@ -1,7 +1,13 @@
 import React from "react";
+import RestraintHeader from "./_components/RestraintHeader";
+import RestraintHero from "./_components/RestraintHero";
 
 const RestraintRoot = () => {
-  return <div>RestraintRoot</div>;
+  return (
+    <>
+      <RestraintHero/>
+    </>
+  );
 };
 
 export default RestraintRoot;

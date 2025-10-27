@@ -35,6 +35,7 @@ import MartivoLogin from "./app/martivo/login/page";
 import MartivoSignupPage from "./app/martivo/sign-up/_components/MartivoSignupPage";
 import MartivoEventDetailsPage from "./app/martivo/event-details/page";
 import MartivoSubscriptionsPage from "./app/martivo/subscriptions/page";
+import RestraintShell from "./app/restraint/RestraintShell";
 
 export const templateLayouts: Record<
   string,
@@ -45,6 +46,7 @@ export const templateLayouts: Record<
   default: DefaultShell,
   spawell: SpawellShell,
   martivo: MartivoShell,
+  restraint: RestraintShell,
 };
 
 export const templates: Record<
@@ -85,6 +87,5 @@ export const templates: Record<
     "/sign-up": MartivoSignupPage,
     "/event-details": MartivoEventDetailsPage,
     "/subscriptions": MartivoSubscriptionsPage,
-
   },
 };

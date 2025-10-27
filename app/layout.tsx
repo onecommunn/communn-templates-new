@@ -8,6 +8,8 @@ import {
   Plus_Jakarta_Sans,
   Lora,
   Lato,
+  Sora,
+  Marcellus,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -62,6 +64,20 @@ const lato = Lato({
   variable: "--font-lato",
 });
 
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
+  style: ["normal"],
+  variable: "--font-sora",
+});
+
+const marcellus = Marcellus({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal"],
+  variable: "--font-marcellus",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -70,7 +86,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

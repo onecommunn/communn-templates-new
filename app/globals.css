@@ -14,6 +14,8 @@
   --font-plus-jakarta: var(--font-plus-jakarta), sans-serif;
   --font-lora: var(--font-lora), serif;
   --font-lato: var(--font-lato), serif;
+  --font-sora: var(--font-sora), serif;
+  --font-marcellus: var(--font-marcellus), serif;
 }
 
 .font-lora {
