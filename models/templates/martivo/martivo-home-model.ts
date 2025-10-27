@@ -38,6 +38,7 @@ export interface AboutSection extends SectionBase {
   content: {
     heading: string;
     description: string;
+    subHeading: string;
     features: {
       icon: string;
       title: string;
