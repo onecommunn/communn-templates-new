@@ -32,7 +32,7 @@ const MartivoAbout = ({
       <span
         className="pointer-events-none absolute -right-32 top-0 aspect-[1/1] w-[520px] rounded-full"
         style={{
-          background: `radial-gradient(closest-side, ${primaryColor}1A, transparent 70%)`,
+          background: `radial-gradient(closest-side, ${secondaryColor}1A, transparent 70%)`,
         }}
       />
 
@@ -72,7 +72,7 @@ const MartivoAbout = ({
             <span
               className="pointer-events-none absolute left-20 -top-8 -z-10 hidden aspect-[1/1] w-[300px] rounded-full md:block"
               style={{
-                background: `radial-gradient(closest-side, ${primaryColor}1A, transparent 30%)`,
+                background: `radial-gradient(closest-side, ${secondaryColor}1A, transparent 30%)`,
               }}
             />
 
@@ -94,7 +94,7 @@ const MartivoAbout = ({
             </div>
 
             {/* CTA */}
-            <Link href={content?.buttons?.[0].url} className="cursor-pointer">
+            <Link href={content?.buttons?.[0].url || "/"} className="cursor-pointer">
               <button className="mt-6 md:mt-10 cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2">
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
                 <span className="relative z-[1] text-[16px] font-medium">

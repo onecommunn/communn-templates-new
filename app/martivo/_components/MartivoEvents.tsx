@@ -39,7 +39,7 @@ const ViewAllButton: React.FC<{ href?: string; label?: string }> = ({
   label = "View All",
 }) => (
   <Link
-    href={href}
+    href={href || "/"}
     className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--sec)] px-5 py-3 md:py-2 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sec)] focus-visible:ring-offset-2"
   >
     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
@@ -144,6 +144,10 @@ export default function MartivoEvents({
         </div>
       </section>
     );
+  }
+
+  if (!(events?.length) ||events?.length < 0) {
+    return null;
   }
 
   return (

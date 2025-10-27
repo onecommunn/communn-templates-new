@@ -9,13 +9,14 @@ import {
   Header,
   HomeSection,
 } from "@/models/templates/martivo/martivo-home-model";
+import { dummyData } from "./DummyData";
 
 export default async function MartivoShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getMartivoCMSBundle(community._id);
-  const source = bundle?.home;
+  const source = bundle?.home ?? dummyData;
   const initialLoading = !bundle?.home;
 
   const headerData = source?.sections.find(

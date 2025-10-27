@@ -32,7 +32,7 @@ const MartivoTestimonials = ({
 }) => {
   const content = data?.content;
   const realItems = content?.testimonies;
-  const realLen = realItems.length;
+  const realLen = realItems?.length;
 
   // Virtualize to ensure enough slides for the centered layout & looping
   const slides: Testimonial[] = useMemo(() => {
@@ -68,6 +68,10 @@ const MartivoTestimonials = ({
   // Map the current virtual index back to the real item for the message/name/role and the dots
   const activeRealIndex = realLen ? selectedVirtual % realLen : 0;
   const activeForText = realLen ? realItems[activeRealIndex] : undefined;
+
+  if(!(content?.testimonies?.length) || content?.testimonies?.length < 0){
+    return null
+  }
 
   return (
     <section
@@ -150,7 +154,7 @@ const MartivoTestimonials = ({
 
             {/* Dots reflect the real items count */}
             <div className="mt-5 flex items-center justify-center gap-3">
-              {realItems.map((_, i) => {
+              {realItems?.map((_, i) => {
                 const active = i === activeRealIndex;
                 return (
                   <button

@@ -82,7 +82,7 @@ const ChooseButton: React.FC<{
   color: string;
 }> = ({ href = "/", text, color }) => (
   <Link
-    href={href}
+    href={href || "/"}
     className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
     style={
       {
@@ -423,7 +423,7 @@ const MartivoPlans = ({
     };
   });
 
-  if (normalized?.length < 0) {
+  if (!(normalized?.length) || normalized?.length < 0) {
     return null;
   }
 

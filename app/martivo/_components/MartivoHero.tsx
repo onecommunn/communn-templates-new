@@ -46,7 +46,7 @@ const MartivoHero = ({
               {content?.subHeading}
             </h2>
             <p>{content?.description}</p>
-            <Link href={content?.buttons?.[0].url} className="cursor-pointer">
+            <Link href={content?.buttons?.[0].url || "/"} className="cursor-pointer">
               <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sec)] focus-visible:ring-offset-2">
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
                 <span className="relative z-[1] text-lg font-medium">

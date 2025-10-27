@@ -38,7 +38,13 @@ const MartivoServices = ({
   secondaryColor: string;
   data: ServiceSection;
 }) => {
-  const content = data?.content
+  const content = data?.content;
+
+  console.log(content?.itemBox?.length,'lentn')
+
+  if (!(content?.itemBox?.length) || content?.itemBox?.length < 0 ) {
+    return null;
+  }
   return (
     <section
       className="relative py-16 md:py-24 font-lato bg-[var(--sec)]/10"
@@ -89,7 +95,7 @@ const MartivoServices = ({
 
                   {/* orange number chip */}
                   <div className="absolute -left-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[var(--sec)] text-[11px] font-semibold text-white shadow-md ring-4 ring-white">
-                    {String(idx+1).padStart(2, "0")}
+                    {String(idx + 1).padStart(2, "0")}
                   </div>
                 </div>
 

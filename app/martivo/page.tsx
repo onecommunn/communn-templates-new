@@ -24,12 +24,13 @@ import {
   ServiceSection,
   TestimoniesSection,
 } from "@/models/templates/martivo/martivo-home-model";
+import { dummyData } from "./DummyData";
 
 const MartivoRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: MartivoHomePage | undefined = !isLoading
-    ? (home as MartivoHomePage | undefined)
+    ? (home as MartivoHomePage | undefined) ?? dummyData
     : undefined;
   const primaryColor = source?.color?.primary || "#29400a";
   const secondaryColor = source?.color?.secondary || "#7bd900";

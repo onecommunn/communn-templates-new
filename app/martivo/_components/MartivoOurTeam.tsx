@@ -15,29 +15,6 @@ import {
 import { WavyStroke } from "./Icons/WavyStroke";
 import { OurTeamSection } from "@/models/templates/martivo/martivo-home-model";
 
-// const data = [
-//   {
-//     image: "/assets/Martivo-team-image-1.jpg",
-//     name: "Sara Lee",
-//     role: "SR. MARTIAL ARTS",
-//   },
-//   {
-//     image: "/assets/Martivo-team-image-2.jpg",
-//     name: "Savanna Hahn",
-//     role: "STRENGTH TRAINERS",
-//   },
-//   {
-//     image: "/assets/Martivo-team-image-3.jpg",
-//     name: "Mike Johnson",
-//     role: "SELF DEFENSE EXPERT",
-//   },
-//   {
-//     image: "/assets/Martivo-team-image-4.jpg",
-//     name: "Leilani Smitham",
-//     role: "PUNCHING EXPERTS",
-//   },
-// ];
-
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
 const MartivoOurTeam = ({
@@ -69,6 +46,10 @@ const MartivoOurTeam = ({
     api.on("select", onSelect);
   }, [api]);
 
+  if(!(content?.itemBox?.length) || content?.itemBox?.length < 0){
+    return null
+  }
+
   return (
     <section
       className="relative py-16 md:py-24 font-lato"
@@ -86,8 +67,7 @@ const MartivoOurTeam = ({
             Our Team
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
-            Learn from expert martial <br className="hidden md:block" />
-            arts masters
+           {content?.heading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
             <WavyStroke color={secondaryColor} size={120} />

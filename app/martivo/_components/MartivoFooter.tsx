@@ -97,7 +97,7 @@ export default function MartivoFooter({
                   return (
                     <Link
                       key={idx}
-                      href={url}
+                      href={url || "/"}
                       aria-label="Facebook"
                       className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-white/90 transition hover:bg-white/20"
                     >
