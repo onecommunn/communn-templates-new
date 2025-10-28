@@ -69,7 +69,7 @@ const MartivoTestimonials = ({
   const activeRealIndex = realLen ? selectedVirtual % realLen : 0;
   const activeForText = realLen ? realItems[activeRealIndex] : undefined;
 
-  if(!(content?.testimonies?.length) || content?.testimonies?.length < 0){
+  if (!(content?.testimonies?.length) || content?.testimonies?.length < 0) {
     return null
   }
 
@@ -85,11 +85,21 @@ const MartivoTestimonials = ({
     >
       <div
         className="relative overflow-hidden py-16 md:py-24"
-        style={{
-          backgroundImage: `url('/assets/martivo-testimonials-bg-image.png')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        // style={{
+        //   backgroundImage: `url('/assets/martivo-testimonials-bg-image.png')`,
+        //   backgroundSize: "cover",
+        //   backgroundPosition: "center",
+        // }}
+        style={
+          {
+            backgroundImage: `url(${content?.media || "/assets/martivo-testimonials-bg-image.png"
+              })`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            ["--pri" as any]: primaryColor,
+            ["--sec" as any]: secondaryColor,
+          } as React.CSSProperties
+        }
       >
         {/* dark overlay */}
         <div className="absolute inset-0 bg-[var(--pri)]/80" />
@@ -117,9 +127,8 @@ const MartivoTestimonials = ({
                       className="embla__slide shrink-0 grow-0 px-2 md:px-0 basis-1/3 md:basis-1/5 relative"
                     >
                       <div
-                        className={`relative w-[200px] h-[400px] rounded-full overflow-hidden mx-auto transition-all duration-300 ${
-                          isActive ? "scale-105" : "scale-95"
-                        }`}
+                        className={`relative w-[200px] h-[400px] rounded-full overflow-hidden mx-auto transition-all duration-300 ${isActive ? "scale-105" : "scale-95"
+                          }`}
                       >
                         <Image
                           src={s.avatar}
@@ -161,11 +170,10 @@ const MartivoTestimonials = ({
                     key={i}
                     aria-label={`Go to slide ${i + 1}`}
                     onClick={() => scrollTo(i)}
-                    className={`h-2.5 w-2.5 rounded-full transition-all ${
-                      active
-                        ? "bg-[var(--sec)]"
-                        : "bg-slate-200 hover:bg-slate-300"
-                    }`}
+                    className={`h-2.5 w-2.5 rounded-full transition-all ${active
+                      ? "bg-[var(--sec)]"
+                      : "bg-slate-200 hover:bg-slate-300"
+                      }`}
                   />
                 );
               })}
