@@ -93,7 +93,7 @@ const MartivoServices = ({
                   />
 
                   {/* orange number chip */}
-                  <div className="absolute -left-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[var(--sec)] text-[11px] font-semibold text-white shadow-md ring-4 ring-white">
+                  <div className="absolute -left-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[var(--pri)] text-[11px] font-semibold text-white shadow-md ring-4 ring-white">
                     {String(idx + 1).padStart(2, "0")}
                   </div>
                 </div>
