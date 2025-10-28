@@ -41,7 +41,7 @@ const MartivoServices = ({
   const content = data?.content;
 
 
-  if (!(content?.itemBox?.length) || content?.itemBox?.length < 0 ) {
+  if (!(content?.itemBox?.length) || content?.itemBox?.length < 0) {
     return null;
   }
   return (
@@ -103,7 +103,7 @@ const MartivoServices = ({
                   <h3 className="mb-1 text-lg font-semibold text-slate-900">
                     {c.title}
                   </h3>
-                  <p className="mb-3 max-w-[48ch] text-sm leading-6 text-slate-600">
+                  <p className="mb-3 max-w-[48ch] text-[15px] leading-6 text-slate-600">
                     {c.description}
                   </p>
                 </div>

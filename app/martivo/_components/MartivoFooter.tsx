@@ -76,18 +76,18 @@ export default function MartivoFooter({
               <Image
                 src={content?.logo || "/assets/martivoLogo.png"}
                 alt="Martivo"
-                width={150}
+                width={100}
                 height={18}
                 className="object-contain"
                 unoptimized
               />
             </div>
 
-            <p className="mt-4 max-w-xs text-[13px] leading-6 text-white/70">
+            <p className="mt-4 max-w-xs text-[16px] leading-6 text-white/70">
               {content?.description}
             </p>
 
-            <div className="mt-4 text-[13px]">Connect with us</div>
+            <div className="mt-4 text-[16px]">Connect with us</div>
             <div className="mt-2 flex items-center gap-3">
               {content?.socialMedia?.map(
                 (each: SocialMediaLink, idx: number) => {
@@ -111,32 +111,32 @@ export default function MartivoFooter({
 
           {/* About links */}
           <nav className="text-[13px]">
-            <h4 className="mb-3 text-[12px] font-semibold tracking-[0.22em] uppercase text-white/80">
+            <h4 className="mb-3 text-[16px] font-semibold tracking-[0.22em] uppercase text-white/80">
               Links
             </h4>
             <ul className="space-y-3 text-white/80">
               <li>
-                <Link href="/#about-us" className="transition hover:text-white">
+                <Link href="/#about-us" className=" text-[15px] transition hover:text-white">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="transition hover:text-white">
+                <Link href="/#services" className="text-[15px] transition hover:text-white">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/#events" className="transition hover:text-white">
+                <Link href="/#events" className="text-[15px] transition hover:text-white">
                   Events
                 </Link>
               </li>
               <li>
-                <Link href="/#plans" className="transition hover:text-white">
+                <Link href="/#plans" className="text-[15px] transition hover:text-white">
                   Plans
                 </Link>
               </li>
               <li>
-                <Link href="/#contact" className="transition hover:text-white">
+                <Link href="/#contact" className="text-[15px] transition hover:text-white">
                   Contact Us
                 </Link>
               </li>
@@ -145,7 +145,7 @@ export default function MartivoFooter({
 
           {/* Quick contact */}
           <div className="text-[13px]">
-            <h4 className="mb-3 text-[12px] font-semibold tracking-[0.22em] uppercase text-white/80">
+            <h4 className="mb-3 text-[16px] font-semibold tracking-[0.22em] uppercase text-white/80">
               Quick Contact
             </h4>
 
@@ -154,11 +154,11 @@ export default function MartivoFooter({
                 <span className="mt-0.5 text-[var(--accent,#ff8a1f)]">
                   <MapPin size={16} color={secondaryColor} />
                 </span>
-                <p className="break-words">{content?.contact?.address}</p>
+                <p className="text-[15px] break-words">{content?.contact?.address}</p>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} color={secondaryColor} />
-                <a href="tel:+9856554544" className="hover:text-white">
+                <a href="tel:+9856554544" className="text-[15px] hover:text-white">
                   {content?.contact?.phoneNumber}
                 </a>
               </li>
@@ -166,7 +166,7 @@ export default function MartivoFooter({
                 <Mail size={16} color={secondaryColor} />
                 <a
                   href="mailto:support@example.com"
-                  className="hover:text-white"
+                  className="text-[15px] hover:text-white"
                 >
                   {content?.contact?.email}
                 </a>
@@ -180,10 +180,10 @@ export default function MartivoFooter({
 
         {/* Copyright */}
         <div className="flex items-center justify-between">
-          <div className="py-4 text-center text-[12px] text-white/70">
+          <div className="py-4 text-center text-[15px] text-white/70">
             {content?.copyrightText}
           </div>
-          <div className="py-4 text-center text-[12px] text-white/70">
+          <div className="py-4 text-center text-[15px] text-white/70">
             Made with ❤️ by communn.io
           </div>
         </div>

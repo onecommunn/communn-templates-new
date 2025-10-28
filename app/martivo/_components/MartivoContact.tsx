@@ -39,8 +39,8 @@ export default function MartivoContact({
     [email]
   );
   const canSubmit = useMemo(() => {
-    return first && email && phone && service && date && !isSubmitting;
-  }, [first, email, phone, service, date, isSubmitting]);
+    return first && email && phone && !isSubmitting;
+  }, [first, email, phone, isSubmitting]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,7 +108,7 @@ export default function MartivoContact({
             <h3 className="text-xl font-semibold text-slate-900">
               {content?.subHeading}
             </h3>
-            <p className="max-w-md text-[14px] leading-6 text-slate-600">
+            <p className="max-w-md text-[16px] leading-6 text-slate-600">
               {content?.description}
             </p>
 
@@ -118,8 +118,8 @@ export default function MartivoContact({
                   <MapPin size={18} color={secondaryColor} />
                 </span>
                 <div>
-                  <p className="font-medium text-slate-900">Address</p>
-                  <p className="text-slate-600">{content?.contact?.address}</p>
+                  <p className="text-[16px] text-slate-900">Address</p>
+                  <p className="text-slate-600 text-[15px]">{content?.contact?.address}</p>
                 </div>
               </li>
 
@@ -128,10 +128,10 @@ export default function MartivoContact({
                   <Phone size={18} color={secondaryColor} />
                 </span>
                 <div>
-                  <p className="font-medium text-slate-900">Phone</p>
+                  <p className="text-[16px] text-slate-900">Phone</p>
                   <a
                     href="tel:+9856554544"
-                    className="text-slate-600 hover:text-slate-800"
+                    className="text-slate-600 text-[15px] hover:text-slate-800"
                   >
                     {content?.contact?.phoneNumber}
                   </a>
@@ -143,10 +143,10 @@ export default function MartivoContact({
                   <Mail size={18} color={secondaryColor} />
                 </span>
                 <div>
-                  <p className="font-medium text-slate-900">Email</p>
+                  <p className="text-[16px] text-slate-900">Email</p>
                   <a
                     href="mailto:support@example.com"
-                    className="text-slate-600 hover:text-slate-800"
+                    className="text-[15px] text-slate-600 hover:text-slate-800"
                   >
                     {content?.contact?.email}
                   </a>
@@ -158,8 +158,8 @@ export default function MartivoContact({
                   <Clock size={18} color={secondaryColor} />
                 </span>
                 <div>
-                  <p className="font-medium text-slate-900">Hours</p>
-                  <p className="text-slate-600">{content?.availableTimings}</p>
+                  <p className="text-[16px] text-slate-900">Hours</p>
+                  <p className="text-[15px] text-slate-600">{content?.availableTimings}</p>
                 </div>
               </li>
             </ul>
@@ -168,11 +168,11 @@ export default function MartivoContact({
           {/* Right: form */}
           <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-1 gap-4 md:grid-cols-2"
+            className="grid grid-cols-1 gap-4"
           >
             <div>
               <label className="mb-1 block text-[13px] text-slate-700">
-                First name *
+                Name *
               </label>
               <input
                 value={first}
@@ -180,19 +180,6 @@ export default function MartivoContact({
                 type="text"
                 required
                 placeholder="Sarah"
-                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
-              />
-            </div>
-
-            <div>
-              <label className="mb-1 block text-[13px] text-slate-700">
-                Last name
-              </label>
-              <input
-                value={last}
-                onChange={(e) => setLast(e.target.value)}
-                type="text"
-                placeholder="Taylor"
                 className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
               />
             </div>
@@ -226,34 +213,18 @@ export default function MartivoContact({
 
             <div>
               <label className="mb-1 block text-[13px] text-slate-700">
-                Service *
+                Message *
               </label>
-              <input
+              <textarea
                 value={service}
                 onChange={(e) => setService(e.target.value)}
-                type="text"
                 required
                 placeholder="Kickboxing Intro Class"
                 className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
               />
             </div>
 
-            <div>
-              <label className="mb-1 block text-[13px] text-slate-700">
-                Preferred date *
-              </label>
-              <input
-                value={date ? formatDateFns(date, "yyyy-MM-dd") : ""}
-                onChange={(e) =>
-                  setDate(e.target.value ? new Date(e.target.value) : undefined)
-                }
-                type="date"
-                required
-                className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
-              />
-            </div>
-
-            <div className="md:col-span-2 mt-2">
+            <div className="mt-2">
               <button
                 type="submit"
                 disabled={!canSubmit}
@@ -274,6 +245,7 @@ export default function MartivoContact({
               </button>
             </div>
           </form>
+
         </div>
       </div>
 
