@@ -171,7 +171,7 @@ export default function MartivoContact({
             className="grid grid-cols-1 gap-4"
           >
             <div>
-              <label className="mb-1 block text-[13px] text-slate-700">
+              <label className="mb-1 block text-[15px] text-slate-700">
                 Name *
               </label>
               <input
@@ -185,7 +185,7 @@ export default function MartivoContact({
             </div>
 
             <div>
-              <label className="mb-1 block text-[13px] text-slate-700">
+              <label className="mb-1 block text-[15px] text-slate-700">
                 Email *
               </label>
               <input
@@ -199,20 +199,20 @@ export default function MartivoContact({
             </div>
 
             <div>
-              <label className="mb-1 block text-[13px] text-slate-700">
+              <label className="mb-1 block text-[15px] text-slate-700">
                 Phone
               </label>
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 type="tel"
-                placeholder="+1 555 000 1234"
+                placeholder="+91 9876231202"
                 className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-[13px] text-slate-700">
+              <label className="mb-1 block text-[15px] text-slate-700">
                 Message *
               </label>
               <textarea
