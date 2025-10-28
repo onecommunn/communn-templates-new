@@ -226,7 +226,7 @@ const Card: React.FC<CardProps> = ({
           {!isLoggedIn ? (
             <Link
               href={"/login"}
-              className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+              className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
             >
               <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
               <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
@@ -237,7 +237,7 @@ const Card: React.FC<CardProps> = ({
                 )}
                 Login to Subscribe
               </span>
-              <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
+              <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
                 <ArrowRight size={18} />
               </span>
             </Link>
@@ -440,7 +440,7 @@ const MartivoPlans = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 md:max-w-lg text-center md:mb-14">
-          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--pri)] uppercase">
 
             {content?.heading}
           </p>
@@ -448,7 +448,7 @@ const MartivoPlans = ({
             {content?.subHeading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color={secondaryColor} size={120} />
+            <WavyStroke color={primaryColor} size={120} />
           </div>
         </div>
 

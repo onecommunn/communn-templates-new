@@ -101,12 +101,12 @@ export default function MartivoServicesCarousel({
                     "h-full rounded-2xl border bg-white px-6 py-8 text-center transition-all duration-300",
                     "border-slate-200 shadow-[0_1px_0_rgba(16,24,40,0.04)]",
                     isActive
-                      ? "border-[var(--sec)] ring-1 ring-[var(--sec)] shadow-[0_10px_30px_rgba(246,124,0,0.12)]"
+                      ? "border-[var(--pri)] ring-1 ring-[var(--pri)] shadow-[0_10px_30px_rgba(246,124,0,0.12)]"
                       : "hover:shadow-[0_6px_20px_rgba(16,24,40,0.06)]",
                   ].join(" ")}
                   style={{
-                    borderColor: isActive ? "var(--sec)" : undefined,
-                    boxShadow: isActive ? `0 10px 30px ${secondaryColor}1F` : undefined,
+                    borderColor: isActive ? "var(--pri)" : undefined,
+                    boxShadow: isActive ? `0 10px 30px ${primaryColor}1F` : undefined,
                   }}
                 >
                   <div className="mb-4 flex items-center justify-center">
@@ -114,7 +114,7 @@ export default function MartivoServicesCarousel({
                       <LucideIcon
                         width={56}
                         height={56}
-                        stroke={secondaryColor}
+                        stroke={primaryColor}
                         strokeWidth={1}
                       />
                     ) : (

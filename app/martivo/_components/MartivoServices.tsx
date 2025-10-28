@@ -58,7 +58,7 @@ const MartivoServices = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 md:max-w-lg text-center md:mb-14">
-          <p className="mb-2 text-[16px] font-semibold text-[var(--sec)] uppercase">
+          <p className="mb-2 text-[16px] font-semibold text-[var(--pri)] uppercase">
             OUR SERVICES
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
@@ -67,7 +67,7 @@ const MartivoServices = ({
 
           {/* wavy accent */}
           <div className="mx-auto mt-3 flex items-center justify-center gap-3">
-            <WavyStroke color={secondaryColor} size={120} />
+            <WavyStroke color={primaryColor} size={120} />
           </div>
         </div>
 

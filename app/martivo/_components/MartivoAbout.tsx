@@ -76,7 +76,7 @@ const MartivoAbout = ({
               }}
             />
 
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--sec)]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--pri)]">
               {content?.heading}
             </p>
 
@@ -86,7 +86,7 @@ const MartivoAbout = ({
 
             {/* tiny accent line + wavy stroke */}
             <div className="mb-6 flex items-center gap-3">
-              <WavyStroke color={secondaryColor} size={120} />
+              <WavyStroke color={primaryColor} size={120} />
             </div>
 
             <div className="space-y-4 text-sm leading-7 text-slate-600 md:text-base md:leading-8">
@@ -95,12 +95,12 @@ const MartivoAbout = ({
 
             {/* CTA */}
             <Link href={content?.buttons?.[0].url || "/"} className="cursor-pointer">
-              <button className="mt-6 md:mt-10 cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2">
+              <button className="mt-6 md:mt-10 cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[var(--pri)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2">
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
                 <span className="relative z-[1] text-[16px] font-medium">
                   {content?.buttons?.[0].label}
                 </span>
-                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
+                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-[var(--pri)] text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
                   <ArrowRight size={18} />
                 </span>
               </button>

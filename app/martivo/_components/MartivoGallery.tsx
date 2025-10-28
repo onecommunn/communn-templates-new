@@ -27,38 +27,45 @@ const images = [
   },
 ];
 
-const MartivoGallery = ({ data, secondaryColor }: { data: GallerySection, secondaryColor: string }) => {
+const MartivoGallery = ({ data, secondaryColor, primaryColor }: { data: GallerySection, secondaryColor: string, primaryColor: string }) => {
   const content = data?.content;
   return (
     <section>
       <hr className="mx-10 mb-2" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
-        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
+        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14 mt-10">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--pri)] uppercase">
             Visual Stories
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
             Our Collection
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color={secondaryColor} size={120} />
+            <WavyStroke color={primaryColor} size={120} />
           </div>
         </div>
       </div>
-      <Marquee>
-        {content?.media?.map((item, idx) => (
-          <div key={idx} className="overflow-hidden rounded-xl">
-            <Image
-              src={item}
-              alt={`image-${idx}`}
-              width={195}
-              height={195}
-              unoptimized
-            />
-          </div>
-        ))}
-      </Marquee>
+      <div className="mt-6">
+        <Marquee>
+          {content?.media?.map((item, idx) => (
+            <div
+              key={idx}
+              className="overflow-hidden rounded-xl w-[195px] h-[195px] flex-shrink-0 mx-2 bg-gray-100"
+            >
+              <Image
+                src={item}
+                alt={`image-${idx}`}
+                width={195}
+                height={195}
+                unoptimized
+                className="object-cover w-full h-full"
+              />
+            </div>
+          ))}
+        </Marquee>
+      </div>
+
     </section>
   );
 };

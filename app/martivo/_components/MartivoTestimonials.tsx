@@ -149,13 +149,13 @@ const MartivoTestimonials = ({
 
             {activeForText && (
               <div className="mt-10 max-w-2xl mx-auto text-center">
-                <p className="text-lg italic text-gray-200">
+                <p className="text-[15px] italic text-gray-200">
                   “{activeForText.message}”
                 </p>
-                <h4 className="mt-4 text-xl font-semibold text-[var(--sec)]">
+                <h4 className="mt-4 text-[18px] font-semibold text-[var(--sec)]">
                   {activeForText.name}
                 </h4>
-                <p className="text-sm text-gray-300">
+                <p className="text-md text-gray-300">
                   {activeForText.designation}
                 </p>
               </div>
@@ -197,7 +197,7 @@ const MartivoTestimonials = ({
           <dl className="grid grid-cols-1 items-center divide-y divide-[#EEF1F6] sm:grid-cols-2 sm:divide-y-0 md:grid-cols-4 md:divide-x">
             {content?.itemBox?.map((item, idx) => (
               <div className="px-8 py-8 text-center" key={idx}>
-                <dt className="text-4xl font-bold text-[var(--sec)] md:text-[28px] leading-none font-lato">
+                <dt className="text-4xl font-bold text-[var(--pri)] md:text-[28px] leading-none font-lato">
                   {item?.count}+
                 </dt>
                 <dd className="mt-3 text-[16px] text-slate-600">

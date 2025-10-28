@@ -145,7 +145,7 @@ const MartivoRoot = () => {
         />
       )}
 
-      {gallerySection && <MartivoGallery data={gallerySection} secondaryColor={secondaryColor} />}
+      {gallerySection && <MartivoGallery data={gallerySection} secondaryColor={secondaryColor} primaryColor={primaryColor} />}
 
       {contactSection && (
         <MartivoContact

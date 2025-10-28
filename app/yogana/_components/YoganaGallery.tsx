@@ -45,9 +45,9 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
   return (
     <section
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       <div
         className="absolute inset-0 -z-10 pointer-events-none select-none"
@@ -114,18 +114,24 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
       <div className="mt-6">
         <Marquee>
           {data?.content?.media?.map((item, idx) => (
-            <div key={idx} className="overflow-hidden rounded-xl">
+            <div
+              key={idx}
+              className="overflow-hidden rounded-xl w-[195px] h-[195px] flex-shrink-0 mx-2 bg-gray-100"
+            >
               <Image
                 src={item}
                 alt={`image-${idx}`}
                 width={195}
                 height={195}
                 unoptimized
+                className="object-cover w-full h-full"
               />
             </div>
           ))}
         </Marquee>
+
       </div>
+
     </section>
   );
 };

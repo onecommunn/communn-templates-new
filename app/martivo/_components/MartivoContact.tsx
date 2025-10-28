@@ -90,14 +90,14 @@ export default function MartivoContact({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--pri)] uppercase">
             Contact Us
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
             {content?.heading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color={secondaryColor} size={120} />
+            <WavyStroke color={primaryColor} size={120} />
           </div>
         </div>
 
@@ -114,7 +114,7 @@ export default function MartivoContact({
 
             <ul className="mt-4 space-y-4 text-[14px] text-slate-700">
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 rounded-full bg-[var(--sec)]/10 p-2">
+                <span className="mt-0.5 rounded-full bg-[var(--pri)] p-2">
                   <MapPin size={18} color={secondaryColor} />
                 </span>
                 <div>
@@ -124,7 +124,7 @@ export default function MartivoContact({
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 rounded-full bg-[var(--sec)]/10 p-2">
+                <span className="mt-0.5 rounded-full bg-[var(--pri)] p-2">
                   <Phone size={18} color={secondaryColor} />
                 </span>
                 <div>
@@ -139,7 +139,7 @@ export default function MartivoContact({
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 rounded-full bg-[var(--sec)]/10 p-2">
+                <span className="mt-0.5 rounded-full bg-[var(--pri)] p-2">
                   <Mail size={18} color={secondaryColor} />
                 </span>
                 <div>
@@ -154,7 +154,7 @@ export default function MartivoContact({
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 rounded-full bg-[var(--sec)]/10 p-2">
+                <span className="mt-0.5 rounded-full bg-[var(--pri)] p-2">
                   <Clock size={18} color={secondaryColor} />
                 </span>
                 <div>
@@ -231,16 +231,16 @@ export default function MartivoContact({
                 className={[
                   "group relative inline-flex items-center gap-3 rounded-full px-6 py-3 text-white shadow-md transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F67C00] focus-visible:ring-offset-2",
                   canSubmit
-                    ? "bg-[var(--sec)] hover:-translate-y-0.5"
-                    : "bg-[var(--sec)]/60 cursor-not-allowed",
+                    ? "bg-[var(--pri)] hover:-translate-y-0.5"
+                    : "bg-[var(--pri)]/60 cursor-not-allowed",
                 ].join(" ")}
               >
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
                 <span className="relative z-[1] text-[15px]">
                   {isSubmitting ? "Sending…" : "Send Message"}
                 </span>
-                <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--sec)]">
-                  <ArrowRight size={18} color={secondaryColor} />
+                <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)]">
+                  <ArrowRight size={18} color={primaryColor} />
                 </span>
               </button>
             </div>

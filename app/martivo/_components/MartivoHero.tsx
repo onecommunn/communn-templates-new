@@ -19,9 +19,8 @@ const MartivoHero = ({
       className="relative flex items-center justify-center min-h-[85vh] bg-cover bg-left md:bg-center bg-no-repeat font-lato"
       style={
         {
-          backgroundImage: `url(${
-            content?.media?.[1] || "/assets/martivo-hero-bg-image.png"
-          })`,
+          backgroundImage: `url(${content?.media?.[1] || "/assets/martivo-hero-bg-image.png"
+            })`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
         } as React.CSSProperties
@@ -47,13 +46,13 @@ const MartivoHero = ({
             </h2>
             <p>{content?.description}</p>
             <Link href={content?.buttons?.[0].url || "/"} className="cursor-pointer">
-              <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sec)] focus-visible:ring-offset-2">
-                <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
+              <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-[var(--pri)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pri)] focus-visible:ring-offset-2">
+                <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-[var(--pri)]" />
                 <span className="relative z-[1] text-lg font-medium">
                   {content?.buttons?.[0].label}
                 </span>
-                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
-                  <ArrowRight size={18} />
+                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-[var(--pri)] text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
+                  <ArrowRight size={18} color={secondaryColor} />
                 </span>
               </button>
             </Link>

@@ -63,7 +63,7 @@ const MartivoOurTeam = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* Header */}
         <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
+          <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--pri)] uppercase">
             Our Team
             {content?.heading}
           </p>
@@ -71,7 +71,7 @@ const MartivoOurTeam = ({
             {content?.subHeading}
           </h2>
           <div className="mx-auto mt-3 flex items-center justify-center">
-            <WavyStroke color={secondaryColor} size={120} />
+            <WavyStroke color={primaryColor} size={120} />
           </div>
         </div>
 
@@ -113,7 +113,7 @@ const MartivoOurTeam = ({
                     <h3 className="text-[15px] font-semibold text-slate-900">
                       {each.name}
                     </h3>
-                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-wide text-[var(--sec)]">
+                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-wide text-[var(--pri)]">
                       {each.role}
                     </p>
                   </article>
