@@ -85,7 +85,7 @@ const MartivoServices = ({
                 ].join(" ")}
               >
                 {/* Image with soft frame */}
-                <div className="relative shrink-0 rounded-xl border border-[#dddddd] border-dashed p-1">
+                <div className=" relative shrink-0 rounded-xl border border-[#dddddd] border-dashed p-1">
                   <img
                     src={c.media}
                     alt={c.title}

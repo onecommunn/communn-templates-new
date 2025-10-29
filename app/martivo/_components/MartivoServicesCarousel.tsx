@@ -152,7 +152,7 @@ export default function MartivoServicesCarousel({
               onClick={() => scrollTo(i)}
               className={[
                 "h-2.5 w-2.5 rounded-full transition-all",
-                active ? "bg-[var(--sec)]" : "bg-slate-200 hover:bg-slate-300",
+                active ? "bg-[var(--pri)]" : "bg-slate-200 hover:bg-slate-300",
               ].join(" ")}
             />
           );

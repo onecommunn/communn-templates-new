@@ -100,7 +100,7 @@ const MartivoAbout = ({
                 <span className="relative z-[1] text-[16px] font-medium">
                   {content?.buttons?.[0].label}
                 </span>
-                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-[var(--pri)] text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
+                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-[var(--pri)] text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
                   <ArrowRight size={18} />
                 </span>
               </button>

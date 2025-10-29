@@ -116,7 +116,7 @@ const YoganaSignupPage = () => {
       }
     >
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-white rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-8 text-center font-cormorant text-[var(--pri)]">
             Create Account
           </h2>
