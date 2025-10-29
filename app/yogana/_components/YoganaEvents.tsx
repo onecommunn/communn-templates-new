@@ -198,14 +198,11 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
     return (
       <section
         id="events"
-        className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+        className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden items-center justify-center bg-[#ffffff]"
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <Header />
-          <div className="mx-auto max-w-6xl px-4">
+          <div className=" px-4">
             {" "}
             <Carousel
               opts={{ align: "start", loop: false }}
@@ -237,9 +234,6 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
     <section
       id="events"
       className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-    // style={{
-    //   backgroundColor: `${primaryColor}1A`,
-    // }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <Header />
@@ -263,9 +257,9 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                   {events.map((event: Event, index) => (
                     <CarouselItem
                       key={event._id ?? index}
-                      className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/3"
+                      className="p-3 bg-[#ffffff] basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/3 md:basis-1/3 border gap-6 border-dashed border-[#C2A74E] rounded-[30px]"
                     >
-                      <div className="relative aspect-[13/16] rounded-2xl overflow-hidden">
+                      <div className="bg-[#ffffff] relative h-[300px] w-full rounded-2xl overflow-hidden">
                         <Image
                           src={
                             event?.coverImage?.value ||
@@ -282,34 +276,35 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
 
                       <div className="flex items-center flex-col gap-2">
                         <div className="flex items-center flex-col mt-2">
-                          <h6
-                            style={{
-                              color: primaryColor,
-                            }}
-                            className={`font-cormorant text-xl text-[#C2A74E] font-medium`}
+                          <p
+                            style={{ color: secondaryColor }}
+                            className={`text-[#C2A74E] font-cormorant font-semibold text-2xl text-center w-full`}
                           >
-                            {`${formatDate(
-                              event?.availability[0]?.day
-                            )} - ${formatDate(
-                              event?.availability[
-                                event?.availability.length - 1
-                              ]?.day
-                            )}`}
-                          </h6>
+                            {capitalizeWords(event.title)}
+                          </p>
                           <h6
                             style={{ color: primaryColor }}
-                            className={`font-cormorant text-4xl text-[#C2A74E] font-semibold`}
+                            className="text-lg font-bold text-[#C2A74E] font-plus-jakarta"
                           >
                             {event?.pricing != null && `₹${event.pricing}`}
                           </h6>
                         </div>
 
-                        <p
-                          style={{ color: secondaryColor }}
-                          className={`text-[#000] font-medium font-cormorant text-2xl`}
+
+                        <h6
+                          style={{
+                            color: neutralColor,
+                          }}
+                          className={`font-plus-jakarta text-sm text-center w-full text-[#000] line-clamp-5`}
                         >
-                          {capitalizeWords(event.title)}
-                        </p>
+                          {`${formatDate(
+                            event?.availability[0]?.day
+                          )} - ${formatDate(
+                            event?.availability[
+                              event?.availability.length - 1
+                            ]?.day
+                          )}`}
+                        </h6>
 
                         {(() => {
                           const availability = event?.availability;
@@ -329,9 +324,9 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                                   backgroundColor: primaryColor,
                                 }}
                                 variant="ghost"
-                                className={`mt-2 font-semibold font-cormorant text-[16px] cursor-pointer hover:bg-[#C2A74E] bg-[#C2A74E] text-white rounded-full hover:text-white hover:scale-105`}
+                                className={`mt-2 font-semibold font-plus-jakarta text-[16px] cursor-pointer hover:bg-[#C2A74E] bg-[#C2A74E] text-white rounded-full hover:text-white hover:scale-105`}
                               >
-                                RESERVE SPOT
+                                BOOK EVENT
                               </Button>
                             </Link>
                           ) : (

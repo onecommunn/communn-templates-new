@@ -66,7 +66,7 @@ const FeatureItem = ({
     <Check muted={!available} color={color} />
     <span
       className={[
-        "text-[14px] leading-6",
+        "text-[15px] leading-6",
         available ? "text-slate-700" : "text-slate-300 line-through",
       ].join(" ")}
     >
@@ -192,7 +192,7 @@ const Card: React.FC<CardProps> = ({
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4 md:gap-8 items-center">
         {/* Title */}
         <div className="md:col-span-1">
-          <h3 className="text-base font-semibold text-slate-900 md:text-lg break-words">
+          <h3 className="text-base font-semibold text-slate-900 md:text-[18px] break-words">
             {title}
           </h3>
         </div>
@@ -218,7 +218,7 @@ const Card: React.FC<CardProps> = ({
           <div className="text-right">
             <div className="text-xl font-semibold text-slate-900">
               ₹{price}
-              <span className="ml-1 text-sm font-normal text-slate-500">
+              <span className="ml-1 text-[16px] font-normal text-slate-500">
                 / {period}
               </span>
             </div>

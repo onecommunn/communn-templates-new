@@ -145,7 +145,7 @@ const YoganaLogin = () => {
       }
     >
       <div className="w-full max-w-md">
-        <div className="rounded-lg shadow-md border p-8 bg-[#ffffff]">
+        <div className="rounded-lg border p-8 bg-[#ffffff]">
           <h2
             className="text-3xl font-bold mb-8 text-center font-cormorant"
             style={{ color: primaryColor }}

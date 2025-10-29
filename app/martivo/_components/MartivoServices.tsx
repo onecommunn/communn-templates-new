@@ -79,13 +79,13 @@ const MartivoServices = ({
               <article
                 key={idx}
                 className={[
-                  "relative flex items-center md:items-start gap-5 rounded-2xl justify-around p-3",
+                  "relative flex items-center md:items-start gap-5 rounded-2xl justify-around p-3 shadow",
                   "flex-col md:flex-row",
                   reverseOnDesktop ? "md:flex-row-reverse" : "",
                 ].join(" ")}
               >
                 {/* Image with soft frame */}
-                <div className="relative shrink-0 rounded-xl border border-[#dddddd] border-dashed p-1">
+                <div className=" relative shrink-0 rounded-xl border border-[#dddddd] border-dashed p-1">
                   <img
                     src={c.media}
                     alt={c.title}
