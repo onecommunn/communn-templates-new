@@ -68,6 +68,7 @@ const RestraintAboutus = () => {
                       alt={item.image}
                       width={50}
                       height={50}
+                      unoptimized
                     />
                   </div>
                   <div>

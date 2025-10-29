@@ -25,14 +25,14 @@ export default function RestraintHowItWork() {
     <section className="bg-white py-10">
       <div className="container mx-auto px-6 md:px-20">
         {/* Label */}
-        <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+        <p className="text-sm mb-2 font-normal uppercase tracking-[4.2px] text-[#3D493A]">
           HOW IT WORK
         </p>
 
         <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
           {/* Left: Heading + steps */}
           <div>
-            <h2 className="font-marcellus text-4xl leading-tight text-[#242B22] sm:text-5xl">
+            <h2 className="font-marcellus text-4xl leading-tight text-[#242B22] md:text-5xl">
               Discover our yoga and
               <br />
               <span style={{ color: ACCENT }}>meditation process</span>

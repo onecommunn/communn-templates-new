@@ -28,7 +28,7 @@ import Link from "next/link";
 import type { LucideProps } from "lucide-react";
 import * as Lucide from "lucide-react";
 
-const formatMonthDay = (iso: string) =>
+export const formatMonthDay = (iso: string) =>
   new Intl.DateTimeFormat("en-US", {
     weekday: "short",
     month: "short",
@@ -49,7 +49,13 @@ type EventCardProps = {
   price: number;
 };
 
-function EventCard({ image, title, blurb, date, price }: EventCardProps) {
+export function EventCard({
+  image,
+  title,
+  blurb,
+  date,
+  price,
+}: EventCardProps) {
   return (
     <div className="group rounded-2xl border border-black/10 bg-white hover:shadow-lg shadow-sm overflow-hidden">
       <Image
@@ -59,6 +65,7 @@ function EventCard({ image, title, blurb, date, price }: EventCardProps) {
         width={100}
         priority
         className="object-cover w-full max-h-[160px] h-[160px]"
+        unoptimized
       />
       <div className="group-hover:underline flex items-center gap-3 px-6 py-3">
         <div className="font-marcellus text-[18px] leading-6 text-[#30382E]">
@@ -185,7 +192,7 @@ export default function RestraintEvents() {
 
           {/* Heading + intro */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
-            <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] sm:text-5xl">
+            <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
               Experience excellence in{" "}
               <span className="block" style={{ color: ACCENT }}>
                 yoga and meditation Events
@@ -222,8 +229,8 @@ export default function RestraintEvents() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex" />
-              <CarouselNext className="hidden sm:flex" />
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
             </Carousel>
           </div>
         </div>
@@ -231,9 +238,9 @@ export default function RestraintEvents() {
     );
   }
 
-    if (!events?.length || events?.length < 0) {
-      return null;
-    }
+  if (!events?.length || events?.length < 0) {
+    return null;
+  }
 
   return (
     <section className="font-sora py-10" id="events">
@@ -245,7 +252,7 @@ export default function RestraintEvents() {
 
         {/* Heading + intro */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
-          <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] sm:text-5xl">
+          <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
             Experience excellence in{" "}
             <span className="block" style={{ color: ACCENT }}>
               yoga and meditation Events
@@ -282,7 +289,7 @@ export default function RestraintEvents() {
                 })();
                 return (
                   <CarouselItem
-                   className="basis-full sm:basis-1/2 md:basis-1/3"
+                    className="basis-full sm:basis-1/2 md:basis-1/3"
                     key={event?._id}
                   >
                     <Link href={`/event-details?eventid=${event._id}`}>
@@ -322,6 +329,21 @@ export default function RestraintEvents() {
               })}
             </div>
           )}
+        </div>
+        <div className="w-full flex items-center justify-center mt-2">
+          <Link href={"/events"}>
+            <button
+              className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
+            >
+              <span className="relative z-10 inline-flex items-center gap-2">
+                View All
+                <Lucide.ArrowUpRight
+                  className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                  strokeWidth={2}
+                />
+              </span>
+            </button>
+          </Link>
         </div>
 
         {/* Divider */}

@@ -36,6 +36,12 @@ import MartivoSignupPage from "./app/martivo/sign-up/_components/MartivoSignupPa
 import MartivoEventDetailsPage from "./app/martivo/event-details/page";
 import MartivoSubscriptionsPage from "./app/martivo/subscriptions/page";
 import RestraintShell from "./app/restraint/RestraintShell";
+import RestraintPlansRoot from "./app/restraint/plans/page";
+import RestraintEventsRoot from "./app/restraint/events/pages";
+import RestraintLogin from "./app/restraint/login/page";
+import RestraintSignup from "./app/restraint/sign-up/page";
+import RestraintSubscriptionsPage from "./app/restraint/subscriptions/page";
+import RestraintEventDetailsPage from "./app/restraint/event-details/page";
 
 export const templateLayouts: Record<
   string,
@@ -80,7 +86,15 @@ export const templates: Record<
     "/sign-up": SpawellSignup,
   },
   fitkit: { "/": FitkitRoot },
-  restraint: { "/": RestraintRoot },
+  restraint: {
+    "/": RestraintRoot,
+    "/plans": RestraintPlansRoot,
+    "/events": RestraintEventsRoot,
+    "/login": RestraintLogin,
+    "/sign-up": RestraintSignup,
+    "/subscriptions": RestraintSubscriptionsPage,
+    "/event-details": RestraintEventDetailsPage,
+  },
   martivo: {
     "/": MartivoRoot,
     "/login": MartivoLogin,

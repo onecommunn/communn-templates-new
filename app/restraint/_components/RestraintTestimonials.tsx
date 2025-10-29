@@ -53,6 +53,7 @@ export default function RestraintTestimonials() {
                 height={470}
                 className="object-cover h-full"
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                unoptimized
               />
             </div>
           </div>
@@ -79,7 +80,7 @@ export default function RestraintTestimonials() {
                   <span className="text-lg font-semibold">30K+</span>
                   <span className="text-gray-300 leading-tight">
                     Worldwide
-                    <br className="hidden md:block"/>
+                    <br className="hidden md:block" />
                     Client
                   </span>
                 </div>
@@ -116,6 +117,7 @@ export default function RestraintTestimonials() {
                           alt={t.name}
                           fill
                           className="object-cover"
+                          unoptimized
                         />
                       </div>
                       <div>
@@ -143,8 +145,8 @@ export default function RestraintTestimonials() {
               ))}
             </CarouselContent>
 
-            <CarouselPrevious className="h-9 w-9 border border-[#ccc] text-[#2F3A31] hover:bg-[#E8E8E8]" />
-            <CarouselNext className="h-9 w-9 border border-[#ccc] text-[#2F3A31] hover:bg-[#E8E8E8]" />
+            <CarouselPrevious className="hidden cursor-pointer md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+            <CarouselNext className="hidden cursor-pointer md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
           </Carousel>
         </div>
       </div>

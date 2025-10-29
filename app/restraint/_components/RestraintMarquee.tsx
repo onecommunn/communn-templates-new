@@ -8,7 +8,7 @@ function Bubble({ src, alt, up = false }: { src: string; alt: string; up?: boole
     <span
       className={`relative inline-block mx-20 h-12 w-12 md:h-14 md:w-14 overflow-hidden rounded-full ring-2 ring-white/70 shadow-sm`}
     >
-      <Image src={src} alt={alt} fill className="object-cover" sizes="56px" />
+      <Image src={src} alt={alt} fill className="object-cover" sizes="56px" unoptimized/>
     </span>
   );
 }

@@ -100,6 +100,7 @@ export default function RestraintServices() {
           width={350}
           height={250}
           className="absolute bottom-0 -right-12 hidden md:flex"
+          unoptimized
         />
       </div>
       <div className="mx-auto container px-6 md:px-20">
@@ -152,7 +153,7 @@ export default function RestraintServices() {
                 alt="Meditation"
                 width={360}
                 height={460}
-                className="mx-auto h-auto w-[320px] sm:w-[360px] object-contain"
+                className="mx-auto h-auto w-[360px] object-contain"
                 unoptimized
               />
             </div>

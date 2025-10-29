@@ -119,6 +119,7 @@ const RestraintWhatWeDo = () => {
               priority
               className="object-cover"
               sizes="(min-width: 768px) 33vw, 100vw"
+              unoptimized
             />
           </div>
         </div>

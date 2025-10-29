@@ -36,72 +36,6 @@ const ACCENT = "#B6A57B";
 const MUTED = "#747B70";
 const DARK = "#2F3A31";
 
-/* -------------------- Local seed (fallback) -------------------- */
-type SeedPlan = {
-  name: string;
-  price: string;
-  image: string;
-  features: string[];
-};
-
-const PLANS: SeedPlan[] = [
-  {
-    name: "Basic Plan",
-    price: "29",
-    image: "/assets/restraint-plans-image-1.jpg",
-    features: [
-      "Weekly Group Yoga Practice",
-      "Stress Relief Yoga Programs",
-      "Flexible Class Schedules",
-      "In-Person and Online Options",
-    ],
-  },
-  {
-    name: "Standard Plan",
-    price: "39",
-    image: "/assets/restraint-plans-image-1.jpg",
-    features: [
-      "Weekly Group Yoga Practice",
-      "Stress Relief Yoga Programs",
-      "Flexible Class Schedules",
-      "In-Person and Online Options",
-    ],
-  },
-  {
-    name: "Premium Plan",
-    price: "49",
-    image: "/assets/restraint-plans-image-1.jpg",
-    features: [
-      "Weekly Group Yoga Practice",
-      "Stress Relief Yoga Programs",
-      "Flexible Class Schedules",
-      "In-Person and Online Options",
-    ],
-  },
-  {
-    name: "Wellness Plus",
-    price: "59",
-    image: "/assets/restraint-plans-image-1.jpg",
-    features: [
-      "Weekly Group Yoga Practice",
-      "Advanced Breathwork",
-      "Flexible Class Schedules",
-      "In-Person and Online Options",
-    ],
-  },
-  {
-    name: "Elite",
-    price: "79",
-    image: "/assets/restraint-plans-image-1.jpg",
-    features: [
-      "1:1 Coaching",
-      "All Workshops Included",
-      "Priority Support",
-      "In-Person and Online Options",
-    ],
-  },
-];
-
 /* -------------------- Display & helpers -------------------- */
 type DisplayPlan = {
   id?: string;
@@ -133,10 +67,6 @@ export default function RestraintPlans() {
   const isLoggedIn = !!auth?.isAuthenticated;
 
   const { communityId, communityData } = useCommunity();
-  const isSubscribedCommunity =
-    (communityData as any)?.isUserJoined ??
-    (communityData as any)?.joined ??
-    false;
 
   React.useEffect(() => {
     const fetchPlans = async () => {
@@ -192,35 +122,25 @@ export default function RestraintPlans() {
   }, [plans]);
 
   // Pick dataset: fetched or seed
-  const data: DisplayPlan[] =
-    !isLoading && normalizedFromApi.length > 0
-      ? normalizedFromApi
-      : PLANS.map((p) => ({
-          name: p.name,
-          price: p.price,
-          image: p.image,
-          features: p.features,
-          periodLabel: "Per Month",
-        }));
+  const data: DisplayPlan[] = normalizedFromApi;
 
   return (
     <section className="bg-[#B6A57B15] font-sora py-10" id="plans">
       <div className="mx-auto container px-6 md:px-20">
         {/* Section header */}
         <div className="mb-6">
-          <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+          <p className="text-sm mb-2 font-normal uppercase tracking-[4.2px] text-[#3D493A]">
             OUR PLANS
           </p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_1fr]">
-            <h2 className="font-marcellus text-4xl leading-tight text-[#232A22] sm:text-5xl">
-              Flexible pricing for yoga <span style={{ color: ACCENT }}>and</span>
-              <br />
-              <span style={{ color: ACCENT }}>meditation</span>
+            <h2 className="font-marcellus text-4xl leading-tight text-[#232A22] md:text-5xl">
+              Flexible pricing for yoga{" "}
+              <span style={{ color: ACCENT }}>and meditation</span>
             </h2>
             <p className="max-w-xl text-[16px] leading-7 text-[#9C9C9C]">
-              Choose from our flexible pricing plans designed to suit your needs.
-              Whether you’re a beginner or advanced practitioner, we offer
-              affordable.
+              Choose from our flexible pricing plans designed to suit your
+              needs. Whether you’re a beginner or advanced practitioner, we
+              offer affordable.
             </p>
           </div>
         </div>
@@ -244,15 +164,13 @@ export default function RestraintPlans() {
           >
             <CarouselContent className="-ml-4">
               {data.map((plan, idx) => {
-                const isFeatured = (idx + 1) % 2 === 0; // even cards highlighted
+                const isFeatured = (idx + 1) % 2 === 0;
                 const planId =
                   (plans[idx]?._id as string | undefined) ||
                   `${plan.name}-${idx}`;
                 const coverImage =
                   plan.image || "/assets/restraint-plans-image-1.jpg";
                 const color = isFeatured ? "#C5B38A" : "#2F3A31";
-
-                // naive plan subscription check (customize if you track per-plan)
                 const isSubscribed = false;
 
                 return (
@@ -266,7 +184,9 @@ export default function RestraintPlans() {
                       periodLabel={plan.periodLabel}
                       isLoggedIn={isLoggedIn}
                       isPrivate={communityData?.community?.type === "PRIVATE"}
-                      isSubscribedCommunity={isSubscribedCommunity}
+                      isSubscribedCommunity={communityData?.community?.members?.some(
+                        (m: any) => m?.user?._id === auth?.user?.id
+                      )}
                       isSubscribed={isSubscribed}
                       communityId={communityId}
                       planId={planId}
@@ -283,12 +203,27 @@ export default function RestraintPlans() {
           </Carousel>
         )}
       </div>
+      <div className="w-full flex items-center justify-center mt-2">
+        <Link href={"/plans"}>
+          <button
+            className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
+          >
+            <span className="relative z-10 inline-flex items-center gap-2">
+              View All
+              <ArrowUpRight
+                className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                strokeWidth={2}
+              />
+            </span>
+          </button>
+        </Link>
+      </div>
     </section>
   );
 }
 
 /* -------------------- Card -------------------- */
-function PlanCard({
+export function PlanCard({
   plan,
   isFeatured,
   periodLabel,
@@ -307,7 +242,7 @@ function PlanCard({
   periodLabel: string;
   isLoggedIn: boolean;
   isPrivate: boolean;
-  isSubscribedCommunity: boolean;
+  isSubscribedCommunity?: boolean;
   isSubscribed: boolean;
   communityId?: string; // can be undefined
   planId: string;
@@ -334,7 +269,10 @@ function PlanCard({
     }
   };
 
-  const handleClickSendRequest = async (community?: string, message?: string) => {
+  const handleClickSendRequest = async (
+    community?: string,
+    message?: string
+  ) => {
     if (!community) {
       toast.error("Missing community id");
       return;
@@ -376,6 +314,7 @@ function PlanCard({
           fill
           className="object-cover"
           sizes="(min-width: 1024px) 33vw, 100vw"
+          unoptimized
         />
       </div>
 

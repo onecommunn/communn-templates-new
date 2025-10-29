@@ -47,30 +47,19 @@ export default function RestraintFAQ() {
     <section className="font-sora md:py-16 py-10">
       <div className="mx-auto container px-6 md:px-20 pb-2">
         {/* Top row: heading + CTA */}
-        <div className="mb-8 flex items-start justify-between gap-4">
+        <div className="mb-10 flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[4px] text-[#3D493A]">
-              FAQs
-            </p>
-            <h2 className="mt-2 font-marcellus text-4xl leading-tight text-[#232A22] sm:text-5xl">
-              Answers to common yoga <br />
+            <div className="flex items-center justify-between">
+              <p className="text-sm uppercase tracking-[4px] text-[#3D493A]">
+                FAQs
+              </p>
+            </div>
+
+            <h2 className="mt-2 font-marcellus text-4xl leading-tight text-[#232A22] md:text-5xl">
+              Answers to common yoga {" "}
               <span style={{ color: ACCENT }}>meditation questions</span>
             </h2>
           </div>
-
-          <Link href={"/"}>
-            <button
-              className={`${"group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
-            >
-              <span className="relative z-10 inline-flex items-center gap-2">
-                View All FAQs
-                <ArrowUpRight
-                  className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
-                  strokeWidth={2}
-                />
-              </span>
-            </button>
-          </Link>
         </div>
 
         {/* Content grid */}
@@ -142,6 +131,7 @@ export default function RestraintFAQ() {
                   fill
                   className="object-cover"
                   sizes="(min-width: 1024px) 40vw, 100vw"
+                  unoptimized
                 />
               </div>
 
@@ -160,14 +150,6 @@ export default function RestraintFAQ() {
                 </div>
               </div>
             </div>
-
-            {/* View All (mobile) */}
-            <Link
-              href="/faqs"
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#2F3A31] px-4 py-2 text-sm text-white hover:opacity-95 md:hidden"
-            >
-              View All FAQs <ArrowUpRight className="h-4 w-4" />
-            </Link>
           </div>
         </div>
       </div>

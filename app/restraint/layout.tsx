@@ -7,7 +7,7 @@ const EMPTY_BUNDLE = {
   home: null,
 };
 
-const SpawellLayout = ({ children }: { children: React.ReactNode }) => {
+const RestraintLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <CMSProvider initialBundle={EMPTY_BUNDLE} initialLoading={true}>
       {children}
@@ -15,4 +15,4 @@ const SpawellLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default SpawellLayout;
+export default RestraintLayout;
