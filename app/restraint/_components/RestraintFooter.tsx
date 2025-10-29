@@ -34,7 +34,7 @@ export default function RestraintFooter() {
       {/* top divider line */}
       <div className="mx-auto h-px w-full max-w-7xl bg-white/10" />
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8">
         {/* Brand + tagline */}
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">

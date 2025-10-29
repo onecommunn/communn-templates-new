@@ -219,7 +219,7 @@ const Card: React.FC<CardProps> = ({
             <div className="text-xl font-semibold text-slate-900">
               ₹{price}
               <span className="ml-1 text-sm font-normal text-slate-500">
-                / {period}
+                / {period} 
               </span>
             </div>
           </div>

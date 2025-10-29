@@ -102,7 +102,7 @@ export default function RestraintServices() {
           className="absolute bottom-0 -right-12 hidden md:flex"
         />
       </div>
-      <div className="mx-auto container px-4 sm:px-6 lg:px-20">
+      <div className="mx-auto container px-6 md:px-20">
         {/* top label + CTA */}
         <div className="mb-3 md:mb-1 flex items-center justify-between">
           {/* Label */}

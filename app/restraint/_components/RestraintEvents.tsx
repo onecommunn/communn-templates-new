@@ -177,7 +177,7 @@ export default function RestraintEvents() {
     // Loading: carousel with skeleton slides + dots
     return (
       <section id="events" className="w-full py-12 md:py-16 font-lato">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+        <div className="container mx-auto px-6 md:px-20">
           {/* Label */}
           <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
             Events
@@ -236,8 +236,8 @@ export default function RestraintEvents() {
     }
 
   return (
-    <section className="bg-[#B6A57B15] font-sora py-10" id="events">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+    <section className="font-sora py-10" id="events">
+      <div className="container mx-auto px-4 sm:px-6 md:px-20">
         {/* Label */}
         <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
           Events
@@ -328,7 +328,7 @@ export default function RestraintEvents() {
         <div className="my-10 h-px w-full bg-black/10" />
 
         {/* Stats row */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
           <Stat
             icon={"/assets/restraint-event-icon-2.svg"}
             value="25 +"

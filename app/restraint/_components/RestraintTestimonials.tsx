@@ -41,36 +41,37 @@ const testimonials = [
 export default function RestraintTestimonials() {
   return (
     <section className="bg-[#B6A57B15] py-16 font-sora">
-      <div className="mx-auto container px-4 sm:px-6 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+      <div className="mx-auto container px-6 md:px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           {/* Left Side */}
           <div className="space-y-6">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+            <div className="relative  overflow-hidden rounded-3xl">
               <Image
                 src="/assets/restraint-testimonials-image-1.jpg"
                 alt="Yoga Class"
-                fill
-                className="object-cover"
+                width={620}
+                height={470}
+                className="object-cover h-full"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
             </div>
           </div>
 
           {/* Right Side */}
-          <div className="h-full">
+          <div className="h-full flex flex-col">
             {/* Heading */}
-            <div className="mb-10">
+            <div className="mb-8">
               <p className="text-sm uppercase tracking-[4px] text-[#3D493A] mb-2">
                 Testimonials
               </p>
-              <h2 className="font-marcellus text-4xl text-[#232A22]">
+              <h2 className="font-marcellus text-4xl md:text-4xl text-[#232A22]">
                 Real stories transformation{" "}
                 <span className="text-[#B6A57B]">and growth</span>
               </h2>
             </div>
             {/* Free Class Card */}
-            <div className="rounded-3xl bg-[#2F3A31] text-white p-8">
-              <div className="flex justify-between items-start mb-3">
+            <div className="rounded-3xl bg-[#2F3A31] text-white p-8 flex-1">
+              <div className="flex justify-between items-start mb-3 flex-col md:flex-row">
                 <h3 className="font-marcellus text-2xl">
                   Try A Free Class Today!
                 </h3>
@@ -78,7 +79,7 @@ export default function RestraintTestimonials() {
                   <span className="text-lg font-semibold">30K+</span>
                   <span className="text-gray-300 leading-tight">
                     Worldwide
-                    <br />
+                    <br className="hidden md:block"/>
                     Client
                   </span>
                 </div>
@@ -97,7 +98,7 @@ export default function RestraintTestimonials() {
             </div>
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-4">
           {/* Carousel */}
           <Carousel
             opts={{ align: "start", loop: true }}

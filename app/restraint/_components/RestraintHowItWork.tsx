@@ -23,7 +23,7 @@ const STEPS = [
 export default function RestraintHowItWork() {
   return (
     <section className="bg-white py-10">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="container mx-auto px-6 md:px-20">
         {/* Label */}
         <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
           HOW IT WORK

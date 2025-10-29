@@ -39,8 +39,8 @@ const RestraintHeader = () => {
     }
   };
   return (
-    <header className="font-sora top-0 z-50 backdrop-blur bg-[#3D493A]">
-      <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
+    <header className="sticky font-sora top-0 z-50 backdrop-blur bg-[#3D493A]">
+      <div className="container mx-auto px-4 sm:px-6 md:px-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
@@ -140,7 +140,7 @@ const RestraintHeader = () => {
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <button
-                  className="cursor-pointer p-2"
+                  className="cursor-pointer p-2 text-white"
                   aria-controls="creator-mobile-menu"
                   aria-label="Open menu"
                 >

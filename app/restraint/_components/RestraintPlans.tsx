@@ -205,7 +205,7 @@ export default function RestraintPlans() {
 
   return (
     <section className="bg-[#B6A57B15] font-sora py-10" id="plans">
-      <div className="mx-auto container px-4 sm:px-6 lg:px-20">
+      <div className="mx-auto container px-6 md:px-20">
         {/* Section header */}
         <div className="mb-6">
           <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">

@@ -25,22 +25,22 @@ const RestraintAboutus = () => {
         <Image
           src={"/assets/restraint-about-bg-image01.svg"}
           alt="restraint-about-bg-image01"
-          width={310}
+          width={300}
           height={250}
-          className="absolute -bottom-20 right-2"
+          className="absolute -bottom-12 right-2 hidden md:flex"
         />
       </div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="container mx-auto px-6 md:px-20">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">
           {/* LEFT — image */}
           <div className="relative">
-            <div className="flex items-center justify-center gap-6 md:gap-8">
+            <div className="flex items-center justify-center gap-6 md:gap-8 aspect-square">
               <Image
                 src={"/assets/restraint-about-image-1.png"}
                 alt="Martial artist pose"
-                className="h-[360px] w-full rounded-[28px] object-cover md:h-[700px] md:w-full"
-                width={620}
-                height={700}
+                className="h-[460px] w-full rounded-[28px] md:w-[650px] md:h-[650px]"
+                width={650}
+                height={650}
                 unoptimized
               />
             </div>

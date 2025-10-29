@@ -79,7 +79,7 @@ const MartivoServices = ({
               <article
                 key={idx}
                 className={[
-                  "relative flex items-center md:items-start gap-5 rounded-2xl justify-around p-3",
+                  "relative flex items-center md:items-start gap-5 rounded-2xl  p-3",
                   "flex-col md:flex-row",
                   reverseOnDesktop ? "md:flex-row-reverse" : "",
                 ].join(" ")}

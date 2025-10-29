@@ -33,7 +33,7 @@ export default function RestraintMarquee() {
         {/* Row 1 → left (default) */}
         <div className="relative">
           <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-black/5" />
-          <Marquee className="[--duration:22s] [--gap:8rem]">
+          <Marquee className="[--duration:22s] [--gap:0.1rem] md:[--gap:8rem]">
             {/* <Word>Serene Flow</Word> */}
             <Bubble src={a1} alt="avatar 1" />
             {/* <Word>Mindful Movement</Word> */}
@@ -59,7 +59,7 @@ export default function RestraintMarquee() {
         {/* Row 3 → left (default) */}
         <div className="relative">
           <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-black/5" />
-          <Marquee className="[--duration:18s] [--gap:8rem]">
+          <Marquee className="[--duration:18s] [--gap:0.1rem] md:[--gap:8rem]">
             {/* <Word>Gentle Stretch</Word> */}
             <Bubble src={a3} alt="avatar 3" />
             {/* <Word>Peaceful Postures</Word> */}

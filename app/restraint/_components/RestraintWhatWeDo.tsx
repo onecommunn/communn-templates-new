@@ -23,32 +23,32 @@ function getLucideIcon(name: string): LucideIconType | null {
 
 const RestraintWhatWeDo = () => {
   return (
-    <section className="relative py-20 md:pb-28 font-sora">
+    <section className="relative py-10 font-sora">
       <div className="inset-1 pointer-events-none">
         <Image
           src={"/assets/restraint-whatWeDo-image01.svg"}
           alt="restraint-about-bg-image01"
-          width={255}
+          width={180}
           height={250}
-          className="absolute -top-20 left-2"
+          className="absolute -top-6 left-2 hidden md:flex"
         />
       </div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="container mx-auto px-6 md:px-20">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">
           {/* LEFT — image */}
-          <div className="relative">
-            <div className="flex items-center justify-end gap-6 md:gap-8">
+          <div className="relative order-1 md:order-0">
+            <div className="flex items-center justify-end">
               <Image
                 src={"/assets/restraint-whatwedo-image-1.png"}
                 alt="Martial artist pose"
-                className="h-[360px] w-full rounded-[28px] object-cover md:h-[590px] md:w-[560px]"
+                className="h-[400px] w-full rounded-[28px] md:h-[580px] md:w-[572px]"
                 width={572}
                 height={590}
                 unoptimized
               />
             </div>
           </div>
-          <div className="relative space-y-4">
+          <div className="relative space-y-4 order-0 md:order-1">
             <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
               WHAT WE DO
             </p>
@@ -61,7 +61,7 @@ const RestraintWhatWeDo = () => {
               practice integrates mindful movement, meditation, and breathing
               techniques to promote physical strength, mental clarity.
             </p>
-            <ul className="grid grid-cols-2 gap-4 list-disc ml-4 mt-4">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-disc ml-4 mt-4">
               {list?.map((item, idx) => (
                 <li key={idx} className="text-[#9C9C9C] font-sora text-[16px]">
                   {item}
