@@ -171,7 +171,7 @@ export default function RestraintPlans({
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-100 animate-pulse rounded-2xl border border-[#B6A57B] bg-[#B6A57B]"
+                className="h-100 animate-pulse rounded-2xl border border-[var(-pri)] bg-[var(--pri)]"
               />
             ))}
           </div>
@@ -395,7 +395,7 @@ export function PlanCard({
               className={[
                 "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
                 isFeatured
-                  ? "bg-[var(--sec)] text-[#2D332C] hover:brightness-95"
+                  ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
                   : "bg-[var(--pri)] text-white hover:opacity-95",
               ].join(" ")}
             >
@@ -410,7 +410,7 @@ export function PlanCard({
               <span
                 className={[
                   isFeatured
-                    ? "bg-[var(--sec)] text-[#2D332C] hover:brightness-95"
+                    ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
                     : "bg-[var(--pri)] text-white hover:opacity-95",
                 ].join(" ")}
               >
@@ -425,7 +425,7 @@ export function PlanCard({
                     className={[
                       "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
                       isFeatured
-                        ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
+                        ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
                         : "bg-[var(--pri)] text-white hover:opacity-95",
                     ].join(" ")}
                     style={{ cursor: "pointer" }}
@@ -441,7 +441,7 @@ export function PlanCard({
                     <span
                       className={[
                         isFeatured
-                          ? "bg-[var(--sec)] text-[#2D332C] hover:brightness-95"
+                          ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
                           : "bg-[var(--pri)] text-white hover:opacity-95",
                       ].join(" ")}
                     >
@@ -472,8 +472,8 @@ export function PlanCard({
                     className={[
                       "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
                       isFeatured
-                        ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
-                        : "bg-[#2F3A31] text-white hover:opacity-95",
+                        ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
+                        : "bg-[var(--pri)] text-white hover:opacity-95",
                     ].join(" ")}
                     style={{ cursor: "pointer" }}
                   >
@@ -488,8 +488,8 @@ export function PlanCard({
                     <span
                       className={[
                         isFeatured
-                          ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
-                          : "bg-[#2F3A31] text-white hover:opacity-95",
+                          ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
+                          : "bg-[var(--pri)] text-white hover:opacity-95",
                       ].join(" ")}
                     >
                       <ArrowUpRight className="h-6 w-6" />

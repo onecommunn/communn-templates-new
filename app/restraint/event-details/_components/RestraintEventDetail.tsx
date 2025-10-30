@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate, formatTime } from "@/components/utils/StringFunctions";
@@ -339,15 +338,18 @@ const RestraintEventDetail = ({
   return (
     <>
       <section
-        className="py-10 font-marcellus bg-[#C2A74E1A]"
+        className="py-10 font-marcellus bg-[var(--sec)]/15"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+          } as React.CSSProperties
+        }
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-6">
             <h2
-              className="text-3xl font-marcellus md:text-5xl mb-4 text-[#0C0407]"
-              style={{
-                color: "#000",
-              }}
+              className="text-3xl font-marcellus md:text-5xl mb-4 text-[var(--pri)]"
             >
               {eventData?.title}
             </h2>

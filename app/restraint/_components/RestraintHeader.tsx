@@ -114,7 +114,7 @@ const RestraintHeader = ({
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-semibold font-sora py-2 bg-white text-[#0A2640] rounded-[10px] text-sm w-fit">
+                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white text-[var(--pri)] rounded-[10px] text-sm w-fit">
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -129,7 +129,7 @@ const RestraintHeader = ({
                       </AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleLogout}
-                        className="bg-[#ba1c26] text-[var(--sec)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                        className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
                       >
                         Continue
                       </AlertDialogAction>

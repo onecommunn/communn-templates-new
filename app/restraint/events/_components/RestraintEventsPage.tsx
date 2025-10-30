@@ -6,7 +6,13 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { EventCard, formatMonthDay } from "../../_components/RestraintEvents";
 
-const RestraintEventsPage = () => {
+const RestraintEventsPage = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
@@ -28,7 +34,15 @@ const RestraintEventsPage = () => {
   }, [communityId]);
 
   return (
-    <section className="py-10 font-sora">
+    <section
+      className="py-10 font-sora"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* header */}
         <div className="text-center md:mb-16 mb-6">
@@ -37,7 +51,7 @@ const RestraintEventsPage = () => {
           </p>
           <h2 className="font-marcellus text-4xl leading-tight text-black">
             Experience excellence in{" "}
-            <span style={{ color: "#B6A57B" }}>yoga and meditation Events</span>
+            <span style={{ color: secondaryColor }}>yoga and meditation Events</span>
           </h2>
         </div>
         {/* main */}
@@ -46,7 +60,7 @@ const RestraintEventsPage = () => {
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-100 animate-pulse rounded-2xl border border-[#B6A57B] bg-[#B6A57B]"
+                className="h-100 animate-pulse rounded-2xl border border-[var(--pri)] bg-[var(--pri)]"
               />
             ))}
           </div>
@@ -62,7 +76,10 @@ const RestraintEventsPage = () => {
                 return today <= endDate;
               })();
               return (
-                <Link href={`/event-details?eventid=${event._id}`} key={event._id}>
+                <Link
+                  href={`/event-details?eventid=${event._id}`}
+                  key={event._id}
+                >
                   <EventCard
                     image={event?.coverImage?.value}
                     title={event?.title}

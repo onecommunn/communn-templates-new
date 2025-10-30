@@ -483,12 +483,12 @@ const RestraintSubscriptions = ({
           </div>
           <div>
             <div>
-              <h2 className="font-marcellus font-semibold text-3xl mb-2">
+              <h2 className="font-marcellus font-semibold text-3xl mb-2 text-[var(--pri)]">
                 Description
               </h2>
-              <p className="font-sora text-[16px]">{plan?.description}</p>
+              <p className="font-sora text-[16px] text-gray-500">{plan?.description}</p>
             </div>
-            <h2 className="font-sora font-semibold text-3xl my-2">
+            <h2 className="font-sora font-semibold text-3xl my-2 text-[var(--pri)]">
               {new Intl.NumberFormat("en-IN", {
                 style: "currency",
                 currency: "INR",
@@ -496,7 +496,7 @@ const RestraintSubscriptions = ({
               }).format(Number(plan?.pricing ?? 0))}
             </h2>
             <div className="mt-4">
-              <h2 className="font-marcellus font-semibold text-3xl mb-2">
+              <h2 className="font-marcellus font-semibold text-3xl mb-2 text-[var(--pri)]">
                 Sequences
               </h2>
               <div>
@@ -558,14 +558,14 @@ const RestraintSubscriptions = ({
                   style={{ borderColor: primaryColor }}
                 >
                   <div>
-                    <h6 className="font-semibold text-[16px] mb-3 font-marcellus">
+                    <h6 className="font-semibold text-[16px] mb-3 font-marcellus text-[var(--pri)]">
                       Subscription Summary
                     </h6>
                     <hr />
                   </div>
                   <div className="grid grid-cols-2 mt-3">
                     <div className="space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3 font-marcellus">
+                      <h6 className="font-semibold text-[16px] mb-3 font-marcellus text-[var(--pri)]">
                         Plan Name
                       </h6>
                       <p className="text-[#646464] text-[16px]">Start Date</p>
@@ -575,7 +575,7 @@ const RestraintSubscriptions = ({
                       </p>
                     </div>
                     <div className="text-right space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3 font-marcellus">
+                      <h6 className="font-semibold text-[16px] mb-3 font-marcellus text-[var(--pri)]">
                         {plan?.name || "-"}
                       </h6>
                       <p className="text-[#646464] text-[16px]">
@@ -597,10 +597,10 @@ const RestraintSubscriptions = ({
                   <hr className="my-3" />
                   <div className="grid grid-cols-2">
                     <div>
-                      <h6 className="font-semibold text-[16px] mb-3">Total</h6>
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">Total</h6>
                     </div>
                     <div className="text-right">
-                      <h6 className="font-semibold text-[16px] mb-3">
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
                         ₹{totalAmount.toFixed(2)}
                       </h6>
                     </div>

@@ -26,7 +26,13 @@ function formatPeriodLabel(interval?: number, duration?: string) {
   return `For ${interval} ${cap === unit ? plural : cap + "s"}`;
 }
 
-const RestraintPlansPage = () => {
+const RestraintPlansPage = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = React.useState<TrainingPlan[]>([]);
@@ -92,7 +98,15 @@ const RestraintPlansPage = () => {
   const data: DisplayPlan[] = normalizedFromApi;
 
   return (
-    <section className="py-10 font-sora">
+    <section
+      className="py-10 font-sora"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         {/* header */}
         <div className="text-center md:mb-16 mb-6">
@@ -101,7 +115,7 @@ const RestraintPlansPage = () => {
           </p>
           <h2 className="font-marcellus text-4xl leading-tight text-black sm:text-5xl">
             Flexible pricing for yoga{" "}
-            <span style={{ color: "#B6A57B" }}>and meditation</span>
+            <span style={{ color: secondaryColor}}>and meditation</span>
           </h2>
         </div>
         {/* main */}
@@ -110,7 +124,7 @@ const RestraintPlansPage = () => {
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-100 animate-pulse rounded-2xl border border-[#B6A57B] bg-[#B6A57B]"
+                className="h-100 animate-pulse rounded-2xl border border-[var(--pri)] bg-[var(--pri)]"
               />
             ))}
           </div>
@@ -123,7 +137,7 @@ const RestraintPlansPage = () => {
                 `${plan.name}-${idx}`;
               const coverImage =
                 plan.image || "/assets/restraint-plans-image-1.jpg";
-              const color = isFeatured ? "#C5B38A" : "#2F3A31";
+              const color = isFeatured ? secondaryColor : primaryColor;
 
               const isSubscribed =
                 !!isLoggedIn &&

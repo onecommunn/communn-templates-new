@@ -1,6 +1,9 @@
 "use client";
 import React, { Suspense } from "react";
 import RestraintSubscriptions from "./_components/RestraintSubscriptions";
+import { useCMS } from "../CMSProvider.client";
+import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import { dummyData } from "../DummyData";
 
 function PlanDetailsSkeleton() {
   return (
@@ -30,8 +33,14 @@ function PlanDetailsSkeleton() {
 }
 
 const RestraintSubscriptionsPage = () => {
-  const primaryColor =  "#3D493A";
-  const secondaryColor ="#7bd900";
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: RestarintHomePage | undefined = !isLoading
+    ? (home as RestarintHomePage | undefined) ?? dummyData
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#3D493A";
+  const secondaryColor = source?.color?.secondary || "#AEA17E";
 
   return (
     <Suspense fallback={<PlanDetailsSkeleton />}>

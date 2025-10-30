@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React, { Suspense } from "react";
 import { useCMS } from "../CMSProvider.client";
-import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 import RestraintEventDetail from "./_components/RestraintEventDetail";
+import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import { dummyData } from "../DummyData";
 
 function EventDetailsSkeleton() {
   return (
@@ -32,8 +33,14 @@ function EventDetailsSkeleton() {
 }
 
 const RestraintEventDetailsPage = () => {
-  const primaryColor = "#3D493A";
-  const secondaryColor = "#fff";
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: RestarintHomePage | undefined = !isLoading
+    ? (home as RestarintHomePage | undefined) ?? dummyData
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#3D493A";
+  const secondaryColor = source?.color?.secondary || "#AEA17E";
   return (
     <Suspense fallback={<EventDetailsSkeleton />}>
       <RestraintEventDetail

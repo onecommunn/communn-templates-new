@@ -1,5 +1,5 @@
+"use client"
 import React from "react";
-import RestraintHeader from "./_components/RestraintHeader";
 import RestraintHero from "./_components/RestraintHero";
 import RestraintAboutus from "./_components/RestraintAboutus";
 import RestraintWhatWeDo from "./_components/RestraintWhatWeDo";
@@ -11,10 +11,19 @@ import RestraintMarquee from "./_components/RestraintMarquee";
 import RestraintTestimonials from "./_components/RestraintTestimonials";
 import RestraintFAQ from "./_components/RestraintFAQ";
 import RestraintContact from "./_components/RestraintContact";
+import { useCMS } from "./CMSProvider.client";
+import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import { dummyData } from "./DummyData";
 
 const RestraintRoot = () => {
-  const primaryColor = "#2c3869";
-  const secondaryColor = "#3e7bdd";
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: RestarintHomePage | undefined = !isLoading
+    ? (home as RestarintHomePage | undefined) ?? dummyData
+    : undefined;
+
+  const primaryColor = source?.color?.primary ||  "#3D493A";
+  const secondaryColor = source?.color?.secondary || "#AEA17E";
   return (
     <>
       <RestraintHero

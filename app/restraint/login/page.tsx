@@ -12,14 +12,19 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/CustomComponents/CustomInputOtp";
-import Link from "next/link";
-import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 import { useCMS } from "../CMSProvider.client";
+import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import { dummyData } from "../DummyData";
 
 const RestraintLogin = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: RestarintHomePage | undefined = !isLoading
+    ? (home as RestarintHomePage | undefined) ?? dummyData
+    : undefined;
 
-  const primaryColor = "#3D493A";
-  const secondaryColor = "#7bd900";
+  const primaryColor = source?.color?.primary || "#3D493A";
+  const secondaryColor = source?.color?.secondary || "#AEA17E";
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
@@ -114,14 +119,14 @@ const RestraintLogin = () => {
         } else if (res.status === 500) {
           toast.error("User not found. Please sign up.");
           const queryKey = useEmail ? "email" : "mobile";
-          router.push(
-            `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
-          );
+          // router.push(
+          //   `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
+          // );
         } else toast.error("Login failed. Please try again.");
       } else if (verifyResponse.status === 500) {
         toast.error("User not found. Please sign up.");
         const queryKey = useEmail ? "email" : "mobile";
-        router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
+        // router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
       } else toast.error("Invalid OTP. Please try again.");
     } catch (error) {
       toast.error("Verification failed. Please try again.");
@@ -223,12 +228,12 @@ const RestraintLogin = () => {
                 </div>
               </div>
 
-              <p className="text-center text-sm text-gray-600 mt-8">
+              {/* <p className="text-center text-sm text-gray-600 mt-8">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now
                 </Link>
-              </p>
+              </p> */}
             </div>
           ) : (
             <div className="space-y-6">
@@ -296,12 +301,12 @@ const RestraintLogin = () => {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-gray-600 mt-2">
+              {/* <p className="text-center text-sm text-gray-600 mt-2">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now
                 </Link>
-              </p>
+              </p> */}
             </div>
           )}
         </div>
