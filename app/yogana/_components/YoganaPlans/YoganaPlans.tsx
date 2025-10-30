@@ -189,7 +189,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         style={{
           color: primaryColor,
         }}
-        className={`text-[#C2A74E] font-alex-brush text-3xl`}
+        className="font-alex-brush text-2xl md:text-4xl"
       >
         {data?.content?.heading}
       </p>
@@ -197,7 +197,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         style={{
           color: secondaryColor,
         }}
-        className={`text-[#000] font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+        className={`text-[#000] font-cormorant text-[28px] md:text-[60px] font-semibold`}
       >
         {data?.content?.subHeading}
       </h2>
@@ -254,7 +254,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   return (
     <section
       id="plans"
-      className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
+      className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
     // style={{
     //   backgroundColor: `${primaryColor}1A`,
     // }}

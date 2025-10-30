@@ -84,7 +84,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
           style={{
             color: primaryColor,
           }}
-          className={`text-[#C2A74E] font-alex-brush text-3xl`}
+          className="font-alex-brush text-2xl md:text-4xl"
         >
           Gallery
         </h4>
@@ -92,7 +92,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
           style={{
             color: secondaryColor,
           }}
-          className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+          className={`text-black font-cormorant text-[28px] md:text-[60px] font-semibold`}
         >
           {data?.content?.heading}
         </h4>
@@ -104,7 +104,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
         <div className="h-px w-full bg-neutral-200/80" />
         <p
           style={{ color: neutralColor }}
-          className="font-semibold text-3xl text-[#1C1A1D] min-w-fit"
+          className="font-semibold text-[28px] md:text-3xl text-[#1C1A1D] min-w-fit"
         >
           Captured Moments
         </p>

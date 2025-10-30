@@ -95,7 +95,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           style={{
             color: primaryColor,
           }}
-          className={`text-[#C2A74E] font-alex-brush text-3xl`}
+          className="font-alex-brush text-2xl md:text-4xl"
         >
           Testimonials
         </h4>
@@ -103,7 +103,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           style={{
             color: secondaryColor,
           }}
-          className={`text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold`}
+          className="font-cormorant text-[28px] md:text-[60px] font-semibold leading-tight"
         >
           {data?.content?.heading}
         </h4>
@@ -111,7 +111,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           style={{
             color: neutralColor,
           }}
-          className={`font-plus-jakarta text-[16px] text-[#707070] w-full mt-2`}
+          className={`font-plus-jakarta text-[14px] md:text-lg text-[#707070] w-full mt-2 p-1`}
         >
           {data?.content?.subHeading}
         </p>
@@ -171,7 +171,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
               {/* quote */}
               <p
                 style={{ color: neutralColor }}
-                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-lg font-small leading-relaxed text-[#000]`}
+                className={`mx-auto mb-6 max-w-prose font-plus-jakarta text-[14px] md:text-lg font-small leading-relaxed text-[#000]`}
               >
                 “{active?.quote}”
               </p>
@@ -179,13 +179,13 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
               {/* author */}
               <p
                 style={{ color: secondaryColor }}
-                className={`font-cormorant text-3xl text-[#000]`}
+                className={`font-cormorant text-[22px] md:text-3xl text-[#000]`}
               >
                 {active?.author}{" "}
                 {active?.role ? (
                   <span
                     style={{ color: neutralColor }}
-                    className={`text-[16px] text-[#707070] font-plus-jakarta`}
+                    className={`text-[14px] md:text-lg text-[#707070] font-plus-jakarta`}
                   >
                     – {active.role}
                   </span>

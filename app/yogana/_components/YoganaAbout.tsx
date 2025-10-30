@@ -21,9 +21,9 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
     <section
       id="about-us"
       className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       <div className="absolute inset-0 pointer-events-none">
         <Image
@@ -59,12 +59,12 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
               height={227}
               className="rounded-3xl absolute -top-10 left-0 md:-left-0 w-30 md:w-[236px]"
             />
-            
+
           </div>
           <div className="my-auto">
             <div>
               <p
-                className="text-[#C2A74E] font-alex-brush text-3xl"
+                className="text-[#C2A74E] font-alex-brush text-2xl md:text-4xl"
                 style={{
                   color: primaryColor,
                 }}
@@ -72,7 +72,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                 {data?.content?.heading}
               </p>
               <h3
-                className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold"
+                className="text-black font-cormorant text-[28px] md:text-[60px]/[60px] font-semibold"
                 style={{
                   color: secondaryColor,
                 }}
