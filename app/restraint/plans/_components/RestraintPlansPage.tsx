@@ -14,6 +14,7 @@ type DisplayPlan = {
   image?: string;
   features: string[];
   periodLabel: string;
+  subscribers?: Array<{ _id?: string; id?: string }>;
 };
 
 function formatPeriodLabel(interval?: number, duration?: string) {
@@ -32,12 +33,10 @@ const RestraintPlansPage = () => {
 
   const auth = React.useContext(AuthContext);
   const isLoggedIn = !!auth?.isAuthenticated;
+  const userId: string | undefined =
+    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
 
   const { communityId, communityData } = useCommunity();
-  const isSubscribedCommunity =
-    (communityData as any)?.isUserJoined ??
-    (communityData as any)?.joined ??
-    false;
 
   React.useEffect(() => {
     const fetchPlans = async () => {
@@ -100,7 +99,7 @@ const RestraintPlansPage = () => {
           <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
             PLANS
           </p>
-          <h2 className="font-marcellus text-4xl leading-tight text-[#232A22] sm:text-5xl">
+          <h2 className="font-marcellus text-4xl leading-tight text-black sm:text-5xl">
             Flexible pricing for yoga{" "}
             <span style={{ color: "#B6A57B" }}>and meditation</span>
           </h2>
@@ -108,7 +107,7 @@ const RestraintPlansPage = () => {
         {/* main */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[0, 1, 2,].map((k) => (
+            {[0, 1, 2].map((k) => (
               <div
                 key={k}
                 className="h-100 animate-pulse rounded-2xl border border-[#B6A57B] bg-[#B6A57B]"
@@ -126,7 +125,13 @@ const RestraintPlansPage = () => {
                 plan.image || "/assets/restraint-plans-image-1.jpg";
               const color = isFeatured ? "#C5B38A" : "#2F3A31";
 
-              const isSubscribed = false;
+              const isSubscribed =
+                !!isLoggedIn &&
+                !!plan.subscribers?.some(
+                  (sub: { _id?: string; id?: string }) =>
+                    (sub?._id ?? sub?.id) === userId
+                );
+
               return (
                 <PlanCard
                   key={idx}
@@ -135,7 +140,9 @@ const RestraintPlansPage = () => {
                   periodLabel={plan.periodLabel}
                   isLoggedIn={isLoggedIn}
                   isPrivate={communityData?.community?.type === "PRIVATE"}
-                  isSubscribedCommunity={isSubscribedCommunity}
+                  isSubscribedCommunity={communityData?.community?.members?.some(
+                    (m: any) => m?.user?._id === auth?.user?.id
+                  )}
                   isSubscribed={isSubscribed}
                   communityId={communityId}
                   planId={planId}

@@ -460,7 +460,7 @@ const RestraintSubscriptions = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
         <div className="text-center md:mb-6 mb-6">
           <h2
-            className="font-marcellus text-4xl leading-tight text-[#232A22] sm:text-5xl"
+            className="font-marcellus text-4xl leading-tight text-black sm:text-5xl"
             style={{ color: primaryColor }}
           >
             {plan?.name || ""}

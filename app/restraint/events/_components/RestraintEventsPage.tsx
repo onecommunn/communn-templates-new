@@ -35,7 +35,7 @@ const RestraintEventsPage = () => {
           <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
             Events
           </p>
-          <h2 className="font-marcellus text-4xl leading-tight text-[#232A22]">
+          <h2 className="font-marcellus text-4xl leading-tight text-black">
             Experience excellence in{" "}
             <span style={{ color: "#B6A57B" }}>yoga and meditation Events</span>
           </h2>

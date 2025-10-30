@@ -38,9 +38,23 @@ const testimonials = [
   },
 ];
 
-export default function RestraintTestimonials() {
+export default function RestraintTestimonials({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   return (
-    <section className="bg-[#B6A57B15] py-16 font-sora">
+    <section
+      className="bg-[var(--sec)]/15 py-16 font-sora"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           {/* Left Side */}
@@ -62,16 +76,16 @@ export default function RestraintTestimonials() {
           <div className="h-full flex flex-col">
             {/* Heading */}
             <div className="mb-8">
-              <p className="text-sm uppercase tracking-[4px] text-[#3D493A] mb-2">
+              <p className="text-sm uppercase tracking-[4px] text-black mb-2">
                 Testimonials
               </p>
-              <h2 className="font-marcellus text-4xl md:text-4xl text-[#232A22]">
+              <h2 className="font-marcellus text-4xl md:text-4xl text-black">
                 Real stories transformation{" "}
-                <span className="text-[#B6A57B]">and growth</span>
+                <span className="text-[var(--sec)]">and growth</span>
               </h2>
             </div>
             {/* Free Class Card */}
-            <div className="rounded-3xl bg-[#2F3A31] text-white p-8 flex-1">
+            <div className="rounded-3xl bg-[var(--pri)] text-white p-8 flex-1">
               <div className="flex justify-between items-start mb-3 flex-col md:flex-row">
                 <h3 className="font-marcellus text-2xl">
                   Try A Free Class Today!
@@ -92,7 +106,7 @@ export default function RestraintTestimonials() {
                   relaxation can enhance your well-being. No matter your skill
                   level, this is the perfect place to begin.
                 </p>
-                <button className="flex items-center p-4 justify-center gap-2 rounded-full bg-[#B6A57B] text-[#2F3A31] font-medium transition hover:brightness-95">
+                <button className="flex items-center p-4 justify-center gap-2 rounded-full bg-[var(--sec)] text-white font-medium transition hover:brightness-95">
                   <ArrowUpRight className="h-5 w-5" />
                 </button>
               </div>
@@ -135,8 +149,8 @@ export default function RestraintTestimonials() {
                         <Star
                           key={i}
                           size={16}
-                          fill="#B6A57B"
-                          stroke="#B6A57B"
+                          fill={secondaryColor}
+                          stroke={secondaryColor}
                         />
                       ))}
                     </div>

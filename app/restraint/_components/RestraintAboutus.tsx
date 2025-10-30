@@ -18,9 +18,24 @@ const data = [
   },
 ];
 
-const RestraintAboutus = () => {
+const RestraintAboutus = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   return (
-    <section id="about-us" className="relative py-20 md:pb-28 font-sora">
+    <section
+      id="about-us"
+      className="relative py-20 md:pb-28 font-sora"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="inset-1 pointer-events-none">
         <Image
           src={"/assets/restraint-about-bg-image01.svg"}
@@ -51,7 +66,7 @@ const RestraintAboutus = () => {
             </p>
             <h2 className="md:text-5xl/[56px] text-4xl font-marcellus">
               Transforming lives through{" "}
-              <span className="text-[#AEA17E]">yoga and meditation</span>
+              <span className="text-[var(--sec)]">yoga and meditation</span>
             </h2>
             <p className="text-[#9C9C9C] text-[16px] font-sora">
               Discover inner peace and well-being through yoga Our practice
@@ -82,7 +97,7 @@ const RestraintAboutus = () => {
             </div>
             <Link href={"/"}>
               <button
-                className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
+                className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"}`}
               >
                 <span className="relative z-10 inline-flex items-center gap-2">
                   More About Us

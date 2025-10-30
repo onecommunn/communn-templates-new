@@ -21,9 +21,23 @@ function getLucideIcon(name: string): LucideIconType | null {
   return lib[name] ?? null;
 }
 
-const RestraintWhatWeDo = () => {
+const RestraintWhatWeDo = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   return (
-    <section className="relative py-10 font-sora">
+    <section
+      className="relative py-10 font-sora"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="inset-1 pointer-events-none">
         <Image
           src={"/assets/restraint-whatWeDo-image01.svg"}
@@ -54,7 +68,7 @@ const RestraintWhatWeDo = () => {
             </p>
             <h2 className="md:text-5xl/[56px] text-4xl font-marcellus">
               Transforming minds and{" "}
-              <span className="text-[#AEA17E]">bodies through yoga</span>
+              <span className="text-[var(--sec)]">bodies through yoga</span>
             </h2>
             <p className="text-[#9C9C9C] text-[16px] font-sora">
               Unlock the power of yoga to harmonize your mind and body. Our
@@ -70,7 +84,7 @@ const RestraintWhatWeDo = () => {
             </ul>
             <Link href={"/"}>
               <button
-                className={`${"mt-4 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
+                className={`${"mt-4 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"}`}
               >
                 <span className="relative z-10 inline-flex items-center gap-2">
                   Contact Now
@@ -85,7 +99,7 @@ const RestraintWhatWeDo = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] overflow-hidden rounded-3xl gap-1">
           {/* Left dark panel */}
-          <div className="bg-[#1E1E1E] px-8 py-10 sm:px-10 flex items-center justify-center">
+          <div className="bg-[var(--pri)] px-8 py-10 sm:px-10 flex items-center justify-center">
             <div className="grid gap-y-10 gap-x-12 sm:grid-cols-2">
               <Feature
                 icon={"/assets/restraint-whatWeDo-image02.svg"}

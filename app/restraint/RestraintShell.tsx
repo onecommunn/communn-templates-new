@@ -11,14 +11,22 @@ export default async function RestraintShell({
   const bundle = await getRestraintCMSBundle(community._id);
   const source = bundle?.home;
   const initialLoading = !bundle?.home;
+
+  const primaryColor = "#2c3869";
+  const secondaryColor = "#3e7bdd";
   return (
     <>
-      <RestraintHeader />
+      <RestraintHeader
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
-        {" "}
         <main>{children}</main>
       </CMSProvider>
-      <RestraintFooter />
+      <RestraintFooter
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </>
   );
 }

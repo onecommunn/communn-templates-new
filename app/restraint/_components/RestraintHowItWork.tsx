@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 
-const ACCENT = "#B6A57B";
-// const MUTED = "#6E756B";
 
 const STEPS = [
   {
@@ -20,12 +18,26 @@ const STEPS = [
   },
 ];
 
-export default function RestraintHowItWork() {
+export default function RestraintHowItWork({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   return (
-    <section className="bg-white py-10">
+    <section
+      className="bg-white py-10"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-6 md:px-20">
         {/* Label */}
-        <p className="text-sm mb-2 font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+        <p className="text-sm mb-2 font-normal uppercase tracking-[4.2px] text-black">
           HOW IT WORK
         </p>
 
@@ -35,7 +47,7 @@ export default function RestraintHowItWork() {
             <h2 className="font-marcellus text-4xl leading-tight text-[#242B22] md:text-5xl">
               Discover our yoga and
               <br />
-              <span style={{ color: ACCENT }}>meditation process</span>
+              <span style={{ color: secondaryColor }}>meditation process</span>
             </h2>
 
             <div className="mt-8 h-px w-full bg-black/10" />
@@ -43,11 +55,11 @@ export default function RestraintHowItWork() {
             <ul className="mt-6 space-y-8">
               {STEPS.map((s, i) => (
                 <li key={i} className="grid grid-cols-[48px_1fr] gap-4">
-                  <div className="flex h-12 w-12 items-center font-marcellus justify-center text-4xl text-[#232A22]">
+                  <div className="flex h-12 w-12 items-center font-marcellus justify-center text-4xl text-black">
                     {(i + 1).toString().padStart(2, "0")}
                   </div>
                   <div>
-                    <h3 className="font-marcellus text-xl text-[#232A22]">
+                    <h3 className="font-marcellus text-xl text-black">
                       {s.title}
                     </h3>
                     <p className="mt-2 max-w-xl text-[16px] leading-6 text-[#6E756B]">

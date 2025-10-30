@@ -24,7 +24,13 @@ import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/Auth.context";
 import { logoutService } from "@/services/logoutService";
 
-const RestraintHeader = () => {
+const RestraintHeader = ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
 
@@ -39,7 +45,15 @@ const RestraintHeader = () => {
     }
   };
   return (
-    <header className="sticky font-sora top-0 z-50 backdrop-blur bg-[#3D493A]">
+    <header
+      className="sticky font-sora top-0 z-50 backdrop-blur bg-[var(--pri)]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">

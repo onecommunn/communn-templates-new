@@ -6,9 +6,6 @@ import * as Icons from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 import Link from "next/link";
 
-const ACCENT = "#B6A57B";
-const MUTED = "#757B70";
-
 type ServiceItem = {
   icon: string; // "Lotus", "Wind" (Lucide) OR "/icons/lotus.svg" (image)
   title: string;
@@ -87,12 +84,27 @@ function ServiceRow({ item }: { item: ServiceItem }) {
   );
 }
 
-export default function RestraintServices() {
+export default function RestraintServices({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const left = SERVICES.filter((_, i) => i % 2 === 0);
   const right = SERVICES.filter((_, i) => i % 2 === 1);
 
   return (
-    <section className="bg-[#B6A57B15] relative py-10 overflow-hidden" id="services">
+    <section
+      className="bg-[var(--sec)]/15 relative py-10 overflow-hidden"
+      id="services"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="inset-1 pointer-events-none">
         <Image
           src={"/assets/restraint-services-bg-image01.svg"}
@@ -107,13 +119,13 @@ export default function RestraintServices() {
         {/* top label + CTA */}
         <div className="mb-3 md:mb-1 flex items-center justify-between">
           {/* Label */}
-          <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+          <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
             OUR SERVICES
           </p>
 
           <Link href={"/"}>
             <button
-              className={`${"group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
+              className={`${"group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"}`}
             >
               <span className="relative z-10 inline-flex items-center gap-2">
                 Contact Now
@@ -130,7 +142,7 @@ export default function RestraintServices() {
         <h2 className="max-w-3xl font-marcellus text-3xl leading-tight text-[#20261E] sm:text-4xl">
           Comprehensive yoga and
           <br />
-          <span style={{ color: ACCENT }}>meditation services</span>
+          <span style={{ color: secondaryColor }}>meditation services</span>
         </h2>
 
         {/* main layout */}
@@ -172,7 +184,7 @@ export default function RestraintServices() {
         {/* mobile CTA */}
         <a
           href="#contact"
-          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#273126] px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 md:hidden"
+          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--pri)] px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 md:hidden"
         >
           Contact Now
           <Icons.ArrowUpRight className="h-4 w-4" />

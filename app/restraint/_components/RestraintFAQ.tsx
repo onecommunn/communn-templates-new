@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import * as React from "react";
 
-const ACCENT = "#B6A57B";
+// const ACCENT = "#B6A57B";
 const DARK = "#2F3A31";
 const SUB = "#9CA39A";
 
@@ -40,24 +40,38 @@ const FAQS: Faq[] = [
   },
 ];
 
-export default function RestraintFAQ() {
+export default function RestraintFAQ({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const [value, setValue] = React.useState<string>("item-0");
 
   return (
-    <section className="font-sora md:py-16 py-10">
+    <section
+      className="font-sora md:py-16 py-10"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20 pb-2">
         {/* Top row: heading + CTA */}
         <div className="mb-10 flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center justify-between">
-              <p className="text-sm uppercase tracking-[4px] text-[#3D493A]">
+              <p className="text-sm uppercase tracking-[4px] text-black">
                 FAQs
               </p>
             </div>
 
-            <h2 className="mt-2 font-marcellus text-4xl leading-tight text-[#232A22] md:text-5xl">
-              Answers to common yoga {" "}
-              <span style={{ color: ACCENT }}>meditation questions</span>
+            <h2 className="mt-2 font-marcellus text-4xl leading-tight text-black md:text-5xl">
+              Answers to common yoga{" "}
+              <span style={{ color: secondaryColor }} className="pl-3">meditation questions</span>
             </h2>
           </div>
         </div>
@@ -84,7 +98,7 @@ export default function RestraintFAQ() {
                     className={[
                       "rounded-xl border",
                       isOpen
-                        ? "border-transparent bg-[#2F3A31] text-white"
+                        ? "border-transparent bg-[var(--pri)] text-white"
                         : "border-black/10 bg-white",
                     ].join(" ")}
                   >
@@ -121,7 +135,7 @@ export default function RestraintFAQ() {
             {/* Rounded “frame” blob */}
             <div
               className="absolute -top-6 -right-6 hidden aspect-square h-72 w-8h-72 rounded-3xl md:block"
-              style={{ backgroundColor: ACCENT }}
+              style={{ backgroundColor: secondaryColor }}
             />
             <div className="relative overflow-hidden rounded-3xl bg-white shadow-sm">
               <div className="relative aspect-[4/3]">
@@ -138,7 +152,7 @@ export default function RestraintFAQ() {
               {/* Sticky/help card */}
               <div className="pointer-events-none absolute bottom-4 left-4">
                 <div className="pointer-events-auto flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-md">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-[#E9E5DA] text-[#2D332C]">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--sec)]/15 text-[#2D332C]">
                     <Phone className="h-4 w-4" />
                   </span>
                   <div>

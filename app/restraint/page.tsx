@@ -13,19 +13,51 @@ import RestraintFAQ from "./_components/RestraintFAQ";
 import RestraintContact from "./_components/RestraintContact";
 
 const RestraintRoot = () => {
+  const primaryColor = "#2c3869";
+  const secondaryColor = "#3e7bdd";
   return (
     <>
-      <RestraintHero />
-      <RestraintAboutus />
-      <RestraintEvents />
-      <RestraintWhatWeDo />
-      <RestraintServices/>
-      <RestraintHowItWork/>
-      <RestraintPlans/>
-      <RestraintMarquee/>
-      <RestraintTestimonials/>
-      <RestraintFAQ/>
-      <RestraintContact/>
+      <RestraintHero
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintAboutus
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintEvents
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintWhatWeDo
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintServices
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintHowItWork
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintPlans
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintMarquee />
+      <RestraintTestimonials
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintFAQ
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
+      <RestraintContact
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </>
   );
 };

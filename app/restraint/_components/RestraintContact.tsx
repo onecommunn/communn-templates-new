@@ -15,12 +15,18 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 /* ---------- Styling palette aligned to Restraint ---------- */
-const ACCENT = "#B6A57B";
+// const ACCENT = "#B6A57B";
 // const DARK = "#2F3A31"; // not used now
 // const MUTED_TEXT = "#7A8278"; // not used now
 
 /* ---------- Page ---------- */
-export default function RestraintContact() {
+export default function RestraintContact({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   // form state
   const [first, setFirst] = React.useState("");
   const [last, setLast] = React.useState(""); // optional; fine to keep
@@ -72,19 +78,26 @@ export default function RestraintContact() {
   };
 
   return (
-    <section className="bg-[#F7F6F4] font-sora py-12" id="contact">
+    <section
+      className="bg-[var(--sec)]/15 font-sora py-12"
+      id="contact"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-6 md:px-20">
         {/* Header */}
         <div className="mb-10 flex items-start justify-between gap-4">
           <div className="w-full">
             <div className="flex w-full items-center justify-between">
-              <p className="text-sm uppercase tracking-[4px] text-[#3D493A]">
+              <p className="text-sm uppercase tracking-[4px] text-black">
                 Contact
               </p>
               <Link href="tel:+00761852398">
-                <button
-                  className="group relative cursor-pointer overflow-hidden rounded-[10px] border border-[#3D493A] bg-[#3D493A] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[#3D493A] active:translate-y-0"
-                >
+                <button className="group relative cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
                   <span className="relative z-10 inline-flex items-center gap-2">
                     Call Now
                     <ArrowUpRight
@@ -96,9 +109,9 @@ export default function RestraintContact() {
               </Link>
             </div>
 
-            <h1 className="font-marcellus text-4xl leading-tight text-[#232A22] md:text-5xl">
+            <h1 className="font-marcellus text-4xl leading-tight text-black md:text-5xl">
               Book an appointment or{" "}
-              <span style={{ color: ACCENT }}> send us a message</span>
+              <span style={{ color: secondaryColor }}> send us a message</span>
             </h1>
           </div>
         </div>
@@ -154,9 +167,9 @@ export default function RestraintContact() {
                 <Button
                   type="submit"
                   disabled={!canSubmit || isSubmitting}
-                  className="w-full rounded-xl bg-[#2F3A31] text-white hover:opacity-95"
+                  className="w-full rounded-xl bg-[var(--pri)] text-white hover:opacity-95"
                 >
-                  {isSubmitting ? "Submitting..." : "Request Appointment"}
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>
                 <p className="mt-2 text-center text-xs text-[#7C847A]">
                   By submitting, you agree to be contacted about your request.
@@ -208,7 +221,7 @@ function InfoCard({
 }) {
   return (
     <div className="flex items-start gap-3 rounded-2xl border border-black/10 bg-white p-4">
-      <span className="mt-1 grid h-9 w-9 place-items-center rounded-full bg-[#F0EFEA] text-[#2F3A31]">
+      <span className="mt-1 grid h-9 w-9 place-items-center rounded-full bg-[var(--sec)]/10 text-[#2F3A31]">
         {icon}
       </span>
       <div>

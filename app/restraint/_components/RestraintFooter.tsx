@@ -12,9 +12,23 @@ import {
 } from "lucide-react";
 import { FaPinterest } from "react-icons/fa";
 
-export default function RestraintFooter() {
+export default function RestraintFooter({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   return (
-    <footer className="relative bg-[#303B31] text-[#D6D9D1] font-sora overflow-hidden">
+    <footer
+      className="relative bg-[var(--pri)] text-[#D6D9D1] font-sora overflow-hidden"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="inset-0 pointer-events-auto">
         <Image
           src={"/assets/restraint-footer-bg-image.svg"}
@@ -49,7 +63,7 @@ export default function RestraintFooter() {
 
             <hr className="h-8 border border-white/40" />
 
-            <p className="max-w-2xl text-sm text-[#C2C6BC]">
+            <p className="max-w-2xl text-sm text-white">
               Holistic practices for inner peace, focus, and overall well-being.
             </p>
           </div>
@@ -154,7 +168,7 @@ export default function RestraintFooter() {
         <div className="mt-10 h-px w-full bg-white/10" />
 
         {/* Bottom bar */}
-        <div className="mt-6 flex flex-col-reverse items-start justify-between gap-4 text-xs text-[#B9BFB3] sm:flex-row">
+        <div className="mt-6 flex flex-col-reverse items-start justify-between gap-4 text-xs text-white sm:flex-row">
           <p>Copyright © {new Date().getFullYear()} All Rights Reserved.</p>
 
           <p> Made with ❤️ by communn.io</p>
@@ -177,7 +191,7 @@ function Social({
     <Link
       aria-label={label}
       href={href}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#AEA17E] text-white/90 transition hover:bg-[#AEA17E]/60"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sec)] text-white/90 transition hover:bg-[var(--sec)]/60"
     >
       {icon}
     </Link>

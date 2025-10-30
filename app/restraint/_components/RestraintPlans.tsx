@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, LockKeyhole } from "lucide-react";
+import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -32,9 +32,7 @@ import { capitalizeWords } from "@/components/utils/StringFunctions";
 import { toast } from "sonner";
 import { useRequests } from "@/hooks/useRequests";
 
-const ACCENT = "#B6A57B";
 const MUTED = "#747B70";
-const DARK = "#2F3A31";
 
 /* -------------------- Display & helpers -------------------- */
 type DisplayPlan = {
@@ -44,6 +42,7 @@ type DisplayPlan = {
   image?: string;
   features: string[];
   periodLabel: string;
+  subscribers?: Array<{ _id?: string; id?: string }>;
 };
 
 function formatPeriodLabel(interval?: number, duration?: string) {
@@ -56,7 +55,13 @@ function formatPeriodLabel(interval?: number, duration?: string) {
 }
 
 /* -------------------- Component -------------------- */
-export default function RestraintPlans() {
+export default function RestraintPlans({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const [api, setApi] = React.useState<CarouselApi | null>(null);
 
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
@@ -117,25 +122,40 @@ export default function RestraintPlans() {
           }`,
         ],
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
+        // carry raw subscribers for per-user detection
+        subscribers: (p.subscribers as any[]) || [],
       };
     });
   }, [plans]);
 
-  // Pick dataset: fetched or seed
+  // Pick dataset: fetched
   const data: DisplayPlan[] = normalizedFromApi;
 
+  // current user id (support both _id and id just in case)
+  const userId: string | undefined =
+    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+
   return (
-    <section className="bg-[#B6A57B15] font-sora py-10" id="plans">
+    <section
+      className="bg-[var(--sec)]/15 font-sora py-10"
+      id="plans"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20">
         {/* Section header */}
         <div className="mb-6">
-          <p className="text-sm mb-2 font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+          <p className="mb-2 text-sm font-normal uppercase tracking-[4.2px] text-black">
             OUR PLANS
           </p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_1fr]">
-            <h2 className="font-marcellus text-4xl leading-tight text-[#232A22] md:text-5xl">
+            <h2 className="font-marcellus text-4xl leading-tight text-black md:text-5xl">
               Flexible pricing for yoga{" "}
-              <span style={{ color: ACCENT }}>and meditation</span>
+              <span style={{ color: secondaryColor }}>and meditation</span>
             </h2>
             <p className="max-w-xl text-[16px] leading-7 text-[#9C9C9C]">
               Choose from our flexible pricing plans designed to suit your
@@ -147,11 +167,11 @@ export default function RestraintPlans() {
 
         {/* Loading skeleton */}
         {isLoading && data.length === 0 ? (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-white"
+                className="h-100 animate-pulse rounded-2xl border border-[#B6A57B] bg-[#B6A57B]"
               />
             ))}
           </div>
@@ -170,8 +190,18 @@ export default function RestraintPlans() {
                   `${plan.name}-${idx}`;
                 const coverImage =
                   plan.image || "/assets/restraint-plans-image-1.jpg";
-                const color = isFeatured ? "#C5B38A" : "#2F3A31";
-                const isSubscribed = false;
+                const color = isFeatured ? secondaryColor : primaryColor;
+
+                const isSubscribed =
+                  !!isLoggedIn &&
+                  !!plan.subscribers?.some(
+                    (sub: { _id?: string; id?: string }) =>
+                      (sub?._id ?? sub?.id) === userId
+                  );
+
+                const isSubscribedCommunity = communityData?.community?.members?.some(
+                  (m: any) => m?.user?._id === (auth as any)?.user?.id
+                );
 
                 return (
                   <CarouselItem
@@ -184,9 +214,7 @@ export default function RestraintPlans() {
                       periodLabel={plan.periodLabel}
                       isLoggedIn={isLoggedIn}
                       isPrivate={communityData?.community?.type === "PRIVATE"}
-                      isSubscribedCommunity={communityData?.community?.members?.some(
-                        (m: any) => m?.user?._id === auth?.user?.id
-                      )}
+                      isSubscribedCommunity={isSubscribedCommunity}
                       isSubscribed={isSubscribed}
                       communityId={communityId}
                       planId={planId}
@@ -198,20 +226,18 @@ export default function RestraintPlans() {
               })}
             </CarouselContent>
 
-            <CarouselPrevious className="hidden cursor-pointer md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-            <CarouselNext className="hidden cursor-pointer md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+            <CarouselPrevious className="hidden cursor-pointer border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:flex" />
+            <CarouselNext className="hidden cursor-pointer border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:flex" />
           </Carousel>
         )}
       </div>
-      <div className="w-full flex items-center justify-center mt-2">
+      <div className="mt-2 flex w-full items-center justify-center">
         <Link href={"/plans"}>
-          <button
-            className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
-          >
+          <button className="group relative mt-2 cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
             <span className="relative z-10 inline-flex items-center gap-2">
               View All
               <ArrowUpRight
-                className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
                 strokeWidth={2}
               />
             </span>
@@ -297,14 +323,9 @@ export function PlanCard({
       className={[
         "h-full overflow-hidden rounded-3xl border shadow-sm",
         isFeatured
-          ? "border-transparent bg-[var(--card-dark)] text-white"
+          ? "border-transparent bg-[var(--pri)] text-white"
           : "border-black/10 bg-white",
       ].join(" ")}
-      style={
-        isFeatured
-          ? ({ ["--card-dark" as any]: DARK } as React.CSSProperties)
-          : undefined
-      }
     >
       {/* Image */}
       <div className="relative h-40 w-full overflow-hidden md:h-48">
@@ -337,7 +358,7 @@ export function PlanCard({
           </div>
         </div>
       </div>
-      <h3 className="font-marcellus text-xl my-1 text-center px-4">
+      <h3 className="my-1 px-4 text-center font-marcellus text-xl">
         {capitalizeWords(plan.name)}
       </h3>
 
@@ -374,11 +395,11 @@ export function PlanCard({
               className={[
                 "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
                 isFeatured
-                  ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
-                  : "bg-[#2F3A31] text-white hover:opacity-95",
+                  ? "bg-[var(--sec)] text-[#2D332C] hover:brightness-95"
+                  : "bg-[var(--pri)] text-white hover:opacity-95",
               ].join(" ")}
             >
-              <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
+              <span className="relative z-[1] flex items-center gap-2 text-[15px] font-medium">
                 {isPrivate && (
                   <span>
                     <LockKeyhole size={20} strokeWidth={1.5} />
@@ -389,8 +410,8 @@ export function PlanCard({
               <span
                 className={[
                   isFeatured
-                    ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
-                    : "bg-[#2F3A31] text-white hover:opacity-95",
+                    ? "bg-[var(--sec)] text-[#2D332C] hover:brightness-95"
+                    : "bg-[var(--pri)] text-white hover:opacity-95",
                 ].join(" ")}
               >
                 <ArrowUpRight className="h-6 w-6" />
@@ -405,11 +426,11 @@ export function PlanCard({
                       "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
                       isFeatured
                         ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
-                        : "bg-[#2F3A31] text-white hover:opacity-95",
+                        : "bg-[var(--pri)] text-white hover:opacity-95",
                     ].join(" ")}
                     style={{ cursor: "pointer" }}
                   >
-                    <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
+                    <span className="relative z-[1] flex items-center gap-2 text-[15px] font-medium">
                       {isPrivate && (
                         <span>
                           <LockKeyhole size={20} strokeWidth={1.5} />
@@ -420,8 +441,8 @@ export function PlanCard({
                     <span
                       className={[
                         isFeatured
-                          ? "bg-[#C5B38A] text-[#2D332C] hover:brightness-95"
-                          : "bg-[#2F3A31] text-white hover:opacity-95",
+                          ? "bg-[var(--sec)] text-[#2D332C] hover:brightness-95"
+                          : "bg-[var(--pri)] text-white hover:opacity-95",
                       ].join(" ")}
                     >
                       <ArrowUpRight className="h-6 w-6" />
@@ -456,7 +477,7 @@ export function PlanCard({
                     ].join(" ")}
                     style={{ cursor: "pointer" }}
                   >
-                    <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
+                    <span className="relative z-[1] flex items-center gap-2 text-[15px] font-medium">
                       {isPrivate && (
                         <span>
                           <LockKeyhole size={20} strokeWidth={1.5} />
@@ -500,7 +521,7 @@ export function PlanCard({
             )
           ) : (
             <ChooseButton
-              text="Choose Plan"
+              text={isSubscribed ? "Subscribed" : "Subscribe"}
               href={`/subscriptions/?planid=${encodeURIComponent(
                 planId
               )}&communityid=${encodeURIComponent(
@@ -515,7 +536,7 @@ export function PlanCard({
   );
 }
 
-/* -------------------- Local ChooseButton (remove if you already have one) -------------------- */
+/* -------------------- Local ChooseButton -------------------- */
 function ChooseButton({
   text,
   href,
@@ -528,7 +549,7 @@ function ChooseButton({
   return (
     <Link
       href={href}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition text-white"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-white transition"
       style={{ backgroundColor: color }}
     >
       {text} <ArrowUpRight className="h-4 w-4" />

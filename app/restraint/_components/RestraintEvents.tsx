@@ -38,7 +38,6 @@ export const formatMonthDay = (iso: string) =>
     .format(new Date(iso))
     .replace(",", "");
 
-const ACCENT = "#B6A57B"; // gold-like accent from the mock
 const SUBTEXT = "#9C9C9C"; // soft gray text
 
 type EventCardProps = {
@@ -112,10 +111,7 @@ function Stat({ icon, value, label }: StatProps) {
   const LucideIcon = !isUrl(icon) ? getLucideIcon(icon) : null;
   return (
     <div className="flex items-center gap-4 md:gap-3">
-      <div
-        className="flex items-center justify-center rounded-lg"
-        style={{ color: ACCENT }}
-      >
+      <div className="flex items-center justify-center rounded-lg text-[var(--sec)]">
         {LucideIcon ? (
           <LucideIcon strokeWidth={1} className="w-12 h-12" />
         ) : (
@@ -141,7 +137,13 @@ function Stat({ icon, value, label }: StatProps) {
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
-export default function RestraintEvents() {
+export default function RestraintEvents({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [snapCount, setSnapCount] = useState(0);
@@ -183,10 +185,19 @@ export default function RestraintEvents() {
   if (isLoading) {
     // Loading: carousel with skeleton slides + dots
     return (
-      <section id="events" className="w-full py-12 md:py-16 font-lato">
+      <section
+        id="events"
+        className="w-full py-12 md:py-16 font-lato"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+          } as React.CSSProperties
+        }
+      >
         <div className="container mx-auto px-6 md:px-20">
           {/* Label */}
-          <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+          <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
             Events
           </p>
 
@@ -194,7 +205,7 @@ export default function RestraintEvents() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
             <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
               Experience excellence in{" "}
-              <span className="block" style={{ color: ACCENT }}>
+              <span className="block" style={{ color: secondaryColor }}>
                 yoga and meditation Events
               </span>
             </h2>
@@ -223,7 +234,7 @@ export default function RestraintEvents() {
                     <Skeleton
                       className="h-[350px] w-full bg-[var(--sec)] rounded-[30px]"
                       style={{
-                        backgroundColor: ACCENT,
+                        backgroundColor: secondaryColor,
                       }}
                     />
                   </CarouselItem>
@@ -243,10 +254,19 @@ export default function RestraintEvents() {
   }
 
   return (
-    <section className="font-sora py-10" id="events">
+    <section
+      className="font-sora py-10"
+      id="events"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-20">
         {/* Label */}
-        <p className="text-sm font-normal uppercase tracking-[4.2px] text-[#3D493A]">
+        <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
           Events
         </p>
 
@@ -254,7 +274,7 @@ export default function RestraintEvents() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
           <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
             Experience excellence in{" "}
-            <span className="block" style={{ color: ACCENT }}>
+            <span className="block" style={{ color: secondaryColor }}>
               yoga and meditation Events
             </span>
           </h2>
@@ -333,7 +353,7 @@ export default function RestraintEvents() {
         <div className="w-full flex items-center justify-center mt-2">
           <Link href={"/events"}>
             <button
-              className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[#3D493A] text-white border-[#3D493A] hover:bg-transparent hover:text-[#3D493A] hover:border-[#3D493A] hover:-translate-y-0.5 active:translate-y-0"}`}
+              className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"}`}
             >
               <span className="relative z-10 inline-flex items-center gap-2">
                 View All
