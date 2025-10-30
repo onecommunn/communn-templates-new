@@ -5,6 +5,9 @@ import Image from "next/image";
 import * as Icons from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 import Link from "next/link";
+import React from "react";
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+
 
 type ServiceItem = {
   icon: string; // "Lotus", "Wind" (Lucide) OR "/icons/lotus.svg" (image)
@@ -19,7 +22,7 @@ const SERVICES: ServiceItem[] = [
     desc: "We focus on connection, offering a complete wellness experience that nurtures your physical",
   },
   {
-    icon: "/assets/restraint-services-image01.svg", // if not a real lucide name, pass an image url instead
+    icon: "/assets/restraint-services-image01.svg",
     title: "Emotional Balance",
     desc: "We focus on connection, offering a complete wellness experience that nurtures your physical",
   },
@@ -117,78 +120,124 @@ export default function RestraintServices({
       </div>
       <div className="mx-auto container px-6 md:px-20">
         {/* top label + CTA */}
-        <div className="mb-3 md:mb-1 flex items-center justify-between">
-          {/* Label */}
-          <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
-            OUR SERVICES
-          </p>
+        <AnimatedContent
+          direction="vertical"
+          distance={40}
+          duration={0.5}
+          animateOpacity
+        >
+          <div className="mb-3 md:mb-1 flex items-center justify-between gap-4">
+            {/* Label */}
+            <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
+              OUR SERVICES
+            </p>
 
-          <Link href={"/"}>
-            <button
-              className={`${"group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"}`}
-            >
-              <span className="relative z-10 inline-flex items-center gap-2">
-                Contact Now
-                <Icons.ArrowUpRight
-                  className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
-                  strokeWidth={2}
-                />
-              </span>
-            </button>
-          </Link>
-        </div>
+            <Link href={"/"}>
+              <button className="group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0">
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  Contact Now
+                  <Icons.ArrowUpRight
+                    className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                    strokeWidth={2}
+                  />
+                </span>
+              </button>
+            </Link>
+          </div>
+        </AnimatedContent>
 
         {/* heading */}
-        <h2 className="max-w-3xl font-marcellus text-3xl leading-tight text-[#20261E] sm:text-4xl">
-          Comprehensive yoga and
-          <br />
-          <span style={{ color: secondaryColor }}>meditation services</span>
-        </h2>
+        <AnimatedContent
+          direction="vertical"
+          distance={45}
+          duration={0.55}
+          delay={0.05}
+          animateOpacity
+        >
+          <h2 className="max-w-3xl font-marcellus text-3xl leading-tight text-[#20261E] sm:text-4xl">
+            Comprehensive yoga and
+            <br />
+            <span style={{ color: secondaryColor }}>meditation services</span>
+          </h2>
+        </AnimatedContent>
 
         {/* main layout */}
         <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-[1fr_auto_1fr] md:items-center">
-          {/* left list */}
-          <div className="space-y-10">
-            {left.map((it, idx) => (
-              <div key={idx} className="pb-8">
-                <ServiceRow item={it} />
-              </div>
-            ))}
-          </div>
-
-          {/* center hero with subtle frame */}
-          <div className="mx-auto md:mx-0">
-            <div className="relative">
-              {/* decorative dots / lines could go here */}
-              <Image
-                src="/assets/restraint-services-images-1.png" // replace with your transparent yoga person
-                alt="Meditation"
-                width={360}
-                height={460}
-                className="mx-auto h-auto w-[360px] object-contain"
-                unoptimized
-              />
+          {/* left list (1,3) */}
+          <AnimatedContent
+            direction="horizontal"
+            distance={90}
+            duration={0.6}
+            stagger={0.12} // 👈 will animate service blocks one after another
+            animateOpacity
+          >
+            <div className="space-y-10">
+              {left.map((it, idx) => (
+                <div key={idx} className="pb-8">
+                  <ServiceRow item={it} />
+                </div>
+              ))}
             </div>
-          </div>
+          </AnimatedContent>
 
-          {/* right list */}
-          <div className="space-y-10">
-            {right.map((it, idx) => (
-              <div key={idx} className="pb-8">
-                <ServiceRow item={it} />
+          {/* center hero image */}
+          <AnimatedContent
+            direction="vertical"
+            distance={60}
+            duration={0.55}
+            delay={0.05}
+            animateOpacity
+            scale={0.98} // 👈 small scale-in feel
+          >
+            <div className="mx-auto md:mx-0">
+              <div className="relative">
+                <Image
+                  src="/assets/restraint-services-images-1.png"
+                  alt="Meditation"
+                  width={360}
+                  height={460}
+                  className="mx-auto h-auto w-[360px] object-contain"
+                  unoptimized
+                />
               </div>
-            ))}
-          </div>
+            </div>
+          </AnimatedContent>
+
+          {/* right list (2,4) */}
+          <AnimatedContent
+            direction="horizontal"
+            reverse
+            distance={90}
+            duration={0.6}
+            stagger={0.12}
+            animateOpacity
+          >
+            <div className="space-y-10">
+              {right.map((it, idx) => (
+                <div key={idx} className="pb-8">
+                  <ServiceRow item={it} />
+                </div>
+              ))}
+            </div>
+          </AnimatedContent>
         </div>
 
         {/* mobile CTA */}
-        <a
-          href="#contact"
-          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--pri)] px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 md:hidden"
+        <AnimatedContent
+          direction="vertical"
+          distance={35}
+          duration={0.45}
+          delay={0.1}
+          animateOpacity
         >
-          Contact Now
-          <Icons.ArrowUpRight className="h-4 w-4" />
-        </a>
+          <a
+            href="#contact"
+            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--pri)] px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 md:hidden"
+          >
+            Contact Now
+            <Icons.ArrowUpRight className="h-4 w-4" />
+          </a>
+        </AnimatedContent>
       </div>
     </section>
   );

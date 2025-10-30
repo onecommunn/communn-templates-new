@@ -2,12 +2,7 @@
 
 import Image from "next/image";
 import {
-  IndianRupee,
   Calendar,
-  Award,
-  UsersRound,
-  Globe2,
-  BookOpenText,
 } from "lucide-react";
 import {
   Carousel,
@@ -27,6 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import type { LucideProps } from "lucide-react";
 import * as Lucide from "lucide-react";
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 
 export const formatMonthDay = (iso: string) =>
   new Intl.DateTimeFormat("en-US", {
@@ -102,7 +98,6 @@ const isUrl = (v: string) => /^https?:\/\//i.test(v) || v.startsWith("/");
 
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name: string): LucideIconType | null {
-  // Cast through unknown to satisfy TS (avoids the 2352 error)
   const lib = Lucide as unknown as Record<string, LucideIconType>;
   return lib[name] ?? null;
 }
@@ -182,8 +177,8 @@ export default function RestraintEvents({
     if (communityId) fetchEvents();
   }, [communityId]);
 
+  // LOADING STATE
   if (isLoading) {
-    // Loading: carousel with skeleton slides + dots
     return (
       <section
         id="events"
@@ -196,59 +191,81 @@ export default function RestraintEvents({
         }
       >
         <div className="container mx-auto px-6 md:px-20">
-          {/* Label */}
-          <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
-            Events
-          </p>
-
-          {/* Heading + intro */}
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
-            <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
-              Experience excellence in{" "}
-              <span className="block" style={{ color: secondaryColor }}>
-                yoga and meditation Events
-              </span>
-            </h2>
-
-            <p
-              className="max-w-xl text-[15px] leading-7"
-              style={{ color: SUBTEXT }}
-            >
-              Join us to experience expert-guided yoga and meditation practices
-              designed to enhance your physical health, mental clarity, and
-              overall well-being.
+          <AnimatedContent
+            direction="vertical"
+            distance={60}
+            duration={0.6}
+            animateOpacity
+          >
+            <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
+              Events
             </p>
-          </div>
-          <div className="mt-8">
-            <Carousel
-              opts={{ align: "start", loop: false }}
-              className="w-full"
-              setApi={setApi}
-            >
-              <CarouselContent>
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <CarouselItem
-                    key={i}
-                    className="basis-full sm:basis-1/2 md:basis-1/3"
-                  >
-                    <Skeleton
-                      className="h-[350px] w-full bg-[var(--sec)] rounded-[30px]"
-                      style={{
-                        backgroundColor: secondaryColor,
-                      }}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
-            </Carousel>
-          </div>
+          </AnimatedContent>
+
+          <AnimatedContent
+            direction="vertical"
+            distance={70}
+            duration={0.7}
+            delay={0.05}
+            animateOpacity
+          >
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
+              <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
+                Experience excellence in{" "}
+                <span className="block" style={{ color: secondaryColor }}>
+                  yoga and meditation Events
+                </span>
+              </h2>
+              <p
+                className="max-w-xl text-[15px] leading-7"
+                style={{ color: SUBTEXT }}
+              >
+                Join us to experience expert-guided yoga and meditation practices
+                designed to enhance your physical health, mental clarity, and
+                overall well-being.
+              </p>
+            </div>
+          </AnimatedContent>
+
+          <AnimatedContent
+            direction="vertical"
+            distance={60}
+            duration={0.6}
+            delay={0.1}
+            animateOpacity
+          >
+            <div className="mt-8">
+              <Carousel
+                opts={{ align: "start", loop: false }}
+                className="w-full"
+                setApi={setApi}
+              >
+                <CarouselContent>
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <CarouselItem
+                      key={i}
+                      className="basis-full sm:basis-1/2 md:basis-1/3"
+                    >
+                      <Skeleton
+                        className="h-[350px] w-full bg-[var(--sec)] rounded-[30px]"
+                        style={{
+                          backgroundColor: secondaryColor,
+                        }}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="hidden md:flex" />
+                <CarouselNext className="hidden md:flex" />
+              </Carousel>
+            </div>
+          </AnimatedContent>
         </div>
       </section>
     );
   }
 
+  // EMPTY
   if (!events?.length || events?.length < 0) {
     return null;
   }
@@ -266,132 +283,180 @@ export default function RestraintEvents({
     >
       <div className="container mx-auto px-4 sm:px-6 md:px-20">
         {/* Label */}
-        <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
-          Events
-        </p>
+        <AnimatedContent
+          direction="vertical"
+          distance={50}
+          duration={0.55}
+          animateOpacity
+        >
+          <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
+            Events
+          </p>
+        </AnimatedContent>
 
         {/* Heading + intro */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
-          <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
-            Experience excellence in{" "}
-            <span className="block" style={{ color: secondaryColor }}>
-              yoga and meditation Events
-            </span>
-          </h2>
-
-          <p
-            className="max-w-xl text-[15px] leading-7"
-            style={{ color: SUBTEXT }}
-          >
-            Join us to experience expert-guided yoga and meditation practices
-            designed to enhance your physical health, mental clarity, and
-            overall well-being.
-          </p>
-        </div>
-
-        {/* Main row: big image + two cards */}
-        <div className="relative mt-8 ">
-          <Carousel
-            setApi={setApi}
-            opts={OPTIONS}
-            plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
-            className="w-full"
-          >
-            <CarouselContent>
-              {events.map((event) => {
-                const availability = event?.availability;
-                const end = availability?.[availability.length - 1]?.day;
-                const isBookable = (() => {
-                  if (!end) return false;
-                  const today = new Date().setHours(0, 0, 0, 0);
-                  const endDate = new Date(end).setHours(0, 0, 0, 0);
-                  return today <= endDate;
-                })();
-                return (
-                  <CarouselItem
-                    className="basis-full sm:basis-1/2 md:basis-1/3"
-                    key={event?._id}
-                  >
-                    <Link href={`/event-details?eventid=${event._id}`}>
-                      <EventCard
-                        image={event?.coverImage?.value}
-                        title={event?.title}
-                        blurb={event?.description}
-                        date={formatMonthDay(availability?.[0]?.day)}
-                        price={event?.pricing}
-                      />
-                    </Link>
-                  </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-            <CarouselPrevious className="cursor-pointer hidden md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-            <CarouselNext className="cursor-pointer hidden md:flex  border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-          </Carousel>
-          {/* Dots */}
-          {events.length > 1 && (
-            <div className="mt-5 flex items-center justify-center gap-2">
-              {Array.from({ length: snapCount }).map((_, i) => {
-                const active = i === selectedIndex;
-                return (
-                  <button
-                    key={i}
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => api?.scrollTo(i)}
-                    className={[
-                      "h-2.5 w-2.5 rounded-full transition-all",
-                      active
-                        ? "bg-[var(--sec)]"
-                        : "bg-slate-200 hover:bg-slate-300",
-                    ].join(" ")}
-                  />
-                );
-              })}
-            </div>
-          )}
-        </div>
-        <div className="w-full flex items-center justify-center mt-2">
-          <Link href={"/events"}>
-            <button
-              className={`${"mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0"}`}
-            >
-              <span className="relative z-10 inline-flex items-center gap-2">
-                View All
-                <Lucide.ArrowUpRight
-                  className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
-                  strokeWidth={2}
-                />
+        <AnimatedContent
+          direction="vertical"
+          distance={70}
+          duration={0.7}
+          delay={0.05}
+          animateOpacity
+        >
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
+            <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
+              Experience excellence in{" "}
+              <span className="block" style={{ color: secondaryColor }}>
+                yoga and meditation Events
               </span>
-            </button>
-          </Link>
-        </div>
+            </h2>
+
+            <p
+              className="max-w-xl text-[15px] leading-7"
+              style={{ color: SUBTEXT }}
+            >
+              Join us to experience expert-guided yoga and meditation practices
+              designed to enhance your physical health, mental clarity, and
+              overall well-being.
+            </p>
+          </div>
+        </AnimatedContent>
+
+        {/* Carousel */}
+        <AnimatedContent
+          direction="vertical"
+          distance={60}
+          duration={0.65}
+          delay={0.1}
+          animateOpacity
+        >
+          <div className="relative mt-8 ">
+            <Carousel
+              setApi={setApi}
+              opts={OPTIONS}
+              plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
+              className="w-full"
+            >
+              <CarouselContent>
+                {events.map((event) => {
+                  const availability = event?.availability;
+                  const end = availability?.[availability.length - 1]?.day;
+                  const isBookable = (() => {
+                    if (!end) return false;
+                    const today = new Date().setHours(0, 0, 0, 0);
+                    const endDate = new Date(end).setHours(0, 0, 0, 0);
+                    return today <= endDate;
+                  })();
+                  return (
+                    <CarouselItem
+                      className="basis-full sm:basis-1/2 md:basis-1/3"
+                      key={event?._id}
+                    >
+                      <Link href={`/event-details?eventid=${event._id}`}>
+                        <EventCard
+                          image={event?.coverImage?.value}
+                          title={event?.title}
+                          blurb={event?.description}
+                          date={formatMonthDay(availability?.[0]?.day)}
+                          price={event?.pricing}
+                        />
+                      </Link>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+              <CarouselPrevious className="cursor-pointer hidden md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+              <CarouselNext className="cursor-pointer hidden md:flex  border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+            </Carousel>
+
+            {/* Dots */}
+            {events.length > 1 && (
+              <div className="mt-5 flex items-center justify-center gap-2">
+                {Array.from({ length: snapCount }).map((_, i) => {
+                  const active = i === selectedIndex;
+                  return (
+                    <button
+                      key={i}
+                      aria-label={`Go to slide ${i + 1}`}
+                      onClick={() => api?.scrollTo(i)}
+                      className={[
+                        "h-2.5 w-2.5 rounded-full transition-all",
+                        active
+                          ? "bg-[var(--sec)]"
+                          : "bg-slate-200 hover:bg-slate-300",
+                      ].join(" ")}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </AnimatedContent>
+
+        {/* View all button */}
+        <AnimatedContent
+          direction="vertical"
+          distance={35}
+          duration={0.5}
+          delay={0.15}
+          animateOpacity
+        >
+          <div className="w-full flex items-center justify-center mt-2">
+            <Link href={"/events"}>
+              <button className="mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0">
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  View All
+                  <Lucide.ArrowUpRight
+                    className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                    strokeWidth={2}
+                  />
+                </span>
+              </button>
+            </Link>
+          </div>
+        </AnimatedContent>
 
         {/* Divider */}
-        <div className="my-10 h-px w-full bg-black/10" />
+        <AnimatedContent
+          direction="vertical"
+          distance={30}
+          duration={0.45}
+          delay={0.1}
+          animateOpacity
+        >
+          <div className="my-10 h-px w-full bg-black/10" />
+        </AnimatedContent>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          <Stat
-            icon={"/assets/restraint-event-icon-2.svg"}
-            value="25 +"
-            label="Years Of Experience"
-          />
-          <Stat
-            icon={"/assets/restraint-event-icon-1.svg"}
-            value="150 K+"
-            label="Satisfied Clients"
-          />
-          <Stat
-            icon={"/assets/restraint-event-icon-3.svg"}
-            value="30 +"
-            label="Countries Reached"
-          />
-          <Stat
-            icon={"/assets/restraint-event-icon-4.svg"}
-            value="2 K+"
-            label="Classes Conducted"
-          />
-        </div>
+        {/* Stats row (stagger) */}
+        <AnimatedContent
+          direction="vertical"
+          distance={50}
+          duration={0.55}
+          stagger={0.12}
+          animateOpacity
+        >
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
+            <Stat
+              icon={"/assets/restraint-event-icon-2.svg"}
+              value="25 +"
+              label="Years Of Experience"
+            />
+            <Stat
+              icon={"/assets/restraint-event-icon-1.svg"}
+              value="150 K+"
+              label="Satisfied Clients"
+            />
+            <Stat
+              icon={"/assets/restraint-event-icon-3.svg"}
+              value="30 +"
+              label="Countries Reached"
+            />
+            <Stat
+              icon={"/assets/restraint-event-icon-4.svg"}
+              value="2 K+"
+              label="Classes Conducted"
+            />
+          </div>
+        </AnimatedContent>
       </div>
     </section>
   );

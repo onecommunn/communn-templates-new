@@ -1,19 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, Plus, Minus, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Link from "next/link";
 import * as React from "react";
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 
-// const ACCENT = "#B6A57B";
-const DARK = "#2F3A31";
-const SUB = "#9CA39A";
 
 type Faq = { q: string; a: string };
 
@@ -61,110 +58,138 @@ export default function RestraintFAQ({
     >
       <div className="mx-auto container px-6 md:px-20 pb-2">
         {/* Top row: heading + CTA */}
-        <div className="mb-10 flex items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center justify-between">
-              <p className="text-sm uppercase tracking-[4px] text-black">
-                FAQs
-              </p>
-            </div>
+        <AnimatedContent
+          direction="vertical"
+          distance={45}
+          duration={0.5}
+          animateOpacity
+        >
+          <div className="mb-10 flex items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center justify-between">
+                <p className="text-sm uppercase tracking-[4px] text-black">
+                  FAQs
+                </p>
+              </div>
 
-            <h2 className="mt-2 font-marcellus text-4xl leading-tight text-black md:text-5xl">
-              Answers to common yoga{" "}
-              <span style={{ color: secondaryColor }} className="pl-3">meditation questions</span>
-            </h2>
+              <h2 className="mt-2 font-marcellus text-4xl leading-tight text-black md:text-5xl">
+                Answers to common yoga{" "}
+                <span style={{ color: secondaryColor }} className="pl-3">
+                  meditation questions
+                </span>
+              </h2>
+            </div>
           </div>
-        </div>
+        </AnimatedContent>
 
         {/* Content grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.05fr_1fr]">
-          {/* LEFT: Accordion */}
-          <div>
-            <Accordion
-              type="single"
-              collapsible
-              className="space-y-3"
-              value={value}
-              onValueChange={(v) => setValue(v)}
-              defaultValue="item-0"
-            >
-              {FAQS.map((f, i) => {
-                const id = `item-${i}`;
-                const isOpen = value === id;
-                return (
-                  <AccordionItem
-                    key={id}
-                    value={id}
-                    className={[
-                      "rounded-xl border",
-                      isOpen
-                        ? "border-transparent bg-[var(--pri)] text-white"
-                        : "border-black/10 bg-white",
-                    ].join(" ")}
-                  >
-                    <AccordionTrigger
+          {/* LEFT: Accordion (stagger) */}
+          <AnimatedContent
+            direction="vertical"
+            distance={60}
+            duration={0.6}
+            stagger={0.08} // 👈 each FAQ item appears one after another
+            animateOpacity
+          >
+            <div>
+              <Accordion
+                type="single"
+                collapsible
+                className="space-y-3"
+                value={value}
+                onValueChange={(v) => setValue(v)}
+                defaultValue="item-0"
+              >
+                {FAQS.map((f, i) => {
+                  const id = `item-${i}`;
+                  const isOpen = value === id;
+                  return (
+                    <AccordionItem
+                      key={id}
+                      value={id}
                       className={[
-                        "px-5 py-4 text-left text-[15px] font-medium",
-                        "hover:no-underline",
-                        isOpen ? "text-white" : "text-[#1E2520]",
+                        "rounded-xl border",
+                        isOpen
+                          ? "border-transparent bg-[var(--pri)] text-white"
+                          : "border-black/10 bg-white",
                       ].join(" ")}
                     >
-                      <div className="flex w-full items-center justify-between gap-3">
-                        <span>{f.q}</span>
-                      </div>
-                    </AccordionTrigger>
-
-                    <AccordionContent className="px-5 pb-5 pt-1">
-                      <p
+                      <AccordionTrigger
                         className={[
-                          "text-[14px] leading-relaxed",
-                          isOpen ? "text-white/90" : "text-[#465046]",
+                          "px-5 py-4 text-left text-[15px] font-medium",
+                          "hover:no-underline",
+                          isOpen ? "text-white" : "text-[#1E2520]",
                         ].join(" ")}
                       >
-                        {f.a}
-                      </p>
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-          </div>
+                        <div className="flex w-full items-center justify-between gap-3">
+                          <span>{f.q}</span>
+                        </div>
+                      </AccordionTrigger>
+
+                      <AccordionContent className="px-5 pb-5 pt-1">
+                        <p
+                          className={[
+                            "text-[14px] leading-relaxed",
+                            isOpen ? "text-white/90" : "text-[#465046]",
+                          ].join(" ")}
+                        >
+                          {f.a}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+            </div>
+          </AnimatedContent>
 
           {/* RIGHT: Image with rounded frame & help card */}
-          <div className="relative">
-            {/* Rounded “frame” blob */}
-            <div
-              className="absolute -top-6 -right-6 hidden aspect-square h-72 w-8h-72 rounded-3xl md:block"
-              style={{ backgroundColor: secondaryColor }}
-            />
-            <div className="relative overflow-hidden rounded-3xl bg-white shadow-sm">
-              <div className="relative aspect-[4/3]">
-                <Image
-                  src="/assets/yogona-hero-image.jpg"
-                  alt="Meditation pose"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 40vw, 100vw"
-                  unoptimized
-                />
-              </div>
+          <AnimatedContent
+            direction="horizontal"
+            reverse
+            distance={110}
+            duration={0.65}
+            delay={0.08}
+            animateOpacity
+          >
+            <div className="relative">
+              {/* Rounded “frame” blob */}
+              <div
+                className="absolute -top-6 -right-6 hidden aspect-square h-72 w-8h-72 rounded-3xl md:block"
+                style={{ backgroundColor: secondaryColor }}
+              />
+              <div className="relative overflow-hidden rounded-3xl bg-white shadow-sm">
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src="/assets/yogona-hero-image.jpg"
+                    alt="Meditation pose"
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 40vw, 100vw"
+                    unoptimized
+                  />
+                </div>
 
-              {/* Sticky/help card */}
-              <div className="pointer-events-none absolute bottom-4 left-4">
-                <div className="pointer-events-auto flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-md">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--sec)]/15 text-[#2D332C]">
-                    <Phone className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <p className="text-sm text-[#2B3129]">
-                      Still have Question?
-                    </p>
-                    <p className="text-xs text-[#6F756E]">(0) - 0761-852-398</p>
+                {/* Sticky/help card */}
+                <div className="pointer-events-none absolute bottom-4 left-4">
+                  <div className="pointer-events-auto flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-md">
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--sec)]/15 text-[#2D332C]">
+                      <Phone className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-sm text-[#2B3129]">
+                        Still have Question?
+                      </p>
+                      <p className="text-xs text-[#6F756E]">
+                        (0) - 0761-852-398
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </AnimatedContent>
         </div>
       </div>
     </section>
