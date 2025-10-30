@@ -162,10 +162,10 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
   return (
     <section
       id="services"
-      className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+      className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       {/* background accents */}
       <div className="absolute inset-0 pointer-events-none">
@@ -187,7 +187,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
 
       <div className="relative z-10 text-center md:mb-16 mb-6">
         <p
-          className="text-[#C2A74E] font-alex-brush text-3xl"
+          className="font-alex-brush text-2xl md:text-4xl"
           style={{
             color: primaryColor,
           }}
@@ -195,7 +195,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
           {data?.content?.heading}
         </p>
         <h2
-          className="text-black font-cormorant text-[40px] md:text-[60px]/[60px] font-semibold"
+          className="text-black font-cormorant text-[28px] md:text-[60px] font-semibold"
           style={{
             color: secondaryColor,
           }}
@@ -216,12 +216,11 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
             {data?.content?.services?.map((svc: Service, idx) => (
               <CarouselItem
                 key={idx}
-                className="basis-1/2 md:basis-1/3 lg:basis-1/4"
+                className="basis-1/1  md:basis-1/3 lg:basis-1/4"
               >
                 <div
-                  className={`flex h-[560px] md:h-[500px] ${
-                    idx % 2 === 0 ? "items-start" : "items-end"
-                  }`}
+                  className={`flex h-[560px] md:h-[500px] ${idx % 2 === 0 ? "items-start" : "items-end"
+                    }`}
                 >
                   {/* Make the whole card tappable on mobile */}
                   <div

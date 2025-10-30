@@ -203,11 +203,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                 type="submit"
                 disabled={loading}
                 style={{ backgroundColor: primaryColor }}
-                className={`inline-flex items-center gap-2 rounded-none px-6 py-3 text-sm font-medium text-white ${
-                  loading
-                    ? "opacity-70 cursor-not-allowed"
-                    : "cursor-pointer hover:opacity-95"
-                }`}
+                className={`inline-flex items-center gap-2 rounded-none px-6 py-3 text-sm font-medium text-white ${loading
+                  ? "opacity-70 cursor-not-allowed"
+                  : "cursor-pointer hover:opacity-95"
+                  }`}
               >
                 {loading ? "SENDING..." : <Send size={16} />}
                 {!loading && "SEND MESSAGE"}
@@ -246,10 +245,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   <Phone className="text-white" />
                 </div>
                 <div>
-                  <p style={{ color: neutralColor }} className="text-sm">
+                  <p style={{ color: secondaryColor }} className="text-lg">
                     Have any question?
                   </p>
-                  <p style={{ color: secondaryColor }} className="mt-1 text-md">
+                  <p style={{ color: neutralColor }} className="mt-1 text-[15px]">
                     {data?.content?.call?.value}
                   </p>
                 </div>
@@ -264,10 +263,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   <Mail className="text-white " />
                 </div>
                 <div>
-                  <p className="text-sm" style={{ color: neutralColor }}>
+                  <p className="text-lg" style={{ color: secondaryColor }}>
                     Write email
                   </p>
-                  <p style={{ color: secondaryColor }} className="mt-1 text-md">
+                  <p style={{ color: neutralColor }} className="mt-1 text-[15px]">
                     {data?.content?.email?.value}
                   </p>
                 </div>
@@ -288,10 +287,10 @@ const YoganaContact: FC<YoganaContactProps> = ({
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm" style={{ color: neutralColor }}>
+                  <p className="text-lg" style={{ color: secondaryColor }}>
                     Visit anytime
                   </p>
-                  <p className="mt-1 text-md" style={{ color: secondaryColor }}>
+                  <p className="mt-1 text-[15px]" style={{ color: neutralColor }}>
                     {data?.content?.address?.value}
                   </p>
                 </div>
