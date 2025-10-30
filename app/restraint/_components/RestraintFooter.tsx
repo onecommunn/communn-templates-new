@@ -9,16 +9,38 @@ import {
   Phone,
   Mail,
   Youtube,
+  Linkedin,
+  Dribbble,
+  Twitter,
+  Globe,
 } from "lucide-react";
 import { FaPinterest } from "react-icons/fa";
+import {
+  FooterSection,
+  SocialMediaLink,
+} from "@/models/templates/restraint/restraint-home-model";
+
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+  twitter: Twitter,
+  youtube: Youtube,
+  pinterest: FaPinterest,
+};
 
 export default function RestraintFooter({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: FooterSection;
 }) {
+  const content = data?.content;
+  const normalize = (s?: string) => (s ?? "").trim();
   return (
     <footer
       className="relative bg-[var(--pri)] text-[#D6D9D1] font-sora overflow-hidden"
@@ -53,7 +75,7 @@ export default function RestraintFooter({
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
             <Image
-              src="/assets/restraint-logo.png"
+              src={content?.logo || "/assets/restraint-logo.png"}
               alt="logo"
               width={150}
               height={18}
@@ -64,12 +86,25 @@ export default function RestraintFooter({
             <hr className="h-8 border border-white/40" />
 
             <p className="max-w-2xl text-sm text-white">
-              Holistic practices for inner peace, focus, and overall well-being.
+              {content?.description}
             </p>
           </div>
           {/* Socials */}
           <div className="mt-6 flex items-center gap-3">
-            <Social
+            {content?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
+              const key = normalize(each.platform).toLowerCase();
+              const Icon = PLATFORM_ICON[key] ?? Globe;
+              const url = normalize(each.url) || "/";
+              return (
+                <Social
+                  icon={<Icon className="h-4 w-4" />}
+                  label={key}
+                  href={url || "/"}
+                  key={idx}
+                />
+              );
+            })}
+            {/* <Social
               icon={<FaPinterest className="h-4 w-4" />}
               label="Pinterest"
               href="#"
@@ -88,7 +123,7 @@ export default function RestraintFooter({
               icon={<Instagram className="h-4 w-4" />}
               label="Instagram"
               href="#"
-            />
+            /> */}
           </div>
         </div>
 
@@ -147,19 +182,15 @@ export default function RestraintFooter({
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <Phone className="mt-0.5 h-4 w-4 opacity-80" />
-                <span>(0) - 0761-852-398</span>
+                <span>{content?.contact?.phoneNumber}</span>
               </li>
               <li className="flex items-start gap-3 break-all">
                 <Mail className="mt-0.5 h-4 w-4 opacity-80" />
-                <span>info@domainname.com</span>
+                <span>{content?.contact?.email}</span>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 opacity-80" />
-                <div>
-                  123 High Street LN1 1AB
-                  <br />
-                  United Kingdom
-                </div>
+                <div>{content?.contact?.address}</div>
               </li>
             </ul>
           </div>
@@ -169,7 +200,7 @@ export default function RestraintFooter({
 
         {/* Bottom bar */}
         <div className="mt-6 flex flex-col-reverse items-start justify-between gap-4 text-xs text-white sm:flex-row">
-          <p>Copyright © {new Date().getFullYear()} All Rights Reserved.</p>
+          <p>{content?.copyrightText}</p>
 
           <p> Made with ❤️ by communn.io</p>
         </div>

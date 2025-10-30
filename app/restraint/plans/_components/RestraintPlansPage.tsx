@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { PlanCard } from "../../_components/RestraintPlans";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useCommunity } from "@/hooks/useCommunity";
+import { PlansSection } from "@/models/templates/restraint/restraint-home-model";
 
 type DisplayPlan = {
   id?: string;
@@ -29,13 +30,17 @@ function formatPeriodLabel(interval?: number, duration?: string) {
 const RestraintPlansPage = ({
   primaryColor,
   secondaryColor,
+  content
 }: {
   secondaryColor: string;
   primaryColor: string;
+  content?: PlansSection;
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = React.useState<TrainingPlan[]>([]);
+
+  const source = content?.content
 
   const auth = React.useContext(AuthContext);
   const isLoggedIn = !!auth?.isAuthenticated;
@@ -114,8 +119,8 @@ const RestraintPlansPage = ({
             PLANS
           </p>
           <h2 className="font-marcellus text-4xl leading-tight text-black sm:text-5xl">
-            Flexible pricing for yoga{" "}
-            <span style={{ color: secondaryColor}}>and meditation</span>
+            {source?.heading}{" "}
+            <span style={{ color: secondaryColor }}>{source?.subHeading}</span>
           </h2>
         </div>
         {/* main */}

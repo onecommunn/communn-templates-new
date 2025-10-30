@@ -2,6 +2,7 @@
 
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/models/templates/restraint/restraint-home-model";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -26,16 +27,21 @@ const hexToRgba = (hex: string, alpha = 1) => {
 const RestraintHero = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: HeroSection;
 }) => {
+  const content = data?.content;
   return (
     <section
       className="relative flex items-center justify-center min-h-screen bg-cover bg-right md:bg-center bg-no-repeat font-sora"
       style={
         {
-          backgroundImage: `url(${"/assets/restraint-hero-bg-image.png"})`,
+          backgroundImage: `url(${
+            content?.media || "/assets/restraint-hero-bg-image.png"
+          })`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
         } as React.CSSProperties
@@ -64,23 +70,19 @@ const RestraintHero = ({
           >
             <div>
               <p className="uppercase text-sm mb-4 font-normal tracking-[4.2px]">
-                WELCOME RESTRAINT
+                {content?.heading}
               </p>
               <h2 className="md:text-6xl/[72px] text-4xl font-marcellus uppercase font-normal">
-                TRANSFORM YOUR LIFE THROUGH YOGA AND MEDITATION
+                {content?.subHeading}
               </h2>
               <hr className="my-8 border border-white/20" />
-              <p className="text-[16px]/[36px]">
-                Discover the path to holistic well-being through yoga meditation
-                practices are designed to enhance your physical strength, mental
-                clarity.
-              </p>
+              <p className="text-[16px]/[36px]">{content?.description}</p>
               {/* CTA buttons */}
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mt-10">
-                <Link href={"/"}>
+                <Link href={content?.buttons?.[0]?.url || "/"}>
                   <button className="group cursor-pointer relative overflow-hidden px-[20px] py-[17px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--sec)] text-white border-[var(--sec)] hover:bg-transparent hover:text-[white] hover:border-white hover:-translate-y-0.5 active:translate-y-0">
                     <span className="relative z-10 inline-flex items-center gap-2">
-                      Join Us Today
+                      {content?.buttons?.[0]?.label}
                       <ArrowUpRight
                         className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
                         strokeWidth={2}

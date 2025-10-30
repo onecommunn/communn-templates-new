@@ -1,7 +1,8 @@
+"use client"
 import React from "react";
 import RestraintEventsPage from "./_components/RestraintEventsPage";
 import { useCMS } from "../CMSProvider.client";
-import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import { EventsSection, HomeSection, RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "../DummyData";
 
 const RestraintEventsRoot = () => {
@@ -13,10 +14,17 @@ const RestraintEventsRoot = () => {
 
   const primaryColor = source?.color?.primary || "#3D493A";
   const secondaryColor = source?.color?.secondary || "#AEA17E";
+
+  const eventsSectionData = source?.sections?.find(
+    (s: HomeSection): s is EventsSection =>
+      s.sectionName == "eventsSection" && s.isActive
+  );
+
   return (
     <RestraintEventsPage
       primaryColor={primaryColor}
       secondaryColor={secondaryColor}
+      data={eventsSectionData}
     />
   );
 };

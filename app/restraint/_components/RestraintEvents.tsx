@@ -1,9 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Calendar,
-} from "lucide-react";
+import { Calendar } from "lucide-react";
 import {
   Carousel,
   CarouselApi,
@@ -23,6 +21,7 @@ import Link from "next/link";
 import type { LucideProps } from "lucide-react";
 import * as Lucide from "lucide-react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { EventsSection } from "@/models/templates/restraint/restraint-home-model";
 
 export const formatMonthDay = (iso: string) =>
   new Intl.DateTimeFormat("en-US", {
@@ -135,10 +134,13 @@ const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 export default function RestraintEvents({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: EventsSection;
 }) {
+  const content = data?.content;
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [snapCount, setSnapCount] = useState(0);
@@ -177,7 +179,6 @@ export default function RestraintEvents({
     if (communityId) fetchEvents();
   }, [communityId]);
 
-  // LOADING STATE
   if (isLoading) {
     return (
       <section
@@ -211,18 +212,16 @@ export default function RestraintEvents({
           >
             <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
               <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
-                Experience excellence in{" "}
+                {content?.heading}{" "}
                 <span className="block" style={{ color: secondaryColor }}>
-                  yoga and meditation Events
+                  {content?.subHeading}
                 </span>
               </h2>
               <p
                 className="max-w-xl text-[15px] leading-7"
                 style={{ color: SUBTEXT }}
               >
-                Join us to experience expert-guided yoga and meditation practices
-                designed to enhance your physical health, mental clarity, and
-                overall well-being.
+                {content?.description}
               </p>
             </div>
           </AnimatedContent>
@@ -435,26 +434,14 @@ export default function RestraintEvents({
           animateOpacity
         >
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-            <Stat
-              icon={"/assets/restraint-event-icon-2.svg"}
-              value="25 +"
-              label="Years Of Experience"
-            />
-            <Stat
-              icon={"/assets/restraint-event-icon-1.svg"}
-              value="150 K+"
-              label="Satisfied Clients"
-            />
-            <Stat
-              icon={"/assets/restraint-event-icon-3.svg"}
-              value="30 +"
-              label="Countries Reached"
-            />
-            <Stat
-              icon={"/assets/restraint-event-icon-4.svg"}
-              value="2 K+"
-              label="Classes Conducted"
-            />
+            {content?.features?.map((item, idx) => (
+              <Stat
+                icon={item?.icon}
+                value={item?.title}
+                label={item?.description}
+                key={idx}
+              />
+            ))}
           </div>
         </AnimatedContent>
       </div>

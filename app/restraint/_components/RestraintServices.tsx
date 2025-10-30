@@ -7,36 +7,13 @@ import type { ComponentType, SVGProps } from "react";
 import Link from "next/link";
 import React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
-
+import { ServiceSection } from "@/models/templates/restraint/restraint-home-model";
 
 type ServiceItem = {
   icon: string; // "Lotus", "Wind" (Lucide) OR "/icons/lotus.svg" (image)
   title: string;
-  desc: string;
+  description: string;
 };
-
-const SERVICES: ServiceItem[] = [
-  {
-    icon: "/assets/restraint-about-image01.svg",
-    title: "Service Name",
-    desc: "We focus on connection, offering a complete wellness experience that nurtures your physical",
-  },
-  {
-    icon: "/assets/restraint-services-image01.svg",
-    title: "Emotional Balance",
-    desc: "We focus on connection, offering a complete wellness experience that nurtures your physical",
-  },
-  {
-    icon: "/assets/restraint-services-image02.svg",
-    title: "Stress Reduction",
-    desc: "We focus on connection, offering a complete wellness experience that nurtures your physical",
-  },
-  {
-    icon: "HeartHandshake",
-    title: "Mind-Body Harmony",
-    desc: "We focus on connection, offering a complete wellness experience that nurtures your physical…",
-  },
-];
 
 // ---- small helpers ----
 
@@ -77,7 +54,7 @@ function ServiceRow({ item }: { item: ServiceItem }) {
           {item.title}
         </h4>
         <p className="mt-2 max-w-xs text-[16px] leading-6 text-[#9C9C9C]">
-          {item.desc}
+          {item.description}
         </p>
       </div>
 
@@ -90,12 +67,15 @@ function ServiceRow({ item }: { item: ServiceItem }) {
 export default function RestraintServices({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: ServiceSection;
 }) {
-  const left = SERVICES.filter((_, i) => i % 2 === 0);
-  const right = SERVICES.filter((_, i) => i % 2 === 1);
+  const content = data?.content;
+  const left = content?.features?.filter((_, i) => i % 2 === 0);
+  const right = content?.features?.filter((_, i) => i % 2 === 1);
 
   return (
     <section
@@ -132,10 +112,10 @@ export default function RestraintServices({
               OUR SERVICES
             </p>
 
-            <Link href={"/"}>
+            <Link href={content?.buttons?.[0]?.url || "/"}>
               <button className="group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0">
                 <span className="relative z-10 inline-flex items-center gap-2">
-                  Contact Now
+                  {content?.buttons?.[0]?.label}
                   <Icons.ArrowUpRight
                     className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
                     strokeWidth={2}
@@ -155,9 +135,9 @@ export default function RestraintServices({
           animateOpacity
         >
           <h2 className="max-w-3xl font-marcellus text-3xl leading-tight text-[#20261E] sm:text-4xl">
-            Comprehensive yoga and
+            {content?.heading}
             <br />
-            <span style={{ color: secondaryColor }}>meditation services</span>
+            <span style={{ color: secondaryColor }}>{content?.subHeading}</span>
           </h2>
         </AnimatedContent>
 
@@ -230,13 +210,13 @@ export default function RestraintServices({
           delay={0.1}
           animateOpacity
         >
-          <a
-            href="#contact"
+          <Link
+            href={content?.buttons?.[0]?.label || "#contact"}
             className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--pri)] px-4 py-3 text-sm font-medium text-white transition hover:opacity-90 md:hidden"
           >
-            Contact Now
+            {content?.buttons?.[0]?.label}
             <Icons.ArrowUpRight className="h-4 w-4" />
-          </a>
+          </Link>
         </AnimatedContent>
       </div>
     </section>

@@ -23,14 +23,18 @@ import { ArrowRight, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/Auth.context";
 import { logoutService } from "@/services/logoutService";
+import { Header } from "@/models/templates/restraint/restraint-home-model";
 
 const RestraintHeader = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: Header;
 }) => {
+  const content = data?.content;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
 
@@ -58,7 +62,7 @@ const RestraintHeader = ({
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
-              src={"/assets/restraint-logo.png"}
+              src={content?.media?.[0] || "/assets/restraint-logo.png"}
               alt="logo"
               className="w-32 h-15 object-contain"
             />

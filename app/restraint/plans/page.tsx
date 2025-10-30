@@ -1,8 +1,12 @@
-"use client"
+"use client";
 import React from "react";
 import RestraintPlansPage from "./_components/RestraintPlansPage";
 import { useCMS } from "../CMSProvider.client";
-import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import {
+  HomeSection,
+  PlansSection,
+  RestarintHomePage,
+} from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "../DummyData";
 
 const RestraintPlansRoot = () => {
@@ -14,10 +18,17 @@ const RestraintPlansRoot = () => {
 
   const primaryColor = source?.color?.primary || "#3D493A";
   const secondaryColor = source?.color?.secondary || "#AEA17E";
+
+  const plansSectionData = source?.sections?.find(
+    (s: HomeSection): s is PlansSection =>
+      s.sectionName == "plansSection" && s.isActive
+  );
+
   return (
     <RestraintPlansPage
       primaryColor={primaryColor}
       secondaryColor={secondaryColor}
+      content={plansSectionData}
     />
   );
 };

@@ -12,6 +12,7 @@ import { Star, ArrowUpRight } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { TestimoniesSection } from "@/models/templates/restraint/restraint-home-model";
 
 const testimonials = [
   {
@@ -43,10 +44,13 @@ const testimonials = [
 export default function RestraintTestimonials({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: TestimoniesSection;
 }) {
+  const content = data?.content;
   return (
     <section
       className="bg-[var(--sec)]/15 py-16 font-sora"
@@ -69,7 +73,10 @@ export default function RestraintTestimonials({
             <div className="space-y-6">
               <div className="relative overflow-hidden rounded-3xl">
                 <Image
-                  src="/assets/restraint-testimonials-image-1.jpg"
+                  src={
+                    content?.media ||
+                    "/assets/restraint-testimonials-image-1.jpg"
+                  }
                   alt="Yoga Class"
                   width={620}
                   height={470}
@@ -97,8 +104,10 @@ export default function RestraintTestimonials({
                   Testimonials
                 </p>
                 <h2 className="font-marcellus text-4xl md:text-5xl text-black">
-                  Real stories transformation{" "}
-                  <span className="text-[var(--sec)]">and growth</span>
+                  {content?.heading}{" "}
+                  <span className="text-[var(--sec)]">
+                    {content?.subHeading}
+                  </span>
                 </h2>
               </div>
 
@@ -113,10 +122,12 @@ export default function RestraintTestimonials({
                 <div className="rounded-3xl bg-[var(--pri)] text-white p-8 flex-1">
                   <div className="flex justify-between items-start mb-3 flex-col md:flex-row gap-4">
                     <h3 className="font-marcellus text-2xl">
-                      Try A Free Class Today!
+                      {content?.cta?.heading}
                     </h3>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-lg font-semibold">30K+</span>
+                      <span className="text-lg font-semibold">
+                        {content?.cta?.clientCount}
+                      </span>
                       <span className="text-gray-300 leading-tight">
                         Worldwide
                         <br className="hidden md:block" />
@@ -126,10 +137,7 @@ export default function RestraintTestimonials({
                   </div>
                   <div className="flex items-center gap-4 md:mt-9">
                     <p className="text-gray-300 text-[15px]">
-                      Experience the benefits of yoga with a free trial class!
-                      Discover how mindful movement, techniques, and guided
-                      relaxation can enhance your well-being. No matter your
-                      skill level, this is the perfect place to begin.
+                      {content?.cta?.description}
                     </p>
                     <button className="flex items-center p-4 justify-center gap-2 rounded-full bg-[var(--sec)] text-white font-medium transition hover:brightness-95">
                       <ArrowUpRight className="h-5 w-5" />
@@ -156,14 +164,14 @@ export default function RestraintTestimonials({
               plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
             >
               <CarouselContent>
-                {testimonials.map((t, i) => (
+                {content?.testimonies?.map((t, i) => (
                   <CarouselItem key={i} className="basis-full md:basis-1/2">
                     <div className="rounded-2xl bg-white p-6 border h-full">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="relative h-12 w-12 rounded-full overflow-hidden">
                           <Image
-                            src={t.avatar}
-                            alt={t.name}
+                            src={t?.avatar || "/assets/restraint-marquee-image-1.jpg"}
+                            alt={t?.name}
                             fill
                             className="object-cover"
                             unoptimized
@@ -171,13 +179,13 @@ export default function RestraintTestimonials({
                         </div>
                         <div>
                           <h4 className="font-semibold text-[#1C1C1C]">
-                            {t.name}
+                            {t?.name}
                           </h4>
-                          <p className="text-sm text-[#6B6B6B]">{t.role}</p>
+                          <p className="text-sm text-[#6B6B6B]">{t?.designation}</p>
                         </div>
                       </div>
                       <p className="text-[#444] text-[15px] leading-relaxed mb-4">
-                        {t.text}
+                        {t?.message}
                       </p>
                       <div className="flex gap-1">
                         {Array.from({ length: 5 }).map((_, i) => (

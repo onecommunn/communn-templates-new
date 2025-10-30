@@ -5,17 +5,24 @@ import { getEvents } from "@/services/eventService";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { EventCard, formatMonthDay } from "../../_components/RestraintEvents";
+import {
+  EventsSection,
+} from "@/models/templates/restraint/restraint-home-model";
 
 const RestraintEventsPage = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   secondaryColor: string;
   primaryColor: string;
+  data?: EventsSection;
 }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
+
+  const content = data?.content;
 
   const fetchEvents = async () => {
     try {
@@ -50,8 +57,8 @@ const RestraintEventsPage = ({
             Events
           </p>
           <h2 className="font-marcellus text-4xl leading-tight text-black">
-            Experience excellence in{" "}
-            <span style={{ color: secondaryColor }}>yoga and meditation Events</span>
+            {content?.heading}{" "}
+            <span style={{ color: secondaryColor }}>{content?.subHeading}</span>
           </h2>
         </div>
         {/* main */}

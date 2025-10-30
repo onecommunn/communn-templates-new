@@ -5,6 +5,9 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import * as Icons from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
+import { AboutSection } from "@/models/templates/restraint/restraint-home-model";
 
 const data = [
   {
@@ -21,13 +24,42 @@ const data = [
   },
 ];
 
+function IconOrImage({ src, alt }: { src: string; alt: string }) {
+  const isImage = src.includes("/") || src.includes(".");
+  if (!isImage && src in Icons) {
+    const Ico = Icons[src as keyof typeof Icons] as ComponentType<
+      SVGProps<SVGSVGElement>
+    >;
+    return (
+      <Ico
+        className="h-12 w-12 text-[#273126]"
+        aria-label={alt}
+        strokeWidth={0.5}
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={50}
+      height={50}
+      className="h-12 w-12 object-contain"
+      unoptimized
+    />
+  );
+}
+
 const RestraintAboutus = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: AboutSection;
 }) => {
+  const content = data?.content;
   return (
     <section
       id="about-us"
@@ -64,7 +96,7 @@ const RestraintAboutus = ({
             <div className="relative">
               <div className="flex items-center justify-center gap-6 md:gap-8 aspect-square">
                 <Image
-                  src={"/assets/restraint-about-image-1.png"}
+                  src={content?.media || "/assets/restraint-about-image-1.png"}
                   alt="Martial artist pose"
                   className="h-[460px] w-full rounded-[28px] md:w-[650px] md:h-[650px]"
                   width={650}
@@ -90,14 +122,11 @@ const RestraintAboutus = ({
                 About Us
               </p>
               <h2 className="md:text-5xl/[56px] text-4xl font-marcellus">
-                Transforming lives through{" "}
-                <span className="text-[var(--sec)]">yoga and meditation</span>
+                {content?.heading}{" "}
+                <span className="text-[var(--sec)]">{content?.subHeading}</span>
               </h2>
               <p className="text-[#9C9C9C] text-[16px] font-sora">
-                Discover inner peace and well-being through yoga Our practice
-                combines physical movement, mindfulness, and breathing techniques
-                to help you achieve balance, reduce stress, and foster personal
-                growth.
+                {content?.description}
               </p>
 
               {/* feature list with stagger */}
@@ -110,21 +139,15 @@ const RestraintAboutus = ({
                 animateOpacity
               >
                 <div className="mt-10 flex flex-col items-start gap-4">
-                  {data?.map((item, idx) => (
+                  {content?.features?.map((item, idx) => (
                     <div key={idx} className="flex gap-5">
                       <div className="w-19 h-19 flex items-center justify-center aspect-square">
-                        <Image
-                          src={item?.image}
-                          alt={item.image}
-                          width={50}
-                          height={50}
-                          unoptimized
-                        />
+                        <IconOrImage src={item?.icon} alt={item?.title} />
                       </div>
                       <div>
                         <h5 className="font-marcellus text-xl">{item.title}</h5>
                         <p className="text-[#9C9C9C] text-[16px] font-sora">
-                          {item.descriptiom}
+                          {item.description}
                         </p>
                       </div>
                     </div>

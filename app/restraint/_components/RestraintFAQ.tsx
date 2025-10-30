@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import * as React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
-
+import { FaqSection } from "@/models/templates/restraint/restraint-home-model";
 
 type Faq = { q: string; a: string };
 
@@ -40,12 +40,14 @@ const FAQS: Faq[] = [
 export default function RestraintFAQ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: FaqSection;
 }) {
   const [value, setValue] = React.useState<string>("item-0");
-
+  const content = data?.content;
   return (
     <section
       className="font-sora md:py-16 py-10"
@@ -73,9 +75,9 @@ export default function RestraintFAQ({
               </div>
 
               <h2 className="mt-2 font-marcellus text-4xl leading-tight text-black md:text-5xl">
-                Answers to common yoga{" "}
+                {content?.heading}{" "}
                 <span style={{ color: secondaryColor }} className="pl-3">
-                  meditation questions
+                  {content?.subHeading}
                 </span>
               </h2>
             </div>
@@ -89,7 +91,7 @@ export default function RestraintFAQ({
             direction="vertical"
             distance={60}
             duration={0.6}
-            stagger={0.08} // 👈 each FAQ item appears one after another
+            stagger={0.08}
             animateOpacity
           >
             <div>
@@ -101,7 +103,7 @@ export default function RestraintFAQ({
                 onValueChange={(v) => setValue(v)}
                 defaultValue="item-0"
               >
-                {FAQS.map((f, i) => {
+                {content?.faqItem?.map((f, i) => {
                   const id = `item-${i}`;
                   const isOpen = value === id;
                   return (
@@ -123,7 +125,7 @@ export default function RestraintFAQ({
                         ].join(" ")}
                       >
                         <div className="flex w-full items-center justify-between gap-3">
-                          <span>{f.q}</span>
+                          <span>{f?.question}</span>
                         </div>
                       </AccordionTrigger>
 
@@ -134,7 +136,7 @@ export default function RestraintFAQ({
                             isOpen ? "text-white/90" : "text-[#465046]",
                           ].join(" ")}
                         >
-                          {f.a}
+                          {f?.answer}
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -162,7 +164,7 @@ export default function RestraintFAQ({
               <div className="relative overflow-hidden rounded-3xl bg-white shadow-sm">
                 <div className="relative aspect-[4/3]">
                   <Image
-                    src="/assets/yogona-hero-image.jpg"
+                    src={content?.media || "/assets/yogona-hero-image.jpg"}
                     alt="Meditation pose"
                     fill
                     className="object-cover"
@@ -174,15 +176,15 @@ export default function RestraintFAQ({
                 {/* Sticky/help card */}
                 <div className="pointer-events-none absolute bottom-4 left-4">
                   <div className="pointer-events-auto flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-md">
-                    <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--sec)]/15 text-[#2D332C]">
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--sec)]/15 text-[var(--pri)]">
                       <Phone className="h-4 w-4" />
                     </span>
                     <div>
-                      <p className="text-sm text-[#2B3129]">
+                      <p className="text-sm text-[var(--pri)]">
                         Still have Question?
                       </p>
-                      <p className="text-xs text-[#6F756E]">
-                        (0) - 0761-852-398
+                      <p className="text-xs text-[var(--pri)]">
+                        {content?.phoneNumber}
                       </p>
                     </div>
                   </div>

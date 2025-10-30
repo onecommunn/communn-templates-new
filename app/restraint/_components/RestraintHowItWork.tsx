@@ -1,6 +1,7 @@
 "use client";
 
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { HowItWorkSection } from "@/models/templates/restraint/restraint-home-model";
 import Image from "next/image";
 import React from "react";
 
@@ -22,10 +23,13 @@ const STEPS = [
 export default function RestraintHowItWork({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: HowItWorkSection;
 }) {
+  const content = data?.content;
   return (
     <section
       className="bg-white py-10"
@@ -59,10 +63,10 @@ export default function RestraintHowItWork({
           >
             <div>
               <h2 className="font-marcellus text-4xl leading-tight text-[#242B22] md:text-5xl">
-                Discover our yoga and
+                {content?.heading}
                 <br />
                 <span style={{ color: secondaryColor }}>
-                  meditation process
+                  {content?.subHeading}
                 </span>
               </h2>
 
@@ -77,7 +81,7 @@ export default function RestraintHowItWork({
                 animateOpacity
               >
                 <ul className="mt-6 space-y-8">
-                  {STEPS.map((s, i) => (
+                  {content?.features?.map((s, i) => (
                     <li key={i} className="grid grid-cols-[48px_1fr] gap-4">
                       <div className="flex h-12 w-12 items-center font-marcellus justify-center text-4xl text-black">
                         {(i + 1).toString().padStart(2, "0")}
@@ -87,7 +91,7 @@ export default function RestraintHowItWork({
                           {s.title}
                         </h3>
                         <p className="mt-2 max-w-xl text-[16px] leading-6 text-[#6E756B]">
-                          {s.desc}
+                          {s.description}
                         </p>
                       </div>
                     </li>
@@ -109,7 +113,10 @@ export default function RestraintHowItWork({
             <div className="relative mx-auto w-full max-w-[560px]">
               <div className="flex items-center justify-center aspect-square">
                 <Image
-                  src="/assets/restraint-how-it-work-image-1.png"
+                  src={
+                    content?.media ||
+                    "/assets/restraint-how-it-work-image-1.png"
+                  }
                   alt="Yoga pose"
                   width={720}
                   height={720}

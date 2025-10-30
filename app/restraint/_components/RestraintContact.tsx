@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { ContactSection } from "@/models/templates/restraint/restraint-home-model";
 
 /* ---------- Styling palette aligned to Restraint ---------- */
 // const ACCENT = "#B6A57B";
@@ -23,10 +24,13 @@ import Link from "next/link";
 export default function RestraintContact({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: ContactSection;
 }) {
+  const content = data?.content;
   // form state
   const [first, setFirst] = React.useState("");
   const [last, setLast] = React.useState(""); // optional; fine to keep
@@ -96,7 +100,7 @@ export default function RestraintContact({
               <p className="text-sm uppercase tracking-[4px] text-black">
                 Contact
               </p>
-              <Link href="tel:+00761852398">
+              <Link href={`tel:${content?.contact?.phoneNumber}`}>
                 <button className="group relative cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
                   <span className="relative z-10 inline-flex items-center gap-2">
                     Call Now
@@ -110,8 +114,8 @@ export default function RestraintContact({
             </div>
 
             <h1 className="font-marcellus text-4xl leading-tight text-black md:text-5xl">
-              Book an appointment or{" "}
-              <span style={{ color: secondaryColor }}> send us a message</span>
+              {content?.heading}{" "}
+              <span style={{ color: secondaryColor }}>{content?.subHeading}</span>
             </h1>
           </div>
         </div>
@@ -184,22 +188,22 @@ export default function RestraintContact({
               <InfoCard
                 icon={<Phone className="h-4 w-4" />}
                 title="Phone"
-                lines={["+91 98765 43210"]}
+                lines={[content?.contact?.phoneNumber]}
               />
               <InfoCard
                 icon={<Mail className="h-4 w-4" />}
                 title="Email"
-                lines={["hello@restraint.yoga"]}
+                lines={[content?.contact?.email]}
               />
               <InfoCard
                 icon={<MapPin className="h-4 w-4" />}
                 title="Studio"
-                lines={["123 High Street, LN1 1AB, United Kingdom"]}
+                lines={[content?.contact?.address]}
               />
               <InfoCard
                 icon={<Clock className="h-4 w-4" />}
                 title="Hours"
-                lines={["Mon–Sat: 6:30 AM – 8:00 PM", "Sun: 8:00 AM – 2:00 PM"]}
+                lines={content?.availableTimings}
               />
             </div>
           </div>

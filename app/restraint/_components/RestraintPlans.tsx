@@ -31,6 +31,7 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 import { toast } from "sonner";
 import { useRequests } from "@/hooks/useRequests";
+import { PlansSection } from "@/models/templates/restraint/restraint-home-model";
 
 const MUTED = "#747B70";
 
@@ -58,10 +59,13 @@ function formatPeriodLabel(interval?: number, duration?: string) {
 export default function RestraintPlans({
   primaryColor,
   secondaryColor,
+  content,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  content: PlansSection;
 }) {
+  const source = content?.content;
   const [api, setApi] = React.useState<CarouselApi | null>(null);
 
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
@@ -154,13 +158,13 @@ export default function RestraintPlans({
           </p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_1fr]">
             <h2 className="font-marcellus text-4xl leading-tight text-black md:text-5xl">
-              Flexible pricing for yoga{" "}
-              <span style={{ color: secondaryColor }}>and meditation</span>
+              {source?.heading}{" "}
+              <span style={{ color: secondaryColor }}>
+                {source?.subHeading}
+              </span>
             </h2>
             <p className="max-w-xl text-[16px] leading-7 text-[#9C9C9C]">
-              Choose from our flexible pricing plans designed to suit your
-              needs. Whether you’re a beginner or advanced practitioner, we
-              offer affordable.
+              {source?.description}
             </p>
           </div>
         </div>
@@ -199,9 +203,10 @@ export default function RestraintPlans({
                       (sub?._id ?? sub?.id) === userId
                   );
 
-                const isSubscribedCommunity = communityData?.community?.members?.some(
-                  (m: any) => m?.user?._id === (auth as any)?.user?.id
-                );
+                const isSubscribedCommunity =
+                  communityData?.community?.members?.some(
+                    (m: any) => m?.user?._id === (auth as any)?.user?.id
+                  );
 
                 return (
                   <CarouselItem
