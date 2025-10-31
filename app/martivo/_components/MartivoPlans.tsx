@@ -80,10 +80,11 @@ const ChooseButton: React.FC<{
   href?: string;
   text: string;
   color: string;
-}> = ({ href = "/", text, color }) => (
+  isSubscribed:boolean
+}> = ({ href = "/", text, color,isSubscribed }) => (
   <Link
     href={href || "/"}
-    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+    className={`group relative inline-flex items-center gap-3 rounded-full ${isSubscribed ? "bg-[var(--pri)]" : "bg-[var(--color)]"} px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2`}
     style={
       {
         "--color": color,
@@ -332,11 +333,12 @@ const Card: React.FC<CardProps> = ({
             )
           ) : (
             <ChooseButton
-              text="Choose Plan"
+              text={isSubscribed ?  "Subscribed" : "Subscribe"}
               href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(
                 coverImage
               )}`}
               color={color}
+              isSubscribed={isSubscribed}
             />
           )}
         </div>
