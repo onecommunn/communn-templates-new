@@ -205,6 +205,10 @@ const SpawellEvents = ({
     );
   }
 
+  if (!events?.length || events?.length < 0) {
+    return null;
+  }
+
   return (
     <section
       id="events"
@@ -281,8 +285,7 @@ const SpawellEvents = ({
                 <div
                   className="pointer-events-none absolute inset-0"
                   style={{
-                    background:
-                      `linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, ${primaryColor} 100%)`,
+                    background: `linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, ${primaryColor} 100%)`,
                   }}
                 />
 

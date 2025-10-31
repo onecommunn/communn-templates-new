@@ -116,7 +116,7 @@ const Card: React.FC<PlanCardProps> = ({
 
   return (
     <div
-      className="group block rounded-3xl bg-white p-3 transition-shadow border md:shadow-lg my-6"
+      className="group block rounded-3xl bg-white p-3 transition-shadow border md:shadow-lg my-6 pb-4"
       aria-label={title}
       style={
         {
@@ -211,8 +211,7 @@ const Card: React.FC<PlanCardProps> = ({
               </div>
             </DialogContent>
           </Dialog>
-        ) : isRequested ?
-         (
+        ) : isRequested ? (
           <div className="mt-4 inline-flex flex-col text-[var(--pri)] gap-2 text-[16px] font-bold">
             <h5>Already Requested</h5>
             <p className="font-normal text-sm">
@@ -271,7 +270,7 @@ const Card: React.FC<PlanCardProps> = ({
             className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
             style={{ color: primaryColor, cursor: "pointer" }}
           >
-            View Plan
+            {isSubscribed ?  "Already Subscribed" : "Subscribe Now"}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </Link>
@@ -482,6 +481,10 @@ const SpawellPlans: React.FC<Props> = ({
       (req: any) => req.createdBy?._id === authContext?.user?.id
     )
   );
+
+  if (!plans?.length || plans?.length < 0) {
+    return null;
+  }
 
   return (
     <section
