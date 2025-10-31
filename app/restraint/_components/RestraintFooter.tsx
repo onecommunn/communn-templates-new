@@ -104,26 +104,6 @@ export default function RestraintFooter({
                 />
               );
             })}
-            {/* <Social
-              icon={<FaPinterest className="h-4 w-4" />}
-              label="Pinterest"
-              href="#"
-            />
-            <Social
-              icon={<Youtube className="h-4 w-4" />}
-              label="Youtube"
-              href="#"
-            />
-            <Social
-              icon={<Facebook className="h-4 w-4" />}
-              label="Facebook"
-              href="#"
-            />
-            <Social
-              icon={<Instagram className="h-4 w-4" />}
-              label="Instagram"
-              href="#"
-            /> */}
           </div>
         </div>
 

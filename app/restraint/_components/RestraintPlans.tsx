@@ -182,7 +182,7 @@ export default function RestraintPlans({
         ) : (
           <Carousel
             setApi={setApi}
-            opts={{ align: "start", loop: false, dragFree: true }}
+            opts={{ align: "start", loop: false, dragFree: true}}
             className="relative"
             plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
           >
@@ -533,6 +533,7 @@ export function PlanCard({
                 communityId || ""
               )}&image=${encodeURIComponent(coverImage)}`}
               color={color}
+              isSubscribed={isSubscribed}
             />
           )}
         </div>
@@ -546,16 +547,24 @@ function ChooseButton({
   text,
   href,
   color,
+  isSubscribed,
 }: {
   text: string;
   href: string;
   color: string;
+  isSubscribed: boolean;
 }) {
   return (
     <Link
       href={href}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-white transition"
-      style={{ backgroundColor: color }}
+      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium ${
+        isSubscribed ?"text-[var(--color)] border border-[var(--color)] bg-none" : "text-white bg-[var(--color)]"
+      } transition`}
+      style={
+        {
+          "--color": color,
+        } as React.CSSProperties
+      }
     >
       {text} <ArrowUpRight className="h-4 w-4" />
     </Link>

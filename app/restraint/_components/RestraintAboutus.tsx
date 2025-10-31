@@ -96,7 +96,7 @@ const RestraintAboutus = ({
             <div className="relative">
               <div className="flex items-center justify-center gap-6 md:gap-8 aspect-square">
                 <Image
-                  src={content?.media || "/assets/restraint-about-image-1.png"}
+                  src={content?.media?.[0] || "/assets/restraint-about-image-1.png"}
                   alt="Martial artist pose"
                   className="h-[460px] w-full rounded-[28px] md:w-[650px] md:h-[650px]"
                   width={650}

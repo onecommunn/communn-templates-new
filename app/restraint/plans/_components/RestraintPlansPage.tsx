@@ -1,8 +1,8 @@
 "use client";
+import React, { useState } from "react";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
-import React, { useState } from "react";
 import { PlanCard } from "../../_components/RestraintPlans";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useCommunity } from "@/hooks/useCommunity";
@@ -15,12 +15,13 @@ type DisplayPlan = {
   image?: string;
   features: string[];
   periodLabel: string;
+  // 👇 keep subscribers from API so we can check against logged-in user
   subscribers?: Array<{ _id?: string; id?: string }>;
 };
 
 function formatPeriodLabel(interval?: number, duration?: string) {
   if (!interval || !duration) return "Per Month";
-  const unit = duration.toLowerCase(); // week | month | year
+  const unit = duration.toLowerCase();
   const cap = unit.charAt(0).toUpperCase() + unit.slice(1);
   if (interval === 1) return `Per ${cap}`;
   const plural = unit.endsWith("s") ? unit : unit + "s";
@@ -30,7 +31,7 @@ function formatPeriodLabel(interval?: number, duration?: string) {
 const RestraintPlansPage = ({
   primaryColor,
   secondaryColor,
-  content
+  content,
 }: {
   secondaryColor: string;
   primaryColor: string;
@@ -40,7 +41,7 @@ const RestraintPlansPage = ({
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = React.useState<TrainingPlan[]>([]);
 
-  const source = content?.content
+  const source = content?.content;
 
   const auth = React.useContext(AuthContext);
   const isLoggedIn = !!auth?.isAuthenticated;
@@ -76,6 +77,7 @@ const RestraintPlansPage = ({
     fetchPlans();
   }, [communityId, isLoggedIn]);
 
+  // 👇 THIS was the problem: subscribers were not passed through
   const normalizedFromApi: DisplayPlan[] = React.useMemo(() => {
     return plans.map((p) => {
       const period = `${p.interval} ${capitalizeWords(p.duration)}`;
@@ -97,9 +99,13 @@ const RestraintPlansPage = ({
           }`,
         ],
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
+
+        // ✅ keep the actual list
+        subscribers: p.subscribers as Array<{ _id?: string; id?: string }>,
       };
     });
   }, [plans]);
+
   const data: DisplayPlan[] = normalizedFromApi;
 
   return (
@@ -123,9 +129,10 @@ const RestraintPlansPage = ({
             <span style={{ color: secondaryColor }}>{source?.subHeading}</span>
           </h2>
         </div>
+
         {/* main */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
@@ -134,7 +141,7 @@ const RestraintPlansPage = ({
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {data.map((plan, idx) => {
               const isFeatured = (idx + 1) % 2 === 0;
               const planId =
@@ -144,6 +151,7 @@ const RestraintPlansPage = ({
                 plan.image || "/assets/restraint-plans-image-1.jpg";
               const color = isFeatured ? secondaryColor : primaryColor;
 
+              // ✅ now this actually has data
               const isSubscribed =
                 !!isLoggedIn &&
                 !!plan.subscribers?.some(
