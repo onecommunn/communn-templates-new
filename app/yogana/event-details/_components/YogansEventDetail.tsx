@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Event } from "@/models/event.model";
-import { LoaderCircle } from "lucide-react";
+import { CalendarDays, Clock, LoaderCircle, MapPin, User } from "lucide-react";
 import Image from "next/image";
 import { formatDate } from "@/components/utils/StringFunctions";
 
@@ -355,15 +355,15 @@ const YogansEventDetail = ({
   return (
     <>
       <section
-        className="py-10 font-cormorant bg-[#C2A74E1A]"
-        // style={{
-        //   backgroundColor: `${primaryColor}1A`,
-        // }}
+        className="sm:py-1 md:py-10 font-cormorant bg-[#C2A74E1A]"
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-          <div className="text-center mb-6">
+        <div className="container mx-auto px-2 sm:px-6 lg:px-20">
+          <div className="hidden md:block text-center mb-6 md:display-none">
             <h2
-              className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]"
+              className="text-2xl font-plus-jakarta md:text-4xl font-bold mb-4 text-[#0C0407]"
               style={{
                 color: primaryColor,
               }}
@@ -399,52 +399,59 @@ const YogansEventDetail = ({
               {/* Left: Event details */}
               <div className="md:col-span-2">
                 <h2
-                  className="md:text-[32px] text-2xl font-semibold mb-4 font-cormorant"
+                  className="md:text-[28px] text-[16px] font-semibold mb-4 font-plus-jakarta"
                   style={{ color: secondaryColor }}
                 >
                   {eventData.title}
                 </h2>
                 <p
-                  className="text-gray-600 text-[16px] mb-6 font-plus-jakarta"
+                  className="text-gray text-[14px] mb-6 font-plus-jakarta"
                   style={{ color: neutralColor }}
                 >
                   {eventData.description}
                 </p>
 
                 <h3
-                  className="md:text-[32px] text-2xl  font-semibold mb-2 font-cormorant"
+                  className="md:text-[32px] text-2xl font-semibold mb-2 font-cormorant"
                   style={{ color: secondaryColor }}
                 >
                   Access Information
                 </h3>
                 <ul
-                  className="space-y-2 text-[#707070] text-[16px] list-disc ml-6 font-plus-jakarta"
+                  className="space-y-2 text-[#707070] text-[14px] ml-6 font-plus-jakarta"
                   style={{ color: neutralColor }}
                 >
-                  <li className="font-semibold text-[16px] ">
-                    {`${formatDate(
-                      eventData?.availability[0]?.day
-                    )} - ${formatDate(
-                      eventData?.availability[
-                        eventData?.availability.length - 1
-                      ]?.day
+                  <li className="flex items-center gap-2 font-semibold text-[16px]">
+                    <CalendarDays size={18} className="text-[#707070]" />
+                    {`${formatDate(eventData?.availability[0]?.day)} - ${formatDate(
+                      eventData?.availability[eventData?.availability.length - 1]?.day
                     )}`}
                   </li>
-                  <li>{`${formatTime(times.startTime)} - ${formatTime(
-                    times.endTime
-                  )}`}</li>
-                  <li>By Admin : {eventData.hostedBy}</li>
-                  <li>{eventData.location}</li>
+
+                  <li className="flex items-center gap-2">
+                    <Clock size={18} className="text-[#707070]" />
+                    {`${formatTime(times.startTime)} - ${formatTime(times.endTime)}`}
+                  </li>
+
+                  <li className="flex items-center gap-2">
+                    <User size={18} className="text-[#707070]" />
+                    By Admin : {eventData.hostedBy}
+                  </li>
+
+                  <li className="flex items-center gap-2">
+                    <MapPin size={18} className="text-[#707070]" />
+                    {eventData.location}
+                  </li>
                 </ul>
               </div>
 
               {/* Right: Form */}
-              <div className="rounded-xl  p-6 h-fit">
+              <div className="rounded-xl p-1 h-fit">
                 <h3
-                  className="text-3xl font-bold mb-4 font-cormorant"
+                  className="text-3xl font-bold mb-4 font-cormorant text-center"
                   style={{ color: primaryColor }}
                 >
-                  Enter Details
+                  Book Event
                 </h3>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <input
@@ -477,11 +484,10 @@ const YogansEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
-                            !isFormValid || isLoading
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${!isFormValid || isLoading
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                            }`}
                           disabled={!isFormValid}
                           onClick={() => {
                             if (!eventData?._id || !eventData?.community?._id) {
@@ -508,11 +514,10 @@ const YogansEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
-                            !isFormValid || isLoading
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${!isFormValid || isLoading
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                            }`}
                           disabled={!isFormValid}
                           onClick={() => {
                             if (
@@ -543,11 +548,10 @@ const YogansEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
-                            !isFormValid || isLoading
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${!isFormValid || isLoading
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                            }`}
                           onClick={() => {
                             if (!eventData?._id || !eventData?.community?._id) {
                               return;
