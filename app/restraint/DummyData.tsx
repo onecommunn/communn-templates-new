@@ -267,6 +267,7 @@ export const dummyData: RestarintHomePage = {
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Sed rutrum leo ante, vel lobortis odio pellentesque. Suspendisse faucibus elementum pharetra. Aenean quis vehicula dolor. Sed condimentum interdum convallis.",
+            rating: 5,
           },
           {
             name: "John Carter",
@@ -275,6 +276,7 @@ export const dummyData: RestarintHomePage = {
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Duis aliquet nulla vel tellus rhoncus, et malesuada purus pharetra. Integer eu sem felis.",
+            rating: 5,
           },
           {
             name: "Emily Chen",
@@ -283,6 +285,7 @@ export const dummyData: RestarintHomePage = {
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Quisque volutpat, ipsum id ullamcorper cursus, lectus justo iaculis lacus.",
+            rating: 5,
           },
           {
             name: "Hiro Tanaka",
@@ -291,6 +294,7 @@ export const dummyData: RestarintHomePage = {
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Maecenas eget sagittis libero. Ut cursus magna ut tincidunt fermentum.",
+            rating: 5,
           },
         ],
         cta: {

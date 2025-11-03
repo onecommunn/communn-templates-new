@@ -132,6 +132,7 @@ export interface TestimoniesSection extends SectionBase {
       designation: string;
       avatar: string;
       message: string;
+      rating: number;
     }[];
     cta: {
       heading: string;

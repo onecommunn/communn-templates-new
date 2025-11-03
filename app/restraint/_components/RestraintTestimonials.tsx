@@ -8,38 +8,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Star, ArrowUpRight } from "lucide-react";
+import { Star, ArrowUpRight, StarHalf } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { TestimoniesSection } from "@/models/templates/restraint/restraint-home-model";
-
-const testimonials = [
-  {
-    name: "Sarah Miller",
-    role: "Founder & Lead Yoga Instructor",
-    avatar: "/assets/restraint-marquee-image-1.jpg",
-    text: "Joining this yoga and meditation program was life-changing. I feel more balanced, focused, and at peace than ever before. The instructors are knowledgeable, patient, and truly inspiring.",
-  },
-  {
-    name: "David Parker",
-    role: "Mindfulness Coach",
-    avatar: "/assets/restraint-marquee-image-1.jpg",
-    text: "The classes helped me reconnect with myself and manage stress effectively. Every instructor radiates calm and positivity.",
-  },
-  {
-    name: "Priya Sharma",
-    role: "Yoga Enthusiast",
-    avatar: "/assets/restraint-marquee-image-1.jpg",
-    text: "The energy and guidance here are unmatched. I now begin my mornings feeling grounded and grateful.",
-  },
-  {
-    name: "James Lee",
-    role: "Meditation Practitioner",
-    avatar: "/assets/restraint-marquee-image-1.jpg",
-    text: "After years of practice, this community elevated my mindfulness to a whole new level. Truly transformative.",
-  },
-];
+import { Star as StarEmpty } from "lucide-react";
 
 export default function RestraintTestimonials({
   primaryColor,
@@ -170,7 +144,10 @@ export default function RestraintTestimonials({
                       <div className="flex items-center gap-4 mb-4">
                         <div className="relative h-12 w-12 rounded-full overflow-hidden">
                           <Image
-                            src={t?.avatar || "/assets/restraint-marquee-image-1.jpg"}
+                            src={
+                              t?.avatar ||
+                              "/assets/restraint-marquee-image-1.jpg"
+                            }
                             alt={t?.name}
                             fill
                             className="object-cover"
@@ -181,21 +158,48 @@ export default function RestraintTestimonials({
                           <h4 className="font-semibold text-[#1C1C1C]">
                             {t?.name}
                           </h4>
-                          <p className="text-sm text-[#6B6B6B]">{t?.designation}</p>
+                          <p className="text-sm text-[#6B6B6B]">
+                            {t?.designation}
+                          </p>
                         </div>
                       </div>
                       <p className="text-[#444] text-[15px] leading-relaxed mb-4">
                         {t?.message}
                       </p>
                       <div className="flex gap-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            size={16}
-                            fill={secondaryColor}
-                            stroke={secondaryColor}
-                          />
-                        ))}
+                        {Array.from({ length: 5 }).map((_, i) => {
+                          const ratingValue = i + 1;
+                          if (t.rating >= ratingValue) {
+                            // Full star
+                            return (
+                              <Star
+                                key={i}
+                                size={16}
+                                fill={secondaryColor}
+                                stroke={secondaryColor}
+                              />
+                            );
+                          } else if (t.rating >= ratingValue - 0.5) {
+                            // Half star
+                            return (
+                              <StarHalf
+                                key={i}
+                                size={16}
+                                fill={secondaryColor}
+                                stroke={secondaryColor}
+                              />
+                            );
+                          } else {
+                            // Empty star
+                            return (
+                              <StarEmpty
+                                key={i}
+                                size={16}
+                                stroke={secondaryColor}
+                              />
+                            );
+                          }
+                        })}
                       </div>
                     </div>
                   </CarouselItem>
