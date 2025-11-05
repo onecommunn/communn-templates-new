@@ -4,7 +4,14 @@ import { useSnackbar } from "notistack";
 // import store from "../store";
 // import { useSelector } from "react-redux";
 import { TrainingPlan } from "../models/plan.model";
-import { createSubscriptionSequences, getPlansCommunity, getPlansCommunityAuth, getSequencesBySubscriptionId, joinCommunity } from "../services/plansService";
+import {
+  createSubscriptionSequences,
+  getPlanById,
+  getPlansCommunity,
+  getPlansCommunityAuth,
+  getSequencesBySubscriptionId,
+  joinCommunity,
+} from "../services/plansService";
 // import { deletePost } from "../services/post.service";
 
 export const usePlans = () => {
@@ -13,18 +20,16 @@ export const usePlans = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
 
-//   const state = store.getState();
-//   const community = useSelector(() => {
-//     return state?.selectedCommunity;
-//   });
-//   useEffect(() => {
-//     const communityId = community?.selectedCommunity?._id ?? ""
-//     if (communityId)
-//       getCommunityPlansList(communityId)
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [community?.selectedCommunity?._id]);
-
-
+  //   const state = store.getState();
+  //   const community = useSelector(() => {
+  //     return state?.selectedCommunity;
+  //   });
+  //   useEffect(() => {
+  //     const communityId = community?.selectedCommunity?._id ?? ""
+  //     if (communityId)
+  //       getCommunityPlansList(communityId)
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   }, [community?.selectedCommunity?._id]);
 
   const getCommunityPlansListAuth = async (id: string) => {
     try {
@@ -33,7 +38,10 @@ export const usePlans = () => {
       return response;
     } catch (error) {
       console.error("Error fetching community plans:", error);
-      enqueueSnackbar("An error occurred while loading plans", { variant: "error", autoHideDuration: 3000 });
+      enqueueSnackbar("An error occurred while loading plans", {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -44,8 +52,8 @@ export const usePlans = () => {
       const response = await getPlansCommunity(getAccessToken(), id);
       return response;
     } catch (err) {
-      enqueueSnackbar('Failed to fetch plans', {
-        variant: 'error',
+      enqueueSnackbar("Failed to fetch plans", {
+        variant: "error",
         autoHideDuration: 3000,
       });
     }
@@ -55,58 +63,56 @@ export const usePlans = () => {
     setIsLoading(true);
     try {
       const response = await joinCommunity(getAccessToken(), community_id);
-      if (response === 'success') {
-        enqueueSnackbar('You have successfully joined!', {
-          variant: 'success',
+      if (response === "success") {
+        enqueueSnackbar("You have successfully joined!", {
+          variant: "success",
           autoHideDuration: 3000,
         });
       } else {
-        enqueueSnackbar('Error while joining to public community!', {
-          variant: 'error',
+        enqueueSnackbar("Error while joining to public community!", {
+          variant: "error",
           autoHideDuration: 3000,
         });
       }
       return response;
     } catch (error) {
       enqueueSnackbar(
-        'An error occurred while joining to Community, Please try again.',
-        { variant: 'error', autoHideDuration: 3000 }
+        "An error occurred while joining to Community, Please try again.",
+        { variant: "error", autoHideDuration: 3000 }
       );
     }
     setIsLoading(false);
   };
 
+  const getPlansById = async (id: string) => {
+    try {
+      setIsLoading(true);
+      const response = await getPlanById(id);
+      return response;
+    } catch (error) {
+      enqueueSnackbar("Failed to fetch plan details", { variant: "error" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-//   const getPlansById = async (id: string) => {
-//     try {
-//       setIsLoading(true);
-//       const response = await getPlanById(id);
-//       return response;
-//     } catch (error) {
-//       enqueueSnackbar('Failed to fetch plan details', { variant: 'error' });
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-
-const createSubscriptionSequencesByPlanAndCommunityId = async (
-    userId:string,
+  const createSubscriptionSequencesByPlanAndCommunityId = async (
+    userId: string,
     communityId: string,
-    planId: string,
+    planId: string
   ) => {
     setIsLoading(true);
     try {
       const response = await createSubscriptionSequences(
         userId,
         communityId,
-        planId,
+        planId
       );
       // console.log("response", response);
       return response;
     } catch (err) {
       enqueueSnackbar("Couldn't create Subscription", {
-        variant: 'error',
+        variant: "error",
         autoHideDuration: 3000,
       });
       return err;
@@ -115,7 +121,11 @@ const createSubscriptionSequencesByPlanAndCommunityId = async (
     }
   };
 
-const getSequencesById = async (subscriptionId: string, planId: string, courseId?:string) => {
+  const getSequencesById = async (
+    subscriptionId: string,
+    planId: string,
+    courseId?: string
+  ) => {
     setIsLoading(true);
     try {
       const response = await getSequencesBySubscriptionId(
@@ -127,7 +137,7 @@ const getSequencesById = async (subscriptionId: string, planId: string, courseId
       return response;
     } catch (err) {
       enqueueSnackbar("Couldn't create Subscription", {
-        variant: 'error',
+        variant: "error",
         autoHideDuration: 3000,
       });
       return err;
@@ -143,6 +153,7 @@ const getSequencesById = async (subscriptionId: string, planId: string, courseId
     getCommunityPlansListAuth,
     getSequencesById,
     createSubscriptionSequencesByPlanAndCommunityId,
-    joinToPublicCommunity
+    joinToPublicCommunity,
+    getPlansById,
   };
 };

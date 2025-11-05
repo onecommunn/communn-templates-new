@@ -22,8 +22,8 @@ export interface TrainingPlan {
   duration: string; // e.g., "MONTH"
   interval: string; // typically a number string
   startDate: string; // ISO string
-  endDate: string;   // ISO string
-  status: string;    // e.g., "ACTIVE"
+  endDate: string; // ISO string
+  status: string; // e.g., "ACTIVE"
   totalPlanValue: number;
   summary: string;
   addOn: any[]; // Define specific structure if known
@@ -48,30 +48,40 @@ export interface TrainingPlan {
   initialPayment: string;
   isUserSubscribed: boolean;
   nextDueDate: string; // ISO string
+  coupons: Coupons[];
 }
 
+interface Coupons {
+  _id: string;
+  couponCode: string;
+  cycleCount: number;
+  discountName: string;
+  discountType: string;
+  discountValue: number;
+  expiryDate: string;
+  maxRedemptions: number;
+  usedRedemptions: number;
+}
 
 export interface ISequences {
-    previousStatus:string;
-    startDate: string;
-    status: string;
-    _id: string;
+  previousStatus: string;
+  startDate: string;
+  status: string;
+  _id: string;
 }
 
-
 export interface ISubscribers {
-    _id: string;
-    community: ICommunity;
-    createdAt: string;
-    plan: TrainingPlan;
-    initialPayment:string,
-    pricing:string,
-    isInitialPaymentPaid:boolean,
-    sequences: ISequences[];
-    status: string;
-    user: IUserInfo;
-    startDate: string;
-    subscription_status: string;
-    courseAmount:string
-
+  _id: string;
+  community: ICommunity;
+  createdAt: string;
+  plan: TrainingPlan;
+  initialPayment: string;
+  pricing: string;
+  isInitialPaymentPaid: boolean;
+  sequences: ISequences[];
+  status: string;
+  user: IUserInfo;
+  startDate: string;
+  subscription_status: string;
+  courseAmount: string;
 }

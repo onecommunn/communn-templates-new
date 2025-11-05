@@ -40,6 +40,16 @@ export const getPlansCommunity = async (token: string, id: string) => {
   }
 };
 
+export const getPlanById = async (id: string) => {
+  try {
+    const response = await axios.get(`https://communn.io/api/v1/plan/${id}`, {
+    });
+    return response;
+  } catch (err) {
+    console.log('ERR :', err);
+    return { status: 500, data: [] };
+  }
+};
 
 export const createSubscriptionSequences = async (
   userId: string,

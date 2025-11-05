@@ -172,7 +172,7 @@ export default function RestraintServices({
             <div className="mx-auto md:mx-0">
               <div className="relative">
                 <Image
-                  src="/assets/restraint-services-images-1.png"
+                  src={content?.media || "/assets/restraint-services-images-1.png"}
                   alt="Meditation"
                   width={360}
                   height={460}

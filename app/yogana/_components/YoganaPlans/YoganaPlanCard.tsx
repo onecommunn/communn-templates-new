@@ -33,6 +33,17 @@ interface YoganaPlanCardProps {
   coverImage: string;
   isPrivate: boolean;
   isRequested: boolean;
+  coupons: {
+    _id: string;
+    couponCode: string;
+    cycleCount: number;
+    discountName: string;
+    discountType: string;
+    discountValue: number;
+    expiryDate: string;
+    maxRedemptions: number;
+    usedRedemptions: number;
+  }[];
 }
 
 const YoganaPlanCard = ({
@@ -52,6 +63,7 @@ const YoganaPlanCard = ({
   coverImage,
   isPrivate,
   isRequested,
+  coupons,
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -199,6 +211,19 @@ const YoganaPlanCard = ({
               / {period}
             </span>
           </div>
+          {coupons?.length > 0 && (
+            <p
+              className="font-plus-jakarta text-xs font-medium px-3 py-1 rounded-full border"
+              style={{
+                borderColor: primaryColor,
+                color: primaryColor,
+              }}
+            >
+              {coupons?.length === 1
+                ? "1 offer available"
+                : `${coupons?.length} offers available`}
+            </p>
+          )}
 
           {!isLoggedIn ? (
             <Link href="/login">
@@ -350,7 +375,7 @@ const YoganaPlanCard = ({
             )
           ) : (
             <Link
-              href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${coverImage}`}
+              href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
             >
               <Button
                 variant={isSubscribed ? "outline" : "ghost"}
