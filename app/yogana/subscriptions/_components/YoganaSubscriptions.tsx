@@ -114,6 +114,7 @@ interface Plan {
   nextDueDate: string;
   minPauseDays?: number;
   maxPauseDays?: number;
+  isPauseUserVisible: boolean;
   isPauseUserApprovalRequired?: boolean;
   plan: { _id: string; isPauseUserVisible: boolean };
 }
@@ -583,6 +584,7 @@ const YoganaSubscriptions = ({
     );
   }
 
+  console.log(plan?.isPauseUserVisible, "plan?.plan?.isPauseUserVisible");
   return (
     <main className="flex-grow bg-[#C2A74E1A] font-plus-jakarta">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
@@ -730,7 +732,9 @@ const YoganaSubscriptions = ({
                 </div>
 
                 <div className="border bg-white rounded-2xl p-6 mt-6">
-                  <div className="flex items-center justify-between mb-3">
+                  <div
+                    className="flex flex-col md:flex-row gap-2 md:items-center md:justify-between mb-3"
+                  >
                     <h6 className="font-semibold text-[16px] font-plus-jakarta">
                       Subscription Summary
                     </h6>
@@ -760,7 +764,7 @@ const YoganaSubscriptions = ({
                           ? "Expired"
                           : "Active"}
                       </button>
-                      {plan?.plan?.isPauseUserVisible && (
+                      {plan?.isPauseUserVisible && (
                         <Dialog
                           open={isPauseOpen}
                           onOpenChange={setIsPauseOpen}
@@ -1058,7 +1062,7 @@ const YoganaSubscriptions = ({
                   <div className="my-1 mb-3 flex items-center justify-end">
                     {/* {planData?.coupons?.length} */}
                   </div>
-                  <div className="flex flex-row items-center justify-end gap-3">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
                     {/* <Link href={"/plans"}>
                       <Button
                         variant={"outline"}
@@ -1074,14 +1078,14 @@ const YoganaSubscriptions = ({
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
-                          className="flex items-center gap-2 cursor-pointer rounded-none"
+                          className="flex items-center gap-2 cursor-pointer rounded-none px-[37px] py-[22px]"
                           variant={"outline"}
                           disabled={totalAmount === 0}
                         >
                           <span>
                             <Gift size={24} strokeWidth={1} />
                           </span>
-                          Add Discount Coupon
+                          Add Discount
                         </Button>
                       </DialogTrigger>
                       <DialogContent
