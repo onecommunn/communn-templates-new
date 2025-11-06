@@ -268,7 +268,24 @@ export default function RestraintEvents({
 
   // EMPTY
   if (!events?.length || events?.length < 0) {
-    return null;
+    return (
+      <section
+        className="font-sora py-10"
+        id="events"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+          } as React.CSSProperties
+        }
+      >
+        <div className="container mx-auto px-4 sm:px-6 md:px-20">
+          <div className="flex items-center">
+            No Events
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
