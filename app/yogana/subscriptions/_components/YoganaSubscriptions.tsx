@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import { ISequences, ISubscribers } from "@/models/plan.model";
 import { AuthContext } from "@/contexts/Auth.context";
@@ -11,7 +12,7 @@ import PaymentSuccess from "@/components/utils/PaymentSuccess";
 import PaymentFailure from "@/components/utils/PaymentFailure";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/components/utils/StringFunctions";
-import { CirclePause, Gift, Loader2, Minus, Plus } from "lucide-react";
+import { CirclePause, Gift, Info, Loader2, Minus, Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,12 +21,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { useSubscription } from "@/hooks/useSubscription";
+import { Subscription } from "@/models/Subscription.model";
+
+const formatDates = (dateStr?: string) => {
+  if (!dateStr) return "-";
+  const date = new Date(dateStr);
+  return date.toLocaleString("en-GB", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const PaymentScheduleItem = ({
   date,
@@ -156,10 +167,11 @@ const YoganaSubscriptions = ({
   const [pauseError, setPauseError] = useState("");
   const [startImmediately, setStartImmediately] = useState(true);
   const [pauseStartDate, setPauseStartDate] = useState<string>("");
-
+  const [openPausePopup, setOpenPausePopup] = useState<boolean>(false);
   const [resumeDate, setResumeDate] = useState<string>("");
   const [pauseExpiryDate, setPauseExpiryDate] = useState<string>("");
   const { pauseSubscription } = useSubscription();
+  const [subscriptionData, setSubscriptionData] = useState<Subscription>();
 
   const addDays = (date: Date, days: number) => {
     const d = new Date(date);
@@ -203,6 +215,7 @@ const YoganaSubscriptions = ({
       setPauseExpiryDate(formatDisplayDate(resume));
     }
   }, [pauseDuration, startImmediately, pauseStartDate, plan?.endDate]);
+
   const handlePauseSubmit = async () => {
     if (
       !subscriptionId ||
@@ -271,7 +284,6 @@ const YoganaSubscriptions = ({
 
   const searchParams = useSearchParams();
   const planID = searchParams.get("planid");
-
   const communityId = searchParams.get("communityid");
 
   const {
@@ -279,6 +291,7 @@ const YoganaSubscriptions = ({
     getSequencesById,
     getPlansById,
   } = usePlans();
+
   const {
     initiatePaymentByIds,
     getPaymentStatusById,
@@ -308,6 +321,7 @@ const YoganaSubscriptions = ({
   useEffect(() => {
     setMounted(true);
   }, []);
+
   useEffect(() => {}, [authContext]);
 
   const handleCreateSubscription = async () => {
@@ -315,6 +329,7 @@ const YoganaSubscriptions = ({
       console.warn("User ID not ready yet");
       return;
     }
+
     try {
       setIsLoading(true);
       const response: any =
@@ -323,8 +338,10 @@ const YoganaSubscriptions = ({
           communityId || "",
           planID || ""
         );
+
       setPlan(response?.subscription?.plan);
       setSubscriptionId(response?.subscription?._id);
+      setSubscriptionData(response?.subscription);
     } catch (error) {
       console.error("Error creating subscription:", error);
     } finally {
@@ -370,6 +387,7 @@ const YoganaSubscriptions = ({
   }, [subscriptionId]);
 
   const tabs = ["All", "PAID", "NOT_PAID"];
+
   const formatStatus = (status: string) => {
     return status
       .toLowerCase()
@@ -390,6 +408,12 @@ const YoganaSubscriptions = ({
     setSuccessOpen(false);
   };
 
+  useEffect(() => {
+    if (subscriptionData?.subscription_status === "PAUSED") {
+      setOpenPausePopup(true);
+    }
+  }, [subscriptionData?.subscription_status]);
+
   const handleFailureClose = () => {
     setTimer(3);
     setFailureOpen(false);
@@ -399,9 +423,11 @@ const YoganaSubscriptions = ({
     try {
       const tnxId = response?.transactionId;
       const transaction = response?.transaction as IPaymentList;
+
       if (transaction) {
         setTransaction(transaction);
       }
+
       if (response?.url) {
         const screenWidth = window.screen.width;
         const screenHeight = window.screen.height;
@@ -417,9 +443,11 @@ const YoganaSubscriptions = ({
 
         const intervalRef = setInterval(async () => {
           const paymentStatus = await getPaymentStatusById(tnxId);
+
           if (paymentStatus && paymentStatus.length > 0) {
             clearInterval(intervalRef);
             windowRef?.close();
+
             if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
               await updateSequencesPaymentStatus(
                 communityId || "",
@@ -444,6 +472,7 @@ const YoganaSubscriptions = ({
       setPayLoading(true);
       setCommunity(communityId);
       setplanId(planId);
+
       const amount = totalAmount.toString();
       const response = await initiatePaymentByIds(
         userId,
@@ -451,9 +480,11 @@ const YoganaSubscriptions = ({
         sequenceId,
         amount
       );
+
       const sequenceIds = selectedAmounts
         ?.filter((item: any) => item?.id)
         .map((item: any) => item.id);
+
       paymentResponse(response, sequenceIds);
       handlegetSequencesById();
     } catch (error) {
@@ -489,7 +520,9 @@ const YoganaSubscriptions = ({
       acc + curr.amount + (Number(subscriptions?.courseAmount) || 0),
     0
   );
+
   const baseAmount = baseAmountPerCycles * count;
+
   const discountAmount =
     appliedCoupon && baseAmount > 0
       ? appliedCoupon.discountType === "PERCENTAGE"
@@ -574,6 +607,7 @@ const YoganaSubscriptions = ({
                 </div>
               </div>
             </div>
+
             <div className="bg-white rounded-xl shadow border p-6 space-y-4">
               <Skeleton className="h-5 w-32" />
               <Skeleton className="h-10 w-full rounded-md" />
@@ -606,6 +640,7 @@ const YoganaSubscriptions = ({
             </p>
           )} */}
         </div>
+
         <div className="mx-auto pb-4">
           {/* Cover image */}
           {/* <div className="rounded-2xl overflow-hidden mb-8">
@@ -620,6 +655,7 @@ const YoganaSubscriptions = ({
               />
             </div>
           </div> */}
+
           <div>
             <div>
               <h2
@@ -635,6 +671,7 @@ const YoganaSubscriptions = ({
                 {plan?.description}
               </p>
             </div>
+
             <h2
               className="font-cormorant font-semibold text-5xl my-2"
               style={{ color: primaryColor }}
@@ -645,6 +682,7 @@ const YoganaSubscriptions = ({
                 minimumFractionDigits: 2,
               }).format(Number(plan?.pricing ?? 0))}
             </h2>
+
             <div className="mt-4">
               <h2
                 className="font-cormorant font-semibold text-3xl mb-2"
@@ -652,6 +690,7 @@ const YoganaSubscriptions = ({
               >
                 Sequences
               </h2>
+
               <div>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {tabs.map((tab) => (
@@ -674,7 +713,9 @@ const YoganaSubscriptions = ({
                     const isVisible =
                       activeTab === "All" ||
                       payment.previousStatus === activeTab;
+
                     if (!isVisible) return null;
+
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
@@ -738,254 +779,275 @@ const YoganaSubscriptions = ({
                     <h6 className="font-semibold text-[16px] font-plus-jakarta">
                       Subscription Summary
                     </h6>
+
                     <div className="flex items-center gap-2">
                       <button
-                        className="text-xs rounded-full bg-[#10a00d1a] text-[#10A00D] border border-[#10a00d1a] px-4 py-2 capitalize"
+                        className="text-xs rounded-full px-4 py-2 capitalize border"
                         style={{
                           backgroundColor:
-                            plan?.nextDueDate &&
-                            new Date(plan?.nextDueDate) < new Date()
+                            subscriptionData?.subscription_status ===
+                              "INACTIVE" ||
+                            subscriptionData?.subscription_status === "STOP"
                               ? "#ffa87d1a"
+                              : subscriptionData?.subscription_status ===
+                                "PAUSED"
+                              ? "#f5e58a1a"
                               : "#10a00d1a",
                           color:
-                            plan?.nextDueDate &&
-                            new Date(plan.nextDueDate) < new Date()
+                            subscriptionData?.subscription_status ===
+                              "INACTIVE" ||
+                            subscriptionData?.subscription_status === "STOP"
                               ? "#ffa87d"
+                              : subscriptionData?.subscription_status ===
+                                "PAUSED"
+                              ? "#d9b300"
                               : "#10A00D",
                           border:
-                            plan?.nextDueDate &&
-                            new Date(plan.nextDueDate) < new Date()
+                            subscriptionData?.subscription_status ===
+                              "INACTIVE" ||
+                            subscriptionData?.subscription_status === "STOP"
                               ? "1px solid #ffa87d1a"
+                              : subscriptionData?.subscription_status ===
+                                "PAUSED"
+                              ? "1px solid #f5e58a1a"
                               : "1px solid #10a00d1a",
                         }}
                       >
-                        {plan?.nextDueDate &&
-                        new Date(plan.nextDueDate) < new Date()
-                          ? "Expired"
+                        {subscriptionData?.subscription_status === "INACTIVE"
+                          ? "Inactive"
+                          : subscriptionData?.subscription_status === "STOP"
+                          ? "Stopped"
+                          : subscriptionData?.subscription_status === "PAUSED"
+                          ? "Paused"
                           : "Active"}
                       </button>
-                      {plan?.isPauseUserVisible && (
-                        <Dialog
-                          open={isPauseOpen}
-                          onOpenChange={setIsPauseOpen}
-                        >
-                          <DialogTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              className="flex items-center gap-2 text-[#3B9B7F] border border-[#3B9B7F]/40 hover:bg-[#3B9B7F]/10 hover:border-[#3B9B7F] transition-all duration-200 rounded-lg px-4 py-2 shadow-sm hover:shadow-md cursor-pointer font-medium"
-                            >
-                              <CirclePause
-                                size={18}
-                                strokeWidth={1.8}
-                                color="#3B9B7F"
-                              />
-                              <span>Pause Subscription</span>
-                            </Button>
-                          </DialogTrigger>
 
-                          <DialogContent className="max-w-lg">
-                            <DialogTitle className="text-lg font-semibold">
-                              Pause Subscription
-                            </DialogTitle>
-                            <p className="text-sm text-gray-500">
-                              Temporarily pause your member&apos;s subscription.
-                            </p>
-
-                            {/* Current Details */}
-                            <div className="border rounded-lg p-4 bg-gray-50">
-                              <p className="text-xs font-semibold text-gray-500 mb-2">
-                                Current Details
-                              </p>
-                              <div className="grid grid-cols-2 gap-y-1 text-sm">
-                                <span className="text-gray-500">Member</span>
-                                <span className="text-gray-900 text-right">
-                                  {authContext?.user?.name ||
-                                    authContext?.user?.fullName ||
-                                    "-"}
-                                </span>
-
-                                <span className="text-gray-500">Plan</span>
-                                <span className="text-gray-900 text-right">
-                                  {plan?.name || "-"}
-                                </span>
-
-                                <span className="text-gray-500">
-                                  Start Date
-                                </span>
-                                <span className="text-gray-900 text-right">
-                                  {plan?.startDate
-                                    ? formatDate(plan.startDate)
-                                    : "-"}
-                                </span>
-
-                                <span className="text-gray-500">
-                                  Expiry Date
-                                </span>
-                                <span className="text-gray-900 text-right">
-                                  {plan?.endDate
-                                    ? formatDate(plan.endDate)
-                                    : "-"}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Pause Duration */}
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Pause Duration
-                              </label>
-                              <Input
-                                type="number"
-                                min={plan?.minPauseDays ?? 3}
-                                max={plan?.maxPauseDays ?? 180}
-                                value={
-                                  pauseDuration === "" ? "" : pauseDuration
-                                }
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  const num = val === "" ? "" : Number(val);
-                                  setPauseDuration(num);
-
-                                  if (val === "") {
-                                    setPauseError("");
-                                    return;
-                                  }
-                                  if (
-                                    typeof num !== "number" ||
-                                    isNaN(num) ||
-                                    num < (plan?.minPauseDays ?? 3) ||
-                                    num > (plan?.maxPauseDays ?? 180)
-                                  ) {
-                                    setPauseError(
-                                      `Please enter between ${
-                                        plan?.minPauseDays ?? 3
-                                      } and ${plan?.maxPauseDays ?? 180} days`
-                                    );
-                                  } else {
-                                    setPauseError("");
-                                  }
-                                }}
-                                className={
-                                  pauseError
-                                    ? "border-red-500 focus-visible:ring-red-500"
-                                    : undefined
-                                }
-                              />
-                              {pauseError && (
-                                <p className="mt-1 text-xs text-red-500">
-                                  {pauseError}
-                                </p>
-                              )}
-                              <p className="mt-1 text-xs text-gray-500">
-                                {`Allowed Duration: ${
-                                  plan?.minPauseDays ?? 3
-                                } to ${plan?.maxPauseDays ?? 180} days`}
-                              </p>
-                            </div>
-
-                            {/* Start Immediately */}
-                            <div className="flex items-center justify-between mt-1">
-                              <p className="text-sm text-gray-600">
-                                Start Immediately
-                              </p>
-                              <Switch
-                                checked={startImmediately}
-                                onCheckedChange={(val) =>
-                                  setStartImmediately(val)
-                                }
-                              />
-                            </div>
-
-                            {/* Start Date (when not immediate) */}
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Pause Start Date
-                              </label>
-                              <Input
-                                type="date"
-                                disabled={startImmediately}
-                                value={pauseStartDate}
-                                onChange={(e) =>
-                                  setPauseStartDate(e.target.value)
-                                }
-                                className={
-                                  startImmediately
-                                    ? "bg-gray-100 cursor-not-allowed"
-                                    : ""
-                                }
-                              />
-                            </div>
-
-                            {/* After Pause Details */}
-                            <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
-                              <p className="text-xs font-semibold text-gray-500 mb-2">
-                                After Pause Details
-                              </p>
-                              <div className="grid grid-cols-2 gap-y-1">
-                                <span className="text-gray-500">
-                                  Resume Date
-                                </span>
-                                <span className="text-gray-900 text-right">
-                                  {resumeDate || "--/--/----"}
-                                </span>
-
-                                <span className="text-gray-500">
-                                  Expiry Date
-                                </span>
-                                <span className="text-gray-900 text-right">
-                                  {pauseExpiryDate || "--/--/----"}
-                                </span>
-                              </div>
-                              <p className="mt-2 text-xs text-gray-500">
-                                Your subscription will be extended by{" "}
-                                {typeof pauseDuration === "number" &&
-                                pauseDuration > 0
-                                  ? pauseDuration
-                                  : 0}{" "}
-                                days to account for the pause period.
-                              </p>
-                            </div>
-
-                            <DialogFooter>
-                              <Button
-                                variant="outline"
-                                onClick={() => setIsPauseOpen(false)}
-                                className="cursor-pointer"
-                              >
-                                Cancel
-                              </Button>
+                      {plan?.isPauseUserVisible &&
+                        subscriptionData?.subscription_status === "ACTIVE" && (
+                          <Dialog
+                            open={isPauseOpen}
+                            onOpenChange={setIsPauseOpen}
+                          >
+                            <DialogTrigger asChild>
                               <Button
                                 type="button"
-                                disabled={
-                                  isPauseSubmitting ||
-                                  pauseDuration === 0 ||
-                                  pauseDuration === null ||
-                                  typeof pauseDuration !== "number" ||
-                                  pauseDuration < (plan?.minPauseDays ?? 3) ||
-                                  pauseDuration > (plan?.maxPauseDays ?? 180)
-                                }
-                                onClick={handlePauseSubmit}
-                                className="flex items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                                style={{ backgroundColor: "#3B9B7F" }}
+                                variant="outline"
+                                className="flex items-center gap-2 text-[#3B9B7F] border border-[#3B9B7F]/40 hover:bg-[#3B9B7F]/10 hover:border-[#3B9B7F] transition-all duration-200 rounded-lg px-4 py-2 shadow-sm hover:shadow-md cursor-pointer font-medium"
                               >
-                                {isPauseSubmitting ? (
-                                  <>
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                    <span>Processing...</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    {plan?.isPauseUserApprovalRequired
-                                      ? "Send Request"
-                                      : "Confirm Pause"}
-                                  </>
-                                )}
+                                <CirclePause
+                                  size={18}
+                                  strokeWidth={1.8}
+                                  color="#3B9B7F"
+                                />
+                                <span>Pause Subscription</span>
                               </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      )}
+                            </DialogTrigger>
+
+                            <DialogContent className="max-w-lg">
+                              <DialogTitle className="text-lg font-semibold">
+                                Pause Subscription
+                              </DialogTitle>
+
+                              <p className="text-sm text-gray-500">
+                                Temporarily pause your member&apos;s
+                                subscription.
+                              </p>
+
+                              {/* Current Details */}
+                              <div className="border rounded-lg p-4 bg-gray-50">
+                                <p className="text-xs font-semibold text-gray-500 mb-2">
+                                  Current Details
+                                </p>
+                                <div className="grid grid-cols-2 gap-y-1 text-sm">
+                                  <span className="text-gray-500">Member</span>
+                                  <span className="text-gray-900 text-right">
+                                    {authContext?.user?.name ||
+                                      authContext?.user?.fullName ||
+                                      "-"}
+                                  </span>
+
+                                  <span className="text-gray-500">Plan</span>
+                                  <span className="text-gray-900 text-right">
+                                    {plan?.name || "-"}
+                                  </span>
+
+                                  <span className="text-gray-500">
+                                    Start Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {plan?.startDate
+                                      ? formatDate(plan.startDate)
+                                      : "-"}
+                                  </span>
+
+                                  <span className="text-gray-500">
+                                    Expiry Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {plan?.endDate
+                                      ? formatDate(plan.endDate)
+                                      : "-"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Pause Duration */}
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Pause Duration
+                                </label>
+                                <Input
+                                  type="number"
+                                  min={plan?.minPauseDays ?? 3}
+                                  max={plan?.maxPauseDays ?? 180}
+                                  value={
+                                    pauseDuration === "" ? "" : pauseDuration
+                                  }
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    const num = val === "" ? "" : Number(val);
+                                    setPauseDuration(num);
+
+                                    if (val === "") {
+                                      setPauseError("");
+                                      return;
+                                    }
+
+                                    if (
+                                      typeof num !== "number" ||
+                                      isNaN(num) ||
+                                      num < (plan?.minPauseDays ?? 3) ||
+                                      num > (plan?.maxPauseDays ?? 180)
+                                    ) {
+                                      setPauseError(
+                                        `Please enter between ${
+                                          plan?.minPauseDays ?? 3
+                                        } and ${plan?.maxPauseDays ?? 180} days`
+                                      );
+                                    } else {
+                                      setPauseError("");
+                                    }
+                                  }}
+                                  className={
+                                    pauseError
+                                      ? "border-red-500 focus-visible:ring-red-500"
+                                      : undefined
+                                  }
+                                />
+                                {pauseError && (
+                                  <p className="mt-1 text-xs text-red-500">
+                                    {pauseError}
+                                  </p>
+                                )}
+                                <p className="mt-1 text-xs text-gray-500">
+                                  {`Allowed Duration: ${
+                                    plan?.minPauseDays ?? 3
+                                  } to ${plan?.maxPauseDays ?? 180} days`}
+                                </p>
+                              </div>
+
+                              {/* Start Immediately */}
+                              <div className="flex items-center justify-between mt-1">
+                                <p className="text-sm text-gray-600">
+                                  Start Immediately
+                                </p>
+                                <Switch
+                                  checked={startImmediately}
+                                  onCheckedChange={(val) =>
+                                    setStartImmediately(val)
+                                  }
+                                />
+                              </div>
+
+                              {/* Start Date (when not immediate) */}
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Pause Start Date
+                                </label>
+                                <Input
+                                  type="date"
+                                  disabled={startImmediately}
+                                  value={pauseStartDate}
+                                  onChange={(e) =>
+                                    setPauseStartDate(e.target.value)
+                                  }
+                                  className={
+                                    startImmediately
+                                      ? "bg-gray-100 cursor-not-allowed"
+                                      : ""
+                                  }
+                                />
+                              </div>
+
+                              {/* After Pause Details */}
+                              <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
+                                <p className="text-xs font-semibold text-gray-500 mb-2">
+                                  After Pause Details
+                                </p>
+                                <div className="grid grid-cols-2 gap-y-1">
+                                  <span className="text-gray-500">
+                                    Resume Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {resumeDate || "--/--/----"}
+                                  </span>
+
+                                  <span className="text-gray-500">
+                                    Expiry Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {pauseExpiryDate || "--/--/----"}
+                                  </span>
+                                </div>
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Your subscription will be extended by{" "}
+                                  {typeof pauseDuration === "number" &&
+                                  pauseDuration > 0
+                                    ? pauseDuration
+                                    : 0}{" "}
+                                  days to account for the pause period.
+                                </p>
+                              </div>
+
+                              <DialogFooter>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setIsPauseOpen(false)}
+                                  className="cursor-pointer"
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  type="button"
+                                  disabled={
+                                    isPauseSubmitting ||
+                                    pauseDuration === 0 ||
+                                    pauseDuration === null ||
+                                    typeof pauseDuration !== "number" ||
+                                    pauseDuration < (plan?.minPauseDays ?? 3) ||
+                                    pauseDuration > (plan?.maxPauseDays ?? 180)
+                                  }
+                                  onClick={handlePauseSubmit}
+                                  className="flex items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                                  style={{ backgroundColor: "#3B9B7F" }}
+                                >
+                                  {isPauseSubmitting ? (
+                                    <>
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                      <span>Processing...</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      {plan?.isPauseUserApprovalRequired
+                                        ? "Send Request"
+                                        : "Confirm Pause"}
+                                    </>
+                                  )}
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        )}
                     </div>
                   </div>
 
@@ -1006,6 +1068,7 @@ const YoganaSubscriptions = ({
                   )}
 
                   <hr />
+
                   <div className="grid grid-cols-2 mt-3">
                     <div className="space-y-2">
                       <h6 className="font-semibold text-[16px] mb-3">
@@ -1022,6 +1085,7 @@ const YoganaSubscriptions = ({
                         </p>
                       )}
                     </div>
+
                     <div className="text-right space-y-2">
                       <h6 className="font-semibold text-[16px] mb-3">
                         {plan?.name || "-"}
@@ -1052,7 +1116,9 @@ const YoganaSubscriptions = ({
                       )}
                     </div>
                   </div>
+
                   <hr className="my-3" />
+
                   <div className="grid grid-cols-2">
                     <div>
                       <h6 className="font-semibold text-[16px] mb-3">Total</h6>
@@ -1063,9 +1129,11 @@ const YoganaSubscriptions = ({
                       </h6>
                     </div>
                   </div>
+
                   <div className="my-1 mb-3 flex items-center justify-end">
                     {/* {planData?.coupons?.length} */}
                   </div>
+
                   <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
                     {/* <Link href={"/plans"}>
                       <Button
@@ -1079,6 +1147,7 @@ const YoganaSubscriptions = ({
                         Cancel
                       </Button>
                     </Link> */}
+
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
@@ -1092,6 +1161,7 @@ const YoganaSubscriptions = ({
                           Add Discount
                         </Button>
                       </DialogTrigger>
+
                       <DialogContent
                         style={{ color: primaryColor }}
                         className="w-xl"
@@ -1113,6 +1183,7 @@ const YoganaSubscriptions = ({
                             Apply
                           </Button>
                         </div>
+
                         <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
                           {planData?.coupons?.map((coupon, idx) => (
                             <Button
@@ -1129,6 +1200,7 @@ const YoganaSubscriptions = ({
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
+
                     <Button
                       disabled={totalAmount === 0}
                       onClick={() =>
@@ -1152,6 +1224,7 @@ const YoganaSubscriptions = ({
           </div>
         </div>
       </div>
+
       <PaymentSuccess
         txnid={transaction?.txnid || ""}
         open={successOpen}
@@ -1159,6 +1232,7 @@ const YoganaSubscriptions = ({
         timer={timer}
         onClose={handleSuccessClose}
       />
+
       <PaymentFailure
         open={failureOpen}
         onClose={handleFailureClose}
@@ -1166,6 +1240,50 @@ const YoganaSubscriptions = ({
         txnid={transaction?.txnid || ""}
         timer={timer}
       />
+
+      <Dialog open={openPausePopup} onOpenChange={setOpenPausePopup}>
+        <DialogContent>
+          <DialogTitle></DialogTitle>
+          <div className="flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <Info size={45} color="red" strokeWidth={1.5} />
+              <p className="font-semibold text-sm md:text-[16px] text-black text-center">
+                Your plan is paused!
+              </p>
+              <p className="text-sm md:text-[16px] text-[#646464] text-center">
+                Your plan is paused from{" "}
+                {formatDates(subscriptionData?.pauseStartDate)} -{" "}
+                {formatDates(subscriptionData?.pauseEndDate)}.<br />
+                {subscriptionData?.remainingPauseDays} days remaining to resume
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <div className="bg-[#F9F9F9] p-4 rounded-xl">
+              <p className="mb-1 text-sm">After Pause Details</p>
+
+              <div className="grid grid-cols-2">
+                {[
+                  ["Resume Date", formatDates(subscriptionData?.pauseEndDate)],
+                  ["Expiry Date", formatDates(subscriptionData?.nextDueDate)],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <p className="text-[13px] text-[#777]">{label}</p>
+                    <p>{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-3 text-gray-400 text-[13px]">
+                Your subscription will be extended by{" "}
+                {subscriptionData?.pausedDays} days to account for the pause
+                period.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
