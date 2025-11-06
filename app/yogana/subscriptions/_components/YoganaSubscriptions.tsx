@@ -9,8 +9,6 @@ import { usePayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/components/utils/PaymentSuccess";
 import PaymentFailure from "@/components/utils/PaymentFailure";
-import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/components/utils/StringFunctions";
 import { CirclePause, Gift, Loader2, Minus, Plus } from "lucide-react";
@@ -231,18 +229,24 @@ const YoganaSubscriptions = ({
 
     try {
       setIsPauseSubmitting(true);
-      await pauseSubscription(
+      const res: any = await pauseSubscription(
         subscriptionId,
         pauseDuration,
         lastPaidSequence._id,
         effectiveStartDate
       );
 
-      toast.success(
-        plan?.isPauseUserApprovalRequired
-          ? "Pause request sent successfully!"
-          : "Subscription paused successfully!"
-      );
+      if (res?.data?.status) {
+        toast.success(
+          plan?.isPauseUserApprovalRequired
+            ? "Pause request sent successfully!"
+            : "Subscription paused successfully!"
+        );
+      } else {
+        toast.info(res?.data?.message);
+      }
+
+      console.log(res, "res");
 
       setIsPauseOpen(false);
     } catch (err) {
@@ -269,7 +273,6 @@ const YoganaSubscriptions = ({
   const planID = searchParams.get("planid");
 
   const communityId = searchParams.get("communityid");
-  // const imageUrl = searchParams.get("image");
 
   const {
     createSubscriptionSequencesByPlanAndCommunityId,
@@ -584,7 +587,6 @@ const YoganaSubscriptions = ({
     );
   }
 
-  console.log(plan?.isPauseUserVisible, "plan?.plan?.isPauseUserVisible");
   return (
     <main className="flex-grow bg-[#C2A74E1A] font-plus-jakarta">
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
@@ -732,9 +734,7 @@ const YoganaSubscriptions = ({
                 </div>
 
                 <div className="border bg-white rounded-2xl p-6 mt-6">
-                  <div
-                    className="flex flex-col md:flex-row gap-2 md:items-center md:justify-between mb-3"
-                  >
+                  <div className="flex flex-col md:flex-row gap-2 md:items-center md:justify-between mb-3">
                     <h6 className="font-semibold text-[16px] font-plus-jakarta">
                       Subscription Summary
                     </h6>
@@ -788,12 +788,12 @@ const YoganaSubscriptions = ({
                             <DialogTitle className="text-lg font-semibold">
                               Pause Subscription
                             </DialogTitle>
-                            <p className="text-sm text-gray-500 mb-4">
+                            <p className="text-sm text-gray-500">
                               Temporarily pause your member&apos;s subscription.
                             </p>
 
                             {/* Current Details */}
-                            <div className="border rounded-lg p-4 mb-4 bg-gray-50">
+                            <div className="border rounded-lg p-4 bg-gray-50">
                               <p className="text-xs font-semibold text-gray-500 mb-2">
                                 Current Details
                               </p>
@@ -831,14 +831,14 @@ const YoganaSubscriptions = ({
                             </div>
 
                             {/* Pause Duration */}
-                            <div className="mb-3">
+                            <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Pause Duration
                               </label>
                               <Input
                                 type="number"
-                                min={3}
-                                max={180}
+                                min={plan?.minPauseDays ?? 3}
+                                max={plan?.maxPauseDays ?? 180}
                                 value={
                                   pauseDuration === "" ? "" : pauseDuration
                                 }
@@ -854,11 +854,13 @@ const YoganaSubscriptions = ({
                                   if (
                                     typeof num !== "number" ||
                                     isNaN(num) ||
-                                    num < 3 ||
-                                    num > 180
+                                    num < (plan?.minPauseDays ?? 3) ||
+                                    num > (plan?.maxPauseDays ?? 180)
                                   ) {
                                     setPauseError(
-                                      "Please enter between 3 and 180 days"
+                                      `Please enter between ${
+                                        plan?.minPauseDays ?? 3
+                                      } and ${plan?.maxPauseDays ?? 180} days`
                                     );
                                   } else {
                                     setPauseError("");
@@ -876,12 +878,14 @@ const YoganaSubscriptions = ({
                                 </p>
                               )}
                               <p className="mt-1 text-xs text-gray-500">
-                                Allowed Duration: 3 to 180 days
+                                {`Allowed Duration: ${
+                                  plan?.minPauseDays ?? 3
+                                } to ${plan?.maxPauseDays ?? 180} days`}
                               </p>
                             </div>
 
                             {/* Start Immediately */}
-                            <div className="flex items-center justify-between mt-4 mb-3">
+                            <div className="flex items-center justify-between mt-1">
                               <p className="text-sm text-gray-600">
                                 Start Immediately
                               </p>
@@ -894,7 +898,7 @@ const YoganaSubscriptions = ({
                             </div>
 
                             {/* Start Date (when not immediate) */}
-                            <div className="mb-4">
+                            <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Pause Start Date
                               </label>
@@ -914,7 +918,7 @@ const YoganaSubscriptions = ({
                             </div>
 
                             {/* After Pause Details */}
-                            <div className="mt-4 rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
+                            <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
                               <p className="text-xs font-semibold text-gray-500 mb-2">
                                 After Pause Details
                               </p>
@@ -943,7 +947,7 @@ const YoganaSubscriptions = ({
                               </p>
                             </div>
 
-                            <DialogFooter className="mt-6">
+                            <DialogFooter>
                               <Button
                                 variant="outline"
                                 onClick={() => setIsPauseOpen(false)}
