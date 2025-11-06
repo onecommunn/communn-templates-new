@@ -1,3 +1,4 @@
+import { BASE_URL, BASE_URL_V2 } from "@/configurations/url.config";
 import { IPaymentList } from "@/models/payment.model";
 import axios from "axios";
 
@@ -5,7 +6,7 @@ import axios from "axios";
 export const getEvents = async (communityId: string) => {
   try {
     const response = await axios.get<Event>(
-      `https://communn.io/api/v2.0/builders/community/${communityId}/event`,
+      `${BASE_URL_V2}/builders/community/${communityId}/event`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +23,7 @@ export const getEvents = async (communityId: string) => {
 export const getEventById = async (eventId: string) => {
   try {
     const response = await axios.get<Event>(
-      `https://communn.io/api/v2.0/events/${eventId}`,
+      `${BASE_URL_V2}/events/${eventId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +46,7 @@ export const freeEventsNoAuth = async (
 ) => {
   try {
     const response = await axios.post(
-      `https://communn.io/api/v2.0/events/${eventId}/direct-join`,
+      `${BASE_URL_V2}/events/${eventId}/direct-join`,
       {
         name: name,
         email: email,
@@ -80,7 +81,7 @@ export const paymentEventsNoAuth = async (
 ) => {
   try {
     const response = await axios.post(
-      `https://communn.io/api/v1/payments/events/${eventId}`,
+      `${BASE_URL}/payments/events/${eventId}`,
       {
         name: name,
         email: email,
@@ -119,7 +120,7 @@ export const getPaymentStatusByIdNoAuth = async (id: string) => {
 export const getPaymentStatusNoAuth = async (id: string) => {
   try {
     const response = await axios.post(
-      `https://communn.io/api/v2.0/payments/get-status`,
+      `${BASE_URL_V2}/payments/get-status`,
       { txnid: id },
       {
         headers: {

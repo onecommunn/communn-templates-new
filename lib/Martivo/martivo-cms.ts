@@ -1,3 +1,5 @@
+import { BASE_URL_V2 } from "@/configurations/url.config";
+
 type MartivoCMSBundle = {
   home: any | null;
 };
@@ -14,7 +16,7 @@ async function fetchJSON(url: string) {
 async function fetchMartivoBundle(
   communityId: string
 ): Promise<MartivoCMSBundle> {
-  const base = "https://communn.io/api/v2.0/cms/get-section/community";
+  const base = `${BASE_URL_V2}/cms/get-section/community`;
   const [home] = await Promise.all([
     fetchJSON(`${base}/${communityId}?templateId=martivo&page=home`),
     // add more pages

@@ -1,4 +1,5 @@
 // utils/api.ts or services/plans.ts
+import { BASE_URL, BASE_URL_V2 } from '@/configurations/url.config';
 import { TrainingPlan } from '@/models/plan.model';
 import axios from 'axios';
 
@@ -12,7 +13,7 @@ type PlansCommunityResponse = {
 export const getPlansCommunityAuth = async (token: string, id: string) => {
   try {
     const response = await axios.get<PlansCommunityResponse>(
-      `https://communn.io/api/v1/plans/community/${id}/user`,
+      `${BASE_URL}/plans/community/${id}/user`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +33,7 @@ export const getPlansCommunityAuth = async (token: string, id: string) => {
 
 export const getPlansCommunity = async (token: string, id: string) => {
   try {
-    const response = await axios.get<PlansCommunityResponse>(`https://communn.io/api/v2.0/builders/community/${id}/user-plan`, {});
+    const response = await axios.get<PlansCommunityResponse>(`${BASE_URL_V2}/builders/community/${id}/user-plan`, {});
     return response?.data?.myPlans;
   } catch (err) {
     console.error('Error fetching plans:', err);
@@ -42,7 +43,7 @@ export const getPlansCommunity = async (token: string, id: string) => {
 
 export const getPlanById = async (id: string) => {
   try {
-    const response = await axios.get(`https://communn.io/api/v1/plan/${id}`, {
+    const response = await axios.get(`${BASE_URL}/plan/${id}`, {
     });
     return response;
   } catch (err) {
@@ -58,7 +59,7 @@ export const createSubscriptionSequences = async (
 ) => {
   try {
     const response = await axios.post(
-      `https://communn.io/api/v2.0/subscription/user/${userId}/create-fetch-subscription`,
+      `${BASE_URL_V2}/subscription/user/${userId}/create-fetch-subscription`,
       {
         communityId,
         planId,
@@ -79,7 +80,7 @@ export const getSequencesBySubscriptionId = async (
 ) => {
   try {
     const response = await axios.post(
-      `https://communn.io/api/v2.0/subscription/${subscriptionId}/user/${userId}/get-all-sequences`,
+      `${BASE_URL_V2}/subscription/${subscriptionId}/user/${userId}/get-all-sequences`,
       {
         courseId:courseId
       }
@@ -97,7 +98,7 @@ export const joinCommunity = async (token: string, community_id: string) => {
     const formData = JSON.stringify({ community_id: community_id });
     // console.log(formData);
     const response = await axios.post(
-      `https://communn.io/api/v1/community/${community_id}/join`,
+      `${BASE_URL}/community/${community_id}/join`,
       formData,
       {
         headers: {

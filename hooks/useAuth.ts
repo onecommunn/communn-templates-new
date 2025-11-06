@@ -5,6 +5,7 @@ import { IAddUser } from '../models/user.model';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
+import { BASE_URL } from '@/configurations/url.config';
 
 interface ApiResponse {
   user: {
@@ -58,8 +59,6 @@ const purgeStoredState = () => {
   localStorage.clear();
   sessionStorage.clear();
 };
-
-const BASE_URL = 'https://communn.io/api/v1';
 
 interface UserResponseData {
   user?: {

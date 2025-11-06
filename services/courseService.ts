@@ -1,10 +1,11 @@
 import axios from "axios";
 import { Course } from "../models/course.mode";
+import { BASE_URL_V2 } from "@/configurations/url.config";
 
 export const getCourses = async (communityId: string) => {
   try {
     const response = await axios.get<Course>(
-      `https://communn.io/api/v2.0/builders/community/${communityId}/course`,
+      `${BASE_URL_V2}/builders/community/${communityId}/course`,
       {
         headers: {
           "Content-Type": "application/json",

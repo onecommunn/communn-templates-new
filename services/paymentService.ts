@@ -1,3 +1,4 @@
+import { BASE_URL, BASE_URL_V2 } from '@/configurations/url.config';
 import axios from 'axios';
 
 
@@ -19,7 +20,7 @@ export const initiatePayment = async (
     });
 
     const response = await axios.post(
-      `https://communn.io/api/v1/payments/plan/${planId}/user/${userId}`,
+      `${BASE_URL}/payments/plan/${planId}/user/${userId}`,
       {
         sequenceIds: sequenceIds, 
         amount: amount,
@@ -37,7 +38,7 @@ export const initiatePayment = async (
     return response;
   } catch (err) {
     console.error("❌ initiatePayment failed:", err);
-    return { status: 500, data: [] }; // still returns something
+    return { status: 500, data: [] };
   }
 };
 
@@ -46,7 +47,7 @@ export const initiatePayment = async (
 export const getPaymentStatus = async (token: string, id: string) => {
   try {
     const response = await axios.post(
-      `https://communn.io/api/v1/payment/${id}`,
+      `${BASE_URL}/payment/${id}`,
       { txnid: id },
       {
         headers: {
@@ -55,8 +56,6 @@ export const getPaymentStatus = async (token: string, id: string) => {
         },
       }
     );
-
-    // console.log('Payment-response:', response);
     return response;
   } catch (err) {
     return { status: 500, data: [] };
@@ -70,7 +69,7 @@ export const updateSequencesStatus = async (
 ) => {
   try {
     const response = await axios.put(
-      `https://communn.io/api/v2.0/subscriptions/${communityId}/update-subscription-sequences`,
+      `${BASE_URL_V2}/subscriptions/${communityId}/update-subscription-sequences`,
       {
         sequences: ids,
       },

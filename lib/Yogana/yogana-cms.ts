@@ -1,3 +1,5 @@
+import { BASE_URL_V2 } from "@/configurations/url.config";
+
 type YoganaCMSBundle = {
   home: any | null;
 };
@@ -14,7 +16,7 @@ async function fetchJSON(url: string) {
 async function fetchYoganaBundle(
   communityId: string
 ): Promise<YoganaCMSBundle> {
-  const base = "https://communn.io/api/v2.0/cms/get-section/community";
+  const base = `${BASE_URL_V2}/cms/get-section/community`;
   const [home] = await Promise.all([
     fetchJSON(`${base}/${communityId}?templateId=yogana&page=home`),
     // add more pages

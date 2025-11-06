@@ -1,3 +1,5 @@
+import { BASE_URL_V2 } from "@/configurations/url.config";
+
 // lib/cms.ts (server)
 type CreatorCMSBundle = {
   header: any | null;
@@ -20,7 +22,7 @@ async function fetchJSON(url: string) {
 async function fetchCreatorBundle(
   communityId: string
 ): Promise<CreatorCMSBundle> {
-  const base = "https://communn.io/api/v2.0/cms/get-section/community";
+  const base = `${BASE_URL_V2}/cms/get-section/community`;
   const [header, footer, home, about, contact] = await Promise.all([
     fetchJSON(`${base}/${communityId}?templateId=creator&page=header`),
     fetchJSON(`${base}/${communityId}?templateId=creator&page=footer`),

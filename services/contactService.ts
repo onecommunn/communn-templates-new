@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { ContactForm } from "@/models/contact.model";
+import { BASE_URL_V2 } from "@/configurations/url.config";
 
 interface ApiResponse {
   status: number;
@@ -12,7 +13,7 @@ export const sendNotification = async (
 ): Promise<ApiResponse> => {
   try {
     const response = await axios.post<ApiResponse>(
-      "https://communn.io/api/v2.0/cms/send-cms_notification",
+      `${BASE_URL_V2}/cms/send-cms_notification`,
       contactForm
     );
     return response.data;

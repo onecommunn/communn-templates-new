@@ -148,7 +148,7 @@ export default function RestraintServices({
             direction="horizontal"
             distance={90}
             duration={0.6}
-            stagger={0.12} // 👈 will animate service blocks one after another
+            stagger={0.12}
             animateOpacity
           >
             <div className="space-y-10">

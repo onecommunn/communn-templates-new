@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/configurations/url.config';
 import axios from 'axios';
 
 
@@ -18,7 +19,7 @@ export const logoutService = async (): Promise<boolean> => {
       console.warn('No device token found, proceeding with logout without it.');
     }
 
-    const response = await axios.post(`https://communn.io/api/v1/logout`, requestBody, {
+    const response = await axios.post(`${BASE_URL}/logout`, requestBody, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,

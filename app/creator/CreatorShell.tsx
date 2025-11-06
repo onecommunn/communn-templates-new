@@ -9,6 +9,7 @@ import { CMSProvider } from "./CMSProvider.client";
 import { CreatorHeaderPage } from "@/models/templates/creator/creator-header.model";
 import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-model";
 import { fetchCreatorContact } from "@/services/creatorService";
+import { BASE_URL_V2 } from "@/configurations/url.config";
 
 const dummyHeaderData: CreatorHeaderPage = {
   templateId: "creator",
@@ -140,7 +141,7 @@ async function HeaderSlot({
 }) {
   // fetch just header (cached by fetch); if you prefer, extract a getHeader() cache helper
   const res = await fetch(
-    `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=header`,
+    `${BASE_URL_V2}/cms/get-section/community/${communityId}?templateId=creator&page=header`,
     { cache: "no-store" }
   )
     .then((r) => r.json())
@@ -167,7 +168,7 @@ async function FooterSlot({
   secondaryColor: string;
 }) {
   const res = await fetch(
-    `https://communn.io/api/v2.0/cms/get-section/community/${communityId}?templateId=creator&page=footer`,
+    `${BASE_URL_V2}/cms/get-section/community/${communityId}?templateId=creator&page=footer`,
     { cache: "no-store" }
   )
     .then((r) => r.json())

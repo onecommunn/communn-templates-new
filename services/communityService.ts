@@ -1,3 +1,4 @@
+import { BASE_URL_V2 } from "@/configurations/url.config";
 import axios from "axios";
 
 /** ---------------- Interfaces ------------------ **/
@@ -117,8 +118,8 @@ export interface Plan {
 
 /** ---------------- API Constants ------------------ **/
 
-const COMMUNITY_API_BASE = "https://communn.io/api/v2.0/community";
-const DOMAIN_API_BASE = "https://communn.io/api/v2.0/domain";
+const COMMUNITY_API_BASE = `${BASE_URL_V2}/community`;
+const DOMAIN_API_BASE = `${BASE_URL_V2}/domain`;
 
 /** ---------------- API Function ------------------ **/
 

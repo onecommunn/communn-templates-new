@@ -1,6 +1,5 @@
+import { BASE_URL } from "@/configurations/url.config";
 import axios from "axios";
-
-const BASE_URL = 'https://communn.io/api/v1';
 
 export const getOtp = async (phoneNumber: string) => {
   try {
