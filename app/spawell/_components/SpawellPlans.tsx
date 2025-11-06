@@ -262,9 +262,7 @@ const Card: React.FC<PlanCardProps> = ({
         )
       ) : (
         <Link
-          href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(
-            coverImage
-          )}`}
+          href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
         >
           <div
             className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"

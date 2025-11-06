@@ -334,9 +334,7 @@ const Card: React.FC<CardProps> = ({
           ) : (
             <ChooseButton
               text={isSubscribed ?  "Subscribed" : "Subscribe"}
-              href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${encodeURIComponent(
-                coverImage
-              )}`}
+              href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
               color={color}
               isSubscribed={isSubscribed}
             />

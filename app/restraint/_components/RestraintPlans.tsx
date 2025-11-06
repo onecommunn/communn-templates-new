@@ -335,7 +335,7 @@ export function PlanCard({
       {/* Image */}
       <div className="relative h-40 w-full overflow-hidden md:h-48">
         <Image
-          src={plan.image || "/assets/restraint-plans-image-1.jpg"}
+          src={plan.image || coverImage || "/assets/restraint-plans-image-1.jpg"}
           alt={plan.name}
           fill
           className="object-cover"
@@ -531,7 +531,7 @@ export function PlanCard({
                 planId
               )}&communityid=${encodeURIComponent(
                 communityId || ""
-              )}&image=${encodeURIComponent(coverImage)}`}
+              )}`}
               color={color}
               isSubscribed={isSubscribed}
             />

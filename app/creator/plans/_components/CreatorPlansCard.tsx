@@ -236,7 +236,7 @@ const CreatorPlansCard = ({
           )
         ) : (
           <Link
-            href={`/subscriptions/?planid=${planId}&communityid=${communityId}&image=${imageUrl}`}
+            href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
           >
             <Button
               variant={isSubscribed ? "outline" : "default"}

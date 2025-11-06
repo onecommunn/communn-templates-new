@@ -51,7 +51,7 @@ export function EventCard({
   price,
 }: EventCardProps) {
   return (
-    <div className="group rounded-2xl border border-black/10 bg-white hover:shadow-lg shadow-sm overflow-hidden">
+    <div className="group rounded-2xl flex flex-col justify-between border border-black/10 bg-white hover:shadow-lg shadow-sm overflow-hidden h-full">
       <Image
         src={image || "/assets/restraint-event-image-1.jpg"}
         alt="Yoga class"
@@ -61,17 +61,19 @@ export function EventCard({
         className="object-cover w-full max-h-[160px] h-[160px]"
         unoptimized
       />
-      <div className="group-hover:underline flex items-center gap-3 px-6 py-3">
-        <div className="font-marcellus text-[18px] leading-6 text-[#30382E]">
-          {title}
+      <div>
+        <div className="group-hover:underline flex items-center gap-3 px-6 py-3">
+          <div className="font-marcellus text-[18px] leading-6 text-[#30382E]">
+            {title}
+          </div>
         </div>
+
+        <p className="mt-1 text-sm leading-6 text-[#4C5149] px-6 line-clamp-4">
+          {blurb}
+        </p>
       </div>
 
-      <p className="mt-1 text-sm leading-6 text-[#4C5149] px-6 line-clamp-4">
-        {blurb}
-      </p>
-
-      <div className="mt-2 flex items-center justify-between text-sm text-[#2F362E] p-6">
+      <div className="flex items-center justify-between text-sm text-[#2F362E] p-6">
         <div
           className="flex items-center gap-2 text-[13px]"
           style={{ color: SUBTEXT }}
