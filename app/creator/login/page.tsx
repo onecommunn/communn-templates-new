@@ -13,13 +13,13 @@ import {
   InputOTPSlot,
 } from "@/components/CustomComponents/CustomInputOtp";
 import { useCMS } from "../CMSProvider.client";
-import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
+import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
 
-const RestraintLogin = () => {
+const CreatorLogin = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
-  const source: RestarintHomePage | undefined = !isLoading
-    ? (home as RestarintHomePage | undefined)
+  const source: CreatorHomePage | undefined = !isLoading
+    ? (home as CreatorHomePage | undefined)
     : undefined;
 
   const primaryColor = source?.color?.primary || "#3D493A";
@@ -89,7 +89,6 @@ const RestraintLogin = () => {
     requestOtp();
   };
 
-  
   const handleLogin = async () => {
     if (otp.length !== 6) {
       toast.error("Please enter a valid 6-digit OTP");
@@ -110,7 +109,7 @@ const RestraintLogin = () => {
           null
         );
 
-        console.log(res,'res')
+        console.log(res, "res");
 
         if (res.status === 200) {
           toast.success("Login successful!");
@@ -132,7 +131,7 @@ const RestraintLogin = () => {
         } else if (res?.response?.status === 404) {
           toast.error("User not Found, check your Account Credentials");
         }
-      }
+      } else toast.error("Invalid OTP");
     } finally {
       setLoading(false);
     }
@@ -318,4 +317,4 @@ const RestraintLogin = () => {
   );
 };
 
-export default RestraintLogin;
+export default CreatorLogin;

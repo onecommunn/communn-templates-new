@@ -3,21 +3,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
 import { AuthContext } from "@/contexts/Auth.context";
 import { useOtp } from "@/hooks/useOtp";
 import { getOtp, sendOtpEmailService, verifyOtp } from "@/services/otpService";
-import { useCMS } from "../CMSProvider.client";
-import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/CustomComponents/CustomInputOtp";
-import Link from "next/link";
+import { useCMS } from "../CMSProvider.client";
+import { dummyData } from "../dummyData";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
 
 const YoganaLogin = () => {
   const { home } = useCMS();
-  const source: YoganaHomePage | undefined = home as YoganaHomePage | undefined;
+  const isLoading = home === undefined;
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined) ?? dummyData
+    : undefined;
+
   const primaryColor = source?.color?.primary || "#C2A74E";
   const secondaryColor = source?.color?.secondary || "#000";
   const neutralColor = source?.color?.neutral || "#707070";
@@ -27,18 +32,16 @@ const YoganaLogin = () => {
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
   const [useEmail, setUseEmail] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
 
+  const [resendTimer, setResendTimer] = useState(0);
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (authContext?.isAuthenticated) router.push("/");
   }, [authContext?.isAuthenticated]);
 
-  // Countdown for resend OTP
   useEffect(() => {
     if (resendTimer <= 0) return;
     const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
@@ -50,6 +53,7 @@ const YoganaLogin = () => {
     return /^\d{10}$/.test(mobileNumber);
   };
 
+  // Request OTP
   const requestOtp = async () => {
     if (!mobileNumber) {
       toast.error(
@@ -69,11 +73,11 @@ const YoganaLogin = () => {
           `OTP sent to your ${useEmail ? "email" : "mobile number"}`
         );
         setStep("otp");
-        setResendTimer(30); // 30-second cooldown
+        setResendTimer(30); // 30-second cooldown for resend
       } else {
         toast.error(response?.data?.message || "Failed to send OTP");
       }
-    } catch {
+    } catch (err) {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -81,8 +85,11 @@ const YoganaLogin = () => {
   };
 
   const handleGetOtp = () => requestOtp();
+
+  // Resend OTP
   const handleResendOtp = () => {
-    if (resendTimer <= 0) requestOtp();
+    if (resendTimer > 0) return;
+    requestOtp();
   };
 
   const handleLogin = async () => {
@@ -93,39 +100,50 @@ const YoganaLogin = () => {
 
     setLoading(true);
     try {
-      let verifyResponse: any = useEmail
-        ? await verifyEmailOtp(otp, mobileNumber)
-        : await verifyOtp(mobileNumber, otp);
+      let verifyResponse: any;
+      if (useEmail) verifyResponse = await verifyEmailOtp(otp, mobileNumber);
+      else verifyResponse = await verifyOtp(mobileNumber, otp);
 
       if (verifyResponse.status === 200) {
-        const res: any = await authContext.autoLogin(
+        let res: any = null;
+        res = await authContext.autoLogin(
           useEmail ? "" : mobileNumber,
           useEmail ? mobileNumber : "",
           null
         );
 
+        console.log(res, "res");
+
         if (res.status === 200) {
           toast.success("Login successful!");
           router.push("/");
-        } else if (res.status === 500) {
+        } else if (res.status === 403) {
+          toast.error(
+            "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."
+          );
+        } else if (res.status === 404) {
           toast.error("User not found. Please sign up.");
           const queryKey = useEmail ? "email" : "mobile";
           router.push(
             `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
           );
         } else toast.error("Login failed. Please try again.");
-      } else if (verifyResponse.status === 500) {
-        toast.error("User not found. Please sign up.");
-        const queryKey = useEmail ? "email" : "mobile";
-        router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
-      } else toast.error("Invalid OTP. Please try again.");
-    } catch {
-      toast.error("Verification failed. Please try again.");
+
+        if (res?.response?.status === 401) {
+          toast.error("Incorrect Password/Username.");
+        } else if (res?.response?.status === 404) {
+          toast.error("User not Found, check your Account Credentials");
+        }
+      }
+      else(
+        toast.error("Invalid OTP")
+      )
     } finally {
       setLoading(false);
     }
   };
 
+  // Toggle email/mobile login
   const toggleAuthMethod = () => {
     setUseEmail(!useEmail);
     setMobileNumber("");
@@ -199,10 +217,11 @@ const YoganaLogin = () => {
                   <button
                     onClick={handleGetOtp}
                     disabled={!isInputValid() || loading}
-                    className={`text-white px-6 py-3 rounded-none font-medium w-full ${!isInputValid() || loading
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : ""
-                      }`}
+                    className={`text-white px-6 py-3 rounded-none font-medium w-full ${
+                      !isInputValid() || loading
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : ""
+                    }`}
                     style={{ backgroundColor: primaryColor }}
                   >
                     {loading ? "Sending..." : "Get OTP"}
@@ -262,10 +281,11 @@ const YoganaLogin = () => {
                 <button
                   onClick={handleResendOtp}
                   disabled={resendTimer > 0 || loading}
-                  className={`text-sm underline font-medium ${resendTimer > 0
-                    ? "text-gray-400 cursor-not-allowed"
-                    : "text-[var(--pri)]"
-                    }`}
+                  className={`text-sm underline font-medium ${
+                    resendTimer > 0
+                      ? "text-gray-400 cursor-not-allowed"
+                      : "text-[var(--pri)]"
+                  }`}
                 >
                   {resendTimer > 0
                     ? `Resend OTP in ${resendTimer}s`

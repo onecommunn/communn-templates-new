@@ -12,16 +12,17 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/CustomComponents/CustomInputOtp";
-import Link from "next/link";
-import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 import { useCMS } from "../CMSProvider.client";
+import { dummyData } from "../DummyData";
+import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 
 const MartivoLogin = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: MartivoHomePage | undefined = !isLoading
-    ? (home as MartivoHomePage | undefined)
+    ? (home as MartivoHomePage | undefined) ?? dummyData
     : undefined;
+
   const primaryColor = source?.color?.primary || "#29400a";
   const secondaryColor = source?.color?.secondary || "#7bd900";
   const [mobileNumber, setMobileNumber] = useState("");
@@ -35,19 +36,16 @@ const MartivoLogin = () => {
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
 
-  // Redirect authenticated users
   useEffect(() => {
     if (authContext?.isAuthenticated) router.push("/");
   }, [authContext?.isAuthenticated]);
 
-  // Countdown timer for resend OTP
   useEffect(() => {
     if (resendTimer <= 0) return;
     const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
     return () => clearInterval(interval);
   }, [resendTimer]);
 
-  // Input validation
   const isInputValid = () => {
     if (useEmail) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mobileNumber);
     return /^\d{10}$/.test(mobileNumber);
@@ -92,7 +90,6 @@ const MartivoLogin = () => {
     requestOtp();
   };
 
-  // Handle login / OTP verification
   const handleLogin = async () => {
     if (otp.length !== 6) {
       toast.error("Please enter a valid 6-digit OTP");
@@ -106,29 +103,36 @@ const MartivoLogin = () => {
       else verifyResponse = await verifyOtp(mobileNumber, otp);
 
       if (verifyResponse.status === 200) {
-        const res: any = await authContext.autoLogin(
+        let res: any = null;
+        res = await authContext.autoLogin(
           useEmail ? "" : mobileNumber,
           useEmail ? mobileNumber : "",
           null
         );
 
+        console.log(res, "res");
+
         if (res.status === 200) {
           toast.success("Login successful!");
           router.push("/");
-        } else if (res.status === 500) {
+        } else if (res.status === 403) {
+          toast.error(
+            "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."
+          );
+        } else if (res.status === 404) {
           toast.error("User not found. Please sign up.");
           const queryKey = useEmail ? "email" : "mobile";
           router.push(
             `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
           );
         } else toast.error("Login failed. Please try again.");
-      } else if (verifyResponse.status === 500) {
-        toast.error("User not found. Please sign up.");
-        const queryKey = useEmail ? "email" : "mobile";
-        router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
-      } else toast.error("Invalid OTP. Please try again.");
-    } catch (error) {
-      toast.error("Verification failed. Please try again.");
+
+        if (res?.response?.status === 401) {
+          toast.error("Incorrect Password/Username.");
+        } else if (res?.response?.status === 404) {
+          toast.error("User not Found, check your Account Credentials");
+        }
+      } else toast.error("Invalid OTP");
     } finally {
       setLoading(false);
     }
@@ -227,12 +231,12 @@ const MartivoLogin = () => {
                 </div>
               </div>
 
-              <p className="text-center text-sm text-gray-600 mt-8">
+              {/* <p className="text-center text-sm text-gray-600 mt-8">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now
                 </Link>
-              </p>
+              </p> */}
             </div>
           ) : (
             <div className="space-y-6">
@@ -300,12 +304,12 @@ const MartivoLogin = () => {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-gray-600 mt-2">
+              {/* <p className="text-center text-sm text-gray-600 mt-2">
                 Don't have an account?{" "}
                 <Link href="/sign-up" className="font-medium text-[var(--pri)]">
                   Sign up now
                 </Link>
-              </p>
+              </p> */}
             </div>
           )}
         </div>
