@@ -1,4 +1,9 @@
 "use client";
+
+import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 import { AuthContext } from "@/contexts/Auth.context";
 import { useOtp } from "@/hooks/useOtp";
 import { getOtp, sendOtpEmailService, verifyOtp } from "@/services/otpService";
@@ -7,118 +12,133 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/CustomComponents/CustomInputOtp";
-import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 import { useCMS } from "../CMSProvider.client";
-import { CreatorHomePage } from "@/models/templates/creator/creator-home.model";
-import Link from "next/link";
+import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 
-const CreatorLogin = () => {
+const RestraintLogin = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: RestarintHomePage | undefined = !isLoading
+    ? (home as RestarintHomePage | undefined)
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#3D493A";
+  const secondaryColor = source?.color?.secondary || "#AEA17E";
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
   const [useEmail, setUseEmail] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [resendTimer, setResendTimer] = useState(0);
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
 
-  //-------------------------------------------------------
-  const { home } = useCMS();
-  const isLoading = home === undefined;
-  const source: CreatorHomePage | undefined = !isLoading
-    ? (home as CreatorHomePage | undefined)
-    : undefined;
-  const primaryColor = source?.color?.primary || "#fff";
-  const secondaryColor = source?.color?.secondary || "#000";
-  //-------------------------------------------------------------
   useEffect(() => {
-    if (authContext?.isAuthenticated) {
-      router.push("/");
-    }
-  }, []);
+    if (authContext?.isAuthenticated) router.push("/");
+  }, [authContext?.isAuthenticated]);
 
-  // console.log(authContext?.isAuthenticated, "authContext");
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [resendTimer]);
 
-  const handleGetOtp = async () => {
+  const isInputValid = () => {
+    if (useEmail) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mobileNumber);
+    return /^\d{10}$/.test(mobileNumber);
+  };
+
+  // Request OTP
+  const requestOtp = async () => {
     if (!mobileNumber) {
       toast.error(
         `Please enter a valid ${useEmail ? "email" : "mobile number"}`
       );
       return;
     }
+
     setLoading(true);
     try {
       let response: any;
-      if (useEmail) {
-        const token = localStorage.getItem("access-token") || "";
-        response = await sendOtpEmailService(mobileNumber);
-        console.log(response, "Response from email OTP service");
-      } else {
-        response = await getOtp(mobileNumber);
-      }
+      if (useEmail) response = await sendOtpEmailService(mobileNumber);
+      else response = await getOtp(mobileNumber);
+
       if (response?.status === 200) {
         toast.success(
           `OTP sent to your ${useEmail ? "email" : "mobile number"}`
         );
         setStep("otp");
+        setResendTimer(30); // 30-second cooldown for resend
       } else {
-        toast.error(response.data?.message || "Failed to send OTP");
+        toast.error(response?.data?.message || "Failed to send OTP");
       }
-    } catch (error) {
+    } catch (err) {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLoginResponse = async (response: any) => {
-    if (response.status === 200) {
-      toast.success("Login successful!");
-      router.push("/");
-    } else if (response.status === 404) {
-      toast.error("User not found. Please sign up.");
-      const encodedValue = encodeURIComponent(mobileNumber);
-      const queryKey = useEmail ? "email" : "mobile";
-      router.push(`/sign-up?${queryKey}=${encodedValue}`);
-    } else {
-      toast.error("Login failed. Please try again.");
-    }
+  const handleGetOtp = () => requestOtp();
+
+  // Resend OTP
+  const handleResendOtp = () => {
+    if (resendTimer > 0) return;
+    requestOtp();
   };
 
+  
   const handleLogin = async () => {
     if (otp.length !== 6) {
       toast.error("Please enter a valid 6-digit OTP");
       return;
     }
+
     setLoading(true);
     try {
       let verifyResponse: any;
-      if (useEmail) {
-        verifyResponse = await verifyEmailOtp(otp, mobileNumber);
-      } else {
-        verifyResponse = await verifyOtp(mobileNumber, otp);
-      }
-      console.log(verifyResponse, "verifyResponse");
+      if (useEmail) verifyResponse = await verifyEmailOtp(otp, mobileNumber);
+      else verifyResponse = await verifyOtp(mobileNumber, otp);
+
       if (verifyResponse.status === 200) {
-        const res: any = await authContext.autoLogin(
+        let res: any = null;
+        res = await authContext.autoLogin(
           useEmail ? "" : mobileNumber,
           useEmail ? mobileNumber : "",
           null
         );
-        handleLoginResponse(res);
-        console.log(res, "Response from auto login");
-      } else {
-        toast.error("Invalid OTP. Please try again.");
+
+        console.log(res,'res')
+
+        if (res.status === 200) {
+          toast.success("Login successful!");
+          router.push("/");
+        } else if (res.status === 403) {
+          toast.error(
+            "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."
+          );
+        } else if (res.status === 404) {
+          toast.error("User not found. Please sign up.");
+          const queryKey = useEmail ? "email" : "mobile";
+          router.push(
+            `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
+          );
+        } else toast.error("Login failed. Please try again.");
+
+        if (res?.response?.status === 401) {
+          toast.error("Incorrect Password/Username.");
+        } else if (res?.response?.status === 404) {
+          toast.error("User not Found, check your Account Credentials");
+        }
       }
-    } catch (error) {
-      toast.error("Verification failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Toggle email/mobile login
   const toggleAuthMethod = () => {
     setUseEmail(!useEmail);
     setMobileNumber("");
@@ -126,201 +146,176 @@ const CreatorLogin = () => {
     setStep("mobile");
   };
 
-  // const isValidMobile = (number: string): boolean => {
-  //   const mobileRegex = /^[6-9]\d{9}$/;
-  //   return mobileRegex.test(number);
-  // };
-
-  // const isValidEmail = (email: string): boolean => {
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // };
-
-  const isInputValid = () => {
-    if (useEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(mobileNumber);
-    } else {
-      return /^\d{10}$/.test(mobileNumber); // exactly 10 digits
-    }
-  };
-
   return (
-    <>
-      <main
-        className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4"
-        style={{ backgroundColor: primaryColor, color: secondaryColor }}
-      >
-        <style jsx>{`
-          .dynamic-input::placeholder {
-            color: ${primaryColor}70;
-            opacity: 1;
-          }
-        `}</style>
-        <div className="w-full max-w-md">
-          <div
-            className="bg-white rounded-lg shadow-md border p-8"
-            style={{ backgroundColor: primaryColor, color: secondaryColor }}
+    <main
+      className="flex-grow flex h-[80vh] items-center justify-center py-12 px-4 bg-[var(--pri)]/10"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
+      <div className="w-full max-w-md">
+        <div className="rounded-lg shadow-md border p-8 bg-[#ffffff]">
+          <h2
+            className="text-3xl font-bold mb-8 text-center font-lato"
+            style={{ color: secondaryColor }}
           >
-            <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
+            Login
+          </h2>
 
-            {step === "mobile" ? (
-              <div className="space-y-6">
-                <div className="text-center mb-6">
-                  <button
-                    onClick={toggleAuthMethod}
-                    className="cursor-pointer text-sm font-medium"
-                    disabled={loading}
-                  >
-                    {useEmail ? "Use Mobile No" : "Use Email ID"}
-                  </button>
-                </div>
-
-                <div>
-                  <label
-                    className="block text-sm text-gray-600 mb-2"
-                    style={{ color: secondaryColor }}
-                  >
-                    {useEmail ? "Enter Email ID" : "Enter Mobile No"}
-                  </label>
-                  <div className="flex gap-3 flex-col">
-                    <input
-                      type={useEmail ? "email" : "tel"}
-                      value={mobileNumber}
-                      onChange={(e) => {
-                        const input = e.target.value;
-                        if (useEmail) {
-                          setMobileNumber(input);
-                        } else {
-                          const numericOnly = input.replace(/\D/g, "");
-                          setMobileNumber(numericOnly);
-                        }
-                      }}
-                      placeholder={
-                        useEmail
-                          ? "Enter your email"
-                          : "Enter your mobile number"
-                      }
-                      className="dynamic-input flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
-                      disabled={loading}
-                    />
-
-                    <button
-                      onClick={handleGetOtp}
-                      disabled={!isInputValid() || loading}
-                      className={`${
-                        isInputValid() && !loading
-                          ? "bg-black cursor-pointer"
-                          : "bg-gray-300 cursor-not-allowed"
-                      } text-white px-6 py-3 rounded-lg font-medium w-full`}
-                      style={{
-                        backgroundColor: secondaryColor,
-                        color: primaryColor,
-                      }}
-                    >
-                      {loading ? "Sending..." : "Get OTP"}
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-center text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <Link
-                    href="/sign-up"
-                    className="text-[#FF6347] hover:text-[#FF6347]-dark font-semibold"
-                    style={{ color: secondaryColor }}
-                  >
-                    Sign up now
-                  </Link>
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div>
-                  <label
-                    className="block text-sm font-medium text-gray-600 mb-4"
-                    style={{
-                      color: primaryColor,
-                    }}
-                  >
-                    Enter OTP
-                  </label>
-                  <div className="flex justify-center">
-                    <InputOTP
-                      maxLength={6}
-                      value={otp}
-                      onChange={setOtp}
-                      className="gap-2"
-                      disabled={loading}
-                    >
-                      <InputOTPGroup>
-                        <InputOTPSlot
-                          index={0}
-                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
-                        />
-                        <InputOTPSlot
-                          index={1}
-                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
-                        />
-                        <InputOTPSlot
-                          index={2}
-                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
-                        />
-                        <InputOTPSlot
-                          index={3}
-                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
-                        />
-                        <InputOTPSlot
-                          index={4}
-                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
-                        />
-                        <InputOTPSlot
-                          index={5}
-                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
-                        />
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </div>
-                </div>
-
+          {step === "mobile" ? (
+            <div className="space-y-6">
+              <div className="text-center mb-6">
                 <button
-                  onClick={handleLogin}
-                  disabled={otp.length !== 6 || loading}
-                  className="w-full bg-black cursor-pointer text-white py-3 rounded-lg font-medium"
-                  style={{
-                    backgroundColor: primaryColor,
-                  }}
+                  onClick={toggleAuthMethod}
+                  className="cursor-pointer underline font-lato text-sm font-medium"
+                  disabled={loading}
+                  style={{ color: secondaryColor }}
                 >
-                  {loading ? "Verifying..." : "Login"}
+                  {useEmail ? "Use Mobile No" : "Use Email ID"}
                 </button>
+              </div>
 
-                <div className="text-center">
-                  <button
-                    onClick={() => setStep("mobile")}
-                    className="text-sm text-gray-600 cursor-pointer font-medium underline"
+              <div>
+                <label
+                  className="block text-sm mb-2 font-lato font-bold"
+                  style={{ color: secondaryColor }}
+                >
+                  {useEmail ? "Enter Email ID" : "Enter Mobile No"}
+                </label>
+                <div className="flex gap-3 flex-col">
+                  <input
+                    type={useEmail ? "email" : "tel"}
+                    value={mobileNumber}
+                    onChange={(e) =>
+                      setMobileNumber(
+                        useEmail
+                          ? e.target.value
+                          : e.target.value.replace(/\D/g, "")
+                      )
+                    }
+                    placeholder={
+                      useEmail ? "Enter your email" : "Enter your mobile number"
+                    }
+                    className="flex-1 px-4 py-2 border font-lato border-gray-300 rounded-lg focus:ring-[#C2A74E] focus:outline-none focus:ring-2"
                     disabled={loading}
+                    style={{
+                      border: "1px solid #ddd",
+                      borderRadius: "6px",
+                      padding: "0.75rem 1rem",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${secondaryColor}10`;
+                      e.currentTarget.style.borderColor = secondaryColor;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.borderColor = "#ddd";
+                    }}
+                  />
+
+                  <button
+                    onClick={handleGetOtp}
+                    disabled={!isInputValid() || loading}
+                    className={`text-white px-6 py-3 rounded-lg font-medium w-full ${
+                      isInputValid() && !loading
+                        ? ""
+                        : "bg-gray-300 cursor-not-allowed"
+                    }`}
+                    style={{ backgroundColor: secondaryColor }}
                   >
-                    Change {useEmail ? "email" : "mobile number"}?
+                    {loading ? "Sending..." : "Get OTP"}
                   </button>
                 </div>
-
-                <p className="text-center text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <Link
-                    href="/sign-up"
-                    className="text-[#FF6347] hover:text-[#FF6347]-dark font-semibold"
-                    style={{ color: secondaryColor }}
-                  >
-                    Sign up now
-                  </Link>
-                </p>
               </div>
-            )}
-          </div>
+
+              {/* <p className="text-center text-sm text-gray-600 mt-8">
+                Don't have an account?{" "}
+                <Link href="/sign-up" className="font-medium text-[var(--pri)]">
+                  Sign up now
+                </Link>
+              </p> */}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div>
+                <label
+                  className="block text-sm font-medium mb-4"
+                  style={{ color: secondaryColor }}
+                >
+                  Enter OTP
+                </label>
+                <div className="flex justify-center">
+                  <InputOTP
+                    maxLength={6}
+                    value={otp}
+                    onChange={setOtp}
+                    className="gap-2"
+                    disabled={loading}
+                  >
+                    <InputOTPGroup>
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <InputOTPSlot
+                          key={i}
+                          index={i}
+                          className="w-12 h-12 border-2 border-gray-300 rounded-lg text-center text-lg font-medium"
+                        />
+                      ))}
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+              </div>
+
+              <button
+                onClick={handleLogin}
+                disabled={otp.length !== 6 || loading}
+                className="w-full text-white py-3 font-medium rounded-lg"
+                style={{ backgroundColor: secondaryColor }}
+              >
+                {loading ? "Verifying..." : "Login"}
+              </button>
+
+              <div className="flex justify-center gap-4 mt-2">
+                <button
+                  onClick={handleResendOtp}
+                  disabled={resendTimer > 0 || loading}
+                  className={`text-sm underline font-medium ${
+                    resendTimer > 0
+                      ? "text-gray-400 cursor-not-allowed"
+                      : "text-[var(--pri)]"
+                  }`}
+                >
+                  {resendTimer > 0
+                    ? `Resend OTP in ${resendTimer}s`
+                    : "Resend OTP"}
+                </button>
+              </div>
+
+              <div className="text-center mt-2">
+                <button
+                  onClick={() => setStep("mobile")}
+                  className="text-sm cursor-pointer font-medium underline font-lato"
+                  disabled={loading}
+                  style={{ color: secondaryColor }}
+                >
+                  Change {useEmail ? "email" : "mobile number"}?
+                </button>
+              </div>
+
+              {/* <p className="text-center text-sm text-gray-600 mt-2">
+                Don't have an account?{" "}
+                <Link href="/sign-up" className="font-medium text-[var(--pri)]">
+                  Sign up now
+                </Link>
+              </p> */}
+            </div>
+          )}
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 };
 
-export default CreatorLogin;
+export default RestraintLogin;
