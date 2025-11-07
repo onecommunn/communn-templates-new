@@ -21,6 +21,7 @@ import { TrainingPlan } from "@/models/plan.model";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -198,16 +199,18 @@ const Card: React.FC<PlanCardProps> = ({
                 join now?
               </DialogDescription>
               <div className="mt-4 flex justify-end">
-                <Button
-                  onClick={() => handleClickJoin(communityId)}
-                  disabled={isSubscribed}
-                  style={{
-                    backgroundColor: primaryColor,
-                    color: secondaryColor,
-                  }}
-                >
-                  Confirm Join
-                </Button>
+                <DialogClose asChild>
+                  <Button
+                    onClick={() => handleClickJoin(communityId)}
+                    disabled={isSubscribed}
+                    style={{
+                      backgroundColor: primaryColor,
+                      color: secondaryColor,
+                    }}
+                  >
+                    Confirm Join
+                  </Button>
+                </DialogClose>
               </div>
             </DialogContent>
           </Dialog>
@@ -268,7 +271,7 @@ const Card: React.FC<PlanCardProps> = ({
             className="mt-4 inline-flex items-center gap-2 text-[16px] font-bold"
             style={{ color: primaryColor, cursor: "pointer" }}
           >
-            {isSubscribed ?  "Already Subscribed" : "Subscribe Now"}
+            {isSubscribed ? "Already Subscribed" : "Subscribe Now"}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </Link>

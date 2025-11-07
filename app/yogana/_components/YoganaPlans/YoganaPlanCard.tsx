@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -294,16 +295,18 @@ const YoganaPlanCard = ({
                     join now?
                   </DialogDescription>
                   <div className="mt-4 flex justify-end">
-                    <Button
-                      onClick={() => handleClickJoin(communityId)}
-                      disabled={isSubscribed}
-                      className={`bg-[${primaryColor}] text-white cursor-pointer`}
-                      style={{
-                        backgroundColor: primaryColor,
-                      }}
-                    >
-                      Confirm Join
-                    </Button>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={() => handleClickJoin(communityId)}
+                        disabled={isSubscribed}
+                        className={`bg-[${primaryColor}] text-white cursor-pointer`}
+                        style={{
+                          backgroundColor: primaryColor,
+                        }}
+                      >
+                        Confirm Join
+                      </Button>
+                    </DialogClose>
                   </div>
                 </DialogContent>
               </Dialog>

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -77,30 +78,29 @@ export default function RestraintPlans({
 
   const { communityId, communityData } = useCommunity();
 
-  React.useEffect(() => {
-    const fetchPlans = async () => {
-      if (!communityId) return;
-      setIsLoading(true);
-      try {
-        const resp = isLoggedIn
-          ? await getCommunityPlansListAuth(communityId)
-          : await getPlansList(communityId);
+  const fetchPlans = async () => {
+    if (!communityId) return;
+    setIsLoading(true);
+    try {
+      const resp = isLoggedIn
+        ? await getCommunityPlansListAuth(communityId)
+        : await getPlansList(communityId);
 
-        if (Array.isArray(resp)) {
-          setPlans(resp as TrainingPlan[]);
-        } else if (resp && typeof resp === "object" && "myPlans" in resp) {
-          setPlans((resp as any).myPlans as TrainingPlan[]);
-        } else {
-          setPlans([]);
-        }
-      } catch (e) {
-        console.error("Failed to fetch plans:", e);
+      if (Array.isArray(resp)) {
+        setPlans(resp as TrainingPlan[]);
+      } else if (resp && typeof resp === "object" && "myPlans" in resp) {
+        setPlans((resp as any).myPlans as TrainingPlan[]);
+      } else {
         setPlans([]);
-      } finally {
-        setIsLoading(false);
       }
-    };
-
+    } catch (e) {
+      console.error("Failed to fetch plans:", e);
+      setPlans([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  React.useEffect(() => {
     fetchPlans();
   }, [communityId, isLoggedIn]);
 
@@ -230,6 +230,7 @@ export default function RestraintPlans({
                       planId={planId}
                       coverImage={coverImage}
                       color={color}
+                      fetchPlans={fetchPlans}
                     />
                   </CarouselItem>
                 );
@@ -470,12 +471,14 @@ export function PlanCard({
                     join now?
                   </DialogDescription>
                   <div className="mt-4 flex justify-end">
-                    <Button
-                      onClick={() => handleClickJoin(communityId)}
-                      disabled={isSubscribed}
-                    >
-                      Confirm Join
-                    </Button>
+                    <DialogClose asChild>                      
+                      <Button
+                        onClick={() => handleClickJoin(communityId)}
+                        disabled={isSubscribed}
+                      >
+                        Confirm Join
+                      </Button>
+                    </DialogClose>
                   </div>
                 </DialogContent>
               </Dialog>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -172,16 +173,18 @@ const CreatorPlansCard = ({
                   join now?
                 </DialogDescription>
                 <div className="mt-4 flex justify-end">
-                  <Button
-                    onClick={() => handleClickJoin(communityId)}
-                    disabled={isSubscribed}
-                    style={{
-                      backgroundColor: secondaryColor,
-                      color: primaryColor,
-                    }}
-                  >
-                    Confirm Join
-                  </Button>
+                  <DialogClose asChild>
+                    <Button
+                      onClick={() => handleClickJoin(communityId)}
+                      disabled={isSubscribed}
+                      style={{
+                        backgroundColor: secondaryColor,
+                        color: primaryColor,
+                      }}
+                    >
+                      Confirm Join
+                    </Button>
+                  </DialogClose>
                 </div>
               </DialogContent>
             </Dialog>

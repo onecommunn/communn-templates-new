@@ -10,6 +10,7 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { capitalizeWords } from "@/components/utils/StringFunctions";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -80,11 +81,13 @@ const ChooseButton: React.FC<{
   href?: string;
   text: string;
   color: string;
-  isSubscribed:boolean
-}> = ({ href = "/", text, color,isSubscribed }) => (
+  isSubscribed: boolean;
+}> = ({ href = "/", text, color, isSubscribed }) => (
   <Link
     href={href || "/"}
-    className={`group relative inline-flex items-center gap-3 rounded-full ${isSubscribed ? "bg-[var(--pri)]" : "bg-[var(--color)]"} px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2`}
+    className={`group relative inline-flex items-center gap-3 rounded-full ${
+      isSubscribed ? "bg-[var(--pri)]" : "bg-[var(--color)]"
+    } px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2`}
     style={
       {
         "--color": color,
@@ -270,16 +273,14 @@ const Card: React.FC<CardProps> = ({
                     join now?
                   </DialogDescription>
                   <div className="mt-4 flex justify-end">
-                    <Button
-                      onClick={() => handleClickJoin(communityId)}
-                      disabled={isSubscribed}
-                    //   style={{
-                    //     backgroundColor: primaryColor,
-                    //     color: secondaryColor,
-                    //   }}
-                    >
-                      Confirm Join
-                    </Button>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={() => handleClickJoin(communityId)}
+                        disabled={isSubscribed}
+                      >
+                        Confirm Join
+                      </Button>
+                    </DialogClose>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -333,7 +334,7 @@ const Card: React.FC<CardProps> = ({
             )
           ) : (
             <ChooseButton
-              text={isSubscribed ?  "Subscribed" : "Subscribe"}
+              text={isSubscribed ? "Subscribed" : "Subscribe"}
               href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
               color={color}
               isSubscribed={isSubscribed}
@@ -400,12 +401,13 @@ const MartivoPlans = ({
         text: `Next Due: ${p.nextDueDate ? p.nextDueDate : "No Dues"}`,
       },
       {
-        text: `Status: ${!p.nextDueDate
-          ? "Not Subscribed"
-          : new Date(p.nextDueDate) >= new Date()
+        text: `Status: ${
+          !p.nextDueDate
+            ? "Not Subscribed"
+            : new Date(p.nextDueDate) >= new Date()
             ? "Active"
             : "Expired"
-          }`,
+        }`,
       },
     ];
 
@@ -422,7 +424,7 @@ const MartivoPlans = ({
     };
   });
 
-  if (!(normalized?.length) || normalized?.length < 0) {
+  if (!normalized?.length || normalized?.length < 0) {
     return null;
   }
 
@@ -441,7 +443,6 @@ const MartivoPlans = ({
         {/* Header */}
         <div className="mx-auto mb-10 md:max-w-lg text-center md:mb-14">
           <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--pri)] uppercase">
-
             {content?.heading}
           </p>
           <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
