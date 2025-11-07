@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import { ISequences, ISubscribers } from "@/models/plan.model";
 import { AuthContext } from "@/contexts/Auth.context";
@@ -9,11 +10,38 @@ import { usePayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/components/utils/PaymentSuccess";
 import PaymentFailure from "@/components/utils/PaymentFailure";
-import Image from "next/image";
-import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { Gift, Info, Minus, Plus, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { useSubscription } from "@/hooks/useSubscription";
+import { Subscription } from "@/models/Subscription.model";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+const formatDates = (dateStr?: string) => {
+  if (!dateStr) return "-";
+  const date = new Date(dateStr);
+  return date.toLocaleString("en-GB", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const PaymentScheduleItem = ({
   date,
@@ -30,8 +58,6 @@ const PaymentScheduleItem = ({
 }) => {
   const isDisabled = status === "paid";
 
-  // console.log(isSelected, "isSelected")
-
   return (
     <div
       onClick={() => {
@@ -42,7 +68,7 @@ const PaymentScheduleItem = ({
          isDisabled
            ? "opacity-50 cursor-not-allowed border-gray-200"
            : isSelected
-           ? "border-none bg-gray-100"
+           ? "border-none bg-[var(--pri)]/20"
            : "border-transparent"
        }`}
     >
@@ -76,6 +102,21 @@ interface Sequences {
   status: string;
 }
 
+interface PlanData {
+  _id: string;
+  coupons: {
+    _id: string;
+    couponCode: string;
+    cycleCount: number;
+    discountName: string;
+    discountType: "PERCENTAGE" | "FLAT" | string;
+    discountValue: number;
+    expiryDate: string;
+    maxRedemptions: number;
+    usedRedemptions: number;
+  }[];
+}
+
 interface Plan {
   name: string;
   duration: string;
@@ -84,14 +125,89 @@ interface Plan {
   endDate: string;
   pricing: string;
   description?: string;
+  nextDueDate: string;
+  minPauseDays?: number;
+  maxPauseDays?: number;
+  isPauseUserVisible: boolean;
+  isPauseUserApprovalRequired?: boolean;
+  plan: { _id: string; isPauseUserVisible: boolean };
+  coupons: any[];
 }
+
+const StaticValues = {
+  ACTIVE: "Active",
+  INACTIVE: "Inactive",
+  INVALID: "Invalid",
+  ADMIN: "Admin",
+  USER: "Member",
+  MODERATOR: "Moderator",
+  YES: "Yes",
+  NO: "No",
+  YEAR: "Year",
+  MONTH: "Month",
+  DAY: "Day",
+  WEEK: "Week",
+  YEARLY: "Yearly",
+  MONTHLY: "Monthly",
+  WEEKLY: "Weekly",
+  DAILY: "Daily",
+  QUARTERLY: "Quarterly",
+  HALF_YEARLY: "Half Yearly",
+  ONE_TIME: "One Time",
+  FREE: "Free",
+  PAID: "Paid",
+  PUBLIC: "Public",
+  PRIVATE: "Private",
+  BUSYNESS: "Business",
+  Business: "Business",
+  TECHNOLOGY: "Technology",
+  "Role Type": "Role",
+  INVITED: "Invited",
+  IN_ACTIVE: "In_Active",
+  userCancelled: "Cancelled",
+  FAILURE: "Failed",
+  SUCCESS: "Success",
+  USERCANCELLED: "Cancelled",
+  DROPPED: "Dropped",
+  SUPERADMIN: "Superadmin",
+  dayly: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
+  quarterly: "Quarterly",
+  half_yearly: "Half Yearly",
+  one_time: "One Time",
+  yearly: "Yearly",
+  REJECT: "Reject",
+  NOT_PAID: "Not Paid",
+  EXPIRED: "Expired",
+  CANCELLED: "Cancelled",
+  PAID_BY_CASH: "Paid By Cash",
+  Settled: "Settled",
+  NA: "NA",
+  PENDING: "Pending",
+  PENDINGPAYMENT: "Pay now",
+  FOREVER: "Forever",
+  ALLDAYS: "All Days",
+  MONDAY: "Mon",
+  TUESDAY: "Tue",
+  WEDNESDAY: "Weds",
+  THURSDAY: "Thu",
+  FRIDAY: "Fri",
+  SATURDAY: "Sat",
+  SUNDAY: "Sun",
+  CUSTOM: "Custom",
+};
+const getStaticValue = (key: string) => {
+  //console.log(key);
+  return StaticValues[key as keyof typeof StaticValues]; // Use type assertion
+};
 
 const MartivoSubscriptions = ({
   primaryColor,
   secondaryColor,
 }: {
-  secondaryColor: string;
   primaryColor: string;
+  secondaryColor: string;
 }) => {
   const [activeTab, setActiveTab] = useState("All");
   const [isExpanded, setIsExpanded] = useState(true);
@@ -100,6 +216,7 @@ const MartivoSubscriptions = ({
   const [placePrice, setPlacePrice] = useState<string>("0");
   const [sequencesList, setSequencesList] = useState<Sequences[]>([]);
   const [plan, setPlan] = useState<Plan>();
+  const [planData, setPlanData] = useState<PlanData>();
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [community, setCommunity] = useState("");
@@ -114,19 +231,146 @@ const MartivoSubscriptions = ({
     { id: string; amount: number; startDate: string; courseAmount?: string }[]
   >([]);
   const [subscriptions, setSubscriptions] = useState<ISubscribers>();
+  const [isPauseSubmitting, setIsPauseSubmitting] = useState(false);
   const [sequences, setSequences] = useState<ISequences[]>([]);
+  const [count, setCount] = useState(1);
+  const [isPauseOpen, setIsPauseOpen] = useState(false);
+  const [pauseDuration, setPauseDuration] = useState<number | "">("");
+  const [pauseError, setPauseError] = useState("");
+  const [startImmediately, setStartImmediately] = useState(true);
+  const [pauseStartDate, setPauseStartDate] = useState<string>("");
+  const [openPausePopup, setOpenPausePopup] = useState<boolean>(false);
+  const [resumeDate, setResumeDate] = useState<string>("");
+  const [pauseExpiryDate, setPauseExpiryDate] = useState<string>("");
+  const { pauseSubscription } = useSubscription();
+  const [subscriptionData, setSubscriptionData] = useState<Subscription>();
+
+  const addDays = (date: Date, days: number) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+  };
+
+  const formatDisplayDate = (d: Date) =>
+    d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+  useEffect(() => {
+    if (
+      !pauseDuration ||
+      typeof pauseDuration !== "number" ||
+      pauseDuration <= 0
+    ) {
+      setResumeDate("");
+      setPauseExpiryDate("");
+      return;
+    }
+
+    const baseStart = startImmediately
+      ? new Date()
+      : pauseStartDate
+      ? new Date(pauseStartDate)
+      : undefined;
+
+    if (!baseStart) return;
+
+    const resume = addDays(baseStart, pauseDuration);
+    setResumeDate(formatDisplayDate(resume));
+
+    if (plan?.endDate) {
+      const expiry = addDays(new Date(plan.endDate), pauseDuration);
+      setPauseExpiryDate(formatDisplayDate(expiry));
+    } else {
+      setPauseExpiryDate(formatDisplayDate(resume));
+    }
+  }, [pauseDuration, startImmediately, pauseStartDate, plan?.endDate]);
+
+  const handlePauseSubmit = async () => {
+    if (
+      !subscriptionId ||
+      typeof pauseDuration !== "number" ||
+      pauseDuration < (plan?.minPauseDays ?? 3) ||
+      pauseDuration > (plan?.maxPauseDays ?? 180)
+    ) {
+      return;
+    }
+
+    const lastPaidSequence = sequencesList
+      ?.filter((seq) => seq.status === "PAID" || seq.status === "PAID_BY_CASH")
+      ?.slice(-1)[0];
+
+    if (!lastPaidSequence) {
+      toast.error("No paid sequence found to base pause on.");
+      return;
+    }
+
+    const effectiveStartDate =
+      startImmediately || !pauseStartDate
+        ? new Date().toISOString()
+        : new Date(pauseStartDate).toISOString();
+
+    try {
+      setIsPauseSubmitting(true);
+      const res: any = await pauseSubscription(
+        subscriptionId,
+        pauseDuration,
+        lastPaidSequence._id,
+        effectiveStartDate
+      );
+
+      if (res?.data?.status) {
+        toast.success(
+          plan?.isPauseUserApprovalRequired
+            ? "Pause request sent successfully!"
+            : "Subscription paused successfully!"
+        );
+      } else {
+        toast.info(res?.data?.message);
+      }
+
+      console.log(res, "res");
+
+      setIsPauseOpen(false);
+    } catch (err) {
+      console.error("Error pausing subscription", err);
+      toast.error("Failed to pause subscription. Please try again.");
+    } finally {
+      setIsPauseSubmitting(false);
+      await handlegetSequencesById();
+    }
+  };
+
+  const decrement = () => setCount((prev) => Math.max(1, prev - 1));
+  const increment = () => setCount((prev) => prev + 1);
+
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<
+    PlanData["coupons"][number] | null
+  >(null);
 
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
 
+  const isPageLoading =
+    authContext?.loading ||
+    isLoading ||
+    !plan ||
+    !subscriptionData ||
+    sequencesList.length === 0;
+
   const searchParams = useSearchParams();
   const planID = searchParams.get("planid");
-
   const communityId = searchParams.get("communityid");
-  const imageUrl = searchParams.get("image");
 
-  const { createSubscriptionSequencesByPlanAndCommunityId, getSequencesById } =
-    usePlans();
+  const {
+    createSubscriptionSequencesByPlanAndCommunityId,
+    getSequencesById,
+    getPlansById,
+  } = usePlans();
+
   const {
     initiatePaymentByIds,
     getPaymentStatusById,
@@ -141,8 +385,25 @@ const MartivoSubscriptions = ({
   ]);
 
   useEffect(() => {
+    getPlanDataById();
+  }, []);
+
+  const getPlanDataById = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getPlansById(planID ?? "");
+      setPlanData(response?.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     setMounted(true);
   }, []);
+
   useEffect(() => {}, [authContext]);
 
   const handleCreateSubscription = async () => {
@@ -150,6 +411,7 @@ const MartivoSubscriptions = ({
       console.warn("User ID not ready yet");
       return;
     }
+
     try {
       setIsLoading(true);
       const response: any =
@@ -158,8 +420,10 @@ const MartivoSubscriptions = ({
           communityId || "",
           planID || ""
         );
+
       setPlan(response?.subscription?.plan);
       setSubscriptionId(response?.subscription?._id);
+      setSubscriptionData(response?.subscription);
     } catch (error) {
       console.error("Error creating subscription:", error);
     } finally {
@@ -205,6 +469,7 @@ const MartivoSubscriptions = ({
   }, [subscriptionId]);
 
   const tabs = ["All", "PAID", "NOT_PAID"];
+
   const formatStatus = (status: string) => {
     return status
       .toLowerCase()
@@ -225,6 +490,12 @@ const MartivoSubscriptions = ({
     setSuccessOpen(false);
   };
 
+  useEffect(() => {
+    if (subscriptionData?.subscription_status === "PAUSED") {
+      setOpenPausePopup(true);
+    }
+  }, [subscriptionData?.subscription_status]);
+
   const handleFailureClose = () => {
     setTimer(3);
     setFailureOpen(false);
@@ -232,13 +503,13 @@ const MartivoSubscriptions = ({
 
   const paymentResponse = async (response: any, selectedSequences: any) => {
     try {
-      // console.log('💬 FULL PAYMENT RESPONSE:', response);
-
       const tnxId = response?.transactionId;
       const transaction = response?.transaction as IPaymentList;
+
       if (transaction) {
         setTransaction(transaction);
       }
+
       if (response?.url) {
         const screenWidth = window.screen.width;
         const screenHeight = window.screen.height;
@@ -254,9 +525,11 @@ const MartivoSubscriptions = ({
 
         const intervalRef = setInterval(async () => {
           const paymentStatus = await getPaymentStatusById(tnxId);
+
           if (paymentStatus && paymentStatus.length > 0) {
             clearInterval(intervalRef);
             windowRef?.close();
+
             if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
               await updateSequencesPaymentStatus(
                 communityId || "",
@@ -281,6 +554,7 @@ const MartivoSubscriptions = ({
       setPayLoading(true);
       setCommunity(communityId);
       setplanId(planId);
+
       const amount = totalAmount.toString();
       const response = await initiatePaymentByIds(
         userId,
@@ -288,9 +562,11 @@ const MartivoSubscriptions = ({
         sequenceId,
         amount
       );
+
       const sequenceIds = selectedAmounts
         ?.filter((item: any) => item?.id)
         .map((item: any) => item.id);
+
       paymentResponse(response, sequenceIds);
       handlegetSequencesById();
     } catch (error) {
@@ -321,16 +597,68 @@ const MartivoSubscriptions = ({
     });
   };
 
-  const totalAmount = selectedAmounts.reduce(
+  const baseAmountPerCycles = selectedAmounts.reduce(
     (acc, curr) =>
       acc + curr.amount + (Number(subscriptions?.courseAmount) || 0),
     0
   );
 
-  if (isLoading) {
+  const baseAmount = baseAmountPerCycles * count;
+
+  const discountAmount =
+    appliedCoupon && baseAmount > 0
+      ? appliedCoupon.discountType === "PERCENTAGE"
+        ? (baseAmount * appliedCoupon.discountValue) / 100
+        : appliedCoupon.discountValue
+      : 0;
+
+  const totalAmount = Math.max(0, baseAmount - discountAmount);
+
+  const handleApplyCoupon = (codeFromButton?: string) => {
+    const code =
+      (codeFromButton ?? couponInput).trim().toUpperCase() || undefined;
+
+    if (!code) {
+      toast.error("Please enter a coupon code");
+      return;
+    }
+
+    const coupon = planData?.coupons.find(
+      (c) => c.couponCode.toUpperCase() === code
+    );
+
+    if (!coupon) {
+      toast.error("Invalid coupon code");
+      return;
+    }
+
+    const now = new Date();
+    const expiry = new Date(coupon.expiryDate);
+
+    if (expiry < now) {
+      toast.error("This coupon has expired");
+      return;
+    }
+
+    if (coupon.usedRedemptions >= coupon.maxRedemptions) {
+      toast.error("Coupon usage limit reached");
+      return;
+    }
+
+    setAppliedCoupon(coupon);
+    setCouponInput(coupon.couponCode);
+    toast.success("Coupon applied");
+  };
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput("");
+    toast.info("Coupon removed");
+  };
+
+  if (isPageLoading) {
     return (
-      <div
-        className="mx-auto px-4 sm:px-6 lg:px-20"
+      <main
+        className="flex-grow font-lato bg-[var(--pri)]/10"
         style={
           {
             "--pri": primaryColor,
@@ -338,118 +666,83 @@ const MartivoSubscriptions = ({
           } as React.CSSProperties
         }
       >
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="rounded-2xl overflow-hidden mb-8">
-            <div className="relative aspect-[16/9] w-full">
-              <Skeleton
-                className="absolute inset-0"
-                style={{ backgroundColor: primaryColor }}
-              />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
+          <div className="mx-auto">
+            {/* Card-style skeleton to match the final layout */}
+            <div className="rounded-2xl border bg-white px-4 md:px-6 py-5 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div>
+                  <Skeleton className="h-3 w-16 mb-2" />
+                  <Skeleton className="h-4 w-28" />
+                </div>
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div className="flex items-center justify-center">
+                  <Skeleton className="h-7 w-24 rounded-full" />
+                </div>
+              </div>
+              <div className="mt-4">
+                <Skeleton className="h-3 w-24 mb-2" />
+                <Skeleton className="h-4 w-full mb-1" />
+                <Skeleton className="h-4 w-[90%]" />
+              </div>
             </div>
-          </div>
 
-          <div className="grid md:grid-cols-1 gap-8">
-            <div className="md:col-span-2 space-y-4">
-              <Skeleton
-                className="h-7 w-3/4"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <div className="space-y-2">
-                <Skeleton
-                  className="h-4 w-full"
-                  style={{ backgroundColor: primaryColor }}
-                />
-                <Skeleton
-                  className="h-4 w-[92%]"
-                  style={{ backgroundColor: primaryColor }}
-                />
-                <Skeleton
-                  className="h-4 w-[88%]"
-                  style={{ backgroundColor: primaryColor }}
-                />
-                <Skeleton
-                  className="h-4 w-[80%]"
-                  style={{ backgroundColor: primaryColor }}
-                />
-              </div>
-              <Skeleton
-                className="h-5 w-56 mt-6"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-64"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-52"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-40"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-72"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                </div>
+            {/* Payment schedule + summary skeleton */}
+            <div className="mb-3">
+              <Skeleton className="h-5 w-40 mb-3" />
+              <Skeleton className="h-8 w-64 rounded-full mb-4" />
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="flex flex-col items-center gap-2">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-10 w-24 rounded-2xl" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton
-                className="h-5 w-32"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
+
+            <div className="border bg-white rounded-2xl p-6">
+              <div className="grid grid-cols-2 gap-4 mb-3">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+                <div className="space-y-2 text-right">
+                  <Skeleton className="h-4 w-40 ml-auto" />
+                  <Skeleton className="h-4 w-32 ml-auto" />
+                </div>
+              </div>
+              <hr className="my-3" />
+              <div className="grid grid-cols-2 gap-4 items-center">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-5 w-28 ml-auto" />
+              </div>
+              <div className="mt-4 flex flex-wrap justify-end gap-3">
+                <Skeleton className="h-10 w-36 rounded-md" />
+                <Skeleton className="h-10 w-40 rounded-md" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
     <main
-      className="flex-grow bg-white font-lato"
+      className="flex-grow font-lato bg-[var(--pri)]/10"
       style={
         {
           "--pri": primaryColor,
@@ -458,54 +751,134 @@ const MartivoSubscriptions = ({
       }
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
-        <div className="text-center md:mb-6 mb-6">
-          <h2
-            className="text-3xl md:text-4xl font-bold mb-2 text-[#0C0407] font-lato"
-            style={{ color: primaryColor }}
+        <Accordion type="single" collapsible className="w-full space-y-3">
+          <AccordionItem
+            value={subscriptionData?._id || "Id"}
+            className="rounded-2xl border bg-white px-4 md:px-6 "
+            style={{ border: `1px solid ${primaryColor}` }}
           >
-            {plan?.name || ""}
-          </h2>
-        </div>
+            <AccordionTrigger className="px-0 py-4 hover:no-underline">
+              <div className="flex w-full items-center justify-between gap-4">
+                {/* Left: columns */}
+                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-5">
+                  {/* Plan Name */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Plan Name
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {plan?.name}
+                    </p>
+                  </div>
+                  {/* Plan Type */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Plan Type
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {capitalizeWords(plan?.duration || "")}
+                    </p>
+                  </div>
+                  {/* Price + offers */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Price
+                    </p>
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                      <p className="text-sm font-semibold text-slate-900">
+                        ₹{plan?.pricing} / {plan?.interval}{" "}
+                        {(plan?.interval ?? "0") > "1"
+                          ? `${getStaticValue(plan?.duration ?? "")}s`
+                          : getStaticValue(plan?.duration ?? "")}
+                      </p>
+                      {plan && plan?.coupons?.length > 0 && (
+                        <Badge
+                          variant="outline"
+                          className="flex items-center gap-1 rounded-full bg-emerald-50 text-xs font-medium text-emerald-700"
+                        >
+                          <Gift className="h-3 w-3" />
+                          {plan?.coupons?.length} Offer
+                          {plan?.coupons?.length > 1 ? "s" : ""}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  {/* Start Date */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Start Date
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {sequencesList?.[0]?.startDate
+                        ? new Date(sequencesList[0].startDate)
+                            .toISOString()
+                            .split("T")[0]
+                        : ""}
+                    </p>
+                  </div>
+                  {/* Right: status pill (chevron is auto from AccordionTrigger) */}
+                  <div className="flex items-center justify-center">
+                    <div
+                      className="text-xs rounded-full px-4 py-2 capitalize border text-center flex items-center justify-center w-fit"
+                      style={{
+                        backgroundColor:
+                          subscriptionData?.subscription_status ===
+                            "INACTIVE" ||
+                          subscriptionData?.subscription_status === "STOP"
+                            ? "#ffa87d1a"
+                            : subscriptionData?.subscription_status === "PAUSED"
+                            ? "#f5e58a1a"
+                            : "#10a00d1a",
+                        color:
+                          subscriptionData?.subscription_status ===
+                            "INACTIVE" ||
+                          subscriptionData?.subscription_status === "STOP"
+                            ? "#ffa87d"
+                            : subscriptionData?.subscription_status === "PAUSED"
+                            ? "#d9b300"
+                            : "#10A00D",
+                        border:
+                          subscriptionData?.subscription_status ===
+                            "INACTIVE" ||
+                          subscriptionData?.subscription_status === "STOP"
+                            ? "1px solid #ffa87d"
+                            : subscriptionData?.subscription_status === "PAUSED"
+                            ? "1px solid #f5e58a"
+                            : "1px solid #10a00d",
+                      }}
+                    >
+                      {subscriptionData?.subscription_status === "INACTIVE"
+                        ? "Inactive"
+                        : subscriptionData?.subscription_status === "STOP"
+                        ? "Stopped"
+                        : subscriptionData?.subscription_status === "PAUSED"
+                        ? "Paused"
+                        : "Active"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="border-t py-4 text-sm text-slate-700">
+              <p className="mb-1 font-semibold text-slate-900">Description</p>
+              <p className="leading-relaxed">{plan?.description}</p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
-        <div className="mx-auto pb-4">
-          {/* Cover image */}
-          <div className="rounded-2xl overflow-hidden mb-8">
-            <div className="relative aspect-[18/9] w-full">
-              <Image
-                src={imageUrl || "/assets/martivo-testimonials-bg-image.png "}
-                alt={plan?.name || "plan Image"}
-                fill
-                className="object-cover"
-                priority
-                unoptimized
-              />
-            </div>
-          </div>
+        <div className="mx-auto">
           <div>
-            <div>
-              <h2 className="font-lato font-semibold text-3xl mb-2">
-                Description
-              </h2>
-              <p className="font-lato text-[16px]">{plan?.description}</p>
-            </div>
-            <h2 className="font-lato font-semibold text-3xl my-2">
-              {new Intl.NumberFormat("en-IN", {
-                style: "currency",
-                currency: "INR",
-                minimumFractionDigits: 2,
-              }).format(Number(plan?.pricing ?? 0))}
-            </h2>
-            <div className="mt-4">
-              <h2 className="font-lato font-semibold text-3xl mb-2">
-                Sequences
+            <div className="my-3">
+              <h2 className="font-semibold text-xl my-2 text-[var(--pri)]">
+                Payment Schedule
               </h2>
               <div>
-                <div className="flex flex-wrap gap-2 mb-6 mt-2">
+                <div className="flex flex-wrap mb-3 mt-2 bg-[var(--pri)]/10 w-fit rounded-full">
                   {tabs.map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-4 py-2 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+                      className={`px-8 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${
                         activeTab === tab
                           ? "bg-[var(--pri)] text-white"
                           : "text-[var(--pri)] hover:text-[var(--pri)] hover:bg-[var(--sec)]/20"
@@ -521,7 +894,9 @@ const MartivoSubscriptions = ({
                     const isVisible =
                       activeTab === "All" ||
                       payment.previousStatus === activeTab;
+
                     if (!isVisible) return null;
+
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
@@ -553,62 +928,162 @@ const MartivoSubscriptions = ({
                     );
                   })}
                 </div>
-                <div
-                  className="border rounded-2xl p-6 mt-6"
-                  style={{ borderColor: primaryColor }}
-                >
-                  <div>
-                    <h6 className="font-semibold text-[16px] mb-3">
-                      Subscription Summary
-                    </h6>
-                    <hr />
+
+                {/* Add Members */}
+                <div className="flex items-center justify-end gap-8 mt-2">
+                  <p className="font-semibold">Add Members:</p>
+                  <div className="flex items-center gap-3 justify-end">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={decrement}
+                      className="rounded-sm"
+                    >
+                      <Minus size={20} strokeWidth={1.5} />
+                    </Button>
+                    <span className="w-6 text-center text-sm font-medium">
+                      {count}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={increment}
+                      className="rounded-sm"
+                    >
+                      <Plus size={20} strokeWidth={1.5} />
+                    </Button>
                   </div>
-                  <div className="grid grid-cols-2 mt-3">
+                </div>
+
+                <div className="border bg-white rounded-2xl p-6 mt-2">
+                  <div className="grid grid-cols-2">
                     <div className="space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3">
-                        Plan Name
-                      </h6>
-                      <p className="text-[#646464] text-[16px]">Start Date</p>
-                      <p className="text-[#646464] text-[16px]">End Date</p>
                       <p className="text-[#646464] text-[16px]">
                         Subscription Fee
                       </p>
+                      {appliedCoupon && (
+                        <p className="text-[#646464] text-[16px]">
+                          Coupon Discount
+                        </p>
+                      )}
                     </div>
+
                     <div className="text-right space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3">
-                        {plan?.name || "-"}
-                      </h6>
-                      <p className="text-[#646464] text-[16px]">
-                        {plan?.startDate ? formatDate(plan?.startDate) : "-"}
-                      </p>
-                      <p className="text-[#646464] text-[16px]">
-                        {plan?.endDate ? formatDate(plan?.endDate) : "-"}
-                      </p>
                       <p className="text-[#646464] text-[16px]">
                         {new Intl.NumberFormat("en-IN", {
                           style: "currency",
                           currency: "INR",
                           minimumFractionDigits: 2,
-                        }).format(Number(plan?.pricing ?? 0))}{" "}
-                        * {selectedAmounts.length}
+                        }).format(Number(baseAmountPerCycles || 0))}{" "}
+                        × {count} member{count > 1 ? "s" : ""}
                       </p>
+                      {appliedCoupon && (
+                        <p className="text-[#10A00D] text-[16px]">
+                          -{" "}
+                          {new Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                            minimumFractionDigits: 2,
+                          }).format(discountAmount)}
+                        </p>
+                      )}
+                      {/* Applied coupon badge */}
+                      {appliedCoupon && (
+                        <div className="flex justify-end mb-2 gap-2 items-center">
+                          <Badge
+                            variant="outline"
+                            className="border-green-500 text-green-700"
+                          >
+                            Applied coupon: {appliedCoupon.couponCode} (
+                            {appliedCoupon.discountType === "PERCENTAGE"
+                              ? `${appliedCoupon.discountValue}% off`
+                              : `₹${appliedCoupon.discountValue} off`}
+                            )
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer"
+                              type="button"
+                              onClick={handleRemoveCoupon}
+                              style={{ padding: 0 }}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </Badge>
+                        </div>
+                      )}
                     </div>
                   </div>
+
                   <hr className="my-3" />
+
                   <div className="grid grid-cols-2">
                     <div>
-                      <h6 className="font-semibold text-[16px] mb-3">Total</h6>
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
+                        Total
+                      </h6>
                     </div>
                     <div className="text-right">
-                      <h6 className="font-semibold text-[16px] mb-3">
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
                         ₹{totalAmount.toFixed(2)}
                       </h6>
                     </div>
                   </div>
-                  <div className="flex flex-row items-center justify-end gap-3">
-                    <Link href={"/plans"}>
-                      <Button variant={"outline"}>Cancel</Button>
-                    </Link>
+
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          className="flex items-center gap-2 cursor-pointer"
+                          variant={"outline"}
+                          disabled={totalAmount === 0}
+                        >
+                          <span>
+                            <Gift size={24} strokeWidth={1} />
+                          </span>
+                          Add Discount
+                        </Button>
+                      </DialogTrigger>
+
+                      <DialogContent
+                        style={{ color: primaryColor }}
+                        className="w-xl"
+                      >
+                        <DialogTitle>Apply Coupon Code</DialogTitle>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="text"
+                            placeholder="Enter Coupon"
+                            value={couponInput}
+                            onChange={(e) =>
+                              setCouponInput(e.target.value.toUpperCase())
+                            }
+                          />
+                          <Button
+                            style={{ backgroundColor: primaryColor }}
+                            onClick={() => handleApplyCoupon()}
+                          >
+                            Apply
+                          </Button>
+                        </div>
+
+                        <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
+                          {planData?.coupons?.map((coupon, idx) => (
+                            <Button
+                              key={idx}
+                              variant={"outline"}
+                              className="cursor-pointer"
+                              onClick={() =>
+                                handleApplyCoupon(coupon.couponCode)
+                              }
+                            >
+                              {coupon.couponCode}
+                            </Button>
+                          ))}
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+
                     <Button
                       disabled={totalAmount === 0}
                       onClick={() =>
@@ -624,7 +1099,6 @@ const MartivoSubscriptions = ({
                         color: "#fff",
                       }}
                     >
-                      {/* Pay ₹{totalAmount.toFixed(2)} */}
                       Continue to Payment
                     </Button>
                   </div>
@@ -634,6 +1108,7 @@ const MartivoSubscriptions = ({
           </div>
         </div>
       </div>
+
       <PaymentSuccess
         txnid={transaction?.txnid || ""}
         open={successOpen}
@@ -641,6 +1116,7 @@ const MartivoSubscriptions = ({
         timer={timer}
         onClose={handleSuccessClose}
       />
+
       <PaymentFailure
         open={failureOpen}
         onClose={handleFailureClose}
@@ -648,6 +1124,50 @@ const MartivoSubscriptions = ({
         txnid={transaction?.txnid || ""}
         timer={timer}
       />
+
+      <Dialog open={openPausePopup} onOpenChange={setOpenPausePopup}>
+        <DialogContent>
+          <DialogTitle></DialogTitle>
+          <div className="flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <Info size={45} color="red" strokeWidth={1.5} />
+              <p className="font-semibold text-sm md:text-[16px] text-black text-center">
+                Your plan is paused!
+              </p>
+              <p className="text-sm md:text-[16px] text-[#646464] text-center">
+                Your plan is paused from{" "}
+                {formatDates(subscriptionData?.pauseStartDate)} -{" "}
+                {formatDates(subscriptionData?.pauseEndDate)}.<br />
+                {subscriptionData?.remainingPauseDays} days remaining to resume
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <div className="bg-[#F9F9F9] p-4 rounded-xl">
+              <p className="mb-1 text-sm">After Pause Details</p>
+
+              <div className="grid grid-cols-2">
+                {[
+                  ["Resume Date", formatDates(subscriptionData?.pauseEndDate)],
+                  ["Expiry Date", formatDates(subscriptionData?.nextDueDate)],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <p className="text-[13px] text-[#777]">{label}</p>
+                    <p>{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-3 text-gray-400 text-[13px]">
+                Your subscription will be extended by{" "}
+                {subscriptionData?.pausedDays} days to account for the pause
+                period.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
