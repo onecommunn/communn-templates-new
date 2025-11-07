@@ -354,6 +354,13 @@ const RestraintSubscriptions = ({
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
 
+  const isPageLoading =
+    authContext?.loading ||
+    isLoading ||
+    !plan ||
+    !subscriptionData ||
+    sequencesList.length === 0;
+
   const searchParams = useSearchParams();
   const planID = searchParams.get("planid");
   const communityId = searchParams.get("communityid");
@@ -648,56 +655,88 @@ const RestraintSubscriptions = ({
     toast.info("Coupon removed");
   };
 
-  if (isLoading) {
+  if (isPageLoading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="rounded-2xl overflow-hidden mb-8">
-            <div className="relative aspect-[16/9] w-full">
-              <Skeleton className="absolute inset-0" />
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 space-y-4">
-              <Skeleton className="h-7 w-3/4" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-[92%]" />
-                <Skeleton className="h-4 w-[88%]" />
-                <Skeleton className="h-4 w-[80%]" />
-              </div>
-              <Skeleton className="h-5 w-56 mt-6" />
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-64" />
+      <main
+        className="flex-grow font-sora bg-[var(--sec)]/10"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+          } as React.CSSProperties
+        }
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
+          <div className="max-w-6xl mx-auto">
+            {/* Card-style skeleton to match the final layout */}
+            <div className="rounded-2xl border bg-white px-4 md:px-6 py-5 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-32" />
                 </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-52" />
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-24" />
                 </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-40" />
+                <div>
+                  <Skeleton className="h-3 w-16 mb-2" />
+                  <Skeleton className="h-4 w-28" />
                 </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-72" />
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div className="flex items-center justify-center">
+                  <Skeleton className="h-7 w-24 rounded-full" />
                 </div>
               </div>
+              <div className="mt-4">
+                <Skeleton className="h-3 w-24 mb-2" />
+                <Skeleton className="h-4 w-full mb-1" />
+                <Skeleton className="h-4 w-[90%]" />
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton className="h-5 w-32" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
+            {/* Payment schedule + summary skeleton */}
+            <div className="mb-3">
+              <Skeleton className="h-5 w-40 mb-3" />
+              <Skeleton className="h-8 w-64 rounded-full mb-4" />
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="flex flex-col items-center gap-2">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-10 w-24 rounded-2xl" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border bg-white rounded-2xl p-6">
+              <div className="grid grid-cols-2 gap-4 mb-3">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+                <div className="space-y-2 text-right">
+                  <Skeleton className="h-4 w-40 ml-auto" />
+                  <Skeleton className="h-4 w-32 ml-auto" />
+                </div>
+              </div>
+              <hr className="my-3" />
+              <div className="grid grid-cols-2 gap-4 items-center">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-5 w-28 ml-auto" />
+              </div>
+              <div className="mt-4 flex flex-wrap justify-end gap-3">
+                <Skeleton className="h-10 w-36 rounded-md" />
+                <Skeleton className="h-10 w-40 rounded-md" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -966,7 +1005,7 @@ const RestraintSubscriptions = ({
                               className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer"
                               type="button"
                               onClick={handleRemoveCoupon}
-                              style={{padding:0}}
+                              style={{ padding: 0 }}
                             >
                               <X className="h-3 w-3" />
                             </Button>
