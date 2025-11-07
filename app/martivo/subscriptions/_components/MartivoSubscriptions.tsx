@@ -760,7 +760,7 @@ const MartivoSubscriptions = ({
             <AccordionTrigger className="px-0 py-4 hover:no-underline">
               <div className="flex w-full items-center justify-between gap-4">
                 {/* Left: columns */}
-                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-5">
+                <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-5">
                   {/* Plan Name */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
@@ -817,9 +817,9 @@ const MartivoSubscriptions = ({
                     </p>
                   </div>
                   {/* Right: status pill (chevron is auto from AccordionTrigger) */}
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center md:justify-center">
                     <div
-                      className="text-xs rounded-full px-4 py-2 capitalize border text-center flex items-center justify-center w-fit"
+                      className="text-xs rounded-full px-4 py-2 capitalize border text-center flex items-center justify-center md:w-fit w-full"
                       style={{
                         backgroundColor:
                           subscriptionData?.subscription_status ===
