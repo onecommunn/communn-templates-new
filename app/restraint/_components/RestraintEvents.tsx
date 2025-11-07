@@ -266,7 +266,7 @@ export default function RestraintEvents({
     );
   }
 
-  // EMPTY
+  // EMPTY STATE
   if (!events?.length || events?.length < 0) {
     return (
       <section
@@ -280,9 +280,79 @@ export default function RestraintEvents({
         }
       >
         <div className="container mx-auto px-4 sm:px-6 md:px-20">
-          <div className="flex items-center">
-            No Events
+          {/* Label */}
+          <AnimatedContent
+            direction="vertical"
+            distance={50}
+            duration={0.55}
+            animateOpacity
+          >
+            <p className="text-sm font-normal uppercase tracking-[4.2px] text-black">
+              Events
+            </p>
+          </AnimatedContent>
+
+          {/* Heading + intro */}
+          <AnimatedContent
+            direction="vertical"
+            distance={70}
+            duration={0.7}
+            delay={0.05}
+            animateOpacity
+          >
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
+              <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
+                {content?.heading}{" "}
+                <span className="block" style={{ color: secondaryColor }}>
+                  {content?.subHeading}
+                </span>
+              </h2>
+
+              <p
+                className="max-w-xl text-[15px] leading-7"
+                style={{ color: SUBTEXT }}
+              >
+                {content?.description}
+              </p>
+            </div>
+          </AnimatedContent>
+
+          <div className="my-10 flex flex-col items-center justify-center text-center">
+            <h3 className="text-lg font-semibold text-gray-400 mb-2">
+              No Upcoming Events
+            </h3>
           </div>
+
+          {/* Divider */}
+          <AnimatedContent
+            direction="vertical"
+            distance={30}
+            duration={0.45}
+            delay={0.15}
+            animateOpacity
+          >
+            <div className="my-10 h-px w-full bg-black/10" />
+          </AnimatedContent>
+
+          {/* Stats row (stagger) */}
+          <AnimatedContent
+            direction="vertical"
+            distance={50}
+            duration={0.55}
+            stagger={0.12}
+            animateOpacity
+          >
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
+              {content?.features?.map((item, idx) => (
+                <Stat
+                  icon={item?.icon}
+                  value={item?.title}
+                  label={item?.description}
+                  key={idx}
+                />
+              ))}
+            </div>
+          </AnimatedContent>
         </div>
       </section>
     );
@@ -322,9 +392,9 @@ export default function RestraintEvents({
         >
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
             <h2 className="font-marcellus text-4xl leading-[1.1] text-[#222B21] md:text-5xl">
-              Experience excellence in{" "}
+              {content?.heading}{" "}
               <span className="block" style={{ color: secondaryColor }}>
-                yoga and meditation Events
+                {content?.subHeading}
               </span>
             </h2>
 
@@ -332,9 +402,7 @@ export default function RestraintEvents({
               className="max-w-xl text-[15px] leading-7"
               style={{ color: SUBTEXT }}
             >
-              Join us to experience expert-guided yoga and meditation practices
-              designed to enhance your physical health, mental clarity, and
-              overall well-being.
+              {content?.description}
             </p>
           </div>
         </AnimatedContent>
@@ -347,67 +415,76 @@ export default function RestraintEvents({
           delay={0.1}
           animateOpacity
         >
-          <div className="relative mt-8 ">
-            <Carousel
-              setApi={setApi}
-              opts={OPTIONS}
-              plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
-              className="w-full"
-            >
-              <CarouselContent>
-                {events.map((event) => {
-                  const availability = event?.availability;
-                  const end = availability?.[availability.length - 1]?.day;
-                  const isBookable = (() => {
-                    if (!end) return false;
-                    const today = new Date().setHours(0, 0, 0, 0);
-                    const endDate = new Date(end).setHours(0, 0, 0, 0);
-                    return today <= endDate;
-                  })();
-                  return (
-                    <CarouselItem
-                      className="basis-full sm:basis-1/2 md:basis-1/3"
-                      key={event?._id}
-                    >
-                      <Link href={`/event-details?eventid=${event._id}`}>
-                        <EventCard
-                          image={event?.coverImage?.value}
-                          title={event?.title}
-                          blurb={event?.description}
-                          date={formatMonthDay(availability?.[0]?.day)}
-                          price={event?.pricing}
-                        />
-                      </Link>
-                    </CarouselItem>
-                  );
-                })}
-              </CarouselContent>
-              <CarouselPrevious className="cursor-pointer hidden md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-              <CarouselNext className="cursor-pointer hidden md:flex  border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-            </Carousel>
+          {!events?.length || events?.length < 0 ? (
+            <>no event</>
+          ) : (
+            <>
+              {" "}
+              <div className="relative mt-8 ">
+                <Carousel
+                  setApi={setApi}
+                  opts={OPTIONS}
+                  plugins={[
+                    Autoplay({ delay: 3500, stopOnInteraction: false }),
+                  ]}
+                  className="w-full"
+                >
+                  <CarouselContent>
+                    {events.map((event) => {
+                      const availability = event?.availability;
+                      const end = availability?.[availability.length - 1]?.day;
+                      const isBookable = (() => {
+                        if (!end) return false;
+                        const today = new Date().setHours(0, 0, 0, 0);
+                        const endDate = new Date(end).setHours(0, 0, 0, 0);
+                        return today <= endDate;
+                      })();
+                      return (
+                        <CarouselItem
+                          className="basis-full sm:basis-1/2 md:basis-1/3"
+                          key={event?._id}
+                        >
+                          <Link href={`/event-details?eventid=${event._id}`}>
+                            <EventCard
+                              image={event?.coverImage?.value}
+                              title={event?.title}
+                              blurb={event?.description}
+                              date={formatMonthDay(availability?.[0]?.day)}
+                              price={event?.pricing}
+                            />
+                          </Link>
+                        </CarouselItem>
+                      );
+                    })}
+                  </CarouselContent>
+                  <CarouselPrevious className="cursor-pointer hidden md:flex border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+                  <CarouselNext className="cursor-pointer hidden md:flex  border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+                </Carousel>
 
-            {/* Dots */}
-            {events.length > 1 && (
-              <div className="mt-5 flex items-center justify-center gap-2">
-                {Array.from({ length: snapCount }).map((_, i) => {
-                  const active = i === selectedIndex;
-                  return (
-                    <button
-                      key={i}
-                      aria-label={`Go to slide ${i + 1}`}
-                      onClick={() => api?.scrollTo(i)}
-                      className={[
-                        "h-2.5 w-2.5 rounded-full transition-all",
-                        active
-                          ? "bg-[var(--sec)]"
-                          : "bg-slate-200 hover:bg-slate-300",
-                      ].join(" ")}
-                    />
-                  );
-                })}
+                {/* Dots */}
+                {events.length > 1 && (
+                  <div className="mt-5 flex items-center justify-center gap-2">
+                    {Array.from({ length: snapCount }).map((_, i) => {
+                      const active = i === selectedIndex;
+                      return (
+                        <button
+                          key={i}
+                          aria-label={`Go to slide ${i + 1}`}
+                          onClick={() => api?.scrollTo(i)}
+                          className={[
+                            "h-2.5 w-2.5 rounded-full transition-all",
+                            active
+                              ? "bg-[var(--sec)]"
+                              : "bg-slate-200 hover:bg-slate-300",
+                          ].join(" ")}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
         </AnimatedContent>
 
         {/* View all button */}

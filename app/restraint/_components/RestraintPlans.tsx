@@ -169,20 +169,25 @@ export default function RestraintPlans({
           </div>
         </div>
 
-        {/* Loading skeleton */}
-        {isLoading && data.length === 0 ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-100 animate-pulse rounded-2xl border border-[var(-pri)] bg-[var(--pri)]"
+                className="h-64 animate-pulse rounded-2xl border border-gray-200 bg-gray-100"
               />
             ))}
+          </div>
+        ) : data.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <h3 className="text-xl font-semibold text-gray-400">
+              No Plans Available
+            </h3>
           </div>
         ) : (
           <Carousel
             setApi={setApi}
-            opts={{ align: "start", loop: false, dragFree: true}}
+            opts={{ align: "start", loop: false, dragFree: true }}
             className="relative"
             plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
           >
@@ -236,19 +241,21 @@ export default function RestraintPlans({
           </Carousel>
         )}
       </div>
-      <div className="mt-2 flex w-full items-center justify-center">
-        <Link href={"/plans"}>
-          <button className="group relative mt-2 cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
-            <span className="relative z-10 inline-flex items-center gap-2">
-              View All
-              <ArrowUpRight
-                className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
-                strokeWidth={2}
-              />
-            </span>
-          </button>
-        </Link>
-      </div>
+      {!(data.length === 0) && (
+        <div className="mt-2 flex w-full items-center justify-center">
+          <Link href={"/plans"}>
+            <button className="group relative mt-2 cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
+              <span className="relative z-10 inline-flex items-center gap-2">
+                View All
+                <ArrowUpRight
+                  className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
+                  strokeWidth={2}
+                />
+              </span>
+            </button>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
@@ -335,7 +342,9 @@ export function PlanCard({
       {/* Image */}
       <div className="relative h-40 w-full overflow-hidden md:h-48">
         <Image
-          src={plan.image || coverImage || "/assets/restraint-plans-image-1.jpg"}
+          src={
+            plan.image || coverImage || "/assets/restraint-plans-image-1.jpg"
+          }
           alt={plan.name}
           fill
           className="object-cover"
@@ -529,9 +538,7 @@ export function PlanCard({
               text={isSubscribed ? "Subscribed" : "Subscribe"}
               href={`/subscriptions/?planid=${encodeURIComponent(
                 planId
-              )}&communityid=${encodeURIComponent(
-                communityId || ""
-              )}`}
+              )}&communityid=${encodeURIComponent(communityId || "")}`}
               color={color}
               isSubscribed={isSubscribed}
             />
@@ -558,7 +565,9 @@ function ChooseButton({
     <Link
       href={href}
       className={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium ${
-        isSubscribed ?"text-[var(--color)] border border-[var(--color)] bg-none" : "text-white bg-[var(--color)]"
+        isSubscribed
+          ? "text-[var(--color)] border border-[var(--color)] bg-none"
+          : "text-white bg-[var(--color)]"
       } transition`}
       style={
         {

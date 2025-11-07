@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { IAddUser } from '../models/user.model';
+import { useEffect, useRef, useState, useCallback } from "react";
+import { IAddUser } from "../models/user.model";
 import { jwtDecode } from "jwt-decode";
-import axios from 'axios';
-import { usePathname, useRouter } from 'next/navigation';
-import { BASE_URL } from '@/configurations/url.config';
+import axios from "axios";
+import { usePathname, useRouter } from "next/navigation";
+import { BASE_URL } from "@/configurations/url.config";
 
 interface ApiResponse {
   user: {
@@ -31,28 +31,28 @@ const setTokens = ({ accessToken, refreshToken }: any) => {
     accessToken &&
     accessToken !== null &&
     accessToken !== undefined &&
-    accessToken !== ''
+    accessToken !== ""
   ) {
-    localStorage.setItem('access-token', accessToken);
-    localStorage.setItem('refresh-token', refreshToken);
+    localStorage.setItem("access-token", accessToken);
+    localStorage.setItem("refresh-token", refreshToken);
   }
 };
 
 const setCommunityTols = (communityId: any) => {
-  localStorage.setItem('communityId', communityId);
+  localStorage.setItem("communityId", communityId);
 };
 
 const getTokens = () => {
   return {
-    accessToken: localStorage.getItem('access-token'),
-    refreshToken: localStorage.getItem('refresh-token'),
+    accessToken: localStorage.getItem("access-token"),
+    refreshToken: localStorage.getItem("refresh-token"),
   };
 };
 
 const removeTokens = () => {
-  localStorage.removeItem('access-token');
-  localStorage.removeItem('refresh-token');
-  localStorage.removeItem('community');
+  localStorage.removeItem("access-token");
+  localStorage.removeItem("refresh-token");
+  localStorage.removeItem("community");
 };
 
 const purgeStoredState = () => {
@@ -115,11 +115,11 @@ export const useAuth = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           }
         );
-        
+
         // console.log('User response:', userResponse.data);
 
         // Handle both cases: user data directly in response or nested under user property
@@ -127,12 +127,12 @@ export const useAuth = () => {
         if (userData) {
           const userWithoutToken = { ...userData };
           delete userWithoutToken.token;
-          
+
           // Update all states in a single batch
           setUser(userWithoutToken);
           setIsAuthenticated(true);
           setAccessToken(token);
-          
+
           // console.log('Auth state updated:', {
           //   user: userWithoutToken,
           //   isAuthenticated: true,
@@ -148,7 +148,7 @@ export const useAuth = () => {
             //   remainingTime,
             //   isExpired: remainingTime < 0
             // });
-            
+
             if (remainingTime < 0) {
               // console.log('Token is expired, clearing auth state');
               removeTokens();
@@ -170,17 +170,17 @@ export const useAuth = () => {
           }
         }
       } catch (apiError: any) {
-        console.error('API Error:', {
+        console.error("API Error:", {
           status: apiError.response?.status,
           data: apiError.response?.data,
-          message: apiError.message
+          message: apiError.message,
         });
-        
+
         if (apiError.response?.status === 401) {
           // console.log('Token is invalid or expired, clearing auth state');
           removeTokens();
         }
-        
+
         setUser(null);
         setIsAuthenticated(false);
         setAccessToken(null);
@@ -195,28 +195,31 @@ export const useAuth = () => {
     }
   }, []);
 
-  const verifyToken = useCallback(async (token: string) => {
-    try {
-      const decoded: { exp: number } = jwtDecode(token);
-      const remainingTime = decoded.exp - ((Date.now() / 1000) | 0);
-      
-      if (remainingTime < 100) {
-        // console.log('Token expired, clearing interval');
-        clearInterval(intervalId.current);
-        getNewToken();
-      } else {
-        if (!isAuthenticated || !user) {
-          // console.log('Token valid but no user data, fetching user data');
-          await fetchUserData(token);
+  const verifyToken = useCallback(
+    async (token: string) => {
+      try {
+        const decoded: { exp: number } = jwtDecode(token);
+        const remainingTime = decoded.exp - ((Date.now() / 1000) | 0);
+
+        if (remainingTime < 100) {
+          // console.log('Token expired, clearing interval');
+          clearInterval(intervalId.current);
+          getNewToken();
+        } else {
+          if (!isAuthenticated || !user) {
+            // console.log('Token valid but no user data, fetching user data');
+            await fetchUserData(token);
+          }
         }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+        setUser(null);
+        setIsAuthenticated(false);
+        setAccessToken(null);
       }
-    } catch (error) {
-      console.error('Error verifying token:', error);
-      setUser(null);
-      setIsAuthenticated(false);
-      setAccessToken(null);
-    }
-  }, [isAuthenticated, user, fetchUserData]);
+    },
+    [isAuthenticated, user, fetchUserData]
+  );
 
   const getNewToken = useCallback(() => {
     setLoading(false);
@@ -229,20 +232,21 @@ export const useAuth = () => {
         // console.log('Auth already initialized');
         return;
       }
-      
+
       try {
         setLoading(true);
         const params = new URLSearchParams(window.location.search);
-        const token = params?.get('token') || localStorage.getItem('access-token');
+        const token =
+          params?.get("token") || localStorage.getItem("access-token");
 
         // console.log('Initializing auth with token:', token ? 'Token exists' : 'No token');
 
         if (token) {
-          if (params.get('token')) {
-            console.log('Setting tokens from URL params');
+          if (params.get("token")) {
+            console.log("Setting tokens from URL params");
             setTokens({ accessToken: token, refreshToken: token });
           }
-          
+
           await fetchUserData(token);
         } else {
           // console.log('No token found, clearing auth state');
@@ -251,7 +255,7 @@ export const useAuth = () => {
           setAccessToken(null);
         }
       } catch (error) {
-        console.error('Error in initializeAuth:', error);
+        console.error("Error in initializeAuth:", error);
         setUser(null);
         setIsAuthenticated(false);
         setAccessToken(null);
@@ -267,9 +271,9 @@ export const useAuth = () => {
   // Handle route changes and page reloads
   useEffect(() => {
     const handleRouteChange = () => {
-      const token = localStorage.getItem('access-token');
+      const token = localStorage.getItem("access-token");
       // console.log('Route change detected, checking token:', token ? 'Token exists' : 'No token');
-      
+
       if (token && (!isAuthenticated || !user)) {
         // console.log('Token exists but no user data, fetching user data');
         fetchUserData(token);
@@ -277,13 +281,13 @@ export const useAuth = () => {
     };
 
     // Handle page reloads
-    window.addEventListener('load', handleRouteChange);
-    
+    window.addEventListener("load", handleRouteChange);
+
     // Handle route changes using pathname
     handleRouteChange();
 
     return () => {
-      window.removeEventListener('load', handleRouteChange);
+      window.removeEventListener("load", handleRouteChange);
     };
   }, [pathname, isAuthenticated, user, fetchUserData]);
 
@@ -305,81 +309,74 @@ export const useAuth = () => {
   }, [accessToken, verifyToken]);
 
   const getAccessToken = useCallback(() => {
-    return accessToken ?? '';
+    return accessToken ?? "";
   }, [accessToken]);
 
   const getCommunity = useCallback(() => {
-    return community ?? localStorage.getItem('community') ?? '';
+    return community ?? localStorage.getItem("community") ?? "";
   }, [community]);
 
-  const autoLogin = useCallback(async (phoneNumber: string, emailId: string) => {
+  const autoLogin = async (phoneNumber: string, emailId: string) => {
     try {
-      // console.log('Starting autoLogin with:', { phoneNumber, emailId });
-      
       const response = await axios.post<ApiResponse>(
         `${BASE_URL}/auth/autoLogin`,
-        {
-          phoneNumber,
-          emailId,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+        { phoneNumber, emailId },
+        { headers: { "Content-Type": "application/json" } }
       );
-      
-      // console.log('AutoLogin API Response:', response.data);
-      
+
       if (response.status === 200) {
         const { user } = response.data;
-        // console.log('User data from response:', user);
-        
+
         const tokens = user?.token;
-        // console.log('Tokens from response:', tokens);
-        
         if (tokens) {
           setTokens(tokens);
           setAccessToken(tokens.accessToken || null);
           setRefreshToken(tokens.refreshToken || null);
         }
-        
+
         setIsAuthenticated(true);
-        
+
         const OnlyUser = { ...user };
-        delete OnlyUser['token'];
-        // console.log('Setting user state with:', OnlyUser);
+        delete OnlyUser["token"];
         setUser(OnlyUser);
+      } else {
+        // Non-200 → not authenticated
+        setIsAuthenticated(false);
       }
-      return response;
+
+      return response; // ✅ always return on success
     } catch (err: any) {
-      // console.log('AutoLogin error:', err);
       setIsAuthenticated(false);
-      //return err?.response ? err?.response : err;
+      // ✅ return something instead of nothing
+      return err?.response ?? err;
     }
-  }, []);
+  };
 
   const autoCreate = useCallback(async (formData: IAddUser) => {
     try {
       const response = await axios.post<ApiResponse>(
         `${BASE_URL}/auth/autoCreate`,
         formData,
-        { headers: { 'Content-Type': 'application/json' } }
+        { headers: { "Content-Type": "application/json" } }
       );
       if (response.status === 200) {
         const { user, adminCommunities } = response.data;
         const tokens = user?.token;
-        
+
         if (tokens) {
           setTokens(tokens);
           setAccessToken(tokens.accessToken || null);
           setRefreshToken(tokens.refreshToken || null);
         }
-        
+
         if (adminCommunities?.[0]?.community._id) {
           setCommunityTols(adminCommunities[0].community._id);
         }
-        
+
         setIsAuthenticated(true);
-        
+
         const OnlyUser = { ...user };
-        delete OnlyUser['token'];
+        delete OnlyUser["token"];
         setUser(OnlyUser);
       }
 
@@ -411,5 +408,3 @@ export const useAuth = () => {
     roleType,
   };
 };
-
-

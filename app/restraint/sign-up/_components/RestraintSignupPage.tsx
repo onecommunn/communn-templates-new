@@ -212,7 +212,7 @@ const RestraintSignupPage = () => {
               </button>
             </div>
           </form>
-          <p className="text-center text-sm text-[var(--pri)] mt-8">
+          {/* <p className="text-center text-sm text-[var(--pri)] mt-8">
             Already have an account?{" "}
             <Link
               href="/login"
@@ -220,7 +220,7 @@ const RestraintSignupPage = () => {
             >
               Login
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </main>

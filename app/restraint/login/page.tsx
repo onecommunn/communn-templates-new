@@ -36,19 +36,16 @@ const RestraintLogin = () => {
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
 
-  // Redirect authenticated users
   useEffect(() => {
     if (authContext?.isAuthenticated) router.push("/");
   }, [authContext?.isAuthenticated]);
 
-  // Countdown timer for resend OTP
   useEffect(() => {
     if (resendTimer <= 0) return;
     const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
     return () => clearInterval(interval);
   }, [resendTimer]);
 
-  // Input validation
   const isInputValid = () => {
     if (useEmail) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mobileNumber);
     return /^\d{10}$/.test(mobileNumber);
@@ -93,7 +90,7 @@ const RestraintLogin = () => {
     requestOtp();
   };
 
-  // Handle login / OTP verification
+  
   const handleLogin = async () => {
     if (otp.length !== 6) {
       toast.error("Please enter a valid 6-digit OTP");
@@ -107,29 +104,36 @@ const RestraintLogin = () => {
       else verifyResponse = await verifyOtp(mobileNumber, otp);
 
       if (verifyResponse.status === 200) {
-        const res: any = await authContext.autoLogin(
+        let res: any = null;
+        res = await authContext.autoLogin(
           useEmail ? "" : mobileNumber,
           useEmail ? mobileNumber : "",
           null
         );
 
+        console.log(res,'res')
+
         if (res.status === 200) {
           toast.success("Login successful!");
           router.push("/");
-        } else if (res.status === 500) {
+        } else if (res.status === 403) {
+          toast.error(
+            "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."
+          );
+        } else if (res.status === 404) {
           toast.error("User not found. Please sign up.");
           const queryKey = useEmail ? "email" : "mobile";
-          // router.push(
-          //   `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
-          // );
+          router.push(
+            `/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`
+          );
         } else toast.error("Login failed. Please try again.");
-      } else if (verifyResponse.status === 500) {
-        toast.error("User not found. Please sign up.");
-        const queryKey = useEmail ? "email" : "mobile";
-        // router.push(`/sign-up?${queryKey}=${encodeURIComponent(mobileNumber)}`);
-      } else toast.error("Invalid OTP. Please try again.");
-    } catch (error) {
-      toast.error("Verification failed. Please try again.");
+
+        if (res?.response?.status === 401) {
+          toast.error("Incorrect Password/Username.");
+        } else if (res?.response?.status === 404) {
+          toast.error("User not Found, check your Account Credentials");
+        }
+      }
     } finally {
       setLoading(false);
     }
