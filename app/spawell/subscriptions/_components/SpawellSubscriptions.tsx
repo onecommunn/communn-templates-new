@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import { ISequences, ISubscribers } from "@/models/plan.model";
 import { AuthContext } from "@/contexts/Auth.context";
@@ -9,11 +10,33 @@ import { usePayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/components/utils/PaymentSuccess";
 import PaymentFailure from "@/components/utils/PaymentFailure";
-import Image from "next/image";
-import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/components/utils/StringFunctions";
+import { CirclePause, Gift, Info, Loader2, Minus, Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { useSubscription } from "@/hooks/useSubscription";
+import { Subscription } from "@/models/Subscription.model";
+
+const formatDates = (dateStr?: string) => {
+  if (!dateStr) return "-";
+  const date = new Date(dateStr);
+  return date.toLocaleString("en-GB", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const PaymentScheduleItem = ({
   date,
@@ -29,8 +52,6 @@ const PaymentScheduleItem = ({
   onSelect: () => void;
 }) => {
   const isDisabled = status === "paid";
-
-  // console.log(isSelected, "isSelected")
 
   return (
     <div
@@ -76,6 +97,21 @@ interface Sequences {
   status: string;
 }
 
+interface PlanData {
+  _id: string;
+  coupons: {
+    _id: string;
+    couponCode: string;
+    cycleCount: number;
+    discountName: string;
+    discountType: "PERCENTAGE" | "FLAT" | string;
+    discountValue: number;
+    expiryDate: string;
+    maxRedemptions: number;
+    usedRedemptions: number;
+  }[];
+}
+
 interface Plan {
   name: string;
   duration: string;
@@ -84,15 +120,21 @@ interface Plan {
   endDate: string;
   pricing: string;
   description?: string;
+  nextDueDate: string;
+  minPauseDays?: number;
+  maxPauseDays?: number;
+  isPauseUserVisible: boolean;
+  isPauseUserApprovalRequired?: boolean;
+  plan: { _id: string; isPauseUserVisible: boolean };
 }
 
-const SpawellSubscriptions = ({
+const RestraintSubscriptions = ({
   primaryColor,
   secondaryColor,
   neutralColor,
 }: {
-  secondaryColor: string;
   primaryColor: string;
+  secondaryColor: string;
   neutralColor: string;
 }) => {
   const [activeTab, setActiveTab] = useState("All");
@@ -102,6 +144,7 @@ const SpawellSubscriptions = ({
   const [placePrice, setPlacePrice] = useState<string>("0");
   const [sequencesList, setSequencesList] = useState<Sequences[]>([]);
   const [plan, setPlan] = useState<Plan>();
+  const [planData, setPlanData] = useState<PlanData>();
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [community, setCommunity] = useState("");
@@ -116,19 +159,139 @@ const SpawellSubscriptions = ({
     { id: string; amount: number; startDate: string; courseAmount?: string }[]
   >([]);
   const [subscriptions, setSubscriptions] = useState<ISubscribers>();
+  const [isPauseSubmitting, setIsPauseSubmitting] = useState(false);
   const [sequences, setSequences] = useState<ISequences[]>([]);
+  const [count, setCount] = useState(1);
+  const [isPauseOpen, setIsPauseOpen] = useState(false);
+  const [pauseDuration, setPauseDuration] = useState<number | "">("");
+  const [pauseError, setPauseError] = useState("");
+  const [startImmediately, setStartImmediately] = useState(true);
+  const [pauseStartDate, setPauseStartDate] = useState<string>("");
+  const [openPausePopup, setOpenPausePopup] = useState<boolean>(false);
+  const [resumeDate, setResumeDate] = useState<string>("");
+  const [pauseExpiryDate, setPauseExpiryDate] = useState<string>("");
+  const { pauseSubscription } = useSubscription();
+  const [subscriptionData, setSubscriptionData] = useState<Subscription>();
+
+  const addDays = (date: Date, days: number) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+  };
+
+  const formatDisplayDate = (d: Date) =>
+    d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+  useEffect(() => {
+    if (
+      !pauseDuration ||
+      typeof pauseDuration !== "number" ||
+      pauseDuration <= 0
+    ) {
+      setResumeDate("");
+      setPauseExpiryDate("");
+      return;
+    }
+
+    const baseStart = startImmediately
+      ? new Date()
+      : pauseStartDate
+      ? new Date(pauseStartDate)
+      : undefined;
+
+    if (!baseStart) return;
+
+    const resume = addDays(baseStart, pauseDuration);
+    setResumeDate(formatDisplayDate(resume));
+
+    if (plan?.endDate) {
+      const expiry = addDays(new Date(plan.endDate), pauseDuration);
+      setPauseExpiryDate(formatDisplayDate(expiry));
+    } else {
+      setPauseExpiryDate(formatDisplayDate(resume));
+    }
+  }, [pauseDuration, startImmediately, pauseStartDate, plan?.endDate]);
+
+  const handlePauseSubmit = async () => {
+    if (
+      !subscriptionId ||
+      typeof pauseDuration !== "number" ||
+      pauseDuration < (plan?.minPauseDays ?? 3) ||
+      pauseDuration > (plan?.maxPauseDays ?? 180)
+    ) {
+      return;
+    }
+
+    const lastPaidSequence = sequencesList
+      ?.filter((seq) => seq.status === "PAID" || seq.status === "PAID_BY_CASH")
+      ?.slice(-1)[0];
+
+    if (!lastPaidSequence) {
+      toast.error("No paid sequence found to base pause on.");
+      return;
+    }
+
+    const effectiveStartDate =
+      startImmediately || !pauseStartDate
+        ? new Date().toISOString()
+        : new Date(pauseStartDate).toISOString();
+
+    try {
+      setIsPauseSubmitting(true);
+      const res: any = await pauseSubscription(
+        subscriptionId,
+        pauseDuration,
+        lastPaidSequence._id,
+        effectiveStartDate
+      );
+
+      if (res?.data?.status) {
+        toast.success(
+          plan?.isPauseUserApprovalRequired
+            ? "Pause request sent successfully!"
+            : "Subscription paused successfully!"
+        );
+      } else {
+        toast.info(res?.data?.message);
+      }
+
+      console.log(res, "res");
+
+      setIsPauseOpen(false);
+    } catch (err) {
+      console.error("Error pausing subscription", err);
+      toast.error("Failed to pause subscription. Please try again.");
+    } finally {
+      setIsPauseSubmitting(false);
+      await handlegetSequencesById();
+    }
+  };
+
+  const decrement = () => setCount((prev) => Math.max(1, prev - 1));
+  const increment = () => setCount((prev) => prev + 1);
+
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<
+    PlanData["coupons"][number] | null
+  >(null);
 
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
 
   const searchParams = useSearchParams();
   const planID = searchParams.get("planid");
-
   const communityId = searchParams.get("communityid");
-  const imageUrl = searchParams.get("image");
 
-  const { createSubscriptionSequencesByPlanAndCommunityId, getSequencesById } =
-    usePlans();
+  const {
+    createSubscriptionSequencesByPlanAndCommunityId,
+    getSequencesById,
+    getPlansById,
+  } = usePlans();
+
   const {
     initiatePaymentByIds,
     getPaymentStatusById,
@@ -143,8 +306,25 @@ const SpawellSubscriptions = ({
   ]);
 
   useEffect(() => {
+    getPlanDataById();
+  }, []);
+
+  const getPlanDataById = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getPlansById(planID ?? "");
+      setPlanData(response?.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     setMounted(true);
   }, []);
+
   useEffect(() => {}, [authContext]);
 
   const handleCreateSubscription = async () => {
@@ -152,6 +332,7 @@ const SpawellSubscriptions = ({
       console.warn("User ID not ready yet");
       return;
     }
+
     try {
       setIsLoading(true);
       const response: any =
@@ -160,8 +341,10 @@ const SpawellSubscriptions = ({
           communityId || "",
           planID || ""
         );
+
       setPlan(response?.subscription?.plan);
       setSubscriptionId(response?.subscription?._id);
+      setSubscriptionData(response?.subscription);
     } catch (error) {
       console.error("Error creating subscription:", error);
     } finally {
@@ -207,6 +390,7 @@ const SpawellSubscriptions = ({
   }, [subscriptionId]);
 
   const tabs = ["All", "PAID", "NOT_PAID"];
+
   const formatStatus = (status: string) => {
     return status
       .toLowerCase()
@@ -227,6 +411,12 @@ const SpawellSubscriptions = ({
     setSuccessOpen(false);
   };
 
+  useEffect(() => {
+    if (subscriptionData?.subscription_status === "PAUSED") {
+      setOpenPausePopup(true);
+    }
+  }, [subscriptionData?.subscription_status]);
+
   const handleFailureClose = () => {
     setTimer(3);
     setFailureOpen(false);
@@ -234,13 +424,13 @@ const SpawellSubscriptions = ({
 
   const paymentResponse = async (response: any, selectedSequences: any) => {
     try {
-      // console.log('💬 FULL PAYMENT RESPONSE:', response);
-
       const tnxId = response?.transactionId;
       const transaction = response?.transaction as IPaymentList;
+
       if (transaction) {
         setTransaction(transaction);
       }
+
       if (response?.url) {
         const screenWidth = window.screen.width;
         const screenHeight = window.screen.height;
@@ -256,9 +446,11 @@ const SpawellSubscriptions = ({
 
         const intervalRef = setInterval(async () => {
           const paymentStatus = await getPaymentStatusById(tnxId);
+
           if (paymentStatus && paymentStatus.length > 0) {
             clearInterval(intervalRef);
             windowRef?.close();
+
             if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
               await updateSequencesPaymentStatus(
                 communityId || "",
@@ -283,6 +475,7 @@ const SpawellSubscriptions = ({
       setPayLoading(true);
       setCommunity(communityId);
       setplanId(planId);
+
       const amount = totalAmount.toString();
       const response = await initiatePaymentByIds(
         userId,
@@ -290,9 +483,11 @@ const SpawellSubscriptions = ({
         sequenceId,
         amount
       );
+
       const sequenceIds = selectedAmounts
         ?.filter((item: any) => item?.id)
         .map((item: any) => item.id);
+
       paymentResponse(response, sequenceIds);
       handlegetSequencesById();
     } catch (error) {
@@ -323,120 +518,105 @@ const SpawellSubscriptions = ({
     });
   };
 
-  const totalAmount = selectedAmounts.reduce(
+  const baseAmountPerCycles = selectedAmounts.reduce(
     (acc, curr) =>
       acc + curr.amount + (Number(subscriptions?.courseAmount) || 0),
     0
   );
 
+  const baseAmount = baseAmountPerCycles * count;
+
+  const discountAmount =
+    appliedCoupon && baseAmount > 0
+      ? appliedCoupon.discountType === "PERCENTAGE"
+        ? (baseAmount * appliedCoupon.discountValue) / 100
+        : appliedCoupon.discountValue
+      : 0;
+
+  const totalAmount = Math.max(0, baseAmount - discountAmount);
+
+  const handleApplyCoupon = (codeFromButton?: string) => {
+    const code =
+      (codeFromButton ?? couponInput).trim().toUpperCase() || undefined;
+
+    if (!code) {
+      toast.error("Please enter a coupon code");
+      return;
+    }
+
+    const coupon = planData?.coupons.find(
+      (c) => c.couponCode.toUpperCase() === code
+    );
+
+    if (!coupon) {
+      toast.error("Invalid coupon code");
+      return;
+    }
+
+    const now = new Date();
+    const expiry = new Date(coupon.expiryDate);
+
+    if (expiry < now) {
+      toast.error("This coupon has expired");
+      return;
+    }
+
+    if (coupon.usedRedemptions >= coupon.maxRedemptions) {
+      toast.error("Coupon usage limit reached");
+      return;
+    }
+
+    setAppliedCoupon(coupon);
+    setCouponInput(coupon.couponCode);
+    toast.success("Coupon applied");
+  };
+
   if (isLoading) {
     return (
-      <div
-        className="mx-auto px-4 sm:px-6 lg:px-20"
-        style={{ backgroundColor: neutralColor }}
-      >
+      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="rounded-2xl overflow-hidden mb-8">
             <div className="relative aspect-[16/9] w-full">
-              <Skeleton
-                className="absolute inset-0"
-                style={{ backgroundColor: primaryColor }}
-              />
+              <Skeleton className="absolute inset-0" />
             </div>
           </div>
 
-          <div className="grid md:grid-cols-1 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-4">
-              <Skeleton
-                className="h-7 w-3/4"
-                style={{ backgroundColor: primaryColor }}
-              />
+              <Skeleton className="h-7 w-3/4" />
               <div className="space-y-2">
-                <Skeleton
-                  className="h-4 w-full"
-                  style={{ backgroundColor: primaryColor }}
-                />
-                <Skeleton
-                  className="h-4 w-[92%]"
-                  style={{ backgroundColor: primaryColor }}
-                />
-                <Skeleton
-                  className="h-4 w-[88%]"
-                  style={{ backgroundColor: primaryColor }}
-                />
-                <Skeleton
-                  className="h-4 w-[80%]"
-                  style={{ backgroundColor: primaryColor }}
-                />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-[92%]" />
+                <Skeleton className="h-4 w-[88%]" />
+                <Skeleton className="h-4 w-[80%]" />
               </div>
-              <Skeleton
-                className="h-5 w-56 mt-6"
-                style={{ backgroundColor: primaryColor }}
-              />
+              <Skeleton className="h-5 w-56 mt-6" />
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-64"
-                    style={{ backgroundColor: primaryColor }}
-                  />
+                  <Skeleton className="h-2 w-2 rounded-full" />
+                  <Skeleton className="h-4 w-64" />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-52"
-                    style={{ backgroundColor: primaryColor }}
-                  />
+                  <Skeleton className="h-2 w-2 rounded-full" />
+                  <Skeleton className="h-4 w-52" />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-40"
-                    style={{ backgroundColor: primaryColor }}
-                  />
+                  <Skeleton className="h-2 w-2 rounded-full" />
+                  <Skeleton className="h-4 w-40" />
                 </div>
                 <div className="flex items-center gap-3">
-                  <Skeleton
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  <Skeleton
-                    className="h-4 w-72"
-                    style={{ backgroundColor: primaryColor }}
-                  />
+                  <Skeleton className="h-2 w-2 rounded-full" />
+                  <Skeleton className="h-4 w-72" />
                 </div>
               </div>
             </div>
+
             <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton
-                className="h-5 w-32"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
-              <Skeleton
-                className="h-10 w-full rounded-md"
-                style={{ backgroundColor: primaryColor }}
-              />
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-10 w-full rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
             </div>
           </div>
         </div>
@@ -446,20 +626,30 @@ const SpawellSubscriptions = ({
 
   return (
     <main
-      className="flex-grow bg-white font-inter"
+      className="flex-grow bg-white font-sora"
       style={{ backgroundColor: neutralColor, color: primaryColor }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
-        <CreatorSectionHeader
-          title={plan?.name || ""}
-          textColor={primaryColor}
-        />
+        <div className="text-center mb-6">
+          <h2 className="font-marcellus text-4xl leading-tight text-[var(--pri)] sm:text-5xl">
+            {plan?.name}
+          </h2>
+          {/* {plan?.description && (
+            <p
+              className="text-[16px] text-[#707070] max-w-2xl mx-auto font-marcellus"
+              style={{ color: neutralColor }}
+            >
+              {plan?.description}
+            </p>
+          )} */}
+        </div>
+
         <div className="mx-auto pb-4">
           {/* Cover image */}
-          <div className="rounded-2xl overflow-hidden mb-8">
+          {/* <div className="rounded-2xl overflow-hidden mb-8">
             <div className="relative aspect-[18/9] w-full">
               <Image
-                src={imageUrl || "/assets/spawell-event-image-3.png "}
+                src={imageUrl || "/assets/creatorCoursesPlaceHolderImage.jpg"}
                 alt={plan?.name || "plan Image"}
                 fill
                 className="object-cover"
@@ -467,27 +657,33 @@ const SpawellSubscriptions = ({
                 unoptimized
               />
             </div>
-          </div>
+          </div> */}
+
           <div>
             <div>
-              <h2 className="font-poppins font-semibold text-3xl mb-2">
+              <h2 className="font-marcellus font-semibold text-3xl mb-2 text-[var(--pri)]">
                 Description
               </h2>
-              <p className="font-inter text-[16px]">{plan?.description}</p>
+              <p className="font-sora text-[16px] text-gray-500">
+                {plan?.description}
+              </p>
             </div>
-            <h2 className="font-poppins font-semibold text-3xl my-2">
+
+            <h2 className="font-sora font-semibold text-3xl my-2 text-[var(--pri)]">
               {new Intl.NumberFormat("en-IN", {
                 style: "currency",
                 currency: "INR",
                 minimumFractionDigits: 2,
               }).format(Number(plan?.pricing ?? 0))}
             </h2>
+
             <div className="mt-4">
-              <h2 className="font-poppins font-semibold text-3xl mb-2">
+              <h2 className="font-marcellus font-semibold text-3xl mb-2 text-[var(--pri)]">
                 Sequences
               </h2>
+
               <div>
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-wrap gap-2 mb-6 mt-2">
                   {tabs.map((tab) => (
                     <button
                       key={tab}
@@ -513,7 +709,9 @@ const SpawellSubscriptions = ({
                     const isVisible =
                       activeTab === "All" ||
                       payment.previousStatus === activeTab;
+
                     if (!isVisible) return null;
+
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
@@ -545,19 +743,334 @@ const SpawellSubscriptions = ({
                     );
                   })}
                 </div>
+
+                {/* Add Members */}
+                <div className="flex items-center justify-end gap-8 mt-6">
+                  <p className="font-semibold">Add Members:</p>
+                  <div className="flex items-center gap-3 justify-end">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={decrement}
+                      className="rounded-sm"
+                    >
+                      <Minus size={20} strokeWidth={1.5} />
+                    </Button>
+                    <span className="w-6 text-center text-sm font-medium">
+                      {count}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={increment}
+                      className="rounded-sm"
+                    >
+                      <Plus size={20} strokeWidth={1.5} />
+                    </Button>
+                  </div>
+                </div>
+
                 <div
-                  className="border rounded-2xl p-6 mt-6"
+                  className="border bg-white rounded-2xl p-6 mt-6"
                   style={{ borderColor: primaryColor }}
                 >
-                  <div>
-                    <h6 className="font-semibold text-[16px] mb-3">
+                  <div className="flex flex-col md:flex-row gap-2 md:items-center md:justify-between mb-3">
+                    <h6 className="font-semibold text-[16px] mb-3 font-marcellus text-[var(--pri)]">
                       Subscription Summary
                     </h6>
-                    <hr />
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="text-xs rounded-full px-4 py-2 capitalize border"
+                        style={{
+                          backgroundColor:
+                            subscriptionData?.subscription_status ===
+                              "INACTIVE" ||
+                            subscriptionData?.subscription_status === "STOP"
+                              ? "#ffa87d1a"
+                              : subscriptionData?.subscription_status ===
+                                "PAUSED"
+                              ? "#f5e58a1a"
+                              : "#10a00d1a",
+                          color:
+                            subscriptionData?.subscription_status ===
+                              "INACTIVE" ||
+                            subscriptionData?.subscription_status === "STOP"
+                              ? "#ffa87d"
+                              : subscriptionData?.subscription_status ===
+                                "PAUSED"
+                              ? "#d9b300"
+                              : "#10A00D",
+                          border:
+                            subscriptionData?.subscription_status ===
+                              "INACTIVE" ||
+                            subscriptionData?.subscription_status === "STOP"
+                              ? "1px solid #ffa87d"
+                              : subscriptionData?.subscription_status ===
+                                "PAUSED"
+                              ? "1px solid #f5e58a"
+                              : "1px solid #10a00d",
+                        }}
+                      >
+                        {subscriptionData?.subscription_status === "INACTIVE"
+                          ? "Inactive"
+                          : subscriptionData?.subscription_status === "STOP"
+                          ? "Stopped"
+                          : subscriptionData?.subscription_status === "PAUSED"
+                          ? "Paused"
+                          : "Active"}
+                      </button>
+
+                      {plan?.isPauseUserVisible &&
+                        subscriptionData?.subscription_status === "ACTIVE" && (
+                          <Dialog
+                            open={isPauseOpen}
+                            onOpenChange={setIsPauseOpen}
+                          >
+                            <DialogTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="flex items-center gap-2 text-[#3B9B7F] border border-[#3B9B7F]/40 hover:bg-[#3B9B7F]/10 hover:border-[#3B9B7F] transition-all duration-200 rounded-lg px-4 py-2 shadow-sm hover:shadow-md cursor-pointer font-medium"
+                              >
+                                <CirclePause
+                                  size={18}
+                                  strokeWidth={1.8}
+                                  color="#3B9B7F"
+                                />
+                                <span>Pause Subscription</span>
+                              </Button>
+                            </DialogTrigger>
+
+                            <DialogContent className="max-w-lg">
+                              <DialogTitle className="text-lg font-semibold">
+                                Pause Subscription
+                              </DialogTitle>
+
+                              <p className="text-sm text-gray-500">
+                                Temporarily pause your member&apos;s
+                                subscription.
+                              </p>
+
+                              {/* Current Details */}
+                              <div className="border rounded-lg p-4 bg-gray-50">
+                                <p className="text-xs font-semibold text-gray-500 mb-2">
+                                  Current Details
+                                </p>
+                                <div className="grid grid-cols-2 gap-y-1 text-sm">
+                                  <span className="text-gray-500">Member</span>
+                                  <span className="text-gray-900 text-right">
+                                    {authContext?.user?.name ||
+                                      authContext?.user?.fullName ||
+                                      "-"}
+                                  </span>
+
+                                  <span className="text-gray-500">Plan</span>
+                                  <span className="text-gray-900 text-right">
+                                    {plan?.name || "-"}
+                                  </span>
+
+                                  <span className="text-gray-500">
+                                    Start Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {plan?.startDate
+                                      ? formatDate(plan.startDate)
+                                      : "-"}
+                                  </span>
+
+                                  <span className="text-gray-500">
+                                    Expiry Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {plan?.endDate
+                                      ? formatDate(plan.endDate)
+                                      : "-"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Pause Duration */}
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Pause Duration
+                                </label>
+                                <Input
+                                  type="number"
+                                  min={plan?.minPauseDays ?? 3}
+                                  max={plan?.maxPauseDays ?? 180}
+                                  value={
+                                    pauseDuration === "" ? "" : pauseDuration
+                                  }
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    const num = val === "" ? "" : Number(val);
+                                    setPauseDuration(num);
+
+                                    if (val === "") {
+                                      setPauseError("");
+                                      return;
+                                    }
+
+                                    if (
+                                      typeof num !== "number" ||
+                                      isNaN(num) ||
+                                      num < (plan?.minPauseDays ?? 3) ||
+                                      num > (plan?.maxPauseDays ?? 180)
+                                    ) {
+                                      setPauseError(
+                                        `Please enter between ${
+                                          plan?.minPauseDays ?? 3
+                                        } and ${plan?.maxPauseDays ?? 180} days`
+                                      );
+                                    } else {
+                                      setPauseError("");
+                                    }
+                                  }}
+                                  className={
+                                    pauseError
+                                      ? "border-red-500 focus-visible:ring-red-500"
+                                      : undefined
+                                  }
+                                />
+                                {pauseError && (
+                                  <p className="mt-1 text-xs text-red-500">
+                                    {pauseError}
+                                  </p>
+                                )}
+                                <p className="mt-1 text-xs text-gray-500">
+                                  {`Allowed Duration: ${
+                                    plan?.minPauseDays ?? 3
+                                  } to ${plan?.maxPauseDays ?? 180} days`}
+                                </p>
+                              </div>
+
+                              {/* Start Immediately */}
+                              <div className="flex items-center justify-between mt-1">
+                                <p className="text-sm text-gray-600">
+                                  Start Immediately
+                                </p>
+                                <Switch
+                                  checked={startImmediately}
+                                  onCheckedChange={(val) =>
+                                    setStartImmediately(val)
+                                  }
+                                />
+                              </div>
+
+                              {/* Start Date (when not immediate) */}
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Pause Start Date
+                                </label>
+                                <Input
+                                  type="date"
+                                  disabled={startImmediately}
+                                  value={pauseStartDate}
+                                  onChange={(e) =>
+                                    setPauseStartDate(e.target.value)
+                                  }
+                                  className={
+                                    startImmediately
+                                      ? "bg-gray-100 cursor-not-allowed"
+                                      : ""
+                                  }
+                                />
+                              </div>
+
+                              {/* After Pause Details */}
+                              <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
+                                <p className="text-xs font-semibold text-gray-500 mb-2">
+                                  After Pause Details
+                                </p>
+                                <div className="grid grid-cols-2 gap-y-1">
+                                  <span className="text-gray-500">
+                                    Resume Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {resumeDate || "--/--/----"}
+                                  </span>
+
+                                  <span className="text-gray-500">
+                                    Expiry Date
+                                  </span>
+                                  <span className="text-gray-900 text-right">
+                                    {pauseExpiryDate || "--/--/----"}
+                                  </span>
+                                </div>
+                                <p className="mt-2 text-xs text-gray-500">
+                                  Your subscription will be extended by{" "}
+                                  {typeof pauseDuration === "number" &&
+                                  pauseDuration > 0
+                                    ? pauseDuration
+                                    : 0}{" "}
+                                  days to account for the pause period.
+                                </p>
+                              </div>
+
+                              <DialogFooter>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setIsPauseOpen(false)}
+                                  className="cursor-pointer"
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  type="button"
+                                  disabled={
+                                    isPauseSubmitting ||
+                                    pauseDuration === 0 ||
+                                    pauseDuration === null ||
+                                    typeof pauseDuration !== "number" ||
+                                    pauseDuration < (plan?.minPauseDays ?? 3) ||
+                                    pauseDuration > (plan?.maxPauseDays ?? 180)
+                                  }
+                                  onClick={handlePauseSubmit}
+                                  className="flex items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                                  style={{ backgroundColor: "#3B9B7F" }}
+                                >
+                                  {isPauseSubmitting ? (
+                                    <>
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                      <span>Processing...</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      {plan?.isPauseUserApprovalRequired
+                                        ? "Send Request"
+                                        : "Confirm Pause"}
+                                    </>
+                                  )}
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        )}
+                    </div>
                   </div>
+
+                  {/* Applied coupon badge */}
+                  {appliedCoupon && (
+                    <div className="flex justify-end mb-2">
+                      <Badge
+                        variant="outline"
+                        className="border-green-500 text-green-700"
+                      >
+                        Applied coupon: {appliedCoupon.couponCode} (
+                        {appliedCoupon.discountType === "PERCENTAGE"
+                          ? `${appliedCoupon.discountValue}% off`
+                          : `₹${appliedCoupon.discountValue} off`}
+                        )
+                      </Badge>
+                    </div>
+                  )}
+
+                  <hr />
+
                   <div className="grid grid-cols-2 mt-3">
                     <div className="space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3">
+                      <h6 className="font-semibold text-[16px] mb-3 font-marcellus text-[var(--pri)]">
                         Plan Name
                       </h6>
                       <p className="text-[#646464] text-[16px]">Start Date</p>
@@ -565,9 +1078,15 @@ const SpawellSubscriptions = ({
                       <p className="text-[#646464] text-[16px]">
                         Subscription Fee
                       </p>
+                      {appliedCoupon && (
+                        <p className="text-[#646464] text-[16px]">
+                          Coupon Discount
+                        </p>
+                      )}
                     </div>
+
                     <div className="text-right space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3">
+                      <h6 className="font-semibold text-[16px] mb-3 font-marcellus text-[var(--pri)]">
                         {plan?.name || "-"}
                       </h6>
                       <p className="text-[#646464] text-[16px]">
@@ -581,26 +1100,108 @@ const SpawellSubscriptions = ({
                           style: "currency",
                           currency: "INR",
                           minimumFractionDigits: 2,
-                        }).format(Number(plan?.pricing ?? 0))}{" "}
-                        * {selectedAmounts.length}
+                        }).format(Number(baseAmountPerCycles || 0))}{" "}
+                        × {count} member{count > 1 ? "s" : ""}
                       </p>
+                      {appliedCoupon && (
+                        <p className="text-[#10A00D] text-[16px]">
+                          -{" "}
+                          {new Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                            minimumFractionDigits: 2,
+                          }).format(discountAmount)}
+                        </p>
+                      )}
                     </div>
                   </div>
+
                   <hr className="my-3" />
+
                   <div className="grid grid-cols-2">
                     <div>
-                      <h6 className="font-semibold text-[16px] mb-3">Total</h6>
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
+                        Total
+                      </h6>
                     </div>
                     <div className="text-right">
-                      <h6 className="font-semibold text-[16px] mb-3">
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
                         ₹{totalAmount.toFixed(2)}
                       </h6>
                     </div>
                   </div>
-                  <div className="flex flex-row items-center justify-end gap-3">
-                    <Link href={"/plans"}>
-                      <Button variant={"outline"}>Cancel</Button>
-                    </Link>
+
+                  <div className="my-1 mb-3 flex items-center justify-end">
+                    {/* {planData?.coupons?.length} */}
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
+                    {/* <Link href={"/plans"}>
+                      <Button
+                        variant={"outline"}
+                        style={{
+                          color: primaryColor,
+                          borderColor: primaryColor,
+                        }}
+                        className=" border border-[#C2A74E] rounded-none text-[#C2A74E] hover:text-[#C2A74E] cursor-pointer px-[37px] py-[22px]"
+                      >
+                        Cancel
+                      </Button>
+                    </Link> */}
+
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          className="flex items-center gap-2 cursor-pointer"
+                          variant={"outline"}
+                          disabled={totalAmount === 0}
+                        >
+                          <span>
+                            <Gift size={24} strokeWidth={1} />
+                          </span>
+                          Add Discount
+                        </Button>
+                      </DialogTrigger>
+
+                      <DialogContent
+                        style={{ color: primaryColor }}
+                        className="w-xl"
+                      >
+                        <DialogTitle>Apply Coupon Code</DialogTitle>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="text"
+                            placeholder="Enter Coupon"
+                            value={couponInput}
+                            onChange={(e) =>
+                              setCouponInput(e.target.value.toUpperCase())
+                            }
+                          />
+                          <Button
+                            style={{ backgroundColor: primaryColor }}
+                            onClick={() => handleApplyCoupon()}
+                          >
+                            Apply
+                          </Button>
+                        </div>
+
+                        <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
+                          {planData?.coupons?.map((coupon, idx) => (
+                            <Button
+                              key={idx}
+                              variant={"outline"}
+                              className="cursor-pointer"
+                              onClick={() =>
+                                handleApplyCoupon(coupon.couponCode)
+                              }
+                            >
+                              {coupon.couponCode}
+                            </Button>
+                          ))}
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+
                     <Button
                       disabled={totalAmount === 0}
                       onClick={() =>
@@ -616,7 +1217,6 @@ const SpawellSubscriptions = ({
                         color: "#fff",
                       }}
                     >
-                      {/* Pay ₹{totalAmount.toFixed(2)} */}
                       Continue to Payment
                     </Button>
                   </div>
@@ -626,6 +1226,7 @@ const SpawellSubscriptions = ({
           </div>
         </div>
       </div>
+
       <PaymentSuccess
         txnid={transaction?.txnid || ""}
         open={successOpen}
@@ -633,6 +1234,7 @@ const SpawellSubscriptions = ({
         timer={timer}
         onClose={handleSuccessClose}
       />
+
       <PaymentFailure
         open={failureOpen}
         onClose={handleFailureClose}
@@ -640,8 +1242,52 @@ const SpawellSubscriptions = ({
         txnid={transaction?.txnid || ""}
         timer={timer}
       />
+
+      <Dialog open={openPausePopup} onOpenChange={setOpenPausePopup}>
+        <DialogContent>
+          <DialogTitle></DialogTitle>
+          <div className="flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <Info size={45} color="red" strokeWidth={1.5} />
+              <p className="font-semibold text-sm md:text-[16px] text-black text-center">
+                Your plan is paused!
+              </p>
+              <p className="text-sm md:text-[16px] text-[#646464] text-center">
+                Your plan is paused from{" "}
+                {formatDates(subscriptionData?.pauseStartDate)} -{" "}
+                {formatDates(subscriptionData?.pauseEndDate)}.<br />
+                {subscriptionData?.remainingPauseDays} days remaining to resume
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <div className="bg-[#F9F9F9] p-4 rounded-xl">
+              <p className="mb-1 text-sm">After Pause Details</p>
+
+              <div className="grid grid-cols-2">
+                {[
+                  ["Resume Date", formatDates(subscriptionData?.pauseEndDate)],
+                  ["Expiry Date", formatDates(subscriptionData?.nextDueDate)],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <p className="text-[13px] text-[#777]">{label}</p>
+                    <p>{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-3 text-gray-400 text-[13px]">
+                Your subscription will be extended by{" "}
+                {subscriptionData?.pausedDays} days to account for the pause
+                period.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
 
-export default SpawellSubscriptions;
+export default RestraintSubscriptions;
