@@ -68,7 +68,7 @@ const PaymentScheduleItem = ({
          isDisabled
            ? "opacity-50 cursor-not-allowed border-gray-200"
            : isSelected
-           ? "border-none bg-gray-100"
+           ? "border-none bg-[var(--pri)]/20"
            : "border-transparent"
        }`}
     >
@@ -757,7 +757,7 @@ const RestraintSubscriptions = ({
             className="rounded-2xl border bg-white px-4 md:px-6 "
             style={{ border: `1px solid ${primaryColor}` }}
           >
-            <AccordionTrigger className="px-0 py-4 hover:no-underline [&>svg]:hidden">
+            <AccordionTrigger className="px-0 py-4 hover:no-underline">
               <div className="flex w-full items-center justify-between gap-4">
                 {/* Left: columns */}
                 <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-5">

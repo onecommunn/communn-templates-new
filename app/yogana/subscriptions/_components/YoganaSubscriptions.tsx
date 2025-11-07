@@ -11,8 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/components/utils/PaymentSuccess";
 import PaymentFailure from "@/components/utils/PaymentFailure";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/components/utils/StringFunctions";
-import { CirclePause, Gift, Info, Loader2, Minus, Plus } from "lucide-react";
+import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { Gift, Info, Minus, Plus, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -23,9 +23,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Switch } from "@/components/ui/switch";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Subscription } from "@/models/Subscription.model";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const formatDates = (dateStr?: string) => {
   if (!dateStr) return "-";
@@ -63,7 +68,7 @@ const PaymentScheduleItem = ({
          isDisabled
            ? "opacity-50 cursor-not-allowed border-gray-200"
            : isSelected
-           ? "border-none bg-gray-100"
+           ? "border-none bg-[var(--pri)]/20"
            : "border-transparent"
        }`}
     >
@@ -126,7 +131,76 @@ interface Plan {
   isPauseUserVisible: boolean;
   isPauseUserApprovalRequired?: boolean;
   plan: { _id: string; isPauseUserVisible: boolean };
+  coupons: any[];
 }
+
+const StaticValues = {
+  ACTIVE: "Active",
+  INACTIVE: "Inactive",
+  INVALID: "Invalid",
+  ADMIN: "Admin",
+  USER: "Member",
+  MODERATOR: "Moderator",
+  YES: "Yes",
+  NO: "No",
+  YEAR: "Year",
+  MONTH: "Month",
+  DAY: "Day",
+  WEEK: "Week",
+  YEARLY: "Yearly",
+  MONTHLY: "Monthly",
+  WEEKLY: "Weekly",
+  DAILY: "Daily",
+  QUARTERLY: "Quarterly",
+  HALF_YEARLY: "Half Yearly",
+  ONE_TIME: "One Time",
+  FREE: "Free",
+  PAID: "Paid",
+  PUBLIC: "Public",
+  PRIVATE: "Private",
+  BUSYNESS: "Business",
+  Business: "Business",
+  TECHNOLOGY: "Technology",
+  "Role Type": "Role",
+  INVITED: "Invited",
+  IN_ACTIVE: "In_Active",
+  userCancelled: "Cancelled",
+  FAILURE: "Failed",
+  SUCCESS: "Success",
+  USERCANCELLED: "Cancelled",
+  DROPPED: "Dropped",
+  SUPERADMIN: "Superadmin",
+  dayly: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
+  quarterly: "Quarterly",
+  half_yearly: "Half Yearly",
+  one_time: "One Time",
+  yearly: "Yearly",
+  REJECT: "Reject",
+  NOT_PAID: "Not Paid",
+  EXPIRED: "Expired",
+  CANCELLED: "Cancelled",
+  PAID_BY_CASH: "Paid By Cash",
+  Settled: "Settled",
+  NA: "NA",
+  PENDING: "Pending",
+  PENDINGPAYMENT: "Pay now",
+  FOREVER: "Forever",
+  ALLDAYS: "All Days",
+  MONDAY: "Mon",
+  TUESDAY: "Tue",
+  WEDNESDAY: "Weds",
+  THURSDAY: "Thu",
+  FRIDAY: "Fri",
+  SATURDAY: "Sat",
+  SUNDAY: "Sun",
+  CUSTOM: "Custom",
+};
+const getStaticValue = (key: string) => {
+  //console.log(key);
+  return StaticValues[key as keyof typeof StaticValues]; // Use type assertion
+};
 
 const YoganaSubscriptions = ({
   primaryColor,
@@ -282,6 +356,13 @@ const YoganaSubscriptions = ({
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
 
+  const isPageLoading =
+    authContext?.loading ||
+    isLoading ||
+    !plan ||
+    !subscriptionData ||
+    sequencesList.length === 0;
+
   const searchParams = useSearchParams();
   const planID = searchParams.get("planid");
   const communityId = searchParams.get("communityid");
@@ -311,10 +392,13 @@ const YoganaSubscriptions = ({
 
   const getPlanDataById = async () => {
     try {
+      setIsLoading(true);
       const response = await getPlansById(planID ?? "");
       setPlanData(response?.data);
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -567,140 +651,241 @@ const YoganaSubscriptions = ({
     setCouponInput(coupon.couponCode);
     toast.success("Coupon applied");
   };
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput("");
+    toast.info("Coupon removed");
+  };
 
-  if (isLoading) {
+  if (isPageLoading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="rounded-2xl overflow-hidden mb-8">
-            <div className="relative aspect-[16/9] w-full">
-              <Skeleton className="absolute inset-0" />
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 space-y-4">
-              <Skeleton className="h-7 w-3/4" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-[92%]" />
-                <Skeleton className="h-4 w-[88%]" />
-                <Skeleton className="h-4 w-[80%]" />
+      <main
+        className="flex-grow font-sora bg-[var(--pri)]/10"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+            "--neu":neutralColor
+          } as React.CSSProperties
+        }
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
+          <div className="max-w-6xl mx-auto">
+            {/* Card-style skeleton to match the final layout */}
+            <div className="rounded-2xl border bg-white px-4 md:px-6 py-5 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div>
+                  <Skeleton className="h-3 w-16 mb-2" />
+                  <Skeleton className="h-4 w-28" />
+                </div>
+                <div>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div className="flex items-center justify-center">
+                  <Skeleton className="h-7 w-24 rounded-full" />
+                </div>
               </div>
-              <Skeleton className="h-5 w-56 mt-6" />
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-64" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-52" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-40" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-72" />
-                </div>
+              <div className="mt-4">
+                <Skeleton className="h-3 w-24 mb-2" />
+                <Skeleton className="h-4 w-full mb-1" />
+                <Skeleton className="h-4 w-[90%]" />
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton className="h-5 w-32" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
+            {/* Payment schedule + summary skeleton */}
+            <div className="mb-3">
+              <Skeleton className="h-5 w-40 mb-3" />
+              <Skeleton className="h-8 w-64 rounded-full mb-4" />
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="flex flex-col items-center gap-2">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-10 w-24 rounded-2xl" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border bg-white rounded-2xl p-6">
+              <div className="grid grid-cols-2 gap-4 mb-3">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+                <div className="space-y-2 text-right">
+                  <Skeleton className="h-4 w-40 ml-auto" />
+                  <Skeleton className="h-4 w-32 ml-auto" />
+                </div>
+              </div>
+              <hr className="my-3" />
+              <div className="grid grid-cols-2 gap-4 items-center">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-5 w-28 ml-auto" />
+              </div>
+              <div className="mt-4 flex flex-wrap justify-end gap-3">
+                <Skeleton className="h-10 w-36 rounded-md" />
+                <Skeleton className="h-10 w-40 rounded-md" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <main className="flex-grow bg-[#C2A74E1A] font-plus-jakarta">
+    <main
+      className="flex-grow font-plus-jakarta bg-white"
+       style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+            "--neu":neutralColor
+          } as React.CSSProperties
+        }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
-        <div className="text-center mb-6">
-          <h2
-            className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]"
-            style={{ color: primaryColor }}
+        <Accordion type="single" collapsible className="w-full space-y-3">
+          <AccordionItem
+            value={subscriptionData?._id || "Id"}
+            className="rounded-2xl border bg-white px-4 md:px-6 "
+            style={{ border: `1px solid ${primaryColor}` }}
           >
-            {plan?.name}
-          </h2>
-          {/* {plan?.description && (
-            <p
-              className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta"
-              style={{ color: neutralColor }}
-            >
-              {plan?.description}
-            </p>
-          )} */}
-        </div>
+            <AccordionTrigger className="px-0 py-4 hover:no-underline">
+              <div className="flex w-full items-center justify-between gap-4">
+                {/* Left: columns */}
+                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-5">
+                  {/* Plan Name */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Plan Name
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {plan?.name}
+                    </p>
+                  </div>
+                  {/* Plan Type */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Plan Type
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {capitalizeWords(plan?.duration || "")}
+                    </p>
+                  </div>
+                  {/* Price + offers */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Price
+                    </p>
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                      <p className="text-sm font-semibold text-slate-900">
+                        ₹{plan?.pricing} / {plan?.interval}{" "}
+                        {(plan?.interval ?? "0") > "1"
+                          ? `${getStaticValue(plan?.duration ?? "")}s`
+                          : getStaticValue(plan?.duration ?? "")}
+                      </p>
+                      {plan && plan?.coupons?.length > 0 && (
+                        <Badge
+                          variant="outline"
+                          className="flex items-center gap-1 rounded-full bg-emerald-50 text-xs font-medium text-emerald-700"
+                        >
+                          <Gift className="h-3 w-3" />
+                          {plan?.coupons?.length} Offer
+                          {plan?.coupons?.length > 1 ? "s" : ""}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  {/* Start Date */}
+                  <div>
+                    <p className="text-xs font-medium uppercase text-slate-500">
+                      Start Date
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {sequencesList?.[0]?.startDate
+                        ? new Date(sequencesList[0].startDate)
+                            .toISOString()
+                            .split("T")[0]
+                        : ""}
+                    </p>
+                  </div>
+                  {/* Right: status pill (chevron is auto from AccordionTrigger) */}
+                  <div className="flex items-center justify-center">
+                    <div
+                      className="text-xs rounded-full px-4 py-2 capitalize border text-center flex items-center justify-center w-fit"
+                      style={{
+                        backgroundColor:
+                          subscriptionData?.subscription_status ===
+                            "INACTIVE" ||
+                          subscriptionData?.subscription_status === "STOP"
+                            ? "#ffa87d1a"
+                            : subscriptionData?.subscription_status === "PAUSED"
+                            ? "#f5e58a1a"
+                            : "#10a00d1a",
+                        color:
+                          subscriptionData?.subscription_status ===
+                            "INACTIVE" ||
+                          subscriptionData?.subscription_status === "STOP"
+                            ? "#ffa87d"
+                            : subscriptionData?.subscription_status === "PAUSED"
+                            ? "#d9b300"
+                            : "#10A00D",
+                        border:
+                          subscriptionData?.subscription_status ===
+                            "INACTIVE" ||
+                          subscriptionData?.subscription_status === "STOP"
+                            ? "1px solid #ffa87d"
+                            : subscriptionData?.subscription_status === "PAUSED"
+                            ? "1px solid #f5e58a"
+                            : "1px solid #10a00d",
+                      }}
+                    >
+                      {subscriptionData?.subscription_status === "INACTIVE"
+                        ? "Inactive"
+                        : subscriptionData?.subscription_status === "STOP"
+                        ? "Stopped"
+                        : subscriptionData?.subscription_status === "PAUSED"
+                        ? "Paused"
+                        : "Active"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="border-t py-4 text-sm text-slate-700">
+              <p className="mb-1 font-semibold text-slate-900">Description</p>
+              <p className="leading-relaxed">{plan?.description}</p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
-        <div className="mx-auto pb-4">
-          {/* Cover image */}
-          {/* <div className="rounded-2xl overflow-hidden mb-8">
-            <div className="relative aspect-[18/9] w-full">
-              <Image
-                src={imageUrl || "/assets/creatorCoursesPlaceHolderImage.jpg"}
-                alt={plan?.name || "plan Image"}
-                fill
-                className="object-cover"
-                priority
-                unoptimized
-              />
-            </div>
-          </div> */}
-
+        <div className="mx-auto">
           <div>
-            <div>
-              <h2
-                className="font-cormorant font-semibold text-3xl mb-2"
-                style={{ color: secondaryColor }}
-              >
-                Description
+            <div className="my-3">
+              <h2 className="font-cormorant font-semibold text-xl md:text-2xl my-2 text-[var(--pri)]">
+                Payment Schedule
               </h2>
-              <p
-                className="font-plus-jakarta text-[16px]"
-                style={{ color: neutralColor }}
-              >
-                {plan?.description}
-              </p>
-            </div>
-
-            <h2
-              className="font-cormorant font-semibold text-5xl my-2"
-              style={{ color: primaryColor }}
-            >
-              {new Intl.NumberFormat("en-IN", {
-                style: "currency",
-                currency: "INR",
-                minimumFractionDigits: 2,
-              }).format(Number(plan?.pricing ?? 0))}
-            </h2>
-
-            <div className="mt-4">
-              <h2
-                className="font-cormorant font-semibold text-3xl mb-2"
-                style={{ color: secondaryColor }}
-              >
-                Sequences
-              </h2>
-
               <div>
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-wrap mb-3 mt-2 bg-[var(--pri)]/10 w-fit rounded-full">
                   {tabs.map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-4 py-2 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+                      className={`px-8 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${
                         activeTab === tab
-                          ? "bg-gray-100 text-gray-700"
-                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                          ? "bg-[var(--pri)] text-white"
+                          : "text-[var(--pri)] hover:text-[var(--pri)] hover:bg-[var(--pri)]/20"
                       }`}
                     >
                       {formatStatus(tab)}
@@ -749,7 +934,7 @@ const YoganaSubscriptions = ({
                 </div>
 
                 {/* Add Members */}
-                <div className="flex items-center justify-end gap-8 mt-6">
+                <div className="flex items-center justify-end gap-8 mt-2">
                   <p className="font-semibold">Add Members:</p>
                   <div className="flex items-center gap-3 justify-end">
                     <Button
@@ -774,308 +959,9 @@ const YoganaSubscriptions = ({
                   </div>
                 </div>
 
-                <div className="border bg-white rounded-2xl p-6 mt-6">
-                  <div className="flex flex-col md:flex-row gap-2 md:items-center md:justify-between mb-3">
-                    <h6 className="font-semibold text-[16px] font-plus-jakarta">
-                      Subscription Summary
-                    </h6>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        className="text-xs rounded-full px-4 py-2 capitalize border"
-                        style={{
-                          backgroundColor:
-                            subscriptionData?.subscription_status ===
-                              "INACTIVE" ||
-                            subscriptionData?.subscription_status === "STOP"
-                              ? "#ffa87d1a"
-                              : subscriptionData?.subscription_status ===
-                                "PAUSED"
-                              ? "#f5e58a1a"
-                              : "#10a00d1a",
-                          color:
-                            subscriptionData?.subscription_status ===
-                              "INACTIVE" ||
-                            subscriptionData?.subscription_status === "STOP"
-                              ? "#ffa87d"
-                              : subscriptionData?.subscription_status ===
-                                "PAUSED"
-                              ? "#d9b300"
-                              : "#10A00D",
-                          border:
-                            subscriptionData?.subscription_status ===
-                              "INACTIVE" ||
-                            subscriptionData?.subscription_status === "STOP"
-                              ? "1px solid #ffa87d1a"
-                              : subscriptionData?.subscription_status ===
-                                "PAUSED"
-                              ? "1px solid #f5e58a1a"
-                              : "1px solid #10a00d1a",
-                        }}
-                      >
-                        {subscriptionData?.subscription_status === "INACTIVE"
-                          ? "Inactive"
-                          : subscriptionData?.subscription_status === "STOP"
-                          ? "Stopped"
-                          : subscriptionData?.subscription_status === "PAUSED"
-                          ? "Paused"
-                          : "Active"}
-                      </button>
-
-                      {plan?.isPauseUserVisible &&
-                        subscriptionData?.subscription_status === "ACTIVE" && (
-                          <Dialog
-                            open={isPauseOpen}
-                            onOpenChange={setIsPauseOpen}
-                          >
-                            <DialogTrigger asChild>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                className="flex items-center gap-2 text-[#3B9B7F] border border-[#3B9B7F]/40 hover:bg-[#3B9B7F]/10 hover:border-[#3B9B7F] transition-all duration-200 rounded-lg px-4 py-2 shadow-sm hover:shadow-md cursor-pointer font-medium"
-                              >
-                                <CirclePause
-                                  size={18}
-                                  strokeWidth={1.8}
-                                  color="#3B9B7F"
-                                />
-                                <span>Pause Subscription</span>
-                              </Button>
-                            </DialogTrigger>
-
-                            <DialogContent className="max-w-lg">
-                              <DialogTitle className="text-lg font-semibold">
-                                Pause Subscription
-                              </DialogTitle>
-
-                              <p className="text-sm text-gray-500">
-                                Temporarily pause your member&apos;s
-                                subscription.
-                              </p>
-
-                              {/* Current Details */}
-                              <div className="border rounded-lg p-4 bg-gray-50">
-                                <p className="text-xs font-semibold text-gray-500 mb-2">
-                                  Current Details
-                                </p>
-                                <div className="grid grid-cols-2 gap-y-1 text-sm">
-                                  <span className="text-gray-500">Member</span>
-                                  <span className="text-gray-900 text-right">
-                                    {authContext?.user?.name ||
-                                      authContext?.user?.fullName ||
-                                      "-"}
-                                  </span>
-
-                                  <span className="text-gray-500">Plan</span>
-                                  <span className="text-gray-900 text-right">
-                                    {plan?.name || "-"}
-                                  </span>
-
-                                  <span className="text-gray-500">
-                                    Start Date
-                                  </span>
-                                  <span className="text-gray-900 text-right">
-                                    {plan?.startDate
-                                      ? formatDate(plan.startDate)
-                                      : "-"}
-                                  </span>
-
-                                  <span className="text-gray-500">
-                                    Expiry Date
-                                  </span>
-                                  <span className="text-gray-900 text-right">
-                                    {plan?.endDate
-                                      ? formatDate(plan.endDate)
-                                      : "-"}
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Pause Duration */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  Pause Duration
-                                </label>
-                                <Input
-                                  type="number"
-                                  min={plan?.minPauseDays ?? 3}
-                                  max={plan?.maxPauseDays ?? 180}
-                                  value={
-                                    pauseDuration === "" ? "" : pauseDuration
-                                  }
-                                  onChange={(e) => {
-                                    const val = e.target.value;
-                                    const num = val === "" ? "" : Number(val);
-                                    setPauseDuration(num);
-
-                                    if (val === "") {
-                                      setPauseError("");
-                                      return;
-                                    }
-
-                                    if (
-                                      typeof num !== "number" ||
-                                      isNaN(num) ||
-                                      num < (plan?.minPauseDays ?? 3) ||
-                                      num > (plan?.maxPauseDays ?? 180)
-                                    ) {
-                                      setPauseError(
-                                        `Please enter between ${
-                                          plan?.minPauseDays ?? 3
-                                        } and ${plan?.maxPauseDays ?? 180} days`
-                                      );
-                                    } else {
-                                      setPauseError("");
-                                    }
-                                  }}
-                                  className={
-                                    pauseError
-                                      ? "border-red-500 focus-visible:ring-red-500"
-                                      : undefined
-                                  }
-                                />
-                                {pauseError && (
-                                  <p className="mt-1 text-xs text-red-500">
-                                    {pauseError}
-                                  </p>
-                                )}
-                                <p className="mt-1 text-xs text-gray-500">
-                                  {`Allowed Duration: ${
-                                    plan?.minPauseDays ?? 3
-                                  } to ${plan?.maxPauseDays ?? 180} days`}
-                                </p>
-                              </div>
-
-                              {/* Start Immediately */}
-                              <div className="flex items-center justify-between mt-1">
-                                <p className="text-sm text-gray-600">
-                                  Start Immediately
-                                </p>
-                                <Switch
-                                  checked={startImmediately}
-                                  onCheckedChange={(val) =>
-                                    setStartImmediately(val)
-                                  }
-                                />
-                              </div>
-
-                              {/* Start Date (when not immediate) */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  Pause Start Date
-                                </label>
-                                <Input
-                                  type="date"
-                                  disabled={startImmediately}
-                                  value={pauseStartDate}
-                                  onChange={(e) =>
-                                    setPauseStartDate(e.target.value)
-                                  }
-                                  className={
-                                    startImmediately
-                                      ? "bg-gray-100 cursor-not-allowed"
-                                      : ""
-                                  }
-                                />
-                              </div>
-
-                              {/* After Pause Details */}
-                              <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
-                                <p className="text-xs font-semibold text-gray-500 mb-2">
-                                  After Pause Details
-                                </p>
-                                <div className="grid grid-cols-2 gap-y-1">
-                                  <span className="text-gray-500">
-                                    Resume Date
-                                  </span>
-                                  <span className="text-gray-900 text-right">
-                                    {resumeDate || "--/--/----"}
-                                  </span>
-
-                                  <span className="text-gray-500">
-                                    Expiry Date
-                                  </span>
-                                  <span className="text-gray-900 text-right">
-                                    {pauseExpiryDate || "--/--/----"}
-                                  </span>
-                                </div>
-                                <p className="mt-2 text-xs text-gray-500">
-                                  Your subscription will be extended by{" "}
-                                  {typeof pauseDuration === "number" &&
-                                  pauseDuration > 0
-                                    ? pauseDuration
-                                    : 0}{" "}
-                                  days to account for the pause period.
-                                </p>
-                              </div>
-
-                              <DialogFooter>
-                                <Button
-                                  variant="outline"
-                                  onClick={() => setIsPauseOpen(false)}
-                                  className="cursor-pointer"
-                                >
-                                  Cancel
-                                </Button>
-                                <Button
-                                  type="button"
-                                  disabled={
-                                    isPauseSubmitting ||
-                                    pauseDuration === 0 ||
-                                    pauseDuration === null ||
-                                    typeof pauseDuration !== "number" ||
-                                    pauseDuration < (plan?.minPauseDays ?? 3) ||
-                                    pauseDuration > (plan?.maxPauseDays ?? 180)
-                                  }
-                                  onClick={handlePauseSubmit}
-                                  className="flex items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                                  style={{ backgroundColor: "#3B9B7F" }}
-                                >
-                                  {isPauseSubmitting ? (
-                                    <>
-                                      <Loader2 className="h-4 w-4 animate-spin" />
-                                      <span>Processing...</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      {plan?.isPauseUserApprovalRequired
-                                        ? "Send Request"
-                                        : "Confirm Pause"}
-                                    </>
-                                  )}
-                                </Button>
-                              </DialogFooter>
-                            </DialogContent>
-                          </Dialog>
-                        )}
-                    </div>
-                  </div>
-
-                  {/* Applied coupon badge */}
-                  {appliedCoupon && (
-                    <div className="flex justify-end mb-2">
-                      <Badge
-                        variant="outline"
-                        className="border-green-500 text-green-700"
-                      >
-                        Applied coupon: {appliedCoupon.couponCode} (
-                        {appliedCoupon.discountType === "PERCENTAGE"
-                          ? `${appliedCoupon.discountValue}% off`
-                          : `₹${appliedCoupon.discountValue} off`}
-                        )
-                      </Badge>
-                    </div>
-                  )}
-
-                  <hr />
-
-                  <div className="grid grid-cols-2 mt-3">
+                <div className="border bg-white rounded-2xl p-6 mt-2">
+                  <div className="grid grid-cols-2">
                     <div className="space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3">
-                        Plan Name
-                      </h6>
-                      <p className="text-[#646464] text-[16px]">Start Date</p>
-                      <p className="text-[#646464] text-[16px]">End Date</p>
                       <p className="text-[#646464] text-[16px]">
                         Subscription Fee
                       </p>
@@ -1087,15 +973,6 @@ const YoganaSubscriptions = ({
                     </div>
 
                     <div className="text-right space-y-2">
-                      <h6 className="font-semibold text-[16px] mb-3">
-                        {plan?.name || "-"}
-                      </h6>
-                      <p className="text-[#646464] text-[16px]">
-                        {plan?.startDate ? formatDate(plan?.startDate) : "-"}
-                      </p>
-                      <p className="text-[#646464] text-[16px]">
-                        {plan?.endDate ? formatDate(plan?.endDate) : "-"}
-                      </p>
                       <p className="text-[#646464] text-[16px]">
                         {new Intl.NumberFormat("en-IN", {
                           style: "currency",
@@ -1114,6 +991,31 @@ const YoganaSubscriptions = ({
                           }).format(discountAmount)}
                         </p>
                       )}
+                      {/* Applied coupon badge */}
+                      {appliedCoupon && (
+                        <div className="flex justify-end mb-2 gap-2 items-center">
+                          <Badge
+                            variant="outline"
+                            className="border-green-500 text-green-700"
+                          >
+                            Applied coupon: {appliedCoupon.couponCode} (
+                            {appliedCoupon.discountType === "PERCENTAGE"
+                              ? `${appliedCoupon.discountValue}% off`
+                              : `₹${appliedCoupon.discountValue} off`}
+                            )
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer"
+                              type="button"
+                              onClick={handleRemoveCoupon}
+                              style={{ padding: 0 }}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </Badge>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -1121,37 +1023,22 @@ const YoganaSubscriptions = ({
 
                   <div className="grid grid-cols-2">
                     <div>
-                      <h6 className="font-semibold text-[16px] mb-3">Total</h6>
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
+                        Total
+                      </h6>
                     </div>
                     <div className="text-right">
-                      <h6 className="font-semibold text-[16px] mb-3">
+                      <h6 className="font-semibold text-[16px] mb-3 text-[var(--pri)]">
                         ₹{totalAmount.toFixed(2)}
                       </h6>
                     </div>
                   </div>
 
-                  <div className="my-1 mb-3 flex items-center justify-end">
-                    {/* {planData?.coupons?.length} */}
-                  </div>
-
                   <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
-                    {/* <Link href={"/plans"}>
-                      <Button
-                        variant={"outline"}
-                        style={{
-                          color: primaryColor,
-                          borderColor: primaryColor,
-                        }}
-                        className=" border border-[#C2A74E] rounded-none text-[#C2A74E] hover:text-[#C2A74E] cursor-pointer px-[37px] py-[22px]"
-                      >
-                        Cancel
-                      </Button>
-                    </Link> */}
-
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
-                          className="flex items-center gap-2 cursor-pointer rounded-none px-[37px] py-[22px]"
+                          className="flex items-center gap-2 cursor-pointer"
                           variant={"outline"}
                           disabled={totalAmount === 0}
                         >
@@ -1206,14 +1093,15 @@ const YoganaSubscriptions = ({
                       onClick={() =>
                         handleClickPay(communityId || "", planID || "")
                       }
-                      style={{
-                        backgroundColor: primaryColor,
-                      }}
-                      className={`bg-[#C2A74E] hover:bg-[#C2A74E] rounded-none px-[37px] py-[22px] ${
+                      className={`${
                         totalAmount === 0
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
                       }`}
+                      style={{
+                        backgroundColor: primaryColor,
+                        color: "#fff",
+                      }}
                     >
                       Continue to Payment
                     </Button>
