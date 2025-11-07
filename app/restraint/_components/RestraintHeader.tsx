@@ -69,7 +69,7 @@ const RestraintHeader = ({
           </Link>
           {/* Desktop Navigation */}
           <nav
-            className="hidden md:flex items-center space-x-8"
+            className="hidden md:flex items-center space-x-16"
             aria-label="Primary"
           >
             <Link

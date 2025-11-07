@@ -128,7 +128,7 @@ interface Plan {
   plan: { _id: string; isPauseUserVisible: boolean };
 }
 
-const RestraintSubscriptions = ({
+const SpawellSubscriptions = ({
   primaryColor,
   secondaryColor,
   neutralColor,
@@ -1290,4 +1290,4 @@ const RestraintSubscriptions = ({
   );
 };
 
-export default RestraintSubscriptions;
+export default SpawellSubscriptions;
