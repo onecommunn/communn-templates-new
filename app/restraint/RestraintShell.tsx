@@ -9,6 +9,7 @@ import {
   FooterSection,
   Header,
   HomeSection,
+  ServiceSection,
 } from "@/models/templates/restraint/restraint-home-model";
 export default async function RestraintShell({
   community,
@@ -28,6 +29,12 @@ export default async function RestraintShell({
   const footerData = source?.sections.find(
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
+
+  const serviceSectionData = source?.sections?.find(
+    (s: HomeSection): s is ServiceSection =>
+      s.sectionName == "serviceSection" && s.isActive
+  );
+
   return (
     <>
       <RestraintHeader
@@ -42,6 +49,7 @@ export default async function RestraintShell({
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         data={footerData}
+        servicesData={serviceSectionData}
       />
     </>
   );

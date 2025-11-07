@@ -17,6 +17,7 @@ import {
 import { FaPinterest } from "react-icons/fa";
 import {
   FooterSection,
+  ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/restraint/restraint-home-model";
 
@@ -34,10 +35,12 @@ export default function RestraintFooter({
   primaryColor,
   secondaryColor,
   data,
+  servicesData
 }: {
   primaryColor: string;
   secondaryColor: string;
   data: FooterSection;
+  servicesData: ServiceSection;
 }) {
   const content = data?.content;
   const normalize = (s?: string) => (s ?? "").trim();
@@ -141,14 +144,9 @@ export default function RestraintFooter({
               Services
             </h3>
             <ul className="space-y-3 text-sm">
-              {[
-                "Beginner Yoga Classes",
-                "Stress Relief Sessions",
-                "Mindful Meditation",
-                "Restorative Yoga",
-              ].map((s) => (
-                <li key={s} className="transition-colors hover:text-white">
-                  {s}
+              {servicesData?.content?.features.map((s,idx) => (
+                <li key={`${s.title}-${idx}`} className="transition-colors hover:text-white">
+                  {s.title}
                 </li>
               ))}
             </ul>
