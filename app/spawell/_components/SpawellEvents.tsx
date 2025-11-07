@@ -205,9 +205,9 @@ const SpawellEvents = ({
     );
   }
 
-  if (!events?.length || events?.length < 0) {
-    return null;
-  }
+  // if (!events?.length || events?.length < 0) {
+  //   return null;
+  // }
 
   return (
     <section
@@ -240,22 +240,30 @@ const SpawellEvents = ({
         </div>
 
         {/* Cards */}
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {events.map((event) => {
-            const availability = event?.availability;
-            const end = availability?.[availability.length - 1]?.day;
-            const isBookable = (() => {
-              if (!end) return false;
-              const today = new Date().setHours(0, 0, 0, 0);
-              const endDate = new Date(end).setHours(0, 0, 0, 0);
-              return today <= endDate;
-            })();
+        {!events?.length || events?.length < 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <h3 className="text-xl font-semibold text-gray-400">
+              No Upcoming Events
+            </h3>
+          </div>
+        ) : (
+          <>
+            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {events.map((event) => {
+                const availability = event?.availability;
+                const end = availability?.[availability.length - 1]?.day;
+                const isBookable = (() => {
+                  if (!end) return false;
+                  const today = new Date().setHours(0, 0, 0, 0);
+                  const endDate = new Date(end).setHours(0, 0, 0, 0);
+                  return today <= endDate;
+                })();
 
-            return (
-              <Link
-                href={`/event-details?eventid=${event._id}`}
-                key={event._id}
-                className={`
+                return (
+                  <Link
+                    href={`/event-details?eventid=${event._id}`}
+                    key={event._id}
+                    className={`
         group relative block overflow-hidden rounded-3xl shadow-sm ring-1 transition-all duration-300
         ${
           isBookable
@@ -263,67 +271,69 @@ const SpawellEvents = ({
             : "bg-neutral-300 ring-neutral-300/60 grayscale cursor-not-allowed opacity-70"
         }
       `}
-              >
-                {/* Image */}
-                <div className="relative aspect-[13/16]">
-                  <Image
-                    src={
-                      event?.coverImage?.value ||
-                      "/assets/spawell-event-image-3.png"
-                    }
-                    alt={event.title || "Event Image"}
-                    fill
-                    className={`object-cover transition-all duration-300 ${
-                      !isBookable ? "grayscale" : ""
-                    }`}
-                    sizes="(max-width: 1024px) 100vw, 33vw"
-                    unoptimized
-                  />
-                </div>
+                  >
+                    {/* Image */}
+                    <div className="relative aspect-[13/16]">
+                      <Image
+                        src={
+                          event?.coverImage?.value ||
+                          "/assets/spawell-event-image-3.png"
+                        }
+                        alt={event.title || "Event Image"}
+                        fill
+                        className={`object-cover transition-all duration-300 ${
+                          !isBookable ? "grayscale" : ""
+                        }`}
+                        sizes="(max-width: 1024px) 100vw, 33vw"
+                        unoptimized
+                      />
+                    </div>
 
-                {/* Bottom gradient for legibility */}
-                <div
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background: `linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, ${primaryColor} 100%)`,
-                  }}
-                />
+                    {/* Bottom gradient for legibility */}
+                    <div
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background: `linear-gradient(180deg, rgba(93, 50, 34, 0) 66.06%, ${primaryColor} 100%)`,
+                      }}
+                    />
 
-                {/* Shine sweep */}
-                {isBookable && (
-                  <span
-                    className="pointer-events-none absolute inset-y-0 -left-1/2 w-[140%]
+                    {/* Shine sweep */}
+                    {isBookable && (
+                      <span
+                        className="pointer-events-none absolute inset-y-0 -left-1/2 w-[140%]
           -skew-x-12 bg-white/30 blur-[1px] opacity-0 translate-x-0
           transition-all duration-700 ease-out
           group-hover:translate-x-[140%] group-hover:opacity-100"
-                  />
-                )}
+                      />
+                    )}
 
-                {/* Content */}
-                <div className="absolute inset-0 flex items-end justify-between p-5">
-                  <h3
-                    className={`max-w-[80%] text-[20px] font-medium leading-6 drop-shadow-sm transition-colors
+                    {/* Content */}
+                    <div className="absolute inset-0 flex items-end justify-between p-5">
+                      <h3
+                        className={`max-w-[80%] text-[20px] font-medium leading-6 drop-shadow-sm transition-colors
             ${isBookable ? "text-white" : "text-gray-400"}`}
-                  >
-                    {capitalizeWords(event.title)}
-                  </h3>
+                      >
+                        {capitalizeWords(event.title)}
+                      </h3>
 
-                  {/* Corner arrow badge */}
-                  <span
-                    className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors
+                      {/* Corner arrow badge */}
+                      <span
+                        className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors
             ${
               isBookable
                 ? "bg-white/85 text-[var(--pri)] group-hover:bg-[var(--pri)] group-hover:text-white"
                 : "bg-gray-400 text-gray-200"
             }`}
-                  >
-                    <ArrowUpRight className="h-5 w-5 transition-transform" />
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                      >
+                        <ArrowUpRight className="h-5 w-5 transition-transform" />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

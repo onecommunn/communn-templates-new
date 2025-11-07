@@ -483,9 +483,9 @@ const SpawellPlans: React.FC<Props> = ({
     )
   );
 
-  if (!plans?.length || plans?.length < 0) {
-    return null;
-  }
+  // if (!plans?.length || plans?.length < 0) {
+  //   return null;
+  // }
 
   return (
     <section
@@ -515,83 +515,92 @@ const SpawellPlans: React.FC<Props> = ({
             spa experience
           </p>
         </div>
+        {!plans?.length || plans?.length < 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <h3 className="text-xl font-semibold text-gray-400">
+              No Plans Available
+            </h3>
+          </div>
+        ) : (
+          <>
+            {/* Cards */}
+            <Carousel
+              opts={{ align: "start", loop: false }}
+              plugins={[autoplay.current]}
+              className="w-full"
+              setApi={setApiMain}
+            >
+              <CarouselContent>
+                {plans.map((plan, index) => (
+                  <CarouselItem
+                    key={plan._id ?? index}
+                    className="basis-full md:basis-1/3"
+                  >
+                    <Card
+                      title={plan.name}
+                      description={plan.description || plan.summary}
+                      subscribers={plan?.subscribers ?? []}
+                      fetchPlans={fetchPlans}
+                      isSubscribedCommunity={communityData?.community?.members?.some(
+                        (m: any) => m?.user?._id === authContext?.user?.id
+                      )}
+                      planId={plan._id}
+                      communityId={communityId}
+                      primaryColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      neutralColor={neutralColor}
+                      price={plan.pricing ?? plan.totalPlanValue}
+                      period={
+                        plan.interval && plan.duration
+                          ? `${plan.interval} ${capitalizeWords(plan.duration)}`
+                          : undefined
+                      }
+                      coverImage={
+                        plan?.image?.value ||
+                        "/assets/spawell-plans-image-1.jpg"
+                      }
+                      isPrivate={communityData?.community?.type === "PRIVATE"}
+                      isRequested={!!isRequested}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
 
-        {/* Cards */}
-        <div></div>
-        <Carousel
-          opts={{ align: "start", loop: false }}
-          plugins={[autoplay.current]}
-          className="w-full"
-          setApi={setApiMain}
-        >
-          <CarouselContent>
-            {plans.map((plan, index) => (
-              <CarouselItem
-                key={plan._id ?? index}
-                className="basis-full md:basis-1/3"
-              >
-                <Card
-                  title={plan.name}
-                  description={plan.description || plan.summary}
-                  subscribers={plan?.subscribers ?? []}
-                  fetchPlans={fetchPlans}
-                  isSubscribedCommunity={communityData?.community?.members?.some(
-                    (m: any) => m?.user?._id === authContext?.user?.id
-                  )}
-                  planId={plan._id}
-                  communityId={communityId}
-                  primaryColor={primaryColor}
-                  secondaryColor={secondaryColor}
-                  neutralColor={neutralColor}
-                  price={plan.pricing ?? plan.totalPlanValue}
-                  period={
-                    plan.interval && plan.duration
-                      ? `${plan.interval} ${capitalizeWords(plan.duration)}`
-                      : undefined
-                  }
-                  coverImage={
-                    plan?.image?.value || "/assets/spawell-plans-image-1.jpg"
-                  }
-                  isPrivate={communityData?.community?.type === "PRIVATE"}
-                  isRequested={!!isRequested}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+              <CarouselPrevious
+                aria-label="Previous plans"
+                className="hidden sm:flex size-10 cursor-pointer"
+                style={{ color: primaryColor, backgroundColor: "#fff" }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.backgroundColor = primaryColor;
+                  el.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.backgroundColor = "#fff";
+                  el.style.color = primaryColor;
+                }}
+              />
+              <CarouselNext
+                aria-label="Next plans"
+                className="hidden sm:flex size-10 cursor-pointer"
+                style={{ color: primaryColor, backgroundColor: "#fff" }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.backgroundColor = primaryColor;
+                  el.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.backgroundColor = "#fff";
+                  el.style.color = primaryColor;
+                }}
+              />
+            </Carousel>
 
-          <CarouselPrevious
-            aria-label="Previous plans"
-            className="hidden sm:flex size-10 cursor-pointer"
-            style={{ color: primaryColor, backgroundColor: "#fff" }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.backgroundColor = primaryColor;
-              el.style.color = "#fff";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.backgroundColor = "#fff";
-              el.style.color = primaryColor;
-            }}
-          />
-          <CarouselNext
-            aria-label="Next plans"
-            className="hidden sm:flex size-10 cursor-pointer"
-            style={{ color: primaryColor, backgroundColor: "#fff" }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.backgroundColor = primaryColor;
-              el.style.color = "#fff";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.backgroundColor = "#fff";
-              el.style.color = primaryColor;
-            }}
-          />
-        </Carousel>
-
-        <Dots api={apiMain} primaryColor={primaryColor} />
+            <Dots api={apiMain} primaryColor={primaryColor} />
+          </>
+        )}
       </div>
     </section>
   );

@@ -424,9 +424,9 @@ const MartivoPlans = ({
     };
   });
 
-  if (!normalized?.length || normalized?.length < 0) {
-    return null;
-  }
+  // if (!normalized?.length || normalized?.length < 0) {
+  //   return null;
+  // }
 
   return (
     <section

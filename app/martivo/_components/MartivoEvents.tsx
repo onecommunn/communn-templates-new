@@ -146,9 +146,9 @@ export default function MartivoEvents({
     );
   }
 
-  if (!(events?.length) || events?.length < 0) {
-    return null;
-  }
+  // if (!(events?.length) || events?.length < 0) {
+  //   return null;
+  // }
 
   return (
     <section
@@ -176,89 +176,104 @@ export default function MartivoEvents({
           </div>
 
           {/* Right: shadcn Carousel */}
-          <div className="relative">
-            <Carousel
-              setApi={setApi}
-              opts={OPTIONS}
-              plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
-              className="w-full"
-            >
-              <CarouselContent>
-                {events.map((event) => {
-                  const availability = event?.availability;
-                  const end = availability?.[availability.length - 1]?.day;
-                  const isBookable = (() => {
-                    if (!end) return false;
-                    const today = new Date().setHours(0, 0, 0, 0);
-                    const endDate = new Date(end).setHours(0, 0, 0, 0);
-                    return today <= endDate;
-                  })();
-                  return (
-                    <CarouselItem
-                      key={event._id}
-                      className="basis-full md:basis-1/4"
-                    >
-                      <article className="rounded-2xl">
-                        {/* Square image with subtle double-border look */}
-                        <div className="relative mb-3 rounded-xl border border-dashed border-slate-200 p-1">
-                          <div className="rounded-lg border border-slate-100">
-                            <Image
-                              src={
-                                event?.coverImage?.value ||
-                                "/assets/martivo-event-image-1.png"
-                              }
-                              alt={event.title || "Event Image"}
-                              width={480}
-                              height={480}
-                              className="aspect-square w-full rounded-lg object-cover"
-                              unoptimized
-                            />
+          {isLoading ? (
+            <div className="space-y-6">
+              {[0, 1, 2].map((k) => (
+                <div
+                  key={k}
+                  className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-[var(--sec)]"
+                />
+              ))}
+            </div>
+          ) : !events?.length || events?.length < 0 ? (
+            <div className="rounded-xl border border-[#E6E8EE] bg-white p-10 text-center text-slate-600">
+              No Upcoming Events right now.
+            </div>
+          ) : (
+            <div className="relative">
+              <Carousel
+                setApi={setApi}
+                opts={OPTIONS}
+                plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {events.map((event) => {
+                    const availability = event?.availability;
+                    const end = availability?.[availability.length - 1]?.day;
+                    const isBookable = (() => {
+                      if (!end) return false;
+                      const today = new Date().setHours(0, 0, 0, 0);
+                      const endDate = new Date(end).setHours(0, 0, 0, 0);
+                      return today <= endDate;
+                    })();
+                    return (
+                      <CarouselItem
+                        key={event._id}
+                        className="basis-full md:basis-1/4"
+                      >
+                        <article className="rounded-2xl">
+                          {/* Square image with subtle double-border look */}
+                          <div className="relative mb-3 rounded-xl border border-dashed border-slate-200 p-1">
+                            <div className="rounded-lg border border-slate-100">
+                              <Image
+                                src={
+                                  event?.coverImage?.value ||
+                                  "/assets/martivo-event-image-1.png"
+                                }
+                                alt={event.title || "Event Image"}
+                                width={480}
+                                height={480}
+                                className="aspect-square w-full rounded-lg object-cover"
+                                unoptimized
+                              />
+                            </div>
                           </div>
-                        </div>
 
-                        <h3 className="mb-1 line-clamp-1 text-[15px] font-semibold text-slate-900">
-                          {event.title}
-                        </h3>
-                        <p className="text-xs text-slate-500 mb-2">
-                          {formatMonthDay(availability[0].day)}
-                        </p>
-                        <ViewAllButton
-                          label="View More"
-                          href={`/event-details?eventid=${event._id}`}
-                        />
-                      </article>
-                    </CarouselItem>
-                  );
-                })}
-              </CarouselContent>
+                          <h3 className="mb-1 line-clamp-1 text-[15px] font-semibold text-slate-900">
+                            {event.title}
+                          </h3>
+                          <p className="text-xs text-slate-500 mb-2">
+                            {formatMonthDay(availability[0].day)}
+                          </p>
+                          <ViewAllButton
+                            label="View More"
+                            href={`/event-details?eventid=${event._id}`}
+                          />
+                        </article>
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
 
-              {/* Arrows (desktop) */}
-              <CarouselPrevious className="cursor-pointer hidden md:flex -top-12 right-12 left-auto translate-y-0 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-              <CarouselNext className="cursor-pointer hidden md:flex -top-12 right-0 translate-y-0 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
-            </Carousel>
+                {/* Arrows (desktop) */}
+                <CarouselPrevious className="cursor-pointer hidden md:flex -top-12 right-12 left-auto translate-y-0 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+                <CarouselNext className="cursor-pointer hidden md:flex -top-12 right-0 translate-y-0 border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" />
+              </Carousel>
 
-            {/* Dots */}
-            {events.length > 1 && (
-              <div className="mt-5 flex items-center justify-center gap-2">
-                {Array.from({ length: snapCount }).map((_, i) => {
-                  const active = i === selectedIndex;
-                  return (
-                    <button
-                      key={i}
-                      aria-label={`Go to slide ${i + 1}`}
-                      onClick={() => api?.scrollTo(i)}
-                      className={[
-                        "h-2.5 w-2.5 rounded-full transition-all",
-                        active
-                          ? "bg-[var(--sec)]"
-                          : "bg-slate-200 hover:bg-slate-300",
-                      ].join(" ")}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
+              {/* Dots */}
+              {events.length > 1 && (
+                <div className="mt-5 flex items-center justify-center gap-2">
+                  {Array.from({ length: snapCount }).map((_, i) => {
+                    const active = i === selectedIndex;
+                    return (
+                      <button
+                        key={i}
+                        aria-label={`Go to slide ${i + 1}`}
+                        onClick={() => api?.scrollTo(i)}
+                        className={[
+                          "h-2.5 w-2.5 rounded-full transition-all",
+                          active
+                            ? "bg-[var(--sec)]"
+                            : "bg-slate-200 hover:bg-slate-300",
+                        ].join(" ")}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>
