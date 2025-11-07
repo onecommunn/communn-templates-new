@@ -187,7 +187,7 @@ const SpawellFooter = ({
 
       {/* bottom bar */}
       <div className="bg-[var(--pri)]">
-        <div className="container mx-auto px-6 md:px-20 flex items-center justify-between">
+        <div className="container mx-auto px-6 md:px-20 flex flex-col md:flex-row items-center justify-between">
           <div className="py-4 text-center text-xs text-[var(--sec)]/80">
             {source?.copyrightText}
           </div>

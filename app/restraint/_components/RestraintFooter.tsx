@@ -76,7 +76,7 @@ export default function RestraintFooter({
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8">
         {/* Brand + tagline */}
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col md:flex-row md:items-center gap-3">
             <Image
               src={content?.logo || "/assets/restraint-logo.png"}
               alt="logo"
@@ -86,7 +86,7 @@ export default function RestraintFooter({
               unoptimized
             />
 
-            <hr className="h-8 border border-white/40" />
+            <hr className="md:h-8 border border-white/40" />
 
             <p className="max-w-2xl text-sm text-white">
               {content?.description}
@@ -177,7 +177,7 @@ export default function RestraintFooter({
         <div className="mt-10 h-px w-full bg-white/10" />
 
         {/* Bottom bar */}
-        <div className="mt-6 flex flex-col-reverse items-start justify-between gap-4 text-xs text-white sm:flex-row">
+        <div className="mt-6 flex flex-col-reverse items-center md:items-start justify-between gap-4 text-xs text-white sm:flex-row">
           <p>{content?.copyrightText}</p>
 
           <p> Made with ❤️ by communn.io</p>

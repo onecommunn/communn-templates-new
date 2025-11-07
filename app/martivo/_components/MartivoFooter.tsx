@@ -179,7 +179,7 @@ export default function MartivoFooter({
         <div className="mt-8 h-px w-full bg-white/15" />
 
         {/* Copyright */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="py-4 text-center text-[15px] text-white/70">
             {content?.copyrightText}
           </div>
