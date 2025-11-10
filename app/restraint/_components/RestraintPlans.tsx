@@ -45,6 +45,7 @@ type DisplayPlan = {
   features: string[];
   periodLabel: string;
   subscribers?: Array<{ _id?: string; id?: string }>;
+  initialPayment: string | number;
 };
 
 function formatPeriodLabel(interval?: number, duration?: string) {
@@ -128,6 +129,7 @@ export default function RestraintPlans({
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
         // carry raw subscribers for per-user detection
         subscribers: (p.subscribers as any[]) || [],
+        initialPayment: p?.initialPayment,
       };
     });
   }, [plans]);
@@ -231,6 +233,7 @@ export default function RestraintPlans({
                       coverImage={coverImage}
                       color={color}
                       fetchPlans={fetchPlans}
+                      initialPayment={plan?.initialPayment}
                     />
                   </CarouselItem>
                 );
@@ -275,6 +278,7 @@ export function PlanCard({
   coverImage,
   color,
   fetchPlans,
+  initialPayment,
 }: {
   plan: DisplayPlan;
   isFeatured: boolean;
@@ -288,6 +292,7 @@ export function PlanCard({
   coverImage: string;
   color: string;
   fetchPlans?: () => void;
+  initialPayment: string | number;
 }) {
   const { joinToPublicCommunity } = usePlans();
   const { SendCommunityRequest } = useRequests();
@@ -370,6 +375,10 @@ export function PlanCard({
             style={{ color: isFeatured ? "rgba(255,255,255,.8)" : MUTED }}
           >
             {periodLabel}
+          </div>
+          <div className="text-xs font-normal mt-1" style={{ color: isFeatured ? "rgba(255,255,255,.8)" : MUTED }}>
+            {Number(initialPayment) > 0 &&
+              ` + One Time Fee :  ₹ ${initialPayment}`}
           </div>
         </div>
       </div>
@@ -471,7 +480,7 @@ export function PlanCard({
                     join now?
                   </DialogDescription>
                   <div className="mt-4 flex justify-end">
-                    <DialogClose asChild>                      
+                    <DialogClose asChild>
                       <Button
                         onClick={() => handleClickJoin(communityId)}
                         disabled={isSubscribed}

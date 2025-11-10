@@ -15,8 +15,8 @@ type DisplayPlan = {
   image?: string;
   features: string[];
   periodLabel: string;
-  // 👇 keep subscribers from API so we can check against logged-in user
   subscribers?: Array<{ _id?: string; id?: string }>;
+  initialPayment: string | number;
 };
 
 function formatPeriodLabel(interval?: number, duration?: string) {
@@ -99,9 +99,8 @@ const RestraintPlansPage = ({
           }`,
         ],
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
-
-        // ✅ keep the actual list
         subscribers: p.subscribers as Array<{ _id?: string; id?: string }>,
+        initialPayment: p?.initialPayment,
       };
     });
   }, [plans]);
@@ -175,6 +174,7 @@ const RestraintPlansPage = ({
                   planId={planId}
                   coverImage={coverImage}
                   color={color}
+                  initialPayment={plan?.initialPayment}
                 />
               );
             })}

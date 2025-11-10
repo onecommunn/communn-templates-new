@@ -34,6 +34,7 @@ interface YoganaPlanCardProps {
   coverImage: string;
   isPrivate: boolean;
   isRequested: boolean;
+  initialPayment: string | number;
   coupons: {
     _id: string;
     couponCode: string;
@@ -64,6 +65,7 @@ const YoganaPlanCard = ({
   coverImage,
   isPrivate,
   isRequested,
+  initialPayment,
   coupons,
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
@@ -211,7 +213,12 @@ const YoganaPlanCard = ({
             >
               / {period}
             </span>
+            <div className="text-sm font-plus-jakarta block"  style={{ color: primaryColor }}>
+              {Number(initialPayment) > 0 &&
+                ` + One Time Fee :  ₹ ${initialPayment}`}
+            </div>
           </div>
+
           {coupons?.length > 0 && (
             <p
               className="font-plus-jakarta text-xs font-medium px-3 py-1 rounded-full border"

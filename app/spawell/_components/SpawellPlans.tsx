@@ -48,6 +48,7 @@ type PlanCardProps = {
   coverImage: string;
   isPrivate: boolean;
   isRequested: boolean;
+  initialPayment: string | number;
 };
 
 type Props = {
@@ -71,6 +72,7 @@ const Card: React.FC<PlanCardProps> = ({
   coverImage,
   isPrivate,
   isRequested,
+  initialPayment,
 }) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -156,10 +158,14 @@ const Card: React.FC<PlanCardProps> = ({
               style={{ color: primaryColor }}
             >
               ₹{price}
-            </span>{" "}
+            </span>
             {period ? `/ ${period}` : null}
           </p>
         )}
+        <div className="text-xs" style={{ color: primaryColor }}>
+          {Number(initialPayment) > 0 &&
+            ` + One Time Fee :  ₹ ${initialPayment}`}
+        </div>
       </div>
 
       {/* CTA */}
@@ -425,7 +431,6 @@ const SpawellPlans: React.FC<Props> = ({
 
   useEffect(() => {
     fetchPlans();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isAuthenticated]);
 
   if (isLoading) {
@@ -506,13 +511,13 @@ const SpawellPlans: React.FC<Props> = ({
             className="text-3xl font-semibold tracking-[-0.02em] md:text-5xl"
             style={{ color: primaryColor }}
           >
-            Inside the ultimate luxury
+            {source?.heading}
           </h2>
           <p
             className="mt-1 text-2xl font-lora italic md:text-[34px]"
             style={{ color: primaryColor }}
           >
-            spa experience
+            {source?.subHeading}
           </p>
         </div>
         {!plans?.length || plans?.length < 0 ? (
@@ -561,6 +566,7 @@ const SpawellPlans: React.FC<Props> = ({
                       }
                       isPrivate={communityData?.community?.type === "PRIVATE"}
                       isRequested={!!isRequested}
+                      initialPayment={plan?.initialPayment}
                     />
                   </CarouselItem>
                 ))}

@@ -195,6 +195,7 @@ const CreatorPlansSection = ({
               secondaryColor={secondaryColor}
               isPrivate={communityData?.community?.type === "PRIVATE"}
               isRequested={!!isRequested}
+              initialPayment={plan?.initialPayment}
             />
           ))}
         </div>

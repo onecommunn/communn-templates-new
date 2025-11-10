@@ -33,6 +33,7 @@ interface ICreatorPlansCard {
   secondaryColor: string;
   isPrivate: boolean;
   isRequested: boolean;
+  initialPayment: string | number;
 }
 
 const CreatorPlansCard = ({
@@ -50,6 +51,7 @@ const CreatorPlansCard = ({
   secondaryColor,
   isPrivate,
   isRequested,
+  initialPayment,
 }: ICreatorPlansCard) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -129,14 +131,21 @@ const CreatorPlansCard = ({
         {description}
       </p>
       <CardFooter className="flex flex-row justify-between items-center p-0 px-2 pb-2 mt-2">
-        <div className="flex items-center" style={{ color: secondaryColor }}>
-          <span className="text-[16px] font-semibold mr-1 text-current">
-            ₹{price}
-          </span>
-          <span className="text-[16px] font-semibold text-current">
-            / {period}
-          </span>
+        <div className="flex flex-col">
+          <div className="flex items-center" style={{ color: secondaryColor }}>
+            <span className="text-[16px] font-semibold mr-1 text-current">
+              ₹{price}
+            </span>
+            <span className="text-[16px] font-semibold text-current">
+              / {period}
+            </span>
+          </div>
+          <div className="text-sm">
+            {Number(initialPayment) > 0 &&
+              ` + One Time Fee :  ₹ ${initialPayment}`}
+          </div>
         </div>
+
         {!isLoggedIn ? (
           <Link href="/login">
             <Button
