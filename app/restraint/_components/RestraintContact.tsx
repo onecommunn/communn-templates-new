@@ -230,7 +230,7 @@ function InfoCard({
       </span>
       <div>
         <p className="mb-1 text-sm font-semibold text-[#2B3129]">{title}</p>
-        {lines.map((l, i) => (
+        {lines?.map((l, i) => (
           <p key={i} className="text-xs text-[#687068]">
             {l}
           </p>

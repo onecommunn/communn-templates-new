@@ -21,7 +21,6 @@ export const getPlansCommunityAuth = async (token: string, id: string) => {
         },
       }
     );
-    console.log(response?.data, "response");
     return response?.data; 
   } catch (err) {
     console.error('Error fetching plans:', err);
