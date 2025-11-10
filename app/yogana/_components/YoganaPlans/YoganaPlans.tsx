@@ -307,6 +307,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         }
                         isPrivate={communityData?.community?.type === "PRIVATE"}
                         isRequested={!!isRequested}
+                        initialPayment={plan?.initialPayment}
                       />
                     </div>
                   </CarouselItem>

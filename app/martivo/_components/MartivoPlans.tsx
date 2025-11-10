@@ -1,7 +1,7 @@
 "use client";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, LockKeyhole } from "lucide-react";
+import { ArrowRight, LockKeyhole } from "lucide-react";
 import { WavyStroke } from "./Icons/WavyStroke";
 import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
@@ -86,7 +86,7 @@ const ChooseButton: React.FC<{
   <Link
     href={href || "/"}
     className={`group relative inline-flex items-center gap-3 rounded-full ${
-      isSubscribed ? "bg-[var(--pri)]" : "bg-[var(--color)]"
+      isSubscribed ? "bg-[var(--pri)]" : "bg-[var(--pri)]"
     } px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2`}
     style={
       {
@@ -96,7 +96,7 @@ const ChooseButton: React.FC<{
   >
     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
     <span className="relative z-[1] text-[15px] font-medium">{text}</span>
-    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
+    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
       <ArrowRight size={18} />
     </span>
   </Link>
@@ -118,6 +118,7 @@ type CardProps = {
   coverImage: string;
   planId: string;
   color: string;
+  initialPayment?: string | number;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -134,6 +135,7 @@ const Card: React.FC<CardProps> = ({
   coverImage,
   planId,
   color,
+  initialPayment
 }) => {
   // split features into two columns (balanced)
   const mid = Math.ceil(features.length / 2);
@@ -226,6 +228,9 @@ const Card: React.FC<CardProps> = ({
                 / {period}
               </span>
             </div>
+            <div>
+              {Number(initialPayment) > 0 && ` + One Time Fee :  ₹ ${initialPayment}`}
+            </div>
           </div>
           {!isLoggedIn ? (
             <Link
@@ -250,7 +255,7 @@ const Card: React.FC<CardProps> = ({
               <Dialog>
                 <DialogTrigger asChild>
                   <div
-                    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+                    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
                     style={{ cursor: "pointer" }}
                   >
                     <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
@@ -261,7 +266,7 @@ const Card: React.FC<CardProps> = ({
                       )}
                       Join Community
                     </span>
-                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
+                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
                       <ArrowRight size={18} />
                     </span>
                   </div>
@@ -421,6 +426,7 @@ const MartivoPlans = ({
       featured: plans.length === 3 ? idx === 1 : false,
       subscribers: p.subscribers,
       image: p?.image?.value,
+      initialPayment: p?.initialPayment || 0,
     };
   });
 
@@ -487,6 +493,7 @@ const MartivoPlans = ({
                 coverImage={p?.image || "/assets/spawell-plans-image-1.jpg"}
                 planId={p.id}
                 color={secondaryColor}
+                initialPayment={p?.initialPayment}
               />
             ))}
           </div>
