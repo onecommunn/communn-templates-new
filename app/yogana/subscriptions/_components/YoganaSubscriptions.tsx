@@ -11,8 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/components/utils/PaymentSuccess";
 import PaymentFailure from "@/components/utils/PaymentFailure";
 import { Button } from "@/components/ui/button";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
-import { Gift, Info, Minus, Plus, X } from "lucide-react";
+import { capitalizeWords, formatDate } from "@/components/utils/StringFunctions";
+import { CirclePause, Gift, Info, Loader2, Minus, Plus, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +31,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Switch } from "@/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const formatDates = (dateStr?: string) => {
   if (!dateStr) return "-";
@@ -665,7 +667,7 @@ const YoganaSubscriptions = ({
           {
             "--pri": primaryColor,
             "--sec": secondaryColor,
-            "--neu":neutralColor
+            "--neu": neutralColor,
           } as React.CSSProperties
         }
       >
@@ -746,13 +748,13 @@ const YoganaSubscriptions = ({
   return (
     <main
       className="flex-grow font-plus-jakarta bg-white"
-       style={
-          {
-            "--pri": primaryColor,
-            "--sec": secondaryColor,
-            "--neu":neutralColor
-          } as React.CSSProperties
-        }
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
         <Accordion type="single" collapsible className="w-full space-y-3">
@@ -821,7 +823,7 @@ const YoganaSubscriptions = ({
                     </p>
                   </div>
                   {/* Right: status pill (chevron is auto from AccordionTrigger) */}
-                  <div className="flex items-center md:justify-center">
+                  <div className="flex items-center md:justify-center gap-2">
                     <div
                       className="text-xs rounded-full px-4 py-2 capitalize border text-center flex items-center justify-center w-full md:w-fit"
                       style={{
@@ -859,6 +861,236 @@ const YoganaSubscriptions = ({
                         ? "Paused"
                         : "Active"}
                     </div>
+                    {plan?.isPauseUserVisible &&
+                      subscriptionData?.subscription_status === "ACTIVE" && (
+                        <Dialog
+                          open={isPauseOpen}
+                          onOpenChange={setIsPauseOpen}
+                        >
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <DialogTrigger asChild>
+                                <div
+                                  className="flex items-center gap-2 text-[#3B9B7F] border border-[#3B9B7F]/40 
+                                             hover:bg-[#3B9B7F]/10 hover:border-[#3B9B7F] 
+                                             transition-all duration-200 rounded-full p-1 
+                                             cursor-pointer font-medium"
+                                >
+                                  <CirclePause
+                                    size={22}
+                                    strokeWidth={1.8}
+                                    color="#3B9B7F"
+                                  />
+                                </div>
+                              </DialogTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent>Pause Subscription</TooltipContent>
+                          </Tooltip>
+
+                          <DialogContent className="max-w-lg">
+                            <DialogTitle className="text-lg font-semibold">
+                              Pause Subscription
+                            </DialogTitle>
+
+                            <p className="text-sm text-gray-500">
+                              Temporarily pause your member&apos;s subscription.
+                            </p>
+
+                            {/* Current Details */}
+                            <div className="border rounded-lg p-4 bg-gray-50">
+                              <p className="text-xs font-semibold text-gray-500 mb-2">
+                                Current Details
+                              </p>
+                              <div className="grid grid-cols-2 gap-y-1 text-sm">
+                                <span className="text-gray-500">Member</span>
+                                <span className="text-gray-900 text-right">
+                                  {authContext?.user?.name ||
+                                    authContext?.user?.fullName ||
+                                    "-"}
+                                </span>
+
+                                <span className="text-gray-500">Plan</span>
+                                <span className="text-gray-900 text-right">
+                                  {plan?.name || "-"}
+                                </span>
+
+                                <span className="text-gray-500">
+                                  Start Date
+                                </span>
+                                <span className="text-gray-900 text-right">
+                                  {plan?.startDate
+                                    ? formatDate(plan.startDate)
+                                    : "-"}
+                                </span>
+
+                                <span className="text-gray-500">
+                                  Expiry Date
+                                </span>
+                                <span className="text-gray-900 text-right">
+                                  {plan?.endDate
+                                    ? formatDate(plan.endDate)
+                                    : "-"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Pause Duration */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Pause Duration
+                              </label>
+                              <Input
+                                type="number"
+                                min={plan?.minPauseDays ?? 3}
+                                max={plan?.maxPauseDays ?? 180}
+                                value={
+                                  pauseDuration === "" ? "" : pauseDuration
+                                }
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  const num = val === "" ? "" : Number(val);
+                                  setPauseDuration(num);
+
+                                  if (val === "") {
+                                    setPauseError("");
+                                    return;
+                                  }
+
+                                  if (
+                                    typeof num !== "number" ||
+                                    isNaN(num) ||
+                                    num < (plan?.minPauseDays ?? 3) ||
+                                    num > (plan?.maxPauseDays ?? 180)
+                                  ) {
+                                    setPauseError(
+                                      `Please enter between ${
+                                        plan?.minPauseDays ?? 3
+                                      } and ${plan?.maxPauseDays ?? 180} days`
+                                    );
+                                  } else {
+                                    setPauseError("");
+                                  }
+                                }}
+                                className={
+                                  pauseError
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : undefined
+                                }
+                              />
+                              {pauseError && (
+                                <p className="mt-1 text-xs text-red-500">
+                                  {pauseError}
+                                </p>
+                              )}
+                              <p className="mt-1 text-xs text-gray-500">
+                                {`Allowed Duration: ${
+                                  plan?.minPauseDays ?? 3
+                                } to ${plan?.maxPauseDays ?? 180} days`}
+                              </p>
+                            </div>
+
+                            {/* Start Immediately */}
+                            <div className="flex items-center justify-between mt-1">
+                              <p className="text-sm text-gray-600">
+                                Start Immediately
+                              </p>
+                              <Switch
+                                checked={startImmediately}
+                                onCheckedChange={(val) =>
+                                  setStartImmediately(val)
+                                }
+                              />
+                            </div>
+
+                            {/* Start Date (when not immediate) */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Pause Start Date
+                              </label>
+                              <Input
+                                type="date"
+                                disabled={startImmediately}
+                                value={pauseStartDate}
+                                onChange={(e) =>
+                                  setPauseStartDate(e.target.value)
+                                }
+                                className={
+                                  startImmediately
+                                    ? "bg-gray-100 cursor-not-allowed"
+                                    : ""
+                                }
+                              />
+                            </div>
+
+                            {/* After Pause Details */}
+                            <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
+                              <p className="text-xs font-semibold text-gray-500 mb-2">
+                                After Pause Details
+                              </p>
+                              <div className="grid grid-cols-2 gap-y-1">
+                                <span className="text-gray-500">
+                                  Resume Date
+                                </span>
+                                <span className="text-gray-900 text-right">
+                                  {resumeDate || "--/--/----"}
+                                </span>
+
+                                <span className="text-gray-500">
+                                  Expiry Date
+                                </span>
+                                <span className="text-gray-900 text-right">
+                                  {pauseExpiryDate || "--/--/----"}
+                                </span>
+                              </div>
+                              <p className="mt-2 text-xs text-gray-500">
+                                Your subscription will be extended by{" "}
+                                {typeof pauseDuration === "number" &&
+                                pauseDuration > 0
+                                  ? pauseDuration
+                                  : 0}{" "}
+                                days to account for the pause period.
+                              </p>
+                            </div>
+
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                onClick={() => setIsPauseOpen(false)}
+                                className="cursor-pointer"
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                type="button"
+                                disabled={
+                                  isPauseSubmitting ||
+                                  pauseDuration === 0 ||
+                                  pauseDuration === null ||
+                                  typeof pauseDuration !== "number" ||
+                                  pauseDuration < (plan?.minPauseDays ?? 3) ||
+                                  pauseDuration > (plan?.maxPauseDays ?? 180)
+                                }
+                                onClick={handlePauseSubmit}
+                                className="flex items-center justify-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                                style={{ backgroundColor: "#3B9B7F" }}
+                              >
+                                {isPauseSubmitting ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <span>Processing...</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    {plan?.isPauseUserApprovalRequired
+                                      ? "Send Request"
+                                      : "Confirm Pause"}
+                                  </>
+                                )}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      )}
                   </div>
                 </div>
               </div>
