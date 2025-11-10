@@ -58,47 +58,53 @@ const PaymentScheduleItem = ({
   status,
   isSelected,
   onSelect,
+  isDisabled,
 }: {
   date: string;
   amount: string;
   status: string;
   isSelected: boolean;
+  isDisabled: boolean;
   onSelect: () => void;
 }) => {
-  const isDisabled = status === "paid";
-
   return (
     <div
       onClick={() => {
-        if (status !== "PAID") onSelect();
+        if (!isDisabled) onSelect();
       }}
-      className={`flex flex-col items-center space-y-2 cursor-pointer px-3 py-2 rounded-lg border 
+      className={`flex flex-col items-center space-y-2 px-3 py-2 rounded-lg border 
        ${
          isDisabled
            ? "opacity-50 cursor-not-allowed border-gray-200"
            : isSelected
-           ? "border-none bg-[var(--pri)]/20"
-           : "border-transparent"
+           ? "border-none bg-[var(--pri)]/20 cursor-pointer"
+           : "border-transparent cursor-pointer"
        }`}
     >
       <div className="text-sm text-gray-600">{date}</div>
+
       <div
         className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${
           status === "PAID"
             ? "border-green-600 text-green-600"
-            : isSelected
+            : isSelected && !isDisabled
             ? "border-gray-500 bg-gray-200 text-black-700"
             : "border-gray-300 bg-white text-gray-600"
         }`}
       >
         ₹{amount}
       </div>
+
       <div
         className={`text-xs ${
-          status === "PAID" ? "text-green-600" : "text-red-500"
+          status === "PAID"
+            ? "text-green-600"
+            : isDisabled
+            ? "text-gray-400"
+            : "text-red-500"
         }`}
       >
-        {status === "PAID" ? "Paid" : "Not Paid"}
+        {status === "PAID" ? "Paid" : isDisabled ? "Not Payable" : "Not Paid"}
       </div>
     </div>
   );
@@ -206,9 +212,9 @@ const StaticValues = {
   SUNDAY: "Sun",
   CUSTOM: "Custom",
 };
+
 const getStaticValue = (key: string) => {
-  //console.log(key);
-  return StaticValues[key as keyof typeof StaticValues]; // Use type assertion
+  return StaticValues[key as keyof typeof StaticValues];
 };
 
 const RestraintSubscriptions = ({
@@ -219,8 +225,6 @@ const RestraintSubscriptions = ({
   secondaryColor: string;
 }) => {
   const [activeTab, setActiveTab] = useState("All");
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [selectedPayments, setSelectedPayments] = useState<number[]>([]);
   const [subscriptionId, setSubscriptionId] = useState<string>("");
   const [placePrice, setPlacePrice] = useState<string>("0");
   const [sequencesList, setSequencesList] = useState<Sequences[]>([]);
@@ -387,9 +391,9 @@ const RestraintSubscriptions = ({
   } = usePayment();
 
   useEffect(() => {}, [
-    authContext.user,
-    authContext.isAuthenticated,
-    authContext.loading,
+    authContext?.user,
+    authContext?.isAuthenticated,
+    authContext?.loading,
     authContext?.user?.id,
   ]);
 
@@ -408,12 +412,6 @@ const RestraintSubscriptions = ({
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {}, [authContext]);
 
   const handleCreateSubscription = async () => {
     if (!userId) {
@@ -446,6 +444,7 @@ const RestraintSubscriptions = ({
       const response: any = await getSequencesById(subscriptionId, userId);
       setPlacePrice(response?.pricing || "0");
       setSequencesList(response?.sequences || []);
+      setSubscriptions(response);
     } catch (error) {
       console.error("Error fetching sequences:", error);
     } finally {
@@ -606,22 +605,25 @@ const RestraintSubscriptions = ({
     });
   };
 
-  const baseAmountPerCycles = selectedAmounts.reduce(
-    (acc, curr) =>
-      acc + curr.amount + (Number(subscriptions?.courseAmount) || 0),
-    0
+  const baseAmountPerMember =
+    selectedAmounts.reduce((acc, curr) => acc + curr.amount, 0) +
+    (Number(subscriptions?.courseAmount) || 0);
+
+  let discountPerMember = 0;
+  if (appliedCoupon && baseAmountPerMember > 0 && selectedAmounts.length > 0) {
+    const firstAmount = selectedAmounts[0].amount;
+
+    if (appliedCoupon.discountType === "PERCENTAGE") {
+      discountPerMember = (firstAmount * appliedCoupon.discountValue) / 100;
+    } else {
+      discountPerMember = appliedCoupon.discountValue;
+    }
+  }
+
+  const totalAmount = Math.max(
+    0,
+    (baseAmountPerMember - discountPerMember) * count
   );
-
-  const baseAmount = baseAmountPerCycles * count;
-
-  const discountAmount =
-    appliedCoupon && baseAmount > 0
-      ? appliedCoupon.discountType === "PERCENTAGE"
-        ? (baseAmount * appliedCoupon.discountValue) / 100
-        : appliedCoupon.discountValue
-      : 0;
-
-  const totalAmount = Math.max(0, baseAmount - discountAmount);
 
   const handleApplyCoupon = (codeFromButton?: string) => {
     const code =
@@ -658,11 +660,18 @@ const RestraintSubscriptions = ({
     setCouponInput(coupon.couponCode);
     toast.success("Coupon applied");
   };
+
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponInput("");
     toast.info("Coupon removed");
   };
+
+  const oneTimeFee = Number(subscriptions?.initialPayment ?? 0);
+  const hasOneTimeFeeApplied =
+    oneTimeFee > 0 &&
+    sequencesList.length > 0 &&
+    selectedAmounts.some((item) => item.id === sequencesList[0]?._id);
 
   if (isPageLoading) {
     return (
@@ -768,9 +777,7 @@ const RestraintSubscriptions = ({
           >
             <AccordionTrigger className="px-0 py-4 hover:no-underline">
               <div className="flex w-full items-center justify-between gap-4">
-                {/* Left: columns */}
                 <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-5">
-                  {/* Plan Name */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Plan Name
@@ -1136,6 +1143,26 @@ const RestraintSubscriptions = ({
 
                     if (!isVisible) return null;
 
+                    const basePricing = Number(
+                      subscriptions?.pricing ?? placePrice ?? 0
+                    );
+
+                    const initialPayment =
+                      index === 0
+                        ? Number(subscriptions?.initialPayment ?? 0)
+                        : 0;
+
+                    const amount = basePricing + initialPayment;
+                    const isDisabled =
+                      ["PAID", "PAID_BY_CASH", "NA"].includes(payment.status) ||
+                      (payment as any).isnonPayable ||
+                      index ===
+                        sequencesList.filter(
+                          (p) =>
+                            activeTab === "All" ||
+                            p.previousStatus === activeTab
+                        ).length -
+                          1;
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
@@ -1151,15 +1178,16 @@ const RestraintSubscriptions = ({
                               )
                             : "N/A"
                         }
-                        amount={placePrice}
+                        amount={amount.toString()}
                         status={payment.status}
                         isSelected={selectedAmounts.some(
                           (item) => item.id === payment._id
                         )}
+                        isDisabled={isDisabled}
                         onSelect={() =>
                           handleSelectAmount(
                             payment._id,
-                            Number(placePrice),
+                            amount,
                             payment?.startDate
                           )
                         }
@@ -1200,6 +1228,18 @@ const RestraintSubscriptions = ({
                       <p className="text-[#646464] text-[16px]">
                         Subscription Fee
                       </p>
+                      {hasOneTimeFeeApplied && (
+                        <p className="text-xs text-gray-500">
+                          Includes one-time fee of{" "}
+                          {new Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                            minimumFractionDigits: 2,
+                          }).format(oneTimeFee)}{" "}
+                          in the first cycle
+                        </p>
+                      )}
+
                       {appliedCoupon && (
                         <p className="text-[#646464] text-[16px]">
                           Coupon Discount
@@ -1208,12 +1248,12 @@ const RestraintSubscriptions = ({
                     </div>
 
                     <div className="text-right space-y-2">
-                      <p className="text-[#646464] text-[16px]">
+                       <p className="text-[#646464] text-[16px]">
                         {new Intl.NumberFormat("en-IN", {
                           style: "currency",
                           currency: "INR",
                           minimumFractionDigits: 2,
-                        }).format(Number(baseAmountPerCycles || 0))}{" "}
+                        }).format(Number(baseAmountPerMember || 0))}{" "}
                         × {count} member{count > 1 ? "s" : ""}
                       </p>
                       {appliedCoupon && (
@@ -1223,7 +1263,7 @@ const RestraintSubscriptions = ({
                             style: "currency",
                             currency: "INR",
                             minimumFractionDigits: 2,
-                          }).format(discountAmount)}
+                          }).format(discountPerMember * count)}
                         </p>
                       )}
                       {/* Applied coupon badge */}

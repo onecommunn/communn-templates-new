@@ -58,47 +58,53 @@ const PaymentScheduleItem = ({
   status,
   isSelected,
   onSelect,
+  isDisabled,
 }: {
   date: string;
   amount: string;
   status: string;
   isSelected: boolean;
+  isDisabled: boolean;
   onSelect: () => void;
 }) => {
-  const isDisabled = status === "paid";
-
   return (
     <div
       onClick={() => {
-        if (status !== "PAID") onSelect();
+        if (!isDisabled) onSelect();
       }}
-      className={`flex flex-col items-center space-y-2 cursor-pointer px-3 py-2 rounded-lg border 
+      className={`flex flex-col items-center space-y-2 px-3 py-2 rounded-lg border 
        ${
          isDisabled
            ? "opacity-50 cursor-not-allowed border-gray-200"
            : isSelected
-           ? "border-none bg-[var(--pri)]/20"
-           : "border-transparent"
+           ? "border-none bg-[var(--pri)]/20 cursor-pointer"
+           : "border-transparent cursor-pointer"
        }`}
     >
       <div className="text-sm text-gray-600">{date}</div>
+
       <div
         className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${
           status === "PAID"
             ? "border-green-600 text-green-600"
-            : isSelected
+            : isSelected && !isDisabled
             ? "border-gray-500 bg-gray-200 text-black-700"
             : "border-gray-300 bg-white text-gray-600"
         }`}
       >
         ₹{amount}
       </div>
+
       <div
         className={`text-xs ${
-          status === "PAID" ? "text-green-600" : "text-red-500"
+          status === "PAID"
+            ? "text-green-600"
+            : isDisabled
+            ? "text-gray-400"
+            : "text-red-500"
         }`}
       >
-        {status === "PAID" ? "Paid" : "Not Paid"}
+        {status === "PAID" ? "Paid" : isDisabled ? "Not Payable" : "Not Paid"}
       </div>
     </div>
   );
@@ -206,9 +212,9 @@ const StaticValues = {
   SUNDAY: "Sun",
   CUSTOM: "Custom",
 };
+
 const getStaticValue = (key: string) => {
-  //console.log(key);
-  return StaticValues[key as keyof typeof StaticValues]; // Use type assertion
+  return StaticValues[key as keyof typeof StaticValues];
 };
 
 const MartivoSubscriptions = ({
@@ -219,15 +225,12 @@ const MartivoSubscriptions = ({
   secondaryColor: string;
 }) => {
   const [activeTab, setActiveTab] = useState("All");
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [selectedPayments, setSelectedPayments] = useState<number[]>([]);
   const [subscriptionId, setSubscriptionId] = useState<string>("");
   const [placePrice, setPlacePrice] = useState<string>("0");
   const [sequencesList, setSequencesList] = useState<Sequences[]>([]);
   const [plan, setPlan] = useState<Plan>();
   const [planData, setPlanData] = useState<PlanData>();
   const [isLoading, setIsLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [community, setCommunity] = useState("");
   const [sequenceId, setSequenceId] = useState<string[]>([]);
   const [payLoading, setPayLoading] = useState(false);
@@ -241,7 +244,6 @@ const MartivoSubscriptions = ({
   >([]);
   const [subscriptions, setSubscriptions] = useState<ISubscribers>();
   const [isPauseSubmitting, setIsPauseSubmitting] = useState(false);
-  const [sequences, setSequences] = useState<ISequences[]>([]);
   const [count, setCount] = useState(1);
   const [isPauseOpen, setIsPauseOpen] = useState(false);
   const [pauseDuration, setPauseDuration] = useState<number | "">("");
@@ -340,8 +342,6 @@ const MartivoSubscriptions = ({
         toast.info(res?.data?.message);
       }
 
-      console.log(res, "res");
-
       setIsPauseOpen(false);
     } catch (err) {
       console.error("Error pausing subscription", err);
@@ -387,9 +387,9 @@ const MartivoSubscriptions = ({
   } = usePayment();
 
   useEffect(() => {}, [
-    authContext.user,
-    authContext.isAuthenticated,
-    authContext.loading,
+    authContext?.user,
+    authContext?.isAuthenticated,
+    authContext?.loading,
     authContext?.user?.id,
   ]);
 
@@ -408,12 +408,6 @@ const MartivoSubscriptions = ({
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {}, [authContext]);
 
   const handleCreateSubscription = async () => {
     if (!userId) {
@@ -446,6 +440,7 @@ const MartivoSubscriptions = ({
       const response: any = await getSequencesById(subscriptionId, userId);
       setPlacePrice(response?.pricing || "0");
       setSequencesList(response?.sequences || []);
+      setSubscriptions(response); 
     } catch (error) {
       console.error("Error fetching sequences:", error);
     } finally {
@@ -606,22 +601,25 @@ const MartivoSubscriptions = ({
     });
   };
 
-  const baseAmountPerCycles = selectedAmounts.reduce(
-    (acc, curr) =>
-      acc + curr.amount + (Number(subscriptions?.courseAmount) || 0),
-    0
+  const baseAmountPerMember =
+    selectedAmounts.reduce((acc, curr) => acc + curr.amount, 0) +
+    (Number(subscriptions?.courseAmount) || 0);
+
+  let discountPerMember = 0;
+  if (appliedCoupon && baseAmountPerMember > 0 && selectedAmounts.length > 0) {
+    const firstAmount = selectedAmounts[0].amount;
+
+    if (appliedCoupon.discountType === "PERCENTAGE") {
+      discountPerMember = (firstAmount * appliedCoupon.discountValue) / 100;
+    } else {
+      discountPerMember = appliedCoupon.discountValue;
+    }
+  }
+
+  const totalAmount = Math.max(
+    0,
+    (baseAmountPerMember - discountPerMember) * count
   );
-
-  const baseAmount = baseAmountPerCycles * count;
-
-  const discountAmount =
-    appliedCoupon && baseAmount > 0
-      ? appliedCoupon.discountType === "PERCENTAGE"
-        ? (baseAmount * appliedCoupon.discountValue) / 100
-        : appliedCoupon.discountValue
-      : 0;
-
-  const totalAmount = Math.max(0, baseAmount - discountAmount);
 
   const handleApplyCoupon = (codeFromButton?: string) => {
     const code =
@@ -658,11 +656,18 @@ const MartivoSubscriptions = ({
     setCouponInput(coupon.couponCode);
     toast.success("Coupon applied");
   };
+
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponInput("");
     toast.info("Coupon removed");
   };
+
+  const oneTimeFee = Number(subscriptions?.initialPayment ?? 0);
+  const hasOneTimeFeeApplied =
+    oneTimeFee > 0 &&
+    sequencesList.length > 0 &&
+    selectedAmounts.some((item) => item.id === sequencesList[0]?._id);
 
   if (isPageLoading) {
     return (
@@ -677,7 +682,6 @@ const MartivoSubscriptions = ({
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
           <div className="mx-auto">
-            {/* Card-style skeleton to match the final layout */}
             <div className="rounded-2xl border bg-white px-4 md:px-6 py-5 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div>
@@ -707,7 +711,6 @@ const MartivoSubscriptions = ({
               </div>
             </div>
 
-            {/* Payment schedule + summary skeleton */}
             <div className="mb-3">
               <Skeleton className="h-5 w-40 mb-3" />
               <Skeleton className="h-8 w-64 rounded-full mb-4" />
@@ -768,9 +771,7 @@ const MartivoSubscriptions = ({
           >
             <AccordionTrigger className="px-0 py-4 hover:no-underline">
               <div className="flex w-full items-center justify-between gap-4">
-                {/* Left: columns */}
                 <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-5">
-                  {/* Plan Name */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Plan Name
@@ -779,7 +780,6 @@ const MartivoSubscriptions = ({
                       {plan?.name}
                     </p>
                   </div>
-                  {/* Plan Type */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Plan Type
@@ -788,7 +788,6 @@ const MartivoSubscriptions = ({
                       {capitalizeWords(plan?.duration || "")}
                     </p>
                   </div>
-                  {/* Price + offers */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Price
@@ -812,7 +811,6 @@ const MartivoSubscriptions = ({
                       )}
                     </div>
                   </div>
-                  {/* Start Date */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Start Date
@@ -825,7 +823,6 @@ const MartivoSubscriptions = ({
                         : ""}
                     </p>
                   </div>
-                  {/* Right: status pill (chevron is auto from AccordionTrigger) */}
                   <div className="flex items-center md:justify-center gap-2">
                     <div
                       className="text-xs rounded-full px-4 py-2 capitalize border text-center flex items-center justify-center md:w-fit w-full"
@@ -873,8 +870,7 @@ const MartivoSubscriptions = ({
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <DialogTrigger asChild>
-                                <button
-                                  type="button"
+                                <div
                                   className="flex items-center gap-2 text-[#3B9B7F] border border-[#3B9B7F]/40 
                          hover:bg-[#3B9B7F]/10 hover:border-[#3B9B7F] 
                          transition-all duration-200 rounded-full p-1 
@@ -885,7 +881,7 @@ const MartivoSubscriptions = ({
                                     strokeWidth={1.8}
                                     color="#3B9B7F"
                                   />
-                                </button>
+                                </div>
                               </DialogTrigger>
                             </TooltipTrigger>
                             <TooltipContent>Pause Subscription</TooltipContent>
@@ -900,7 +896,6 @@ const MartivoSubscriptions = ({
                               Temporarily pause your member&apos;s subscription.
                             </p>
 
-                            {/* Current Details */}
                             <div className="border rounded-lg p-4 bg-gray-50">
                               <p className="text-xs font-semibold text-gray-500 mb-2">
                                 Current Details
@@ -938,7 +933,6 @@ const MartivoSubscriptions = ({
                               </div>
                             </div>
 
-                            {/* Pause Duration */}
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Pause Duration
@@ -993,7 +987,6 @@ const MartivoSubscriptions = ({
                               </p>
                             </div>
 
-                            {/* Start Immediately */}
                             <div className="flex items-center justify-between mt-1">
                               <p className="text-sm text-gray-600">
                                 Start Immediately
@@ -1006,7 +999,6 @@ const MartivoSubscriptions = ({
                               />
                             </div>
 
-                            {/* Start Date (when not immediate) */}
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Pause Start Date
@@ -1026,7 +1018,6 @@ const MartivoSubscriptions = ({
                               />
                             </div>
 
-                            {/* After Pause Details */}
                             <div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
                               <p className="text-xs font-semibold text-gray-500 mb-2">
                                 After Pause Details
@@ -1137,6 +1128,26 @@ const MartivoSubscriptions = ({
 
                     if (!isVisible) return null;
 
+                    const basePricing = Number(
+                      subscriptions?.pricing ?? placePrice ?? 0
+                    );
+
+                    const initialPayment =
+                      index === 0
+                        ? Number(subscriptions?.initialPayment ?? 0)
+                        : 0;
+
+                    const amount = basePricing + initialPayment;
+                    const isDisabled =
+                      ["PAID", "PAID_BY_CASH", "NA"].includes(payment.status) ||
+                      (payment as any).isnonPayable ||
+                      index ===
+                        sequencesList.filter(
+                          (p) =>
+                            activeTab === "All" ||
+                            p.previousStatus === activeTab
+                        ).length -
+                          1;
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
@@ -1152,15 +1163,16 @@ const MartivoSubscriptions = ({
                               )
                             : "N/A"
                         }
-                        amount={placePrice}
+                        amount={amount.toString()}
                         status={payment.status}
                         isSelected={selectedAmounts.some(
                           (item) => item.id === payment._id
                         )}
+                        isDisabled={isDisabled}
                         onSelect={() =>
                           handleSelectAmount(
                             payment._id,
-                            Number(placePrice),
+                            amount,
                             payment?.startDate
                           )
                         }
@@ -1201,6 +1213,19 @@ const MartivoSubscriptions = ({
                       <p className="text-[#646464] text-[16px]">
                         Subscription Fee
                       </p>
+
+                      {hasOneTimeFeeApplied && (
+                        <p className="text-xs text-gray-500">
+                          Includes one-time fee of{" "}
+                          {new Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                            minimumFractionDigits: 2,
+                          }).format(oneTimeFee)}{" "}
+                          in the first cycle
+                        </p>
+                      )}
+
                       {appliedCoupon && (
                         <p className="text-[#646464] text-[16px]">
                           Coupon Discount
@@ -1214,9 +1239,10 @@ const MartivoSubscriptions = ({
                           style: "currency",
                           currency: "INR",
                           minimumFractionDigits: 2,
-                        }).format(Number(baseAmountPerCycles || 0))}{" "}
+                        }).format(Number(baseAmountPerMember || 0))}{" "}
                         × {count} member{count > 1 ? "s" : ""}
                       </p>
+
                       {appliedCoupon && (
                         <p className="text-[#10A00D] text-[16px]">
                           -{" "}
@@ -1224,10 +1250,10 @@ const MartivoSubscriptions = ({
                             style: "currency",
                             currency: "INR",
                             minimumFractionDigits: 2,
-                          }).format(discountAmount)}
+                          }).format(discountPerMember * count)}
                         </p>
                       )}
-                      {/* Applied coupon badge */}
+
                       {appliedCoupon && (
                         <div className="flex justify-end mb-2 gap-2 items-center">
                           <Badge
@@ -1377,7 +1403,8 @@ const MartivoSubscriptions = ({
               <p className="text-sm md:text-[16px] text-[#646464] text-center">
                 Your plan is paused from{" "}
                 {formatDates(subscriptionData?.pauseStartDate)} -{" "}
-                {formatDates(subscriptionData?.pauseEndDate)}.<br />
+                {formatDates(subscriptionData?.pauseEndDate)}.
+                <br />
                 {subscriptionData?.remainingPauseDays} days remaining to resume
               </p>
             </div>
