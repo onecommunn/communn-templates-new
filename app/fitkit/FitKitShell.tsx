@@ -1,48 +1,23 @@
 import { Community } from "@/services/communityService";
+import React from "react";
 import { CMSProvider } from "./CMSProvider.client";
-import SpawellHeader from "./_components/SpawellHeader";
-import SpawellFooter from "./_components/SpawellFooter";
-import { getSpawellCMSBundle } from "@/lib/Spawell/spawell-cms";
-import {
-  ContactSection,
-  FooterSection,
-  Header,
-  HomeSection,
-} from "@/models/templates/spawell/spawell-home-model";
-import { dummyData } from "./DummyData";
-import Link from "next/link";
-import PhoneIcon from "@/components/icons/PhoneIcon";
-import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import { getFitKitCMSBundle } from "@/lib/FitKit/fitkit-cms";
+import FitKitHeader from "./_components/FitKitHeader";
+import FitkitFooter from "./_components/FitkitFooter";
 import Head from "next/head";
+import Link from "next/link";
+import { Phone } from "lucide-react";
+import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import PhoneIcon from "@/components/icons/PhoneIcon";
 
-export default async function SpawellShell({
+export default async function FitKitShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
-  const bundle = await getSpawellCMSBundle(community._id);
-  const source = bundle?.home ?? dummyData;
-
-  const headerData = source?.sections.find(
-    (s: HomeSection): s is Header => s.sectionName === "headerSection"
-  );
-
-  const footerData = source?.sections.find(
-    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
-  );
-
-  const contactSectionData = source?.sections?.find(
-    (s: HomeSection): s is ContactSection =>
-      s.sectionName == "contactSection" && s.isActive
-  );
+  const bundle = await getFitKitCMSBundle(community._id);
+  const source = bundle?.home;
 
   const initialLoading = !bundle?.home || source;
-
-  const primaryColor = source?.color?.primary || "#5D3222";
-  const secondaryColor = source?.color?.secondary || "#fff";
-  const neutralColor = source?.color?.neutral || "#F9F6F1";
-
-  const contactData = footerData && footerData?.content;
-
   return (
     <>
       <Head>
@@ -56,7 +31,7 @@ export default async function SpawellShell({
       </Head>
       {/* Call Button */}
       <Link
-        href={`tel:${contactData?.contact?.phoneNumber}`}
+        href="tel:+917975207595"
         target="_blank"
         title="Call us"
         style={{
@@ -78,7 +53,7 @@ export default async function SpawellShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=${contactData?.contact?.phoneNumber}&text=Hi`}
+        href="https://api.whatsapp.com/send?phone=917975207595&text=Hi"
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"
@@ -100,21 +75,11 @@ export default async function SpawellShell({
           />
         </button>
       </Link>
-      <SpawellHeader
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-        data={headerData}
-      />
+      <FitKitHeader />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
       </CMSProvider>
-      <SpawellFooter
-        primaryColor={primaryColor}
-        secondaryColor={secondaryColor}
-        neutralColor={neutralColor}
-        data={footerData}
-      />
+      <FitkitFooter />
     </>
   );
 }

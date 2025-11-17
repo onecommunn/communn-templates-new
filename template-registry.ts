@@ -42,6 +42,7 @@ import RestraintLogin from "./app/restraint/login/page";
 import RestraintSignup from "./app/restraint/sign-up/page";
 import RestraintSubscriptionsPage from "./app/restraint/subscriptions/page";
 import RestraintEventDetailsPage from "./app/restraint/event-details/page";
+import FitKitShell from "./app/fitkit/FitKitShell";
 
 export const templateLayouts: Record<
   string,
@@ -53,6 +54,7 @@ export const templateLayouts: Record<
   spawell: SpawellShell,
   martivo: MartivoShell,
   restraint: RestraintShell,
+  fitkit: FitKitShell,
 };
 
 export const templates: Record<

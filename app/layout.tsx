@@ -10,6 +10,8 @@ import {
   Lato,
   Sora,
   Marcellus,
+  Kanit,
+  Archivo,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -78,6 +80,20 @@ const marcellus = Marcellus({
   variable: "--font-marcellus",
 });
 
+const kanit = Kanit({
+  subsets: ["latin", "latin-ext", "thai", "vietnamese"],
+  weight: ["400", "100", "200", "300", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-kanit",
+});
+
+const archivo = Archivo({
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  weight: ["400", "100", "200", "300", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-archivo",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -86,7 +102,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

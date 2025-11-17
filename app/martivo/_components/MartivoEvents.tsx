@@ -166,11 +166,11 @@ export default function MartivoEvents({
           {/* Left intro */}
           <div className="flex justify-center">
             <div className="text-center md:max-w-lg">
-              <p className="mb-2 text-xs font-semibold tracking-[0.22em] text-[var(--sec)] uppercase">
-                Events
-              </p>
-              <h2 className="mb-2 text-2xl font-semibold text-slate-900 md:text-3xl">
+              <p className="mb-2 text-[13px] font-semibold tracking-[0.22em] text-[var(--pri)] uppercase">
                 {content?.heading}
+              </p>
+              <h2 className="text-2xl font-semibold text-slate-900 md:text-4xl">
+                {content?.subHeading}
               </h2>
             </div>
           </div>

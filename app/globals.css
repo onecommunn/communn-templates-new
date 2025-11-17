@@ -16,6 +16,8 @@
   --font-lato: var(--font-lato), serif;
   --font-sora: var(--font-sora), serif;
   --font-marcellus: var(--font-marcellus), serif;
+  --font-kanit: var(--font-kanit), serif;
+  --font-archivo: var(--font-archivo), serif;
 }
 
 .font-lora {
@@ -264,4 +266,14 @@ body {
     padding: 0;
     margin: 0;
   }
+  .hero-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 10% 100%, 0 80%);
+  }
+  .cal-clip {
+    clip-path: polygon(0 0, 10% 20%, 90% 20%, 100% 0, 100% 80%,90% 100%,10% 100%,0 80%);
+  }
+  .gallery-clip-path{
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
+  }
+  
 }
