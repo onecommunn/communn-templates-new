@@ -4,7 +4,6 @@ import { CMSProvider } from "./CMSProvider.client";
 import { getFitKitCMSBundle } from "@/lib/FitKit/fitkit-cms";
 import FitKitHeader from "./_components/FitKitHeader";
 import FitkitFooter from "./_components/FitkitFooter";
-import Head from "next/head";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
@@ -20,15 +19,7 @@ export default async function FitKitShell({
   const initialLoading = !bundle?.home || source;
   return (
     <>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
-        />
-      </Head>
+
       {/* Call Button */}
       <Link
         href="tel:+917975207595"
