@@ -10,6 +10,7 @@ import { CreatorHeaderPage } from "@/models/templates/creator/creator-header.mod
 import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-model";
 import { fetchCreatorContact } from "@/services/creatorService";
 import { BASE_URL_V2 } from "@/configurations/url.config";
+import { CreatorContactPage } from "@/models/templates/creator/creator-contact.model";
 
 const dummyHeaderData: CreatorHeaderPage = {
   templateId: "creator",
@@ -128,6 +129,61 @@ const dummyFooterData: CreatorFooterPage = {
   __v: 0,
 };
 
+const dummyData: CreatorContactPage = {
+  templateId: "creator",
+  pageName: "contact",
+  color: {
+    primary: "#fff",
+    secondary: "#000",
+  },
+  sections: [
+    {
+      sectionName: "contactSection",
+      order: 0,
+      isActive: true,
+      content: {
+        title: "We’d love to hear from you",
+        description:
+          "Ready to start your transformation journey? Have questions about my programs? I'd love to hear from you and help you take the next step.",
+        email: {
+          heading: "Send us an email",
+          subHeading:
+            "Our community has been the heart of our journey from the start, their unwavering support means the world to us",
+          value: "contact@prachiandharsh.com",
+        },
+        call: {
+          heading: "Give us a call",
+          subHeading:
+            "The strength of our community has been pivotal since day one, and their encouragement is priceless.",
+          value: "+91 7904125027",
+        },
+        address: {
+          heading: "Visit us",
+          value:
+            "NO.25/1, BDA SITE, NO.735/A, 3rd Main Rd, 2nd Phase, Gokula 1st Stage, MATHIKERE, Yeswanthpur, Bengaluru, Karnataka 560054",
+        },
+      },
+    },
+    {
+      sectionName: "ctaSection",
+      order: 1,
+      isActive: true,
+      content: {
+        title: "Stay Inspired",
+        description:
+          "Get weekly insights, tips, and exclusive content delivered to your inbox. Join over 10,000 people on their growth journey.",
+        buttons: [
+          {
+            label: "Explore All Activities",
+            url: "https://prachiandharsh/courses",
+          },
+        ],
+      },
+    },
+  ],
+  status: "published",
+};
+
 /** ---- Async server slots with fetch + "nothing if empty" behavior ---- **/
 
 async function HeaderSlot({
@@ -175,7 +231,7 @@ async function FooterSlot({
     .catch(() => null);
 
   const contact: any = await fetchCreatorContact(communityId);
-  const address = contact?.data?.sections[0];
+  const address = contact?.data?.sections[0] ?? dummyData?.sections[0];
 
   const section = res?.data?.sections?.[0] || dummyFooterData.sections[0];
   if (!section) return null; // <-- NO DATA ⇒ render nothing
