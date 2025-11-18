@@ -11,6 +11,9 @@ import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-mod
 import { fetchCreatorContact } from "@/services/creatorService";
 import { BASE_URL_V2 } from "@/configurations/url.config";
 import { CreatorContactPage } from "@/models/templates/creator/creator-contact.model";
+import Link from "next/link";
+import PhoneIcon from "@/components/icons/PhoneIcon";
+import WhatsappIcon from "@/components/icons/WhatsappIcon";
 
 const dummyHeaderData: CreatorHeaderPage = {
   templateId: "creator",
@@ -261,9 +264,57 @@ export default async function CreatorShell({
   const primaryColor = bundle?.header?.color?.primary || "#fff";
   const secondaryColor = bundle?.header?.color?.secondary || "#000";
 
+  const contact: any = await fetchCreatorContact(community._id);
+  const address = contact?.data?.sections[0] ?? dummyData?.sections[0];
   return (
     <>
       {/* Header: skeleton while fetching, nothing if API returns empty */}
+      {/* Call Button */}
+      <Link
+        href={`tel:${address?.content?.call?.value}`}
+        target="_blank"
+        title="Call us"
+        style={{
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        }}
+        className="fixed flex items-center justify-center bottom-[2%] left-[2%]! z-[99] bg-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
+      >
+        <button>
+          <PhoneIcon
+            style={{
+              color: "#000",
+              width: "30px",
+              height: "30px",
+            }}
+          />
+        </button>
+      </Link>
+
+      {/* whatsapp Button */}
+      <Link
+        href={`https://api.whatsapp.com/send?phone=${address?.content?.call?.value}&text=Hi`}
+        target="_blank"
+        data-bs-toggle="tooltip"
+        data-bs-html="true"
+        title="WhatsApp Us"
+        style={{
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          backgroundImage: "linear-gradient(to right, #59ee75, #28d045)",
+        }}
+        className="fixed flex items-center justify-center bottom-[2%] right-[2%]! z-[99] text-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
+      >
+        <button>
+          <WhatsappIcon
+            style={{
+              color: "#fff",
+              width: "40px",
+              height: "40px",
+            }}
+          />
+        </button>
+      </Link>
       <Suspense
         fallback={
           <CreatorHeaderSkeleton
