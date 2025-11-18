@@ -40,7 +40,7 @@ const FitKitHeader = () => {
   };
 
   return (
-    <header className="sticky font-archivo top-0 z-50 bg-[#141414] text-[#AFB1C3]">
+    <header className="sticky font-archivo top-0 z-50 bg-[#141414] text-[#AFB1C3] ">
       {/* upper header */}
       <div className="py-2 mx-auto px-4 sm:px-6 md:px-6 lg:px-20 hidden md:flex md:flex-row items-center justify-between border-b border-b-[#383D46]">
         <div className="flex flex-row items-center justify-center gap-6 text-sm">
@@ -138,7 +138,7 @@ const FitKitHeader = () => {
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-archivo py-2 bg-[var(--pri)] text-[var(--sec)] rounded-[10px] text-sm w-fit">
+                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-archivo py-2 bg-[var(--pri)] text-[var(--sec)] rounded-[10px] text-sm w-fit border border-[#ba1c26]">
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>

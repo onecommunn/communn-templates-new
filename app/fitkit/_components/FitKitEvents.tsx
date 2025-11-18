@@ -70,7 +70,7 @@ const FitKitEvents = () => {
   if (isLoading) {
     // Loading: carousel with skeleton slides + dots
     return (
-      <section className="font-archivo w-full overflow-hidden relative">
+      <section className="font-archivo w-full overflow-hidden relative" id="events">
         <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
           {/* Heading */}
           <div className="flex flex-col items-center w-full">
@@ -114,7 +114,7 @@ const FitKitEvents = () => {
   }
 
   return (
-    <section className="font-archivo w-full overflow-hidden relative">
+    <section className="font-archivo w-full overflow-hidden relative" id="events">
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
         {/* Titles */}
         <div className="flex flex-col items-center w-full">

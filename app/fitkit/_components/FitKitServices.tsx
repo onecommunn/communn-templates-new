@@ -38,7 +38,7 @@ const FitKitServices = () => {
   const [api, setApi] = useState<CarouselApi>();
 
   return (
-    <section className="font-archivo w-full overflow-hidden relative">
+    <section className="font-archivo w-full overflow-hidden relative" id="services">
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
         {/* Titles */}
         <div className="flex flex-col items-center w-full">

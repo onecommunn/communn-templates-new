@@ -42,31 +42,31 @@ const FitkitFooter = () => {
               Home
             </Link>
             <Link
-              href={"/"}
+              href={"/#about-us"}
               className="font-medium text-[#AFB8C7] text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
             >
               About us
             </Link>
             <Link
-              href={"/"}
+              href={"/#services"}
               className="font-medium text-[#AFB8C7] text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
             >
               Services
             </Link>
             <Link
-              href={"/"}
+              href={"/#events"}
               className="font-medium text-[#AFB8C7] text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
             >
               Events
             </Link>
             <Link
-              href={"/"}
+              href={"/#plans"}
               className="font-medium text-[#AFB8C7] text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
             >
               Plans
             </Link>
             <Link
-              href={"/"}
+              href={"/#contact"}
               className="font-medium text-[#AFB8C7] text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
             >
               Contact

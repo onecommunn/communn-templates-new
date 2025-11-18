@@ -43,6 +43,10 @@ import RestraintSignup from "./app/restraint/sign-up/page";
 import RestraintSubscriptionsPage from "./app/restraint/subscriptions/page";
 import RestraintEventDetailsPage from "./app/restraint/event-details/page";
 import FitKitShell from "./app/fitkit/FitKitShell";
+import FitkitLogin from "./app/fitkit/login/page";
+import FitKitSignup from "./app/fitkit/sign-up/page";
+import FitkitEventDetailsPage from "./app/fitkit/event-details/page";
+import FitkitSubscriptionsPage from "./app/fitkit/subscriptions/page";
 
 export const templateLayouts: Record<
   string,
@@ -87,7 +91,13 @@ export const templates: Record<
     "/event-details": SpawellEventDetailsPage,
     "/sign-up": SpawellSignup,
   },
-  fitkit: { "/": FitkitRoot },
+  fitkit: {
+    "/": FitkitRoot,
+    "/login": FitkitLogin,
+    "/sign-up": FitKitSignup,
+    "/event-details": FitkitEventDetailsPage,
+    "/subscriptions": FitkitSubscriptionsPage,
+  },
   restraint: {
     "/": RestraintRoot,
     "/plans": RestraintPlansRoot,

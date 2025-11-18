@@ -28,7 +28,7 @@ const contactItems = [
 
 const FitKitContact = () => {
   return (
-    <section className="w-full font-archivo">
+    <section className="w-full font-archivo" id="contact">
       <div className="mx-auto container  md:px-20 md:py-16 grid min-h-[420px] md:min-h-[520px] md:grid-cols-[1.1fr_1.4fr]">
         {/* LEFT – CONTENT */}
         <div className="bg-[#111111] text-white px-6 py-10 md:px-16 md:py-16 flex items-center">

@@ -5,7 +5,7 @@ import React from "react";
 
 const FitKitAboutUs = () => {
   return (
-    <section className="font-archivo relative w-full overflow-hidden">
+    <section className="font-archivo relative w-full overflow-hidden" id="about-us">
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20 grid md:grid-cols-2 gap-6">
         {/* left */}
         <div className="flex flex-col justify-center">
