@@ -8,6 +8,7 @@ import {
   FooterSection,
   Header,
   HomeSection,
+  ServiceSection,
 } from "@/models/templates/spawell/spawell-home-model";
 import { dummyData } from "./DummyData";
 import Link from "next/link";
@@ -30,11 +31,6 @@ export default async function SpawellShell({
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
-  const contactSectionData = source?.sections?.find(
-    (s: HomeSection): s is ContactSection =>
-      s.sectionName == "contactSection" && s.isActive
-  );
-
   const initialLoading = !bundle?.home || source;
 
   const primaryColor = source?.color?.primary || "#5D3222";
@@ -42,6 +38,11 @@ export default async function SpawellShell({
   const neutralColor = source?.color?.neutral || "#F9F6F1";
 
   const contactData = footerData && footerData?.content;
+
+  const serviceSection = source?.sections?.find(
+    (s: HomeSection): s is ServiceSection =>
+      s.sectionName === "serviceSection" && s.isActive
+  );
 
   return (
     <>
@@ -105,6 +106,7 @@ export default async function SpawellShell({
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
         data={footerData}
+        servicesData={serviceSection}
       />
     </>
   );

@@ -2,9 +2,17 @@
 
 import React from "react";
 import Link from "next/link";
-import { Instagram, Facebook, Linkedin, Dribbble, Globe, Twitter } from "lucide-react";
+import {
+  Instagram,
+  Facebook,
+  Linkedin,
+  Dribbble,
+  Globe,
+  Twitter,
+} from "lucide-react";
 import {
   FooterSection,
+  ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/spawell/spawell-home-model";
 
@@ -13,7 +21,7 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
   facebook: Facebook,
   linkedin: Linkedin,
   dribbble: Dribbble,
-  twitter:Twitter,
+  twitter: Twitter,
 };
 
 const SpawellFooter = ({
@@ -21,14 +29,17 @@ const SpawellFooter = ({
   secondaryColor,
   neutralColor,
   data,
+  servicesData,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
   data: FooterSection;
+  servicesData: ServiceSection;
 }) => {
   const source = data?.content;
   const normalize = (s?: string) => (s ?? "").trim();
+  const services = servicesData?.content?.services;
   return (
     <footer
       className="bg-[var(--pri)] text-[var(--sec)]/90 font-plus-jakarta"
@@ -133,26 +144,13 @@ const SpawellFooter = ({
             <div>
               <h4 className="text-sm font-semibold">Services</h4>
               <ul className="mt-3 space-y-2 text-sm text-[var(--sec)]/80">
-                <li>
-                  <Link href="#" className="hover:text-[var(--sec)]">
-                    Healing Therapy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-[var(--sec)]">
-                    Herbal Body Scrub & Wrap
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-[var(--sec)]">
-                    Rejuvenating Facial Therapy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-[var(--sec)]">
-                    Signature Full-Body
-                  </Link>
-                </li>
+                {services?.map((item, idx) => (
+                  <li key={idx}>
+                    <Link href="/" className="hover:text-[var(--sec)]">
+                      {item?.serviceName}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
