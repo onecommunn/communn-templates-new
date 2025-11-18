@@ -14,7 +14,6 @@ import { dummyData } from "./DummyData";
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
-import Head from "next/head";
 
 export default async function SpawellShell({
   community,
@@ -46,6 +45,7 @@ export default async function SpawellShell({
 
   return (
     <>
+
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.contact?.phoneNumber}`}

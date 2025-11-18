@@ -12,7 +12,6 @@ import {
   HomeSection,
   ServiceSection,
 } from "@/models/templates/restraint/restraint-home-model";
-import Head from "next/head";
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
@@ -48,7 +47,8 @@ export default async function RestraintShell({
   const contactData = contactSectionData && contactSectionData?.content;
 
   return (
-    <>     
+    <>
+
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.contact?.phoneNumber}`}

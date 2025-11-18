@@ -13,7 +13,6 @@ import {
 } from "@/models/templates/yogana/yogana-home-model";
 import YoganaCTA from "./_components/YoganaCTA";
 import { dummyData } from "./dummyData";
-import Head from "next/head";
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
@@ -57,6 +56,7 @@ export default async function YoganaShell({
   // const neutralColor = "#707070";
   return (
     <>
+
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.content?.call?.value}`}

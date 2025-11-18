@@ -13,7 +13,6 @@ import {
 import { dummyData } from "./DummyData";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
 import Link from "next/link";
-import Head from "next/head";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 
 export default async function MartivoShell({
@@ -42,6 +41,7 @@ export default async function MartivoShell({
   const contactData = contactSectionData && contactSectionData?.content;
   return (
     <>
+
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.contact?.phoneNumber}`}
