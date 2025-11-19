@@ -12,11 +12,20 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/CustomComponents/CustomInputOtp";
-import { useCMS } from "../CMSProvider.client";
-import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { Input } from "@/components/ui/input";
+import { useCMS } from "../CMSProvider.client";
+import { dummyData } from "../dummyData";
+import { FitkitHomePage } from "@/models/templates/fitkit/fitkit-home-model";
 
 const FitkitLogin = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: FitkitHomePage | undefined = !isLoading
+    ? (home as FitkitHomePage | undefined) ?? dummyData
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#141414";
+  const secondaryColor = source?.color?.secondary || "#F41E1E";
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
@@ -140,16 +149,16 @@ const FitkitLogin = () => {
 
   return (
     <main
-      className="flex-grow flex h-[85vh] pb-2 items-center justify-center  font-archivo  bg-[#f60000]  border-t border-[#383D46]"
-      // style={
-      //   {
-      //     "--pri": primaryColor,
-      //     "--sec": secondaryColor,
-      //   } as React.CSSProperties
-      // }
+      className="flex-grow flex h-[85vh] pb-2 items-center justify-center  font-archivo  bg-[var(--sec)]  border-t border-[#383D46]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
     >
-      <div className="bg-[#141414] font-kanit h-[85vh] z-0 hero-clip [clip-path:inherit] w-full flex justify-center items-center">
-        <div className="rounded-none shadow-md p-8 text-[#ffffff] w-full max-w-xl border border-[#57606b] mx-6 md:mx-0">
+      <div className="bg-[var(--pri)] font-kanit h-[85vh] z-0 hero-clip [clip-path:inherit] w-full flex justify-center items-center">
+        <div className="rounded-none shadow-md p-8 text-[#ffffff] w-full max-w-xl border border-[var(--sec)] mx-6 md:mx-0">
           <h2 className="font-semibold text-3xl md:text-5xl text-white text-center">
             Login
           </h2>
@@ -159,7 +168,7 @@ const FitkitLogin = () => {
               <div className="text-center my-6">
                 <button
                   onClick={toggleAuthMethod}
-                  className="cursor-pointer underline text-sm font-medium text-[#f60000]"
+                  className="cursor-pointer underline text-sm font-medium text-[var(--sec)]"
                   disabled={loading}
                   // style={{ color: primaryColor }}
                 >
@@ -188,7 +197,7 @@ const FitkitLogin = () => {
                     placeholder={
                       useEmail ? "Enter your email" : "Enter your mobile number"
                     }
-                    className="w-full  border col-span-12 border-[#57606b] md:col-span-4 rounded-none h-12 placeholder:text-[#6B7586] text-white md:text-lg px-[30px] font-archivo"
+                    className="w-full  border col-span-12 border-[var(--sec)]/20 md:col-span-4 rounded-none h-12 placeholder:text-[#6B7586] text-white md:text-lg px-[30px] font-archivo"
                     disabled={loading}
                     // style={{
                     //   border: "1px solid #ddd",
@@ -200,10 +209,10 @@ const FitkitLogin = () => {
                   <button
                     onClick={handleGetOtp}
                     disabled={!isInputValid() || loading}
-                    className={`text-white px-6 py-3 bg-[#f60000] cursor-pointer rounded-none uppercase font-medium w-full ${
+                    className={`text-white px-6 py-3 bg-[var(--sec)] cursor-pointer rounded-none uppercase font-medium w-full ${
                       isInputValid() && !loading
                         ? ""
-                        : "bg-red-400 cursor-not-allowed"
+                        : "bg-[var(--sec)]/80 cursor-not-allowed"
                     }`}
                     // style={{ backgroundColor: primaryColor }}
                   >

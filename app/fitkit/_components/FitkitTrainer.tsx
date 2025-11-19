@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
+import { OurTeamSection } from "@/models/templates/fitkit/fitkit-home-model";
 
 const list = [
   {
@@ -37,11 +38,28 @@ const list = [
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
-const FitkitTrainer = () => {
+const FitkitTrainer = ({
+  data,
+  secondaryColor,
+  primaryColor,
+}: {
+  data: OurTeamSection;
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
   const [api, setApi] = useState<CarouselApi>();
 
   return (
-    <section className="font-archivo w-full md:h-screen overflow-hidden relative bg-center bg-cover">
+    <section
+      className="font-archivo w-full md:h-screen overflow-hidden relative bg-center bg-cover"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <img
@@ -59,15 +77,15 @@ const FitkitTrainer = () => {
         {/* Titles */}
         <div className="flex flex-col items-center w-full">
           <div className="mb-6 flex items-center gap-3">
-            <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
-            <span className="font-semibold text-xl text-[#F41E1E] font-kanit uppercase">
+            <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
+            <span className="font-semibold text-xl text-[var(--sec)] font-kanit uppercase">
               Our Trainer
             </span>
-            <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
+            <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
           </div>
 
           <h4 className="font-kanit font-semibold text-3xl md:text-5xl capitalize  text-center">
-            Meet Our Skilled Trainer
+            {content?.heading}
           </h4>
         </div>
         {/* Carousel */}
@@ -79,7 +97,7 @@ const FitkitTrainer = () => {
             className="w-full gap-10"
           >
             <CarouselContent>
-              {list.map((item, idx) => (
+              {content?.features?.map((item, idx) => (
                 <CarouselItem key={idx} className="basis-full md:basis-1/4">
                   <article className="flex flex-col items-center gap-4">
                     {/* Photo */}
@@ -87,8 +105,8 @@ const FitkitTrainer = () => {
                       <div className="relative rounded-full p-2 border border-gray-300 ">
                         <div className="overflow-hidden rounded-full bg-[#141414]">
                           <Image
-                            src={item.image}
-                            alt={`${item.name} photo`}
+                            src={item?.image}
+                            alt={`${item?.title} photo`}
                             width={320}
                             height={320}
                             unoptimized
@@ -98,11 +116,11 @@ const FitkitTrainer = () => {
                       </div>
                     </div>
                     <h3 className="font-kanit text-3xl font-medium">
-                      {item.name}
+                      {item?.title}
                     </h3>
 
-                    <p className="text-center text-[#F41E1E] text-[16px] px-10">
-                      {item.role}
+                    <p className="text-center text-[var(--sec)] text-[16px] px-10">
+                      {item?.description}
                     </p>
                   </article>
                 </CarouselItem>
@@ -111,7 +129,7 @@ const FitkitTrainer = () => {
             <CarouselPrevious className="hidden cursor-pointer border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:flex" />
             <CarouselNext className="hidden cursor-pointer border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:flex" />
           </Carousel>
-          <Dots api={api} primaryColor="#F41E1E" />
+          <Dots api={api} primaryColor={secondaryColor} />
         </div>
       </div>
     </section>

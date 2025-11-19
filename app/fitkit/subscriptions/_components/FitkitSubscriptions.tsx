@@ -761,12 +761,12 @@ const FitkitSubscriptions = ({
   return (
     <main
       className="flex-grow"
-      // style={
-      //   {
-      //     "--pri": primaryColor,
-      //     "--sec": secondaryColor,
-      //   } as React.CSSProperties
-      // }
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-10">
         <Accordion type="single" collapsible className="w-full space-y-3">
@@ -1119,15 +1119,15 @@ const FitkitSubscriptions = ({
                 Payment Schedule
               </h2>
               <div>
-                <div className="flex flex-wrap mb-3 mt-2 w-fit rounded-none bg-black">
+                <div className="flex flex-wrap mb-3 mt-2 w-fit rounded-none bg-[var(--pri)]">
                   {tabs.map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
                       className={`px-8 py-2 cursor-pointer rounded-none text-sm font-medium transition-colors font-kanit ${
                         activeTab === tab
-                          ? " text-white bg-[#f60000] hover:bg-[#f60000]"
-                          : "text-white hover:text-white hover:bg-[#f60000]/70"
+                          ? " text-white bg-[var(--sec)] hover:bg-[var(--sec)]"
+                          : "text-white hover:text-white hover:bg-[var(--sec)]/70"
                       }`}
                     >
                       {formatStatus(tab)}
@@ -1368,7 +1368,7 @@ const FitkitSubscriptions = ({
                       onClick={() =>
                         handleClickPay(communityId || "", planID || "")
                       }
-                      className={`rounded-none uppercase font-kanit bg-[#f60000] ${
+                      className={`rounded-none uppercase font-kanit bg-[var(--sec)] ${
                         totalAmount === 0
                           ? "cursor-not-allowed"
                           : "cursor-pointer"

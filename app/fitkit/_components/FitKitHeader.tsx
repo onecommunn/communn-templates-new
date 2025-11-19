@@ -19,14 +19,32 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AuthContext } from "@/contexts/Auth.context";
+import {
+  ContactSection,
+  Header,
+  SocialMediaLink,
+} from "@/models/templates/fitkit/fitkit-home-model";
 import { logoutService } from "@/services/logoutService";
 import { ArrowRight, Mail, MapPin, Menu, Phone } from "lucide-react";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
 
-const FitKitHeader = () => {
+const FitKitHeader = ({
+  data,
+  contactData,
+  socialMediaData,
+  secondaryColor,
+  primaryColor,
+}: {
+  data: Header;
+  contactData: ContactSection;
+  socialMediaData: SocialMediaLink[];
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
+  const content = data?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -40,7 +58,15 @@ const FitKitHeader = () => {
   };
 
   return (
-    <header className="sticky font-archivo top-0 z-50 bg-[#141414] text-[#AFB1C3] ">
+    <header
+      className="sticky font-archivo top-0 z-50 bg-[var(--pri)] text-[#AFB1C3]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       {/* upper header */}
       <div className="py-2 mx-auto px-4 sm:px-6 md:px-6 lg:px-20 hidden md:flex md:flex-row items-center justify-between border-b border-b-[#383D46]">
         <div className="flex flex-row items-center justify-center gap-6 text-sm">
@@ -48,41 +74,40 @@ const FitKitHeader = () => {
             <span>
               <Phone size={18} color="#fff" />
             </span>
-            + 163-6589-9654
+            {contactData?.content?.contact?.phoneNumber}
           </Link>
           <span>|</span>
           <Link href={"/"} className="flex items-center gap-2">
             <span>
               <Mail size={18} color="#fff" />
             </span>
-            info@fitkit.com
+            {contactData?.content?.contact?.email}
           </Link>
           <span>|</span>
           <Link href={"/"} className="flex items-center gap-2">
             <span>
               <MapPin size={18} color="#fff" />
             </span>
-            67GR+XV2, Unnamed Road, Chatmohar
+            {contactData?.content?.contact?.address}
           </Link>
         </div>
         <div>
           <div className="flex flex-row items-center justify-center gap-6 text-sm">
-            <Link href={"/"}>Facebook</Link>
-            <span>|</span>
-            <Link href={"/"}>Twitter</Link>
-            <span>|</span>
-            <Link href={"/"}>Pintarest</Link>
-            <span>|</span>
-            <Link href={"/"}>Instagram</Link>
+            {socialMediaData.map((item, index) => (
+              <React.Fragment key={index}>
+                <Link href={item.url || "/"}>{item.platform}</Link>
+                {index !== socialMediaData.length - 1 && <span>|</span>}
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>
       {/* Header */}
-      <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[#141414] text-[#AFB1C3]">
+      <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[var(--pri)] text-[#AFB1C3]">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
-              src={"/assets/fitkit-logo.svg"}
+              src={content?.media?.[0] || "/assets/fitkit-logo.svg"}
               alt="logo"
               className="w-32 h-15 object-contain"
             />
@@ -94,37 +119,49 @@ const FitKitHeader = () => {
           >
             <Link
               href="/"
-              className={"font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"}
+              className={
+                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
+              }
             >
               Home
             </Link>
             <Link
               href="/#about-us"
-              className={"font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"}
+              className={
+                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
+              }
             >
               About us
             </Link>
             <Link
               href="/#services"
-              className={"font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"}
+              className={
+                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
+              }
             >
               Services
             </Link>
             <Link
               href="/#events"
-              className={"font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"}
+              className={
+                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
+              }
             >
               Events
             </Link>
             <Link
               href="/#plans"
-              className={"font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"}
+              className={
+                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
+              }
             >
               Plans
             </Link>
             <Link
               href="/#contact"
-              className={"font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"}
+              className={
+                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
+              }
             >
               Contact
             </Link>
@@ -134,11 +171,11 @@ const FitKitHeader = () => {
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="text-center font-medium min-w-fit text-[var(--pri)]">
+                <div className="text-center font-medium min-w-fit">
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-archivo py-2 bg-[var(--pri)] text-[var(--sec)] rounded-[10px] text-sm w-fit border border-[#ba1c26]">
+                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-archivo py-2 rounded-[10px] text-sm w-fit border border-[var(--sec)] text-[#AFB1C3]">
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -153,7 +190,7 @@ const FitKitHeader = () => {
                       </AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleLogout}
-                        className="bg-[#ba1c26] text-[var(--sec)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                        className="bg-[#ba1c26] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
                       >
                         Continue
                       </AlertDialogAction>
@@ -163,7 +200,7 @@ const FitKitHeader = () => {
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="cursor-pointer hover:bg-transparent hover:text-[var(--pri)] border border-[var(--pri)] rounded-[10px] text-sm bg-[var(--pri)] px-6 w-fit inline-flex items-center gap-2">
+                <Button className="cursor-pointer hover:bg-transparent hover:font-bold bg-transparent border rounded-[10px] text-sm  px-6 w-fit inline-flex items-center gap-2">
                   Login
                   <span>
                     <ArrowRight className="h-4 w-4" />

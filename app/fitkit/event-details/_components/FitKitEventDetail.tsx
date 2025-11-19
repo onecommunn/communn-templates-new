@@ -340,12 +340,12 @@ const FitKitEventDetail = ({
     <>
       <section
         className="py-10 font-archivo"
-        // style={
-        //   {
-        //     "--pri": primaryColor,
-        //     "--sec": secondaryColor,
-        //   } as React.CSSProperties
-        // }
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+          } as React.CSSProperties
+        }
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-6">
@@ -436,7 +436,7 @@ const FitKitEventDetail = ({
                     <>
                       {eventData?.guestApproval ? (
                         <Button
-                          className={`w-full rounded-none h-12 py-2.5 bg-[#f60000] disabled:bg-red-400${
+                          className={`w-full rounded-none h-12 py-2.5 bg-[var(--sec)] disabled:bg-[var(--sec)]/60 ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
@@ -464,9 +464,9 @@ const FitKitEventDetail = ({
                       ) : eventData?.isPaidService &&
                         !eventData?.guestApproval ? (
                         <Button
-                          className={`w-full rounded-none h-12 py-2.5 bg-[#f60000] disabled:bg-red-400${
+                          className={`w-full rounded-none h-12 py-2.5 bg-[var(--sec)] disabled:bg-[var(--sec)]/60 ${
                             !isFormValid || isLoading
-                              ? "cursor-not-allowed bg-red-400"
+                              ? "cursor-not-allowed bg-[var(--sec)]/40"
                               : "cursor-pointer"
                           }`}
                           disabled={!isFormValid}
@@ -496,7 +496,7 @@ const FitKitEventDetail = ({
                         </Button>
                       ) : (
                         <Button
-                          className={`w-full rounded-none h-12 py-2.5 bg-[#f60000] disabled:bg-red-400 ${
+                          className={`w-full rounded-none h-12 py-2.5 bg-[var(--sec)] disabled:bg-[var(--sec)]/60 ${
                             !isFormValid || isLoading
                               ? "cursor-not-allowed"
                               : "cursor-pointer"

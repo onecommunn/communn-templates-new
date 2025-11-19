@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Event } from "@/models/event.model";
+import { EventsSection } from "@/models/templates/fitkit/fitkit-home-model";
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
@@ -40,7 +41,16 @@ const dummyEvents = [
   },
 ];
 
-const FitKitEvents = () => {
+const FitKitEvents = ({
+  data,
+  secondaryColor,
+  primaryColor,
+}: {
+  data: EventsSection;
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
@@ -70,7 +80,10 @@ const FitKitEvents = () => {
   if (isLoading) {
     // Loading: carousel with skeleton slides + dots
     return (
-      <section className="font-archivo w-full overflow-hidden relative" id="events">
+      <section
+        className="font-archivo w-full overflow-hidden relative"
+        id="events"
+      >
         <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
           {/* Heading */}
           <div className="flex flex-col items-center w-full">
@@ -83,7 +96,7 @@ const FitKitEvents = () => {
             </div>
 
             <h4 className="font-kanit font-semibold text-3xl md:text-5xl capitalize text-center">
-              Easy Step to Achieve Your Goals.
+              {content?.heading}
             </h4>
           </div>
           <div className="mx-auto mt-6 px-4">
@@ -114,16 +127,25 @@ const FitKitEvents = () => {
   }
 
   return (
-    <section className="font-archivo w-full overflow-hidden relative" id="events">
+    <section
+      className="font-archivo w-full overflow-hidden relative"
+      id="events"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
         {/* Titles */}
         <div className="flex flex-col items-center w-full">
           <div className="mb-6 flex items-center gap-3">
-            <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
-            <span className="font-semibold text-xl text-[#F41E1E] font-kanit uppercase">
+            <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
+            <span className="font-semibold text-xl text-[var(--sec)] font-kanit uppercase">
               our Events
             </span>
-            <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
+            <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
           </div>
 
           <h4 className="font-kanit font-semibold text-3xl md:text-5xl capitalize  text-center">
@@ -170,7 +192,7 @@ const FitKitEvents = () => {
                         </p>
                         <Link
                           href={`event-details?eventid=${item._id}`}
-                          className="uppercase font-semibold hover:font-bold underline text-[#F41E1E] flex items-center gap-2"
+                          className="uppercase font-semibold hover:font-bold underline text-[var(--sec)] flex items-center gap-2"
                         >
                           Read More
                           <span>

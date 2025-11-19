@@ -10,44 +10,62 @@ import React, { useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Image from "next/image";
+import { ServiceSection } from "@/models/templates/fitkit/fitkit-home-model";
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
-const data = [
-  {
-    image: "/assets/fitkit-services-image1.png",
-    name: "Service Name",
-    description:
-      "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
-  },
-  {
-    image: "/assets/fitkit-services-image2.png",
-    name: "Fitness Practice",
-    description:
-      "Gyms are adaptable to various fitness levels and preferences, catering to beginners and advanced individuals alike.",
-  },
-  {
-    image: "/assets/fitkit-services-image3.png",
-    name: "Achievement",
-    description:
-      "Group fitness classes led by instructors offer structured workouts in a motivating group setting the development.",
-  },
-];
+// const data = [
+//   {
+//     image: "/assets/fitkit-services-image1.png",
+//     name: "Service Name",
+//     description:
+//       "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
+//   },
+//   {
+//     image: "/assets/fitkit-services-image2.png",
+//     name: "Fitness Practice",
+//     description:
+//       "Gyms are adaptable to various fitness levels and preferences, catering to beginners and advanced individuals alike.",
+//   },
+//   {
+//     image: "/assets/fitkit-services-image3.png",
+//     name: "Achievement",
+//     description:
+//       "Group fitness classes led by instructors offer structured workouts in a motivating group setting the development.",
+//   },
+// ];
 
-const FitKitServices = () => {
+const FitKitServices = ({
+  data,
+  secondaryColor,
+  primaryColor,
+}: {
+  data: ServiceSection;
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
   const [api, setApi] = useState<CarouselApi>();
-
+  const content = data?.content;
   return (
-    <section className="font-archivo w-full overflow-hidden relative" id="services">
+    <section
+      className="font-archivo w-full overflow-hidden relative"
+      id="services"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
         {/* Titles */}
         <div className="flex flex-col items-center w-full">
           <div className="mb-6 flex items-center gap-3">
-            <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
-            <span className="font-semibold text-xl text-[#F41E1E] font-kanit uppercase">
+            <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
+            <span className="font-semibold text-xl text-[var(--sec)] font-kanit uppercase">
               OUR SERVICES
             </span>
-            <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
+            <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
           </div>
 
           <h4 className="font-kanit font-semibold text-3xl md:text-5xl capitalize  text-center">
@@ -64,7 +82,7 @@ const FitKitServices = () => {
             className="w-full gap-10"
           >
             <CarouselContent>
-              {data.map((item, idx) => (
+              {content?.features?.map((item, idx) => (
                 <CarouselItem key={idx} className="basis-full md:basis-1/3">
                   <article className="flex flex-col items-center gap-4">
                     {/* Photo */}
@@ -78,8 +96,10 @@ const FitKitServices = () => {
                           }}
                         >
                           <Image
-                            src={item.image}
-                            alt={`${item.name} photo`}
+                            src={
+                              item.image || "/assets/fitkit-services-image1.png"
+                            }
+                            alt={`${item.title} photo`}
                             width={320}
                             height={320}
                             unoptimized
@@ -90,11 +110,11 @@ const FitKitServices = () => {
                     </div>
 
                     <h3 className="font-kanit text-3xl font-medium">
-                      {item.name}
+                      {item?.title}
                     </h3>
 
                     <p className="text-center text-[#6A6A6A] text-[16px] px-10">
-                      {item.description}
+                      {item?.description}
                     </p>
                   </article>
                 </CarouselItem>

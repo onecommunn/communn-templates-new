@@ -9,7 +9,13 @@ import {
 } from "@/components/ui/select";
 import React, { useState } from "react";
 
-const FitKitCalculate = () => {
+const FitKitCalculate = ({
+  secondaryColor,
+  primaryColor,
+}: {
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
   const [weight, setWeight] = useState<string>("");
   const [height, setHeight] = useState<string>("");
   const [age, setAge] = useState<string>("");
@@ -61,14 +67,22 @@ const FitKitCalculate = () => {
   };
 
   return (
-    <section className="bg-[#141414] font-kanit h-[85vh] z-0 -mt-1 md:-mt-[160px] cal-clip [clip-path:inherit]">
+    <section
+      className="bg-[var(--pri)] font-kanit h-[85vh] z-0 -mt-1 md:-mt-[160px] cal-clip [clip-path:inherit]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20 flex flex-col items-center justify-center h-full">
         <div className="mb-6 flex items-center gap-3">
-          <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
-          <span className="font-medium text-lg text-[#F41E1E] uppercase">
+          <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
+          <span className="font-medium text-lg text-[var(--sec)] uppercase">
             Body Mass Index
           </span>
-          <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
+          <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
         </div>
         <h3 className="font-semibold text-3xl md:text-5xl text-white text-center">
           Calculate Your BMI Now
@@ -151,7 +165,7 @@ const FitKitCalculate = () => {
           <button
             onClick={computeBMI}
             aria-label="Calculate Now"
-            className="bg-[#F41E1E] h-12 col-span-12 cursor-pointer hover:bg-[#f41e1ee7] text-white font-archivo font-bold text-[14px] md:col-span-4 uppercase"
+            className="bg-[var(--sec)] h-12 col-span-12 cursor-pointer hover:bg-[var(--sec)]/70 text-white font-archivo font-bold text-[14px] md:col-span-4 uppercase"
           >
             Calculate Now
           </button>

@@ -1,6 +1,9 @@
 "use client";
 import React, { Suspense } from "react";
 import FitkitSubscriptions from "./_components/FitkitSubscriptions";
+import { useCMS } from "../CMSProvider.client";
+import { FitkitHomePage } from "@/models/templates/fitkit/fitkit-home-model";
+import { dummyData } from "../dummyData";
 
 function PlanDetailsSkeleton() {
   return (
@@ -30,8 +33,14 @@ function PlanDetailsSkeleton() {
 }
 
 const FitkitSubscriptionsPage = () => {
-  const primaryColor = "#3D493A";
-  const secondaryColor = "#AEA17E";
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: FitkitHomePage | undefined = !isLoading
+    ? (home as FitkitHomePage | undefined) ?? dummyData
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#141414";
+  const secondaryColor = source?.color?.secondary || "#F41E1E";
 
   return (
     <Suspense fallback={<PlanDetailsSkeleton />}>

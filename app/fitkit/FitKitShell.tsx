@@ -5,21 +5,44 @@ import { getFitKitCMSBundle } from "@/lib/FitKit/fitkit-cms";
 import FitKitHeader from "./_components/FitKitHeader";
 import FitkitFooter from "./_components/FitkitFooter";
 import Link from "next/link";
-import { Phone } from "lucide-react";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
 import PhoneIcon from "@/components/icons/PhoneIcon";
+import {
+  ContactSection,
+  FooterSection,
+  Header,
+  HomeSection,
+} from "@/models/templates/fitkit/fitkit-home-model";
+import { dummyData } from "./dummyData";
 
 export default async function FitKitShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getFitKitCMSBundle(community._id);
-  const source = bundle?.home;
+  const source = bundle?.home ?? dummyData;
+
+  const primaryColor = source?.color?.primary || "#141414";
+  const secondaryColor = source?.color?.secondary || "#F41E1E";
 
   const initialLoading = !bundle?.home || source;
+
+  const headerData = source?.sections.find(
+    (s: HomeSection): s is Header => s.sectionName === "headerSection"
+  );
+
+  const footerData = source?.sections.find(
+    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
+  );
+
+  const contactData = source?.sections.find(
+    (s: HomeSection): s is ContactSection => s.sectionName === "contactSection"
+  );
+
+  const socialMediaData = footerData?.content?.socialMedia;
+
   return (
     <>
-
       {/* Call Button */}
       <Link
         href="tel:+917975207595"
@@ -66,11 +89,21 @@ export default async function FitKitShell({
           />
         </button>
       </Link>
-      <FitKitHeader />
+      <FitKitHeader
+        data={headerData}
+        contactData={contactData}
+        socialMediaData={socialMediaData}
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
       </CMSProvider>
-      <FitkitFooter />
+      <FitkitFooter
+        data={footerData}
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </>
   );
 }

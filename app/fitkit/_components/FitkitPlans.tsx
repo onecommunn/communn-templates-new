@@ -15,6 +15,7 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { usePlans } from "@/hooks/usePlan";
 import { useRequests } from "@/hooks/useRequests";
 import { TrainingPlan } from "@/models/plan.model";
+import { PlansSection } from "@/models/templates/fitkit/fitkit-home-model";
 import { ArrowRight, CircleCheck, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
@@ -22,7 +23,16 @@ import { toast } from "sonner";
 
 type Feature = { text: string; available?: boolean };
 
-const FitkitPlans = () => {
+const FitkitPlans = ({
+  data,
+  secondaryColor,
+  primaryColor,
+}: {
+  data: PlansSection;
+  secondaryColor: string;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -91,19 +101,28 @@ const FitkitPlans = () => {
   });
 
   return (
-    <section className="font-archivo relative w-full overflow-hidden" id="plans">
+    <section
+      className="font-archivo relative w-full overflow-hidden"
+      id="plans"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20">
         {/* Title Row */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between w-full">
           <div>
             <div className="mb-3 flex items-center gap-3">
-              <span className="h-[2px] w-16 bg-[#F41E1E] hidden md:flex" />
-              <span className="font-semibold text-xl text-[#F41E1E] font-kanit uppercase">
+              <span className="h-[2px] w-16 bg-[var(--sec)] hidden md:flex" />
+              <span className="font-semibold text-xl text-[var(--sec)] font-kanit uppercase">
                 Pricing Plan
               </span>
             </div>
             <h4 className="font-kanit font-semibold text-3xl md:text-5xl capitalize">
-              Find Your Perfect Plan
+              {content?.heading}
             </h4>
           </div>
         </div>
@@ -154,9 +173,9 @@ const FitkitPlans = () => {
 
 function FeatureItem({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-2">
-      <CircleCheck color="#F41E1E" size={18} strokeWidth={1} />
-      <span className="leading-snug text-[16px]">{text}</span>
+    <div className="flex items-center gap-2 text-[var(--sec)]">
+      <CircleCheck size={18} strokeWidth={1} />
+      <span className="leading-snug text-[16px] text-gray-500">{text}</span>
     </div>
   );
 }
@@ -194,7 +213,7 @@ const Card: React.FC<CardProps> = ({
   coverImage, // currently unused but kept for future design
   color,
   initialPayment,
-  planId
+  planId,
 }) => {
   const mid = Math.ceil(features.length / 2);
   const left = features.slice(0, mid);
@@ -262,7 +281,7 @@ const Card: React.FC<CardProps> = ({
           {title}
         </h5>
         <div className="flex items-end gap-2">
-          <span className="font-kanit text-[#F41E1E] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
+          <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
             <span className="text-lg md:text-xl mr-1">₹</span>
             {price}
           </span>
@@ -289,7 +308,7 @@ const Card: React.FC<CardProps> = ({
       </div>
 
       {/* Right: CTA */}
-      <div className="flex items-center justify-center bg-[#111318] px-6 py-8 text-center">
+      <div className="flex items-center justify-center bg-[var(--pri)] px-6 py-8 text-center">
         {!isLoggedIn ? (
           <Link
             href={"/login"}
@@ -309,16 +328,18 @@ const Card: React.FC<CardProps> = ({
             <Dialog>
               <DialogTrigger asChild>
                 <div
-                  className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+                  className="group relative inline-flex text-white items-center gap-3 rounded-full px-5 py-3 text-whitetransition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                   style={{ cursor: "pointer" }}
                 >
-                  <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
-                    <span>
-                      <LockKeyhole size={20} strokeWidth={1.5} />
-                    </span>
+                  <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2 uppercase font-kanit">
+                    {isPrivate && (
+                      <span>
+                        <LockKeyhole size={20} strokeWidth={1.5} />
+                      </span>
+                    )}
                     Join Community
                   </span>
-                  <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
+                  <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5">
                     <ArrowRight size={18} />
                   </span>
                 </div>
