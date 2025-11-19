@@ -66,6 +66,7 @@ const FitKitWhyChooseUs = ({
             alt="fitkit-why-choose-us-image"
             width={527}
             height={490}
+            unoptimized
           />
         </div>
       </div>

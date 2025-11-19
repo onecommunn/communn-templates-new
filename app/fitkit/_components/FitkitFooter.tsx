@@ -66,6 +66,7 @@ const FitkitFooter = ({
               alt="logo"
               width={175}
               height={50}
+              unoptimized
             />
           </div>
           <p className="text-center text-sm md:text-[16px] max-w-3xl">
