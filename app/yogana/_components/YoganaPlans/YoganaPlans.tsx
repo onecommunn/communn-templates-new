@@ -97,13 +97,24 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
+
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
   const { communityId, communityData } = useCommunity();
 
-  // console.log(plans, "plans");
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
 
-  // Persist the autoplay plugin instance
+  const userId =
+    (authContext as any)?.user?._id ??
+    (authContext as any)?.user?.id ??
+    undefined;
+
+  const isSubscribedCommunity =
+    joinedCommunityLocal ||
+    communityData?.community?.members?.some(
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+    );
+
   const autoplay = useRef(
     Autoplay({
       delay: 2000,
@@ -289,9 +300,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         description={plan.description || plan.summary}
                         subscribers={plan?.subscribers}
                         fetchPlans={fetchPlans}
-                        isSubscribedCommunity={communityData?.community?.members?.some(
-                          (m: any) => m?.user?._id === authContext?.user?.id
-                        )}
+                        isSubscribedCommunity={isSubscribedCommunity}
                         planId={plan._id}
                         communityId={communityId}
                         primaryColor={primaryColor}
@@ -308,6 +317,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         isPrivate={communityData?.community?.type === "PRIVATE"}
                         isRequested={!!isRequested}
                         initialPayment={plan?.initialPayment}
+                        // ✅ NEW: let the card tell parent “join succeeded”
+                        onJoinedCommunity={() => setJoinedCommunityLocal(true)}
                       />
                     </div>
                   </CarouselItem>

@@ -24,6 +24,7 @@ interface YoganaPlanCardProps {
   subscribers: { _id: string }[];
   fetchPlans?: () => void;
   isSubscribedCommunity?: boolean;
+  onJoinedCommunity?: () => void;
   planId: string;
   communityId: string;
   primaryColor: string;
@@ -67,6 +68,7 @@ const YoganaPlanCard = ({
   isRequested,
   initialPayment,
   coupons,
+  onJoinedCommunity,
 }: YoganaPlanCardProps) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -75,11 +77,11 @@ const YoganaPlanCard = ({
   const [mounted, setMounted] = useState(false);
   const { SendCommunityRequest } = useRequests();
 
-  console.log(coverImage, "coverImage");
-
   const handleClickJoin = async (id: string) => {
     try {
       await joinToPublicCommunity(id);
+
+      onJoinedCommunity?.();
       if (fetchPlans) {
         fetchPlans();
       }
@@ -213,7 +215,10 @@ const YoganaPlanCard = ({
             >
               / {period}
             </span>
-            <div className="text-sm font-plus-jakarta block"  style={{ color: primaryColor }}>
+            <div
+              className="text-sm font-plus-jakarta block"
+              style={{ color: primaryColor }}
+            >
               {Number(initialPayment) > 0 &&
                 ` + One Time Fee :  ₹ ${initialPayment}`}
             </div>

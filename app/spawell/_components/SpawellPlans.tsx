@@ -49,6 +49,7 @@ type PlanCardProps = {
   isPrivate: boolean;
   isRequested: boolean;
   initialPayment: string | number;
+  onJoinedCommunity?: () => void;
 };
 
 type Props = {
@@ -73,23 +74,35 @@ const Card: React.FC<PlanCardProps> = ({
   isPrivate,
   isRequested,
   initialPayment,
+  onJoinedCommunity,
 }) => {
-  const authContext = useContext(AuthContext);
-  const userId = authContext?.user?.id;
-  const isLoggedIn = !!userId;
   const { joinToPublicCommunity } = usePlans();
   const { SendCommunityRequest } = useRequests();
   const [mounted, setMounted] = useState(false);
 
+  const authContext = useContext(AuthContext);
+  const userId =
+    (authContext as any)?.user?._id ??
+    (authContext as any)?.user?.id ??
+    undefined;
+  const isLoggedIn = !!userId;
+
   const isSubscribed =
-    isLoggedIn && subscribers?.some((sub) => sub._id === userId);
+    isLoggedIn && subscribers?.some((sub) => sub?._id === userId);
 
   useEffect(() => setMounted(true), []);
   if (authContext?.loading || !mounted) return null;
 
-  const handleClickJoin = async (id: string) => {
+  const handleClickJoin = async (id?: string) => {
+    if (!id) {
+      toast.error("Community not found.");
+      return;
+    }
     try {
       await joinToPublicCommunity(id);
+
+      onJoinedCommunity?.();
+
       fetchPlans?.();
       toast.success("Successfully joined the community");
     } catch (error) {
@@ -366,6 +379,18 @@ const SpawellPlans: React.FC<Props> = ({
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
   const { communityId, communityData } = useCommunity();
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
+
+  const userId =
+    (authContext as any)?.user?._id ??
+    (authContext as any)?.user?.id ??
+    undefined;
+
+  const isSubscribedCommunity =
+    joinedCommunityLocal ||
+    communityData?.community?.members?.some(
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+    );
 
   // Persist the autoplay plugin instance
   const autoplay = useRef(
@@ -468,7 +493,7 @@ const SpawellPlans: React.FC<Props> = ({
                 >
                   <Skeleton
                     className="h-[420px] w-full rounded-[30px]"
-                    style={{ backgroundColor: "#E5E7EB" }} // gray-200 for skeleton
+                    style={{ backgroundColor: "#E5E7EB" }}
                   />
                 </CarouselItem>
               ))}
@@ -484,13 +509,9 @@ const SpawellPlans: React.FC<Props> = ({
 
   const isRequested = Boolean(
     communityData?.community?.requests?.some(
-      (req: any) => req.createdBy?._id === authContext?.user?.id
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
     )
   );
-
-  // if (!plans?.length || plans?.length < 0) {
-  //   return null;
-  // }
 
   return (
     <section
@@ -546,9 +567,7 @@ const SpawellPlans: React.FC<Props> = ({
                       description={plan.description || plan.summary}
                       subscribers={plan?.subscribers ?? []}
                       fetchPlans={fetchPlans}
-                      isSubscribedCommunity={communityData?.community?.members?.some(
-                        (m: any) => m?.user?._id === authContext?.user?.id
-                      )}
+                      isSubscribedCommunity={isSubscribedCommunity}
                       planId={plan._id}
                       communityId={communityId}
                       primaryColor={primaryColor}
@@ -567,6 +586,7 @@ const SpawellPlans: React.FC<Props> = ({
                       isPrivate={communityData?.community?.type === "PRIVATE"}
                       isRequested={!!isRequested}
                       initialPayment={plan?.initialPayment}
+                      onJoinedCommunity={() => setJoinedCommunityLocal(true)}
                     />
                   </CarouselItem>
                 ))}

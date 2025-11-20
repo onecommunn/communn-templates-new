@@ -26,10 +26,21 @@ const CreatorPlansSection = ({
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
   // const [communityId, setCommunityId] = useState<string>("");
-  const userId = authContext?.user?.id;
-  const isLoggedIn = !!userId;
-  const { communityId, communityData } = useCommunity();
 
+  const { communityId, communityData } = useCommunity();
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = React.useState(false);
+
+  // ✅ support both _id and id on auth user
+  const userId = authContext?.user?._id ?? authContext?.user?.id ?? undefined;
+
+  // ✅ top-level community membership check (server data + local flag)
+  const isSubscribedCommunity =
+    joinedCommunityLocal ||
+    communityData?.community?.members?.some(
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+    );
+
+  const isLoggedIn = !!userId;
   const handleClickJoin = async (id: string) => {
     try {
       await joinToPublicCommunity(id);
@@ -156,7 +167,7 @@ const CreatorPlansSection = ({
 
   const isRequested = Boolean(
     communityData?.community?.requests?.some(
-      (req: any) => req.createdBy?._id === authContext?.user?.id
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
     )
   );
 
@@ -187,15 +198,16 @@ const CreatorPlansSection = ({
               period={`${plan.interval} ${capitalizeWords(plan.duration)}`}
               communityId={communityId}
               subscribers={plan?.subscribers}
-              isSubscribedCommunity={communityData?.community?.members?.some(
-                (m: any) => m?.user?._id === authContext?.user?.id
-              )}
+              // ✅ use the top-level isSubscribedCommunity
+              isSubscribedCommunity={isSubscribedCommunity}
               fetchPlans={fetchPlans}
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
               isPrivate={communityData?.community?.type === "PRIVATE"}
               isRequested={!!isRequested}
               initialPayment={plan?.initialPayment}
+              // ✅ let the card tell parent “join succeeded”
+              onJoinedCommunity={() => setJoinedCommunityLocal(true)}
             />
           ))}
         </div>

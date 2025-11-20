@@ -41,6 +41,20 @@ const FitkitPlans = ({
   const { communityId, communityData } = useCommunity();
   const isAuthenticated = !!auth?.isAuthenticated;
 
+  // ✅ local flag to flip UI immediately after join
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
+
+  // ✅ robust user id (_id or id)
+  const userId =
+    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+
+  // ✅ single source of truth for “is member of community”
+  const isSubscribedCommunity =
+    joinedCommunityLocal ||
+    communityData?.community?.members?.some(
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+    );
+
   useEffect(() => {
     const fetchPlans = async () => {
       if (!communityId) return;
@@ -92,7 +106,6 @@ const FitkitPlans = ({
       price: p.pricing || p.totalPlanValue || 0,
       period,
       features,
-      // visually highlight the middle plan if there are exactly 3.
       featured: plans.length === 3 ? idx === 1 : false,
       subscribers: p.subscribers ?? [],
       image: p?.image?.value,
@@ -154,13 +167,14 @@ const FitkitPlans = ({
                   features={p.features}
                   featured={p.featured}
                   isPrivate={communityData?.community?.type === "PRIVATE"}
-                  isSubscribedCommunity={communityData?.community?.members?.some(
-                    (m: any) => m?.user?._id === auth?.user?.id
-                  )}
+                  // ✅ use computed flag instead of inline some()
+                  isSubscribedCommunity={isSubscribedCommunity}
                   subscribers={p.subscribers}
                   coverImage={p.image || "/assets/spawell-plans-image-1.jpg"}
                   planId={p.id}
                   initialPayment={p.initialPayment}
+                  // ✅ tell parent that join succeeded so UI flips
+                  onJoinedCommunity={() => setJoinedCommunityLocal(true)}
                 />
               ))}
             </div>
@@ -190,13 +204,15 @@ type CardProps = {
   featured?: boolean;
   isPrivate: boolean;
   isSubscribedCommunity?: boolean;
-  subscribers: { _id: string }[];
+  subscribers: { _id?: string; id?: string }[];
   fetchPlans?: () => void;
   communityId?: string;
   coverImage: string;
   planId: string;
   color?: string;
   initialPayment?: string | number;
+  // ✅ new callback: notify parent when join succeeds
+  onJoinedCommunity?: () => void;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -214,17 +230,25 @@ const Card: React.FC<CardProps> = ({
   color,
   initialPayment,
   planId,
+  onJoinedCommunity,
 }) => {
   const mid = Math.ceil(features.length / 2);
   const left = features.slice(0, mid);
   const right = features.slice(mid);
 
   const authContext = useContext(AuthContext);
-  const userId = authContext?.user?.id;
+  const userId =
+    (authContext as any)?.user?._id ??
+    (authContext as any)?.user?.id ??
+    undefined;
   const isLoggedIn = !!userId;
 
+  // ✅ robust subscriber check
   const isSubscribed =
-    isLoggedIn && subscribers?.some((sub) => sub._id === userId);
+    isLoggedIn &&
+    subscribers?.some(
+      (sub) => (sub?._id ?? sub?.id) === userId
+    );
 
   const { joinToPublicCommunity } = usePlans();
   const { SendCommunityRequest } = useRequests();
@@ -236,7 +260,13 @@ const Card: React.FC<CardProps> = ({
     }
     try {
       await joinToPublicCommunity(id);
+
+      // ✅ flip local/parent state so UI reacts immediately
+      onJoinedCommunity?.();
+
+      // optional: also refresh plans if provided
       fetchPlans?.();
+
       toast.success("Successfully joined the community");
     } catch (error) {
       console.error("Error joining community:", error);

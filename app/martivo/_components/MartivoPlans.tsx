@@ -112,13 +112,15 @@ type CardProps = {
   featured?: boolean; // gives orange outline like the mock's middle card
   isPrivate: boolean;
   isSubscribedCommunity?: boolean;
-  subscribers: { _id: string }[];
+  subscribers: { _id?: string; id?: string }[];
   fetchPlans?: () => void;
-  communityId: string;
+  communityId?: string;
   coverImage: string;
   planId: string;
   color: string;
   initialPayment?: string | number;
+  // notify parent when join succeeds
+  onJoinedCommunity?: () => void;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -135,7 +137,8 @@ const Card: React.FC<CardProps> = ({
   coverImage,
   planId,
   color,
-  initialPayment
+  initialPayment,
+  onJoinedCommunity,
 }) => {
   // split features into two columns (balanced)
   const mid = Math.ceil(features.length / 2);
@@ -143,18 +146,35 @@ const Card: React.FC<CardProps> = ({
   const right = features.slice(mid);
 
   const authContext = useContext(AuthContext);
-  const userId = authContext?.user?.id;
+  const userId =
+    (authContext as any)?.user?._id ??
+    (authContext as any)?.user?.id ??
+    undefined;
   const isLoggedIn = !!userId;
 
   const isSubscribed =
-    isLoggedIn && subscribers?.some((sub) => sub._id === userId);
+    isLoggedIn &&
+    subscribers?.some(
+      (sub) => (sub?._id ?? sub?.id) === userId
+    );
+
   const { joinToPublicCommunity } = usePlans();
   const { SendCommunityRequest } = useRequests();
 
-  const handleClickJoin = async (id: string) => {
+  const handleClickJoin = async (id?: string) => {
+    if (!id) {
+      toast.error("Community not found.");
+      return;
+    }
     try {
       await joinToPublicCommunity(id);
+
+      // flip local parent state so UI reacts immediately
+      onJoinedCommunity?.();
+
+      // optional: refresh plans
       fetchPlans?.();
+
       toast.success("Successfully joined the community");
     } catch (error) {
       console.error("Error joining community:", error);
@@ -162,7 +182,11 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
-  const handleClickSendRequest = async (community: string, message: string) => {
+  const handleClickSendRequest = async (community?: string, message?: string) => {
+    if (!community) {
+      toast.error("Community not found.");
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("community", community);
@@ -229,7 +253,8 @@ const Card: React.FC<CardProps> = ({
               </span>
             </div>
             <div>
-              {Number(initialPayment) > 0 && ` + One Time Fee :  ₹ ${initialPayment}`}
+              {Number(initialPayment) > 0 &&
+                ` + One Time Fee :  ₹ ${initialPayment}`}
             </div>
           </div>
           {!isLoggedIn ? (
@@ -325,10 +350,6 @@ const Card: React.FC<CardProps> = ({
                         )
                       }
                       disabled={isSubscribed}
-                      //   style={{
-                      //     backgroundColor: primaryColor,
-                      //     color: secondaryColor,
-                      //   }}
                       className="cursor-pointer"
                     >
                       Send Request
@@ -371,28 +392,41 @@ const MartivoPlans = ({
   const { communityId, communityData } = useCommunity();
   const isAuthenticated = !!auth?.isAuthenticated;
 
+  // local "I just joined" flag to avoid waiting for context to refresh
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
+
+  const userId =
+    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+
+  const isSubscribedCommunity =
+    joinedCommunityLocal ||
+    communityData?.community?.members?.some(
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+    );
+
+  const fetchPlans = async () => {
+    if (!communityId) return;
+    setIsLoading(true);
+    try {
+      const resp = isAuthenticated
+        ? await getCommunityPlansListAuth(communityId)
+        : await getPlansList(communityId);
+
+      if (Array.isArray(resp)) setPlans(resp as TrainingPlan[]);
+      else if (resp && typeof resp === "object" && "myPlans" in resp)
+        setPlans((resp as any).myPlans as TrainingPlan[]);
+      else setPlans([]);
+    } catch (e) {
+      console.error("Failed to fetch plans:", e);
+      setPlans([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchPlans = async () => {
-      if (!communityId) return;
-      setIsLoading(true);
-      try {
-        const resp = isAuthenticated
-          ? await getCommunityPlansListAuth(communityId)
-          : await getPlansList(communityId);
-
-        if (Array.isArray(resp)) setPlans(resp as TrainingPlan[]);
-        else if (resp && typeof resp === "object" && "myPlans" in resp)
-          setPlans((resp as any).myPlans as TrainingPlan[]);
-        else setPlans([]);
-      } catch (e) {
-        console.error("Failed to fetch plans:", e);
-        setPlans([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isAuthenticated]);
 
   const normalized = plans.map((p, idx) => {
@@ -424,15 +458,11 @@ const MartivoPlans = ({
       features,
       // visually highlight the middle plan if there are exactly 3.
       featured: plans.length === 3 ? idx === 1 : false,
-      subscribers: p.subscribers,
+      subscribers: p.subscribers ?? [],
       image: p?.image?.value,
       initialPayment: p?.initialPayment || 0,
     };
   });
-
-  // if (!normalized?.length || normalized?.length < 0) {
-  //   return null;
-  // }
 
   return (
     <section
@@ -486,14 +516,14 @@ const MartivoPlans = ({
                 features={p.features}
                 featured={p.featured}
                 isPrivate={communityData?.community?.type === "PRIVATE"}
-                isSubscribedCommunity={communityData?.community?.members?.some(
-                  (m: any) => m?.user?._id === auth?.user?.id
-                )}
+                isSubscribedCommunity={isSubscribedCommunity}
                 subscribers={p?.subscribers ?? []}
                 coverImage={p?.image || "/assets/spawell-plans-image-1.jpg"}
                 planId={p.id}
                 color={secondaryColor}
                 initialPayment={p?.initialPayment}
+                fetchPlans={fetchPlans}
+                onJoinedCommunity={() => setJoinedCommunityLocal(true)}
               />
             ))}
           </div>

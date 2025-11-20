@@ -34,6 +34,7 @@ interface ICreatorPlansCard {
   isPrivate: boolean;
   isRequested: boolean;
   initialPayment: string | number;
+  onJoinedCommunity?: () => void;
 }
 
 const CreatorPlansCard = ({
@@ -52,6 +53,7 @@ const CreatorPlansCard = ({
   isPrivate,
   isRequested,
   initialPayment,
+  onJoinedCommunity,
 }: ICreatorPlansCard) => {
   const authContext = useContext(AuthContext);
   const userId = authContext?.user?.id;
@@ -69,6 +71,8 @@ const CreatorPlansCard = ({
       if (fetchPlans) {
         fetchPlans();
       }
+
+      onJoinedCommunity?.();
       toast.success("Successfully joined the community");
     } catch (error) {
       console.error("Error joining community:", error);

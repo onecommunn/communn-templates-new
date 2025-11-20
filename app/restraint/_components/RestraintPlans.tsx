@@ -79,6 +79,8 @@ export default function RestraintPlans({
 
   const { communityId, communityData } = useCommunity();
 
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = React.useState(false);
+
   const fetchPlans = async () => {
     if (!communityId) return;
     setIsLoading(true);
@@ -137,9 +139,15 @@ export default function RestraintPlans({
   // Pick dataset: fetched
   const data: DisplayPlan[] = normalizedFromApi;
 
-  // current user id (support both _id and id just in case)
   const userId: string | undefined =
     (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+
+
+  const isSubscribedCommunity =
+    joinedCommunityLocal ||
+    communityData?.community?.members?.some(
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+    );
 
   return (
     <section
@@ -210,11 +218,6 @@ export default function RestraintPlans({
                       (sub?._id ?? sub?.id) === userId
                   );
 
-                const isSubscribedCommunity =
-                  communityData?.community?.members?.some(
-                    (m: any) => m?.user?._id === (auth as any)?.user?.id
-                  );
-
                 return (
                   <CarouselItem
                     key={planId}
@@ -234,6 +237,7 @@ export default function RestraintPlans({
                       color={color}
                       fetchPlans={fetchPlans}
                       initialPayment={plan?.initialPayment}
+                      onJoinedCommunity={() => setJoinedCommunityLocal(true)}
                     />
                   </CarouselItem>
                 );
@@ -279,6 +283,7 @@ export function PlanCard({
   color,
   fetchPlans,
   initialPayment,
+  onJoinedCommunity,
 }: {
   plan: DisplayPlan;
   isFeatured: boolean;
@@ -287,12 +292,13 @@ export function PlanCard({
   isPrivate: boolean;
   isSubscribedCommunity?: boolean;
   isSubscribed: boolean;
-  communityId?: string; // can be undefined
+  communityId?: string;
   planId: string;
   coverImage: string;
   color: string;
   fetchPlans?: () => void;
   initialPayment: string | number;
+  onJoinedCommunity?: () => void;
 }) {
   const { joinToPublicCommunity } = usePlans();
   const { SendCommunityRequest } = useRequests();
@@ -305,6 +311,9 @@ export function PlanCard({
     }
     try {
       await joinToPublicCommunity(id);
+
+      onJoinedCommunity?.();
+
       fetchPlans?.();
       toast.success("Successfully joined the community");
     } catch (error) {
@@ -376,7 +385,10 @@ export function PlanCard({
           >
             {periodLabel}
           </div>
-          <div className="text-xs font-normal mt-1" style={{ color: isFeatured ? "rgba(255,255,255,.8)" : MUTED }}>
+          <div
+            className="text-xs font-normal mt-1"
+            style={{ color: isFeatured ? "rgba(255,255,255,.8)" : MUTED }}
+          >
             {Number(initialPayment) > 0 &&
               ` + One Time Fee :  ₹ ${initialPayment}`}
           </div>
