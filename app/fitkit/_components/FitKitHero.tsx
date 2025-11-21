@@ -68,7 +68,7 @@ const FitKitHero = ({
         {/* dark overlay */}
         <div className="absolute inset-0 bg-[var(--pri)]/70" />
         {/* subtle vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_40%,transparent_0,rgba(0,0,0,.65)_70%)]" />
+        {/* <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_40%,transparent_0,rgba(0,0,0,.65)_70%)]" /> */}
       </div>
       <div className="relative container px-6 md:px-20 mx-auto py-20 md:py-0 z-10 font-kanit h-full">
         <div className="grid items-center gap-6 md:grid-cols-[1.05fr_.95fr] h-full">
@@ -124,11 +124,11 @@ const FitKitHero = ({
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 z-50">
+      <div className="absolute inset-0 z-50 pointer-events-none">
         <img
-          key={"fitkit-hero-bg-image02.png"}
+          key={"fitkit-hero-bg-image.png"}
           src={"/assets/fitkit-hero-bg-image.png"}
-          alt=""
+          alt="fitkit-hero-bg-image"
           className="h-full w-full object-cover brightness-90"
         />
       </div>

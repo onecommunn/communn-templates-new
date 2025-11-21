@@ -43,22 +43,24 @@ const FitkitFooter = ({
         {
           "--pri": primaryColor,
           "--sec": secondaryColor,
+          backgroundImage: "url('/assets/fitkit-footer-bg-image-2.png')",
         } as React.CSSProperties
       }
+      className="bg-[var(--pri)] relative w-full"
     >
+      <Image
+        src="/assets/fitkit-footer-bg-image-1.png"
+        alt="fitkit-footer-bg-image-1"
+        className="absolute top-10 right-0 hidden md:flex z-10"
+        width={129}
+        height={367}
+      />
       <div
-        className="relative mx-auto container px-6 md:px-20 bg-[var(--pri)] text-[#AFB8C7] font-archivo h-full object-center object-cover py-10 md:py-16 min-h-[500px] flex flex-c items-center justify-center"
+        className="relative mx-auto container px-6 md:px-20 bg-[var(--pri)] text-[#AFB8C7] font-archivo h-full bg-cover bg-center py-10 md:py-16 min-h-[500px] flex flex-center items-center justify-center"
         style={{
           backgroundImage: "url('/assets/fitkit-footer-bg-image-2.png')",
         }}
       >
-        <Image
-          src="/assets/fitkit-footer-bg-image-1.png"
-          alt="fitkit-footer-bg-image-1"
-          className="absolute top-10 right-0 hidden md:flex"
-          width={129}
-          height={367}
-        />
         <div className="flex flex-col items-center justify-center gap-6 md:gap-10">
           <div>
             <Image

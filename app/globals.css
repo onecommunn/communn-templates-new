@@ -270,10 +270,22 @@ body {
     clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 10% 100%, 0 80%);
   }
   .cal-clip {
-    clip-path: polygon(0 0, 10% 20%, 90% 20%, 100% 0, 100% 80%,90% 100%,10% 100%,0 80%);
+    clip-path: polygon(
+      0 0,
+      10% 20%,
+      90% 20%,
+      100% 0,
+      100% 80%,
+      90% 100%,
+      10% 100%,
+      0 80%
+    );
   }
-  .gallery-clip-path{
+  .gallery-clip-path {
     clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
   }
-  
+
+  .service-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 40% 100%, 40% 100%, 0 85%);
+  }
 }

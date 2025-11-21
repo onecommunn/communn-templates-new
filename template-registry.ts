@@ -47,6 +47,7 @@ import FitkitLogin from "./app/fitkit/login/page";
 import FitKitSignup from "./app/fitkit/sign-up/page";
 import FitkitEventDetailsPage from "./app/fitkit/event-details/page";
 import FitkitSubscriptionsPage from "./app/fitkit/subscriptions/page";
+import FitkitServicePage from "./app/fitkit/service/page";
 
 export const templateLayouts: Record<
   string,
@@ -97,6 +98,7 @@ export const templates: Record<
     "/sign-up": FitKitSignup,
     "/event-details": FitkitEventDetailsPage,
     "/subscriptions": FitkitSubscriptionsPage,
+    "/service": FitkitServicePage,
   },
   restraint: {
     "/": RestraintRoot,
