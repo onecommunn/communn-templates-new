@@ -9,6 +9,7 @@ import {
   FooterSection,
   Header,
   HomeSection,
+  ServiceSection,
 } from "@/models/templates/martivo/martivo-home-model";
 import { dummyData } from "./DummyData";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
@@ -36,12 +37,16 @@ export default async function MartivoShell({
       s.sectionName == "contactSection" && s.isActive
   );
 
+  const serviceSection = source?.sections?.find(
+    (s: HomeSection): s is ServiceSection =>
+      s.sectionName === "serviceSection" && s.isActive
+  );
+
   const primaryColor = source?.color?.primary || "#29400a";
   const secondaryColor = source?.color?.secondary || "#7bd900";
   const contactData = contactSectionData && contactSectionData?.content;
   return (
     <>
-
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.contact?.phoneNumber}`}
@@ -92,6 +97,7 @@ export default async function MartivoShell({
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         data={headerData}
+        servicesData={serviceSection}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

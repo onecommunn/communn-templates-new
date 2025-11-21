@@ -19,24 +19,32 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/Auth.context";
 import { logoutService } from "@/services/logoutService";
-import { Header } from "@/models/templates/restraint/restraint-home-model";
+import {
+  Header,
+  ServiceSection,
+} from "@/models/templates/restraint/restraint-home-model";
 
 const RestraintHeader = ({
   primaryColor,
   secondaryColor,
   data,
+  servicesData,
 }: {
   primaryColor: string;
   secondaryColor: string;
   data: Header;
+  servicesData: ServiceSection;
 }) => {
   const content = data?.content;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const auth = useContext(AuthContext);
+
+  const servicesContent = servicesData?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -48,6 +56,7 @@ const RestraintHeader = ({
       console.error("Logout failed, unable to navigate to login.");
     }
   };
+
   return (
     <header
       className="sticky font-sora top-0 z-50 backdrop-blur bg-[var(--pri)]"
@@ -67,6 +76,7 @@ const RestraintHeader = ({
               className="w-32 h-15 object-contain"
             />
           </Link>
+
           {/* Desktop Navigation */}
           <nav
             className="hidden md:flex items-center space-x-16"
@@ -74,37 +84,57 @@ const RestraintHeader = ({
           >
             <Link
               href="/"
-              className={"font-sora hover:font-semibold text-white text-sm"}
+              className="font-sora hover:font-semibold text-white text-sm"
             >
               Home
             </Link>
             <Link
               href="/#about-us"
-              className={"font-sora hover:font-semibold text-white text-sm"}
+              className="font-sora hover:font-semibold text-white text-sm"
             >
               About us
             </Link>
-            <Link
-              href="/#services"
-              className={"font-sora hover:font-semibold text-white text-sm"}
-            >
-              Services
-            </Link>
+
+            {/* Services with dropdown on hover (desktop) */}
+            <div className="relative group cursor-pointer">
+              <button
+                type="button"
+                className="font-sora hover:font-semibold text-white text-sm inline-flex items-center gap-1"
+              >
+                Services
+                <ChevronDown className="h-4 w-4 mt-[1px]" />
+              </button>
+
+              <div className="absolute left-0 mt-3 w-72 bg-white text-[#0A2640] rounded-lg shadow-lg py-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out z-50">
+                {servicesContent?.features?.map((service, idx) => (
+                  <Link
+                    key={idx}
+                    href="/#services"
+                    className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-white transition-colors"
+                  >
+                    <div className="text-sm font-semibold tracking-wide">
+                      {service.title}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <Link
               href="/#events"
-              className={"font-sora hover:font-semibold text-white text-sm"}
+              className="font-sora hover:font-semibold text-white text-sm"
             >
               Events
             </Link>
             <Link
               href="/#plans"
-              className={"font-sora hover:font-semibold text-white text-sm"}
+              className="font-sora hover:font-semibold text-white text-sm"
             >
               Plans
             </Link>
             <Link
               href="/#contact"
-              className={"font-sora hover:font-semibold text-white text-sm"}
+              className="font-sora hover:font-semibold text-white text-sm"
             >
               Contact
             </Link>
@@ -186,7 +216,7 @@ const RestraintHeader = ({
                   </div>
                 </SheetHeader>
 
-                {/* Nav list */}
+                {/* Nav list (mobile) */}
                 <nav
                   className="flex flex-col space-y-1 py-2"
                   aria-label="Mobile"
@@ -194,31 +224,58 @@ const RestraintHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/"
-                      className={`px-4 py-3 font-inter hover:font-semibold`}
+                      className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       Home
                     </Link>
                   </SheetClose>
+
                   <SheetClose asChild>
                     <Link
                       href="/#about-us"
-                      className={`px-4 py-3 font-inter hover:font-semibold`}
+                      className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       About us
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#services"
-                      className={`px-4 py-3 font-inter hover:font-semibold`}
+
+                  {/* Services with expandable submenu (mobile) */}
+                  <div className="px-4 py-2 font-inter">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsMobileServicesOpen((prev) => !prev)
+                      }
+                      className="w-full flex items-center justify-between py-1 text-left hover:font-semibold"
                     >
-                      Services
-                    </Link>
-                  </SheetClose>
+                      <span>Services</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          isMobileServicesOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isMobileServicesOpen && (
+                      <div className="mt-1 pl-3 space-y-1">
+                        {servicesContent?.features?.map((service, idx) => (
+                          <SheetClose asChild key={idx}>
+                            <Link
+                              href="/#services"
+                              className="block py-1.5 text-sm text-[#6B7280] hover:text-black"
+                            >
+                              {service.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <SheetClose asChild>
                     <Link
                       href="/#events"
-                      className={`px-4 py-3 font-inter hover:font-semibold`}
+                      className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       Events
                     </Link>
@@ -226,7 +283,7 @@ const RestraintHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#plans"
-                      className={`px-4 py-3 font-inter hover:font-semibold`}
+                      className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       Plans
                     </Link>
@@ -234,7 +291,7 @@ const RestraintHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#contact"
-                      className={`px-4 py-3 font-inter hover:font-semibold`}
+                      className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       Contact
                     </Link>

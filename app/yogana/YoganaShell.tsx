@@ -10,6 +10,7 @@ import {
   FooterSection,
   Header,
   HomeSection,
+  ServiceSection,
 } from "@/models/templates/yogana/yogana-home-model";
 import YoganaCTA from "./_components/YoganaCTA";
 import { dummyData } from "./dummyData";
@@ -40,9 +41,9 @@ export default async function YoganaShell({
     (s: HomeSection): s is CTASection => s.sectionName === "whatsappSection"
   );
 
-  const contactSectionData = source?.sections?.find(
-    (s: HomeSection): s is ContactDetails =>
-      s.sectionName == "contactSection" && s.isActive
+  const servicesSection = source?.sections.find(
+    (s: HomeSection): s is ServiceSection =>
+      s.sectionName === "serviceSection" && s.isActive
   );
 
   const initialLoading = !bundle?.home || source;
@@ -56,7 +57,6 @@ export default async function YoganaShell({
   // const neutralColor = "#707070";
   return (
     <>
-
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.content?.call?.value}`}
@@ -111,6 +111,7 @@ export default async function YoganaShell({
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
+        servicesData={servicesSection}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

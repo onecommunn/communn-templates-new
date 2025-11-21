@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { logoutService } from "@/services/logoutService";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu } from "lucide-react";
 import {
   Sheet,
   SheetClose,
@@ -23,21 +23,28 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Header } from "@/models/templates/martivo/martivo-home-model";
+import {
+  Header,
+  ServiceSection,
+} from "@/models/templates/martivo/martivo-home-model";
 
 const MartivoHeader = ({
   primaryColor,
   secondaryColor,
   data,
+  servicesData,
 }: {
   primaryColor: string;
   secondaryColor: string;
   data: Header;
+  servicesData: ServiceSection;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const auth = useContext(AuthContext);
 
   const content = data?.content;
+  const servicesContent = servicesData?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -46,7 +53,7 @@ const MartivoHeader = ({
       localStorage.removeItem("refresh-token");
       window.location.reload();
     } else {
-      console.error("Logout failed, unable to navigate to login.");
+      console.error("Logout failed");
     }
   };
 
@@ -69,6 +76,7 @@ const MartivoHeader = ({
               className="w-32 h-15 object-contain"
             />
           </Link>
+
           {/* Desktop Navigation */}
           <nav
             className="hidden md:flex items-center space-x-16"
@@ -76,43 +84,71 @@ const MartivoHeader = ({
           >
             <Link
               href="/"
-              className={"font-lato hover:font-semibold text-white text-sm"}
+              className="font-lato hover:font-semibold text-white text-sm"
             >
               HOME
             </Link>
+
             <Link
               href="/#about-us"
-              className={"font-lato hover:font-semibold text-white text-sm"}
+              className="font-lato hover:font-semibold text-white text-sm"
             >
               ABOUT
             </Link>
-            <Link
-              href="/#services"
-              className={"font-lato hover:font-semibold text-white text-sm"}
-            >
-              SERVICES
-            </Link>
+
+            {/* SERVICES DROPDOWN */}
+            <div className="relative group cursor-pointer">
+              <button
+                type="button"
+                className="font-lato hover:font-semibold text-white text-sm inline-flex items-center gap-1"
+              >
+                SERVICES
+                <ChevronDown className="h-4 w-4 mt-[1px]" />
+              </button>
+
+              <div
+                className="absolute left-0 mt-3 w-72 bg-white text-[#0A2640] rounded-lg shadow-lg py-2 
+                              opacity-0 invisible translate-y-1 
+                              group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 
+                              transition-all duration-200 ease-out z-50"
+              >
+                {servicesContent?.itemBox?.map((service, idx) => (
+                  <Link
+                    key={idx}
+                    href="/#services"
+                    className="block px-4 py-2.5 hover:bg-[#0A2640] hover:text-white transition-colors"
+                  >
+                    <div className="text-sm font-semibold tracking-wide">
+                      {service.title}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <Link
               href="/#events"
-              className={"font-lato hover:font-semibold text-white text-sm"}
+              className="font-lato hover:font-semibold text-white text-sm"
             >
               EVENTS
             </Link>
+
             <Link
               href="/#plans"
-              className={"font-lato hover:font-semibold text-white text-sm"}
+              className="font-lato hover:font-semibold text-white text-sm"
             >
               PLANS
             </Link>
+
             <Link
               href="/#contact"
-              className={"font-lato hover:font-semibold text-white text-sm"}
+              className="font-lato hover:font-semibold text-white text-sm"
             >
               CONTACT
             </Link>
           </nav>
 
-          {/* Desktop CTA / Auth */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
@@ -120,7 +156,7 @@ const MartivoHeader = ({
                   Hi, {auth.user?.firstName || auth.user?.email}
                 </div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-semibold font-lato py-2 bg-white text-[#0A2640] rounded-[10px] text-sm w-fit">
+                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-lato py-2 bg-white text-[#0A2640] rounded-[10px] text-sm w-fit">
                     Logout
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -135,7 +171,7 @@ const MartivoHeader = ({
                       </AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleLogout}
-                        className="bg-[#ba1c26] text-[var(--sec)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                        className="bg-[#ba1c26] text-white px-6 py-2 rounded-md hover:bg-[#9c0f19] cursor-pointer"
                       >
                         Continue
                       </AlertDialogAction>
@@ -145,117 +181,123 @@ const MartivoHeader = ({
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="cursor-pointer bg-white hover:bg-transparent hover:text-white text-[#0A2640] border border-white rounded-[10px] text-sm px-6 w-fit inline-flex items-center gap-2">
-                  Login
-                  <span>
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
+                <Button className="cursor-pointer bg-white hover:bg-transparent hover:text-white text-[#0A2640] border border-white rounded-[10px] text-sm px-6 inline-flex items-center gap-2">
+                  Login <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             )}
           </div>
 
-          {/* Mobile Menu */}
+          {/* MOBILE MENU */}
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <button
-                  className="cursor-pointer p-2"
-                  aria-controls="creator-mobile-menu"
-                  aria-label="Open menu"
-                >
+                <button className="cursor-pointer p-2">
                   <Menu className="h-6 w-6 text-[var(--sec)]" />
                 </button>
               </SheetTrigger>
 
               <SheetContent side="right" className="w-[85vw] sm:max-w-sm px-0">
-                {/* Header inside sheet */}
+                {/* Header */}
                 <SheetHeader className="px-4 pb-2">
-                  <div className="flex items-center justify-between">
-                    <SheetTitle className="sr-only">Menu</SheetTitle>
-                    <Link
-                      href="/"
-                      aria-label="Go home"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-2"
-                    >
-                      <img
-                        src={"/assets/martivoLogo-light.png"}
-                        alt="Logo"
-                        className="w-32 h-15 object-contain"
-                      />
-                    </Link>
-                  </div>
+                  <SheetTitle className="sr-only">Menu</SheetTitle>
+                  <img
+                    src={"/assets/martivoLogo-light.png"}
+                    alt="Logo"
+                    className="w-32 object-contain"
+                  />
                 </SheetHeader>
 
-                {/* Nav list */}
-                <nav
-                  className="flex flex-col space-y-1 py-2"
-                  aria-label="Mobile"
-                >
+                {/* MOBILE NAV */}
+                <nav className="flex flex-col space-y-1 py-2">
                   <SheetClose asChild>
                     <Link
                       href="/"
-                      className={`px-4 py-3 font-lato hover:font-semibold text-[#0A2640]`}
+                      className="px-4 py-3 font-lato text-[#0A2640]"
                     >
                       Home
                     </Link>
                   </SheetClose>
+
                   <SheetClose asChild>
                     <Link
                       href="/#about-us"
-                      className={`px-4 py-3 font-lato hover:font-semibold text-[#0A2640]`}
+                      className="px-4 py-3 font-lato text-[#0A2640]"
                     >
-                      About us
+                      About
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#services"
-                      className={`px-4 py-3 font-lato hover:font-semibold text-[#0A2640]`}
+
+                  {/* SERVICES EXPANDABLE SUBMENU */}
+                  <div className="px-4 py-2 font-lato">
+                    <button
+                      onClick={() =>
+                        setIsMobileServicesOpen(!isMobileServicesOpen)
+                      }
+                      className="w-full flex items-center justify-between text-[#0A2640]"
                     >
-                      Services
-                    </Link>
-                  </SheetClose>
+                      <span>Services</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          isMobileServicesOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isMobileServicesOpen && (
+                      <div className="mt-1 ml-3 space-y-1">
+                        {servicesContent?.itemBox?.map((service, idx) => (
+                          <SheetClose asChild key={idx}>
+                            <Link
+                              href="/#services"
+                              className="block py-1.5 text-sm text-[#525252] hover:text-black"
+                            >
+                              {service.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <SheetClose asChild>
                     <Link
                       href="/#events"
-                      className={`px-4 py-3 font-lato hover:font-semibold text-[#0A2640]`}
+                      className="px-4 py-3 font-lato text-[#0A2640]"
                     >
                       Events
                     </Link>
                   </SheetClose>
+
                   <SheetClose asChild>
                     <Link
                       href="/#plans"
-                      className={`px-4 py-3 font-lato hover:font-semibold text-[#0A2640]`}
+                      className="px-4 py-3 font-lato text-[#0A2640]"
                     >
                       Plans
                     </Link>
                   </SheetClose>
+
                   <SheetClose asChild>
                     <Link
                       href="/#contact"
-                      className={`px-4 py-3 font-lato hover:font-semibold text-[#0A2640]`}
+                      className="px-4 py-3 font-lato text-[#0A2640]"
                     >
                       Contact
                     </Link>
                   </SheetClose>
                 </nav>
 
-                {/* CTA pinned at bottom */}
+                {/* CTA pinned bottom */}
                 <div className="px-4 pt-2 pb-6">
                   <SheetClose asChild>
                     {auth.isAuthenticated ? (
-                      <Button
-                        onClick={handleLogout}
-                        className="rounded-[10px] text-sm px-5 w-full bg-[#ba1c26] hover:[#ba1c26]"
-                      >
+                      <Button className="rounded-[10px] text-sm px-5 w-full bg-[#ba1c26] text-white">
                         Logout
                       </Button>
                     ) : (
                       <Link href="/login" className="w-full">
-                        <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2 bg-[var(--sec)]">
+                        <Button className="rounded-[12px] text-sm px-5 w-full bg-[var(--sec)] inline-flex items-center gap-2">
                           Login <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>

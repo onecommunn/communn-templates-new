@@ -23,6 +23,7 @@ import {
   ContactDetails,
   Header,
   SocialMediaLink,
+  ServiceSection,
 } from "@/models/templates/yogana/yogana-home-model";
 import { logoutService } from "@/services/logoutService";
 import {
@@ -34,12 +35,13 @@ import {
   Mail,
   MapPin,
   Phone,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useContext, useState } from "react";
 
-// Convert hex to RGB
+// ---- color utils (unchanged) ----
 function hexToRgb(hex: string) {
   hex = hex.replace("#", "");
   if (hex.length === 3) {
@@ -55,7 +57,6 @@ function hexToRgb(hex: string) {
   return { r, g, b };
 }
 
-// Convert RGB to HSL
 function rgbToHsl(r: number, g: number, b: number) {
   r /= 255;
   g /= 255;
@@ -85,7 +86,6 @@ function rgbToHsl(r: number, g: number, b: number) {
   return { h: h * 360, s: s * 100, l: l * 100 };
 }
 
-// Convert HSL to RGB
 function hslToRgb(h: number, s: number, l: number) {
   h /= 360;
   s /= 100;
@@ -94,7 +94,7 @@ function hslToRgb(h: number, s: number, l: number) {
   let r: number, g: number, b: number;
 
   if (s === 0) {
-    r = g = b = l; // achromatic
+    r = g = b = l;
   } else {
     const hue2rgb = (p: number, q: number, t: number) => {
       if (t < 0) t += 1;
@@ -118,20 +118,17 @@ function hslToRgb(h: number, s: number, l: number) {
   };
 }
 
-// Convert RGB to hex
 function rgbToHex(r: number, g: number, b: number) {
   return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
-// Main function to get softer version
 export function getSofterColor(
   hex: string,
   lightnessPercent: number = 95
 ): string {
   const { r, g, b } = hexToRgb(hex);
   let { h, s, l } = rgbToHsl(r, g, b);
-
-  l = Math.min(lightnessPercent, 100); // ensure max 100%
+  l = Math.min(lightnessPercent, 100);
   const rgb = hslToRgb(h, s, l);
   return rgbToHex(rgb.r, rgb.g, rgb.b);
 }
@@ -143,6 +140,7 @@ interface IYoganaHeader {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  servicesData: ServiceSection;
 }
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -159,13 +157,17 @@ const YoganaHeader = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  servicesData,
 }: IYoganaHeader) => {
   const normalize = (s?: string) => (s ?? "").trim();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const pathname = usePathname();
   const linkClass = (href: string) =>
     `font-inter ${pathname === href ? "font-semibold" : "hover:font-semibold"}`;
   const auth = useContext(AuthContext);
+
+  const servicesContent = servicesData?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -177,12 +179,17 @@ const YoganaHeader = ({
       console.error("Logout failed, unable to navigate to login.");
     }
   };
+
   return (
     <header
       className="sticky font-plus-jakarta top-0 z-50 backdrop-blur bg-[#f4ede0]"
-    // style={{
-    //   backgroundColor: getSofterColor(primaryColor),
-    // }}
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
     >
       <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
@@ -208,12 +215,32 @@ const YoganaHeader = ({
             >
               About us
             </Link>
-            <Link
-              href="/#services"
-              className={"font-inter hover:font-semibold"}
-            >
-              Services
-            </Link>
+
+            {/* Services with dropdown on hover (DESKTOP) */}
+            <div className="relative group cursor-pointer">
+              <button
+                type="button"
+                className="font-inter hover:font-semibold inline-flex items-center gap-1"
+              >
+                Services
+                <ChevronDown className="h-4 w-4 mt-[1px]" />
+              </button>
+
+              <div className="absolute left-0 mt-3 w-72 bg-white text-[#111827] rounded-lg shadow-lg py-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out z-50">
+                {servicesContent?.services?.map((service, idx) => (
+                  <Link
+                    key={idx}
+                    href="/#services"
+                    className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-white transition-colors"
+                  >
+                    <div className="text-sm font-semibold tracking-wide">
+                      {service.serviceName}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <Link href="/#events" className={"font-inter hover:font-semibold"}>
               Events
             </Link>
@@ -229,11 +256,9 @@ const YoganaHeader = ({
           <div className="flex flex-row gap-4 items-center">
             <>
               {auth.user ? (
-                <>
-                  <div className="text-center min-w-fit text-lg font-semibold">
-                    Hi, {auth.user?.firstName}
-                  </div>
-                </>
+                <div className="text-center min-w-fit text-lg font-semibold">
+                  Hi, {auth.user?.firstName}
+                </div>
               ) : (
                 <Link href={"/login"}>
                   <Button
@@ -258,7 +283,7 @@ const YoganaHeader = ({
 
               <SheetContent
                 side="right"
-                className="w-[85vw] sm:max-w-sm px-0 bg-black text-white  font-plus-jakarta h-full"
+                className="w-[85vw] sm:max-w-sm px-0 bg-black text-white font-plus-jakarta h-full"
               >
                 {/* Custom header inside sheet */}
                 <SheetHeader className="px-4 pb-2 text-white">
@@ -271,7 +296,10 @@ const YoganaHeader = ({
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={data?.content?.media?.[0] || "/logo/yogana_Light_Logo.png"}
+                        src={
+                          data?.content?.media?.[0] ||
+                          "/logo/yogana_Light_Logo.png"
+                        }
                         alt="logo"
                         width={120}
                         height={100}
@@ -280,36 +308,61 @@ const YoganaHeader = ({
                   </div>
                 </SheetHeader>
 
-                {/* Nav list */}
-                <nav className="flex flex-col  space-y-1 py-2 md:hidden">
+                {/* Nav list (MOBILE) */}
+                <nav className="flex flex-col space-y-1 py-2 md:hidden">
                   <SheetClose asChild>
                     <Link
                       href="/"
-                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+                      className="px-4 text-white py-3 font-inter hover:font-semibold"
                     >
                       Home
                     </Link>
                   </SheetClose>
+
                   <SheetClose asChild>
                     <Link
                       href="/#about-us"
-                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+                      className="px-4 text-white py-3 font-inter hover:font-semibold"
                     >
                       About us
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#services"
-                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+
+                  {/* ✅ Services expandable submenu (MOBILE) */}
+                  <div className="px-4 py-2 font-inter">
+                    <button
+                      type="button"
+                      onClick={() => setIsMobileServicesOpen((prev) => !prev)}
+                      className="w-full flex items-center justify-between text-white py-1"
                     >
-                      Services
-                    </Link>
-                  </SheetClose>
+                      <span>Services</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          isMobileServicesOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isMobileServicesOpen && (
+                      <div className="mt-1 pl-3 space-y-1">
+                        {servicesContent?.services?.map((service, idx) => (
+                          <SheetClose asChild key={idx}>
+                            <Link
+                              href="/#services"
+                              className="block py-1.5 text-sm text-gray-300 hover:text-white"
+                            >
+                              {service.serviceName}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <SheetClose asChild>
                     <Link
                       href="/#events"
-                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+                      className="px-4 text-white py-3 font-inter hover:font-semibold"
                     >
                       Events
                     </Link>
@@ -317,7 +370,7 @@ const YoganaHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#plans"
-                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+                      className="px-4 text-white py-3 font-inter hover:font-semibold"
                     >
                       Plans
                     </Link>
@@ -325,21 +378,27 @@ const YoganaHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#contact"
-                      className={`px-4 text-white py-3 font-inter hover:font-semibold`}
+                      className="px-4 text-white py-3 font-inter hover:font-semibold"
                     >
                       Contact
                     </Link>
                   </SheetClose>
                 </nav>
+
+                {/* Bottom contact + social (unchanged) */}
                 <div className="flex flex-col justify-between gap-4 px-6 mt-6 h-full relative">
                   <div className="flex flex-col gap-4">
-                    {" "}
                     <div className="flex flex-col gap-4">
                       {/* Phone */}
                       <div className="flex items-center gap-4">
-                        <Phone className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
+                        <Phone
+                          className="text-white w-6 h-6 shrink-0"
+                          strokeWidth={1.5}
+                        />
                         <a
-                          href={`tel:${contactData?.content?.call?.value ?? ""}`}
+                          href={`tel:${
+                            contactData?.content?.call?.value ?? ""
+                          }`}
                           className="text-md text-white hover:underline"
                         >
                           {contactData?.content?.call?.value}
@@ -348,9 +407,14 @@ const YoganaHeader = ({
 
                       {/* Email */}
                       <div className="flex items-center gap-4">
-                        <Mail className="text-white w-6 h-6 shrink-0" strokeWidth={1.5} />
+                        <Mail
+                          className="text-white w-6 h-6 shrink-0"
+                          strokeWidth={1.5}
+                        />
                         <a
-                          href={`mailto:${contactData?.content?.email?.value ?? ""}`}
+                          href={`mailto:${
+                            contactData?.content?.email?.value ?? ""
+                          }`}
                           className="text-md text-white underline hover:no-underline"
                         >
                           {contactData?.content?.email?.value}
@@ -359,15 +423,19 @@ const YoganaHeader = ({
 
                       {/* Address */}
                       <div className="flex items-start gap-4">
-                        <MapPin className="text-white w-6 h-6 mt-1 shrink-0" strokeWidth={1.5} />
+                        <MapPin
+                          className="text-white w-6 h-6 mt-1 shrink-0"
+                          strokeWidth={1.5}
+                        />
                         <p className="text-md text-white leading-relaxed break-words">
                           {contactData?.content?.address?.value}
                         </p>
                       </div>
                     </div>
+
                     {auth?.user && (
                       <AlertDialog>
-                        <AlertDialogTrigger className="cursor-pointer border-none focus-visible:border-none bg-red-600  font-inter  w-full text-white rounded-[12px] text-sm py-2">
+                        <AlertDialogTrigger className="cursor-pointer border-none focus-visible:border-none bg-red-600 font-inter w-full text-white rounded-[12px] text-sm py-2">
                           Logout
                         </AlertDialogTrigger>
                         <AlertDialogContent>

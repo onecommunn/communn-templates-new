@@ -46,9 +46,9 @@ export default async function RestraintShell({
 
   const contactData = contactSectionData && contactSectionData?.content;
 
+
   return (
     <>
-
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.contact?.phoneNumber}`}
@@ -99,6 +99,7 @@ export default async function RestraintShell({
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         data={headerData}
+        servicesData={serviceSectionData}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

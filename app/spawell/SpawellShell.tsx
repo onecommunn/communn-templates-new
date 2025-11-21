@@ -97,6 +97,7 @@ export default async function SpawellShell({
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
         data={headerData}
+        servicesData={serviceSection}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
