@@ -47,6 +47,7 @@ const FitkitServiceContent = ({
               </span>
             </div>
           )}
+          
 
           <h4 className="font-kanit font-semibold text-3xl md:text-5xl">
             {title ?? "Section Title"}

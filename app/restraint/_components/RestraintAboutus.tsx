@@ -9,20 +9,6 @@ import * as Icons from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 import { AboutSection } from "@/models/templates/restraint/restraint-home-model";
 
-const data = [
-  {
-    image: "/assets/restraint-about-image01.svg",
-    title: "Community Support and Encouragement",
-    descriptiom:
-      "Foster a sense of belonging with our supportive community. Share your journey, exchange experiences.",
-  },
-  {
-    image: "/assets/restraint-about-image02.svg",
-    title: "Enhanced Physical Flexibility and Strength",
-    descriptiom:
-      "Foster a sense of belonging with our supportive community. Share your journey, exchange experiences.",
-  },
-];
 
 function IconOrImage({ src, alt }: { src: string; alt: string }) {
   const isImage = src.includes("/") || src.includes(".");

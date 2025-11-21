@@ -28,15 +28,15 @@ export default async function FitKitShell({
 
   const initialLoading = !bundle?.home || source;
 
-  const headerData = source?.sections.find(
+  const headerData = source?.sections?.find(
     (s: HomeSection): s is Header => s.sectionName === "headerSection"
   );
 
-  const footerData = source?.sections.find(
+  const footerData = source?.sections?.find(
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
-  const contactData = source?.sections.find(
+  const contactData = source?.sections?.find(
     (s: HomeSection): s is ContactSection => s.sectionName === "contactSection"
   );
 

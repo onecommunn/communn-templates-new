@@ -43,21 +43,21 @@ const FitKitHeader = ({
   socialMediaData,
   secondaryColor,
   primaryColor,
-  servicesData
+  servicesData,
 }: {
   data: Header;
   contactData: ContactSection;
   socialMediaData: SocialMediaLink[];
   secondaryColor: string;
   primaryColor: string;
-  servicesData:ServiceSection
+  servicesData: ServiceSection;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false); // 👈 NEW
   const auth = useContext(AuthContext);
   const content = data?.content;
 
-  const servicesContent = servicesData?.content
-
+  const servicesContent = servicesData?.content;
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -106,10 +106,10 @@ const FitKitHeader = ({
         </div>
         <div>
           <div className="flex flex-row items-center justify-center gap-6 text-sm">
-            {socialMediaData.map((item, index) => (
+            {socialMediaData?.map((item, index) => (
               <React.Fragment key={index}>
-                <Link href={item.url || "/"}>{item.platform}</Link>
-                {index !== socialMediaData.length - 1 && <span>|</span>}
+                <Link href={item?.url || "/"}>{item?.platform}</Link>
+                {index !== socialMediaData?.length - 1 && <span>|</span>}
               </React.Fragment>
             ))}
           </div>
@@ -146,14 +146,14 @@ const FitKitHeader = ({
               About us
             </Link>
 
-            {/* 🔻 Services with dropdown on hover */}
+            {/* Services with dropdown on hover (desktop) */}
             <div className="relative group cursor-pointer">
               <button
                 className="font-archivo cursor-pointer text-[16px] font-medium text-white hover:font-semibold uppercase inline-flex items-center gap-1"
                 type="button"
               >
                 Services
-                <ChevronDown className="h-4 w-4 mt-[1px]" />
+                <ChevronDown className="h-4 w-4 mt-[1px] transition-transform group-hover:rotate-180" />
               </button>
 
               {/* Dropdown panel */}
@@ -161,17 +161,12 @@ const FitKitHeader = ({
                 {servicesContent?.features?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={service.title || "/"}
+                    href={"/#services"}
                     className="block px-4 py-2.5 hover:bg-[#0E0E0E] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold uppercase tracking-wide">
                       {service.title}
                     </div>
-                    {/* {service.description && (
-                      <div className="text-xs text-[#9CA3AF] mt-1">
-                        {service.description}
-                      </div>
-                    )} */}
                   </Link>
                 ))}
               </div>
@@ -273,7 +268,7 @@ const FitKitHeader = ({
                   </div>
                 </SheetHeader>
 
-                {/* Nav list */}
+                {/* Nav list (mobile) */}
                 <nav
                   className="flex flex-col space-y-1 py-2"
                   aria-label="Mobile"
@@ -286,6 +281,7 @@ const FitKitHeader = ({
                       Home
                     </Link>
                   </SheetClose>
+
                   <SheetClose asChild>
                     <Link
                       href="/#about-us"
@@ -294,14 +290,40 @@ const FitKitHeader = ({
                       About us
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#services"
-                      className="px-4 py-3 font-archivo hover:font-semibold"
+
+                  {/* Services with expandable submenu (mobile) */}
+                  <div className="px-4 py-2 font-archivo">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsMobileServicesOpen((prev) => !prev)
+                      }
+                      className="w-full flex items-center justify-between py-1 text-left hover:font-semibold"
                     >
-                      Services
-                    </Link>
-                  </SheetClose>
+                      <span>Services</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          isMobileServicesOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isMobileServicesOpen && (
+                      <div className="mt-1 pl-3 space-y-1">
+                        {servicesContent?.features?.map((service, idx) => (
+                          <SheetClose asChild key={idx}>
+                            <Link
+                              href={"/#services"}
+                              className="block py-1.5 text-sm text-[#9CA3AF] hover:text-white"
+                            >
+                              {service.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <SheetClose asChild>
                     <Link
                       href="/#events"

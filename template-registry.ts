@@ -48,6 +48,7 @@ import FitKitSignup from "./app/fitkit/sign-up/page";
 import FitkitEventDetailsPage from "./app/fitkit/event-details/page";
 import FitkitSubscriptionsPage from "./app/fitkit/subscriptions/page";
 import FitkitServicePage from "./app/fitkit/service/page";
+import RestraintServicePage from "./app/restraint/service/page";
 
 export const templateLayouts: Record<
   string,
@@ -108,6 +109,7 @@ export const templates: Record<
     "/sign-up": RestraintSignup,
     "/subscriptions": RestraintSubscriptionsPage,
     "/event-details": RestraintEventDetailsPage,
+    "/service":RestraintServicePage
   },
   martivo: {
     "/": MartivoRoot,

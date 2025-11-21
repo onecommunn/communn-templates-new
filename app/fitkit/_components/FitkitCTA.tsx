@@ -9,7 +9,7 @@ const FitkitCTA = ({ primaryColor, secondaryColor }: FitkitCTAprops) => {
   return (
     <section className="relative w-full bg-[#0E0E0E] py-14 px-6 overflow-hidden font-kanit">
       {/* Top Curve Border */}
-      <div className="absolute top-0 left-0 w-full h-full bg-transparent border-b-[6px] border-red-600 md:rounded-b-[150px] rounded-b-[100px]"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-transparent border-b-[6px] border-red-600 md:rounded-b-[150px] rounded-b-[60px]"></div>
 
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Left Text Section */}
