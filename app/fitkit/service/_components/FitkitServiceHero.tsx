@@ -26,7 +26,7 @@ const FitkitServiceHero = ({
           key={"fitkit-hero-bg-image02.png"}
           src={"/assets/fitkit-hero-bg-image02.png"}
           alt="fitkit-hero-bg-image02"
-          className="h-full w-full object-cover brightness-50"          
+          className="h-full w-full object-cover brightness-50"
         />
 
         {/* dark overlay */}
@@ -46,8 +46,8 @@ const FitkitServiceHero = ({
             </p>
             <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
               <Link href={"/"}>
-                <button className="bg-[var(--sec)] px-8 py-4 text-sm font-bold font-archivo tracking-wide text-white shadow-[0_10px_30px_rgba(220,38,38,0.35)] transition hover:bg-red-500">
-                  join now
+                <button className="bg-[var(--sec)] px-8 py-4 uppercase text-sm font-bold font-archivo tracking-wide text-white shadow-[0_10px_30px_rgba(220,38,38,0.35)] transition hover:bg-red-500">
+                  get Started
                 </button>
               </Link>
             </div>

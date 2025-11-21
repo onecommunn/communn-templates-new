@@ -5,13 +5,15 @@ import { useCMS } from "../CMSProvider.client";
 import { FitkitHomePage } from "@/models/templates/fitkit/fitkit-home-model";
 import { dummyData } from "../dummyData";
 import FitkitServiceContent from "./_components/FitkitServiceContent";
+import FitkitCTA from "../_components/FitkitCTA";
 
 const sectionsList = [
   {
     title: "We Have Lot Of Experience Gym Training",
     description:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_4.png",
+    image:
+      "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_4.png",
     tag: "Section tag",
   },
   {
@@ -34,7 +36,8 @@ const sectionsList = [
     title: "We Have Lot Of Experience Gym Training",
     description:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_3.png",
+    image:
+      "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_3.png",
     tag: "Section tag",
   },
 ];
@@ -67,6 +70,7 @@ const FitkitServicePage = () => {
           align={idx % 2 == 0 ? "Left" : "Right"}
         />
       ))}
+      <FitkitCTA primaryColor={primaryColor} secondaryColor={secondaryColor} />
     </main>
   );
 };

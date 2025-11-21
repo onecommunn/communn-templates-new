@@ -89,7 +89,7 @@ const FitkitTrainer = ({
           </h4>
         </div>
         {/* Carousel */}
-        <div className="relative mt-10">
+        <div className="relative my-10">
           <Carousel
             setApi={setApi}
             opts={OPTIONS}
@@ -115,7 +115,7 @@ const FitkitTrainer = ({
                         </div>
                       </div>
                     </div>
-                    <h3 className="font-kanit text-3xl font-medium">
+                    <h3 className="font-kanit text-3xl font-medium text-center">
                       {item?.title}
                     </h3>
 

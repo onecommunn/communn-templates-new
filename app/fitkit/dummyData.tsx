@@ -48,7 +48,7 @@ export const dummyData: FitkitHomePage = {
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-bg-image02.png",
             ],
             media: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-about-us-image2.png",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-upload-1763706734538.png",
             ],
             tagline: "TRANSFORM YOUR BODY, TRANSFORM YOUR LIFE",
             line1: "STRONGER",
@@ -63,27 +63,6 @@ export const dummyData: FitkitHomePage = {
             ],
             statValue: "5k+",
             statLabel: "Members Trained",
-          },
-          {
-            bgMedia: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-bg-image02.png",
-            ],
-            media: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-about-us-image2.png",
-            ],
-            tagline: "NO EXCUSES — JUST RESULTS",
-            line1: "PUSH HARDER",
-            line2: "GO FURTHER",
-            description:
-              "Every rep counts. Every drop of sweat brings you closer to your goals.",
-            buttons: [
-              {
-                label: "START TRAINING",
-                url: "/START",
-              },
-            ],
-            statValue: "500+",
-            statLabel: "Daily Active Users",
           },
         ],
       },

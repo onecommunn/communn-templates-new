@@ -12,6 +12,7 @@ import {
   FooterSection,
   Header,
   HomeSection,
+  ServiceSection,
 } from "@/models/templates/fitkit/fitkit-home-model";
 import { dummyData } from "./dummyData";
 
@@ -37,6 +38,11 @@ export default async function FitKitShell({
 
   const contactData = source?.sections.find(
     (s: HomeSection): s is ContactSection => s.sectionName === "contactSection"
+  );
+
+  const serviceSectionData = source?.sections?.find(
+    (s: HomeSection): s is ServiceSection =>
+      s.sectionName == "serviceSection" && s.isActive
   );
 
   const socialMediaData = footerData?.content?.socialMedia;
@@ -95,6 +101,7 @@ export default async function FitKitShell({
         socialMediaData={socialMediaData}
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
+        servicesData={serviceSectionData}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

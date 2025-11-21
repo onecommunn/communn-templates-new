@@ -35,8 +35,8 @@ const FitkitServiceContent = ({
       <div className="mx-auto container px-6 md:px-20 py-10 md:py-20 grid md:grid-cols-2 gap-6 md:gap-8">
         {/* left */}
         <div
-          className={`flex flex-col justify-center ${
-            align === "Left" ? "order-0" : "order-1"
+          className={`flex flex-col justify-center order-1 ${
+            align === "Left" ? "md:order-0" : "md:order-1"
           }`}
         >
           {tag && (

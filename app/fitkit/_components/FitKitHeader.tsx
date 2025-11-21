@@ -22,10 +22,18 @@ import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactSection,
   Header,
+  ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/fitkit/fitkit-home-model";
 import { logoutService } from "@/services/logoutService";
-import { ArrowRight, Mail, MapPin, Menu, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  Mail,
+  MapPin,
+  Menu,
+  Phone,
+} from "lucide-react";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
 
@@ -35,16 +43,21 @@ const FitKitHeader = ({
   socialMediaData,
   secondaryColor,
   primaryColor,
+  servicesData
 }: {
   data: Header;
   contactData: ContactSection;
   socialMediaData: SocialMediaLink[];
   secondaryColor: string;
   primaryColor: string;
+  servicesData:ServiceSection
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const auth = useContext(AuthContext);
   const content = data?.content;
+
+  const servicesContent = servicesData?.content
+
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -102,6 +115,7 @@ const FitKitHeader = ({
           </div>
         </div>
       </div>
+
       {/* Header */}
       <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-20 bg-[var(--pri)] text-[#AFB1C3]">
         <div className="flex items-center justify-between h-16">
@@ -112,6 +126,7 @@ const FitKitHeader = ({
               className="w-32 h-15 object-contain"
             />
           </Link>
+
           {/* Desktop Navigation */}
           <nav
             className="hidden md:flex items-center space-x-8"
@@ -119,49 +134,64 @@ const FitKitHeader = ({
           >
             <Link
               href="/"
-              className={
-                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
-              }
+              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
             >
               Home
             </Link>
+
             <Link
               href="/#about-us"
-              className={
-                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
-              }
+              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
             >
               About us
             </Link>
-            <Link
-              href="/#services"
-              className={
-                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
-              }
-            >
-              Services
-            </Link>
+
+            {/* 🔻 Services with dropdown on hover */}
+            <div className="relative group cursor-pointer">
+              <button
+                className="font-archivo cursor-pointer text-[16px] font-medium text-white hover:font-semibold uppercase inline-flex items-center gap-1"
+                type="button"
+              >
+                Services
+                <ChevronDown className="h-4 w-4 mt-[1px]" />
+              </button>
+
+              {/* Dropdown panel */}
+              <div className="absolute left-0 mt-3 w-72 bg-[#fff] text-[#000] rounded-lg shadow-lg py-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out z-50">
+                {servicesContent?.features?.map((service, idx) => (
+                  <Link
+                    key={idx}
+                    href={service.title || "/"}
+                    className="block px-4 py-2.5 hover:bg-[#0E0E0E] hover:text-white transition-colors"
+                  >
+                    <div className="text-sm font-semibold uppercase tracking-wide">
+                      {service.title}
+                    </div>
+                    {/* {service.description && (
+                      <div className="text-xs text-[#9CA3AF] mt-1">
+                        {service.description}
+                      </div>
+                    )} */}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <Link
               href="/#events"
-              className={
-                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
-              }
+              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
             >
               Events
             </Link>
             <Link
               href="/#plans"
-              className={
-                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
-              }
+              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
             >
               Plans
             </Link>
             <Link
               href="/#contact"
-              className={
-                "font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase"
-              }
+              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
             >
               Contact
             </Link>
@@ -251,7 +281,7 @@ const FitKitHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/"
-                      className={`px-4 py-3 font-archivo hover:font-semibold`}
+                      className="px-4 py-3 font-archivo hover:font-semibold"
                     >
                       Home
                     </Link>
@@ -259,7 +289,7 @@ const FitKitHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#about-us"
-                      className={`px-4 py-3 font-archivo hover:font-semibold`}
+                      className="px-4 py-3 font-archivo hover:font-semibold"
                     >
                       About us
                     </Link>
@@ -267,7 +297,7 @@ const FitKitHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#services"
-                      className={`px-4 py-3 font-archivo hover:font-semibold`}
+                      className="px-4 py-3 font-archivo hover:font-semibold"
                     >
                       Services
                     </Link>
@@ -275,7 +305,7 @@ const FitKitHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#events"
-                      className={`px-4 py-3 font-archivo hover:font-semibold`}
+                      className="px-4 py-3 font-archivo hover:font-semibold"
                     >
                       Events
                     </Link>
@@ -283,7 +313,7 @@ const FitKitHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#plans"
-                      className={`px-4 py-3 font-archivo hover:font-semibold`}
+                      className="px-4 py-3 font-archivo hover:font-semibold"
                     >
                       Plans
                     </Link>
@@ -291,7 +321,7 @@ const FitKitHeader = ({
                   <SheetClose asChild>
                     <Link
                       href="/#contact"
-                      className={`px-4 py-3 font-archivo hover:font-semibold`}
+                      className="px-4 py-3 font-archivo hover:font-semibold"
                     >
                       Contact
                     </Link>
