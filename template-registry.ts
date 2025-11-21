@@ -49,6 +49,7 @@ import FitkitEventDetailsPage from "./app/fitkit/event-details/page";
 import FitkitSubscriptionsPage from "./app/fitkit/subscriptions/page";
 import FitkitServicePage from "./app/fitkit/service/page";
 import RestraintServicePage from "./app/restraint/service/page";
+import SpawellServicePage from "./app/spawell/service/page";
 
 export const templateLayouts: Record<
   string,
@@ -92,6 +93,7 @@ export const templates: Record<
     "/login": SpawellLogin,
     "/event-details": SpawellEventDetailsPage,
     "/sign-up": SpawellSignup,
+    "/service": SpawellServicePage,
   },
   fitkit: {
     "/": FitkitRoot,
@@ -109,7 +111,7 @@ export const templates: Record<
     "/sign-up": RestraintSignup,
     "/subscriptions": RestraintSubscriptionsPage,
     "/event-details": RestraintEventDetailsPage,
-    "/service":RestraintServicePage
+    "/service": RestraintServicePage,
   },
   martivo: {
     "/": MartivoRoot,
