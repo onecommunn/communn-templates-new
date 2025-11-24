@@ -1,3 +1,4 @@
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { HeroSection } from "@/models/templates/martivo/martivo-home-model";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
@@ -19,8 +20,9 @@ const MartivoHero = ({
       className="relative flex items-center justify-center min-h-[85vh] bg-cover bg-left md:bg-center bg-no-repeat font-lato"
       style={
         {
-          backgroundImage: `url(${content?.media?.[1] || "/assets/martivo-hero-bg-image.png"
-            })`,
+          backgroundImage: `url(${
+            content?.media?.[1] || "/assets/martivo-hero-bg-image.png"
+          })`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
         } as React.CSSProperties
@@ -38,24 +40,57 @@ const MartivoHero = ({
       <div className="relative z-10 container mx-auto px-6 md:px-20 h-full text-white">
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div>
-            <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-[var(--sec)]">
-              {content?.heading}
-            </h2>
-            <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-white">
-              {content?.subHeading}
-            </h2>
-            <p>{content?.description}</p>
-            <Link href={content?.buttons?.[0].url || "/"} className="cursor-pointer">
-              <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-[var(--pri)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pri)] focus-visible:ring-offset-2">
-                <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-[var(--pri)]" />
-                <span className="relative z-[1] text-lg font-medium">
-                  {content?.buttons?.[0].label}
-                </span>
-                <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-[var(--pri)] text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
-                  <ArrowRight size={18} color={secondaryColor} />
-                </span>
-              </button>
-            </Link>
+            <AnimatedContent
+              direction="vertical"
+              distance={60}
+              duration={0.65}
+              animateOpacity
+            >
+              <div className="space-y-1">
+                <AnimatedContent
+                  direction="vertical"
+                  distance={30}
+                  duration={0.55}
+                  stagger={0.08}
+                  animateOpacity
+                >
+                  <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-[var(--sec)]">
+                    {content?.heading}
+                  </h2>
+                  <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-white">
+                    {content?.subHeading}
+                  </h2>
+                </AnimatedContent>
+              </div>
+
+              {/* Description + CTA */}
+              <AnimatedContent
+                direction="vertical"
+                distance={40}
+                duration={0.55}
+                delay={0.05}
+                animateOpacity
+              >
+                <p className="mt-4 text-[15px] leading-7 md:text-[16px] text-white/90">
+                  {content?.description}
+                </p>
+
+                <Link
+                  href={content?.buttons?.[0]?.url || "/"}
+                  className="cursor-pointer"
+                >
+                  <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-[var(--pri)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pri)] focus-visible:ring-offset-2">
+                    <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-[var(--pri)]" />
+                    <span className="relative z-[1] text-lg font-medium">
+                      {content?.buttons?.[0]?.label}
+                    </span>
+                    <span className="relative z-[1] grid h-9 w-9 place-items-center rounded-full bg-[var(--pri)] text-[var(--sec)] transition-transform duration-200 group-hover:translate-x-0.5">
+                      <ArrowRight size={18} color={secondaryColor} />
+                    </span>
+                  </button>
+                </Link>
+              </AnimatedContent>
+            </AnimatedContent>
           </div>
         </div>
       </div>
