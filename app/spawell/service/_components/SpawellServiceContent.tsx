@@ -81,7 +81,7 @@ const SpawellServiceContent = ({
                 <Image
                   src={image || "/assets/spawell-course-image-1.jpg"}
                   alt="Therapist providing a relaxing massage"
-                  className="w-full rounded-[28px] max-h-[550px]"
+                  className="w-full rounded-[24px] max-h-[550px]"
                   width={550}
                   height={550}
                   unoptimized

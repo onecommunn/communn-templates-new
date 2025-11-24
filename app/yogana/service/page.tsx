@@ -70,7 +70,7 @@ const YoganaServicePage = () => {
           tag={item?.tag}
           image={item?.image}
           description={item?.description}
-          align={idx % 2 == 0 ? "Left" : "Right"}
+          align={idx % 2 !== 0 ? "Left" : "Right"}
           neutralColor={neutralColor}
         />
       ))}

@@ -56,7 +56,7 @@ const RestraintServiceHero = ({
             direction="vertical"
             distance={70}
             duration={0.85}
-            stagger={0.08} // 👈 this will nicely reveal each element
+            stagger={0.08}
             animateOpacity
           >
             <div>

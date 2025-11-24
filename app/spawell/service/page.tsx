@@ -69,7 +69,7 @@ const SpawellServicePage = () => {
           key={idx} 
           image={item?.image}
           title={item?.title}
-          align={idx % 2 == 0 ? "Left" : "Right"}
+          align={idx % 2 !== 0 ? "Left" : "Right"}
           description={item?.description}
           neutralColor={neutralColor}
           primaryColor={primaryColor}

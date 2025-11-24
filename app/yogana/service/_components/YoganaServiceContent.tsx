@@ -1,3 +1,4 @@
+import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import Image from "next/image";
 import React from "react";
 
@@ -41,29 +42,48 @@ const YoganaServiceContent = ({
               align === "Left" ? "md:order-0" : "md:order-1"
             }`}
           >
-            {tag && (
-              <p className="font-alex-brush text-2xl md:text-4xl text-[var(--pri)]">
-                {tag}
+            <AnimatedContent
+              distance={150}
+              direction="vertical"
+              reverse={false}
+              duration={1.2}
+              initialOpacity={0.2}
+              animateOpacity
+              scale={1}
+              threshold={0.2}
+              delay={0.3}
+            >
+              {tag && (
+                <p className="font-alex-brush text-2xl md:text-4xl text-[var(--pri)]">
+                  {tag}
+                </p>
+              )}
+              <h2 className="mb-4 max-w-[35ch] text-2xl font-semibold text-slate-900 md:text-4xl">
+                {title}
+              </h2>
+              <p className="font-plus-jakarta font-[500] text-lg italic text-[var(--neu)] my-4">
+                {description}
               </p>
-            )}
-
-            <h2 className="mb-4 max-w-[35ch] text-2xl font-semibold text-slate-900 md:text-4xl">
-              {title}
-            </h2>
-            <p className="font-plus-jakarta font-[500] text-lg italic text-[var(--neu)] my-4">
-              {description}
-            </p>
+            </AnimatedContent>
           </div>
-          <div>
-            <Image
-              src={image || "/assets/fitkit-about-us-image2.png"}
-              alt="fitkit-about-us-image2"
-              width={683}
-              height={557}
-              unoptimized
-              className="max-h-[557px] w-full rounded-[28px]"
-            />
-          </div>
+          <AnimatedContent
+            direction="horizontal"
+            reverse
+            distance={80}
+            duration={0.8}
+            ease="power3.out"
+          >
+            <div>
+              <Image
+                src={image || "/assets/fitkit-about-us-image2.png"}
+                alt="fitkit-about-us-image2"
+                width={683}
+                height={557}
+                unoptimized
+                className="max-h-[557px] w-full rounded-[28px]"
+              />
+            </div>
+          </AnimatedContent>
         </div>
       </div>
     </section>
