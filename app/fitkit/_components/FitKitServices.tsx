@@ -82,7 +82,7 @@ const FitKitServices = ({
             className="w-full gap-10"
           >
             <CarouselContent>
-              {content?.features?.map((item, idx) => (
+              {content?.services?.map((item, idx) => (
                 <CarouselItem key={idx} className="basis-full md:basis-1/3">
                   <article className="flex flex-col items-center gap-4 h-full">
                     {/* Photo */}
@@ -97,9 +97,9 @@ const FitKitServices = ({
                         >
                           <Image
                             src={
-                              item.image || "/assets/fitkit-services-image1.png"
+                              item.media || "/assets/fitkit-services-image1.png"
                             }
-                            alt={`${item.title} photo`}
+                            alt={`${item.serviceName} photo`}
                             width={320}
                             height={320}
                             unoptimized
@@ -110,7 +110,7 @@ const FitKitServices = ({
                     </div>
 
                     <h3 className="font-kanit text-3xl font-medium text-center">
-                      {item?.title}
+                      {item?.serviceName}
                     </h3>
 
                     <p className="text-center text-[#6A6A6A] text-[16px] px-10 line-clamp-2">

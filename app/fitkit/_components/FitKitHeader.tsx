@@ -159,14 +159,14 @@ const FitKitHeader = ({
 
               {/* Dropdown panel */}
               <div className="absolute left-0 mt-3 w-72 bg-[#fff] text-[#000] rounded-lg shadow-lg py-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out z-50">
-                {servicesContent?.features?.map((service, idx) => (
+                {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={`/service/${toSnakeCase(service?.title)}`}
+                    href={`/service?name=${service?.serviceName}`}
                     className="block px-4 py-2.5 hover:bg-[#0E0E0E] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold uppercase tracking-wide">
-                      {service.title}
+                      {service.serviceName}
                     </div>
                   </Link>
                 ))}
@@ -309,13 +309,13 @@ const FitKitHeader = ({
 
                     {isMobileServicesOpen && (
                       <div className="mt-1 pl-3 space-y-1">
-                        {servicesContent?.features?.map((service, idx) => (
+                        {servicesContent?.services?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href={`/service/${toSnakeCase(service?.title)}`}
+                              href={`/service?name=${service?.serviceName}`}
                               className="block py-1.5 text-sm text-[#9CA3AF] hover:text-white"
                             >
-                              {service.title}
+                              {service.serviceName}
                             </Link>
                           </SheetClose>
                         ))}

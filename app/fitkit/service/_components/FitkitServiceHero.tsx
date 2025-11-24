@@ -1,12 +1,16 @@
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { Service } from "@/models/templates/fitkit/fitkit-home-model";
 import Link from "next/link";
 import React from "react";
 
 const FitkitServiceHero = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   secondaryColor: string;
   primaryColor: string;
+  data: Service;
 }) => {
   return (
     <section
@@ -24,7 +28,7 @@ const FitkitServiceHero = ({
       <div className="absolute inset-0 service-clip">
         <img
           key={"fitkit-hero-bg-image02.png"}
-          src={"/assets/fitkit-hero-bg-image02.png"}
+          src={data?.media || "/assets/fitkit-hero-bg-image02.png"}
           alt="fitkit-hero-bg-image02"
           className="h-full w-full object-cover brightness-50"
         />
@@ -37,12 +41,10 @@ const FitkitServiceHero = ({
         <div className="grid items-center gap-6 md:grid-cols-[1.05fr_.95fr] h-full">
           <div className="text-white md:ml-2">
             <h1 className="leading-[0.95] text-[42px] font-bold uppercase md:text-[70px]">
-              <span className="block">Unlock your potential</span>
-              <span className="block text-white">with out peoaching</span>
+              <span className="block">{underscoreToSpace(data?.serviceName)}</span>
             </h1>
             <p className="mt-6 max-w-3xl text-[15px] leading-7 text-white/85 md:text-[16px] font-archivo">
-              Gym workouts are structured exercise sessions conducted in a
-              fitness facility equipped with various machines.
+              {data?.description}
             </p>
             <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
               <Link href={"/"}>

@@ -7,7 +7,7 @@ export interface FitkitServiceContentProps {
   align: "Left" | "Right";
   image: string;
   tag?: string;
-  title: string;
+  title?: string;
   description: string;
   primaryColor: string;
   secondaryColor: string;
@@ -47,16 +47,16 @@ const FitkitServiceContent = ({
               </span>
             </div>
           )}
-          
 
-          <h4 className="font-kanit font-semibold text-3xl md:text-5xl">
-            {title ?? "Section Title"}
-          </h4>
+          {title && (
+            <h4 className="font-kanit font-semibold text-3xl md:text-5xl">
+              {title ?? "Section Title"}
+            </h4>
+          )}
+
           <div className="grid grid-cols-1 mt-10 gap-4 md:gap-0">
             <div className="flex flex-col justify-between gap-4 md:gap-0">
-              <p className="text-[#6A6A6A] text-lg">
-                {description} 
-              </p>
+              <p className="text-[#6A6A6A] text-lg">{description}</p>
               {/* <Link href={"/"}>
                 <Button className="bg-[var(--sec)] rounded-none uppercase text-white h-12 px-[40px] py-[20px] w-full md:w-fit mt-4">
                   get Started

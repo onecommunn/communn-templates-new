@@ -37,3 +37,7 @@ export function formatTime(timeStr: string): string {
 export const toSnakeCase = (str: string) => {
   return str.trim().toLowerCase().replace(/\s+/g, "_");
 };
+
+export function underscoreToSpace(text: string): string {
+  return text.replace(/_/g, " ");
+}

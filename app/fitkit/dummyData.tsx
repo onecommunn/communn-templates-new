@@ -98,34 +98,38 @@ export const dummyData: FitkitHomePage = {
       sectionName: "serviceSection",
       content: {
         heading: "Easy Step to Achieve Your Goals.",
-        features: [
+        services: [
           {
-            image:
+            media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image1.png",
-            title: "Service Name",
+            serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
+            sections: [],
           },
           {
-            image:
+            media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image2.png",
-            title: "Service Name",
+            serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
+            sections: [],
           },
           {
-            image:
+            media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image3.png",
-            title: "Service Name",
+            serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
+            sections: [],
           },
           {
-            image:
+            media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image1.png",
-            title: "Service Name",
+            serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
+            sections: [],
           },
         ],
       },
