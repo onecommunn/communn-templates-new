@@ -34,6 +34,7 @@ import {
   Header,
   ServiceSection,
 } from "@/models/templates/spawell/spawell-home-model";
+import { toSnakeCase } from "@/components/utils/StringFunctions";
 
 const SpawellHeader = ({
   primaryColor,
@@ -149,7 +150,7 @@ const SpawellHeader = ({
                 {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href="/#services"
+                    href={`/service/${toSnakeCase(service?.serviceName)}`}
                     className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-[var(--sec)] transition-colors"
                   >
                     <div className="text-sm font-semibold tracking-wide">
@@ -285,9 +286,7 @@ const SpawellHeader = ({
                   <div className="px-4 py-2 font-inter">
                     <button
                       type="button"
-                      onClick={() =>
-                        setIsMobileServicesOpen((prev) => !prev)
-                      }
+                      onClick={() => setIsMobileServicesOpen((prev) => !prev)}
                       className="w-full flex items-center justify-between py-1 text-left hover:font-semibold"
                       style={{ color: primaryColor }}
                     >
@@ -304,7 +303,9 @@ const SpawellHeader = ({
                         {servicesContent?.services?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href="/#services"
+                              href={`/service/${toSnakeCase(
+                                service?.serviceName
+                              )}`}
                               className="block py-1.5 text-sm text-[#6B7280] hover:text-black"
                             >
                               {service.serviceName}

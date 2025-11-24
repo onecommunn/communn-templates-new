@@ -18,6 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { toSnakeCase } from "@/components/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactSection,
@@ -161,7 +162,7 @@ const FitKitHeader = ({
                 {servicesContent?.features?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={"/#services"}
+                    href={`/service/${toSnakeCase(service?.title)}`}
                     className="block px-4 py-2.5 hover:bg-[#0E0E0E] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold uppercase tracking-wide">
@@ -295,9 +296,7 @@ const FitKitHeader = ({
                   <div className="px-4 py-2 font-archivo">
                     <button
                       type="button"
-                      onClick={() =>
-                        setIsMobileServicesOpen((prev) => !prev)
-                      }
+                      onClick={() => setIsMobileServicesOpen((prev) => !prev)}
                       className="w-full flex items-center justify-between py-1 text-left hover:font-semibold"
                     >
                       <span>Services</span>
@@ -313,7 +312,7 @@ const FitKitHeader = ({
                         {servicesContent?.features?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href={"/#services"}
+                              href={`/service/${toSnakeCase(service?.title)}`}
                               className="block py-1.5 text-sm text-[#9CA3AF] hover:text-white"
                             >
                               {service.title}

@@ -27,6 +27,7 @@ import {
   Header,
   ServiceSection,
 } from "@/models/templates/martivo/martivo-home-model";
+import { toSnakeCase } from "@/components/utils/StringFunctions";
 
 const MartivoHeader = ({
   primaryColor,
@@ -115,7 +116,7 @@ const MartivoHeader = ({
                 {servicesContent?.itemBox?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href="/#services"
+                    href={`/service/${toSnakeCase(service?.title)}`}
                     className="block px-4 py-2.5 hover:bg-[#0A2640] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold tracking-wide">
@@ -249,7 +250,7 @@ const MartivoHeader = ({
                         {servicesContent?.itemBox?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href="/#services"
+                              href={`/service/${toSnakeCase(service?.title)}`}
                               className="block py-1.5 text-sm text-[#525252] hover:text-black"
                             >
                               {service.title}

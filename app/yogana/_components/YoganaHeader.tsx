@@ -18,6 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { toSnakeCase } from "@/components/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactDetails,
@@ -230,7 +231,7 @@ const YoganaHeader = ({
                 {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href="/#services"
+                    href={`/service/${toSnakeCase(service?.serviceName)}`}
                     className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold tracking-wide">
@@ -348,7 +349,9 @@ const YoganaHeader = ({
                         {servicesContent?.services?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href="/#services"
+                              href={`/service/${toSnakeCase(
+                                service?.serviceName
+                              )}`}
                               className="block py-1.5 text-sm text-gray-300 hover:text-white"
                             >
                               {service.serviceName}
