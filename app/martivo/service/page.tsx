@@ -5,6 +5,7 @@ import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 import { dummyData } from "../DummyData";
 import MartivoServiceHero from "./_components/MartivoServiceHero";
 import MartivoServiceContent from "./_components/MartivoServiceContent";
+import MartivoCTA from "../_components/MartivoCTA";
 
 const sectionsList = [
   {
@@ -70,6 +71,7 @@ const MartivoServicePage = () => {
           align={idx % 2 == 0 ? "Left" : "Right"}
         />
       ))}
+      <MartivoCTA primaryColor={primaryColor} secondaryColor={secondaryColor} />
     </main>
   );
 };

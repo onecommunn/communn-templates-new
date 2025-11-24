@@ -11,7 +11,7 @@ const MartivoServiceHero = ({
 }) => {
   return (
     <section
-      className="relative flex items-center justify-center h-[60vh] bg-cover bg-center bg-no-repeat font-lato"
+      className="relative flex items-center justify-center min-h-[60vh] max-h-screen py-10 md:py-16 bg-cover bg-center bg-no-repeat font-lato"
       style={
         {
           backgroundImage: `url(${"/assets/martivo-hero-bg-image.png"})`,
@@ -27,10 +27,12 @@ const MartivoServiceHero = ({
             <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-white">
               Empowering Mind, Body And Spirit Through Martial Arts
             </h2>
-            <Link
-              href={ "/"}
-              className="cursor-pointer"
-            >
+            <p className="text-[16px]/[36px]">
+              Discover the path to holistic well-being through yoga meditation
+              practices are designed to enhance your physical strength, mental
+              clarity.
+            </p>
+            <Link href={"/"} className="cursor-pointer">
               <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-[var(--pri)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pri)] focus-visible:ring-offset-2">
                 <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-[var(--pri)]" />
                 <span className="relative z-[1] text-lg font-medium">
