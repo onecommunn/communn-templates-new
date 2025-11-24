@@ -27,6 +27,7 @@ import {
   Header,
   ServiceSection,
 } from "@/models/templates/restraint/restraint-home-model";
+import { toSnakeCase } from "@/components/utils/StringFunctions";
 
 const RestraintHeader = ({
   primaryColor,
@@ -109,7 +110,7 @@ const RestraintHeader = ({
                 {servicesContent?.features?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href="/#services"
+                    href={`/service/${toSnakeCase(service?.title)}`}
                     className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold tracking-wide">
@@ -261,7 +262,7 @@ const RestraintHeader = ({
                         {servicesContent?.features?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href="/#services"
+                              href={`/service/${toSnakeCase(service?.title)}`}
                               className="block py-1.5 text-sm text-[#6B7280] hover:text-black"
                             >
                               {service.title}

@@ -33,3 +33,7 @@ export function formatTime(timeStr: string): string {
 
   return `${hours}:${minutes} ${ampm}`;
 }
+
+export const toSnakeCase = (str: string) => {
+  return str.trim().toLowerCase().replace(/\s+/g, "_");
+};

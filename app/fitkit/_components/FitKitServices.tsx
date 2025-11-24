@@ -84,7 +84,7 @@ const FitKitServices = ({
             <CarouselContent>
               {content?.features?.map((item, idx) => (
                 <CarouselItem key={idx} className="basis-full md:basis-1/3">
-                  <article className="flex flex-col items-center gap-4">
+                  <article className="flex flex-col items-center gap-4 h-full">
                     {/* Photo */}
                     <div className="mx-auto mb-4 md:w-[300px]">
                       <div className="relative rounded-xl p-2">
@@ -109,11 +109,11 @@ const FitKitServices = ({
                       </div>
                     </div>
 
-                    <h3 className="font-kanit text-3xl font-medium">
+                    <h3 className="font-kanit text-3xl font-medium text-center">
                       {item?.title}
                     </h3>
 
-                    <p className="text-center text-[#6A6A6A] text-[16px] px-10">
+                    <p className="text-center text-[#6A6A6A] text-[16px] px-10 line-clamp-2">
                       {item?.description}
                     </p>
                   </article>

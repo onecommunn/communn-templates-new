@@ -31,7 +31,7 @@ const RestraintServiceHero = ({
 }: RestraintServiceHeroProps) => {
   return (
     <section
-      className="relative flex items-center justify-center h-[60vh] bg-cover bg-right md:bg-top-left bg-no-repeat font-sora"
+      className="relative flex items-center justify-center min-h-[60vh] py-10 md:py-16 bg-cover bg-right md:bg-top-left bg-no-repeat font-sora"
       style={
         {
           backgroundImage: `url(${"https://html.awaikenthemes.com/restraint/images/post-6.jpg"})`,

@@ -5,6 +5,7 @@ import { useCMS } from "../CMSProvider.client";
 import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "../DummyData";
 import RestraintServiceContent from "./_components/RestraintServiceContent";
+import RestraintCTA from "../_components/RestraintCTA";
 
 const sectionsList = [
   {
@@ -70,6 +71,10 @@ const RestraintServicePage = () => {
           align={idx % 2 == 0 ? "Left" : "Right"}
         />
       ))}
+      <RestraintCTA
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </main>
   );
 };
