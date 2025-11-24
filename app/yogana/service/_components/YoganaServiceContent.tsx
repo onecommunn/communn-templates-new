@@ -61,7 +61,7 @@ const YoganaServiceContent = ({
               width={683}
               height={557}
               unoptimized
-              className="max-h-[557px] w-full"
+              className="max-h-[557px] w-full rounded-[28px]"
             />
           </div>
         </div>
