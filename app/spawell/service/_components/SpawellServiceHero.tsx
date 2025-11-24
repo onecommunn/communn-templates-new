@@ -32,7 +32,7 @@ const SpawellServiceHero = ({
 }) => {
   return (
     <section
-      className="relative flex items-center justify-center h-[60vh] bg-cover bg-center bg-no-repeat font-plus-jakarta"
+      className="relative flex items-center justify-center min-h-[60vh] py-10  md:py-16 bg-cover bg-center bg-no-repeat font-plus-jakarta"
       style={{
         backgroundImage: `url(${"/assets/spawell-hero-image.png"})`,
       }}

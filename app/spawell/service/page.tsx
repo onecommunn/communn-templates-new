@@ -5,6 +5,7 @@ import { useCMS } from "../CMSProvider.client";
 import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 import { dummyData } from "../DummyData";
 import SpawellServiceContent from "./_components/SpawellServiceContent";
+import SpawellCTA from "../_components/SpawellCTA";
 
 const sectionsList = [
   {
@@ -75,6 +76,7 @@ const SpawellServicePage = () => {
           secondaryColor={secondaryColor}
         />
       ))}
+      <SpawellCTA primaryColor={primaryColor} secondaryColor={secondaryColor}/>
     </main>
   );
 };
