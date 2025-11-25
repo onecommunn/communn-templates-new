@@ -12,6 +12,7 @@ import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Image from "next/image";
 import { ServiceSection } from "@/models/templates/fitkit/fitkit-home-model";
 import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import Link from "next/link";
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
@@ -85,39 +86,43 @@ const FitKitServices = ({
             <CarouselContent>
               {content?.services?.map((item, idx) => (
                 <CarouselItem key={idx} className="basis-full md:basis-1/3">
-                  <article className="flex flex-col items-center gap-4 h-full">
-                    {/* Photo */}
-                    <div className="mx-auto mb-4 md:w-[300px]">
-                      <div className="relative rounded-xl p-2">
-                        <div
-                          className="overflow-hidden rounded-full"
-                          style={{
-                            WebkitBoxShadow: "0px 12px 0px 12px #D8DDE1",
-                            boxShadow: "0px 12px 0px 12px #D8DDE1",
-                          }}
-                        >
-                          <Image
-                            src={
-                              item.media || "/assets/fitkit-services-image1.png"
-                            }
-                            alt={`${item.serviceName} photo`}
-                            width={320}
-                            height={320}
-                            unoptimized
-                            className="aspect-square w-full rounded-full object-cover"
-                          />
+                  <Link href={`/service?name=${item?.serviceName}`}>
+                    <article className="flex flex-col items-center gap-4 h-full cursor-pointer">
+                      {/* Photo */}
+                      <div className="mx-auto mb-4 md:w-[300px]">
+                        <div className="relative rounded-xl p-2">
+                          <div
+                            className="
+    overflow-hidden rounded-full
+    shadow-[0_12px_0_12px_#D8DDE1]
+    hover:shadow-[0_12px_0_12px_var(--sec)]
+    transition-shadow duration-300
+  "
+                          >
+                            <Image
+                              src={
+                                item.media ||
+                                "/assets/fitkit-services-image1.png"
+                              }
+                              alt={`${item.serviceName} photo`}
+                              width={320}
+                              height={320}
+                              unoptimized
+                              className="aspect-square w-full rounded-full object-cover"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <h3 className="font-kanit text-3xl font-medium text-center capitalize px-4 overflow-hidden">
-                      {underscoreToSpace(item?.serviceName)}
-                    </h3>
+                      <h3 className="font-kanit text-3xl font-medium text-center capitalize px-4 overflow-hidden">
+                        {underscoreToSpace(item?.serviceName)}
+                      </h3>
 
-                    <p className="text-center text-[#6A6A6A] text-[16px] px-10 line-clamp-2">
-                      {item?.description}
-                    </p>
-                  </article>
+                      <p className="text-center text-[#6A6A6A] text-[16px] px-10 line-clamp-2">
+                        {item?.description}
+                      </p>
+                    </article>
+                  </Link>
                 </CarouselItem>
               ))}
             </CarouselContent>
