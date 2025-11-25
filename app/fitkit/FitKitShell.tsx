@@ -127,6 +127,8 @@ export default async function FitKitShell({
         data={footerData}
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
+        plansIsActive={plansIsActive}
+        eventIsActive={eventIsActive}
       />
     </>
   );

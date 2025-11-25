@@ -30,10 +30,14 @@ const FitkitFooter = ({
   data,
   secondaryColor,
   primaryColor,
+  plansIsActive,
+  eventIsActive,
 }: {
   data: FooterSection;
   secondaryColor: string;
   primaryColor: string;
+  plansIsActive: boolean;
+  eventIsActive: boolean;
 }) => {
   const content = data?.content;
   const normalize = (s?: string) => (s ?? "").trim();
@@ -74,44 +78,58 @@ const FitkitFooter = ({
           <p className="text-center text-sm md:text-[16px] max-w-3xl">
             {content?.description}
           </p>
-          <div className="border-y border-y-[#1D2229] grid grid-cols-4  md:grid-cols-6">
-            <Link
-              href={"/"}
-              className="font-medium text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
+          <div className="border-y border-[#1D2229]">
+            <div
+              className="
+      flex flex-wrap justify-center
+      gap-x-8 gap-y-4
+      md:grid md:grid-cols-6 md:divide-x md:divide-[#1D2229]
+    "
             >
-              Home
-            </Link>
-            <Link
-              href={"/#about-us"}
-              className="font-medium text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
-            >
-              About us
-            </Link>
-            <Link
-              href={"/#services"}
-              className="font-medium text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
-            >
-              Services
-            </Link>
-            <Link
-              href={"/#events"}
-              className="font-medium text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
-            >
-              Events
-            </Link>
-            <Link
-              href={"/#plans"}
-              className="font-medium text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
-            >
-              Plans
-            </Link>
-            <Link
-              href={"/#contact"}
-              className="font-medium text-[11px] md:text-[16px] uppercase py-2 px-2 md:px-8 border-r border-r-[#1D2229]"
-            >
-              Contact
-            </Link>
+              <Link
+                href="/"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                Home
+              </Link>
+
+              <Link
+                href="/#about-us"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                About
+              </Link>
+
+              <Link
+                href="/#services"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                Service
+              </Link>
+
+              <Link
+                href="/#gallery"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                Gallery
+              </Link>
+
+              <Link
+                href="/#blog"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                Blog
+              </Link>
+
+              <Link
+                href="/#contact"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                Contact
+              </Link>
+            </div>
           </div>
+
           <div className="flex items-center justify-center gap-4">
             {content?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
               const key = normalize(each.platform).toLowerCase();
