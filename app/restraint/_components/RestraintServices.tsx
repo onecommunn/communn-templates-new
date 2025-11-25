@@ -18,7 +18,7 @@ type ServiceItem = {
 // ---- small helpers ----
 
 function IconOrImage({ src, alt }: { src: string; alt: string }) {
-  const isImage = src.includes("/") || src.includes(".");
+  const isImage = src?.includes("/") || src?.includes(".");
   if (!isImage && src in Icons) {
     const Ico = Icons[src as keyof typeof Icons] as ComponentType<
       SVGProps<SVGSVGElement>
@@ -47,14 +47,14 @@ function ServiceRow({ item }: { item: ServiceItem }) {
   return (
     <div className="relative flex flex-col items-start gap-4">
       <div className="flex h-12 w-12 items-center justify-center">
-        <IconOrImage src={item.icon} alt={item.title} />
+        <IconOrImage src={item?.icon} alt={item?.title} />
       </div>
       <div>
         <h4 className="font-marcellus text-[20px] leading-6 text-[#1E1E1E]">
-          {item.title}
+          {item?.title}
         </h4>
         <p className="mt-2 max-w-xs text-[16px] leading-6 text-[#9C9C9C]">
-          {item.description}
+          {item?.description}
         </p>
       </div>
 

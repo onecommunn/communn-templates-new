@@ -37,7 +37,7 @@ const FitKitAboutUs = ({
           <h4 className="font-kanit font-semibold text-3xl md:text-5xl">
             {content?.heading}
           </h4>
-          <div className="grid md:grid-cols-2 mt-10 gap-4 md:gap-0">
+          <div className="grid md:grid-cols-2 mt-10 gap-4 md:gap-6">
             <div>
               <Image
                 src={

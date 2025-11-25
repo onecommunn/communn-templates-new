@@ -11,6 +11,7 @@ import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Image from "next/image";
 import { ServiceSection } from "@/models/templates/fitkit/fitkit-home-model";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
@@ -109,8 +110,8 @@ const FitKitServices = ({
                       </div>
                     </div>
 
-                    <h3 className="font-kanit text-3xl font-medium text-center">
-                      {item?.serviceName}
+                    <h3 className="font-kanit text-3xl font-medium text-center capitalize px-4 overflow-hidden">
+                      {underscoreToSpace(item?.serviceName)}
                     </h3>
 
                     <p className="text-center text-[#6A6A6A] text-[16px] px-10 line-clamp-2">

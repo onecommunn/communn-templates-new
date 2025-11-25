@@ -98,7 +98,7 @@ const FitkitTrainer = ({
           >
             <CarouselContent>
               {content?.features?.map((item, idx) => (
-                <CarouselItem key={idx} className="basis-full md:basis-1/4">
+                <CarouselItem key={idx} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                   <article className="flex flex-col items-center gap-4">
                     {/* Photo */}
                     <div className="mx-auto mb-4 md:w-[300px]">

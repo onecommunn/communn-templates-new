@@ -18,7 +18,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { toSnakeCase } from "@/components/utils/StringFunctions";
+import {
+  toSnakeCase,
+  underscoreToSpace,
+} from "@/components/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactSection,
@@ -45,6 +48,8 @@ const FitKitHeader = ({
   secondaryColor,
   primaryColor,
   servicesData,
+  eventIsActive,
+  plansIsActive,
 }: {
   data: Header;
   contactData: ContactSection;
@@ -52,6 +57,8 @@ const FitKitHeader = ({
   secondaryColor: string;
   primaryColor: string;
   servicesData: ServiceSection;
+  eventIsActive: boolean;
+  plansIsActive: boolean;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false); // 👈 NEW
@@ -130,7 +137,7 @@ const FitKitHeader = ({
 
           {/* Desktop Navigation */}
           <nav
-            className="hidden md:flex items-center space-x-8"
+            className="hidden md:flex items-center space-x-12"
             aria-label="Primary"
           >
             <Link
@@ -166,25 +173,31 @@ const FitKitHeader = ({
                     className="block px-4 py-2.5 hover:bg-[#0E0E0E] hover:text-white transition-colors"
                   >
                     <div className="text-sm font-semibold uppercase tracking-wide">
-                      {service.serviceName}
+                      {underscoreToSpace(service?.serviceName)}
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link
-              href="/#events"
-              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
-            >
-              Events
-            </Link>
-            <Link
-              href="/#plans"
-              className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
-            >
-              Plans
-            </Link>
+            {eventIsActive && (
+              <Link
+                href="/#events"
+                className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
+              >
+                Events
+              </Link>
+            )}
+
+            {plansIsActive && (
+              <Link
+                href="/#plans"
+                className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
+              >
+                Plans
+              </Link>
+            )}
+
             <Link
               href="/#contact"
               className="font-archivo text-[16px] font-medium text-white hover:font-semibold uppercase cursor-pointer"
@@ -315,7 +328,7 @@ const FitKitHeader = ({
                               href={`/service?name=${service?.serviceName}`}
                               className="block py-1.5 text-sm text-[#9CA3AF] hover:text-white"
                             >
-                              {service.serviceName}
+                              {underscoreToSpace(service?.serviceName)}
                             </Link>
                           </SheetClose>
                         ))}
@@ -323,22 +336,28 @@ const FitKitHeader = ({
                     )}
                   </div>
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/#events"
-                      className="px-4 py-3 font-archivo hover:font-semibold"
-                    >
-                      Events
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#plans"
-                      className="px-4 py-3 font-archivo hover:font-semibold"
-                    >
-                      Plans
-                    </Link>
-                  </SheetClose>
+                  {eventIsActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#events"
+                        className="px-4 py-3 font-archivo hover:font-semibold"
+                      >
+                        Events
+                      </Link>
+                    </SheetClose>
+                  )}
+
+                  {plansIsActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#plans"
+                        className="px-4 py-3 font-archivo hover:font-semibold"
+                      >
+                        Plans
+                      </Link>
+                    </SheetClose>
+                  )}
+
                   <SheetClose asChild>
                     <Link
                       href="/#contact"

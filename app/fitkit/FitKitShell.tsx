@@ -9,9 +9,11 @@ import WhatsappIcon from "@/components/icons/WhatsappIcon";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import {
   ContactSection,
+  EventsSection,
   FooterSection,
   Header,
   HomeSection,
+  PlansSection,
   ServiceSection,
 } from "@/models/templates/fitkit/fitkit-home-model";
 import { dummyData } from "./dummyData";
@@ -44,6 +46,19 @@ export default async function FitKitShell({
     (s: HomeSection): s is ServiceSection =>
       s.sectionName == "serviceSection" && s.isActive
   );
+
+  const eventSectionData = source?.sections?.find(
+    (s: HomeSection): s is EventsSection =>
+      s.sectionName == "eventSection" && s.isActive
+  );
+
+  const plansSectionData = source?.sections?.find(
+    (s: HomeSection): s is PlansSection =>
+      s.sectionName == "plansSection" && s.isActive
+  );
+
+  const eventIsActive = eventSectionData?.isActive;
+  const plansIsActive = plansSectionData?.isActive;
 
   const socialMediaData = footerData?.content?.socialMedia;
 
@@ -102,6 +117,8 @@ export default async function FitKitShell({
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         servicesData={serviceSectionData}
+        plansIsActive={plansIsActive}
+        eventIsActive={eventIsActive}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
