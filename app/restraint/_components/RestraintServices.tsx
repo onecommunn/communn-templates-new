@@ -8,6 +8,7 @@ import Link from "next/link";
 import React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { ServiceSection } from "@/models/templates/restraint/restraint-home-model";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
 
 type ServiceItem = {
   icon: string; // "Lotus", "Wind" (Lucide) OR "/icons/lotus.svg" (image)
@@ -43,17 +44,17 @@ function IconOrImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function ServiceRow({ item }: { item: ServiceItem }) {
+function ServiceRow({ item }: { item: {serviceName:string,media:string,description:string} }) {
   return (
     <div className="relative flex flex-col items-start gap-4">
       <div className="flex h-12 w-12 items-center justify-center">
-        <IconOrImage src={item?.icon} alt={item?.title} />
+        <IconOrImage src={item?.media} alt={item?.serviceName} />
       </div>
       <div>
-        <h4 className="font-marcellus text-[20px] leading-6 text-[#1E1E1E]">
-          {item?.title}
+        <h4 className="font-marcellus text-[20px] leading-6 text-[#1E1E1E] capitalize">
+          {underscoreToSpace(item?.serviceName)}
         </h4>
-        <p className="mt-2 max-w-xs text-[16px] leading-6 text-[#9C9C9C]">
+        <p className="mt-2 max-w-xs text-[16px] leading-6 text-[#9C9C9C] line-clamp-2">
           {item?.description}
         </p>
       </div>
@@ -74,8 +75,8 @@ export default function RestraintServices({
   data: ServiceSection;
 }) {
   const content = data?.content;
-  const left = content?.features?.filter((_, i) => i % 2 === 0);
-  const right = content?.features?.filter((_, i) => i % 2 === 1);
+  const left = content?.services?.filter((_, i) => i % 2 === 0);
+  const right = content?.services?.filter((_, i) => i % 2 === 1);
 
   return (
     <section
@@ -152,7 +153,7 @@ export default function RestraintServices({
             animateOpacity
           >
             <div className="space-y-10">
-              {left.map((it, idx) => (
+              {left?.map((it, idx) => (
                 <div key={idx} className="pb-8">
                   <ServiceRow item={it} />
                 </div>
@@ -193,7 +194,7 @@ export default function RestraintServices({
             animateOpacity
           >
             <div className="space-y-10">
-              {right.map((it, idx) => (
+              {right?.map((it, idx) => (
                 <div key={idx} className="pb-8">
                   <ServiceRow item={it} />
                 </div>

@@ -54,7 +54,6 @@ export interface ServiceSection extends SectionBase {
   sectionName: "serviceSection";
   content: {
     heading: string;
-    // features: Features[];
     services: Service[];
   };
 }

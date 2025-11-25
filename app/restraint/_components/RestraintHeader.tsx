@@ -27,18 +27,25 @@ import {
   Header,
   ServiceSection,
 } from "@/models/templates/restraint/restraint-home-model";
-import { toSnakeCase } from "@/components/utils/StringFunctions";
+import {
+  toSnakeCase,
+  underscoreToSpace,
+} from "@/components/utils/StringFunctions";
 
 const RestraintHeader = ({
   primaryColor,
   secondaryColor,
   data,
   servicesData,
+  eventsisActive,
+  plansisActive,
 }: {
   primaryColor: string;
   secondaryColor: string;
   data: Header;
   servicesData: ServiceSection;
+  eventsisActive: boolean;
+  plansisActive: boolean;
 }) => {
   const content = data?.content;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -107,32 +114,38 @@ const RestraintHeader = ({
               </button>
 
               <div className="absolute left-0 mt-3 w-72 bg-white text-[#0A2640] rounded-lg shadow-lg py-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out z-50">
-                {servicesContent?.features?.map((service, idx) => (
+                {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={`/service/${toSnakeCase(service?.title)}`}
+                    href={`/service?name=${service?.serviceName}`}
                     className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-white transition-colors"
                   >
-                    <div className="text-sm font-semibold tracking-wide">
-                      {service.title}
+                    <div className="text-sm font-semibold tracking-wide capitalize">
+                      {underscoreToSpace(service.serviceName)}
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link
-              href="/#events"
-              className="font-sora hover:font-semibold text-white text-sm"
-            >
-              Events
-            </Link>
-            <Link
-              href="/#plans"
-              className="font-sora hover:font-semibold text-white text-sm"
-            >
-              Plans
-            </Link>
+            {eventsisActive && (
+              <Link
+                href="/#events"
+                className="font-sora hover:font-semibold text-white text-sm"
+              >
+                Events
+              </Link>
+            )}
+
+            {plansisActive && (
+              <Link
+                href="/#plans"
+                className="font-sora hover:font-semibold text-white text-sm"
+              >
+                Plans
+              </Link>
+            )}
+
             <Link
               href="/#contact"
               className="font-sora hover:font-semibold text-white text-sm"
@@ -244,9 +257,7 @@ const RestraintHeader = ({
                   <div className="px-4 py-2 font-inter">
                     <button
                       type="button"
-                      onClick={() =>
-                        setIsMobileServicesOpen((prev) => !prev)
-                      }
+                      onClick={() => setIsMobileServicesOpen((prev) => !prev)}
                       className="w-full flex items-center justify-between py-1 text-left hover:font-semibold"
                     >
                       <span>Services</span>
@@ -259,13 +270,13 @@ const RestraintHeader = ({
 
                     {isMobileServicesOpen && (
                       <div className="mt-1 pl-3 space-y-1">
-                        {servicesContent?.features?.map((service, idx) => (
+                        {servicesContent?.services?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href={`/service/${toSnakeCase(service?.title)}`}
-                              className="block py-1.5 text-sm text-[#6B7280] hover:text-black"
+                              href={`/service?name=${service?.serviceName}`}
+                              className="block py-1.5 text-sm text-[#6B7280] hover:text-black capitalize"
                             >
-                              {service.title}
+                              {underscoreToSpace(service.serviceName)}
                             </Link>
                           </SheetClose>
                         ))}
@@ -273,22 +284,27 @@ const RestraintHeader = ({
                     )}
                   </div>
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/#events"
-                      className="px-4 py-3 font-inter hover:font-semibold"
-                    >
-                      Events
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#plans"
-                      className="px-4 py-3 font-inter hover:font-semibold"
-                    >
-                      Plans
-                    </Link>
-                  </SheetClose>
+                  {eventsisActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#events"
+                        className="px-4 py-3 font-inter hover:font-semibold"
+                      >
+                        Events
+                      </Link>
+                    </SheetClose>
+                  )}
+                  {plansisActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#plans"
+                        className="px-4 py-3 font-inter hover:font-semibold"
+                      >
+                        Plans
+                      </Link>
+                    </SheetClose>
+                  )}
+
                   <SheetClose asChild>
                     <Link
                       href="/#contact"

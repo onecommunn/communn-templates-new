@@ -85,14 +85,23 @@ export interface ServiceSection extends SectionBase {
   content: {
     heading: string;
     subHeading: string;
-    features: {
-      icon: string;
-      title: string;
-      description: string;
-    }[];
     buttons: Button[];
     media: string;
+    services: Service[];
   };
+}
+
+export interface Service {
+  serviceName: string;
+  media: string;
+  bgImage: string;
+  description: string;
+  sections: {
+    title: string;
+    tag: string;
+    image: string;
+    description: string;
+  }[];
 }
 
 export interface HowItWorkSection extends SectionBase {

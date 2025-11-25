@@ -20,6 +20,7 @@ import {
   ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/restraint/restraint-home-model";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
   instagram: Instagram,
@@ -35,7 +36,7 @@ export default function RestraintFooter({
   primaryColor,
   secondaryColor,
   data,
-  servicesData
+  servicesData,
 }: {
   primaryColor: string;
   secondaryColor: string;
@@ -144,9 +145,14 @@ export default function RestraintFooter({
               Services
             </h3>
             <ul className="space-y-3 text-sm">
-              {servicesData?.content?.features.map((s,idx) => (
-                <li key={`${s.title}-${idx}`} className="transition-colors hover:text-white">
-                  {s.title}
+              {servicesData?.content?.services?.map((s, idx) => (
+                <li
+                  key={`${s.serviceName}-${idx}`}
+                  className="transition-colors hover:text-white capitalize"
+                >
+                  <Link href={`/service?name=${s?.serviceName}`}>
+                    {underscoreToSpace(s?.serviceName)}
+                  </Link>
                 </li>
               ))}
             </ul>

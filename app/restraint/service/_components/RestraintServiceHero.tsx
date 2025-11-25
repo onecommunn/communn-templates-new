@@ -1,4 +1,6 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { Service } from "@/models/templates/restraint/restraint-home-model";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -6,6 +8,7 @@ import React from "react";
 interface RestraintServiceHeroProps {
   primaryColor: string;
   secondaryColor: string;
+  data: Service;
 }
 
 const hexToRgba = (hex: string, alpha = 1) => {
@@ -28,13 +31,14 @@ const hexToRgba = (hex: string, alpha = 1) => {
 const RestraintServiceHero = ({
   primaryColor,
   secondaryColor,
+  data,
 }: RestraintServiceHeroProps) => {
   return (
     <section
-      className="relative flex items-center justify-center min-h-[60vh] max-h-screen py-10 md:py-16 bg-cover bg-right md:bg-top-left bg-no-repeat font-sora"
+      className="relative flex items-center justify-center min-h-[60vh] max-h-screen py-10 md:py-16 bg-cover bg-center md:bg-center bg-no-repeat font-sora"
       style={
         {
-          backgroundImage: `url(${"https://html.awaikenthemes.com/restraint/images/post-6.jpg"})`,
+          backgroundImage: `url(${data?.bgImage || "https://html.awaikenthemes.com/restraint/images/post-6.jpg"})`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
         } as React.CSSProperties
@@ -60,14 +64,12 @@ const RestraintServiceHero = ({
             animateOpacity
           >
             <div>
-              <h2 className="md:text-6xl/[72px] text-4xl font-marcellus uppercase font-normal">
-                TRANSFORM YOUR LIFE THROUGH YOGA 
+              <h2 className="md:text-6xl/[72px] text-4xl font-marcellus capitalize font-normal">
+                {underscoreToSpace(data?.serviceName)}
               </h2>
               <hr className="my-8 border border-white/20" />
               <p className="text-[16px]/[36px]">
-                Discover the path to holistic well-being through yoga meditation
-                practices are designed to enhance your physical strength, mental
-                clarity.
+                {data?.description}
               </p>
               {/* CTA buttons */}
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mt-10">

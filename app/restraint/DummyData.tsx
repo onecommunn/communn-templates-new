@@ -161,32 +161,6 @@ export const dummyData: RestarintHomePage = {
       content: {
         heading: "Comprehensive yoga and",
         subHeading: "meditation services",
-        features: [
-          {
-            icon: "/assets/restraint-about-image01.svg",
-            title: "Service Name",
-            description:
-              "We focus on connection, offering a complete wellness experience that nurtures your physical",
-          },
-          {
-            icon: "/assets/restraint-services-image01.svg",
-            title: "Emotional Balance",
-            description:
-              "We focus on connection, offering a complete wellness experience that nurtures your physical",
-          },
-          {
-            icon: "/assets/restraint-services-image02.svg",
-            title: "Stress Reduction",
-            description:
-              "We focus on connection, offering a complete wellness experience that nurtures your physical",
-          },
-          {
-            icon: "HeartHandshake",
-            title: "Mind-Body Harmony",
-            description:
-              "We focus on connection, offering a complete wellness experience that nurtures your physical",
-          },
-        ],
         buttons: [
           {
             label: "Contact Now",
@@ -195,6 +169,147 @@ export const dummyData: RestarintHomePage = {
         ],
         media:
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-services-images-1.png",
+        services: [
+          {
+            serviceName: "service_name",
+            media: "/assets/restraint-about-image01.svg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+            description:
+              "We focus on connection, offering a complete wellness experience that nurtures your physical",
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "http://html.awaikenthemes.com/restraint/images/post-3.jpg",
+                tag: "Section tag",
+              },
+            ],
+          },
+          {
+            serviceName: "emotional_balance",
+            media: "/assets/restraint-services-image01.svg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+
+            description:
+              "We focus on connection, offering a complete wellness experience that nurtures your physical",
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "http://html.awaikenthemes.com/restraint/images/post-3.jpg",
+                tag: "Section tag",
+              },
+            ],
+          },
+          {
+            serviceName: "stress_reduction",
+            media: "/assets/restraint-services-image02.svg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+
+            description:
+              "We focus on connection, offering a complete wellness experience that nurtures your physical",
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "http://html.awaikenthemes.com/restraint/images/post-3.jpg",
+                tag: "Section tag",
+              },
+            ],
+          },
+          {
+            serviceName: "mind-Body_harmony",
+            media: "HeartHandshake",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+
+            description:
+              "We focus on connection, offering a complete wellness experience that nurtures your physical",
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "http://html.awaikenthemes.com/restraint/images/post-3.jpg",
+                tag: "Section tag",
+              },
+            ],
+          },
+        ],
       },
       order: 5,
       isActive: true,

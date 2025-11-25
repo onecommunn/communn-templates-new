@@ -49,7 +49,7 @@ const RestraintAboutus = ({
   return (
     <section
       id="about-us"
-      className="relative py-20 md:pb-28 font-sora"
+      className="bg-[var(--sec)]/15 relative py-20 md:pb-28 font-sora"
       style={
         {
           "--pri": primaryColor,

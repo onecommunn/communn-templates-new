@@ -7,9 +7,11 @@ import { getRestraintCMSBundle } from "@/lib/Restraint/restraint-cms";
 import { dummyData } from "./DummyData";
 import {
   ContactSection,
+  EventsSection,
   FooterSection,
   Header,
   HomeSection,
+  PlansSection,
   ServiceSection,
 } from "@/models/templates/restraint/restraint-home-model";
 import Link from "next/link";
@@ -44,8 +46,20 @@ export default async function RestraintShell({
       s.sectionName == "contactSection" && s.isActive
   );
 
+  const eventSectionData = source?.sections?.find(
+    (s: HomeSection): s is EventsSection =>
+      s.sectionName == "eventsSection" && s.isActive
+  );
+
+  const plansSectionData = source?.sections?.find(
+    (s: HomeSection): s is PlansSection =>
+      s.sectionName == "plansSection" && s.isActive
+  );
+
   const contactData = contactSectionData && contactSectionData?.content;
 
+  const plansisActive = plansSectionData?.isActive;
+  const eventsisActive = eventSectionData?.isActive;
 
   return (
     <>
@@ -100,6 +114,8 @@ export default async function RestraintShell({
         secondaryColor={secondaryColor}
         data={headerData}
         servicesData={serviceSectionData}
+        eventsisActive={eventsisActive}
+        plansisActive={plansisActive}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

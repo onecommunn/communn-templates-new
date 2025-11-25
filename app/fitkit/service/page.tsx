@@ -8,7 +8,6 @@ import { useCMS } from "../CMSProvider.client";
 function ServiceSkeleton() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-      dsdsdsd
       <div className="mx-auto py-8">
         <div className="rounded-2xl overflow-hidden mb-8">
           <div className="relative h-[70vh] w-full bg-gray-200 animate-pulse" />
