@@ -5,9 +5,11 @@ import SpawellFooter from "./_components/SpawellFooter";
 import { getSpawellCMSBundle } from "@/lib/Spawell/spawell-cms";
 import {
   ContactSection,
+  EventsSection,
   FooterSection,
   Header,
   HomeSection,
+  PlansSection,
   ServiceSection,
 } from "@/models/templates/spawell/spawell-home-model";
 import { dummyData } from "./DummyData";
@@ -43,9 +45,21 @@ export default async function SpawellShell({
       s.sectionName === "serviceSection" && s.isActive
   );
 
+  const eventsSection = source?.sections?.find(
+    (s: HomeSection): s is EventsSection =>
+      s.sectionName === "eventsSection" && s.isActive
+  );
+
+  const plansSection = source?.sections?.find(
+    (s: HomeSection): s is PlansSection =>
+      s.sectionName === "plansSection" && s.isActive
+  );
+
+  const eventsIsActive = eventsSection?.isActive;
+  const plansIsActive = plansSection?.isActive;
+
   return (
     <>
-
       {/* Call Button */}
       <Link
         href={`tel:${contactData?.contact?.phoneNumber}`}
@@ -98,6 +112,8 @@ export default async function SpawellShell({
         neutralColor={neutralColor}
         data={headerData}
         servicesData={serviceSection}
+        eventsIsActive={eventsIsActive}
+        plansIsActive={plansIsActive}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
@@ -108,6 +124,8 @@ export default async function SpawellShell({
         neutralColor={neutralColor}
         data={footerData}
         servicesData={serviceSection}
+        eventsIsActive={eventsIsActive}
+        plansIsActive={plansIsActive}
       />
     </>
   );

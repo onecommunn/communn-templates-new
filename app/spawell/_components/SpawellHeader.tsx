@@ -34,7 +34,10 @@ import {
   Header,
   ServiceSection,
 } from "@/models/templates/spawell/spawell-home-model";
-import { toSnakeCase } from "@/components/utils/StringFunctions";
+import {
+  toSnakeCase,
+  underscoreToSpace,
+} from "@/components/utils/StringFunctions";
 
 const SpawellHeader = ({
   primaryColor,
@@ -42,12 +45,16 @@ const SpawellHeader = ({
   neutralColor,
   data,
   servicesData,
+  eventsIsActive,
+  plansIsActive,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
   data: Header;
   servicesData: ServiceSection;
+  eventsIsActive: boolean;
+  plansIsActive: boolean;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
@@ -150,29 +157,35 @@ const SpawellHeader = ({
                 {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={`/service/${toSnakeCase(service?.serviceName)}`}
+                    href={`/service?name=${service?.serviceName}`}
                     className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-[var(--sec)] transition-colors"
                   >
-                    <div className="text-sm font-semibold tracking-wide">
-                      {service.serviceName}
+                    <div className="text-sm font-semibold tracking-wide capitalize">
+                      {underscoreToSpace(service.serviceName)}
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link
-              href="/#events"
-              className="font-inter hover:font-semibold text-[var(--pri)]"
-            >
-              Events
-            </Link>
-            <Link
-              href="/#plans"
-              className="font-inter hover:font-semibold text-[var(--pri)]"
-            >
-              Plans
-            </Link>
+            {eventsIsActive && (
+              <Link
+                href="/#events"
+                className="font-inter hover:font-semibold text-[var(--pri)]"
+              >
+                Events
+              </Link>
+            )}
+
+            {plansIsActive && (
+              <Link
+                href="/#plans"
+                className="font-inter hover:font-semibold text-[var(--pri)]"
+              >
+                Plans
+              </Link>
+            )}
+
             <Link
               href="/#contact"
               className="font-inter hover:font-semibold text-[var(--pri)]"
@@ -303,12 +316,10 @@ const SpawellHeader = ({
                         {servicesContent?.services?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href={`/service/${toSnakeCase(
-                                service?.serviceName
-                              )}`}
-                              className="block py-1.5 text-sm text-[#6B7280] hover:text-black"
+                              href={`/service?name=${service?.serviceName}`}
+                              className="block py-1.5 text-sm text-[#6B7280] hover:text-black capitalize"
                             >
-                              {service.serviceName}
+                              {underscoreToSpace(service.serviceName)}
                             </Link>
                           </SheetClose>
                         ))}

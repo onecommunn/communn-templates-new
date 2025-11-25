@@ -148,38 +148,50 @@ export const dummyData: SpawellHomePage = {
           {
             serviceName: "Service Name",
             media: "Grid3X3",
+            bgImage: "",
             description:
               "Tailored treatments to meet your unique health and relaxation needs",
+            sections: [],
           },
           {
             serviceName: "Natural & Organic Products",
             media: "Leaf",
+            bgImage: "",
             description:
               "We use only clean, skin-safe, and eco-friendly ingredients.",
+            sections: [],
           },
           {
             serviceName: "Tranquil, Hygienic Environment",
             media: "ShieldCheck",
+            bgImage: "",
             description:
               "Enjoy peace of mind and total serenity in our spa sanctuary.",
+            sections: [],
           },
           {
             serviceName: "Wide Range of Services",
             media: "Coffee",
+            bgImage: "",
             description:
               "From massages and facials to holistic therapies and coaching.",
+            sections: [],
           },
           {
             serviceName: "Holistic Wellness Approach",
             media: "ScrollText",
+            bgImage: "",
             description:
               "We treat the whole you — not just symptoms — mind, body, and spirit.",
+            sections: [],
           },
           {
             serviceName: "Flexible Appointments",
             media: "CalendarClock",
+            bgImage: "",
             description:
               "Convenient scheduling that fits your lifestyle — online or in-person.",
+            sections: [],
           },
         ],
         media: [

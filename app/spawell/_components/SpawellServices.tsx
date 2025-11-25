@@ -6,9 +6,12 @@ import * as Lucide from "lucide-react";
 import type { LucideProps } from "lucide-react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { ServiceSection } from "@/models/templates/spawell/spawell-home-model";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import Link from "next/link";
 
 /** ----- helpers ----- */
-const isUrl = (v?: string) => !!v && (/^(https?:)?\/\//i.test(v) || v.startsWith("/"));
+const isUrl = (v?: string) =>
+  !!v && (/^(https?:)?\/\//i.test(v) || v.startsWith("/"));
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name?: string): LucideIconType | null {
   if (!name) return null;
@@ -24,43 +27,53 @@ type Point = {
   direction: "Left" | "Right";
 };
 
-const Bullet = ({
-  title,
-  desc,
-  icon,
-  direction,
-}: Point) => {
+const Bullet = ({ title, desc, icon, direction }: Point) => {
   const LucideIcon = icon && !isUrl(icon) ? getLucideIcon(icon) : null;
 
   return (
-    <div className="grid grid-cols-[2.25rem,1fr] gap-3">
-      <div
-        className={`flex items-center gap-4 ${
-          direction === "Left" ? "flex-row-reverse" : "flex-row"
-        }`}
-      >
-        <div className="flex p-3 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
-          {LucideIcon ? (
-            <LucideIcon className="h-10 w-10 text-[var(--sec)]/90" strokeWidth={1} />
-          ) : icon ? (
-            <Image
-              src={icon}
-              alt={`${title} icon`}
-              width={40}
-              height={40}
-              className="h-10 w-10 object-contain"
-              unoptimized
-            />
-          ) : (
-            <div className="h-10 w-10" />
-          )}
-        </div>
-        <div className={`${direction === "Left" ? "text-right" : "text-left"}`}>
-          <h4 className="text-[15px] font-semibold text-[var(--sec)]">{title}</h4>
-          <p className="mt-1 text-sm leading-6 text-[var(--sec)]/70">{desc}</p>
+    <Link
+      href={`/service?name=${title}`}
+      className="group transition-all duration-300 hover:-translate-y-1"
+    >
+      <div className="grid grid-cols-[2.25rem,1fr] gap-3">
+        <div
+          className={`flex items-center gap-4 ${
+            direction === "Left" ? "flex-row-reverse" : "flex-row"
+          }`}
+        >
+          <div className="flex p-3 flex-shrink-0 items-center justify-center rounded-full bg-white/10 transition-all duration-300 group-hover:bg-white/20 group-hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]">
+            {LucideIcon ? (
+              <LucideIcon
+                className="h-10 w-10 text-[var(--sec)]/90 transition-colors group-hover:text-[var(--sec)]"
+                strokeWidth={1}
+              />
+            ) : icon ? (
+              <Image
+                src={icon}
+                alt={`${title} icon`}
+                width={40}
+                height={40}
+                className="h-10 w-10 object-contain transition-opacity group-hover:opacity-100 opacity-90"
+                unoptimized
+              />
+            ) : (
+              <div className="h-10 w-10" />
+            )}
+          </div>
+
+          <div
+            className={`${direction === "Left" ? "text-right" : "text-left"}`}
+          >
+            <h4 className="text-[15px] font-semibold text-[var(--sec)] capitalize transition-all duration-300 group-hover:font-bold group-hover:tracking-wide">
+              {underscoreToSpace(title)}
+            </h4>
+            <p className="mt-1 text-sm leading-6 text-[var(--sec)]/70 transition-opacity duration-300 group-hover:text-[var(--sec)]/90 line-clamp-2">
+              {desc}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -90,7 +103,8 @@ const SpawellServices = ({
   const LEFT_POINTS = points.filter((p) => p.direction === "Left");
   const RIGHT_POINTS = points.filter((p) => p.direction === "Right");
 
-  const centerImage = source?.media?.[0] || "/assets/spawell-services-image-1.jpg"; // fallback
+  const centerImage =
+    source?.media?.[0] || "/assets/spawell-services-image-1.jpg"; // fallback
 
   return (
     <section

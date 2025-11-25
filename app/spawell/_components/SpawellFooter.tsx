@@ -15,6 +15,7 @@ import {
   ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/spawell/spawell-home-model";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
   instagram: Instagram,
@@ -30,12 +31,16 @@ const SpawellFooter = ({
   neutralColor,
   data,
   servicesData,
+  eventsIsActive,
+  plansIsActive,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
   data: FooterSection;
   servicesData: ServiceSection;
+  eventsIsActive: boolean;
+  plansIsActive: boolean;
 }) => {
   const source = data?.content;
   const normalize = (s?: string) => (s ?? "").trim();
@@ -123,16 +128,20 @@ const SpawellFooter = ({
                     Services
                   </Link>
                 </li>
-                <li>
-                  <Link href="/#events" className="hover:text-[var(--sec)]">
-                    Events
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/#plans" className="hover:text-[var(--sec)]">
-                    Plans
-                  </Link>
-                </li>
+                {eventsIsActive && (
+                  <li>
+                    <Link href="/#events" className="hover:text-[var(--sec)]">
+                      Events
+                    </Link>
+                  </li>
+                )}
+                {plansIsActive && (
+                  <li>
+                    <Link href="/#plans" className="hover:text-[var(--sec)]">
+                      Plans
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/#contact" className="hover:text-[var(--sec)]">
                     Contact Us
@@ -146,8 +155,11 @@ const SpawellFooter = ({
               <ul className="mt-3 space-y-2 text-sm text-[var(--sec)]/80">
                 {services?.map((item, idx) => (
                   <li key={idx}>
-                    <Link href="/" className="hover:text-[var(--sec)]">
-                      {item?.serviceName}
+                    <Link
+                      href={`/service?name=${item?.serviceName}`}
+                      className="hover:text-[var(--sec)] capitalize"
+                    >
+                      {underscoreToSpace(item?.serviceName)}
                     </Link>
                   </li>
                 ))}

@@ -1,5 +1,7 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { Button } from "@/components/ui/button";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { Service } from "@/models/templates/restraint/restraint-home-model";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -25,16 +27,20 @@ const SpawellServiceHero = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: Service;
 }) => {
   return (
     <section
       className="relative flex items-center justify-center min-h-[60vh] max-h-screen py-10  md:py-16 bg-cover bg-center bg-no-repeat font-plus-jakarta"
       style={{
-        backgroundImage: `url(${"/assets/spawell-hero-image.png"})`,
+        backgroundImage: `url(${
+          data?.bgImage || "/assets/spawell-hero-image.png"
+        })`,
       }}
     >
       <div
@@ -73,14 +79,10 @@ const SpawellServiceHero = ({
             delay={0.3}
           >
             <div>
-              <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-4xl font-semibold">
-                Relax, recharge, and reconnect with inner
+              <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-4xl font-semibold capitalize">
+                {underscoreToSpace(data?.serviceName)}
               </h2>
-              <p className="text-lg mt-6">
-                Step into a haven of calm where every treatment is designed to
-                tension, renew your energy, and restore a deep sense of inner
-                peace.
-              </p>
+              <p className="text-lg mt-6">{data?.description}</p>
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mt-10">
                 <Link href={"/"}>
                   <Button

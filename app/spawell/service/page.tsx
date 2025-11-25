@@ -1,51 +1,44 @@
 "use client";
-import React from "react";
-import SpawellServiceHero from "./_components/SpawellServiceHero";
-import { useCMS } from "../CMSProvider.client";
 import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
+import React, { Suspense } from "react";
 import { dummyData } from "../DummyData";
-import SpawellServiceContent from "./_components/SpawellServiceContent";
-import SpawellCTA from "../_components/SpawellCTA";
+import { useCMS } from "../CMSProvider.client";
+import SpawellServicePage from "./_components/SpawellServicePage";
 
-const sectionsList = [
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "http://html.awaikenthemes.com/restraint/images/post-3.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-4.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-5.jpg",
-    tag: "Section tag",
-  },
-];
+function ServiceSkeleton() {
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="mx-auto py-8">
+        <div className="rounded-2xl overflow-hidden mb-8">
+          <div className="relative h-[70vh] w-full bg-gray-200 animate-pulse" />
+        </div>
 
-const SpawellServicePage = () => {
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div key={index} className="grid md:grid-cols-2 gap-8 mb-10">
+            <div
+              className={`bg-gray-200 rounded-xl shadow border p-6 space-y-4 h-[400px] ${
+                index % 2 == 0 ? "order-0" : "order-1"
+              }`}
+            />
+
+            <div className="md:col-span-1 space-y-6 flex justify-center flex-col">
+              <div className="h-7 w-[100px] bg-gray-200 rounded animate-pulse" />
+              <div className="h-10 w-3/4 bg-gray-200 rounded animate-pulse" />
+              <div className="space-y-3">
+                <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-11/12 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-10/12 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-10/12 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const SpawellServiceRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: SpawellHomePage | undefined = !isLoading
@@ -55,30 +48,15 @@ const SpawellServicePage = () => {
   const primaryColor = source?.color?.primary || "#5D3222";
   const secondaryColor = source?.color?.secondary || "#fff";
   const neutralColor = source?.color?.neutral || "#F9F6F1";
-
   return (
-    <main>
-      <SpawellServiceHero
+    <Suspense fallback={<ServiceSkeleton />}>
+      <SpawellServicePage
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
       />
-
-      {sectionsList?.map((item, idx) => (
-        <SpawellServiceContent
-          key={idx} 
-          image={item?.image}
-          title={item?.title}
-          align={idx % 2 !== 0 ? "Left" : "Right"}
-          description={item?.description}
-          neutralColor={neutralColor}
-          primaryColor={primaryColor}
-          secondaryColor={secondaryColor}
-        />
-      ))}
-      <SpawellCTA primaryColor={primaryColor} secondaryColor={secondaryColor}/>
-    </main>
+    </Suspense>
   );
 };
 
-export default SpawellServicePage;
+export default SpawellServiceRoot;

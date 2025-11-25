@@ -47,11 +47,11 @@ import FitkitLogin from "./app/fitkit/login/page";
 import FitKitSignup from "./app/fitkit/sign-up/page";
 import FitkitEventDetailsPage from "./app/fitkit/event-details/page";
 import FitkitSubscriptionsPage from "./app/fitkit/subscriptions/page";
-import SpawellServicePage from "./app/spawell/service/page";
 import MartivoServicePage from "./app/martivo/service/page";
 import YoganaServicePage from "./app/yogana/service/page";
 import FitkitServiceRoot from "./app/fitkit/service/page";
 import RestraintServiceRoot from "./app/restraint/service/page";
+import SpawellServiceRoot from "./app/spawell/service/page";
 
 export const templateLayouts: Record<
   string,
@@ -96,7 +96,7 @@ export const templates: Record<
     "/login": SpawellLogin,
     "/event-details": SpawellEventDetailsPage,
     "/sign-up": SpawellSignup,
-    "/service": SpawellServicePage,
+    "/service": SpawellServiceRoot,
   },
   fitkit: {
     "/": FitkitRoot,
