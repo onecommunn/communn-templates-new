@@ -44,14 +44,18 @@ function IconOrImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function ServiceRow({ item }: { item: {serviceName:string,media:string,description:string} }) {
+function ServiceRow({
+  item,
+}: {
+  item: { serviceName: string; media: string; description: string };
+}) {
   return (
-    <div className="relative flex flex-col items-start gap-4">
+    <div className="relative flex flex-col items-start gap-4 group cursor-pointer">
       <div className="flex h-12 w-12 items-center justify-center">
         <IconOrImage src={item?.media} alt={item?.serviceName} />
       </div>
       <div>
-        <h4 className="font-marcellus text-[20px] leading-6 text-[#1E1E1E] capitalize">
+        <h4 className="font-marcellus text-[20px] leading-6 text-[#1E1E1E] capitalize group-hover:font-semibold">
           {underscoreToSpace(item?.serviceName)}
         </h4>
         <p className="mt-2 max-w-xs text-[16px] leading-6 text-[#9C9C9C] line-clamp-2">
@@ -173,7 +177,9 @@ export default function RestraintServices({
             <div className="mx-auto md:mx-0">
               <div className="relative">
                 <Image
-                  src={content?.media || "/assets/restraint-services-images-1.png"}
+                  src={
+                    content?.media || "/assets/restraint-services-images-1.png"
+                  }
                   alt="Meditation"
                   width={360}
                   height={460}
@@ -196,7 +202,9 @@ export default function RestraintServices({
             <div className="space-y-10">
               {right?.map((it, idx) => (
                 <div key={idx} className="pb-8">
-                  <ServiceRow item={it} />
+                  <Link href={`/service?name=${it?.serviceName}`}>
+                    <ServiceRow item={it} />
+                  </Link>
                 </div>
               ))}
             </div>
