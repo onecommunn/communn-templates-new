@@ -48,10 +48,10 @@ import FitKitSignup from "./app/fitkit/sign-up/page";
 import FitkitEventDetailsPage from "./app/fitkit/event-details/page";
 import FitkitSubscriptionsPage from "./app/fitkit/subscriptions/page";
 import MartivoServicePage from "./app/martivo/service/page";
-import YoganaServicePage from "./app/yogana/service/page";
 import FitkitServiceRoot from "./app/fitkit/service/page";
 import RestraintServiceRoot from "./app/restraint/service/page";
 import SpawellServiceRoot from "./app/spawell/service/page";
+import YoganaServiceRoot from "./app/yogana/service/page";
 
 export const templateLayouts: Record<
   string,
@@ -88,7 +88,7 @@ export const templates: Record<
     "/login": YoganaLogin,
     "/sign-up": YoganaSignup,
     "/subscriptions": YoganaSubscriptionsPage,
-    "/service": YoganaServicePage,
+    "/service": YoganaServiceRoot,
   },
   spawell: {
     "/": SpawellRoot,
