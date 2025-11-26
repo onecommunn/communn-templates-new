@@ -27,18 +27,25 @@ import {
   Header,
   ServiceSection,
 } from "@/models/templates/martivo/martivo-home-model";
-import { toSnakeCase } from "@/components/utils/StringFunctions";
+import {
+  toSnakeCase,
+  underscoreToSpace,
+} from "@/components/utils/StringFunctions";
 
 const MartivoHeader = ({
   primaryColor,
   secondaryColor,
   data,
+  eventsIsActive,
+  plansIsActive,
   servicesData,
 }: {
   primaryColor: string;
   secondaryColor: string;
   data: Header;
   servicesData: ServiceSection;
+  plansIsActive: boolean;
+  eventsIsActive: boolean;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
@@ -113,33 +120,36 @@ const MartivoHeader = ({
                               group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 
                               transition-all duration-200 ease-out z-50"
               >
-                {servicesContent?.itemBox?.map((service, idx) => (
+                {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={`/service/${toSnakeCase(service?.title)}`}
+                    href={`/service?name=${service?.serviceName}`}
                     className="block px-4 py-2.5 hover:bg-[#0A2640] hover:text-white transition-colors"
                   >
-                    <div className="text-sm font-semibold tracking-wide">
-                      {service.title}
+                    <div className="text-sm font-semibold tracking-wide capitalize">
+                      {underscoreToSpace(service.serviceName)}
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link
-              href="/#events"
-              className="font-lato hover:font-semibold text-white text-sm"
-            >
-              EVENTS
-            </Link>
-
-            <Link
-              href="/#plans"
-              className="font-lato hover:font-semibold text-white text-sm"
-            >
-              PLANS
-            </Link>
+            {eventsIsActive && (
+              <Link
+                href="/#events"
+                className="font-lato hover:font-semibold text-white text-sm"
+              >
+                EVENTS
+              </Link>
+            )}
+            {plansIsActive && (
+              <Link
+                href="/#plans"
+                className="font-lato hover:font-semibold text-white text-sm"
+              >
+                PLANS
+              </Link>
+            )}
 
             <Link
               href="/#contact"
@@ -247,13 +257,13 @@ const MartivoHeader = ({
 
                     {isMobileServicesOpen && (
                       <div className="mt-1 ml-3 space-y-1">
-                        {servicesContent?.itemBox?.map((service, idx) => (
+                        {servicesContent?.services?.map((service, idx) => (
                           <SheetClose asChild key={idx}>
                             <Link
-                              href={`/service/${toSnakeCase(service?.title)}`}
-                              className="block py-1.5 text-sm text-[#525252] hover:text-black"
+                              href={`/service?name=${service?.serviceName}`}
+                              className="block py-1.5 text-sm text-[#525252] hover:text-black capitalize"
                             >
-                              {service.title}
+                              {underscoreToSpace(service.serviceName)}
                             </Link>
                           </SheetClose>
                         ))}
@@ -261,23 +271,27 @@ const MartivoHeader = ({
                     )}
                   </div>
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/#events"
-                      className="px-4 py-3 font-lato text-[#0A2640]"
-                    >
-                      Events
-                    </Link>
-                  </SheetClose>
+                  {eventsIsActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#events"
+                        className="px-4 py-3 font-lato text-[#0A2640]"
+                      >
+                        Events
+                      </Link>
+                    </SheetClose>
+                  )}
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/#plans"
-                      className="px-4 py-3 font-lato text-[#0A2640]"
-                    >
-                      Plans
-                    </Link>
-                  </SheetClose>
+                  {plansIsActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#plans"
+                        className="px-4 py-3 font-lato text-[#0A2640]"
+                      >
+                        Plans
+                      </Link>
+                    </SheetClose>
+                  )}
 
                   <SheetClose asChild>
                     <Link

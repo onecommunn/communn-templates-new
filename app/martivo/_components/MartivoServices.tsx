@@ -2,6 +2,8 @@ import React from "react";
 import { WavyStroke } from "./Icons/WavyStroke";
 import { ServiceSection } from "@/models/templates/martivo/martivo-home-model";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import Link from "next/link";
 
 const MartivoServices = ({
   primaryColor,
@@ -14,7 +16,7 @@ const MartivoServices = ({
 }) => {
   const content = data?.content;
 
-  if (!content?.itemBox?.length || content?.itemBox?.length < 0) {
+  if (!content?.services?.length || content?.services?.length < 0) {
     return null;
   }
   return (
@@ -60,9 +62,8 @@ const MartivoServices = ({
           animateOpacity
           threshold={0.2}
         >
-          {" "}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-            {content?.itemBox?.map((c, idx) => {
+            {content?.services?.map((c, idx) => {
               const reverseOnDesktop = Math.floor(idx / 2) % 2 === 1;
               return (
                 <article
@@ -77,7 +78,7 @@ const MartivoServices = ({
                   <div className=" relative shrink-0 rounded-xl border border-[#dddddd] border-dashed p-1">
                     <img
                       src={c.media}
-                      alt={c.title}
+                      alt={c.serviceName}
                       className="h-full w-full rounded-lg object-cover md:h-48 md:w-48"
                     />
 
@@ -89,9 +90,11 @@ const MartivoServices = ({
 
                   {/* Copy */}
                   <div className="pt-1">
-                    <h3 className="mb-1 text-lg font-semibold text-slate-900">
-                      {c.title}
-                    </h3>
+                    <Link href={`/service?name=${c.serviceName}`}>
+                      <h3 className="mb-1 text-lg font-semibold text-slate-900 capitalize hover:text-[var(--sec)]">
+                        {underscoreToSpace(c.serviceName)}
+                      </h3>
+                    </Link>
                     <p className="mb-3 max-w-[48ch] text-[15px] leading-6 text-slate-600">
                       {c.description}
                     </p>

@@ -1,51 +1,44 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import { useCMS } from "../CMSProvider.client";
 import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
 import { dummyData } from "../DummyData";
-import MartivoServiceHero from "./_components/MartivoServiceHero";
-import MartivoServiceContent from "./_components/MartivoServiceContent";
-import MartivoCTA from "../_components/MartivoCTA";
+import MartivoServicePage from "./_components/MartivoServicePage";
 
-const sectionsList = [
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-6.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "http://html.awaikenthemes.com/restraint/images/post-3.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-4.jpg",
-    tag: "Section tag",
-  },
-  {
-    title: "Transforming lives through yoga and meditation",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
-    image: "https://html.awaikenthemes.com/restraint/images/post-5.jpg",
-    tag: "Section tag",
-  },
-];
+function ServiceSkeleton() {
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+      <div className="mx-auto py-8">
+        <div className="rounded-2xl overflow-hidden mb-8">
+          <div className="relative h-[70vh] w-full bg-gray-200 animate-pulse" />
+        </div>
 
-const MartivoServicePage = () => {
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div key={index} className="grid md:grid-cols-2 gap-8 mb-10">
+            <div
+              className={`bg-gray-200 rounded-xl shadow border p-6 space-y-4 h-[400px] ${
+                index % 2 == 0 ? "order-0" : "order-1"
+              }`}
+            />
+
+            <div className="md:col-span-1 space-y-6 flex justify-center flex-col">
+              <div className="h-7 w-[100px] bg-gray-200 rounded animate-pulse" />
+              <div className="h-10 w-3/4 bg-gray-200 rounded animate-pulse" />
+              <div className="space-y-3">
+                <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-11/12 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-10/12 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-10/12 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const MartivoServiceRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: MartivoHomePage | undefined = !isLoading
@@ -53,27 +46,15 @@ const MartivoServicePage = () => {
     : undefined;
   const primaryColor = source?.color?.primary || "#29400a";
   const secondaryColor = source?.color?.secondary || "#7bd900";
+
   return (
-    <main>
-      <MartivoServiceHero
+    <Suspense fallback={<ServiceSkeleton />}>
+      <MartivoServicePage
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
       />
-      {sectionsList?.map((item, idx) => (
-        <MartivoServiceContent
-          key={idx}
-          primaryColor={primaryColor}
-          secondaryColor={secondaryColor}
-          title={item.title}
-          tag={item?.tag}
-          image={item?.image}
-          description={item?.description}
-          align={idx % 2 !== 0 ? "Left" : "Right"}
-        />
-      ))}
-      <MartivoCTA primaryColor={primaryColor} secondaryColor={secondaryColor} />
-    </main>
+    </Suspense>
   );
 };
 
-export default MartivoServicePage;
+export default MartivoServiceRoot;

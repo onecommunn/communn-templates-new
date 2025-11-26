@@ -34,7 +34,6 @@ const MartivoTestimonials = ({
   const realItems = content?.testimonies;
   const realLen = realItems?.length;
 
-  // Virtualize to ensure enough slides for the centered layout & looping
   const slides: Testimonial[] = useMemo(() => {
     if (realLen === 0) return [];
     const count = Math.max(MIN_SLIDES, realLen);
@@ -65,7 +64,6 @@ const MartivoTestimonials = ({
 
   const scrollTo = (index: number) => emblaApi?.scrollTo(index);
 
-  // Map the current virtual index back to the real item for the message/name/role and the dots
   const activeRealIndex = realLen ? selectedVirtual % realLen : 0;
   const activeForText = realLen ? realItems[activeRealIndex] : undefined;
 
@@ -84,12 +82,7 @@ const MartivoTestimonials = ({
       }
     >
       <div
-        className="relative overflow-hidden py-16 md:py-24"
-        // style={{
-        //   backgroundImage: `url('/assets/martivo-testimonials-bg-image.png')`,
-        //   backgroundSize: "cover",
-        //   backgroundPosition: "center",
-        // }}
+        className="relative overflow-hidden py-16 md:py-24"       
         style={
           {
             backgroundImage: `url(${content?.media || "/assets/martivo-testimonials-bg-image.png"
@@ -123,7 +116,7 @@ const MartivoTestimonials = ({
                   const isActive = i === selectedVirtual;
                   return (
                     <div
-                      key={`item-${i}`} // stable across virtualization
+                      key={`item-${i}`}
                       className="embla__slide shrink-0 grow-0 px-2 lg:px-10 basis-1/3 md:basis-1/5 relative"
                     >
                       <div

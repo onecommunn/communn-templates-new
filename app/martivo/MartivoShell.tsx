@@ -6,9 +6,11 @@ import { CMSProvider } from "./CMSProvider.client";
 import { getMartivoCMSBundle } from "@/lib/Martivo/martivo-cms";
 import {
   ContactSection,
+  EventsSection,
   FooterSection,
   Header,
   HomeSection,
+  PlansSection,
   ServiceSection,
 } from "@/models/templates/martivo/martivo-home-model";
 import { dummyData } from "./DummyData";
@@ -42,9 +44,22 @@ export default async function MartivoShell({
       s.sectionName === "serviceSection" && s.isActive
   );
 
+  const plansSection = source?.sections?.find(
+    (s: HomeSection): s is PlansSection =>
+      s.sectionName === "plansSection" && s.isActive
+  );
+
+  const eventsSection = source?.sections?.find(
+    (s: HomeSection): s is EventsSection =>
+      s.sectionName === "eventsSection" && s.isActive
+  );
+
   const primaryColor = source?.color?.primary || "#29400a";
   const secondaryColor = source?.color?.secondary || "#7bd900";
   const contactData = contactSectionData && contactSectionData?.content;
+
+  const plansIsActive = plansSection?.isActive
+  const eventsIsActive = eventsSection?.isActive
   return (
     <>
       {/* Call Button */}
@@ -98,6 +113,8 @@ export default async function MartivoShell({
         secondaryColor={secondaryColor}
         data={headerData}
         servicesData={serviceSection}
+        plansIsActive={plansIsActive}
+        eventsIsActive={eventsIsActive}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

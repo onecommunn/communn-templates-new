@@ -1,5 +1,6 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
-import { TextAnimate } from "@/components/ui/text-animate";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { Service } from "@/models/templates/martivo/martivo-home-model";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -7,16 +8,20 @@ import React from "react";
 const MartivoServiceHero = ({
   primaryColor,
   secondaryColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  data: Service;
 }) => {
   return (
     <section
       className="relative flex items-center justify-center min-h-[60vh] max-h-screen py-10 md:py-16 bg-cover bg-center bg-no-repeat font-lato"
       style={
         {
-          backgroundImage: `url(${"/assets/martivo-hero-bg-image.png"})`,
+          backgroundImage: `url(${
+            data?.media || "/assets/martivo-hero-bg-image.png"
+          })`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
         } as React.CSSProperties
@@ -32,16 +37,11 @@ const MartivoServiceHero = ({
             stagger={0.08}
             animateOpacity
           >
-            {" "}
             <div className="flex flex-col justify-center h-full">
-              <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-white">
-                Empowering Mind, Body And Spirit Through Martial Arts
+              <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-semibold text-white capitalize">
+                {underscoreToSpace(data?.serviceName)}
               </h2>
-              <p className="text-[16px]/[36px]">
-                Discover the path to holistic well-being through yoga meditation
-                practices are designed to enhance your physical strength, mental
-                clarity.
-              </p>
+              <p className="text-[16px]/[36px]">{data?.description}</p>
               <Link href={"/"} className="cursor-pointer">
                 <button className="mt-6 cursor-pointer md:mt-10 group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-[var(--pri)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pri)] focus-visible:ring-offset-2">
                   <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-[var(--pri)]" />
