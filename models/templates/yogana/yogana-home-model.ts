@@ -73,6 +73,7 @@ export interface ServiceSection {
 export interface Service {
   serviceName: string;
   media: string;
+  bgImage: string;
   description: string;
   sections: {
     title: string;

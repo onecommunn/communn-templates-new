@@ -20,7 +20,7 @@ const YoganaServiceHero = ({
       className="relative flex items-center justify-center h-[60vh] bg-cover bg-center bg-no-repeat font-cormorant"
       style={
         {
-          backgroundImage: `url(${"/assets/martivo-hero-bg-image.png"})`,
+          backgroundImage: `url(${data?.bgImage || "/assets/martivo-hero-bg-image.png"})`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
           ["--nue" as any]: neutralColor,

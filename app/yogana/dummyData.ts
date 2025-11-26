@@ -84,6 +84,7 @@ export const dummyData: YoganaHomePage = {
               "Calm the mind with guided breathwork and mindfulness practices designed to reduce stress and improve focus.",
             media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-1.jpg",
+            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
           {
@@ -92,6 +93,7 @@ export const dummyData: YoganaHomePage = {
               "Boost digestion and spinal mobility with a sequence of twists that gently detox the body.",
             media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-2.jpg",
+            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
           {
@@ -100,6 +102,7 @@ export const dummyData: YoganaHomePage = {
               "Learn foundational and advanced breathing techniques to expand lung capacity and energize the body.",
             media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-3.jpg",
+            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
           {
@@ -108,6 +111,7 @@ export const dummyData: YoganaHomePage = {
               "Target tight hips, hamstrings, and shoulders with a restorative flow that lengthens and releases.",
             media:
               "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-4.jpg",
+            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
         ],
