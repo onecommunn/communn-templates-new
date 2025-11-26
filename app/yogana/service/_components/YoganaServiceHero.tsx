@@ -1,15 +1,19 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { Button } from "@/components/ui/button";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { Service } from "@/models/templates/yogana/yogana-home-model";
 import React from "react";
 
 const YoganaServiceHero = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: Service;
 }) => {
   return (
     <section
@@ -19,6 +23,7 @@ const YoganaServiceHero = ({
           backgroundImage: `url(${"/assets/martivo-hero-bg-image.png"})`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
+          ["--nue" as any]: neutralColor,
         } as React.CSSProperties
       }
     >
@@ -36,18 +41,18 @@ const YoganaServiceHero = ({
             threshold={0.2}
             delay={0.3}
           >
-            {" "}
-            <div className="flex flex-col justify-center h-full gap-4 md:gap-6">
-              <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-bold text-white">
-                Empowering Mind, Body And Spirit Through Martial Arts
+            <div className="flex flex-col justify-center h-full gap-4">
+              <h2 className="md:text-6xl/[72px] tracking-[-1.2px] text-5xl/[62px] font-bold text-white capitalize">
+                {underscoreToSpace(data?.serviceName)}
               </h2>
+              <p className="text-lg md:text-xl">{data?.description}</p>
               <Button
                 style={{
                   backgroundColor: primaryColor,
                   color: "#ffffff",
                   border: "none",
                 }}
-                className="font-plus-jakarta rounded-[3px] w-fit font-semibold text-sm py-[22px] px-[37px] "
+                className="font-plus-jakarta rounded-[3px] w-fit font-semibold text-sm py-[22px] px-[37px] cursor-pointer hover:bg-[var(--pri)]/70"
               >
                 Get Started
               </Button>

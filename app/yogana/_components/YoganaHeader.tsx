@@ -18,7 +18,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { toSnakeCase } from "@/components/utils/StringFunctions";
+import {
+  toSnakeCase,
+  underscoreToSpace,
+} from "@/components/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactDetails,
@@ -142,6 +145,8 @@ interface IYoganaHeader {
   secondaryColor: string;
   neutralColor: string;
   servicesData: ServiceSection;
+  plansIsActive: boolean;
+  eventsIsActive: boolean;
 }
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -159,6 +164,8 @@ const YoganaHeader = ({
   secondaryColor,
   neutralColor,
   servicesData,
+  eventsIsActive,
+  plansIsActive,
 }: IYoganaHeader) => {
   const normalize = (s?: string) => (s ?? "").trim();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -231,23 +238,31 @@ const YoganaHeader = ({
                 {servicesContent?.services?.map((service, idx) => (
                   <Link
                     key={idx}
-                    href={`/service/${toSnakeCase(service?.serviceName)}`}
+                    href={`/service?name=${service?.serviceName}`}
                     className="block px-4 py-2.5 hover:bg-[var(--pri)] hover:text-white transition-colors"
                   >
-                    <div className="text-sm font-semibold tracking-wide">
-                      {service.serviceName}
+                    <div className="text-sm font-semibold tracking-wide capitalize">
+                      {underscoreToSpace(service?.serviceName)}
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link href="/#events" className={"font-inter hover:font-semibold"}>
-              Events
-            </Link>
-            <Link href="/#plans" className={"font-inter hover:font-semibold"}>
-              Plans
-            </Link>
+            {eventsIsActive && (
+              <Link
+                href="/#events"
+                className={"font-inter hover:font-semibold"}
+              >
+                Events
+              </Link>
+            )}
+            {plansIsActive && (
+              <Link href="/#plans" className={"font-inter hover:font-semibold"}>
+                Plans
+              </Link>
+            )}
+
             <Link href="/#contact" className={"font-inter hover:font-semibold"}>
               Contact
             </Link>
@@ -362,22 +377,27 @@ const YoganaHeader = ({
                     )}
                   </div>
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/#events"
-                      className="px-4 text-white py-3 font-inter hover:font-semibold"
-                    >
-                      Events
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/#plans"
-                      className="px-4 text-white py-3 font-inter hover:font-semibold"
-                    >
-                      Plans
-                    </Link>
-                  </SheetClose>
+                  {eventsIsActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#events"
+                        className="px-4 text-white py-3 font-inter hover:font-semibold"
+                      >
+                        Events
+                      </Link>
+                    </SheetClose>
+                  )}
+                  {plansIsActive && (
+                    <SheetClose asChild>
+                      <Link
+                        href="/#plans"
+                        className="px-4 text-white py-3 font-inter hover:font-semibold"
+                      >
+                        Plans
+                      </Link>
+                    </SheetClose>
+                  )}
+
                   <SheetClose asChild>
                     <Link
                       href="/#contact"

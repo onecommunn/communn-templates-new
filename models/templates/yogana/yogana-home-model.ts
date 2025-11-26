@@ -70,6 +70,18 @@ export interface ServiceSection {
   isActive: boolean;
 }
 
+export interface Service {
+  serviceName: string;
+  media: string;
+  description: string;
+  sections: {
+    title: string;
+    tag: string;
+    image: string;
+    description: string;
+  }[];
+}
+
 export interface Plans {
   sectionName: "plansSection";
   content: {

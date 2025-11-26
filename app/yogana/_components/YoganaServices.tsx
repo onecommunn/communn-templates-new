@@ -15,17 +15,11 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Service,
   ServiceSection,
 } from "@/models/templates/yogana/yogana-home-model";
-import { Button } from "@/components/ui/button";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import Link from "next/link";
 
 const hexToRgba = (hex: string, alpha: number) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -114,10 +108,6 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     undefined
   );
 
-  // Dialog state
-  const [open, setOpen] = useState(false);
-  const [activeService, setActiveService] = useState<Service | null>(null);
-
   // Autoplay
   const autoplay = useRef(
     Autoplay({
@@ -150,11 +140,6 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     };
   }, [apiMain]);
 
-  const handleViewMore = (svc: Service) => {
-    setActiveService(svc);
-    setOpen(true);
-  };
-
   if (data?.content?.services?.length <= 0) {
     return null;
   }
@@ -163,9 +148,9 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     <section
       id="services"
       className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-    // style={{
-    //   backgroundColor: `${primaryColor}1A`,
-    // }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       {/* background accents */}
       <div className="absolute inset-0 pointer-events-none">
@@ -219,26 +204,22 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                 className="basis-1/1  md:basis-1/3 lg:basis-1/4"
               >
                 <div
-                  className={`flex h-[560px] md:h-[500px] ${idx % 2 === 0 ? "items-start" : "items-end"
-                    }`}
+                  className={`flex h-[560px] md:h-[500px] ${
+                    idx % 2 === 0 ? "items-start" : "items-end"
+                  }`}
                 >
                   {/* Make the whole card tappable on mobile */}
                   <div
                     role="button"
                     tabIndex={0}
-                    onClick={() => handleViewMore(svc)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        handleViewMore(svc);
-                    }}
                     className="relative overflow-hidden rounded-t-[200px] rounded-b-[200px] shadow-md w-full h-[500px] md:h-[450px] group cursor-pointer md:cursor-default"
-                    aria-label={`Open details for ${data.sectionName}`}
+                    aria-label={`Open details for ${data?.sectionName}`}
                   >
                     {/* Image */}
                     <div className="w-full h-full">
                       <Image
-                        src={svc.media}
-                        alt={data.sectionName}
+                        src={svc?.media}
+                        alt={data?.sectionName}
                         width={800}
                         height={900}
                         unoptimized
@@ -269,30 +250,31 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                         transition-opacity duration-300 ease-out pointer-events-none
                       "
                     >
-                      <h3 className="text-center text-white font-cormorant text-3xl md:text-3xl fontx`-extrabold drop-shadow">
-                        {svc.serviceName}
+                      <h3 className="text-center text-white font-cormorant text-3xl md:text-3xl fontx`-extrabold drop-shadow capitalize">
+                        {underscoreToSpace(svc?.serviceName)}
                       </h3>
                     </div>
 
                     {/* Button: always visible on mobile; hover on md+.
                         Stop propagation so tapping the chip doesn't double-trigger the card on desktop */}
-                    <div className="absolute inset-0 flex items-end justify-center pb-20 md:pb-20 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-400 ease-out">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewMore(svc);
-                        }}
-                        style={{
-                          backgroundColor: primaryColor,
-                          color: "#fff",
-                        }}
-                        className="cursor-pointer font-plus-jakarta text-xs md:text-sm pointer-events-auto px-5 py-2 rounded-full font-medium shadow-lg transform transition-transform duration-200 ease-out hover:scale-105"
-                        aria-label={`View more about ${data.sectionName}`}
-                      >
-                        View more
-                      </button>
-                    </div>
+                    <Link href={`/service?name=${svc?.serviceName}`}>
+                      <div className="absolute inset-0 flex items-end justify-center pb-20 md:pb-20 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-400 ease-out">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          style={{
+                            backgroundColor: primaryColor,
+                            color: "#fff",
+                          }}
+                          className="cursor-pointer font-plus-jakarta text-xs md:text-sm pointer-events-auto px-5 py-2 rounded-full font-medium shadow-lg transform transition-transform duration-200 ease-out hover:scale-105"
+                          aria-label={`View more about ${data?.sectionName}`}
+                        >
+                          View more
+                        </button>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               </CarouselItem>
@@ -336,34 +318,6 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
         {/* Dots */}
         <Dots api={apiMain} primaryColor={primaryColor} />
       </div>
-
-      {/* Description Dialog */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          className="sm:max-w-md"
-          onOpenAutoFocus={(e) => e.preventDefault()}
-        >
-          <DialogHeader>
-            <DialogTitle className="font-cormorant text-2xl">
-              {activeService?.serviceName}
-            </DialogTitle>
-            <DialogDescription
-              className="font-plus-jakarta text-[15px] text-[#444]"
-              style={{ color: neutralColor }}
-            >
-              {activeService?.description}
-            </DialogDescription>
-          </DialogHeader>
-
-          <Button
-            style={{ backgroundColor: primaryColor }}
-            className="cursor-pointer w-fit inline-flex items-center gap-2 rounded-full bg-[#C2A74E] px-5 py-2 text-white text-sm font-medium hover:opacity-95"
-          >
-            Explore Program
-            <span aria-hidden>→</span>
-          </Button>
-        </DialogContent>
-      </Dialog>
     </section>
   );
 };
