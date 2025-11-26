@@ -105,7 +105,32 @@ export const dummyData: FitkitHomePage = {
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
-            sections: [],
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_4.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_1.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_2.png",
+                tag: "Section tag",
+              },
+            ],
           },
           {
             media:
@@ -113,7 +138,32 @@ export const dummyData: FitkitHomePage = {
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
-            sections: [],
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_4.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_1.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_2.png",
+                tag: "Section tag",
+              },
+            ],
           },
           {
             media:
@@ -121,7 +171,32 @@ export const dummyData: FitkitHomePage = {
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
-            sections: [],
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_4.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_1.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_2.png",
+                tag: "Section tag",
+              },
+            ],
           },
           {
             media:
@@ -129,7 +204,32 @@ export const dummyData: FitkitHomePage = {
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
-            sections: [],
+            sections: [
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_4.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_1.png",
+                tag: "Section tag",
+              },
+              {
+                title: "We Have Lot Of Experience Gym Training",
+                description:
+                  "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut maxime adipisci, et eveniet, quo asperiores, delectus rem reiciendis veniam saepe similique est beatae fugiat eos suscipit possimus aliquam rerum voluptas!",
+                image:
+                  "https://wordpress.themehour.net/fitkit/wp-content/uploads/2024/08/project_1_2.png",
+                tag: "Section tag",
+              },
+            ],
           },
         ],
       },
