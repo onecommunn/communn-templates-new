@@ -17,6 +17,7 @@ import {
   ContactSection,
   EventsSection,
   FaqSection,
+  FeaturesSection,
   GallerySection,
   HeroSection,
   HomeSection,
@@ -28,6 +29,7 @@ import {
   WhatWeDoSection,
 } from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "./DummyData";
+import RestraintFeatures from "./_components/RestraintFeatures";
 
 const RestraintRoot = () => {
   const { home } = useCMS();
@@ -94,6 +96,11 @@ const RestraintRoot = () => {
       s.sectionName == "contactSection" && s.isActive
   );
 
+  const featuresSectionData = source?.sections?.find(
+    (s: HomeSection): s is FeaturesSection =>
+      s.sectionName == "featuresSection" && s.isActive
+  );
+
   return (
     <>
       {heroSectionData && (
@@ -117,6 +124,13 @@ const RestraintRoot = () => {
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           data={eventSectionData}
+        />
+      )}
+      {featuresSectionData && (
+        <RestraintFeatures
+          data={featuresSectionData}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
         />
       )}
 

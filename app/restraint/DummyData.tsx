@@ -77,6 +77,13 @@ export const dummyData: RestarintHomePage = {
         subHeading: "yoga and meditation Events",
         description:
           "Join us to experience expert-guided yoga and meditation practices designed to enhance your physical health, mental clarity, and overall well-being.",
+      },
+      order: 3,
+      isActive: true,
+    },
+    {
+      sectionName: "featuresSection",
+      content: {
         features: [
           {
             icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-2.svg",
@@ -100,7 +107,7 @@ export const dummyData: RestarintHomePage = {
           },
         ],
       },
-      order: 3,
+      order: 13,
       isActive: true,
     },
     {

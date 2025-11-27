@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Calendar } from "lucide-react";
+import { ArrowUpRight, Calendar } from "lucide-react";
 import {
   Carousel,
   CarouselApi,
@@ -18,8 +18,6 @@ import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import type { LucideProps } from "lucide-react";
-import * as Lucide from "lucide-react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { EventsSection } from "@/models/templates/restraint/restraint-home-model";
 
@@ -83,48 +81,6 @@ export function EventCard({
         </div>
         <div className="flex items-center gap-1 font-medium text-[#30382E]">
           <span> ₹{price}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type StatProps = {
-  icon: string;
-  value: string;
-  label: string;
-};
-
-const isUrl = (v: string) => /^https?:\/\//i.test(v) || v?.startsWith("/");
-
-type LucideIconType = React.ComponentType<LucideProps>;
-function getLucideIcon(name: string): LucideIconType | null {
-  const lib = Lucide as unknown as Record<string, LucideIconType>;
-  return lib[name] ?? null;
-}
-
-function Stat({ icon, value, label }: StatProps) {
-  const LucideIcon = !isUrl(icon) ? getLucideIcon(icon) : null;
-  return (
-    <div className="flex items-center gap-4 md:gap-3">
-      <div className="flex items-center justify-center rounded-lg text-[var(--sec)]">
-        {LucideIcon ? (
-          <LucideIcon strokeWidth={1} className="w-12 h-12" />
-        ) : (
-          <Image
-            src={icon || ""}
-            alt={label || "feature icon"}
-            width={42}
-            height={42}
-            className="object-contain"
-            unoptimized
-          />
-        )}
-      </div>
-      <div>
-        <div className="font-marcellus text-3xl text-[#273126]">{value}</div>
-        <div className="text-[16px]" style={{ color: SUBTEXT }}>
-          {label}
         </div>
       </div>
     </div>
@@ -267,7 +223,7 @@ export default function RestraintEvents({
   }
 
   // EMPTY STATE
-  if (!events?.length || events?.length < 0) {
+  if(!events?.length || events?.length < 0) {
     return (
       <section
         className="font-sora py-10"
@@ -331,27 +287,7 @@ export default function RestraintEvents({
             delay={0.15}
             animateOpacity
           >
-            <div className="my-10 h-px w-full bg-black/10" />
-          </AnimatedContent>
-
-          {/* Stats row (stagger) */}
-          <AnimatedContent
-            direction="vertical"
-            distance={50}
-            duration={0.55}
-            stagger={0.12}
-            animateOpacity
-          >
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-              {content?.features?.map((item, idx) => (
-                <Stat
-                  icon={item?.icon}
-                  value={item?.title}
-                  label={item?.description}
-                  key={idx}
-                />
-              ))}
-            </div>
+            <div className="my-4 h-px w-full bg-black/10" />
           </AnimatedContent>
         </div>
       </section>
@@ -416,7 +352,11 @@ export default function RestraintEvents({
           animateOpacity
         >
           {!events?.length || events?.length < 0 ? (
-            <>no event</>
+            <div className="my-10 flex flex-col items-center justify-center text-center">
+              <h3 className="text-lg font-semibold text-gray-400 mb-2">
+                No Upcoming Events
+              </h3>
+            </div>
           ) : (
             <>
               {" "}
@@ -500,7 +440,7 @@ export default function RestraintEvents({
               <button className="mt-2 group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0">
                 <span className="relative z-10 inline-flex items-center gap-2">
                   View All
-                  <Lucide.ArrowUpRight
+                  <ArrowUpRight
                     className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
                     strokeWidth={2}
                   />
@@ -518,27 +458,7 @@ export default function RestraintEvents({
           delay={0.1}
           animateOpacity
         >
-          <div className="my-10 h-px w-full bg-black/10" />
-        </AnimatedContent>
-
-        {/* Stats row (stagger) */}
-        <AnimatedContent
-          direction="vertical"
-          distance={50}
-          duration={0.55}
-          stagger={0.12}
-          animateOpacity
-        >
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-            {content?.features?.map((item, idx) => (
-              <Stat
-                icon={item?.icon}
-                value={item?.title}
-                label={item?.description}
-                key={idx}
-              />
-            ))}
-          </div>
+          <div className="my-4 h-px w-full bg-black/10" />
         </AnimatedContent>
       </div>
     </section>

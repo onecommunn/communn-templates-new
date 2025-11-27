@@ -55,6 +55,12 @@ export interface EventsSection extends SectionBase {
     heading: string;
     subHeading: string;
     description: string;
+  };
+}
+
+export interface FeaturesSection extends SectionBase {
+  sectionName: "featuresSection";
+  content: {
     features: {
       icon: string;
       title: string;
@@ -204,7 +210,8 @@ export type HomeSection =
   | TestimoniesSection
   | FaqSection
   | ContactSection
-  | FooterSection;
+  | FooterSection
+  | FeaturesSection;
 
 export interface Button {
   label: string;
