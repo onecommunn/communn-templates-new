@@ -187,6 +187,17 @@ export interface FooterSection {
   sectionName: "footerSection";
 }
 
+export interface WhatsappWidgetSection {
+  sectionName: "whatsappWidgetSection";
+  content: {
+    callNumber: string;
+    predefinedMessage: string;
+    whatsappNumber: string;
+  };
+  order: number;
+  isActive: boolean;
+}
+
 export type HomeSection =
   | Header
   | HeroSection
@@ -199,4 +210,5 @@ export type HomeSection =
   | Gallery
   | ContactDetails
   | CTASection
-  | FooterSection;
+  | FooterSection
+  | WhatsappWidgetSection;

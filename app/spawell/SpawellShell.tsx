@@ -11,6 +11,7 @@ import {
   HomeSection,
   PlansSection,
   ServiceSection,
+  WhatsappWidgetSection,
 } from "@/models/templates/spawell/spawell-home-model";
 import { dummyData } from "./DummyData";
 import Link from "next/link";
@@ -55,6 +56,11 @@ export default async function SpawellShell({
       s.sectionName === "plansSection" && s.isActive
   );
 
+  const whatsappWidgetData = source?.sections.find(
+    (s: HomeSection): s is WhatsappWidgetSection =>
+      s.sectionName === "whatsappWidgetSection"
+  );
+
   const eventsIsActive = eventsSection?.isActive;
   const plansIsActive = plansSection?.isActive;
 
@@ -62,7 +68,7 @@ export default async function SpawellShell({
     <>
       {/* Call Button */}
       <Link
-        href={`tel:${contactData?.contact?.phoneNumber}`}
+        href={`tel:${whatsappWidgetData?.content?.callNumber}`}
         target="_blank"
         title="Call us"
         style={{
@@ -84,7 +90,7 @@ export default async function SpawellShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=${contactData?.contact?.phoneNumber}&text=Hi`}
+        href={`https://api.whatsapp.com/send?phone=${whatsappWidgetData?.content?.whatsappNumber}&text=${whatsappWidgetData?.content?.predefinedMessage ?? "HI"}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"

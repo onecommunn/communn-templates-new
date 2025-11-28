@@ -12,6 +12,7 @@ import {
   HomeSection,
   PlansSection,
   ServiceSection,
+  WhatsappWidgetSection,
 } from "@/models/templates/martivo/martivo-home-model";
 import { dummyData } from "./DummyData";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
@@ -54,17 +55,22 @@ export default async function MartivoShell({
       s.sectionName === "eventsSection" && s.isActive
   );
 
+  const whatsappWidgetData = source?.sections.find(
+    (s: HomeSection): s is WhatsappWidgetSection =>
+      s.sectionName === "whatsappWidgetSection"
+  );
+
   const primaryColor = source?.color?.primary || "#29400a";
   const secondaryColor = source?.color?.secondary || "#7bd900";
   const contactData = contactSectionData && contactSectionData?.content;
 
-  const plansIsActive = plansSection?.isActive
-  const eventsIsActive = eventsSection?.isActive
+  const plansIsActive = plansSection?.isActive;
+  const eventsIsActive = eventsSection?.isActive;
   return (
     <>
       {/* Call Button */}
       <Link
-        href={`tel:${contactData?.contact?.phoneNumber}`}
+        href={`tel:${whatsappWidgetData?.content?.callNumber}`}
         target="_blank"
         title="Call us"
         style={{
@@ -86,7 +92,7 @@ export default async function MartivoShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=${contactData?.contact?.phoneNumber}&text=Hi`}
+        href={`https://api.whatsapp.com/send?phone=${whatsappWidgetData?.content?.whatsappNumber}&text=${whatsappWidgetData?.content?.predefinedMessage ?? "HI"}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"

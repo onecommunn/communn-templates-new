@@ -197,6 +197,15 @@ export interface FooterSection extends SectionBase {
   };
 }
 
+export interface WhatsappWidgetSection extends SectionBase {
+  sectionName: "whatsappWidgetSection";
+  content: {
+    callNumber: string;
+    predefinedMessage: string;
+    whatsappNumber: string;
+  };
+}
+
 export type HomeSection =
   | Header
   | HeroSection
@@ -211,7 +220,8 @@ export type HomeSection =
   | FaqSection
   | ContactSection
   | FooterSection
-  | FeaturesSection;
+  | FeaturesSection
+  | WhatsappWidgetSection;
 
 export interface Button {
   label: string;

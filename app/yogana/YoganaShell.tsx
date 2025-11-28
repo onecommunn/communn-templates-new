@@ -13,6 +13,7 @@ import {
   HomeSection,
   Plans,
   ServiceSection,
+  WhatsappWidgetSection,
 } from "@/models/templates/yogana/yogana-home-model";
 import YoganaCTA from "./_components/YoganaCTA";
 import { dummyData } from "./dummyData";
@@ -58,21 +59,24 @@ export default async function YoganaShell({
       s.sectionName === "eventsSection" && s.isActive
   );
 
+  const whatsappWidgetData = source?.sections.find(
+    (s: HomeSection): s is WhatsappWidgetSection => s.sectionName === "whatsappWidgetSection"
+  );
+
   const initialLoading = !bundle?.home || source;
 
   const primaryColor = source?.color?.primary || "#C2A74E";
   const secondaryColor = source?.color?.secondary || "#000";
   const neutralColor = source?.color?.neutral || "#707070";
 
-
-  const eventsIsActive = eventsSection?.isActive
-  const plansIsActive = plansSection?.isActive
+  const eventsIsActive = eventsSection?.isActive;
+  const plansIsActive = plansSection?.isActive;
 
   return (
     <>
       {/* Call Button */}
       <Link
-        href={`tel:${contactData?.content?.call?.value}`}
+        href={`tel:${whatsappWidgetData?.content?.callNumber}`}
         target="_blank"
         title="Call us"
         style={{
@@ -94,7 +98,7 @@ export default async function YoganaShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=${contactData?.content?.call?.value}&text=Hi`}
+        href={`https://api.whatsapp.com/send?phone=${whatsappWidgetData?.content?.whatsappNumber}&text=${whatsappWidgetData?.content?.predefinedMessage ?? "Hi"}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"
@@ -127,7 +131,6 @@ export default async function YoganaShell({
         servicesData={servicesSection}
         eventsIsActive={eventsIsActive}
         plansIsActive={plansIsActive}
-
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

@@ -15,6 +15,7 @@ import {
   HomeSection,
   PlansSection,
   ServiceSection,
+  WhatsappWidgetSection,
 } from "@/models/templates/fitkit/fitkit-home-model";
 import { dummyData } from "./dummyData";
 
@@ -57,6 +58,11 @@ export default async function FitKitShell({
       s.sectionName == "plansSection" && s.isActive
   );
 
+  const whatsappWidgetData = source?.sections?.find(
+    (s: HomeSection): s is WhatsappWidgetSection =>
+      s.sectionName === "whatsappWidgetSection"
+  );
+
   const eventIsActive = eventSectionData?.isActive;
   const plansIsActive = plansSectionData?.isActive;
 
@@ -66,7 +72,7 @@ export default async function FitKitShell({
     <>
       {/* Call Button */}
       <Link
-        href="tel:+917975207595"
+        href={`tel:${whatsappWidgetData?.content?.callNumber}`}
         target="_blank"
         title="Call us"
         style={{
@@ -88,7 +94,9 @@ export default async function FitKitShell({
 
       {/* whatsapp Button */}
       <Link
-        href="https://api.whatsapp.com/send?phone=917975207595&text=Hi"
+        href={`https://api.whatsapp.com/send?phone=${
+          whatsappWidgetData?.content?.whatsappNumber
+        }&text=${whatsappWidgetData?.content?.predefinedMessage ?? "HI"}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"
