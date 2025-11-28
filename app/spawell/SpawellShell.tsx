@@ -25,11 +25,11 @@ export default async function SpawellShell({
   const bundle = await getSpawellCMSBundle(community._id);
   const source = bundle?.home ?? dummyData;
 
-  const headerData = source?.sections.find(
+  const headerData = source?.sections?.find(
     (s: HomeSection): s is Header => s.sectionName === "headerSection"
   );
 
-  const footerData = source?.sections.find(
+  const footerData = source?.sections?.find(
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
@@ -56,7 +56,7 @@ export default async function SpawellShell({
       s.sectionName === "plansSection" && s.isActive
   );
 
-  const whatsappWidgetData = source?.sections.find(
+  const whatsappWidgetData = source?.sections?.find(
     (s: HomeSection): s is WhatsappWidgetSection =>
       s.sectionName === "whatsappWidgetSection"
   );

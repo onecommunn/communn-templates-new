@@ -34,40 +34,40 @@ const YoganaRoot = () => {
     ? (home as YoganaHomePage | undefined) ?? dummyData
     : undefined;
 
-  const heroSection = source?.sections.find(
+  const heroSection = source?.sections?.find(
     (s: HomeSection): s is HeroSection => s.sectionName === "heroSection" && s.isActive
   );
 
-  const aboutUsSection = source?.sections.find(
+  const aboutUsSection = source?.sections?.find(
     (s: HomeSection): s is Aboutus => s.sectionName === "aboutSection" && s.isActive
   );
 
-  const plansSection = source?.sections.find(
+  const plansSection = source?.sections?.find(
     (s: HomeSection): s is Plans => s.sectionName === "plansSection" && s.isActive
   );
 
-  const eventsSection = source?.sections.find(
+  const eventsSection = source?.sections?.find(
     (s: HomeSection): s is Events => s.sectionName === "eventsSection" && s.isActive
   );
 
-  const collaborationSection = source?.sections.find(
+  const collaborationSection = source?.sections?.find(
     (s: HomeSection): s is Collaboration => s.sectionName === "clientsSection" && s.isActive
   );
 
-  const testimonialSection = source?.sections.find(
+  const testimonialSection = source?.sections?.find(
     (s: HomeSection): s is TestimoniesSection =>
       s.sectionName === "testimoniesSection" && s.isActive
   );
 
-  const gallerySection = source?.sections.find(
+  const gallerySection = source?.sections?.find(
     (s: HomeSection): s is Gallery => s.sectionName === "gallerySection" && s.isActive
   );
 
-  const contactSection = source?.sections.find(
+  const contactSection = source?.sections?.find(
     (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection" && s.isActive
   );
 
-  const servicesSection = source?.sections.find(
+  const servicesSection = source?.sections?.find(
     (s: HomeSection): s is ServiceSection => s.sectionName === "serviceSection" && s.isActive
   );
 

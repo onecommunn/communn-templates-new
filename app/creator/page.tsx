@@ -204,26 +204,26 @@ const CreatorRoot: React.FC = () => {
     ? (home as CreatorHomePage | undefined) ?? dummyData
     : undefined;
 
-  const heroSection = source?.sections.find(
+  const heroSection = source?.sections?.find(
     (s: HomeSection): s is HeroSection => s.sectionName === "heroSection"
   );
-  const creatorAboutus = source?.sections.find(
+  const creatorAboutus = source?.sections?.find(
     (s: HomeSection): s is TwoColumnSection =>
       s.sectionName === "twoColumnSection"
   );
-  const creatorBestsellers = source?.sections.find(
+  const creatorBestsellers = source?.sections?.find(
     (s: HomeSection): s is OurBestsellersSection =>
       s.sectionName === "ourBestSellers"
   );
-  const creatorCollaboration = source?.sections.find(
+  const creatorCollaboration = source?.sections?.find(
     (s: HomeSection): s is CollaborationSection =>
       s.sectionName === "collaboration"
   );
-  const creatorTestimonies = source?.sections.find(
+  const creatorTestimonies = source?.sections?.find(
     (s: HomeSection): s is TestimoniesSection =>
       s.sectionName === "testimoniesSection"
   );
-  const creatorCTA = source?.sections.find(
+  const creatorCTA = source?.sections?.find(
     (s: HomeSection): s is CTASection => s.sectionName === "ctaSection"
   );
 

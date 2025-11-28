@@ -28,38 +28,38 @@ export default async function YoganaShell({
   const bundle = await getYoganaCMSBundle(community._id);
   const source = bundle?.home ?? dummyData;
 
-  const headerData = source?.sections.find(
+  const headerData = source?.sections?.find(
     (s: HomeSection): s is Header => s.sectionName === "headerSection"
   );
 
-  const footerData = source?.sections.find(
+  const footerData = source?.sections?.find(
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
-  const contactData = source?.sections.find(
+  const contactData = source?.sections?.find(
     (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection"
   );
 
-  const CTAsection = source?.sections.find(
+  const CTAsection = source?.sections?.find(
     (s: HomeSection): s is CTASection => s.sectionName === "whatsappSection"
   );
 
-  const servicesSection = source?.sections.find(
+  const servicesSection = source?.sections?.find(
     (s: HomeSection): s is ServiceSection =>
       s.sectionName === "serviceSection" && s.isActive
   );
 
-  const plansSection = source?.sections.find(
+  const plansSection = source?.sections?.find(
     (s: HomeSection): s is Plans =>
       s.sectionName === "plansSection" && s.isActive
   );
 
-  const eventsSection = source?.sections.find(
+  const eventsSection = source?.sections?.find(
     (s: HomeSection): s is Events =>
       s.sectionName === "eventsSection" && s.isActive
   );
 
-  const whatsappWidgetData = source?.sections.find(
+  const whatsappWidgetData = source?.sections?.find(
     (s: HomeSection): s is WhatsappWidgetSection => s.sectionName === "whatsappWidgetSection"
   );
 

@@ -27,11 +27,11 @@ export default async function MartivoShell({
   const source = bundle?.home ?? dummyData;
   const initialLoading = !bundle?.home;
 
-  const headerData = source?.sections.find(
+  const headerData = source?.sections?.find(
     (s: HomeSection): s is Header => s.sectionName === "headerSection"
   );
 
-  const footerData = source?.sections.find(
+  const footerData = source?.sections?.find(
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
@@ -55,7 +55,7 @@ export default async function MartivoShell({
       s.sectionName === "eventsSection" && s.isActive
   );
 
-  const whatsappWidgetData = source?.sections.find(
+  const whatsappWidgetData = source?.sections?.find(
     (s: HomeSection): s is WhatsappWidgetSection =>
       s.sectionName === "whatsappWidgetSection"
   );
