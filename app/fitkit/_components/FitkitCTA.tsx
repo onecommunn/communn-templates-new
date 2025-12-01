@@ -15,10 +15,10 @@ const FitkitCTA = ({ primaryColor, secondaryColor }: FitkitCTAprops) => {
         {/* Left Text Section */}
         <div>
           <h2 className="text-white text-3xl md:text-5xl font-bold">
-            Your Fitness Journey Starts Here
+            Get Started Today
           </h2>
           <p className="text-gray-300 mt-2 text-lg">
-            Sign up & get free training tips + early access to challenges.
+            Join thousands who’ve already taken the first step. Begin your journey now.
           </p>
         </div>
 
