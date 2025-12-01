@@ -159,7 +159,9 @@ export default function RestraintServices({
             <div className="space-y-10">
               {left?.map((it, idx) => (
                 <div key={idx} className="pb-8">
-                  <ServiceRow item={it} />
+                  <Link href={`/service?name=${it?.serviceName}`}>
+                    <ServiceRow item={it} />
+                  </Link>
                 </div>
               ))}
             </div>
