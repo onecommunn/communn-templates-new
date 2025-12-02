@@ -130,6 +130,7 @@ export interface ContactSection extends SectionBase {
       address: string;
       phoneNumber: string;
       email: string;
+      mapUrl:string
     };
   };
 }
