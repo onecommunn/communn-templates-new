@@ -84,7 +84,7 @@ const SpawellServiceHero = ({
               </h2>
               <p className="text-lg mt-6">{data?.description}</p>
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mt-10">
-                <Link href={"/"}>
+                <Link href={"/#contact"}>
                   <Button
                     className={`${"group cursor-pointer relative overflow-hidden px-[30px] py-[18px] text-[16px] font-bold border transition-all duration-300 ease-out bg-[var(--sec)] text-[var(--pri)] border-[var(--sec)] hover:bg-[var(--pri)] hover:text-[var(--sec)] hover:border-[var(--sec)] hover:-translate-y-0.5 active:translate-y-0"}`}
                   >

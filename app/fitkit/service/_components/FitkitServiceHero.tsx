@@ -47,7 +47,7 @@ const FitkitServiceHero = ({
               {data?.description}
             </p>
             <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-              <Link href={"/"}>
+              <Link href={"/#contact"}>
                 <button className="bg-[var(--sec)] px-8 py-4 uppercase text-sm font-bold font-archivo tracking-wide text-white shadow-[0_10px_30px_rgba(220,38,38,0.35)] transition hover:bg-red-500">
                   get Started
                 </button>

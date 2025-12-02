@@ -73,7 +73,7 @@ const RestraintServiceHero = ({
               </p>
               {/* CTA buttons */}
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mt-10">
-                <Link href={"/"}>
+                <Link href={"/#contact"}>
                   <button className="group cursor-pointer relative overflow-hidden px-[20px] py-[17px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--sec)] text-white border-[var(--sec)] hover:bg-transparent hover:text-[white] hover:border-white hover:-translate-y-0.5 active:translate-y-0">
                     <span className="relative z-10 inline-flex items-center gap-2">
                       Get Started

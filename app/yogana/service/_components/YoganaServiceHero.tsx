@@ -2,6 +2,7 @@ import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { Button } from "@/components/ui/button";
 import { underscoreToSpace } from "@/components/utils/StringFunctions";
 import { Service } from "@/models/templates/yogana/yogana-home-model";
+import Link from "next/link";
 import React from "react";
 
 const YoganaServiceHero = ({
@@ -20,7 +21,9 @@ const YoganaServiceHero = ({
       className="relative flex items-center justify-center h-[60vh] bg-cover bg-center bg-no-repeat font-cormorant"
       style={
         {
-          backgroundImage: `url(${data?.bgImage || "/assets/martivo-hero-bg-image.png"})`,
+          backgroundImage: `url(${
+            data?.bgImage || "/assets/martivo-hero-bg-image.png"
+          })`,
           ["--pri" as any]: primaryColor,
           ["--sec" as any]: secondaryColor,
           ["--nue" as any]: neutralColor,
@@ -46,16 +49,18 @@ const YoganaServiceHero = ({
                 {underscoreToSpace(data?.serviceName)}
               </h2>
               <p className="text-lg md:text-xl">{data?.description}</p>
-              <Button
-                style={{
-                  backgroundColor: primaryColor,
-                  color: "#ffffff",
-                  border: "none",
-                }}
-                className="font-plus-jakarta rounded-[3px] w-fit font-semibold text-sm py-[22px] px-[37px] cursor-pointer hover:bg-[var(--pri)]/70"
-              >
-                Get Started
-              </Button>
+              <Link href={"/#contact"}>
+                <Button
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: "#ffffff",
+                    border: "none",
+                  }}
+                  className="font-plus-jakarta rounded-[3px] w-fit font-semibold text-sm py-[22px] px-[37px] cursor-pointer hover:bg-[var(--pri)]/70"
+                >
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </AnimatedContent>
         </div>
