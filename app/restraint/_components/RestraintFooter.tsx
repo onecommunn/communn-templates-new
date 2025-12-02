@@ -32,6 +32,19 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
   pinterest: FaPinterest,
 };
 
+const formatUrl = (url: string) => {
+  const clean = url.trim().split(" ")[0]; // remove anything after space
+
+  if (!clean) return "/";
+
+  // If no http/https, add https
+  if (!clean.startsWith("http://") && !clean.startsWith("https://")) {
+    return `https://${clean}`;
+  }
+
+  return clean;
+};
+
 export default function RestraintFooter({
   primaryColor,
   secondaryColor,
@@ -98,7 +111,7 @@ export default function RestraintFooter({
             {content?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
               const key = normalize(each.platform).toLowerCase();
               const Icon = PLATFORM_ICON[key] ?? Globe;
-              const url = normalize(each.url) || "/";
+              const url = formatUrl(each.url) || "/";
               return (
                 <Social
                   icon={<Icon className="h-4 w-4" />}
