@@ -68,7 +68,7 @@ const FitKitCalculate = ({
 
   return (
     <section
-      className="bg-[var(--pri)] font-kanit h-[85vh] z-0 -mt-1 md:-mt-[160px] cal-clip [clip-path:inherit]"
+      className="bg-[var(--pri)] font-kanit h-[85vh] z-0 -mt-1 md:-mt-[200px] cal-clip"
       style={
         {
           "--pri": primaryColor,

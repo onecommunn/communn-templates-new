@@ -41,3 +41,15 @@ export const toSnakeCase = (str: string) => {
 export function underscoreToSpace(text: string): string {
   return text.replace(/_/g, " ");
 }
+
+export const formatUrl = (url: string) => {
+  const clean = url.trim().split(" ")[0];
+
+  if (!clean) return "/";
+
+  if (!clean.startsWith("http://") && !clean.startsWith("https://")) {
+    return `https://${clean}`;
+  }
+
+  return clean;
+};

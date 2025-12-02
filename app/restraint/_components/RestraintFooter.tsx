@@ -20,7 +20,7 @@ import {
   ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/restraint/restraint-home-model";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { formatUrl, underscoreToSpace } from "@/components/utils/StringFunctions";
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
   instagram: Instagram,
@@ -30,19 +30,6 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
   twitter: Twitter,
   youtube: Youtube,
   pinterest: FaPinterest,
-};
-
-const formatUrl = (url: string) => {
-  const clean = url.trim().split(" ")[0]; // remove anything after space
-
-  if (!clean) return "/";
-
-  // If no http/https, add https
-  if (!clean.startsWith("http://") && !clean.startsWith("https://")) {
-    return `https://${clean}`;
-  }
-
-  return clean;
 };
 
 export default function RestraintFooter({

@@ -1,3 +1,4 @@
+import { formatUrl } from "@/components/utils/StringFunctions";
 import {
   FooterSection,
   SocialMediaLink,
@@ -134,7 +135,7 @@ const FitkitFooter = ({
             {content?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
               const key = normalize(each.platform).toLowerCase();
               const Icon = PLATFORM_ICON[key] ?? Globe;
-              const url = normalize(each.url) || "/";
+              const url = formatUrl(each.url) || "/";
               return (
                 <Social
                   icon={<Icon color="#AFB8C7" size={18} />}

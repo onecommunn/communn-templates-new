@@ -19,6 +19,7 @@ import {
   FooterSection,
   SocialMediaLink,
 } from "@/models/templates/yogana/yogana-home-model";
+import { formatUrl } from "@/components/utils/StringFunctions";
 
 interface YoganaFooterProps {
   data: FooterSection;
@@ -118,7 +119,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                   (each: SocialMediaLink, idx: number) => {
                     const key = normalize(each?.platform).toLowerCase();
                     const Icon = PLATFORM_ICON[key] ?? Globe;
-                    const url = normalize(each?.url) || "/";
+                    const url = formatUrl(each?.url) || "/";
                     return (
                       <Link
                         href={url || "/"}

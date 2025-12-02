@@ -18,6 +18,7 @@ import {
   FooterSection,
   SocialMediaLink,
 } from "@/models/templates/martivo/martivo-home-model";
+import { formatUrl } from "@/components/utils/StringFunctions";
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
   instagram: Instagram,
@@ -93,7 +94,7 @@ export default function MartivoFooter({
                 (each: SocialMediaLink, idx: number) => {
                   const key = normalize(each.platform).toLowerCase();
                   const Icon = PLATFORM_ICON[key] ?? Globe;
-                  const url = normalize(each.url) || "/";
+                  const url = formatUrl(each.url) || "/";
                   return (
                     <Link
                       key={idx}
