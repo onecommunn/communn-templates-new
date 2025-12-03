@@ -218,7 +218,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                     {/* Image */}
                     <div className="w-full h-full">
                       <Image
-                        src={svc?.media}
+                        src={svc?.media ?? "/assets/yogana-service-image-2.png"}
                         alt={data?.sectionName}
                         width={800}
                         height={900}

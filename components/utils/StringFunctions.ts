@@ -43,11 +43,11 @@ export function underscoreToSpace(text: string): string {
 }
 
 export const formatUrl = (url: string) => {
-  const clean = url.trim().split(" ")[0];
+  const clean = url?.trim()?.split(" ")?.[0];
 
   if (!clean) return "/";
 
-  if (!clean.startsWith("http://") && !clean.startsWith("https://")) {
+  if (!clean?.startsWith("http://") && !clean?.startsWith("https://")) {
     return `https://${clean}`;
   }
 
