@@ -59,8 +59,8 @@ const FitKitContact = ({
             <div className="mt-5 mb-10 h-[2px] w-40 bg-[var(--sec)]" />
 
             <div className="space-y-8">
-              {contactItems.map((item, idx) => {
-                const Icon = item.icon;
+              {contactItems?.map((item, idx) => {
+                const Icon = item?.icon;
                 return (
                   <div key={idx} className="flex items-start gap-4">
                     {/* Icon block */}
@@ -74,10 +74,10 @@ const FitKitContact = ({
                     {/* Text */}
                     <div>
                       <h4 className="text-lg md:text-xl font-semibold">
-                        {item.title}
+                        {item?.title}
                       </h4>
                       <p className="mt-1 text-sm md:text-[15px] text-[#D0D4DB] whitespace-pre-line">
-                        {item.text}
+                        {item?.text}
                       </p>
                     </div>
                   </div>
