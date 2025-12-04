@@ -237,7 +237,6 @@ const FitkitSubscriptions = ({
   const [payLoading, setPayLoading] = useState(false);
   const [planId, setplanId] = useState("");
   const [successOpen, setSuccessOpen] = useState(false);
-  const [timer, setTimer] = useState(5);
   const [failureOpen, setFailureOpen] = useState(false);
   const [transaction, setTransaction] = useState<IPaymentList>();
   const [selectedAmounts, setSelectedAmounts] = useState<
@@ -494,7 +493,6 @@ const FitkitSubscriptions = ({
   }
 
   const handleSuccessClose = () => {
-    setTimer(3);
     setSuccessOpen(false);
   };
 
@@ -505,11 +503,13 @@ const FitkitSubscriptions = ({
   }, [subscriptionData?.subscription_status]);
 
   const handleFailureClose = () => {
-    setTimer(3);
     setFailureOpen(false);
   };
 
-  const paymentResponse = async (response: any, selectedSequences: any) => {
+  const paymentResponse = async (
+    response: any,
+    selectedSequences: string[]
+  ) => {
     try {
       const tnxId = response?.transactionId;
       const transaction = response?.transaction as IPaymentList;
@@ -532,21 +532,32 @@ const FitkitSubscriptions = ({
         );
 
         const intervalRef = setInterval(async () => {
-          const paymentStatus = await getPaymentStatusById(tnxId);
+          try {
+            const paymentStatus = await getPaymentStatusById(tnxId);
 
-          if (paymentStatus && paymentStatus.length > 0) {
-            clearInterval(intervalRef);
-            windowRef?.close();
+            if (paymentStatus && paymentStatus.length > 0) {
+              clearInterval(intervalRef);
+              windowRef?.close();
 
-            if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
-              await updateSequencesPaymentStatus(
-                communityId || "",
-                selectedSequences
-              );
-              setSuccessOpen(true);
-            } else {
-              setFailureOpen(true);
+              if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
+                // 1️⃣ Mark sequences as paid in backend
+                await updateSequencesPaymentStatus(
+                  communityId || "",
+                  selectedSequences
+                );
+
+                // 2️⃣ Immediately re-fetch latest sequences for UI
+                await handlegetSequencesById();
+                console.log("handlegetSequencesById")
+
+                // 3️⃣ Show success popup
+                setSuccessOpen(true);
+              } else {
+                setFailureOpen(true);
+              }
             }
+          } catch (err) {
+            console.error("Error while checking payment status:", err);
           }
         }, 1000);
       } else {
@@ -1248,7 +1259,7 @@ const FitkitSubscriptions = ({
                     </div>
 
                     <div className="text-right space-y-2">
-                       <p className="text-[#646464] text-[16px]">
+                      <p className="text-[#646464] text-[16px]">
                         {new Intl.NumberFormat("en-IN", {
                           style: "currency",
                           currency: "INR",
@@ -1298,9 +1309,7 @@ const FitkitSubscriptions = ({
 
                   <div className="grid grid-cols-2">
                     <div>
-                      <h6 className="font-semibold text-[16px] mb-3">
-                        Total
-                      </h6>
+                      <h6 className="font-semibold text-[16px] mb-3">Total</h6>
                     </div>
                     <div className="text-right">
                       <h6 className="font-semibold text-[16px] mb-3">
@@ -1388,7 +1397,7 @@ const FitkitSubscriptions = ({
         txnid={transaction?.txnid || ""}
         open={successOpen}
         amount={transaction?.amount || ""}
-        timer={timer}
+        timer={3}
         onClose={handleSuccessClose}
       />
 
@@ -1397,7 +1406,7 @@ const FitkitSubscriptions = ({
         onClose={handleFailureClose}
         amount={transaction?.amount || ""}
         txnid={transaction?.txnid || ""}
-        timer={timer}
+        timer={3}
       />
 
       <Dialog open={openPausePopup} onOpenChange={setOpenPausePopup}>

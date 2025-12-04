@@ -236,7 +236,6 @@ const CreatorSubscriptions = ({
   const [payLoading, setPayLoading] = useState(false);
   const [planId, setplanId] = useState("");
   const [successOpen, setSuccessOpen] = useState(false);
-  const [timer, setTimer] = useState(5);
   const [failureOpen, setFailureOpen] = useState(false);
   const [transaction, setTransaction] = useState<IPaymentList>();
   const [selectedAmounts, setSelectedAmounts] = useState<
@@ -499,7 +498,6 @@ const CreatorSubscriptions = ({
   }
 
   const handleSuccessClose = () => {
-    setTimer(3);
     setSuccessOpen(false);
   };
 
@@ -510,7 +508,6 @@ const CreatorSubscriptions = ({
   }, [subscriptionData?.subscription_status]);
 
   const handleFailureClose = () => {
-    setTimer(3);
     setFailureOpen(false);
   };
 
@@ -1398,7 +1395,7 @@ const CreatorSubscriptions = ({
         txnid={transaction?.txnid || ""}
         open={successOpen}
         amount={transaction?.amount || ""}
-        timer={timer}
+        timer={3}
         onClose={handleSuccessClose}
       />
 
@@ -1407,7 +1404,7 @@ const CreatorSubscriptions = ({
         onClose={handleFailureClose}
         amount={transaction?.amount || ""}
         txnid={transaction?.txnid || ""}
-        timer={timer}
+        timer={3}
       />
 
       <Dialog open={openPausePopup} onOpenChange={setOpenPausePopup}>

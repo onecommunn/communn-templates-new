@@ -166,9 +166,9 @@ const RestraintHeader = ({
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                {/* <div className="text-center min-w-fit text-white">
+                <div className="text-center min-w-fit text-white">
                   Hi, {auth.user?.firstName || auth.user?.emailId}
-                </div> */}
+                </div>
                 <Popover open={desktopPopoverOpen} onOpenChange={setDesktopPopoverOpen}>
                   <PopoverTrigger asChild>
                     <Avatar className="cursor-pointer size-9">
@@ -228,9 +228,9 @@ const RestraintHeader = ({
                 </Popover>
 
                 <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white text-[var(--pri)] rounded-[10px] text-sm w-fit">
+                  {/* <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white text-[var(--pri)] rounded-[10px] text-sm w-fit">
                     Logout
-                  </AlertDialogTrigger>
+                  </AlertDialogTrigger> */}
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle className="font-sora">
@@ -352,7 +352,7 @@ const RestraintHeader = ({
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={"/assets/restraint-logo.png"}
+                        src={content?.media?.[0] ?? "/assets/restraint-logo.png"}
                         alt="Logo"
                         className="w-25 h-15 object-contain"
                       />

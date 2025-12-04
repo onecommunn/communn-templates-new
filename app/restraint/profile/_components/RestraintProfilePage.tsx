@@ -200,10 +200,10 @@ const ProfileSettingsPage = ({
       <div className="container mx-auto space-y-12">
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-extrabold tracking-tight text-[var(--pri)]">
+          <h1 className="text-xl md:text-4xl font-extrabold tracking-tight text-[var(--pri)]">
             Profile Settings
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-sm md:text-lg text-gray-600">
             Manage your personal and contact information.
           </p>
 
@@ -256,13 +256,13 @@ const ProfileSettingsPage = ({
             {/* BASIC INFO */}
             <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
               <CardContent className="p-0 space-y-6">
-                <h2 className="text-2xl font-semibold text-[var(--pri)]">
+                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)]">
                   Basic Information
                 </h2>
 
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>First Name</Label>
+                    <Label>Name</Label>
                     <Input
                       value={formValues.firstName}
                       onChange={handleChange("firstName")}
@@ -276,30 +276,18 @@ const ProfileSettingsPage = ({
                       disabled
                       value={formValues.userName}
                       onChange={handleChange("userName")}
-                      className="py-6 rounded-lg border-gray-300 focus:border-[#AEA17E]"
+                      className="py-6 rounded-lg border-gray-300 focus:border-[#AEA17E] cursor-not-allowed"
                     />
                   </div>
 
-                  <div className="space-y-2 md:col-span-2">
+                  {/* <div className="space-y-2 md:col-span-2">
                     <Label>About Me</Label>
                     <Textarea
                       value={formValues.about}
                       onChange={handleChange("about")}
                       className="min-h-[120px] rounded-lg border-gray-300 focus:border-[#AEA17E]"
                     />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* CONTACT + ADDRESS */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
-              <CardContent className="p-0 space-y-6">
-                <h2 className="text-2xl font-semibold text-[var(--pri)]">
-                  Contact & Location
-                </h2>
-
-                <div className="grid gap-6 md:grid-cols-2">
+                  </div> */}
                   {/* MOBILE */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -326,11 +314,10 @@ const ProfileSettingsPage = ({
                         disabled
                         value={formValues.phoneNumber}
                         onChange={handleChange("phoneNumber")}
-                        className="py-6 rounded-lg border-gray-300 focus:border-[#AEA17E]"
+                        className="py-6 rounded-lg border-gray-300 focus:border-[#AEA17E] cursor-not-allowed"
                       />
                     </div>
                   </div>
-
                   {/* EMAIL */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -358,11 +345,22 @@ const ProfileSettingsPage = ({
                         type="email"
                         value={formValues.emailId}
                         onChange={handleChange("emailId")}
-                        className="py-6 rounded-lg border-gray-300 focus:border-[#AEA17E]"
+                        className="py-6 rounded-lg border-gray-300 focus:border-[#AEA17E] cursor-not-allowed"
                       />
                     </div>
                   </div>
+                </div>
+              </CardContent>
+            </Card>
 
+            {/* ADDRESS */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
+              <CardContent className="p-0 space-y-6">
+                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)]">
+                  Location
+                </h2>
+
+                <div className="grid gap-6 md:grid-cols-2">
                   {/* ADDRESS LINE */}
                   <div className="space-y-2 md:col-span-2">
                     <Label>Address Line</Label>
