@@ -129,7 +129,7 @@ export default function RestraintFooter({
               ].map((i) => (
                 <li key={i.label}>
                   <Link
-                    href={i.href}
+                    href={i.href ?? "/"}
                     className="transition-colors hover:text-white text-sm"
                   >
                     {i.label}
@@ -205,7 +205,7 @@ function Social({
   return (
     <Link
       aria-label={label}
-      href={href}
+      href={href ?? "/"}
       className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sec)] text-white/90 transition hover:bg-[var(--sec)]/60"
     >
       {icon}

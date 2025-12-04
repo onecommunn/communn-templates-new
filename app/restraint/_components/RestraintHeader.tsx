@@ -31,6 +31,12 @@ import {
   toSnakeCase,
   underscoreToSpace,
 } from "@/components/utils/StringFunctions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const RestraintHeader = ({
   primaryColor,
@@ -51,6 +57,8 @@ const RestraintHeader = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const auth = useContext(AuthContext);
+  const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
+  const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
 
   const servicesContent = servicesData?.content;
 
@@ -158,9 +166,67 @@ const RestraintHeader = ({
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="text-center min-w-fit text-white">
-                  Hi, {auth.user?.firstName || auth.user?.email}
-                </div>
+                {/* <div className="text-center min-w-fit text-white">
+                  Hi, {auth.user?.firstName || auth.user?.emailId}
+                </div> */}
+                <Popover open={desktopPopoverOpen} onOpenChange={setDesktopPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Avatar className="cursor-pointer size-9">
+                      <AvatarImage
+                        src={auth?.user?.avatar}
+                        alt={auth?.user?.firstName}
+                      />
+                      <AvatarFallback>
+                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-72 mt-1 rounded-md p-2"
+                    style={
+                      {
+                        "--pri": primaryColor,
+                        "--sec": secondaryColor,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <Avatar className="cursor-pointer size-12">
+                            <AvatarImage
+                              src={auth?.user?.avatar}
+                              alt={auth?.user?.firstName}
+                            />
+                            <AvatarFallback>
+                              {auth?.user?.firstName?.[0] ??
+                                auth?.user?.emailId?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <div className="col-span-3">
+                          <h4 className="font-semibold">
+                            {auth?.user?.firstName}
+                          </h4>
+                          <p className="text-gray-500 text-[12px] font-semibold">
+                            {auth?.user?.emailId}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/profile?id=${auth?.user?.id}`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-semibold text-[16px] py-2 rounded-md bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                      >
+                        Edit Profile
+                      </Link>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
                 <AlertDialog>
                   <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white text-[var(--pri)] rounded-[10px] text-sm w-fit">
                     Logout
@@ -198,7 +264,71 @@ const RestraintHeader = ({
           </div>
 
           {/* Mobile Menu */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            {auth.isAuthenticated && (
+              <div className="flex items-center gap-4">
+                {/* <div className="text-center min-w-fit text-white">
+                  Hi, {auth.user?.firstName || auth.user?.emailId}
+                </div> */}
+                <Popover open={mobilePopoverOpen} onOpenChange={setMobilePopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Avatar className="cursor-pointer size-9">
+                      <AvatarImage
+                        src={auth?.user?.avatar}
+                        alt={auth?.user?.firstName}
+                      />
+                      <AvatarFallback>
+                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-72 mt-1 rounded-md p-2 mr-1 shadow-lg"
+                    style={
+                      {
+                        "--pri": primaryColor,
+                        "--sec": secondaryColor,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <Avatar className="cursor-pointer size-12">
+                            <AvatarImage
+                              src={auth?.user?.avatar}
+                              alt={auth?.user?.firstName}
+                            />
+                            <AvatarFallback>
+                              {auth?.user?.firstName?.[0] ??
+                                auth?.user?.emailId?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <div className="col-span-3">
+                          <h4 className="font-semibold">
+                            {auth?.user?.firstName}
+                          </h4>
+                          <p className="text-gray-500 text-[12px] font-semibold">
+                            {auth?.user?.emailId}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/profile?id=${auth?.user?.id}`}
+                        onClick={() => setMobilePopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-semibold text-[16px] py-2 rounded-md bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                      >
+                        Edit Profile
+                      </Link>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <button
