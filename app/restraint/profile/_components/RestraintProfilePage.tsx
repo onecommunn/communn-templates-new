@@ -689,133 +689,135 @@ const ProfileSkeleton = ({
         } as React.CSSProperties
       }
     >
-      <div className="container mx-auto space-y-12">
+      <div className="container mx-auto space-y-8">
+        {/* HEADER */}
         <div className="text-center space-y-2">
-          <Skeleton className="h-10 w-64 mx-auto bg-[var(--sec)]" />
-          <Skeleton className="h-6 w-96 mx-auto bg-[var(--sec)]" />
+          <Skeleton className="h-8 w-52 mx-auto rounded-md bg-[var(--sec)]" />
+          <Skeleton className="h-5 w-72 mx-auto rounded-md bg-[var(--sec)]" />
+          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[var(--sec)]" />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          <Card className="p-6 shadow-md border h-fit">
-            <CardContent className="p-0 flex flex-col items-center gap-6">
-              <Skeleton
-                className="size-40 rounded-full"
-                style={{ border: `4px solid ${secondaryColor}` }}
-              />
-              <Skeleton className="h-6 w-32 bg-[var(--sec)]" />
-              <Skeleton className="h-4 w-20 bg-[var(--sec)]" />
-            </CardContent>
-          </Card>
-
-          <div className="lg:col-span-2 space-y-8">
-            <Card className="p-6 shadow-md border">
-              <CardContent className="space-y-6">
-                <Skeleton className="h-7 w-48 bg-[var(--sec)]" />
-                <Skeleton className="h-12 w-full bg-[var(--sec)]" />
-                <Skeleton className="h-12 w-full bg-[var(--sec)]" />
-                <Skeleton className="h-32 w-full bg-[var(--sec)]" />
+        {/* MAIN GRID */}
+        <div className="grid lg:grid-cols-3 gap-8 relative">
+          {/* SIDEBAR */}
+          <aside className="lg:col-span-1 space-y-8">
+            {/* PROFILE CARD */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+              <CardContent className="p-0 flex flex-col items-center justify-center gap-6">
+                <Skeleton
+                  className="size-40 rounded-full"
+                  style={{ border: `4px solid ${secondaryColor}` }}
+                />
+                <div className="space-y-2 w-full flex flex-col items-center">
+                  <Skeleton className="h-5 w-32 rounded-md bg-[var(--sec)]" />
+                  <Skeleton className="h-4 w-24 rounded-md bg-[var(--sec)]" />
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-md border">
-              <CardContent className="space-y-6">
-                <Skeleton className="h-7 w-56 bg-[var(--sec)]" />
-                <Skeleton className="h-12 w-full bg-[var(--sec)]" />
-                <Skeleton className="h-12 w-full bg-[var(--sec)]" />
-                <Skeleton className="h-12 w-full bg-[var(--sec)]" />
-                <Skeleton className="h-12 w-full bg-[var(--sec)]" />
+            {/* SUBSCRIBED PLANS CARD */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+              <CardContent className="p-0 flex flex-col gap-4 w-full">
+                {/* Header */}
+                <div className="flex items-center justify-between w-full mb-1">
+                  <Skeleton className="h-4 w-28 rounded-md bg-[var(--sec)]" />
+                  <Skeleton className="h-5 w-16 rounded-full bg-[var(--sec)]" />
+                </div>
+
+                {/* Plan skeleton items */}
+                <div className="space-y-3">
+                  {[1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="w-full border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-white"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="w-12 h-12 rounded-lg bg-[var(--sec)]" />
+                        <div className="flex-1 space-y-2">
+                          <Skeleton className="h-4 w-32 rounded-md bg-[var(--sec)]" />
+                          <Skeleton className="h-3 w-24 rounded-md bg-[var(--sec)]" />
+                          <Skeleton className="h-3 w-28 rounded-md bg-[var(--sec)]" />
+                        </div>
+                      </div>
+
+                      <Skeleton className="h-3 w-full rounded-md bg-[var(--sec)]" />
+                      <Skeleton className="h-3 w-3/4 rounded-md bg-[var(--sec)]" />
+
+                      <div className="flex justify-end pt-1">
+                        <Skeleton className="h-8 w-20 rounded-md bg-[var(--sec)]" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* View all button skeleton */}
+                <Skeleton className="mt-1 h-3 w-24 mx-auto rounded-md bg-[var(--sec)]" />
+              </CardContent>
+            </Card>
+          </aside>
+
+          {/* RIGHT COLUMN */}
+          <section className="lg:col-span-2 space-y-8">
+            {/* BASIC INFO CARD */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
+              <CardContent className="p-0 space-y-6">
+                <Skeleton className="h-5 w-40 rounded-md bg-[var(--sec)]" />
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-20 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-24 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-28 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-16 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            <div className="flex justify-end">
-              <Skeleton className="h-14 w-56 rounded-lg bg-[var(--sec)]" />
+            {/* LOCATION CARD */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8 h-fit">
+              <CardContent className="p-0 space-y-6">
+                <Skeleton className="h-5 w-32 rounded-md bg-[var(--sec)]" />
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2 md:col-span-2">
+                    <Skeleton className="h-3 w-24 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-28 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-16 rounded-md bg-[var(--sec)]" />
+                    <Skeleton className="h-11 w-full rounded-lg bg-[var(--sec)]" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* SAVE BUTTON SKELETON */}
+            <div className="flex justify-end pt-2">
+              <Skeleton className="h-12 w-44 rounded-lg bg-[var(--sec)]" />
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>
   );
 };
-
-// <div
-//                     className="w-full border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-white"
-//                     key={plan.id}
-//                   >
-//                     {/* Image + title row */}
-//                     <div className="flex items-center gap-3">
-//                       <div className="w-12 h-12 rounded-lg bg-gray-100 flex overflow-hidden items-center justify-center text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
-//                         {plan.coverImage ? (
-//                           <img
-//                             src={plan.coverImage}
-//                             alt={plan.title}
-//                             className="w-full h-full object-cover"
-//                           />
-//                         ) : (
-//                           "IMG"
-//                         )}
-//                       </div>
-//                       <div className="flex-1">
-//                         <p className="text-sm font-semibold text-gray-900 line-clamp-1">
-//                           {plan?.title}
-//                         </p>
-//                         <p className="text-xs text-gray-500">
-//                           ₹{plan.price} / {plan?.interval} {plan.periodLabel}
-//                         </p>
-//                         {plan.nextDueDate && (
-//                           <p className="text-[11px] text-gray-500 mt-0.5">
-//                             {plan?.nextDueDate === "forever"
-//                               ? "Forever"
-//                               : `Due on: ${new Date(
-//                                   plan?.nextDueDate
-//                                 ).toLocaleDateString("en-GB", {
-//                                   year: "numeric",
-//                                   month: "short",
-//                                   day: "2-digit",
-//                                 })}`}
-//                           </p>
-//                         )}
-//                       </div>
-//                     </div>
-
-//                     {/* Description */}
-//                     {plan.description && (
-//                       <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
-//                         {plan.description}
-//                       </p>
-//                     )}
-
-//                     {/* Footer row */}
-//                     <div className={`flex items-center ${plan?.nextDueDate ? "justify-between" :"justify-end"} pt-1`}>
-//                       {plan?.nextDueDate ? (
-//                         plan?.nextDueDate === "forever" ? (
-//                           <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-//                             Active
-//                           </Badge>
-//                         ) : new Date(plan?.nextDueDate) >= new Date() ? (
-//                           <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-//                             Active
-//                           </Badge>
-//                         ) : (
-//                           <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100">
-//                             Expired
-//                           </Badge>
-//                         )
-//                       ) : (
-//                         ""
-//                       )}
-//                       <Link
-//                         href={`/subscriptions/?planid=${encodeURIComponent(
-//                           plan?.id
-//                         )}&communityid=${encodeURIComponent(
-//                           communityId || ""
-//                         )}`}
-//                       >
-//                         <Button
-//                           size="sm"
-//                           className="h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
-//                         >
-//                           Manage
-//                         </Button>
-//                       </Link>
-//                     </div>
-//                   </div>
