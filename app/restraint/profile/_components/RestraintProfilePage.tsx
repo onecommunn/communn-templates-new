@@ -14,6 +14,12 @@ import { IEditUser, useUsers } from "@/hooks/useUsers";
 import { toast } from "sonner";
 import { AuthContext } from "@/contexts/Auth.context";
 import Link from "next/link";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { AccordionItem } from "@radix-ui/react-accordion";
 
 interface FormValues {
   id: string;
@@ -396,98 +402,111 @@ const RestraintProfilePage = ({
                 )}
 
                 {userPlans.map((plan) => (
-                  <div
-                    className="w-full border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-white"
-                    key={plan.id}
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full border px-2 rounded-md"
                   >
-                    {/* Image + title row */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-lg bg-gray-100 flex overflow-hidden items-center justify-center text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
-                        {plan.coverImage ? (
-                          <img
-                            src={plan.coverImage}
-                            alt={plan.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          "IMG"
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900 line-clamp-1">
-                          {plan?.title}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          ₹{plan.price} / {plan?.interval} {plan.periodLabel}
-                        </p>
-                        {plan.nextDueDate && (
-                          <p className="text-[11px] text-gray-500 mt-0.5">
-                            {plan?.nextDueDate === "forever"
-                              ? "Forever"
-                              : `Due on: ${new Date(
-                                  plan?.nextDueDate
-                                ).toLocaleDateString("en-GB", {
-                                  year: "numeric",
-                                  month: "short",
-                                  day: "2-digit",
-                                })}`}
+                    <AccordionItem value={plan?.id}>
+                      <AccordionTrigger className="hover:no-underline cursor-pointer">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-lg bg-gray-100 flex overflow-hidden items-center justify-center text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                            {plan.coverImage ? (
+                              <img
+                                src={plan.coverImage}
+                                alt={plan.title}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              "IMG"
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold text-gray-900 line-clamp-1">
+                              {plan?.title}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              ₹{plan.price} / {plan?.interval}{" "}
+                              {plan.periodLabel}
+                            </p>
+                            {plan.nextDueDate && (
+                              <p className="text-[11px] text-gray-500 mt-0.5">
+                                {plan?.nextDueDate === "forever"
+                                  ? "Forever"
+                                  : `Due on: ${new Date(
+                                      plan?.nextDueDate
+                                    ).toLocaleDateString("en-GB", {
+                                      year: "numeric",
+                                      month: "short",
+                                      day: "2-digit",
+                                    })}`}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-2">
+                        {/* Description */}
+                        {plan.description && (
+                          <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                            {plan.description}
                           </p>
                         )}
-                      </div>
-                    </div>
 
-                    {/* Description */}
-                    {plan.description && (
-                      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
-                        {plan.description}
-                      </p>
-                    )}
-
-                    {/* Footer row */}
-                    <div className={`flex items-center ${plan?.nextDueDate ? "justify-between" :"justify-end"} pt-1`}>
-                      {plan?.nextDueDate ? (
-                        plan?.nextDueDate === "forever" ? (
-                          <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            Active
-                          </Badge>
-                        ) : new Date(plan?.nextDueDate) >= new Date() ? (
-                          <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100">
-                            Expired
-                          </Badge>
-                        )
-                      ) : (
-                        ""
-                      )}
-                      <Link
-                        href={`/subscriptions/?planid=${encodeURIComponent(
-                          plan?.id
-                        )}&communityid=${encodeURIComponent(
-                          communityId || ""
-                        )}`}
-                      >
-                        <Button
-                          size="sm"
-                          className="h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
+                        {/* Footer row */}
+                        <div
+                          className={`flex items-center ${
+                            plan?.nextDueDate
+                              ? "justify-between"
+                              : "justify-end"
+                          } pt-1`}
                         >
-                          Manage
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
+                          {plan?.nextDueDate ? (
+                            plan?.nextDueDate === "forever" ? (
+                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                Active
+                              </Badge>
+                            ) : new Date(plan?.nextDueDate) >= new Date() ? (
+                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                Active
+                              </Badge>
+                            ) : (
+                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100">
+                                Expired
+                              </Badge>
+                            )
+                          ) : (
+                            ""
+                          )}
+                          <Link
+                            href={`/subscriptions/?planid=${encodeURIComponent(
+                              plan?.id
+                            )}&communityid=${encodeURIComponent(
+                              communityId || ""
+                            )}`}
+                          >
+                            <Button
+                              size="sm"
+                              className="h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
+                            >
+                              Manage
+                            </Button>
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 ))}
 
                 {/* CTA to see all plans */}
-                <Link href={"/plans"}></Link>
-                <button
-                  type="button"
-                  className="mt-1 w-full text-[11px] font-medium text-[var(--pri)] hover:underline text-center cursor-pointer"
-                >
-                  View all plans
-                </button>
+                <Link href={"/plans"}>
+                  <button
+                    type="button"
+                    className="mt-1 w-full text-[11px] font-medium text-[var(--pri)] hover:underline text-center cursor-pointer"
+                  >
+                    View all plans
+                  </button>
+                </Link>
               </CardContent>
             </Card>
           </aside>
@@ -634,7 +653,7 @@ const RestraintProfilePage = ({
                 type="button"
                 onClick={handleEditProfile}
                 disabled={isSubmiting}
-                className="px-10 py-6 text-[16px] text-white rounded-lg shadow-md bg-[var(--pri)]"
+                className="px-10 py-6 text-[16px] text-white rounded-lg shadow-md bg-[var(--pri)] cursor-pointer"
               >
                 {isSubmiting ? "Submitting..." : "Save Profile"}
               </Button>
@@ -714,3 +733,86 @@ const ProfileSkeleton = ({
     </div>
   );
 };
+
+// <div
+//                     className="w-full border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-white"
+//                     key={plan.id}
+//                   >
+//                     {/* Image + title row */}
+//                     <div className="flex items-center gap-3">
+//                       <div className="w-12 h-12 rounded-lg bg-gray-100 flex overflow-hidden items-center justify-center text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+//                         {plan.coverImage ? (
+//                           <img
+//                             src={plan.coverImage}
+//                             alt={plan.title}
+//                             className="w-full h-full object-cover"
+//                           />
+//                         ) : (
+//                           "IMG"
+//                         )}
+//                       </div>
+//                       <div className="flex-1">
+//                         <p className="text-sm font-semibold text-gray-900 line-clamp-1">
+//                           {plan?.title}
+//                         </p>
+//                         <p className="text-xs text-gray-500">
+//                           ₹{plan.price} / {plan?.interval} {plan.periodLabel}
+//                         </p>
+//                         {plan.nextDueDate && (
+//                           <p className="text-[11px] text-gray-500 mt-0.5">
+//                             {plan?.nextDueDate === "forever"
+//                               ? "Forever"
+//                               : `Due on: ${new Date(
+//                                   plan?.nextDueDate
+//                                 ).toLocaleDateString("en-GB", {
+//                                   year: "numeric",
+//                                   month: "short",
+//                                   day: "2-digit",
+//                                 })}`}
+//                           </p>
+//                         )}
+//                       </div>
+//                     </div>
+
+//                     {/* Description */}
+//                     {plan.description && (
+//                       <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+//                         {plan.description}
+//                       </p>
+//                     )}
+
+//                     {/* Footer row */}
+//                     <div className={`flex items-center ${plan?.nextDueDate ? "justify-between" :"justify-end"} pt-1`}>
+//                       {plan?.nextDueDate ? (
+//                         plan?.nextDueDate === "forever" ? (
+//                           <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+//                             Active
+//                           </Badge>
+//                         ) : new Date(plan?.nextDueDate) >= new Date() ? (
+//                           <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+//                             Active
+//                           </Badge>
+//                         ) : (
+//                           <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100">
+//                             Expired
+//                           </Badge>
+//                         )
+//                       ) : (
+//                         ""
+//                       )}
+//                       <Link
+//                         href={`/subscriptions/?planid=${encodeURIComponent(
+//                           plan?.id
+//                         )}&communityid=${encodeURIComponent(
+//                           communityId || ""
+//                         )}`}
+//                       >
+//                         <Button
+//                           size="sm"
+//                           className="h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
+//                         >
+//                           Manage
+//                         </Button>
+//                       </Link>
+//                     </div>
+//                   </div>
