@@ -60,6 +60,8 @@ const RestraintHeader = ({
   const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
   const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
 
+  console.log(auth,"auth")
+
   const servicesContent = servicesData?.content;
 
   const handleLogout = async () => {

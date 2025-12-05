@@ -43,13 +43,27 @@ export function underscoreToSpace(text: string): string {
 }
 
 export const formatUrl = (url: string) => {
-  const clean = url?.trim()?.split(" ")?.[0];
+  if (!url) return "/";
 
-  if (!clean) return "/";
+  const clean = url.trim().split(" ")[0];
 
-  if (!clean?.startsWith("http://") && !clean?.startsWith("https://")) {
+  // If it's a hash or local anchor → return as is
+  if (clean.startsWith("#")) return clean;
+
+  // If user enters something like "/", "../", "./"
+  if (clean.startsWith("/")) return clean;
+
+  // If user enters "www.facebook.com" or "google.com"
+  const isValidDomain = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(clean);
+
+  if (isValidDomain) {
     return `https://${clean}`;
   }
 
-  return clean;
+  // If already has http/https
+  if (clean.startsWith("http://") || clean.startsWith("https://")) {
+    return clean;
+  }
+
+  return "/";
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Camera, CheckCircle2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { IEditUser, useUsers } from "@/hooks/useUsers";
 import { toast } from "sonner";
+import { AuthContext } from "@/contexts/Auth.context";
 
 interface FormValues {
   id: string;
@@ -40,6 +41,8 @@ const ProfileSettingsPage = ({
   secondaryColor: string;
   primaryColor: string;
 }) => {
+  const authContext = useContext(AuthContext);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
@@ -68,6 +71,14 @@ const ProfileSettingsPage = ({
     about: "",
     whatsappNumber: 0,
   });
+
+  const { isAuthenticated, loading } = authContext || {};
+
+  /* ------------------------ ROUTE GUARD ------------------------ */
+  useEffect(() => {
+    if (loading) return;
+    if (!isAuthenticated) router.push("/");
+  }, [loading, isAuthenticated, router]);
 
   /* ------------------------ GENERIC CHANGE HANDLERS ------------------------ */
 
@@ -139,6 +150,8 @@ const ProfileSettingsPage = ({
       return;
     }
 
+    if (loading || !isAuthenticated) return;
+
     const fetchUser = async () => {
       try {
         setIsLoading(true);
@@ -176,7 +189,7 @@ const ProfileSettingsPage = ({
     };
 
     fetchUser();
-  }, [userId]);
+  }, [userId, isAuthenticated, loading]);
 
   if (isLoading)
     return (
@@ -279,14 +292,6 @@ const ProfileSettingsPage = ({
                     />
                   </div>
 
-                  {/* <div className="space-y-2 md:col-span-2">
-                    <Label>About Me</Label>
-                    <Textarea
-                      value={formValues.about}
-                      onChange={handleChange("about")}
-                      className="min-h-[120px] rounded-lg border-gray-300 focus:border-[#AEA17E]"
-                    />
-                  </div> */}
                   {/* MOBILE */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -404,7 +409,6 @@ const ProfileSettingsPage = ({
               >
                 {isSubmiting ? "Submitting..." : "Save Profile"}
               </Button>
-              
             </div>
           </div>
         </div>

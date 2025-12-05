@@ -178,7 +178,7 @@ export default function RestraintServices({
           >
             <div className="mx-auto md:mx-0">
               <div className="relative">
-                <Image
+                <img
                   src={
                     content?.media || "/assets/restraint-services-images-1.png"
                   }
@@ -186,7 +186,6 @@ export default function RestraintServices({
                   width={360}
                   height={460}
                   className="mx-auto h-auto w-[360px] object-contain"
-                  unoptimized
                 />
               </div>
             </div>
