@@ -516,7 +516,10 @@ const SpawellSubscriptions = ({
     setFailureOpen(false);
   };
 
-  const paymentResponse = async (response: any, selectedSequences: any) => {
+  const paymentResponse = async (
+    response: any,
+    selectedSequences: string[]
+  ) => {
     try {
       const tnxId = response?.transactionId;
       const transaction = response?.transaction as IPaymentList;
@@ -539,21 +542,31 @@ const SpawellSubscriptions = ({
         );
 
         const intervalRef = setInterval(async () => {
-          const paymentStatus = await getPaymentStatusById(tnxId);
+          try {
+            const paymentStatus = await getPaymentStatusById(tnxId);
 
-          if (paymentStatus && paymentStatus.length > 0) {
-            clearInterval(intervalRef);
-            windowRef?.close();
+            if (paymentStatus && paymentStatus.length > 0) {
+              clearInterval(intervalRef);
+              windowRef?.close();
 
-            if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
-              await updateSequencesPaymentStatus(
-                communityId || "",
-                selectedSequences
-              );
-              setSuccessOpen(true);
-            } else {
-              setFailureOpen(true);
+              if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
+                // 1️⃣ Mark sequences as paid in backend
+                await updateSequencesPaymentStatus(
+                  communityId || "",
+                  selectedSequences
+                );
+
+                // 2️⃣ Immediately re-fetch latest sequences for UI
+                await handlegetSequencesById();
+
+                // 3️⃣ Show success popup
+                setSuccessOpen(true);
+              } else {
+                setFailureOpen(true);
+              }
             }
+          } catch (err) {
+            console.error("Error while checking payment status:", err);
           }
         }, 1000);
       } else {
@@ -563,7 +576,7 @@ const SpawellSubscriptions = ({
       console.error("An error occurred in paymentResponse:", error);
     }
   };
-
+  
   const handleClickPay = async (communityId: string, planId: string) => {
     try {
       setPayLoading(true);
@@ -1259,7 +1272,7 @@ const SpawellSubscriptions = ({
                     </div>
 
                     <div className="text-right space-y-2">
-                     <p className="text-[#646464] text-[16px]">
+                      <p className="text-[#646464] text-[16px]">
                         {new Intl.NumberFormat("en-IN", {
                           style: "currency",
                           currency: "INR",

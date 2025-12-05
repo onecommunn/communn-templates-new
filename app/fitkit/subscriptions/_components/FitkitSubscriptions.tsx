@@ -548,7 +548,7 @@ const FitkitSubscriptions = ({
 
                 // 2️⃣ Immediately re-fetch latest sequences for UI
                 await handlegetSequencesById();
-                console.log("handlegetSequencesById")
+                console.log("handlegetSequencesById");
 
                 // 3️⃣ Show success popup
                 setSuccessOpen(true);
@@ -587,7 +587,9 @@ const FitkitSubscriptions = ({
         .map((item: any) => item.id);
 
       paymentResponse(response, sequenceIds);
-      handlegetSequencesById();
+      if (subscriptionId) {
+        handlegetSequencesById();
+      }
     } catch (error) {
       console.error("Payment failed:", error);
     } finally {

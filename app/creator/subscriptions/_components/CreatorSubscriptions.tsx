@@ -511,7 +511,10 @@ const CreatorSubscriptions = ({
     setFailureOpen(false);
   };
 
-  const paymentResponse = async (response: any, selectedSequences: any) => {
+  const paymentResponse = async (
+    response: any,
+    selectedSequences: string[]
+  ) => {
     try {
       const tnxId = response?.transactionId;
       const transaction = response?.transaction as IPaymentList;
@@ -534,21 +537,31 @@ const CreatorSubscriptions = ({
         );
 
         const intervalRef = setInterval(async () => {
-          const paymentStatus = await getPaymentStatusById(tnxId);
+          try {
+            const paymentStatus = await getPaymentStatusById(tnxId);
 
-          if (paymentStatus && paymentStatus.length > 0) {
-            clearInterval(intervalRef);
-            windowRef?.close();
+            if (paymentStatus && paymentStatus.length > 0) {
+              clearInterval(intervalRef);
+              windowRef?.close();
 
-            if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
-              await updateSequencesPaymentStatus(
-                communityId || "",
-                selectedSequences
-              );
-              setSuccessOpen(true);
-            } else {
-              setFailureOpen(true);
+              if (paymentStatus[0]?.status === PaymentStatus.SUCCESS) {
+                // 1️⃣ Mark sequences as paid in backend
+                await updateSequencesPaymentStatus(
+                  communityId || "",
+                  selectedSequences
+                );
+
+                // 2️⃣ Immediately re-fetch latest sequences for UI
+                await handlegetSequencesById();
+
+                // 3️⃣ Show success popup
+                setSuccessOpen(true);
+              } else {
+                setFailureOpen(true);
+              }
             }
+          } catch (err) {
+            console.error("Error while checking payment status:", err);
           }
         }, 1000);
       } else {
