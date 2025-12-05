@@ -1,13 +1,18 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useContext, useEffect } from "react";
 import RestraintProfilePage from "./_components/RestraintProfilePage";
 import { useCMS } from "../CMSProvider.client";
 import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "../DummyData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/contexts/Auth.context";
 
 const RestraintProfileRoot = () => {
+  const authContext = useContext(AuthContext);
+  const router = useRouter();
+
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: RestarintHomePage | undefined = !isLoading
@@ -75,9 +80,17 @@ const RestraintProfileRoot = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (!authContext?.isAuthenticated) router.push("/");
+  }, [authContext?.isAuthenticated]);
+  
   return (
     <Suspense fallback={<ProfileSkeleton />}>
-      <RestraintProfilePage primaryColor={primaryColor} secondaryColor={secondaryColor}/>
+      <RestraintProfilePage
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+      />
     </Suspense>
   );
 };

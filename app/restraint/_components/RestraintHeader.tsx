@@ -169,7 +169,10 @@ const RestraintHeader = ({
                 <div className="text-center min-w-fit text-white">
                   Hi, {auth.user?.firstName || auth.user?.emailId}
                 </div>
-                <Popover open={desktopPopoverOpen} onOpenChange={setDesktopPopoverOpen}>
+                <Popover
+                  open={desktopPopoverOpen}
+                  onOpenChange={setDesktopPopoverOpen}
+                >
                   <PopoverTrigger asChild>
                     <Avatar className="cursor-pointer size-9">
                       <AvatarImage
@@ -182,7 +185,7 @@ const RestraintHeader = ({
                     </Avatar>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-72 mt-1 rounded-md p-2"
+                    className="w-72 mt-1 rounded-md p-2 mr-4"
                     style={
                       {
                         "--pri": primaryColor,
@@ -223,33 +226,32 @@ const RestraintHeader = ({
                       >
                         Edit Profile
                       </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-[10px] text-sm w-full">
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-sora">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </PopoverContent>
                 </Popover>
-
-                <AlertDialog>
-                  {/* <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white text-[var(--pri)] rounded-[10px] text-sm w-fit">
-                    Logout
-                  </AlertDialogTrigger> */}
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle className="font-sora">
-                        Are you sure you want to logout?
-                      </AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className="border">
-                        Cancel
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleLogout}
-                        className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
@@ -270,7 +272,10 @@ const RestraintHeader = ({
                 {/* <div className="text-center min-w-fit text-white">
                   Hi, {auth.user?.firstName || auth.user?.emailId}
                 </div> */}
-                <Popover open={mobilePopoverOpen} onOpenChange={setMobilePopoverOpen}>
+                <Popover
+                  open={mobilePopoverOpen}
+                  onOpenChange={setMobilePopoverOpen}
+                >
                   <PopoverTrigger asChild>
                     <Avatar className="cursor-pointer size-9">
                       <AvatarImage
@@ -324,6 +329,29 @@ const RestraintHeader = ({
                       >
                         Edit Profile
                       </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-[10px] text-sm w-full">
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-sora">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </PopoverContent>
                 </Popover>
@@ -352,7 +380,9 @@ const RestraintHeader = ({
                       className="flex items-center space-x-2"
                     >
                       <img
-                        src={content?.media?.[0] ?? "/assets/restraint-logo.png"}
+                        src={
+                          content?.media?.[0] ?? "/assets/restraint-logo.png"
+                        }
                         alt="Logo"
                         className="w-25 h-15 object-contain"
                       />
@@ -446,7 +476,7 @@ const RestraintHeader = ({
                 </nav>
 
                 {/* CTA pinned at bottom */}
-                <div className="px-4 pt-2 pb-6">
+                {/* <div className="px-4 pt-2 pb-6">
                   <SheetClose asChild>
                     {auth.isAuthenticated ? (
                       <Button
@@ -463,7 +493,7 @@ const RestraintHeader = ({
                       </Link>
                     )}
                   </SheetClose>
-                </div>
+                </div> */}
               </SheetContent>
             </Sheet>
           </div>
