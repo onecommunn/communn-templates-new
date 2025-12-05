@@ -53,6 +53,7 @@ interface UserPlanCard {
   nextDueDate?: string;
   daysLeft?: number | null;
   interval?: string;
+  planId: string;
 }
 
 const RestraintProfilePage = ({
@@ -280,6 +281,7 @@ const RestraintProfilePage = ({
               nextDueDate: sub.nextDueDate,
               daysLeft: sub.daysLeft ?? null,
               interval: plan?.interval ?? "",
+              planId: plan?._id,
             };
           });
 
@@ -406,6 +408,7 @@ const RestraintProfilePage = ({
                     type="single"
                     collapsible
                     className="w-full border px-2 rounded-md"
+                    key={plan?.id}
                   >
                     <AccordionItem value={plan?.id}>
                       <AccordionTrigger className="hover:no-underline cursor-pointer">
@@ -480,7 +483,7 @@ const RestraintProfilePage = ({
                           )}
                           <Link
                             href={`/subscriptions/?planid=${encodeURIComponent(
-                              plan?.id
+                              plan?.planId
                             )}&communityid=${encodeURIComponent(
                               communityId || ""
                             )}`}
