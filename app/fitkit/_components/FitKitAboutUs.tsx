@@ -44,13 +44,13 @@ const FitKitAboutUs = ({
                   content?.media?.[1] || "/assets/fitkit-about-us-image1.png"
                 }
                 alt="fitkit-about-us-image1"
-                className="w-full md:w-fit"
+                className="w-full"
                 width={285}
                 height={350}
                 unoptimized
               />
             </div>
-            <div className="flex flex-col justify-between gap-4 md:gap-0">
+            <div className="flex flex-col justify-between gap-4 md:gap-2">
               <p className="text-[#6A6A6A] text-[16px]">
                 {content?.description}
               </p>

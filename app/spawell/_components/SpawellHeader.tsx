@@ -38,6 +38,12 @@ import {
   toSnakeCase,
   underscoreToSpace,
 } from "@/components/utils/StringFunctions";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const SpawellHeader = ({
   primaryColor,
@@ -61,6 +67,9 @@ const SpawellHeader = ({
   const auth = useContext(AuthContext);
   const source = data?.content;
   const servicesContent = servicesData?.content;
+
+  const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
+  const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -198,33 +207,92 @@ const SpawellHeader = ({
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="text-center font-medium min-w-fit text-[var(--pri)]">
-                  Hi, {auth.user?.firstName || auth.user?.email}
+                <div className="text-center min-w-fit text-[var(--pri)] font-semibold">
+                  Hi, {auth.user?.firstName || auth.user?.emailId}
                 </div>
-                <AlertDialog>
-                  <AlertDialogTrigger className="cursor-pointer hover:bg-[#ba1c26] px-6 font-inter py-2 bg-[var(--pri)] text-[var(--sec)] rounded-[10px] text-sm w-fit">
-                    Logout
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle className="font-inter">
-                        Are you sure you want to logout?
-                      </AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className="border">
-                        Cancel
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleLogout}
-                        className="bg-[#ba1c26] text-[var(--sec)] px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
-                        style={{ color: secondaryColor }}
+                <Popover
+                  open={desktopPopoverOpen}
+                  onOpenChange={setDesktopPopoverOpen}
+                >
+                  <PopoverTrigger asChild>
+                    <Avatar className="cursor-pointer size-9">
+                      <AvatarImage
+                        src={auth?.user?.avatar}
+                        alt={auth?.user?.firstName}
+                      />
+                      <AvatarFallback>
+                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-72 mt-1 rounded-md p-2 mr-4"
+                    style={
+                      {
+                        "--pri": primaryColor,
+                        "--sec": secondaryColor,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <Avatar className="cursor-pointer size-12">
+                            <AvatarImage
+                              src={auth?.user?.avatar}
+                              alt={auth?.user?.firstName}
+                            />
+                            <AvatarFallback>
+                              {auth?.user?.firstName?.[0] ??
+                                auth?.user?.emailId?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <div className="col-span-3">
+                          <h4 className="font-semibold">
+                            {auth?.user?.firstName}
+                          </h4>
+                          <p className="text-gray-500 text-[12px] font-semibold">
+                            {auth?.user?.emailId}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/profile?id=${auth?.user?.id}`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-semibold text-[16px] py-2 rounded-md bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
                       >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                        Edit Profile
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-[10px] text-sm w-full">
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-sora">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
@@ -239,7 +307,97 @@ const SpawellHeader = ({
           </div>
 
           {/* Mobile Menu */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            {auth.isAuthenticated && (
+              <div className="flex items-center gap-4">
+                {/* <div className="text-center min-w-fit text-white">
+                              Hi, {auth.user?.firstName || auth.user?.emailId}
+                            </div> */}
+                <Popover
+                  open={mobilePopoverOpen}
+                  onOpenChange={setMobilePopoverOpen}
+                >
+                  <PopoverTrigger asChild>
+                    <Avatar className="cursor-pointer size-9">
+                      <AvatarImage
+                        src={auth?.user?.avatar}
+                        alt={auth?.user?.firstName}
+                      />
+                      <AvatarFallback>
+                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-72 mt-1 rounded-md p-2 mr-1 shadow-lg"
+                    style={
+                      {
+                        "--pri": primaryColor,
+                        "--sec": secondaryColor,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <Avatar className="cursor-pointer size-12">
+                            <AvatarImage
+                              src={auth?.user?.avatar}
+                              alt={auth?.user?.firstName}
+                            />
+                            <AvatarFallback>
+                              {auth?.user?.firstName?.[0] ??
+                                auth?.user?.emailId?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <div className="col-span-3">
+                          <h4 className="font-semibold">
+                            {auth?.user?.firstName}
+                          </h4>
+                          <p className="text-gray-500 text-[12px] font-semibold">
+                            {auth?.user?.emailId}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/profile?id=${auth?.user?.id}`}
+                        onClick={() => setMobilePopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-semibold text-[16px] py-2 rounded-md bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                      >
+                        Edit Profile
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-[10px] text-sm w-full">
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-sora">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <button
@@ -251,7 +409,16 @@ const SpawellHeader = ({
                 </button>
               </SheetTrigger>
 
-              <SheetContent side="right" className="w-[85vw] sm:max-w-sm px-0">
+              <SheetContent
+                side="right"
+                className="w-[85vw] sm:max-w-sm px-0"
+                style={
+                  {
+                    "--pri": primaryColor,
+                    "--sec": secondaryColor,
+                  } as React.CSSProperties
+                }
+              >
                 {/* Header inside sheet */}
                 <SheetHeader className="px-4 pb-2">
                   <div className="flex items-center justify-between">
@@ -359,16 +526,9 @@ const SpawellHeader = ({
                 {/* CTA pinned at bottom */}
                 <div className="px-4 pt-2 pb-6">
                   <SheetClose asChild>
-                    {auth.isAuthenticated ? (
-                      <Button
-                        onClick={handleLogout}
-                        className="rounded-[10px] text-sm px-5 w-full bg-[#ba1c26] hover:[#ba1c26]"
-                      >
-                        Logout
-                      </Button>
-                    ) : (
+                    {!auth.isAuthenticated && (
                       <Link href="/login" className="w-full">
-                        <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2">
+                        <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2 bg-[var(--pri)] text-[var(--sec)]">
                           Login <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>

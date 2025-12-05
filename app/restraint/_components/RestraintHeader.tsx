@@ -60,8 +60,6 @@ const RestraintHeader = ({
   const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
   const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
 
-  console.log(auth,"auth")
-
   const servicesContent = servicesData?.content;
 
   const handleLogout = async () => {
@@ -478,16 +476,9 @@ const RestraintHeader = ({
                 </nav>
 
                 {/* CTA pinned at bottom */}
-                {/* <div className="px-4 pt-2 pb-6">
+                <div className="px-4 pt-2 pb-6">
                   <SheetClose asChild>
-                    {auth.isAuthenticated ? (
-                      <Button
-                        onClick={handleLogout}
-                        className="rounded-[10px] text-sm px-5 w-full bg-[#ba1c26] hover:[#ba1c26]"
-                      >
-                        Logout
-                      </Button>
-                    ) : (
+                    {!auth.isAuthenticated && (
                       <Link href="/login" className="w-full">
                         <Button className="rounded-[12px] text-sm px-5 w-full inline-flex items-center gap-2">
                           Login <ArrowRight className="h-4 w-4" />
@@ -495,7 +486,7 @@ const RestraintHeader = ({
                       </Link>
                     )}
                   </SheetClose>
-                </div> */}
+                </div>
               </SheetContent>
             </Sheet>
           </div>
