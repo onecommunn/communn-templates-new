@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { IEditUser, useUsers } from "@/hooks/useUsers";
 import { toast } from "sonner";
 import { AuthContext } from "@/contexts/Auth.context";
+import Link from "next/link";
 
 interface FormValues {
   id: string;
@@ -34,7 +35,21 @@ interface FormValues {
   whatsappNumber: number;
 }
 
-const ProfileSettingsPage = ({
+interface UserPlanCard {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  periodLabel: string;
+  coverImage?: string;
+  communityName: string;
+  subscriptionStatus: string;
+  nextDueDate?: string;
+  daysLeft?: number | null;
+  interval?: string;
+}
+
+const RestraintProfilePage = ({
   primaryColor,
   secondaryColor,
 }: {
@@ -43,10 +58,13 @@ const ProfileSettingsPage = ({
 }) => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // profile loading
+  const [isPlansLoading, setIsPlansLoading] = useState(false); // plans loading
+  const [userPlans, setUserPlans] = useState<UserPlanCard[]>([]);
+
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
-  const { editUsers, loadUser } = useUsers();
+  const { editUsers, loadUserPlans } = useUsers();
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [avatarImage, setAvatarImage] = useState("");
@@ -72,7 +90,7 @@ const ProfileSettingsPage = ({
     whatsappNumber: 0,
   });
 
-  const { isAuthenticated, loading } = authContext || {};
+  const { isAuthenticated, loading, communityId } = authContext || {};
 
   /* ------------------------ ROUTE GUARD ------------------------ */
   useEffect(() => {
@@ -109,8 +127,7 @@ const ProfileSettingsPage = ({
         ...formValues,
       };
 
-      const response = await editUsers(userId, profileData, profileImage);
-      console.log(response);
+      await editUsers(userId, profileData, profileImage);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Something went wrong while updating profile");
@@ -144,19 +161,68 @@ const ProfileSettingsPage = ({
 
   /* ------------------------------ LOAD USER ------------------------------ */
 
+  // useEffect(() => {
+  //   if (!userId) {
+  //     setIsLoading(false);
+  //     return;
+  //   }
+
+  //   if (loading || !isAuthenticated) return;
+
+  //   const fetchUser = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const response = await loadUser(userId);
+
+  //       setFormValues({
+  //         id: response?.id ?? "",
+  //         firstName: response?.firstName ?? "",
+  //         lastName: response?.lastName ?? "",
+  //         emailId: response?.emailId ?? "",
+  //         phoneNumber: response?.phoneNumber ?? "",
+  //         isPhoneVerified: !!response?.isPhoneVerified,
+  //         isEmailVerified: !!response?.isEmailVerified,
+  //         userName: response?.userName ?? "",
+  //         description: response?.description ?? "",
+  //         pincode: response?.pincode ?? "",
+  //         city: response?.city ?? "",
+  //         address: response?.address ?? "",
+  //         aadhar: response?.aadhar ?? "",
+  //         pan: response?.pan ?? "",
+  //         avatar: response?.avatar ?? "",
+  //         about: response?.about ?? response?.description ?? "",
+  //         whatsappNumber: response?.whatsappNumber ?? 0,
+  //       });
+
+  //       if (response?.avatar) {
+  //         setAvatarImage(response.avatar);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //       toast.error("Failed to load profile");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, [userId, isAuthenticated, loading]);
+
+  /* --------------------------- LOAD USER PLANS --------------------------- */
+
   useEffect(() => {
-    if (!userId) {
-      setIsLoading(false);
+    if (!userId || !communityId) {
       return;
     }
 
     if (loading || !isAuthenticated) return;
 
-    const fetchUser = async () => {
+    const fetchUserPlans = async () => {
       try {
+        setIsPlansLoading(true);
         setIsLoading(true);
-        const response = await loadUser(userId);
-
+        const response = await loadUserPlans(userId, communityId);
+        console.log(response, "loadUserPlans");
         setFormValues({
           id: response?.id ?? "",
           firstName: response?.firstName ?? "",
@@ -177,19 +243,54 @@ const ProfileSettingsPage = ({
           whatsappNumber: response?.whatsappNumber ?? 0,
         });
 
-        if (response?.avatar) {
-          setAvatarImage(response.avatar);
-        }
+        // Handle both shapes: { subscriptionDetail: [...] } or direct array
+        const rawSubs = Array.isArray(response?.subscriptionDetail)
+          ? response.subscriptionDetail
+          : Array.isArray(response)
+          ? response
+          : [];
+
+        const mapped: UserPlanCard[] = rawSubs
+          .filter((sub: any) => sub?.subscription_status === "ACTIVE")
+          .map((sub: any) => {
+            const plan = sub.plan || {};
+            const community = sub.community || {};
+
+            const duration = (plan.duration || "").toString().toLowerCase();
+            let periodLabel = duration;
+            if (duration === "day") periodLabel = "day";
+            if (duration === "month") periodLabel = "month";
+            if (duration === "year") periodLabel = "year";
+
+            return {
+              id: sub._id,
+              title: plan.name || "Untitled Plan",
+              description: plan.description || "",
+              price: (plan.pricing ?? "").toString(),
+              periodLabel,
+              coverImage: community.logo, // using community logo as image
+              communityName: community.name || "",
+              subscriptionStatus: sub.subscription_status,
+              nextDueDate: sub.nextDueDate,
+              daysLeft: sub.daysLeft ?? null,
+              interval: plan?.interval ?? "",
+            };
+          });
+
+        setUserPlans(mapped);
       } catch (error) {
-        console.error("Error fetching user data:", error);
-        toast.error("Failed to load profile");
+        console.error("Error fetching user plans data:", error);
+        toast.error("Failed to load plans");
       } finally {
+        setIsPlansLoading(false);
         setIsLoading(false);
       }
     };
 
-    fetchUser();
-  }, [userId, isAuthenticated, loading]);
+    fetchUserPlans();
+  }, [userId, isAuthenticated, loading, communityId]);
+
+  /* ------------------------------ RENDER ------------------------------ */
 
   if (isLoading)
     return (
@@ -209,7 +310,7 @@ const ProfileSettingsPage = ({
         } as React.CSSProperties
       }
     >
-      <div className="container mx-auto space-y-12">
+      <div className="container mx-auto space-y-8">
         {/* HEADER */}
         <div className="text-center space-y-2">
           <h1 className="text-xl md:text-4xl font-extrabold tracking-tight text-[var(--pri)]">
@@ -222,49 +323,177 @@ const ProfileSettingsPage = ({
           <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[var(--sec)]" />
         </div>
 
+        {/* MAIN GRID */}
         <div className="grid lg:grid-cols-3 gap-8 relative">
           {/* SIDEBAR */}
-          <Card className="lg:col-span-1 rounded-xl shadow-md border border-gray-200 p-6 h-fit">
-            <CardContent className="p-0 flex flex-col items-center gap-6">
-              <div className="relative">
-                <Avatar
-                  className="size-40 shadow-lg"
-                  style={{ border: `4px solid ${secondaryColor}` }}
-                >
-                  <AvatarImage
-                    src={avatarImage || formValues.avatar}
-                    alt="Profile"
-                  />
-                  <AvatarFallback style={{ backgroundColor: secondaryColor }}>
-                    {formValues.firstName?.[0] ??
-                      formValues.emailId?.[0] ??
-                      "U"}
-                  </AvatarFallback>
-                </Avatar>
+          <aside className="lg:col-span-1 space-y-8">
+            {/* PROFILE */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+              <CardContent className="p-0 flex flex-col items-center justify-center gap-6">
+                <div className="relative">
+                  <Avatar
+                    className="size-40 shadow-lg"
+                    style={{ border: `4px solid ${secondaryColor}` }}
+                  >
+                    <AvatarImage
+                      src={avatarImage || formValues.avatar}
+                      alt="Profile"
+                    />
+                    <AvatarFallback style={{ backgroundColor: secondaryColor }}>
+                      {formValues.firstName?.[0] ??
+                        formValues.emailId?.[0] ??
+                        "U"}
+                    </AvatarFallback>
+                  </Avatar>
 
-                <Button
-                  size="icon"
-                  className="absolute bottom-0 right-0 h-9 w-9 rounded-full border-2 border-white shadow-md cursor-pointer bg-[var(--pri)]"
+                  <Button
+                    size="icon"
+                    className="absolute bottom-0 right-0 h-9 w-9 rounded-full border-2 border-white shadow-md cursor-pointer bg-[var(--pri)]"
+                    type="button"
+                    onClick={handleImageChange}
+                  >
+                    <Camera className="h-5 w-5 text-white" />
+                  </Button>
+                </div>
+
+                <div className="space-y-1 text-center">
+                  <p className="text-xl font-semibold text-[var(--pri)]">
+                    {formValues.firstName || "First Name"}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {formValues.userName || "User Name"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* SUBSCRIBED PLANS */}
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+              <CardContent className="p-0 flex flex-col gap-4 w-full">
+                {/* Header */}
+                <div className="flex items-center justify-between w-full mb-1">
+                  <p className="text-base font-semibold text-[var(--pri)]">
+                    Subscribed Plans
+                  </p>
+                  <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    {isPlansLoading
+                      ? "Loading..."
+                      : `${userPlans.length} Plans`}
+                  </Badge>
+                </div>
+
+                {/* Plans List */}
+                {isPlansLoading && userPlans.length === 0 && (
+                  <div className="w-full border border-dashed border-gray-200 rounded-lg p-3 text-xs text-gray-500 text-center">
+                    Fetching your plans...
+                  </div>
+                )}
+
+                {!isPlansLoading && userPlans.length === 0 && (
+                  <div className="w-full border border-dashed border-gray-200 rounded-lg p-3 text-xs text-gray-500 text-center">
+                    No active plans found for this community.
+                  </div>
+                )}
+
+                {userPlans.map((plan) => (
+                  <div
+                    className="w-full border border-gray-200 rounded-lg p-3 flex flex-col gap-3 bg-white"
+                    key={plan.id}
+                  >
+                    {/* Image + title row */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg bg-gray-100 flex overflow-hidden items-center justify-center text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                        {plan.coverImage ? (
+                          <img
+                            src={plan.coverImage}
+                            alt={plan.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          "IMG"
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-gray-900 line-clamp-1">
+                          {plan?.title}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          ₹{plan.price} / {plan?.interval} {plan.periodLabel}
+                        </p>
+                        {plan.nextDueDate && (
+                          <p className="text-[11px] text-gray-500 mt-0.5">
+                            {plan?.nextDueDate === "forever"
+                              ? "Forever"
+                              : `Due on: ${new Date(
+                                  plan?.nextDueDate
+                                ).toLocaleDateString("en-GB", {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "2-digit",
+                                })}`}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    {plan.description && (
+                      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                        {plan.description}
+                      </p>
+                    )}
+
+                    {/* Footer row */}
+                    <div className={`flex items-center ${plan?.nextDueDate ? "justify-between" :"justify-end"} pt-1`}>
+                      {plan?.nextDueDate ? (
+                        plan?.nextDueDate === "forever" ? (
+                          <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            Active
+                          </Badge>
+                        ) : new Date(plan?.nextDueDate) >= new Date() ? (
+                          <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            Active
+                          </Badge>
+                        ) : (
+                          <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100">
+                            Expired
+                          </Badge>
+                        )
+                      ) : (
+                        ""
+                      )}
+                      <Link
+                        href={`/subscriptions/?planid=${encodeURIComponent(
+                          plan?.id
+                        )}&communityid=${encodeURIComponent(
+                          communityId || ""
+                        )}`}
+                      >
+                        <Button
+                          size="sm"
+                          className="h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
+                        >
+                          Manage
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+
+                {/* CTA to see all plans */}
+                <Link href={"/plans"}></Link>
+                <button
                   type="button"
-                  onClick={handleImageChange}
+                  className="mt-1 w-full text-[11px] font-medium text-[var(--pri)] hover:underline text-center cursor-pointer"
                 >
-                  <Camera className="h-5 w-5 text-white" />
-                </Button>
-              </div>
+                  View all plans
+                </button>
+              </CardContent>
+            </Card>
+          </aside>
 
-              <div className="space-y-1 text-center">
-                <p className="text-xl font-semibold text-[var(--pri)]">
-                  {formValues.firstName || "First Name"}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {formValues.userName || "User Name"}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* MAIN CONTENT */}
-          <div className="lg:col-span-2 space-y-10">
+          {/* RIGHT COLUMN */}
+          <section className="lg:col-span-2 space-y-8">
             {/* BASIC INFO */}
             <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
               <CardContent className="p-0 space-y-6">
@@ -358,7 +587,7 @@ const ProfileSettingsPage = ({
             </Card>
 
             {/* ADDRESS */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
+            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8 h-fit">
               <CardContent className="p-0 space-y-6">
                 <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)]">
                   Location
@@ -410,14 +639,14 @@ const ProfileSettingsPage = ({
                 {isSubmiting ? "Submitting..." : "Save Profile"}
               </Button>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>
   );
 };
 
-export default ProfileSettingsPage;
+export default RestraintProfilePage;
 
 /* ---------- SKELETON ---------- */
 

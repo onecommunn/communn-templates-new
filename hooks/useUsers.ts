@@ -1,5 +1,5 @@
 import { AuthContext, IAuthContext } from "@/contexts/Auth.context";
-import { getUser, updateUser } from "@/services/userService";
+import { getUser, getUserPlans, updateUser } from "@/services/userService";
 import { useContext } from "react";
 import { toast } from "sonner";
 
@@ -61,8 +61,29 @@ export const useUsers = () => {
     }
   };
 
+  const loadUserPlans = async (userId: string, communityId: string) => {
+    try {
+      const response = await getUserPlans(
+        getAccessToken(),
+        userId,
+        communityId
+      );
+
+      if (response.status === 200) {
+        return response.data;
+      }
+
+      toast.error("Failed to fetch user plans");
+      return null;
+    } catch (error) {
+      toast.error("Something went wrong while fetching the user plans");
+      return null;
+    }
+  };
+
   return {
     loadUser,
     editUsers,
+    loadUserPlans,
   };
 };

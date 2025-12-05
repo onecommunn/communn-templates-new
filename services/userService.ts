@@ -46,3 +46,25 @@ export const updateUser = async (
     return { status: 500, data: [] };
   }
 };
+
+export const getUserPlans = async (
+  token: string,
+  userId: string,
+  communityId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/users/${userId}/community/${communityId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log("ERR :", err);
+    return { status: 500, data: [] };
+  }
+};
