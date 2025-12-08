@@ -1,6 +1,5 @@
-import { BASE_URL, BASE_URL_V2 } from '@/configurations/url.config';
-import axios from 'axios';
-
+import { BASE_URL, BASE_URL_V2 } from "@/configurations/url.config";
+import axios from "axios";
 
 export const initiatePayment = async (
   token: string,
@@ -8,7 +7,7 @@ export const initiatePayment = async (
   planId: string,
   sequenceIds: string[],
   amount: string,
-  courseId?: string,
+  courseId?: string
 ) => {
   try {
     console.log("📡 Sending payment request with:", {
@@ -22,14 +21,14 @@ export const initiatePayment = async (
     const response = await axios.post(
       `${BASE_URL}/payments/plan/${planId}/user/${userId}`,
       {
-        sequenceIds: sequenceIds, 
+        sequenceIds: sequenceIds,
         amount: amount,
         courseId: courseId,
       },
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -42,8 +41,6 @@ export const initiatePayment = async (
   }
 };
 
-
-
 export const getPaymentStatus = async (token: string, id: string) => {
   try {
     const response = await axios.post(
@@ -52,7 +49,7 @@ export const getPaymentStatus = async (token: string, id: string) => {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -76,7 +73,7 @@ export const updateSequencesStatus = async (
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -84,5 +81,92 @@ export const updateSequencesStatus = async (
     return response;
   } catch (err) {
     return { status: 500, data: [] };
+  }
+};
+
+export const paymenttransactionsbyloggedInUser = async (
+  token: string,
+  communityId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/payment/my-payments/community/${communityId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (err) {
+    return { status: 500, data: [] };
+  }
+};
+
+export const subscriptionpaymentsdue = async (
+  token: string,
+  communityId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/payment/upcoming-payments/community/${communityId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (err) {
+    return { status: 500, data: [] };
+  }
+};
+
+export const paymentRequestbyUser = async (
+  token: string,
+  communityId: string,
+  userId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/payment/${communityId}/requests/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (err) {
+    return { status: 500, data: [] };
+  }
+};
+
+export const customPayment = async (
+  token: string,
+  id: string,
+  formData: any
+) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/payment/${id}/customPay`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (err) {
+    return { status: 500, data: [], message: err };
   }
 };
