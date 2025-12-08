@@ -85,7 +85,7 @@ export default async function YoganaShell({
         }}
         className="fixed flex items-center justify-center bottom-[2%] left-[2%]! z-[99] bg-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
       >
-        <button>
+        <button className="cursor-pointer">
           <PhoneIcon
             style={{
               color: "#000",
@@ -110,7 +110,7 @@ export default async function YoganaShell({
         }}
         className="fixed flex items-center justify-center bottom-[2%] right-[2%]! z-[99] text-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
       >
-        <button>
+        <button className="cursor-pointer">
           <WhatsappIcon
             style={{
               color: "#fff",
