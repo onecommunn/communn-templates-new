@@ -53,6 +53,7 @@ import SpawellServiceRoot from "./app/spawell/service/page";
 import YoganaServiceRoot from "./app/yogana/service/page";
 import MartivoServiceRoot from "./app/martivo/service/page";
 import RestraintProfileRoot from "./app/restraint/profile/page";
+import SpawellProfileRoot from "./app/spawell/profile/page";
 
 export const templateLayouts: Record<
   string,
@@ -98,6 +99,7 @@ export const templates: Record<
     "/event-details": SpawellEventDetailsPage,
     "/sign-up": SpawellSignup,
     "/service": SpawellServiceRoot,
+    "/profile": SpawellProfileRoot,
   },
   fitkit: {
     "/": FitkitRoot,

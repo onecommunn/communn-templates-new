@@ -56,12 +56,14 @@ interface UserPlanCard {
   planId: string;
 }
 
-const RestraintProfilePage = ({
+const SpawellProfilePage = ({
   primaryColor,
   secondaryColor,
+  neutralColor,
 }: {
   secondaryColor: string;
   primaryColor: string;
+  neutralColor: string;
 }) => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
@@ -310,25 +312,26 @@ const RestraintProfilePage = ({
 
   return (
     <div
-      className="min-h-screen py-12 px-4 sm:px-8 md:px-20 font-sora bg-[#F8F7F4]"
+      className="min-h-screen py-12 px-4 sm:px-8 md:px-20 font-plus-jakarta bg-[var(--nue)]"
       style={
         {
           "--pri": primaryColor,
           "--sec": secondaryColor,
+          "--nue": neutralColor,
         } as React.CSSProperties
       }
     >
       <div className="container mx-auto space-y-8">
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-xl md:text-4xl font-bold font-marcellus tracking-tight text-[var(--pri)]">
+          <h1 className="text-xl md:text-4xl font-medium font-lora tracking-tight text-[var(--pri)]">
             Profile Settings
           </h1>
           <p className="text-sm md:text-lg text-gray-600">
             Manage your personal and contact information.
           </p>
 
-          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[var(--sec)]" />
+          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[var(--pri)]" />
         </div>
 
         {/* MAIN GRID */}
@@ -366,7 +369,7 @@ const RestraintProfilePage = ({
                 </div>
 
                 <div className="space-y-1 md:text-center">
-                  <p className="text-xl font-semibold text-[var(--pri)] font-marcellus">
+                  <p className="text-xl font-medium text-[var(--pri)] font-lora">
                     {formValues.firstName || "First Name"}
                   </p>
                   <p className="text-sm text-gray-500">
@@ -381,7 +384,7 @@ const RestraintProfilePage = ({
               <CardContent className="p-0 flex flex-col gap-4 w-full">
                 {/* Header */}
                 <div className="flex items-center justify-between w-full mb-1">
-                  <p className="text-base font-semibold text-[var(--pri)] font-marcellus">
+                  <p className="text-base font-medium text-[var(--pri)] font-lora">
                     Subscribed Plans
                   </p>
                   <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
@@ -488,7 +491,7 @@ const RestraintProfilePage = ({
 
                         {/* Footer row */}
                         {/* <div className={`flex items-center justify-end pt-1`}> */}
-                          {/* {plan?.nextDueDate ? (
+                        {/* {plan?.nextDueDate ? (
                             plan?.nextDueDate === "forever" ? (
                               <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
                                 Active
@@ -505,7 +508,7 @@ const RestraintProfilePage = ({
                           ) : (
                             ""
                           )} */}
-                          {/* <Link
+                        {/* <Link
                             href={`/subscriptions/?planid=${encodeURIComponent(
                               plan?.planId
                             )}&communityid=${encodeURIComponent(
@@ -526,7 +529,7 @@ const RestraintProfilePage = ({
                 ))}
 
                 {/* CTA to see all plans */}
-                <Link href={"/plans"}>
+                <Link href={"/#plans"}>
                   <button
                     type="button"
                     className="mt-1 w-full text-[11px] font-medium text-[var(--pri)] hover:underline text-center cursor-pointer"
@@ -543,7 +546,7 @@ const RestraintProfilePage = ({
             {/* BASIC INFO */}
             <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-8">
               <CardContent className="p-0 space-y-6">
-                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)] font-marcellus">
+                <h2 className="text-lg md:text-2xl font-medium text-[var(--pri)] font-lora">
                   Basic Information
                 </h2>
 
@@ -635,7 +638,7 @@ const RestraintProfilePage = ({
             {/* ADDRESS */}
             <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-8 h-fit">
               <CardContent className="p-0 space-y-6">
-                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)] font-marcellus">
+                <h2 className="text-lg md:text-2xl font-medium text-[var(--pri)] font-lora">
                   Location
                 </h2>
 
@@ -692,7 +695,7 @@ const RestraintProfilePage = ({
   );
 };
 
-export default RestraintProfilePage;
+export default SpawellProfilePage;
 
 /* ---------- SKELETON ---------- */
 
@@ -705,7 +708,7 @@ const ProfileSkeleton = ({
 }) => {
   return (
     <div
-      className="min-h-screen py-12 px-4 sm:px-8 md:px-20 font-sora bg-[#F8F7F4]"
+      className="min-h-screen py-12 px-4 sm:px-8 md:px-20 font-inter bg-[#F8F7F4]"
       style={
         {
           "--pri": primaryColor,
