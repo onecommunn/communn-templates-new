@@ -412,7 +412,7 @@ const RestraintProfilePage = ({
                   >
                     <AccordionItem value={plan?.id}>
                       <AccordionTrigger className="hover:no-underline cursor-pointer">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 w-full justify-between">
                           <div className="w-12 h-12 rounded-lg bg-gray-100 flex overflow-hidden items-center justify-center text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
                             {plan.coverImage ? (
                               <img
@@ -446,6 +446,23 @@ const RestraintProfilePage = ({
                               </p>
                             )}
                           </div>
+                          {plan?.nextDueDate ? (
+                            plan?.nextDueDate === "forever" ? (
+                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-start">
+                                Active
+                              </Badge>
+                            ) : new Date(plan?.nextDueDate) >= new Date() ? (
+                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-start">
+                                Active
+                              </Badge>
+                            ) : (
+                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 self-start">
+                                Expired
+                              </Badge>
+                            )
+                          ) : (
+                            ""
+                          )}
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="space-y-2">
@@ -457,14 +474,8 @@ const RestraintProfilePage = ({
                         )}
 
                         {/* Footer row */}
-                        <div
-                          className={`flex items-center ${
-                            plan?.nextDueDate
-                              ? "justify-between"
-                              : "justify-end"
-                          } pt-1`}
-                        >
-                          {plan?.nextDueDate ? (
+                        <div className={`flex items-center justify-end pt-1`}>
+                          {/* {plan?.nextDueDate ? (
                             plan?.nextDueDate === "forever" ? (
                               <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
                                 Active
@@ -480,7 +491,7 @@ const RestraintProfilePage = ({
                             )
                           ) : (
                             ""
-                          )}
+                          )} */}
                           <Link
                             href={`/subscriptions/?planid=${encodeURIComponent(
                               plan?.planId
