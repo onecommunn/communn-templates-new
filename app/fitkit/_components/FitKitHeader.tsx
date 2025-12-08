@@ -219,7 +219,7 @@ const FitKitHeader = ({
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="text-center min-w-fit text-white">
+                <div className="text-center min-w-fit text-white font-kanit">
                   Hi, {auth.user?.firstName || auth.user?.emailId}
                 </div>
                 <Popover
@@ -261,10 +261,10 @@ const FitKitHeader = ({
                           </Avatar>
                         </div>
                         <div className="col-span-3">
-                          <h4 className="font-semibold">
+                          <h4 className="font-semibold font-kanit">
                             {auth?.user?.firstName}
                           </h4>
-                          <p className="text-gray-500 text-[12px] font-semibold">
+                          <p className="text-gray-500 text-[12px] font-semibold font-archivo">
                             {auth?.user?.emailId}
                           </p>
                         </div>
@@ -275,12 +275,12 @@ const FitKitHeader = ({
                         style={{
                           cursor: "pointer",
                         }}
-                        className="w-full font-semibold text-[16px] py-2 rounded-none bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                        className="w-full font-semibold font-kanit text-[16px] py-2 rounded-none bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
                       >
                         Edit Profile
                       </Link>
                       <AlertDialog>
-                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-none text-sm w-full">
+                        <AlertDialogTrigger className="cursor-pointer font-kanit hover:bg-[#df2431] text-[#df2431] px-6 font-semibold py-2 hover:text-white bg-white rounded-none text-sm w-full">
                           Logout
                         </AlertDialogTrigger>
                         <AlertDialogContent>

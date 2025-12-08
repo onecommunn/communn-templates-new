@@ -1,21 +1,21 @@
 "use client";
 import React, { Suspense } from "react";
 import { useCMS } from "../CMSProvider.client";
-import { dummyData } from "../DummyData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import { MartivoHomePage } from "@/models/templates/martivo/martivo-home-model";
-import MartivoProfilePage from "./_components/MartivoProfilePage";
+import { FitkitHomePage } from "@/models/templates/fitkit/fitkit-home-model";
+import { dummyData } from "../dummyData";
+import FitkitProfilePage from "./_components/FitkitProfilePage";
 
-const MartivoProfileRoot = () => {
+const FitkitProfileRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
-  const source: MartivoHomePage | undefined = !isLoading
-    ? (home as MartivoHomePage | undefined) ?? dummyData
+  const source: FitkitHomePage | undefined = !isLoading
+    ? (home as FitkitHomePage | undefined) ?? dummyData
     : undefined;
 
-  const primaryColor = source?.color?.primary || "#29400a";
-  const secondaryColor = source?.color?.secondary || "#7bd900";
+  const primaryColor = source?.color?.primary || "#141414";
+  const secondaryColor = source?.color?.secondary || "#F41E1E";
 
   const ProfileSkeleton = () => {
     return (
@@ -78,7 +78,7 @@ const MartivoProfileRoot = () => {
 
   return (
     <Suspense fallback={<ProfileSkeleton />}>
-      <MartivoProfilePage
+      <FitkitProfilePage
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
       />
@@ -86,4 +86,4 @@ const MartivoProfileRoot = () => {
   );
 };
 
-export default MartivoProfileRoot;
+export default FitkitProfileRoot;

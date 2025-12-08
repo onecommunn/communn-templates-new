@@ -56,6 +56,7 @@ import RestraintProfileRoot from "./app/restraint/profile/page";
 import SpawellProfileRoot from "./app/spawell/profile/page";
 import YoganaProfileRoot from "./app/yogana/profile/page";
 import MartivoProfileRoot from "./app/martivo/profile/page";
+import FitkitProfileRoot from "./app/fitkit/profile/page";
 
 export const templateLayouts: Record<
   string,
@@ -111,6 +112,7 @@ export const templates: Record<
     "/event-details": FitkitEventDetailsPage,
     "/subscriptions": FitkitSubscriptionsPage,
     "/service": FitkitServiceRoot,
+    "/profile": FitkitProfileRoot,
   },
   restraint: {
     "/": RestraintRoot,
