@@ -1326,58 +1326,68 @@ const CreatorSubscriptions = ({
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          className="flex items-center gap-2 cursor-pointer"
-                          variant={"outline"}
-                          disabled={totalAmount === 0}
-                        >
-                          <span>
-                            <Gift size={24} strokeWidth={1} />
-                          </span>
-                          Add Discount
-                        </Button>
-                      </DialogTrigger>
-
-                      <DialogContent
-                        style={{ color: secondaryColor }}
-                        className="w-xl"
-                      >
-                        <DialogTitle>Apply Coupon Code</DialogTitle>
-                        <div className="flex items-center gap-2">
-                          <Input
-                            type="text"
-                            placeholder="Enter Coupon"
-                            value={couponInput}
-                            onChange={(e) =>
-                              setCouponInput(e.target.value.toUpperCase())
-                            }
-                          />
+                    {!(
+                      (planData?.coupons && planData?.coupons?.length <= 0) ||
+                      !planData?.coupons
+                    ) && (
+                      <Dialog>
+                        <DialogTrigger asChild>
                           <Button
-                            style={{ backgroundColor: secondaryColor }}
-                            onClick={() => handleApplyCoupon()}
+                            className="flex items-center gap-2 cursor-pointer"
+                            variant={"outline"}
+                            disabled={
+                              totalAmount === 0 ||
+                              (planData?.coupons &&
+                                planData?.coupons?.length <= 0) ||
+                              !planData?.coupons
+                            }
                           >
-                            Apply
+                            <span>
+                              <Gift size={24} strokeWidth={1} />
+                            </span>
+                            Add Discount
                           </Button>
-                        </div>
+                        </DialogTrigger>
 
-                        <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
-                          {planData?.coupons?.map((coupon, idx) => (
-                            <Button
-                              key={idx}
-                              variant={"outline"}
-                              className="cursor-pointer"
-                              onClick={() =>
-                                handleApplyCoupon(coupon.couponCode)
+                        <DialogContent
+                          style={{ color: primaryColor }}
+                          className="w-xl"
+                        >
+                          <DialogTitle>Apply Coupon Code</DialogTitle>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="text"
+                              placeholder="Enter Coupon"
+                              value={couponInput}
+                              onChange={(e) =>
+                                setCouponInput(e.target.value.toUpperCase())
                               }
+                            />
+                            <Button
+                              style={{ backgroundColor: primaryColor }}
+                              onClick={() => handleApplyCoupon()}
                             >
-                              {coupon.couponCode}
+                              Apply
                             </Button>
-                          ))}
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
+                          </div>
+
+                          <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
+                            {planData?.coupons?.map((coupon, idx) => (
+                              <Button
+                                key={idx}
+                                variant={"outline"}
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  handleApplyCoupon(coupon.couponCode)
+                                }
+                              >
+                                {coupon.couponCode}
+                              </Button>
+                            ))}
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    )}
 
                     <Button
                       disabled={totalAmount === 0}
