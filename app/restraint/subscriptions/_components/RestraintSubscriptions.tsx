@@ -73,36 +73,33 @@ const PaymentScheduleItem = ({
         if (!isDisabled) onSelect();
       }}
       className={`flex flex-col items-center space-y-2 px-3 py-2 rounded-lg border 
-       ${
-         isDisabled
-           ? "opacity-50 cursor-not-allowed border-gray-200"
-           : isSelected
-           ? "border-none bg-[var(--pri)]/20 cursor-pointer"
-           : "border-transparent cursor-pointer"
-       }`}
+       ${isDisabled
+          ? "opacity-50 cursor-not-allowed border-gray-200"
+          : isSelected
+            ? "border-none bg-[var(--pri)]/20 cursor-pointer"
+            : "border-transparent cursor-pointer"
+        }`}
     >
-      <div className="text-sm text-gray-600">{date}</div>
+      <div className="text-[12px] md:text-sm text-gray-600">{date}</div>
 
       <div
-        className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${
-          status === "PAID"
-            ? "border-green-600 text-green-600"
-            : isSelected && !isDisabled
+        className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${status === "PAID"
+          ? "border-green-600 text-green-600"
+          : isSelected && !isDisabled
             ? "border-gray-500 bg-gray-200 text-black-700"
             : "border-gray-300 bg-white text-gray-600"
-        }`}
+          }`}
       >
         ₹{amount}
       </div>
 
       <div
-        className={`text-xs ${
-          status === "PAID"
-            ? "text-green-600"
-            : isDisabled
+        className={`text-xs ${status === "PAID"
+          ? "text-green-600"
+          : isDisabled
             ? "text-gray-400"
             : "text-red-500"
-        }`}
+          }`}
       >
         {status === "PAID" ? "Paid" : isDisabled ? "Not Payable" : "Not Paid"}
       </div>
@@ -285,8 +282,8 @@ const RestraintSubscriptions = ({
     const baseStart = startImmediately
       ? new Date()
       : pauseStartDate
-      ? new Date(pauseStartDate)
-      : undefined;
+        ? new Date(pauseStartDate)
+        : undefined;
 
     if (!baseStart) return;
 
@@ -390,7 +387,7 @@ const RestraintSubscriptions = ({
     updateSequencesPaymentStatus,
   } = usePayment();
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     authContext?.user,
     authContext?.isAuthenticated,
     authContext?.loading,
@@ -792,7 +789,7 @@ const RestraintSubscriptions = ({
           >
             <AccordionTrigger className="px-0 py-4 hover:no-underline">
               <div className="flex w-full items-center justify-between gap-4">
-                <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-5">
+                <div className="grid w-full grid-cols-3 gap-4 md:grid-cols-5">
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Plan Name
@@ -842,8 +839,8 @@ const RestraintSubscriptions = ({
                     <p className="mt-1 text-sm font-semibold text-slate-900">
                       {sequencesList?.[0]?.startDate
                         ? new Date(sequencesList[0].startDate)
-                            .toISOString()
-                            .split("T")[0]
+                          .toISOString()
+                          .split("T")[0]
                         : ""}
                     </p>
                   </div>
@@ -855,36 +852,36 @@ const RestraintSubscriptions = ({
                         backgroundColor:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
-                          subscriptionData?.subscription_status === "STOP"
+                            subscriptionData?.subscription_status === "STOP"
                             ? "#ffa87d1a"
                             : subscriptionData?.subscription_status === "PAUSED"
-                            ? "#f5e58a1a"
-                            : "#10a00d1a",
+                              ? "#f5e58a1a"
+                              : "#10a00d1a",
                         color:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
-                          subscriptionData?.subscription_status === "STOP"
+                            subscriptionData?.subscription_status === "STOP"
                             ? "#ffa87d"
                             : subscriptionData?.subscription_status === "PAUSED"
-                            ? "#d9b300"
-                            : "#10A00D",
+                              ? "#d9b300"
+                              : "#10A00D",
                         border:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
-                          subscriptionData?.subscription_status === "STOP"
+                            subscriptionData?.subscription_status === "STOP"
                             ? "1px solid #ffa87d"
                             : subscriptionData?.subscription_status === "PAUSED"
-                            ? "1px solid #f5e58a"
-                            : "1px solid #10a00d",
+                              ? "1px solid #f5e58a"
+                              : "1px solid #10a00d",
                       }}
                     >
                       {subscriptionData?.subscription_status === "INACTIVE"
                         ? "Inactive"
                         : subscriptionData?.subscription_status === "STOP"
-                        ? "Stopped"
-                        : subscriptionData?.subscription_status === "PAUSED"
-                        ? "Paused"
-                        : "Active"}
+                          ? "Stopped"
+                          : subscriptionData?.subscription_status === "PAUSED"
+                            ? "Paused"
+                            : "Active"}
                     </div>
                     {plan?.isPauseUserVisible &&
                       subscriptionData?.subscription_status === "ACTIVE" && (
@@ -988,8 +985,7 @@ const RestraintSubscriptions = ({
                                     num > (plan?.maxPauseDays ?? 180)
                                   ) {
                                     setPauseError(
-                                      `Please enter between ${
-                                        plan?.minPauseDays ?? 3
+                                      `Please enter between ${plan?.minPauseDays ?? 3
                                       } and ${plan?.maxPauseDays ?? 180} days`
                                     );
                                   } else {
@@ -1008,9 +1004,8 @@ const RestraintSubscriptions = ({
                                 </p>
                               )}
                               <p className="mt-1 text-xs text-gray-500">
-                                {`Allowed Duration: ${
-                                  plan?.minPauseDays ?? 3
-                                } to ${plan?.maxPauseDays ?? 180} days`}
+                                {`Allowed Duration: ${plan?.minPauseDays ?? 3
+                                  } to ${plan?.maxPauseDays ?? 180} days`}
                               </p>
                             </div>
 
@@ -1070,7 +1065,7 @@ const RestraintSubscriptions = ({
                               <p className="mt-2 text-xs text-gray-500">
                                 Your subscription will be extended by{" "}
                                 {typeof pauseDuration === "number" &&
-                                pauseDuration > 0
+                                  pauseDuration > 0
                                   ? pauseDuration
                                   : 0}{" "}
                                 days to account for the pause period.
@@ -1139,11 +1134,10 @@ const RestraintSubscriptions = ({
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-8 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${
-                        activeTab === tab
-                          ? "bg-[var(--pri)] text-white"
-                          : "text-[var(--pri)] hover:text-[var(--pri)] hover:bg-[var(--sec)]/20"
-                      }`}
+                      className={`px-8 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${activeTab === tab
+                        ? "bg-[var(--pri)] text-white"
+                        : "text-[var(--pri)] hover:text-[var(--pri)] hover:bg-[var(--sec)]/20"
+                        }`}
                     >
                       {formatStatus(tab)}
                     </button>
@@ -1172,25 +1166,25 @@ const RestraintSubscriptions = ({
                       ["PAID", "PAID_BY_CASH", "NA"].includes(payment.status) ||
                       (payment as any).isnonPayable ||
                       index ===
-                        sequencesList.filter(
-                          (p) =>
-                            activeTab === "All" ||
-                            p.previousStatus === activeTab
-                        ).length -
-                          1;
+                      sequencesList.filter(
+                        (p) =>
+                          activeTab === "All" ||
+                          p.previousStatus === activeTab
+                      ).length -
+                      1;
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
                         date={
                           payment?.startDate
                             ? new Date(payment.startDate).toLocaleDateString(
-                                "en-GB",
-                                {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                }
-                              )
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )
                             : "N/A"
                         }
                         amount={amount.toString()}
@@ -1327,75 +1321,74 @@ const RestraintSubscriptions = ({
                   <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
                     {!((planData?.coupons && planData?.coupons?.length <= 0) ||
                       !planData?.coupons) && (
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            className="flex items-center gap-2 cursor-pointer"
-                            variant={"outline"}
-                            disabled={
-                              totalAmount === 0 ||
-                              (planData?.coupons &&
-                                planData?.coupons?.length <= 0) ||
-                              !planData?.coupons
-                            }
-                          >
-                            <span>
-                              <Gift size={24} strokeWidth={1} />
-                            </span>
-                            Add Discount
-                          </Button>
-                        </DialogTrigger>
-
-                        <DialogContent
-                          style={{ color: primaryColor }}
-                          className="w-xl"
-                        >
-                          <DialogTitle>Apply Coupon Code</DialogTitle>
-                          <div className="flex items-center gap-2">
-                            <Input
-                              type="text"
-                              placeholder="Enter Coupon"
-                              value={couponInput}
-                              onChange={(e) =>
-                                setCouponInput(e.target.value.toUpperCase())
-                              }
-                            />
+                        <Dialog>
+                          <DialogTrigger asChild>
                             <Button
-                              style={{ backgroundColor: primaryColor }}
-                              onClick={() => handleApplyCoupon()}
+                              className="flex items-center gap-2 cursor-pointer"
+                              variant={"outline"}
+                              disabled={
+                                totalAmount === 0 ||
+                                (planData?.coupons &&
+                                  planData?.coupons?.length <= 0) ||
+                                !planData?.coupons
+                              }
                             >
-                              Apply
+                              <span>
+                                <Gift size={24} strokeWidth={1} />
+                              </span>
+                              Add Discount
                             </Button>
-                          </div>
+                          </DialogTrigger>
 
-                          <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
-                            {planData?.coupons?.map((coupon, idx) => (
-                              <Button
-                                key={idx}
-                                variant={"outline"}
-                                className="cursor-pointer"
-                                onClick={() =>
-                                  handleApplyCoupon(coupon.couponCode)
+                          <DialogContent
+                            style={{ color: primaryColor }}
+                            className="w-xl"
+                          >
+                            <DialogTitle>Apply Coupon Code</DialogTitle>
+                            <div className="flex items-center gap-2">
+                              <Input
+                                type="text"
+                                placeholder="Enter Coupon"
+                                value={couponInput}
+                                onChange={(e) =>
+                                  setCouponInput(e.target.value.toUpperCase())
                                 }
+                              />
+                              <Button
+                                style={{ backgroundColor: primaryColor }}
+                                onClick={() => handleApplyCoupon()}
                               >
-                                {coupon.couponCode}
+                                Apply
                               </Button>
-                            ))}
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    )}
+                            </div>
+
+                            <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
+                              {planData?.coupons?.map((coupon, idx) => (
+                                <Button
+                                  key={idx}
+                                  variant={"outline"}
+                                  className="cursor-pointer"
+                                  onClick={() =>
+                                    handleApplyCoupon(coupon.couponCode)
+                                  }
+                                >
+                                  {coupon.couponCode}
+                                </Button>
+                              ))}
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      )}
 
                     <Button
                       disabled={totalAmount === 0}
                       onClick={() =>
                         handleClickPay(communityId || "", planID || "")
                       }
-                      className={`${
-                        totalAmount === 0
-                          ? "cursor-not-allowed"
-                          : "cursor-pointer"
-                      }`}
+                      className={`${totalAmount === 0
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                        }`}
                       style={{
                         backgroundColor: primaryColor,
                         color: "#fff",
