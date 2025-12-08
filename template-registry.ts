@@ -55,6 +55,7 @@ import MartivoServiceRoot from "./app/martivo/service/page";
 import RestraintProfileRoot from "./app/restraint/profile/page";
 import SpawellProfileRoot from "./app/spawell/profile/page";
 import YoganaProfileRoot from "./app/yogana/profile/page";
+import MartivoProfileRoot from "./app/martivo/profile/page";
 
 export const templateLayouts: Record<
   string,
@@ -129,5 +130,6 @@ export const templates: Record<
     "/event-details": MartivoEventDetailsPage,
     "/subscriptions": MartivoSubscriptionsPage,
     "/service": MartivoServiceRoot,
+    "/profile": MartivoProfileRoot,
   },
 };
