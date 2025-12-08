@@ -54,6 +54,7 @@ import YoganaServiceRoot from "./app/yogana/service/page";
 import MartivoServiceRoot from "./app/martivo/service/page";
 import RestraintProfileRoot from "./app/restraint/profile/page";
 import SpawellProfileRoot from "./app/spawell/profile/page";
+import YoganaProfileRoot from "./app/yogana/profile/page";
 
 export const templateLayouts: Record<
   string,
@@ -91,6 +92,7 @@ export const templates: Record<
     "/sign-up": YoganaSignup,
     "/subscriptions": YoganaSubscriptionsPage,
     "/service": YoganaServiceRoot,
+    "/profile": YoganaProfileRoot,
   },
   spawell: {
     "/": SpawellRoot,
