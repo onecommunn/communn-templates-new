@@ -310,7 +310,7 @@ const RestraintProfilePage = ({
 
   return (
     <div
-      className="min-h-screen py-12 px-4 sm:px-8 md:px-20 font-inter bg-[#F8F7F4]"
+      className="min-h-screen py-12 px-4 sm:px-8 md:px-20 font-sora bg-[#F8F7F4]"
       style={
         {
           "--pri": primaryColor,
@@ -321,7 +321,7 @@ const RestraintProfilePage = ({
       <div className="container mx-auto space-y-8">
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-xl md:text-4xl font-extrabold tracking-tight text-[var(--pri)]">
+          <h1 className="text-xl md:text-4xl font-bold font-marcellus tracking-tight text-[var(--pri)]">
             Profile Settings
           </h1>
           <p className="text-sm md:text-lg text-gray-600">
@@ -332,20 +332,21 @@ const RestraintProfilePage = ({
         </div>
 
         {/* MAIN GRID */}
-        <div className="grid lg:grid-cols-3 gap-8 relative">
+        <div className="grid lg:grid-cols-3 gap-4 md:gap-8 relative">
           {/* SIDEBAR */}
-          <aside className="lg:col-span-1 space-y-8">
+          <aside className="lg:col-span-1 space-y-4 md:space-y-8">
             {/* PROFILE */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
-              <CardContent className="p-0 flex flex-col items-center justify-center gap-6">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
+              <CardContent className="p-0 flex md:flex-col items-center justify-start md:justify-center gap-6">
                 <div className="relative">
                   <Avatar
-                    className="size-40 shadow-lg"
+                    className="size-24 md:size-40 shadow-lg"
                     style={{ border: `4px solid ${secondaryColor}` }}
                   >
                     <AvatarImage
                       src={avatarImage || formValues.avatar}
                       alt="Profile"
+                      className="object-cover object-center"
                     />
                     <AvatarFallback style={{ backgroundColor: secondaryColor }}>
                       {formValues.firstName?.[0] ??
@@ -356,7 +357,7 @@ const RestraintProfilePage = ({
 
                   <Button
                     size="icon"
-                    className="absolute bottom-0 right-0 h-9 w-9 rounded-full border-2 border-white shadow-md cursor-pointer bg-[var(--pri)]"
+                    className="absolute bottom-0 right-0 h-9 w-9 rounded-full border-2 border-white shadow-none cursor-pointer bg-[var(--pri)]"
                     type="button"
                     onClick={handleImageChange}
                   >
@@ -365,7 +366,7 @@ const RestraintProfilePage = ({
                 </div>
 
                 <div className="space-y-1 text-center">
-                  <p className="text-xl font-semibold text-[var(--pri)]">
+                  <p className="text-xl font-semibold text-[var(--pri)] font-marcellus">
                     {formValues.firstName || "First Name"}
                   </p>
                   <p className="text-sm text-gray-500">
@@ -376,11 +377,11 @@ const RestraintProfilePage = ({
             </Card>
 
             {/* SUBSCRIBED PLANS */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
               <CardContent className="p-0 flex flex-col gap-4 w-full">
                 {/* Header */}
                 <div className="flex items-center justify-between w-full mb-1">
-                  <p className="text-base font-semibold text-[var(--pri)]">
+                  <p className="text-base font-semibold text-[var(--pri)] font-marcellus">
                     Subscribed Plans
                   </p>
                   <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
@@ -446,23 +447,35 @@ const RestraintProfilePage = ({
                               </p>
                             )}
                           </div>
-                          {plan?.nextDueDate ? (
-                            plan?.nextDueDate === "forever" ? (
-                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-start">
-                                Active
-                              </Badge>
-                            ) : new Date(plan?.nextDueDate) >= new Date() ? (
-                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-start">
-                                Active
-                              </Badge>
+                          <div className="flex flex-col gap-2 items-end">
+                            {plan?.nextDueDate ? (
+                              plan?.nextDueDate === "forever" ? (
+                                <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-end">
+                                  Active
+                                </Badge>
+                              ) : new Date(plan?.nextDueDate) >= new Date() ? (
+                                <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-end">
+                                  Active
+                                </Badge>
+                              ) : (
+                                <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 self-end">
+                                  Expired
+                                </Badge>
+                              )
                             ) : (
-                              <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 self-start">
-                                Expired
-                              </Badge>
-                            )
-                          ) : (
-                            ""
-                          )}
+                              ""
+                            )}{" "}
+                            <Link
+                              href={`/subscriptions/?planid=${encodeURIComponent(
+                                plan?.planId
+                              )}&communityid=${encodeURIComponent(
+                                communityId || ""
+                              )}`}
+                              className=" flex items-center justify-center md:h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
+                            >
+                              Manage
+                            </Link>
+                          </div>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="space-y-2">
@@ -474,7 +487,7 @@ const RestraintProfilePage = ({
                         )}
 
                         {/* Footer row */}
-                        <div className={`flex items-center justify-end pt-1`}>
+                        {/* <div className={`flex items-center justify-end pt-1`}> */}
                           {/* {plan?.nextDueDate ? (
                             plan?.nextDueDate === "forever" ? (
                               <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
@@ -492,7 +505,7 @@ const RestraintProfilePage = ({
                           ) : (
                             ""
                           )} */}
-                          <Link
+                          {/* <Link
                             href={`/subscriptions/?planid=${encodeURIComponent(
                               plan?.planId
                             )}&communityid=${encodeURIComponent(
@@ -505,8 +518,8 @@ const RestraintProfilePage = ({
                             >
                               Manage
                             </Button>
-                          </Link>
-                        </div>
+                          </Link> */}
+                        {/* </div> */}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -526,11 +539,11 @@ const RestraintProfilePage = ({
           </aside>
 
           {/* RIGHT COLUMN */}
-          <section className="lg:col-span-2 space-y-8">
+          <section className="lg:col-span-2 space-y-4 md:space-y-8">
             {/* BASIC INFO */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-8">
               <CardContent className="p-0 space-y-6">
-                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)]">
+                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)] font-marcellus">
                   Basic Information
                 </h2>
 
@@ -620,9 +633,9 @@ const RestraintProfilePage = ({
             </Card>
 
             {/* ADDRESS */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8 h-fit">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-8 h-fit">
               <CardContent className="p-0 space-y-6">
-                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)]">
+                <h2 className="text-lg md:text-2xl font-semibold text-[var(--pri)] font-marcellus">
                   Location
                 </h2>
 
@@ -667,7 +680,7 @@ const RestraintProfilePage = ({
                 type="button"
                 onClick={handleEditProfile}
                 disabled={isSubmiting}
-                className="px-10 py-6 text-[16px] text-white rounded-lg shadow-md bg-[var(--pri)] cursor-pointer"
+                className="px-10 py-6 text-[16px] text-white rounded-lg shadow-none bg-[var(--pri)] cursor-pointer"
               >
                 {isSubmiting ? "Submitting..." : "Save Profile"}
               </Button>
@@ -713,7 +726,7 @@ const ProfileSkeleton = ({
           {/* SIDEBAR */}
           <aside className="lg:col-span-1 space-y-8">
             {/* PROFILE CARD */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-6 py-[30px] h-fit">
               <CardContent className="p-0 flex flex-col items-center justify-center gap-6">
                 <Skeleton
                   className="size-40 rounded-full"
@@ -727,7 +740,7 @@ const ProfileSkeleton = ({
             </Card>
 
             {/* SUBSCRIBED PLANS CARD */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 py-[30px] h-fit">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-6 py-[30px] h-fit">
               <CardContent className="p-0 flex flex-col gap-4 w-full">
                 {/* Header */}
                 <div className="flex items-center justify-between w-full mb-1">
@@ -770,7 +783,7 @@ const ProfileSkeleton = ({
           {/* RIGHT COLUMN */}
           <section className="lg:col-span-2 space-y-8">
             {/* BASIC INFO CARD */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-6 md:p-8">
               <CardContent className="p-0 space-y-6">
                 <Skeleton className="h-5 w-40 rounded-md bg-[var(--sec)]" />
 
@@ -799,7 +812,7 @@ const ProfileSkeleton = ({
             </Card>
 
             {/* LOCATION CARD */}
-            <Card className="rounded-xl shadow-md border border-gray-200 p-6 md:p-8 h-fit">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-6 md:p-8 h-fit">
               <CardContent className="p-0 space-y-6">
                 <Skeleton className="h-5 w-32 rounded-md bg-[var(--sec)]" />
 
