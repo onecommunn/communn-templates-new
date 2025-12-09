@@ -322,7 +322,7 @@ const MartivoProfilePage = ({
         {/* HEADER */}
         <div className="text-center space-y-2">
           <h1 className="text-xl md:text-4xl font-semibold tracking-tight text-[var(--pri)]">
-            Profile Settings
+            Account 
           </h1>
           <p className="text-sm md:text-lg text-gray-600">
             Manage your personal and contact information.

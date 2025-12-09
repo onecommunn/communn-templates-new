@@ -238,7 +238,7 @@ const MartivoHeader = ({
                         className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                       >
                         <UserRoundPen strokeWidth={1.5} />
-                        Edit Profile
+                        Account 
                       </Link>
                       <Link
                         href={`/payments`}
@@ -351,7 +351,7 @@ const MartivoHeader = ({
                         className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                       >
                         <UserRoundPen strokeWidth={1.5} />
-                        Edit Profile
+                        Account 
                       </Link>
                       <Link
                         href={`/payments`}

@@ -9,13 +9,6 @@ import React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { WhatWeDoSection } from "@/models/templates/restraint/restraint-home-model";
 
-const list = [
-  "Mindful Movement For Balance",
-  "Guided Meditation For Clarity",
-  "Personalized Wellness Programs",
-  "Yoga For Every Skill Level",
-];
-
 const isUrl = (v: string) => /^https?:\/\//i?.test(v) || v?.startsWith("/");
 
 type LucideIconType = React.ComponentType<LucideProps>;
