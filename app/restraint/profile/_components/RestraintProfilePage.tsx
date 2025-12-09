@@ -448,33 +448,33 @@ const RestraintProfilePage = ({
                             )}
                           </div>
                           <div className="flex flex-col gap-2 items-end">
-                            {plan?.nextDueDate ? (
-                              plan?.nextDueDate === "forever" ? (
-                                <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-end">
-                                  Active
-                                </Badge>
-                              ) : new Date(plan?.nextDueDate) >= new Date() ? (
-                                <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-end">
-                                  Active
-                                </Badge>
-                              ) : (
-                                <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 self-end">
-                                  Expired
-                                </Badge>
-                              )
-                            ) : (
-                              ""
-                            )}{" "}
                             <Link
                               href={`/subscriptions/?planid=${encodeURIComponent(
                                 plan?.planId
                               )}&communityid=${encodeURIComponent(
                                 communityId || ""
                               )}`}
-                              className=" flex items-center justify-center md:h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
+                              className=" flex items-center justify-center h-8 px-3 text-xs font-medium bg-[var(--pri)] text-white rounded-md cursor-pointer"
                             >
                               Manage
                             </Link>
+                            {plan?.nextDueDate ? (
+                              plan?.nextDueDate === "forever" ? (
+                                <p className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-end">
+                                  Active
+                                </p>
+                              ) : new Date(plan?.nextDueDate) >= new Date() ? (
+                                <p className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 self-end">
+                                  Active
+                                </p>
+                              ) : (
+                                <p className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 self-end">
+                                  Expired
+                                </p>
+                              )
+                            ) : (
+                              ""
+                            )}{" "}
                           </div>
                         </div>
                       </AccordionTrigger>
@@ -488,7 +488,7 @@ const RestraintProfilePage = ({
 
                         {/* Footer row */}
                         {/* <div className={`flex items-center justify-end pt-1`}> */}
-                          {/* {plan?.nextDueDate ? (
+                        {/* {plan?.nextDueDate ? (
                             plan?.nextDueDate === "forever" ? (
                               <Badge className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
                                 Active
@@ -505,7 +505,7 @@ const RestraintProfilePage = ({
                           ) : (
                             ""
                           )} */}
-                          {/* <Link
+                        {/* <Link
                             href={`/subscriptions/?planid=${encodeURIComponent(
                               plan?.planId
                             )}&communityid=${encodeURIComponent(

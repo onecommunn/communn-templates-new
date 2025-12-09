@@ -3,10 +3,8 @@ import { AuthContext } from "@/contexts/Auth.context";
 import { usePayment } from "@/hooks/usePayments";
 import React, { useContext, useEffect, useState } from "react";
 import PaymentsSkeleton from "./PaymentsSkeleton";
-import { ChevronRight } from "lucide-react";
 import { getStaticValue } from "@/components/utils/StringFunctions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   Accordion,
