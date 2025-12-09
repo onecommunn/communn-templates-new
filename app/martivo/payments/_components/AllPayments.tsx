@@ -68,7 +68,6 @@ const AllPayments = ({
     return "#EB3223";
   };
 
-
   if (loading) {
     return <PaymentsSkeleton count={20} />;
   }

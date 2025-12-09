@@ -6,11 +6,11 @@ import React, { useContext } from "react";
 import AllPayments from "./_components/AllPayments";
 import UpcomingPayments from "./_components/UpcomingPayments";
 import PaymentRequests from "./_components/PaymentRequests";
-import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { useCMS } from "../CMSProvider.client";
-import { dummyData } from "../DummyData";
+import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
+import { dummyData } from "../dummyData";
 
-const RestraintPaymentsRoot = () => {
+const YoganaPaymentsRoot = () => {
   const authContext = useContext(AuthContext);
   const { communityId } = authContext || {};
   const { data: paymentsList = [], isLoading: paymentsLoading } =
@@ -21,34 +21,36 @@ const RestraintPaymentsRoot = () => {
 
   const { home } = useCMS();
   const isLoading = home === undefined;
-  const source: RestarintHomePage | undefined = !isLoading
-    ? (home as RestarintHomePage | undefined) ?? dummyData
+  const source: YoganaHomePage | undefined = !isLoading
+    ? (home as YoganaHomePage | undefined) ?? dummyData
     : undefined;
 
-  const primaryColor = source?.color?.primary || "#3D493A";
-  const secondaryColor = source?.color?.secondary || "#AEA17E";
+  const primaryColor = source?.color?.primary || "#C2A74E";
+  const secondaryColor = source?.color?.secondary || "#000";
+  const neutralColor = source?.color?.neutral || "#707070";
 
   return (
     <section
-      className="min-h-screen py-6 px-4 sm:px-8 md:px-20 font-sora bg-[#F8F7F4]"
+      className="min-h-screen py-6 px-4 sm:px-8 md:px-20 bg-[#F8F7F4]"
       style={
         {
           "--pri": primaryColor,
           "--sec": secondaryColor,
+          "--neu": neutralColor,
         } as React.CSSProperties
       }
     >
       <div className="container mx-auto space-y-8">
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-xl md:text-4xl font-bold font-marcellus tracking-tight text-[var(--pri)]">
+          <h1 className="text-xl md:text-5xl font-bold font-alex-brush tracking-wider text-[var(--pri)]">
             Payments
           </h1>
           <p className="text-sm md:text-lg text-gray-600">
             View and manage all your payment transactions
           </p>
 
-          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[#AEA17E]" />
+          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[var(--pri)]" />
         </div>
         <div className="w-full p-1 rounded-[12px] border border-[#E7EBF1] bg-white">
           <Tabs defaultValue="payment_history">
@@ -109,4 +111,4 @@ const RestraintPaymentsRoot = () => {
   );
 };
 
-export default RestraintPaymentsRoot;
+export default YoganaPaymentsRoot;

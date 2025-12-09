@@ -6,11 +6,11 @@ import React, { useContext } from "react";
 import AllPayments from "./_components/AllPayments";
 import UpcomingPayments from "./_components/UpcomingPayments";
 import PaymentRequests from "./_components/PaymentRequests";
-import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { useCMS } from "../CMSProvider.client";
+import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
 import { dummyData } from "../DummyData";
 
-const RestraintPaymentsRoot = () => {
+const SpawellPaymentsRoot = () => {
   const authContext = useContext(AuthContext);
   const { communityId } = authContext || {};
   const { data: paymentsList = [], isLoading: paymentsLoading } =
@@ -21,16 +21,17 @@ const RestraintPaymentsRoot = () => {
 
   const { home } = useCMS();
   const isLoading = home === undefined;
-  const source: RestarintHomePage | undefined = !isLoading
-    ? (home as RestarintHomePage | undefined) ?? dummyData
+  const source: SpawellHomePage | undefined = !isLoading
+    ? (home as SpawellHomePage | undefined) ?? dummyData
     : undefined;
 
-  const primaryColor = source?.color?.primary || "#3D493A";
-  const secondaryColor = source?.color?.secondary || "#AEA17E";
+  const primaryColor = source?.color?.primary || "#5D3222";
+  const secondaryColor = source?.color?.secondary || "#fff";
+  const neutralColor = source?.color?.neutral || "#F9F6F1";
 
   return (
     <section
-      className="min-h-screen py-6 px-4 sm:px-8 md:px-20 font-sora bg-[#F8F7F4]"
+      className="min-h-screen py-6 px-4 sm:px-8 md:px-20 font-plus-jakarta bg-[#F8F7F4]"
       style={
         {
           "--pri": primaryColor,
@@ -41,14 +42,14 @@ const RestraintPaymentsRoot = () => {
       <div className="container mx-auto space-y-8">
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-xl md:text-4xl font-bold font-marcellus tracking-tight text-[var(--pri)]">
+          <h1 className="text-xl md:text-4xl font-bold tracking-tight text-[var(--pri)] font-lora">
             Payments
           </h1>
           <p className="text-sm md:text-lg text-gray-600">
             View and manage all your payment transactions
           </p>
 
-          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[#AEA17E]" />
+          <div className="w-20 h-1 mx-auto mt-4 rounded-full bg-[var(--pri)]" />
         </div>
         <div className="w-full p-1 rounded-[12px] border border-[#E7EBF1] bg-white">
           <Tabs defaultValue="payment_history">
@@ -109,4 +110,4 @@ const RestraintPaymentsRoot = () => {
   );
 };
 
-export default RestraintPaymentsRoot;
+export default SpawellPaymentsRoot;

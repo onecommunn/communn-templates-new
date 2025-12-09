@@ -58,6 +58,10 @@ import YoganaProfileRoot from "./app/yogana/profile/page";
 import MartivoProfileRoot from "./app/martivo/profile/page";
 import FitkitProfileRoot from "./app/fitkit/profile/page";
 import RestraintPaymentsRoot from "./app/restraint/payments/page";
+import FitkitPaymentsRoot from "./app/fitkit/payments/page";
+import SpawellPaymentsRoot from "./app/spawell/payments/page";
+import MartivoPaymentsRoot from "./app/martivo/payments/page";
+import YoganaPaymentsRoot from "./app/yogana/payments/page";
 
 export const templateLayouts: Record<
   string,
@@ -96,6 +100,7 @@ export const templates: Record<
     "/subscriptions": YoganaSubscriptionsPage,
     "/service": YoganaServiceRoot,
     "/profile": YoganaProfileRoot,
+    "/payments": YoganaPaymentsRoot,
   },
   spawell: {
     "/": SpawellRoot,
@@ -105,6 +110,7 @@ export const templates: Record<
     "/sign-up": SpawellSignup,
     "/service": SpawellServiceRoot,
     "/profile": SpawellProfileRoot,
+    "/payments": SpawellPaymentsRoot,
   },
   fitkit: {
     "/": FitkitRoot,
@@ -114,6 +120,7 @@ export const templates: Record<
     "/subscriptions": FitkitSubscriptionsPage,
     "/service": FitkitServiceRoot,
     "/profile": FitkitProfileRoot,
+    "/payments": FitkitPaymentsRoot,
   },
   restraint: {
     "/": RestraintRoot,
@@ -135,5 +142,6 @@ export const templates: Record<
     "/subscriptions": MartivoSubscriptionsPage,
     "/service": MartivoServiceRoot,
     "/profile": MartivoProfileRoot,
+    "/payments": MartivoPaymentsRoot,
   },
 };
