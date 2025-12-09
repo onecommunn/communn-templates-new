@@ -11,7 +11,7 @@ import Link from "next/link";
 
 /** ----- helpers ----- */
 const isUrl = (v?: string) =>
-  !!v && (/^(https?:)?\/\//i.test(v) || v.startsWith("/"));
+  !!v && (/^(https?:)?\/\//i?.test(v) || v?.startsWith("/"));
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name?: string): LucideIconType | null {
   if (!name) return null;

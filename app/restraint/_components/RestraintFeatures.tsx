@@ -28,7 +28,7 @@ function Stat({ icon, value, label }: StatProps) {
           <LucideIcon strokeWidth={1} className="w-12 h-12" />
         ) : (
           <Image
-            src={icon || ""}
+            src={icon || "/assets/restraint-event-icon-3.svg"}
             alt={label || "feature icon"}
             width={42}
             height={42}

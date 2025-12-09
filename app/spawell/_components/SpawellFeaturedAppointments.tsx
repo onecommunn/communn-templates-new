@@ -9,7 +9,7 @@ import type { LucideProps } from "lucide-react";
 import * as Lucide from "lucide-react";
 import Image from "next/image";
 
-const isUrl = (v: string) => /^https?:\/\//i.test(v) || v.startsWith("/");
+const isUrl = (v: string) => /^https?:\/\//i?.test(v) || v?.startsWith("/");
 
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name: string): LucideIconType | null {

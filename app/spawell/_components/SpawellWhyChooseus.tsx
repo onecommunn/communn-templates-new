@@ -9,7 +9,7 @@ import { WhyChooseUsSection } from "@/models/templates/spawell/spawell-home-mode
 import type { LucideProps } from "lucide-react";
 import * as Lucide from "lucide-react";
 
-const isUrl = (v: string) => /^https?:\/\//i.test(v) || v.startsWith("/");
+const isUrl = (v: string) => /^https?:\/\//i?.test(v) || v?.startsWith("/");
 
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name: string): LucideIconType | null {

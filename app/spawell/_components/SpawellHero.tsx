@@ -26,7 +26,7 @@ const hexToRgba = (hex: string, alpha = 1) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-const isUrl = (v: string) => /^https?:\/\//i.test(v) || v.startsWith("/");
+const isUrl = (v: string) => /^https?:\/\//i?.test(v) || v?.startsWith("/");
 
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name: string): LucideIconType | null {

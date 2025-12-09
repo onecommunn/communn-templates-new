@@ -11,7 +11,7 @@ import { AboutSection } from "@/models/templates/restraint/restraint-home-model"
 
 
 function IconOrImage({ src, alt }: { src: string; alt: string }) {
-  const isImage = src.includes("/") || src.includes(".");
+  const isImage = src?.includes("/") || src?.includes(".");
   if (!isImage && src in Icons) {
     const Ico = Icons[src as keyof typeof Icons] as ComponentType<
       SVGProps<SVGSVGElement>
@@ -26,7 +26,7 @@ function IconOrImage({ src, alt }: { src: string; alt: string }) {
   }
   return (
     <Image
-      src={src}
+      src={src || "/assets/restraint-about-image01.svg"}
       alt={alt}
       width={50}
       height={50}

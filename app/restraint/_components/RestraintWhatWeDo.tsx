@@ -16,7 +16,7 @@ const list = [
   "Yoga For Every Skill Level",
 ];
 
-const isUrl = (v: string) => /^https?:\/\//i.test(v) || v.startsWith("/");
+const isUrl = (v: string) => /^https?:\/\//i?.test(v) || v?.startsWith("/");
 
 type LucideIconType = React.ComponentType<LucideProps>;
 function getLucideIcon(name: string): LucideIconType | null {
@@ -206,12 +206,12 @@ function Feature({
   const LucideIcon = !isUrl(icon) ? getLucideIcon(icon) : null;
   return (
     <div className="flex items-start gap-4 font-sora">
-      <div className="mt-1 inline-flex h-16 w-16 items-center justify-center text-white/90">
+      <div className="mt-1 inline-flex min-h-10 max-h-10 min-w-10 max-w-10 items-center justify-center text-white/90">
         {LucideIcon ? (
           <LucideIcon strokeWidth={1} size={36} />
         ) : (
           <Image
-            src={icon || ""}
+            src={icon || "/assets/restraint-whatWeDo-image03.svg"}
             alt={title || "feature icon"}
             width={60}
             height={60}
