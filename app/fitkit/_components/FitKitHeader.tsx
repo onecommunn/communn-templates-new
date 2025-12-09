@@ -24,10 +24,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  toSnakeCase,
-  underscoreToSpace,
-} from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/components/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactSection,
@@ -39,10 +36,13 @@ import { logoutService } from "@/services/logoutService";
 import {
   ArrowRight,
   ChevronDown,
+  LogOut,
   Mail,
   MapPin,
   Menu,
   Phone,
+  UserRoundPen,
+  Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
@@ -275,12 +275,25 @@ const FitKitHeader = ({
                         style={{
                           cursor: "pointer",
                         }}
-                        className="w-full font-semibold font-kanit text-[16px] py-2 rounded-none bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                       >
+                        <UserRoundPen strokeWidth={1.5} />
                         Edit Profile
                       </Link>
+                      <Link
+                        href={`/payments`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <Wallet strokeWidth={1.5} />
+                        Payments
+                      </Link>
                       <AlertDialog>
-                        <AlertDialogTrigger className="cursor-pointer font-kanit hover:bg-[#df2431] text-[#df2431] px-6 font-semibold py-2 hover:text-white bg-white rounded-none text-sm w-full">
+                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold font-sora py-2 bg-white rounded-[10px] text-sm w-full">
+                          <LogOut strokeWidth={1.5} />
                           Logout
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -374,16 +387,29 @@ const FitKitHeader = ({
                       </div>
                       <Link
                         href={`/profile?id=${auth?.user?.id}`}
-                        onClick={() => setMobilePopoverOpen(false)}
+                        onClick={() => setDesktopPopoverOpen(false)}
                         style={{
                           cursor: "pointer",
                         }}
-                        className="w-full font-semibold text-[16px] py-2 rounded-none bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                       >
+                        <UserRoundPen strokeWidth={1.5} />
                         Edit Profile
                       </Link>
+                      <Link
+                        href={`/payments`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <Wallet strokeWidth={1.5} />
+                        Payments
+                      </Link>
                       <AlertDialog>
-                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-none text-sm w-full">
+                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold font-sora py-2 bg-white rounded-[10px] text-sm w-full">
+                          <LogOut strokeWidth={1.5} />
                           Logout
                         </AlertDialogTrigger>
                         <AlertDialogContent>

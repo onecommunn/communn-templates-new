@@ -14,7 +14,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { logoutService } from "@/services/logoutService";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronDown, Menu } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  LogOut,
+  Menu,
+  UserRoundPen,
+  Wallet,
+} from "lucide-react";
 import {
   Sheet,
   SheetClose,
@@ -228,12 +235,25 @@ const MartivoHeader = ({
                         style={{
                           cursor: "pointer",
                         }}
-                        className="w-full font-semibold text-[16px] py-2 rounded-md bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                       >
+                        <UserRoundPen strokeWidth={1.5} />
                         Edit Profile
                       </Link>
+                      <Link
+                        href={`/payments`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <Wallet strokeWidth={1.5} />
+                        Payments
+                      </Link>
                       <AlertDialog>
-                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-[10px] text-sm w-full">
+                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold font-sora py-2 bg-white rounded-[10px] text-sm w-full">
+                          <LogOut strokeWidth={1.5} />
                           Logout
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -324,16 +344,29 @@ const MartivoHeader = ({
                       </div>
                       <Link
                         href={`/profile?id=${auth?.user?.id}`}
-                        onClick={() => setMobilePopoverOpen(false)}
+                        onClick={() => setDesktopPopoverOpen(false)}
                         style={{
                           cursor: "pointer",
                         }}
-                        className="w-full font-semibold text-[16px] py-2 rounded-md bg-[var(--pri)]/30 hover:bg-[var(--pri)] hover:text-white cursor-pointer flex justify-center items-center"
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                       >
+                        <UserRoundPen strokeWidth={1.5} />
                         Edit Profile
                       </Link>
+                      <Link
+                        href={`/payments`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <Wallet strokeWidth={1.5} />
+                        Payments
+                      </Link>
                       <AlertDialog>
-                        <AlertDialogTrigger className="cursor-pointer hover:bg-[#df2431] text-[#df2431] px-6 font-semibold font-sora py-2 hover:text-white bg-white rounded-[10px] text-sm w-full">
+                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold font-sora py-2 bg-white rounded-[10px] text-sm w-full">
+                          <LogOut strokeWidth={1.5} />
                           Logout
                         </AlertDialogTrigger>
                         <AlertDialogContent>
