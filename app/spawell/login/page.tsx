@@ -15,6 +15,7 @@ import {
 import { useCMS } from "../CMSProvider.client";
 import { dummyData } from "../DummyData";
 import { SpawellHomePage } from "@/models/templates/spawell/spawell-home-model";
+import { useUsers } from "@/hooks/useUsers";
 
 const SpawellLogin = () => {
   const { home } = useCMS();
@@ -36,6 +37,8 @@ const SpawellLogin = () => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
+
+  const { loadUserPlans } = useUsers();
 
   useEffect(() => {
     if (authContext?.isAuthenticated) router.push("/");
@@ -115,7 +118,18 @@ const SpawellLogin = () => {
 
         if (res.status === 200) {
           toast.success("Login successful!");
-          router.push("/");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+
+          const response = await loadUserPlans(
+            res?.data?.user?.id,
+            authContext?.communityId
+          );
+          const plansList = response?.subscriptionDetail ?? [];
+          if (plansList.length > 0) {
+            router.push(`/profile?id=${res?.data?.user?.id}`);
+          } else {
+            router.push("/");
+          }
         } else if (res.status === 403) {
           toast.error(
             "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."

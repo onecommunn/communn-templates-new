@@ -15,6 +15,7 @@ import {
 import { useCMS } from "../CMSProvider.client";
 import { dummyData } from "../dummyData";
 import { YoganaHomePage } from "@/models/templates/yogana/yogana-home-model";
+import { useUsers } from "@/hooks/useUsers";
 
 const YoganaLogin = () => {
   const { home } = useCMS();
@@ -37,6 +38,7 @@ const YoganaLogin = () => {
   const authContext = useContext(AuthContext);
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
+  const { loadUserPlans } = useUsers();
 
   useEffect(() => {
     if (authContext?.isAuthenticated) router.push("/");
@@ -116,7 +118,18 @@ const YoganaLogin = () => {
 
         if (res.status === 200) {
           toast.success("Login successful!");
-          router.push("/");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+
+          const response = await loadUserPlans(
+            res?.data?.user?.id,
+            authContext?.communityId
+          );
+          const plansList = response?.subscriptionDetail ?? [];
+          if (plansList.length > 0) {
+            router.push(`/profile?id=${res?.data?.user?.id}`);
+          } else {
+            router.push("/");
+          }
         } else if (res.status === 403) {
           toast.error(
             "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."
@@ -134,10 +147,7 @@ const YoganaLogin = () => {
         } else if (res?.response?.status === 404) {
           toast.error("User not Found, check your Account Credentials");
         }
-      }
-      else(
-        toast.error("Invalid OTP")
-      )
+      } else toast.error("Invalid OTP");
     } finally {
       setLoading(false);
     }

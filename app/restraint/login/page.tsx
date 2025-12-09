@@ -15,6 +15,7 @@ import {
 import { useCMS } from "../CMSProvider.client";
 import { RestarintHomePage } from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "../DummyData";
+import { useUsers } from "@/hooks/useUsers";
 
 const RestraintLogin = () => {
   const { home } = useCMS();
@@ -33,13 +34,13 @@ const RestraintLogin = () => {
 
   const [resendTimer, setResendTimer] = useState(0);
   const authContext = useContext(AuthContext);
+  const { loadUserPlans } = useUsers();
   const router = useRouter();
   const { verifyEmailOtp } = useOtp();
 
   useEffect(() => {
     if (authContext?.isAuthenticated) router.push("/");
   }, [authContext?.isAuthenticated]);
-
 
   useEffect(() => {
     if (resendTimer <= 0) return;
@@ -111,11 +112,21 @@ const RestraintLogin = () => {
           null
         );
 
-        console.log(res, "res");
 
         if (res.status === 200) {
           toast.success("Login successful!");
-          router.push("/");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+
+          const response = await loadUserPlans(
+            res?.data?.user?.id,
+            authContext?.communityId
+          );
+          const plansList = response?.subscriptionDetail ?? [];
+          if (plansList.length > 0) {
+            router.push(`/profile?id=${res?.data?.user?.id}`);
+          } else {
+            router.push("/");
+          }
         } else if (res.status === 403) {
           toast.error(
             "We regret to inform you that your account has been temporarily deactivated. Please contact the Administrator."
