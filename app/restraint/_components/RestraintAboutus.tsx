@@ -9,9 +9,10 @@ import * as Icons from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 import { AboutSection } from "@/models/templates/restraint/restraint-home-model";
 
-
 function IconOrImage({ src, alt }: { src: string; alt: string }) {
-  const isImage = src?.includes("/") || src?.includes(".");
+  const isImage =
+    String(src || "").includes("/") || String(src || "").includes(".");
+
   if (!isImage && src in Icons) {
     const Ico = Icons[src as keyof typeof Icons] as ComponentType<
       SVGProps<SVGSVGElement>
@@ -64,7 +65,7 @@ const RestraintAboutus = ({
           alt="restraint-about-bg-image01"
           width={300}
           height={250}
-          className="absolute -bottom-12 right-2 hidden md:flex"
+          className="absolute -bottom-12 right-2 hidden md:block w-auto h-auto"
         />
       </div>
 
@@ -89,8 +90,7 @@ const RestraintAboutus = ({
                   }
                   alt="Martial artist pose"
                   className="h-[460px] w-full rounded-[28px] md:w-[650px] md:h-[650px]"
-                  width={650}
-                  height={650}
+                  fill
                   unoptimized
                 />
               </div>

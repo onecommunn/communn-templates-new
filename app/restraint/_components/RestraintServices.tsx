@@ -19,7 +19,9 @@ type ServiceItem = {
 // ---- small helpers ----
 
 function IconOrImage({ src, alt }: { src: string; alt: string }) {
-  const isImage = src?.includes("/") || src?.includes(".");
+  const isImage =
+    String(src || "").includes("/") || String(src || "").includes(".");
+
   if (!isImage && src in Icons) {
     const Ico = Icons[src as keyof typeof Icons] as ComponentType<
       SVGProps<SVGSVGElement>
