@@ -794,7 +794,7 @@ const RestraintSubscriptions = ({
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Plan Name
                     </p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                    <p className="mt-1 text-sm font-semibold text-slate-900 line-clamp-2">
                       {plan?.name}
                     </p>
                   </div>

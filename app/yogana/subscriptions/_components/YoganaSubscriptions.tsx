@@ -81,7 +81,7 @@ const PaymentScheduleItem = ({
            : "border-transparent cursor-pointer"
        }`}
     >
-      <div className="text-sm text-gray-600">{date}</div>
+      <div className="text-[12px] md:text-sm text-gray-600">{date}</div>
 
       <div
         className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${
@@ -800,13 +800,13 @@ const YoganaSubscriptions = ({
             <AccordionTrigger className="px-0 py-4 hover:no-underline">
               <div className="flex w-full items-center justify-between gap-4">
                 {/* Left: columns */}
-                <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-5">
+                <div className="grid w-full grid-cols-3 gap-4 md:grid-cols-5">
                   {/* Plan Name */}
                   <div>
                     <p className="text-xs font-medium uppercase text-slate-500">
                       Plan Name
                     </p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                    <p className="mt-1 text-sm font-semibold text-slate-900 line-clamp-2">
                       {plan?.name}
                     </p>
                   </div>
