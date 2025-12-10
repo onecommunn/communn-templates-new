@@ -131,10 +131,10 @@ const RestraintAboutus = ({
                 <div className="mt-10 flex flex-col items-start gap-4">
                   {content?.features?.map((item, idx) => (
                     <div key={idx} className="flex gap-5">
-                      <div className="w-19 h-19 flex items-center justify-center aspect-square">
+                      <div className="w-19 h-19 flex items-start justify-center aspect-square">
                         <IconOrImage src={item?.icon} alt={item?.title} />
                       </div>
-                      <div>
+                      <div className="flex justify-start flex-col">
                         <h5 className="font-marcellus text-xl">{item.title}</h5>
                         <p className="text-[#9C9C9C] text-[16px] font-sora">
                           {item.description}
