@@ -1,6 +1,6 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { Button } from "@/components/ui/button";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import { Service } from "@/models/templates/restraint/restraint-home-model";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";

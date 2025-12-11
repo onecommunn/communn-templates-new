@@ -1,4 +1,4 @@
-import { getStaticValue } from "@/components/utils/StringFunctions";
+import { getStaticValue } from "@/utils/StringFunctions";
 import { IPaymentList } from "@/models/payment.model";
 import { ChevronRight } from "lucide-react";
 import React from "react";

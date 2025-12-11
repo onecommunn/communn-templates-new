@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import { IoClose } from "react-icons/io5";
 import { FaRupeeSign } from "react-icons/fa";
-import successAnimation from "../../public/lotties/payment-success.json"; // Update path accordingly
+import successAnimation from ".././public/lotties/payment-unsuccess.json";
 import { usePathname } from "next/navigation";
 
 interface PaymentSuccessProps {
@@ -15,7 +15,7 @@ interface PaymentSuccessProps {
   onClose: () => void;
 }
 
-const PaymentSuccess = ({
+const PaymentFailure = ({
   open,
   amount,
   txnid,
@@ -23,26 +23,7 @@ const PaymentSuccess = ({
   onClose,
 }: PaymentSuccessProps) => {
   const [time, setTime] = useState(initialTimer);
-  const pathname = usePathname();
-
-  const getMessage = (path: string) => {
-    if (path.includes("/plans/subscription") || path.includes("/plan/")) {
-      return "Plan subscribed successfully!";
-    } else if (path.includes("/plans") || path.includes("/payments")) {
-      return "Custom Payment successful!";
-    } else if (path.includes("/events") || path.includes("/event")) {
-      return "Event Registration Successful!";
-    } else if (
-      path.includes("/appointments") ||
-      path.includes("/book-appointment")
-    ) {
-      return "Appointment Booked Successfully!";
-    } else if (path.includes("/courses")) {
-      return "You’ve successfully enrolled in the course!";
-    }
-    return "Payment Successful!";
-  };
-
+  
   useEffect(() => {
     if (open) {
       setTime(initialTimer);
@@ -97,16 +78,16 @@ const PaymentSuccess = ({
 
         {/* Message */}
         <div className="text-center text-gray-700 font-medium text-base mb-2">
-          {getMessage(pathname)}
+          Payment Failure!
         </div>
 
         {/* Thank you note */}
         <p className="text-center text-sm text-gray-600 px-4">
-          Your payment has been processed successfully. Thank you!
+          Unfortunately, your payment could not be processed. Please try again.
         </p>
       </div>
     </div>
   );
 };
 
-export default PaymentSuccess;
+export default PaymentFailure;

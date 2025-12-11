@@ -8,7 +8,7 @@ import Link from "next/link";
 import React from "react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { ServiceSection } from "@/models/templates/restraint/restraint-home-model";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 
 type ServiceItem = {
   icon: string; // "Lotus", "Wind" (Lucide) OR "/icons/lotus.svg" (image)

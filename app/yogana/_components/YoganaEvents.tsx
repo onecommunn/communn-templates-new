@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   capitalizeWords,
   formatDate,
-} from "@/components/utils/StringFunctions";
+} from "@/utils/StringFunctions";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";

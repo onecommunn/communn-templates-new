@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Event } from "@/models/event.model";
 import { CalendarDays, Clock, LoaderCircle, MapPin, User } from "lucide-react";
 import Image from "next/image";
-import { formatDate } from "@/components/utils/StringFunctions";
+import { formatDate } from "@/utils/StringFunctions";
 
 export const formatTime = (time24: string) => {
   if (!time24) return "--:--";

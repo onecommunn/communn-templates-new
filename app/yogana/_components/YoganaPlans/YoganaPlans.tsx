@@ -17,7 +17,7 @@ import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 
 function Dots({
   api,

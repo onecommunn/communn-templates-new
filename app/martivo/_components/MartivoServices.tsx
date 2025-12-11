@@ -2,7 +2,7 @@ import React from "react";
 import { WavyStroke } from "./Icons/WavyStroke";
 import { ServiceSection } from "@/models/templates/martivo/martivo-home-model";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import Link from "next/link";
 
 const MartivoServices = ({

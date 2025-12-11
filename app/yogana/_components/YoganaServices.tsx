@@ -18,7 +18,7 @@ import {
   Service,
   ServiceSection,
 } from "@/models/templates/yogana/yogana-home-model";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import Link from "next/link";
 
 const hexToRgba = (hex: string, alpha: number) => {

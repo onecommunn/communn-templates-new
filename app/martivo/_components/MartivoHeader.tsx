@@ -37,7 +37,7 @@ import {
 import {
   toSnakeCase,
   underscoreToSpace,
-} from "@/components/utils/StringFunctions";
+} from "@/utils/StringFunctions";
 import {
   Popover,
   PopoverContent,

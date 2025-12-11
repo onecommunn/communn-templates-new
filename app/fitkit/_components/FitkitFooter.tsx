@@ -1,4 +1,4 @@
-import { formatUrl } from "@/components/utils/StringFunctions";
+import { formatUrl } from "@/utils/StringFunctions";
 import {
   FooterSection,
   SocialMediaLink,

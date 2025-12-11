@@ -7,7 +7,7 @@ import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useCommunity } from "@/hooks/useCommunity";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import {
   Dialog,
   DialogClose,

@@ -14,7 +14,7 @@ import {
   capitalizeWords,
   formatDate,
   formatTime,
-} from "@/components/utils/StringFunctions";
+} from "@/utils/StringFunctions";
 
 const CreatorEventsPage = ({
   primaryColor,

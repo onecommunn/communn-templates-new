@@ -19,7 +19,7 @@ import {
   FooterSection,
   SocialMediaLink,
 } from "@/models/templates/yogana/yogana-home-model";
-import { formatUrl } from "@/components/utils/StringFunctions";
+import { formatUrl } from "@/utils/StringFunctions";
 
 interface YoganaFooterProps {
   data: FooterSection;
