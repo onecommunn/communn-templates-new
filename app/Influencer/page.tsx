@@ -21,6 +21,7 @@ import {
   Search,
   Settings,
   Share2,
+  TextAlignJustify,
 } from "lucide-react";
 
 import {
@@ -48,12 +49,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaOptionsType } from "embla-carousel";
-import { SidebarToggle } from "./_components/SidebarToggle";
+// import { SidebarToggle } from "./_components/SidebarToggle";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 const API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ??
-  "AIzaSyAWRYLDjwv0nALlS030tY49TdyBw_ynpSI";
+  "AIzaSyALeRlJaJS3IpdiDH4jFix6L-IXH3Wo8yE";
 
 const CATEGORY_FILTERS: {
   label: string;
@@ -71,7 +73,7 @@ const CATEGORY_FILTERS: {
 
 const containerStyle = {
   width: "100%",
-  height: "100%",
+  height: "100%",  
 };
 
 const modernStyle = [
@@ -166,6 +168,7 @@ const InfluencerPage: React.FC = () => {
   const [isDrawerOpen, setisDrawerOpen] = useState<boolean>(true);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   const onLoad = React.useCallback((mapInstance: google.maps.Map) => {
     const bounds = new window.google.maps.LatLngBounds();
@@ -184,25 +187,41 @@ const InfluencerPage: React.FC = () => {
   }, []);
 
   const getUserLocation = () => {
-    if (!navigator.geolocation) return;
+    if (typeof window === "undefined") return;
+
+    if (!navigator.geolocation) {
+      console.error("Geolocation not supported");
+      return;
+    }
 
     setIsLocating(true);
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        // console.log("✅ location success", pos.coords);
+
         setUserLocation({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         });
+
         setIsLocating(false);
       },
-      () => {
+      (err) => {
+        console.error("❌ location error", err.code, err.message);
+
+        // IMPORTANT: keep this to see why it fails
+        // err.code:
+        // 1 = PERMISSION_DENIED
+        // 2 = POSITION_UNAVAILABLE
+        // 3 = TIMEOUT
+
         setUserLocation(null);
         setIsLocating(false);
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 20000,
         maximumAge: 0,
       }
     );
@@ -285,7 +304,7 @@ const InfluencerPage: React.FC = () => {
             onClick={getUserLocation}
           >
             {isLocating ? (
-              <LoaderCircle strokeWidth={1.5} className="animate-spin"/>
+              <LoaderCircle strokeWidth={1.5} className="animate-spin" />
             ) : (
               <LocateFixed strokeWidth={1.5} />
             )}
@@ -439,90 +458,141 @@ const InfluencerPage: React.FC = () => {
   );
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "26rem",
-          "--sidebar-width-mobile": "20rem",
-        } as React.CSSProperties
-      }
-    >
-      <Sidebar>
-        <SidebarContent>
-          {/* LEFT PANE – search + results */}
-          {renderResultsList()}
-        </SidebarContent>
-      </Sidebar>
-
-      {/* RIGHT PANE – Map */}
-      <div className="flex-1 relative">
-        <div className="md:flex items-center absolute left-0 z-10 h-full hidden">
-          <SidebarToggle />
-        </div>
-        <button
-          onClick={() => setisDrawerOpen((prev) => !prev)}
-          className="border rounded-t-xl py-0.5 px-14 h-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 absolute bottom-0 left-1/2 -translate-x-1/2 z-10"
-        >
-          <ChevronUp size={24} />
-        </button>
-
-        <div className="absolute top-0 p-2 left-0 pl-2 z-10 bg-white w-full">
-          <div className="flex flex-wrap gap-2 md:gap-4 pt-1">
-            {CATEGORY_FILTERS.map((cat) => {
-              const isActive = activeCategory === cat.value;
-              const Icon = cat.icon;
-
-              return (
-                <Badge
-                  key={cat.value}
-                  variant={isActive ? "secondary" : "outline"}
-                  className={`flex items-center gap-2 rounded-full py-1.5 px-4 text-xs cursor-pointer transition ${
-                    isActive
-                      ? "bg-slate-900 text-white"
-                      : "hover:bg-gray-200 bg-white"
-                  }`}
-                  onClick={() => setActiveCategory(cat.value)}
-                >
-                  {Icon && (
-                    <span className="shrink-0">
-                      <Icon size={18} strokeWidth={1.5} />
-                    </span>
-                  )}
-                  {cat.label}
-                </Badge>
-              );
-            })}
+    <main className="min-h-screen flex flex-col">
+      {/* HEADER */}
+      <header className="h-16 bg-white border-b shrink-0">
+        <div className="h-full flex items-center justify-between px-4">
+          <div className="flex items-center gap-2 max-w-[400px] w-full">
+            <InputGroup>
+              <InputGroupInput
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search cafes, stays, experiences..."
+              />
+              <InputGroupAddon align={"inline-end"}>
+                <Search />
+              </InputGroupAddon>
+            </InputGroup>
           </div>
-        </div>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={mapOptions}
-        >
-          {filteredPlaces.map((item) => (
-            <MarkerItem item={item} key={item.uuid} />
-          ))}
-        </GoogleMap>
-      </div>
-
-      <Drawer open={isDrawerOpen} onOpenChange={setisDrawerOpen}>
-        <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
-          <div className="flex justify-center items-center w-full">
-            <button
-              onClick={() => setisDrawerOpen((prev) => !prev)}
-              className="border rounded-t-xl py-0.5 px-14 h-fit w-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 -mt-20 z-10"
+          <ButtonGroup>
+            <Button
+              variant={"outline"}
+              onClick={() => setSidebarOpen(false)}
+              className={`${
+                sidebarOpen ? "" : "bg-gray-200 border border-gray-300"
+              }`}
             >
-              <ChevronDown size={24} />
-            </button>
-          </div>
+              <Map />
+            </Button>
+            <Button variant={"outline"}>
+              <TextAlignJustify />
+            </Button>
+          </ButtonGroup>
+        </div>
+      </header>
+      <div className="relative h-[calc(100vh-64px)] w-full overflow-hidden">
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "28rem",
+              "--sidebar-width-mobile": "20rem",
+            } as React.CSSProperties
+          }
+          open={sidebarOpen}
+          onOpenChange={setSidebarOpen}
+        >
+          <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
+            <div className="relative flex-1">
+              <div className="md:flex items-center absolute right-0 z-10 h-full hidden">
+                <button
+                  onClick={() => setSidebarOpen((prev) => !prev)}
+                  className="border rounded-l-xl py-8 px-0.5 h-fit cursor-pointer bg-white hover:bg-gray-200 border-l-0"
+                >
+                  {sidebarOpen ? (
+                    <ChevronRight size={18} />
+                  ) : (
+                    <ChevronLeft size={18} />
+                  )}
+                </button>
+              </div>
 
-          <div className="h-full overflow-y-auto bg-white">
-            {renderResultsList()}
+              <button
+                onClick={() => setisDrawerOpen((prev) => !prev)}
+                className="border rounded-t-xl py-0.5 px-14 h-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 absolute bottom-0 left-1/2 -translate-x-1/2 z-10"
+              >
+                <ChevronUp size={24} />
+              </button>
+
+              <div className="absolute top-0 py-3 md:py-2 left-0 pl-2 z-10 bg-white w-full">
+                <div className="flex md:flex-wrap gap-2 md:gap-4 pt-1 overflow-x-auto">
+                  {CATEGORY_FILTERS.map((cat) => {
+                    const isActive = activeCategory === cat.value;
+                    const Icon = cat.icon;
+
+                    return (
+                      <Badge
+                        key={cat.value}
+                        variant={isActive ? "secondary" : "outline"}
+                        className={`flex items-center gap-2 rounded-full py-1.5 px-4 text-xs cursor-pointer transition ${
+                          isActive
+                            ? "bg-slate-900 text-white"
+                            : "hover:bg-gray-200 bg-white"
+                        }`}
+                        onClick={() => setActiveCategory(cat.value)}
+                      >
+                        {Icon && (
+                          <span className="shrink-0">
+                            <Icon size={18} strokeWidth={1.5} />
+                          </span>
+                        )}
+                        {cat.label}
+                      </Badge>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+                options={mapOptions}
+              >
+                {filteredPlaces.map((item) => (
+                  <MarkerItem item={item} key={item.uuid} />
+                ))}
+              </GoogleMap>
+            </div>
+
+            {/* SIDEBAR (right) */}
+            <Sidebar
+              side="right"
+              className="border-l top-16 h-[calc(100vh-64px)]"
+            >
+              <SidebarContent>{renderResultsList()}</SidebarContent>
+            </Sidebar>
+
+            {/* MOBILE DRAWER (unchanged) */}
+            <Drawer open={isDrawerOpen} onOpenChange={setisDrawerOpen}>
+              <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
+                <div className="flex justify-center items-center w-full">
+                  <button
+                    onClick={() => setisDrawerOpen((prev) => !prev)}
+                    className="border rounded-t-xl py-0.5 px-14 h-fit w-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 -mt-20 z-10"
+                  >
+                    <ChevronDown size={24} />
+                  </button>
+                </div>
+
+                <div className="h-full overflow-y-auto bg-white">
+                  {renderResultsList()}
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
-        </DrawerContent>
-      </Drawer>
-    </SidebarProvider>
+        </SidebarProvider>
+      </div>
+    </main>
   );
 };
 
