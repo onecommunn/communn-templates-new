@@ -3,7 +3,6 @@ import React from "react";
 import MartivoHeader from "./_components/MartivoHeader";
 import MartivoFooter from "./_components/MartivoFooter";
 import { CMSProvider } from "./CMSProvider.client";
-import { getMartivoCMSBundle } from "@/lib/Martivo/martivo-cms";
 import {
   ContactSection,
   EventsSection,
@@ -18,6 +17,7 @@ import { dummyData } from "./DummyData";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
+import { getMartivoCMSBundle } from "@/services/Martivo/martivo.service";
 
 export default async function MartivoShell({
   community,

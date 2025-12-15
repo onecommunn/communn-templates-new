@@ -2,9 +2,7 @@ import { Community } from "@/services/communityService";
 import { CMSProvider } from "./CMSProvider.client";
 import SpawellHeader from "./_components/SpawellHeader";
 import SpawellFooter from "./_components/SpawellFooter";
-import { getSpawellCMSBundle } from "@/lib/Spawell/spawell-cms";
 import {
-  ContactSection,
   EventsSection,
   FooterSection,
   Header,
@@ -17,6 +15,7 @@ import { dummyData } from "./DummyData";
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import { getSpawellCMSBundle } from "@/services/Spawell/spawell.service";
 
 export default async function SpawellShell({
   community,

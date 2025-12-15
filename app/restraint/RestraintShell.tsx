@@ -3,7 +3,6 @@ import React from "react";
 import RestraintHeader from "./_components/RestraintHeader";
 import RestraintFooter from "./_components/RestraintFooter";
 import { CMSProvider } from "./CMSProvider.client";
-import { getRestraintCMSBundle } from "@/lib/Restraint/restraint-cms";
 import { dummyData } from "./DummyData";
 import {
   ContactSection,
@@ -18,6 +17,7 @@ import {
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import { getRestraintCMSBundle } from "@/services/Restraint/restraint.service";
 export default async function RestraintShell({
   community,
   children,

@@ -54,7 +54,7 @@ import {
 import { AuthContext } from "@/contexts/Auth.context";
 import { toast } from "sonner";
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "AIzaSyALeRlJaJS3IpdiDH4jFix6L-IXH3Wo8yE";
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
 const CATEGORY_ICON: Record<string, React.ElementType> = {
   Cafes: Coffee,

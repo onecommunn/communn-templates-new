@@ -49,13 +49,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaOptionsType } from "embla-carousel";
-// import { SidebarToggle } from "./_components/SidebarToggle";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { ButtonGroup } from "@/components/ui/button-group";
 
 const API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ??
-  "AIzaSyALeRlJaJS3IpdiDH4jFix6L-IXH3Wo8yE";
+  "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
 const CATEGORY_FILTERS: {
   label: string;

@@ -4,10 +4,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Service } from "@/models/templates/restraint/restraint-home-model";
 import { useSearchParams } from "next/navigation";
 import { AuthContext } from "@/contexts/Auth.context";
-import { fetchRestraintServiceBundle } from "@/lib/Restraint/restraint-service-cms";
 import RestraintServiceHero from "./RestraintServiceHero";
 import RestraintServiceContent from "./RestraintServiceContent";
 import RestraintCTA from "../../_components/RestraintCTA";
+import { fetchRestraintServiceBundle } from "@/services/Restraint/restraint.service";
 
 const RestraintServicePage = ({
   primaryColor,

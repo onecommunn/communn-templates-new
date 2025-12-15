@@ -1,13 +1,18 @@
 import { BASE_URL_V2 } from "@/configurations/url.config";
+import axios from "axios";
 
 type SpawellCMSBundle = {
   home: any | null;
 };
 
+type SpawellServiceCMSBundle = {
+  data: any | null;
+};
+
 async function fetchJSON(url: string) {
   try {
-    const r = await fetch(url, { cache: "no-store" });
-    return await r.json();
+    const r = await axios.get(url);
+    return r.data;
   } catch {
     return null;
   }
@@ -30,4 +35,17 @@ async function fetchSpawellBundle(
 
 export async function getSpawellCMSBundle(communityId: string) {
   return fetchSpawellBundle(communityId);
+}
+
+export async function fetchSpawellServiceBundle(
+  communityId: string,
+  serviceName: string
+): Promise<SpawellServiceCMSBundle> {
+  const url = `${BASE_URL_V2}/cms/get-service-detail/community/${communityId}?templateId=spawell&service=${serviceName}`;
+
+  const data = await fetchJSON(url);
+
+  return {
+    data: data?.data ?? null,
+  };
 }

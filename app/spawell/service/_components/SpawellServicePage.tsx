@@ -1,17 +1,14 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import SpawellServiceHero from ".././_components/SpawellServiceHero";
-import { useCMS } from "../../CMSProvider.client";
 import {
   Service,
-  SpawellHomePage,
 } from "@/models/templates/spawell/spawell-home-model";
-import { dummyData } from "../../DummyData";
 import SpawellServiceContent from ".././_components/SpawellServiceContent";
 import SpawellCTA from "../../_components/SpawellCTA";
 import { useSearchParams } from "next/navigation";
 import { AuthContext } from "@/contexts/Auth.context";
-import { fetchSpawellServiceBundle } from "@/lib/Spawell/spawell-service-cms";
+import { fetchSpawellServiceBundle } from "@/services/Spawell/spawell.service";
 
 const SpawellServicePage = ({
   primaryColor,

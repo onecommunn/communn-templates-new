@@ -1,19 +1,18 @@
 import { BASE_URL_V2 } from "@/configurations/url.config";
+import axios from "axios";
 
-// lib/cms.ts (server)
 type CreatorCMSBundle = {
   header: any | null;
   footer: any | null;
   home: any | null;
   about: any | null;
   contact: any | null;
-  // add more pages as needed: events, plans, contact...
 };
 
 async function fetchJSON(url: string) {
   try {
-    const r = await fetch(url, { cache: "no-store" });
-    return await r.json();
+    const r = await axios.get(url);
+    return r.data;
   } catch {
     return null;
   }
@@ -41,13 +40,6 @@ async function fetchCreatorBundle(
     // add more pages
   };
 }
-
-// Cache by community, revalidate every 5 minutes (tune as you like)
-// export const getCreatorCMSBundle = unstable_cache(
-//   async (communityId: string) => fetchCreatorBundle(communityId),
-//   ["creator-cms-bundle"],
-//   { revalidate: false }
-// );
 
 export async function getCreatorCMSBundle(communityId: string) {
   return fetchCreatorBundle(communityId);
