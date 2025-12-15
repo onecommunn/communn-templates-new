@@ -55,25 +55,25 @@ import { ButtonGroup } from "@/components/ui/button-group";
 
 const API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ??
-  "AIzaSyALeRlJaJS3IpdiDH4jFix6L-IXH3Wo8yE";
+  "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
 const CATEGORY_FILTERS: {
   label: string;
   value: string | "all";
   icon?: React.ElementType;
 }[] = [
-  { label: "All", value: "all" },
-  { label: "Cafes", value: "Cafes", icon: Coffee },
-  { label: "Restaurants", value: "Restaurants", icon: ConciergeBell },
-  { label: "Travel", value: "Travel", icon: Map },
-  { label: "Products", value: "Products", icon: Package },
-  { label: "Stays", value: "Stays", icon: House },
-  { label: "Experiences", value: "Experiences", icon: Banknote },
-];
+    { label: "All", value: "all" },
+    { label: "Cafes", value: "Cafes", icon: Coffee },
+    { label: "Restaurants", value: "Restaurants", icon: ConciergeBell },
+    { label: "Travel", value: "Travel", icon: Map },
+    { label: "Products", value: "Products", icon: Package },
+    { label: "Stays", value: "Stays", icon: House },
+    { label: "Experiences", value: "Experiences", icon: Banknote },
+  ];
 
 const containerStyle = {
   width: "100%",
-  height: "100%",  
+  height: "100%",
 };
 
 const modernStyle = [
@@ -148,8 +148,8 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) ** 2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
@@ -295,8 +295,8 @@ const InfluencerPage: React.FC = () => {
               {isLocating
                 ? "Finding nearby places…"
                 : userLocation
-                ? "Nearby (50 km)"
-                : "Explore places"}
+                  ? "Nearby (50 km)"
+                  : "Explore places"}
             </p>
           </div>
           <button
@@ -337,9 +337,8 @@ const InfluencerPage: React.FC = () => {
           return (
             <Card
               key={place.uuid}
-              className={`border rounded-2xl overflow-hidden cursor-pointer p-0 gap-2 shadow-none ${
-                isSelected ? "border-slate-300" : "hover:border-slate-300"
-              }`}
+              className={`border rounded-2xl overflow-hidden cursor-pointer p-0 gap-2 shadow-none ${isSelected ? "border-slate-300" : "hover:border-slate-300"
+                }`}
               onClick={() => {
                 handlePlaceClick(
                   place.uuid!,
@@ -377,8 +376,8 @@ const InfluencerPage: React.FC = () => {
                     const images = Array.isArray(imageUrl)
                       ? imageUrl
                       : imageUrl
-                      ? [imageUrl]
-                      : [];
+                        ? [imageUrl]
+                        : [];
 
                     if (!images.length) return null;
 
@@ -478,9 +477,8 @@ const InfluencerPage: React.FC = () => {
             <Button
               variant={"outline"}
               onClick={() => setSidebarOpen(false)}
-              className={`${
-                sidebarOpen ? "" : "bg-gray-200 border border-gray-300"
-              }`}
+              className={`${sidebarOpen ? "" : "bg-gray-200 border border-gray-300"
+                }`}
             >
               <Map />
             </Button>
@@ -533,11 +531,10 @@ const InfluencerPage: React.FC = () => {
                       <Badge
                         key={cat.value}
                         variant={isActive ? "secondary" : "outline"}
-                        className={`flex items-center gap-2 rounded-full py-1.5 px-4 text-xs cursor-pointer transition ${
-                          isActive
-                            ? "bg-slate-900 text-white"
-                            : "hover:bg-gray-200 bg-white"
-                        }`}
+                        className={`flex items-center gap-2 rounded-full py-1.5 px-4 text-xs cursor-pointer transition ${isActive
+                          ? "bg-slate-900 text-white"
+                          : "hover:bg-gray-200 bg-white"
+                          }`}
                         onClick={() => setActiveCategory(cat.value)}
                       >
                         {Icon && (
