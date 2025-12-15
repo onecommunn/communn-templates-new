@@ -44,7 +44,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { splitCamelCase } from "@/utils/StringFunctions";
 import {
@@ -54,7 +54,7 @@ import {
 import { AuthContext } from "@/contexts/Auth.context";
 import { toast } from "sonner";
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
+const API_KEY = "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
 const CATEGORY_ICON: Record<string, React.ElementType> = {
   Cafes: Coffee,
@@ -66,12 +66,32 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 };
 
 const modernStyle = [
-  { featureType: "all", elementType: "labels.text", stylers: [{ color: "#878787" }] },
-  { featureType: "all", elementType: "labels.text.stroke", stylers: [{ visibility: "off" }] },
-  { featureType: "landscape", elementType: "all", stylers: [{ color: "#f9f5ed" }] },
-  { featureType: "road.highway", elementType: "all", stylers: [{ color: "#f5f5f5" }] },
-  { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#c9c9c9" }] },
-  { featureType: "water", elementType: "all", stylers: [{ color: "#aee0f4" }] },
+  {
+    featureType: "all",
+    elementType: "labels.text",
+    stylers: [{ color: "#878787" }],
+  },
+  {
+    featureType: "all",
+    elementType: "labels.text.stroke",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "landscape",
+    elementType: "all",
+    stylers: [{ color: "#e7ebf1" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "all",
+    stylers: [{ color: "#f5f5f5" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#c9c9c9" }],
+  },
+  { featureType: "water", elementType: "all", stylers: [{ color: "#ACDBFE" }] },
 ];
 
 type UserLocation = { lat: number; lng: number };
@@ -94,7 +114,12 @@ const normalizeArray = <T,>(raw: any): T[] => {
   return [];
 };
 
-const getDistanceInKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+const getDistanceInKm = (
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+) => {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLng = ((lng2 - lng1) * Math.PI) / 180;
@@ -150,7 +175,10 @@ export default function InfluencerPage() {
   const onLoad = React.useCallback((mapInstance: google.maps.Map) => {
     const bounds = new window.google.maps.LatLngBounds();
     touristPlacesListing.forEach((item) => {
-      bounds.extend({ lat: item.details.latitude, lng: item.details.longitude });
+      bounds.extend({
+        lat: item.details.latitude,
+        lng: item.details.longitude,
+      });
     });
     mapInstance.fitBounds(bounds, 80);
     setMap(mapInstance);
@@ -169,7 +197,10 @@ export default function InfluencerPage() {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setUserLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
         setIsLocating(false);
       },
       (err) => {
@@ -267,7 +298,9 @@ export default function InfluencerPage() {
           <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 p-6">
             <MapPin className="h-8 w-8 mb-2 opacity-60" />
             <p className="font-medium text-sm">No places found</p>
-            <p className="text-xs mt-1">Try changing category, search, or location</p>
+            <p className="text-xs mt-1">
+              Try changing category, search, or location
+            </p>
           </div>
         ) : (
           <div className="p-4 space-y-3 overflow-y-auto md:h-full">
@@ -275,7 +308,11 @@ export default function InfluencerPage() {
               const isSelected = selectedId === place.uuid;
               const { name, city, area, description, imageUrl } = place.details;
 
-              const images = Array.isArray(imageUrl) ? imageUrl : imageUrl ? [imageUrl] : [];
+              const images = Array.isArray(imageUrl)
+                ? imageUrl
+                : imageUrl
+                ? [imageUrl]
+                : [];
 
               return (
                 <Card
@@ -285,7 +322,11 @@ export default function InfluencerPage() {
                   }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
-                    handlePlaceClick(place.uuid!, place.details.latitude, place.details.longitude);
+                    handlePlaceClick(
+                      place.uuid!,
+                      place.details.latitude,
+                      place.details.longitude
+                    );
                   }}
                 >
                   <div className="p-4 pb-0 space-y-2">
@@ -297,7 +338,10 @@ export default function InfluencerPage() {
                           {area || city}
                         </p>
                       </div>
-                      <Badge variant="outline" className="text-[10px] rounded-full bg-slate-100">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] rounded-full bg-slate-100"
+                      >
                         {place.details.category}
                       </Badge>
                     </div>
@@ -318,7 +362,13 @@ export default function InfluencerPage() {
                           {images.map((item, idx) => (
                             <CarouselItem key={idx} className="basis-2/5">
                               <div className="relative w-full h-[150px] rounded-xl overflow-hidden">
-                                <Image src={item} alt={`img-${idx}`} fill className="object-cover" unoptimized />
+                                <Image
+                                  src={item}
+                                  alt={`img-${idx}`}
+                                  fill
+                                  className="object-cover"
+                                  unoptimized
+                                />
                               </div>
                             </CarouselItem>
                           ))}
@@ -326,20 +376,34 @@ export default function InfluencerPage() {
                       </Carousel>
                     )}
 
-                    <p className="text-xs text-slate-600 line-clamp-2">{description}</p>
+                    <p className="text-xs text-slate-600 line-clamp-2">
+                      {description}
+                    </p>
                   </div>
 
                   <CardContent className="p-4 pt-3">
                     <div className="grid grid-cols-3 gap-2">
-                      <Button variant="outline" size="sm" className="h-9 text-xs">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 text-xs"
+                      >
                         <MapPin className="h-3 w-3 mr-1" />
                         Directions
                       </Button>
-                      <Button variant="outline" size="sm" className="h-9 text-xs">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 text-xs"
+                      >
                         <BookmarkPlus className="h-3 w-3 mr-1" />
                         Save
                       </Button>
-                      <Button variant="outline" size="sm" className="h-9 text-xs">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 text-xs"
+                      >
                         <Share2 className="h-3 w-3 mr-1" />
                         Share
                       </Button>
@@ -366,12 +430,19 @@ export default function InfluencerPage() {
             <div>
               <p className="text-xs text-slate-500">Location</p>
               <p className="text-sm md:text-lg font-semibold text-slate-900">
-                {isLocating ? "Finding nearby..." : userLocation ? "Nearby (50 km)" : "Explore places"}
+                {isLocating
+                  ? "Finding nearby..."
+                  : userLocation
+                  ? "Nearby (50 km)"
+                  : "Explore places"}
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="h-9 rounded-md cursor-pointer">
+              <Button
+                variant="outline"
+                className="h-9 rounded-md cursor-pointer"
+              >
                 View Saved
               </Button>
               <Button className="h-9 rounded-md bg-[#1F4AA8] hover:bg-[#163A87] cursor-pointer">
@@ -404,7 +475,9 @@ export default function InfluencerPage() {
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
                 className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
-                  activeCategory === "all" ? "bg-slate-900 text-white" : "bg-white hover:bg-slate-50"
+                  activeCategory === "all"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white hover:bg-slate-50"
                 }`}
                 onClick={() => setActiveCategory("all")}
               >
@@ -421,7 +494,9 @@ export default function InfluencerPage() {
                     key={cat._id}
                     variant={isActive ? "secondary" : "outline"}
                     className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
-                      isActive ? "bg-slate-900 text-white" : "bg-white hover:bg-slate-50"
+                      isActive
+                        ? "bg-slate-900 text-white"
+                        : "bg-white hover:bg-slate-50"
                     }`}
                     onClick={() => setActiveCategory(name)}
                   >
@@ -473,7 +548,11 @@ export default function InfluencerPage() {
                     disabled={isLocating}
                     title="Find nearby"
                   >
-                    {isLocating ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}
+                    {isLocating ? (
+                      <LoaderCircle className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <LocateFixed className="h-4 w-4" />
+                    )}
                   </button>
 
                   <div className="h-full">
@@ -492,22 +571,35 @@ export default function InfluencerPage() {
               </div>
 
               {/* RIGHT PANEL */}
-              <div className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"} shrink-0 transition-all`}>
+              <div
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
+              >
                 <button
                   onClick={() => setPanelOpen((p) => !p)}
                   className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
                   title="Toggle panel"
                 >
-                  {panelOpen ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                  {panelOpen ? (
+                    <ChevronRight className="h-4 w-4" />
+                  ) : (
+                    <ChevronLeft className="h-4 w-4" />
+                  )}
                 </button>
 
-                <div className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"}`}>
+                <div
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
+                >
                   {renderResultsList()}
                 </div>
               </div>
 
               {/* MOBILE DRAWER */}
               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                <DrawerTitle className="hidden">List</DrawerTitle>
                 <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
                   <div className="flex justify-center items-center w-full">
                     <button
@@ -517,7 +609,9 @@ export default function InfluencerPage() {
                       <ChevronDown size={24} />
                     </button>
                   </div>
-                  <div className="h-full overflow-y-auto bg-white">{renderResultsList()}</div>
+                  <div className="h-full overflow-y-auto bg-white">
+                    {renderResultsList()}
+                  </div>
                 </DrawerContent>
               </Drawer>
             </div>
@@ -537,7 +631,11 @@ export default function InfluencerPage() {
                     {isLocating ? (
                       <LoaderCircle className="h-4 w-4 animate-spin" />
                     ) : (
-                      <LocateFixed className="h-4 w-4" strokeWidth={1.5} size={20} />
+                      <LocateFixed
+                        className="h-4 w-4"
+                        strokeWidth={1.5}
+                        size={20}
+                      />
                     )}
                   </button>
 
@@ -556,16 +654,28 @@ export default function InfluencerPage() {
                 </div>
               </div>
 
-              <div className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"} shrink-0 transition-all`}>
+              <div
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
+              >
                 <button
                   onClick={() => setPanelOpen((p) => !p)}
                   className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
                   title="Toggle panel"
                 >
-                  {panelOpen ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                  {panelOpen ? (
+                    <ChevronRight className="h-4 w-4" />
+                  ) : (
+                    <ChevronLeft className="h-4 w-4" />
+                  )}
                 </button>
 
-                <div className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"}`}>
+                <div
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
+                >
                   {renderResultsList()}
                 </div>
               </div>
@@ -580,7 +690,9 @@ export default function InfluencerPage() {
                       <ChevronDown size={24} />
                     </button>
                   </div>
-                  <div className="h-full overflow-y-auto bg-white">{renderResultsList()}</div>
+                  <div className="h-full overflow-y-auto bg-white">
+                    {renderResultsList()}
+                  </div>
                 </DrawerContent>
               </Drawer>
             </div>
@@ -594,7 +706,9 @@ export default function InfluencerPage() {
                     ? `${item.details.area}, ${item.details.city}`
                     : item?.details?.city || item?.details?.area || "";
 
-                const imageSrc = item?.details?.imageUrl || ["/assets/map-image-placeholder.jpg"];
+                const imageSrc = item?.details?.imageUrl || [
+                  "/assets/map-image-placeholder.jpg",
+                ];
 
                 return (
                   <Card
@@ -611,13 +725,20 @@ export default function InfluencerPage() {
 
                     <CardContent className="p-4 space-y-3">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="font-semibold text-sm line-clamp-1">{item?.details?.name}</p>
-                        <Badge variant="secondary" className="text-[11px] px-2 py-0.5 rounded-full">
+                        <p className="font-semibold text-sm line-clamp-1">
+                          {item?.details?.name}
+                        </p>
+                        <Badge
+                          variant="secondary"
+                          className="text-[11px] px-2 py-0.5 rounded-full"
+                        >
                           {splitCamelCase(item?.details?.category)}
                         </Badge>
                       </div>
 
-                      <p className="text-xs text-slate-600 line-clamp-2">{item?.details?.description}</p>
+                      <p className="text-xs text-slate-600 line-clamp-2">
+                        {item?.details?.description}
+                      </p>
 
                       {locText && (
                         <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-600">
@@ -627,11 +748,18 @@ export default function InfluencerPage() {
                       )}
 
                       <div className="mt-3 flex gap-2">
-                        <Button variant="outline" size="sm" className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer"
+                        >
                           <Play className="h-3 w-3" />
                           View Reel
                         </Button>
-                        <Button size="sm" className="flex-1 justify-center text-xs cursor-pointer">
+                        <Button
+                          size="sm"
+                          className="flex-1 justify-center text-xs cursor-pointer"
+                        >
                           Go to Maps
                         </Button>
                       </div>
