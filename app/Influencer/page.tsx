@@ -819,75 +819,85 @@ export default function InfluencerPage() {
           </TabsContent>
 
           <TabsContent value="list">
-            <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2">
-              {filteredPlaces.map((item, idx) => {
-                const locText =
-                  item?.details?.area && item?.details?.city
-                    ? `${item.details.area}, ${item.details.city}`
-                    : item?.details?.city || item?.details?.area || "";
+            {filteredPlaces.length === 0 ? (
+              <div className="h-[70vh] flex flex-col items-center justify-center text-center text-slate-500 p-6">
+                <MapPin className="h-8 w-8 md:h-10 md:w-10 mb-2 opacity-60" />
+                <p className="font-medium text-sm md:text-xl">No places found</p>
+                <p className="text-xs md:text-[16px] mt-1">
+                  Try changing category, search, or location
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2">
+                {filteredPlaces.map((item, idx) => {
+                  const locText =
+                    item?.details?.area && item?.details?.city
+                      ? `${item.details.area}, ${item.details.city}`
+                      : item?.details?.city || item?.details?.area || "";
 
-                const imageSrc = item?.details?.imageUrl || [
-                  "/assets/map-image-placeholder.jpg",
-                ];
+                  const imageSrc = item?.details?.imageUrl || [
+                    "/assets/map-image-placeholder.jpg",
+                  ];
 
-                return (
-                  <Card
-                    className="w-full rounded-2xl shadow-none border border-slate-200 overflow-hidden p-0 gap-2"
-                    key={idx}
-                  >
-                    <div className="relative h-40 w-full overflow-hidden">
-                      <img
-                        src={imageSrc?.[0]}
-                        alt={item?.details?.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="font-semibold text-sm line-clamp-1">
-                          {item?.details?.name}
-                        </p>
-                        <Badge
-                          variant="secondary"
-                          className="text-[11px] px-2 py-0.5 rounded-full"
-                        >
-                          {splitCamelCase(item?.details?.category)}
-                        </Badge>
+                  return (
+                    <Card
+                      className="w-full rounded-2xl shadow-none border border-slate-200 overflow-hidden p-0 gap-2"
+                      key={idx}
+                    >
+                      <div className="relative h-40 w-full overflow-hidden">
+                        <img
+                          src={imageSrc?.[0]}
+                          alt={item?.details?.name}
+                          className="h-full w-full object-cover"
+                        />
                       </div>
 
-                      <p className="text-xs text-slate-600 line-clamp-2">
-                        {item?.details?.description}
-                      </p>
-
-                      {locText && (
-                        <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-600">
-                          <MapPin className="h-3 w-3" />
-                          <span className="truncate">{locText}</span>
+                      <CardContent className="p-4 space-y-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="font-semibold text-sm line-clamp-1">
+                            {item?.details?.name}
+                          </p>
+                          <Badge
+                            variant="secondary"
+                            className="text-[11px] px-2 py-0.5 rounded-full"
+                          >
+                            {splitCamelCase(item?.details?.category)}
+                          </Badge>
                         </div>
-                      )}
 
-                      <div className="mt-3 flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer"
-                        >
-                          <Play className="h-3 w-3" />
-                          View Reel
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="flex-1 justify-center text-xs cursor-pointer"
-                        >
-                          Go to Maps
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+                        <p className="text-xs text-slate-600 line-clamp-2">
+                          {item?.details?.description}
+                        </p>
+
+                        {locText && (
+                          <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-600">
+                            <MapPin className="h-3 w-3" />
+                            <span className="truncate">{locText}</span>
+                          </div>
+                        )}
+
+                        <div className="mt-3 flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer"
+                          >
+                            <Play className="h-3 w-3" />
+                            View Reel
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="flex-1 justify-center text-xs cursor-pointer"
+                          >
+                            Go to Maps
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
           </TabsContent>
         </div>
       </Tabs>
