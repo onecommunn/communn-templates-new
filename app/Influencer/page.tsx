@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import {
   Banknote,
   BookmarkPlus,
@@ -53,6 +54,7 @@ import {
 } from "@/services/Influencer/influencer.service";
 import { AuthContext } from "@/contexts/Auth.context";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const API_KEY = "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
@@ -66,32 +68,49 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 };
 
 const modernStyle = [
-  {
-    featureType: "all",
-    elementType: "labels.text",
-    stylers: [{ color: "#878787" }],
-  },
-  {
-    featureType: "all",
-    elementType: "labels.text.stroke",
-    stylers: [{ visibility: "off" }],
-  },
-  {
-    featureType: "landscape",
-    elementType: "all",
-    stylers: [{ color: "#e7ebf1" }],
-  },
-  {
-    featureType: "road.highway",
-    elementType: "all",
-    stylers: [{ color: "#f5f5f5" }],
-  },
-  {
-    featureType: "road.highway",
-    elementType: "geometry.stroke",
-    stylers: [{ color: "#c9c9c9" }],
-  },
-  { featureType: "water", elementType: "all", stylers: [{ color: "#ACDBFE" }] },
+  // {
+  //   featureType: "all",
+  //   elementType: "labels.text",
+  //   stylers: [{ color: "#878787" }],
+  // },
+  // {
+  //   featureType: "all",
+  //   elementType: "labels.text.stroke",
+  //   stylers: [{ visibility: "off" }],
+  // },
+  // {
+  //   featureType: "landscape",
+  //   elementType: "all",
+  //   stylers: [{ color: "#e7ebf1" }],
+  // },
+  // {
+  //   featureType: "road.highway",
+  //   elementType: "all",
+  //   stylers: [{ color: "#f5f5f5" }],
+  // },
+  // {
+  //   featureType: "road.highway",
+  //   elementType: "geometry.stroke",
+  //   stylers: [{ color: "#c9c9c9" }],
+  // },
+  // { featureType: "water", elementType: "all", stylers: [{ color: "#ACDBFE" }] },
+
+  // hide all POI markers + labels
+  { featureType: "poi", elementType: "all", stylers: [{ visibility: "off" }] },
+
+  // optional: hide transit icons/labels too
+  // {
+  //   featureType: "transit",
+  //   elementType: "all",
+  //   stylers: [{ visibility: "off" }],
+  // },
+
+  // optional: hide road icons (sometimes show up)
+  // {
+  //   featureType: "road",
+  //   elementType: "labels.icon",
+  //   stylers: [{ visibility: "off" }],
+  // },
 ];
 
 type UserLocation = { lat: number; lng: number };
@@ -127,10 +146,32 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+const geocodePlace = async (placeId: string) => {
+  const geocoder = new window.google.maps.Geocoder();
+
+  const results = await new Promise<google.maps.GeocoderResult[]>(
+    (resolve, reject) => {
+      geocoder.geocode({ placeId }, (res, status) => {
+        if (status === "OK" && res) resolve(res);
+        else reject(new Error(status));
+      });
+    }
+  );
+
+  const loc = results?.[0]?.geometry?.location;
+  if (!loc) throw new Error("No location found");
+
+  return {
+    lat: loc.lat(),
+    lng: loc.lng(),
+    formatted: results?.[0]?.formatted_address || "",
+  };
 };
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
@@ -139,13 +180,22 @@ export default function InfluencerPage() {
   const auth = useContext(AuthContext);
   const { communityId } = auth;
 
+  const isMobile = useIsMobile();
+
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [listQuery, setListQuery] = useState("");
+
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+
+  const [placeValue, setPlaceValue] = useState<any>(null);
+  const [searchLocation, setSearchLocation] = useState<UserLocation | null>(
+    null
+  );
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
@@ -263,17 +313,18 @@ export default function InfluencerPage() {
         activeCategory === "all" || place.details.category === activeCategory;
       if (!matchesCategory) return false;
 
-      const q = searchQuery.trim().toLowerCase();
+      const q = listQuery.trim().toLowerCase();
       if (q) {
         const text =
           `${place.details.name} ${place.details.city} ${place.details.area} ${place.details.description}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
-      if (userLocation) {
+      const base = searchLocation || userLocation;
+      if (base) {
         const d = getDistanceInKm(
-          userLocation.lat,
-          userLocation.lng,
+          base.lat,
+          base.lng,
           place.details.latitude,
           place.details.longitude
         );
@@ -282,7 +333,7 @@ export default function InfluencerPage() {
 
       return true;
     });
-  }, [activeCategory, searchQuery, userLocation]);
+  }, [activeCategory, listQuery, userLocation, searchLocation]);
 
   const handlePlaceClick = (uuid: string, lat: number, lng: number) => {
     setSelectedId(uuid);
@@ -311,14 +362,15 @@ export default function InfluencerPage() {
               const images = Array.isArray(imageUrl)
                 ? imageUrl
                 : imageUrl
-                  ? [imageUrl]
-                  : [];
+                ? [imageUrl]
+                : [];
 
               return (
                 <Card
                   key={place.uuid}
-                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${isSelected ? "border-slate-300" : "hover:border-slate-300"
-                    }`}
+                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
+                    isSelected ? "border-slate-300" : "hover:border-slate-300"
+                  }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
                     handlePlaceClick(
@@ -432,8 +484,10 @@ export default function InfluencerPage() {
                 {isLocating
                   ? "Finding nearby..."
                   : userLocation
-                    ? "Nearby (50 km)"
-                    : "Explore places"}
+                  ? "Nearby (50 km)"
+                  : placeValue
+                  ? placeValue?.label
+                  : "Explore places"}
               </p>
             </div>
 
@@ -454,29 +508,97 @@ export default function InfluencerPage() {
           <div className="px-6 max-w-screen pb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             {/* Search */}
             <div className="md:max-w-[340px] w-full">
-              <InputGroup>
-                <InputGroupInput
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
+              <div className="relative">
+                <GooglePlacesAutocomplete
+                  apiKey={API_KEY}
+                  selectProps={{
+                    value: placeValue,
+
+                    // ✅ user typing (for listQuery filter)
+                    onInputChange: (val, meta) => {
+                      if (meta.action === "input-change") {
+                        setListQuery(val);
+                      }
+                    },
+
+                    onChange: async (val) => {
+                      // clear
+                      if (!val) {
+                        setPlaceValue(null);
+                        setListQuery("");
+                        setSearchLocation(null);
+                        return;
+                      }
+
+                      try {
+                        const placeId = val?.value?.place_id;
+                        if (!placeId) return;
+
+                        const { lat, lng, formatted } = await geocodePlace(
+                          placeId
+                        );
+
+                        // ✅ IMPORTANT: update the label so input shows formatted text
+                        const nextVal = {
+                          ...val,
+                          label: formatted || val.label,
+                        };
+
+                        setPlaceValue(nextVal);
+
+                        // ✅ clear text filter so results are NOT blocked by address text
+                        setListQuery("");
+
+                        // ✅ pan map + filter radius
+                        if (map) {
+                          map.panTo({ lat, lng });
+                          map.setZoom(13);
+                        }
+                        setSearchLocation({ lat, lng });
+
+                        if (isMobile) setIsDrawerOpen(true);
+                      } catch (e) {
+                        console.error(e);
+                        toast.error("Unable to locate this place");
+                      }
+                    },
+
+                    placeholder: "Search places...",
+                    isClearable: true,
+
+                    styles: {
+                      control: (base) => ({
+                        ...base,
+                        // minHeight: 32,
+                        borderRadius: "8px",
+                        borderColor: "#e2e8f0",
+                        boxShadow: "none",
+                        fontSize: "14px",
+                      }),
+                      menu: (base) => ({ ...base, zIndex: 9999 }),
+                    },
+                  }}
                 />
-                <InputGroupAddon>
-                  <Search className="h-4 w-4" />
-                </InputGroupAddon>
-                <InputGroupAddon align={"inline-end"} className="font-normal">
-                  {filteredPlaces.length} Results
-                </InputGroupAddon>
-              </InputGroup>
+
+                {/* right side icons like your InputGroupAddon */}
+                {/* <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+                  <Search className="h-4 w-4 text-slate-500" />
+                  <span className="text-xs text-slate-500">
+                    {filteredPlaces.length} Results
+                  </span>
+                </div> */}
+              </div>
             </div>
 
             {/* Chips */}
             <div className="w-full md:flex-1 flex md:flex-wrap items-center gap-2 overflow-x-auto overflow-y-hidden mr-10 pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${activeCategory === "all"
+                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
+                  activeCategory === "all"
                     ? "bg-slate-900 text-white"
                     : "bg-white hover:bg-slate-50"
-                  }`}
+                }`}
                 onClick={() => setActiveCategory("all")}
               >
                 All
@@ -491,10 +613,11 @@ export default function InfluencerPage() {
                   <Badge
                     key={cat._id}
                     variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${isActive
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
+                      isActive
                         ? "bg-slate-900 text-white"
                         : "bg-white hover:bg-slate-50"
-                      }`}
+                    }`}
                     onClick={() => setActiveCategory(name)}
                   >
                     {Icon && <Icon size={18} strokeWidth={1.5} />}
@@ -552,7 +675,7 @@ export default function InfluencerPage() {
                     )}
                   </button>
 
-                  <div className="h-full">
+                  <div className="h-full" style={{ textAlign: "left" }}>
                     <GoogleMap
                       mapContainerStyle={{ width: "100%", height: "100%" }}
                       onLoad={onLoad}
@@ -569,8 +692,9 @@ export default function InfluencerPage() {
 
               {/* RIGHT PANEL */}
               <div
-                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
-                  } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
               >
                 <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -585,8 +709,9 @@ export default function InfluencerPage() {
                 </button>
 
                 <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
-                    }`}
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -594,8 +719,8 @@ export default function InfluencerPage() {
 
               {/* MOBILE DRAWER */}
               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                <DrawerTitle className="hidden">List</DrawerTitle>
                 <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
+                  <DrawerTitle className="hidden">List</DrawerTitle>
                   <div className="flex justify-center items-center w-full">
                     <button
                       onClick={() => setIsDrawerOpen((prev) => !prev)}
@@ -650,8 +775,9 @@ export default function InfluencerPage() {
               </div>
 
               <div
-                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
-                  } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
               >
                 <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -666,8 +792,9 @@ export default function InfluencerPage() {
                 </button>
 
                 <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
-                    }`}
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
                 >
                   {renderResultsList()}
                 </div>

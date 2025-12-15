@@ -12,7 +12,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   Cafes: "/assets/map-markers/coffee-pin.svg",
   Products: "/assets/map-markers/box-pin.svg",
   Travel: "/assets/map-markers/map-pin.svg",
-  Experiences:"/assets/map-markers/lib-pin.svg"
+  Experiences: "/assets/map-markers/lib-pin.svg",
 };
 
 type MarkerItemProps = {
@@ -57,7 +57,6 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
 
   const imageSrc =
     selectedPlace?.details?.imageUrl || "/assets/map-image-placeholder.jpg";
-    
 
   return (
     <>
@@ -65,7 +64,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
         position={{ lat: latitude, lng: longitude }}
         icon={{
           url: iconUrl,
-          scaledSize: new window.google.maps.Size(40, 60),
+          scaledSize: new window.google.maps.Size(50, 70),
         }}
         onClick={handleMarkerClick}
       />
