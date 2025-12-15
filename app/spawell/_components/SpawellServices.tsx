@@ -6,7 +6,7 @@ import * as Lucide from "lucide-react";
 import type { LucideProps } from "lucide-react";
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { ServiceSection } from "@/models/templates/spawell/spawell-home-model";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import Link from "next/link";
 
 /** ----- helpers ----- */

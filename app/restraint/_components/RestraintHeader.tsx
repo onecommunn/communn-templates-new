@@ -37,7 +37,7 @@ import {
 import {
   toSnakeCase,
   underscoreToSpace,
-} from "@/components/utils/StringFunctions";
+} from "@/utils/StringFunctions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,

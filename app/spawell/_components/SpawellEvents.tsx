@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Event } from "@/models/event.model";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { EventsSection } from "@/models/templates/spawell/spawell-home-model";
 
 function Dots({

@@ -18,7 +18,7 @@ import {
   FooterSection,
   SocialMediaLink,
 } from "@/models/templates/martivo/martivo-home-model";
-import { formatUrl } from "@/components/utils/StringFunctions";
+import { formatUrl } from "@/utils/StringFunctions";
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
   instagram: Instagram,

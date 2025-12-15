@@ -1,6 +1,6 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
 import { Button } from "@/components/ui/button";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import { Service } from "@/models/templates/yogana/yogana-home-model";
 import Link from "next/link";
 import React from "react";

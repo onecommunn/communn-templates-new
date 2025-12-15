@@ -24,7 +24,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactSection,

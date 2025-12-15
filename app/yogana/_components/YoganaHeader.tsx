@@ -27,7 +27,7 @@ import {
 import {
   toSnakeCase,
   underscoreToSpace,
-} from "@/components/utils/StringFunctions";
+} from "@/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import {
   ContactDetails,

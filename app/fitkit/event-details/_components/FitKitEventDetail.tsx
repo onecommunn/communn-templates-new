@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatDate, formatTime } from "@/components/utils/StringFunctions";
+import { formatDate, formatTime } from "@/utils/StringFunctions";
 import { Event } from "@/models/event.model";
 import {
   freeEventsNoAuth,

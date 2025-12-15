@@ -42,6 +42,11 @@ export function underscoreToSpace(text: string): string {
   return text.replace(/_/g, " ");
 }
 
+export const splitCamelCase = (text: string): string => {
+  if (!text) return "";
+  return text.replace(/([a-z])([A-Z])/g, "$1 $2").trim();
+};
+
 export const formatUrl = (url: string) => {
   if (!url) return "/";
 

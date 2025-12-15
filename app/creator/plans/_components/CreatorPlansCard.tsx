@@ -15,7 +15,7 @@ import {
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
 import { toast } from "sonner";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { LockKeyhole } from "lucide-react";
 import { useRequests } from "@/hooks/useRequests";
 interface ICreatorPlansCard {

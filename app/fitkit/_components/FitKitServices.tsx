@@ -11,7 +11,7 @@ import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Image from "next/image";
 import { ServiceSection } from "@/models/templates/fitkit/fitkit-home-model";
-import { underscoreToSpace } from "@/components/utils/StringFunctions";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 import Link from "next/link";
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };

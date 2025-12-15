@@ -15,7 +15,7 @@ import {
   ServiceSection,
   SocialMediaLink,
 } from "@/models/templates/spawell/spawell-home-model";
-import { formatUrl, underscoreToSpace } from "@/components/utils/StringFunctions";
+import { formatUrl, underscoreToSpace } from "@/utils/StringFunctions";
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
   instagram: Instagram,

@@ -1,4 +1,4 @@
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import Image from "next/image";
 import React from "react";
 

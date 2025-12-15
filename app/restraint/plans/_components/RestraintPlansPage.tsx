@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
 import { PlanCard } from "../../_components/RestraintPlans";

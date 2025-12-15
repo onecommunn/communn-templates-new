@@ -29,7 +29,7 @@ import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useCommunity } from "@/hooks/useCommunity";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { toast } from "sonner";
 import { useRequests } from "@/hooks/useRequests";
 import { PlansSection } from "@/models/templates/restraint/restraint-home-model";

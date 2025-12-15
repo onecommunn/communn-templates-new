@@ -8,13 +8,13 @@ import { usePlans } from "@/hooks/usePlan";
 import { IPaymentList } from "@/models/payment.model";
 import { usePayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
-import PaymentSuccess from "@/components/utils/PaymentSuccess";
-import PaymentFailure from "@/components/utils/PaymentFailure";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 import { Button } from "@/components/ui/button";
 import {
   capitalizeWords,
   formatDate,
-} from "@/components/utils/StringFunctions";
+} from "@/utils/StringFunctions";
 import { CirclePause, Gift, Info, Loader2, Minus, Plus, X } from "lucide-react";
 import {
   Dialog,

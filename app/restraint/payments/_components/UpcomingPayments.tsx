@@ -3,7 +3,7 @@ import { AuthContext } from "@/contexts/Auth.context";
 import { usePayment } from "@/hooks/usePayments";
 import React, { useContext, useEffect, useState } from "react";
 import PaymentsSkeleton from "./PaymentsSkeleton";
-import { getStaticValue } from "@/components/utils/StringFunctions";
+import { getStaticValue } from "@/utils/StringFunctions";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import {

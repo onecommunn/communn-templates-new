@@ -15,7 +15,7 @@ import { Event } from "@/models/event.model";
 import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
-import { formatDate } from "@/components/utils/StringFunctions";
+import { formatDate } from "@/utils/StringFunctions";
 
 export const formatTime = (time24: string) => {
   if (!time24) return "--:--";

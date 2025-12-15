@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
 import { useRequests } from "@/hooks/useRequests";

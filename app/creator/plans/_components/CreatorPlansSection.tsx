@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import CreatorPlansCard from "./CreatorPlansCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { useCommunity } from "@/hooks/useCommunity";
 
 const CreatorPlansSection = ({

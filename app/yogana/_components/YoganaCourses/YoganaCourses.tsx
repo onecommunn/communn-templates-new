@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { capitalizeWords } from "@/components/utils/StringFunctions";
+import { capitalizeWords } from "@/utils/StringFunctions";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Course } from "@/models/course.mode";
 import { getCourses } from "@/services/courseService";
