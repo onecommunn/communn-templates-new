@@ -2,11 +2,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Service } from "@/models/templates/fitkit/fitkit-home-model";
 import { useSearchParams } from "next/navigation";
-import { fetchFitKitServiceBundle } from "@/lib/FitKit/fitkit-service-cms";
 import { AuthContext } from "@/contexts/Auth.context";
 import FitkitServiceHero from "./FitkitServiceHero";
 import FitkitServiceContent from "./FitkitServiceContent";
 import FitkitCTA from "../../_components/FitkitCTA";
+import { fetchFitKitServiceBundle } from "@/services/FitKit/fitKit.service";
 
 const FitkitServicePage = ({
   primaryColor,

@@ -1,60 +1,60 @@
 "use client";
-
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Banknote,
   BookmarkPlus,
+  Calendar,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Coffee,
   ConciergeBell,
-  LocateFixed,
+  Home,
+  House,
+  Inbox,
   LoaderCircle,
+  LocateFixed,
+  Map,
   MapPin,
   Package,
   Search,
+  Settings,
   Share2,
-  House,
-  Map,
-  SlidersHorizontal,
-  LayoutGrid,
-  ChevronUp,
   TextAlignJustify,
-  Play,
 } from "lucide-react";
 
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import MarkerItem from "./_components/MarkerItem";
+import { Badge } from "@/components/ui/badge";
 import { touristPlacesListing } from "./data/data-listing";
 import InfluencerPageSkeleton from "./_components/InfluencerPageSkeleton";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-
-import Autoplay from "embla-carousel-autoplay";
-import type { EmblaOptionsType } from "embla-carousel";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Autoplay from "embla-carousel-autoplay";
+import type { EmblaOptionsType } from "embla-carousel";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { splitCamelCase } from "@/utils/StringFunctions";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const API_KEY =
   process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ??
-  "AIzaSyALeRlJaJS3IpdiDH4jFix6L-IXH3Wo8yE";
+  "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
 const CATEGORY_FILTERS: {
   label: string;
@@ -70,33 +70,66 @@ const CATEGORY_FILTERS: {
   { label: "Experiences", value: "Experiences", icon: Banknote },
 ];
 
+const containerStyle = {
+  width: "100%",
+  height: "100%",  
+};
+
 const modernStyle = [
   {
     featureType: "all",
     elementType: "labels.text",
-    stylers: [{ color: "#878787" }],
+    stylers: [
+      {
+        color: "#878787",
+      },
+    ],
   },
   {
     featureType: "all",
     elementType: "labels.text.stroke",
-    stylers: [{ visibility: "off" }],
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
   },
   {
     featureType: "landscape",
     elementType: "all",
-    stylers: [{ color: "#f9f5ed" }],
+    stylers: [
+      {
+        color: "#f9f5ed",
+      },
+    ],
   },
   {
     featureType: "road.highway",
     elementType: "all",
-    stylers: [{ color: "#f5f5f5" }],
+    stylers: [
+      {
+        color: "#f5f5f5",
+      },
+    ],
   },
   {
     featureType: "road.highway",
     elementType: "geometry.stroke",
-    stylers: [{ color: "#c9c9c9" }],
+    stylers: [
+      {
+        color: "#c9c9c9",
+      },
+    ],
   },
-  { featureType: "water", elementType: "all", stylers: [{ color: "#aee0f4" }] },
+  {
+    featureType: "water",
+    elementType: "all",
+    stylers: [
+      {
+        color: "#aee0f4",
+      },
+    ],
+  },
 ];
 
 type UserLocation = { lat: number; lng: number };
@@ -122,34 +155,19 @@ const getDistanceInKm = (
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
-export default function InfluencerPageCopy() {
+const InfluencerPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
-
-  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [map, setMap] = React.useState<google.maps.Map | null>(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: API_KEY,
   });
-
-  // Right panel collapse (like image)
-  const [panelOpen, setPanelOpen] = useState(true);
-
-  // Location
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isDrawerOpen, setisDrawerOpen] = useState<boolean>(true);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [isLocating, setIsLocating] = useState(false);
-
-  const mapOptions: google.maps.MapOptions = {
-    zoomControl: true,
-    streetViewControl: false,
-    mapTypeControl: false,
-    fullscreenControl: false,
-    styles: modernStyle,
-    mapTypeId: "roadmap",
-    disableDefaultUI: true,
-  };
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   const onLoad = React.useCallback((mapInstance: google.maps.Map) => {
     const bounds = new window.google.maps.LatLngBounds();
@@ -163,130 +181,207 @@ export default function InfluencerPageCopy() {
     setMap(mapInstance);
   }, []);
 
-  const onUnmount = React.useCallback(() => setMap(null), []);
+  const onUnmount = React.useCallback(() => {
+    setMap(null);
+  }, []);
 
   const getUserLocation = () => {
     if (typeof window === "undefined") return;
-    if (!navigator.geolocation) return;
+
+    if (!navigator.geolocation) {
+      console.error("Geolocation not supported");
+      return;
+    }
 
     setIsLocating(true);
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        // console.log("✅ location success", pos.coords);
+
         setUserLocation({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         });
+
         setIsLocating(false);
       },
       (err) => {
-        console.error("location error", err.code, err.message);
+        console.error("❌ location error", err.code, err.message);
+
+        // IMPORTANT: keep this to see why it fails
+        // err.code:
+        // 1 = PERMISSION_DENIED
+        // 2 = POSITION_UNAVAILABLE
+        // 3 = TIMEOUT
+
         setUserLocation(null);
         setIsLocating(false);
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 0,
+      }
     );
   };
 
   useEffect(() => {
     if (!map || !userLocation) return;
     map.panTo(userLocation);
-    map.setZoom(12);
+    map.setZoom(10);
   }, [map, userLocation]);
 
   const filteredPlaces = useMemo(() => {
     return touristPlacesListing.filter((place) => {
       const matchesCategory =
         activeCategory === "all" || place.details.category === activeCategory;
+
       if (!matchesCategory) return false;
 
       const q = searchQuery.trim().toLowerCase();
       if (q) {
         const text =
           `${place.details.name} ${place.details.city} ${place.details.area} ${place.details.description}`.toLowerCase();
+
         if (!text.includes(q)) return false;
       }
 
       if (userLocation) {
-        const d = getDistanceInKm(
+        const distance = getDistanceInKm(
           userLocation.lat,
           userLocation.lng,
           place.details.latitude,
           place.details.longitude
         );
-        return d <= 50;
-      }
 
+        return distance <= 50;
+      }
       return true;
     });
   }, [activeCategory, searchQuery, userLocation]);
 
   const handlePlaceClick = (uuid: string, lat: number, lng: number) => {
     setSelectedId(uuid);
-    if (!map) return;
-    map.panTo({ lat, lng });
-    map.setZoom(11);
+    if (map) {
+      map.panTo({ lat, lng });
+      map.setZoom(12);
+    }
   };
 
-  const renderResultsList = () => {
-    return (
-      <>
-        {filteredPlaces.length === 0 ? (
-          <div
-            className="h-full flex flex-col items-center justify-center 
-                  text-center text-slate-500 p-6"
-          >
-            <MapPin className="h-8 w-8 mb-2 opacity-60" />
-            <p className="font-medium text-sm">No places found</p>
-            <p className="text-xs mt-1">
-              Try changing category, search, or location
+  const mapOptions: google.maps.MapOptions = {
+    zoomControl: true,
+    streetViewControl: false,
+    mapTypeControl: false,
+    fullscreenControl: false,
+    styles: modernStyle,
+    mapTypeId: "roadmap",
+    disableDefaultUI: true,
+  };
+
+  if (!isLoaded) {
+    return <InfluencerPageSkeleton />;
+  }
+
+  const renderResultsList = () => (
+    <div className="w-full bg-white flex flex-col">
+      {/* Search + Filters */}
+      <div className="p-4 border-b border-slate-200 space-y-3 sticky -top-[1px] md:top-0 z-10 bg-white">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <p className="text-xs text-slate-500">Location</p>
+            <p className="font-semibold text-sm">
+              {isLocating
+                ? "Finding nearby places…"
+                : userLocation
+                ? "Nearby (50 km)"
+                : "Explore places"}
             </p>
           </div>
-        ) : (
-          <div className="p-4 space-y-3 overflow-y-auto md:h-full">
-            {filteredPlaces.map((place) => {
-              const isSelected = selectedId === place.uuid;
-              const { name, city, area, description, imageUrl } = place.details;
+          <button
+            className="cursor-pointer rounded-full text-xs p-1 bg-gray-200 hover:bg-gray-300"
+            onClick={getUserLocation}
+          >
+            {isLocating ? (
+              <LoaderCircle strokeWidth={1.5} className="animate-spin" />
+            ) : (
+              <LocateFixed strokeWidth={1.5} />
+            )}
+          </button>
+        </div>
 
-              const images = Array.isArray(imageUrl)
-                ? imageUrl
-                : imageUrl
-                ? [imageUrl]
-                : [];
+        <div className="flex items-center gap-2">
+          <InputGroup>
+            <InputGroupInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search cafes, stays, experiences..."
+            />
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+            <InputGroupAddon align={"inline-end"} className="font-normal">
+              {filteredPlaces.length} Results
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </div>
 
-              return (
-                <Card
-                  key={place.uuid}
-                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
-                    isSelected ? "border-slate-300" : "hover:border-slate-300"
-                  }`}
-                  onClick={() => {
-                    setIsDrawerOpen(false);
-                    handlePlaceClick(
-                      place.uuid!,
-                      place.details.latitude,
-                      place.details.longitude
-                    );
-                  }}
-                >
-                  <div className="p-4 pb-0 space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="font-semibold text-sm">{name}</p>
-                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                          <MapPin className="h-3 w-3" />
-                          {area || city}
-                        </p>
-                      </div>
+      {/* Results list */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {filteredPlaces.map((place) => {
+          const isSelected = selectedId === place.uuid;
+          const { name, city, area, description, imageUrl } = place.details;
+
+          return (
+            <Card
+              key={place.uuid}
+              className={`border rounded-2xl overflow-hidden cursor-pointer p-0 gap-2 shadow-none ${
+                isSelected ? "border-slate-300" : "hover:border-slate-300"
+              }`}
+              onClick={() => {
+                handlePlaceClick(
+                  place.uuid!,
+                  place.details.latitude,
+                  place.details.longitude
+                );
+                setisDrawerOpen(false);
+              }}
+            >
+              <div className="flex gap-3 p-3 pb-0">
+                <div className="flex flex-col flex-1 space-y-2">
+                  {/* name and city */}
+                  <div className="space-y-0.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-semibold text-sm line-clamp-1">
+                        {name}
+                      </p>
                       <Badge
                         variant="outline"
-                        className="text-[10px] rounded-full bg-slate-100"
+                        className="text-[10px] px-2 py-0.5 rounded-full text-[#3E3E3E] bg-[#E7EBF1]"
                       >
                         {place.details.category}
                       </Badge>
                     </div>
+                    <p className="text-xs text-slate-500 line-clamp-1 font-medium flex items-center gap-1">
+                      <span>
+                        <MapPin className="h-3 w-3" />
+                      </span>
+                      {area || city}
+                    </p>
+                  </div>
 
-                    {images.length > 0 && (
+                  {/* images */}
+                  {(() => {
+                    const images = Array.isArray(imageUrl)
+                      ? imageUrl
+                      : imageUrl
+                      ? [imageUrl]
+                      : [];
+
+                    if (!images.length) return null;
+
+                    return (
                       <Carousel
                         className="w-full"
                         plugins={[
@@ -304,7 +399,7 @@ export default function InfluencerPageCopy() {
                               <div className="relative w-full h-[150px] rounded-xl overflow-hidden">
                                 <Image
                                   src={item}
-                                  alt={`img-${idx}`}
+                                  alt={`item-${idx}`}
                                   fill
                                   className="object-cover"
                                 />
@@ -313,438 +408,191 @@ export default function InfluencerPageCopy() {
                           ))}
                         </CarouselContent>
                       </Carousel>
-                    )}
+                    );
+                  })()}
 
-                    <p className="text-xs text-slate-600 line-clamp-2">
+                  {/* description */}
+                  <div>
+                    <p className="text-xs font-medium text-slate-600 line-clamp-2">
                       {description}
                     </p>
                   </div>
+                </div>
+              </div>
 
-                  <CardContent className="p-4 pt-3">
-                    <div className="grid grid-cols-3 gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-9 text-xs"
-                      >
-                        <MapPin className="h-3 w-3 mr-1" />
-                        Directions
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-9 text-xs"
-                      >
-                        <BookmarkPlus className="h-3 w-3 mr-1" />
-                        Save
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-9 text-xs"
-                      >
-                        <Share2 className="h-3 w-3 mr-1" />
-                        Share
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        )}
-      </>
-    );
-  };
-
-  if (!isLoaded) return <InfluencerPageSkeleton />;
+              {/* footer buttons */}
+              <CardContent className="px-3 pb-3 pt-0">
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 text-[11px] cursor-pointer"
+                  >
+                    <MapPin className="mr-1 h-3 w-3" />
+                    Directions
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 text-[11px] cursor-pointer"
+                  >
+                    <BookmarkPlus className="mr-1 h-3 w-3" />
+                    Save
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 text-[11px] cursor-pointer"
+                  >
+                    <Share2 className="mr-1 h-3 w-3" />
+                    Share
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
-    <main className="relative min-h-screen bg-[#F6F7FB]">
-      <Tabs defaultValue="map">
-        {/* ===== Header ===== */}
-        <div className="bg-white border-b sticky top-0 z-20">
-          {/* Row 1 */}
-          <div className="h-14 px-6 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-slate-500">Location</p>
-              <p className="text-sm md:text-lg font-semibold text-slate-900">
-                {isLocating
-                  ? "Finding nearby..."
-                  : userLocation
-                  ? "Nearby (50 km)"
-                  : "Explore places"}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button variant="outline" className="h-9 rounded-md">
-                View Saved
-              </Button>
-              <Button className="h-9 rounded-md bg-[#1F4AA8] hover:bg-[#163A87]">
-                Explore
-              </Button>
-            </div>
+    <main className="min-h-screen flex flex-col">
+      {/* HEADER */}
+      <header className="h-16 bg-white border-b shrink-0">
+        <div className="h-full flex items-center justify-between px-4">
+          <div className="flex items-center gap-2 max-w-[400px] w-full">
+            <InputGroup>
+              <InputGroupInput
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search cafes, stays, experiences..."
+              />
+              <InputGroupAddon align={"inline-end"}>
+                <Search />
+              </InputGroupAddon>
+            </InputGroup>
           </div>
-
-          {/* Row 2 */}
-          <div className="px-6 max-w-screen pb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            {/* Search */}
-            <div className="md:max-w-[340px] w-full">
-              <InputGroup>
-                <InputGroupInput
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                />
-                <InputGroupAddon>
-                  <Search className="h-4 w-4" />
-                </InputGroupAddon>
-                <InputGroupAddon align={"inline-end"} className="font-normal">
-                  {filteredPlaces.length} Results
-                </InputGroupAddon>
-              </InputGroup>
-            </div>
-
-            {/* Chips */}
-            <div
-              className="w-full md:flex-1 flex md:flex-wrap items-center gap-2 
-                overflow-x-auto overflow-y-hidden 
-                mr-10 pr-2 overscroll-x-contain"
+          <ButtonGroup>
+            <Button
+              variant={"outline"}
+              onClick={() => setSidebarOpen(false)}
+              className={`${
+                sidebarOpen ? "" : "bg-gray-200 border border-gray-300"
+              }`}
             >
-              {CATEGORY_FILTERS.map((cat) => {
-                const isActive = activeCategory === cat.value;
-                const Icon = cat.icon;
-                return (
-                  <Badge
-                    key={cat.value}
-                    variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
-                      isActive
-                        ? "bg-slate-900 text-white"
-                        : "bg-white hover:bg-slate-50"
-                    }`}
-                    onClick={() => setActiveCategory(cat.value)}
-                  >
-                    {Icon && (
-                      <span>
-                        <Icon size={18} strokeWidth={1.5} />
-                      </span>
-                    )}
-                    {cat.label}
-                  </Badge>
-                );
-              })}
-            </div>
-
-            {/* Right controls */}
-            <div className="md:flex items-center gap-2 shrink-0 hidden">
-              {/* <ButtonGroup>
-                <Button
-                  variant={"outline"}
-                  className={`cursor-pointer ${
-                    panelOpen ? "border-slate-200 bg-slate-100" : ""
-                  }`}
-                  onClick={() => setPanelOpen(true)}
-                >
-                  Default
-                </Button>
-                <Button variant={"outline"} className={`cursor-pointer `}>
-                  <TextAlignJustify strokeWidth={1.5} />
-                </Button>
-                <Button
-                  variant={"outline"}
-                  className={`cursor-pointer  ${
-                    panelOpen ? "" : "border-slate-200 bg-slate-100"
-                  }`}
-                  onClick={() => setPanelOpen(false)}
-                >
-                  <Map strokeWidth={1.5} />
-                </Button>
-              </ButtonGroup> */}
-              <TabsList className="p-0">
-                <TabsTrigger
-                  value="default"
-                  className="rounded-none rounded-l-md border border-r-0 border-slate-300 !px-4 shadow-none cursor-pointer data-[state=active]:shadow-none"
-                  onClick={() => setPanelOpen(true)}
-                >
-                  Default
-                </TabsTrigger>
-                <TabsTrigger
-                  value="map"
-                  className="rounded-none  border border-slate-300 !px-4 shadow-none cursor-pointer data-[state=active]:shadow-none"
-                  onClick={() => setPanelOpen(false)}
-                >
-                  <Map strokeWidth={1.5} />
-                </TabsTrigger>
-                <TabsTrigger
-                  value="list"
-                  className="rounded-none rounded-r-md border border-l-0 border-slate-300 !px-4 shadow-none cursor-pointer data-[state=active]:shadow-none"
-                >
-                  <TextAlignJustify strokeWidth={1.5} />
-                </TabsTrigger>
-              </TabsList>
-            </div>
-          </div>
+              <Map />
+            </Button>
+            <Button variant={"outline"}>
+              <TextAlignJustify />
+            </Button>
+          </ButtonGroup>
         </div>
-        {/* ===== Body ===== */}
-        <div className="p-[4px] md:p-5 md:py-2">
-          <TabsContent value="default">
-            <div className={`flex ${panelOpen ? "gap-4" : "gap-0"} `}>
-              {/* MAP CARD (left) */}
-              <div className="flex-1 min-w-0">
-                <div className="bg-white rounded-xl border overflow-hidden relative h-[calc(100vh-204px)] md:h-[calc(100vh-140px)]">
-                  {/* Small locate button  */}
-                  <button
-                    onClick={getUserLocation}
-                    className="absolute top-3 right-3 z-10 rounded-full p-2 bg-white shadow border hover:bg-slate-50 cursor-pointer"
-                    disabled={isLocating}
-                    title="Find nearby"
-                  >
-                    {isLocating ? (
-                      <LoaderCircle className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <LocateFixed className="h-4 w-4" />
-                    )}
-                  </button>
-
-                  {/* IMPORTANT: top padding so chips don't overlap map */}
-                  <div className="h-full">
-                    <GoogleMap
-                      mapContainerStyle={{ width: "100%", height: "100%" }}
-                      onLoad={onLoad}
-                      onUnmount={onUnmount}
-                      options={mapOptions}
-                    >
-                      {filteredPlaces.map((item) => (
-                        <MarkerItem item={item} key={item.uuid} />
-                      ))}
-                    </GoogleMap>
-                  </div>
-                </div>
-              </div>
-
-              {/* RIGHT RESULTS PANEL */}
-              <div
-                className={`relative hidden md:flex ${
-                  panelOpen ? "w-[30rem]" : "w-[0px]"
-                } shrink-0 transition-all`}
-              >
-                {/* Toggle handle */}
+      </header>
+      <div className="relative h-[calc(100vh-64px)] w-full overflow-hidden">
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "28rem",
+              "--sidebar-width-mobile": "20rem",
+            } as React.CSSProperties
+          }
+          open={sidebarOpen}
+          onOpenChange={setSidebarOpen}
+        >
+          <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
+            <div className="relative flex-1">
+              <div className="md:flex items-center absolute right-0 z-10 h-full hidden">
                 <button
-                  onClick={() => setPanelOpen((p) => !p)}
-                  className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
-                  title="Toggle panel"
+                  onClick={() => setSidebarOpen((prev) => !prev)}
+                  className="border rounded-l-xl py-8 px-0.5 h-fit cursor-pointer bg-white hover:bg-gray-200 border-l-0"
                 >
-                  {panelOpen ? (
-                    <ChevronRight className="h-4 w-4" />
+                  {sidebarOpen ? (
+                    <ChevronRight size={18} />
                   ) : (
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft size={18} />
                   )}
                 </button>
-
-                <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
-                    panelOpen ? "" : "hidden"
-                  }`}
-                >
-                  {renderResultsList()}
-                </div>
-              </div>
-              {/* mobile version */}
-              <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
-                  <div className="flex justify-center items-center w-full">
-                    <button
-                      onClick={() => setIsDrawerOpen((prev) => !prev)}
-                      className="border rounded-t-xl py-0.5 px-14 h-fit w-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 -mt-20 z-10"
-                    >
-                      <ChevronDown size={24} />
-                    </button>
-                  </div>
-                  <div className="h-full overflow-y-auto bg-white">
-                    {renderResultsList()}
-                  </div>{" "}
-                </DrawerContent>{" "}
-              </Drawer>
-            </div>
-          </TabsContent>
-          <TabsContent value="map">
-            <div className={`flex ${panelOpen ? "gap-4" : "gap-0"} `}>
-              {/* MAP CARD (left) */}
-              <div className="flex-1 min-w-0">
-                <div className="bg-white rounded-xl border overflow-hidden relative h-[calc(100vh-180px)] md:h-[calc(100vh-140px)]">
-                  {/* Small locate button */}
-                  <button
-                    onClick={getUserLocation}
-                    className="absolute top-3 right-3 z-10 rounded-full p-2 bg-white shadow border hover:bg-slate-50 cursor-pointer"
-                    disabled={isLocating}
-                    title="Find nearby"
-                  >
-                    {isLocating ? (
-                      <LoaderCircle className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <LocateFixed className="h-4 w-4" strokeWidth={1.5} size={20}/>
-                    )}
-                  </button>
-
-                  {/* IMPORTANT: top padding so chips don't overlap map */}
-                  <div className="h-full">
-                    <GoogleMap
-                      mapContainerStyle={{ width: "100%", height: "100%" }}
-                      onLoad={onLoad}
-                      onUnmount={onUnmount}
-                      options={mapOptions}
-                    >
-                      {filteredPlaces.map((item) => (
-                        <MarkerItem item={item} key={item.uuid} />
-                      ))}
-                    </GoogleMap>
-                  </div>
-                </div>
               </div>
 
-              {/* RIGHT RESULTS PANEL */}
-              <div
-                className={`relative hidden md:flex ${
-                  panelOpen ? "w-[30rem]" : "w-[0px]"
-                } shrink-0 transition-all`}
-              >
-                {/* Toggle handle */}
-                <button
-                  onClick={() => setPanelOpen((p) => !p)}
-                  className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
-                  title="Toggle panel"
-                >
-                  {panelOpen ? (
-                    <ChevronRight className="h-4 w-4" />
-                  ) : (
-                    <ChevronLeft className="h-4 w-4" />
-                  )}
-                </button>
-
-                <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
-                    panelOpen ? "" : "hidden"
-                  }`}
-                >
-                  {renderResultsList()}
-                </div>
-              </div>
-              {/* mobile version */}
-              {/* <button
-                onClick={() => setIsDrawerOpen((prev) => !prev)}
+              <button
+                onClick={() => setisDrawerOpen((prev) => !prev)}
                 className="border rounded-t-xl py-0.5 px-14 h-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 absolute bottom-0 left-1/2 -translate-x-1/2 z-10"
               >
                 <ChevronUp size={24} />
-              </button> */}
-              <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
-                  <div className="flex justify-center items-center w-full">
-                    <button
-                      onClick={() => setIsDrawerOpen((prev) => !prev)}
-                      className="border rounded-t-xl py-0.5 px-14 h-fit w-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 -mt-20 z-10"
-                    >
-                      <ChevronDown size={24} />
-                    </button>
-                  </div>
-                  <div className="h-full overflow-y-auto bg-white">
-                    {renderResultsList()}
-                  </div>{" "}
-                </DrawerContent>{" "}
-              </Drawer>
-            </div>
-          </TabsContent>
-          <TabsContent value="list">
-            <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2">
-              {filteredPlaces?.map?.((item, idx) => {
-                const locText =
-                  item?.details?.area && item?.details?.city
-                    ? `${item.details.area}, ${item.details.city}`
-                    : item?.details?.city || item?.details?.area || "";
+              </button>
 
-                const imageSrc =
-                  item?.details?.imageUrl ||
-                  "/assets/map-image-placeholder.jpg";
-                return (
-                  <Card
-                    className="w-full rounded-2xl shadow-none border border-slate-200 overflow-hidden p-0 gap-2"
-                    key={idx}
-                  >
-                    {/* Image */}
-                    <div className="relative h-40 w-full overflow-hidden">
-                      <img
-                        src={imageSrc?.[0]}
-                        alt={item?.details?.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
+              <div className="absolute top-0 py-3 md:py-2 left-0 pl-2 z-10 bg-white w-full">
+                <div className="flex md:flex-wrap gap-2 md:gap-4 pt-1 overflow-x-auto">
+                  {CATEGORY_FILTERS.map((cat) => {
+                    const isActive = activeCategory === cat.value;
+                    const Icon = cat.icon;
 
-                    <CardContent className="p-4 space-y-3">
-                      {/* Title + Category */}
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="font-semibold text-sm line-clamp-1">
-                          {item?.details?.name}
-                        </p>
-                        <Badge
-                          variant="secondary"
-                          className="text-[11px] px-2 py-0.5 rounded-full"
-                        >
-                          {splitCamelCase(item?.details?.category)}
-                        </Badge>
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-xs text-slate-600 line-clamp-2">
-                        {item?.details?.description}
-                      </p>
-
-                      {/* Location */}
-                      {locText && (
-                        <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-600">
-                          <MapPin className="h-3 w-3" />
-                          <span className="truncate">{locText}</span>
-                        </div>
-                      )}
-
-                      {/* Buttons */}
-                      <div className="mt-3 flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer"
-                          // onClick={() => ...} // hook your reel logic here
-                        >
-                          <span>
-                            <Play className="h-3 w-3" />
+                    return (
+                      <Badge
+                        key={cat.value}
+                        variant={isActive ? "secondary" : "outline"}
+                        className={`flex items-center gap-2 rounded-full py-1.5 px-4 text-xs cursor-pointer transition ${
+                          isActive
+                            ? "bg-slate-900 text-white"
+                            : "hover:bg-gray-200 bg-white"
+                        }`}
+                        onClick={() => setActiveCategory(cat.value)}
+                      >
+                        {Icon && (
+                          <span className="shrink-0">
+                            <Icon size={18} strokeWidth={1.5} />
                           </span>
-                          View Reel
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="flex-1 justify-center text-xs cursor-pointer"
-                          // onClick={() => ...} // open Google Maps link here
-                        >
-                          Go to Maps
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                        )}
+                        {cat.label}
+                      </Badge>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+                options={mapOptions}
+              >
+                {filteredPlaces.map((item) => (
+                  <MarkerItem item={item} key={item.uuid} />
+                ))}
+              </GoogleMap>
             </div>
-          </TabsContent>
-        </div>
-      </Tabs>
-      <button
-        onClick={() => setIsDrawerOpen((prev) => !prev)}
-        className="md:hidden fixed left-1/2 -translate-x-1/2
-             bottom-[max(0rem,env(safe-area-inset-bottom))]
-             border border-slate-200 rounded-t-2xl
-             py-1 px-14 bg-white hover:bg-gray-200 shadow-md"
-      >
-        <ChevronUp size={24} />
-      </button>
+
+            {/* SIDEBAR (right) */}
+            <Sidebar
+              side="right"
+              className="border-l top-16 h-[calc(100vh-64px)]"
+            >
+              <SidebarContent>{renderResultsList()}</SidebarContent>
+            </Sidebar>
+
+            {/* MOBILE DRAWER (unchanged) */}
+            <Drawer open={isDrawerOpen} onOpenChange={setisDrawerOpen}>
+              <DrawerContent className="h-[70vh] p-0 md:hidden bg-white">
+                <div className="flex justify-center items-center w-full">
+                  <button
+                    onClick={() => setisDrawerOpen((prev) => !prev)}
+                    className="border rounded-t-xl py-0.5 px-14 h-fit w-fit md:hidden cursor-pointer bg-white hover:bg-gray-200 border-l-0 -mt-20 z-10"
+                  >
+                    <ChevronDown size={24} />
+                  </button>
+                </div>
+
+                <div className="h-full overflow-y-auto bg-white">
+                  {renderResultsList()}
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
+        </SidebarProvider>
+      </div>
     </main>
   );
-}
+};
+
+export default InfluencerPage;

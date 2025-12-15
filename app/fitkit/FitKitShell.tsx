@@ -1,7 +1,6 @@
 import { Community } from "@/services/communityService";
 import React from "react";
 import { CMSProvider } from "./CMSProvider.client";
-import { getFitKitCMSBundle } from "@/lib/FitKit/fitkit-cms";
 import FitKitHeader from "./_components/FitKitHeader";
 import FitkitFooter from "./_components/FitkitFooter";
 import Link from "next/link";
@@ -18,6 +17,7 @@ import {
   WhatsappWidgetSection,
 } from "@/models/templates/fitkit/fitkit-home-model";
 import { dummyData } from "./dummyData";
+import { getFitKitCMSBundle } from "@/services/FitKit/fitKit.service";
 
 export default async function FitKitShell({
   community,

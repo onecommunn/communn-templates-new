@@ -2,7 +2,6 @@ import React from "react";
 import YoganaHeader from "./_components/YoganaHeader";
 import YoganaFooter from "./_components/YoganaFooter";
 import { Community } from "@/services/communityService";
-import { getYoganaCMSBundle } from "@/lib/Yogana/yogana-cms";
 import { CMSProvider } from "./CMSProvider.client";
 import {
   ContactDetails,
@@ -20,6 +19,7 @@ import { dummyData } from "./dummyData";
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import { getYoganaCMSBundle } from "@/services/Yogana/yogana.service";
 
 export default async function YoganaShell({
   community,

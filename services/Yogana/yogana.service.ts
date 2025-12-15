@@ -1,13 +1,18 @@
 import { BASE_URL_V2 } from "@/configurations/url.config";
+import axios from "axios";
 
 type YoganaCMSBundle = {
   home: any | null;
 };
 
+type YoganaServiceCMSBundle = {
+  data: any | null;
+};
+
 async function fetchJSON(url: string) {
   try {
-    const r = await fetch(url, { cache: "no-store" });
-    return await r.json();
+    const r = await axios.get(url);
+    return r.data;
   } catch {
     return null;
   }
@@ -19,15 +24,26 @@ async function fetchYoganaBundle(
   const base = `${BASE_URL_V2}/cms/get-section/community`;
   const [home] = await Promise.all([
     fetchJSON(`${base}/${communityId}?templateId=yogana&page=home`),
-    // add more pages
   ]);
 
   return {
     home: home?.data ?? null,
-    // add more pages
   };
 }
 
 export async function getYoganaCMSBundle(communityId: string) {
   return fetchYoganaBundle(communityId);
+}
+
+export async function fetchYoganaServiceBundle(
+  communityId: string,
+  serviceName: string
+): Promise<YoganaServiceCMSBundle> {
+  const url = `${BASE_URL_V2}/cms/get-service-detail/community/${communityId}?templateId=yogana&service=${serviceName}`;
+
+  const data = await fetchJSON(url);
+
+  return {
+    data: data?.data ?? null,
+  };
 }

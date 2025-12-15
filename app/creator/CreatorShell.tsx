@@ -4,7 +4,6 @@ import CreatorFooter from "@/app/creator/_components/CreatorFooter";
 import CreatorHeaderSkeleton from "@/app/creator/_components/Skeletons/CreatorHeaderSkeleton";
 import CreatorFooterSkeleton from "@/app/creator/_components/Skeletons/CreatorFooterSkeleton";
 import { Community } from "@/services/communityService";
-import { getCreatorCMSBundle } from "@/lib/Creator/cms";
 import { CMSProvider } from "./CMSProvider.client";
 import { CreatorHeaderPage } from "@/models/templates/creator/creator-header.model";
 import { CreatorFooterPage } from "@/models/templates/creator/creator-footer-model";
@@ -14,6 +13,7 @@ import { CreatorContactPage } from "@/models/templates/creator/creator-contact.m
 import Link from "next/link";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import { getCreatorCMSBundle } from "@/services/Creator/creator.service";
 
 const dummyHeaderData: CreatorHeaderPage = {
   templateId: "creator",

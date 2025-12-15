@@ -5,7 +5,7 @@ import { Service } from "@/models/templates/yogana/yogana-home-model";
 import YoganaServiceContent from ".././_components/YoganaServiceContent";
 import { useSearchParams } from "next/navigation";
 import { AuthContext } from "@/contexts/Auth.context";
-import { fetchYoganaServiceBundle } from "@/lib/Yogana/yogana-service-cms";
+import { fetchYoganaServiceBundle } from "@/services/Yogana/yogana.service";
 
 const YoganaServicePage = ({
   primaryColor,

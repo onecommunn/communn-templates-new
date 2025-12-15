@@ -4,9 +4,9 @@ import { Service } from "@/models/templates/martivo/martivo-home-model";
 import MartivoServiceHero from ".././_components/MartivoServiceHero";
 import MartivoServiceContent from ".././_components/MartivoServiceContent";
 import MartivoCTA from "../../_components/MartivoCTA";
-import { fetchMartivoServiceBundle } from "@/lib/Martivo/martivo-service-cms";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useSearchParams } from "next/navigation";
+import { fetchMartivoServiceBundle } from "@/services/Martivo/martivo.service";
 
 const MartivoServicePage = ({
   primaryColor,
