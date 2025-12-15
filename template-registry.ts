@@ -64,7 +64,6 @@ import MartivoPaymentsRoot from "./app/martivo/payments/page";
 import YoganaPaymentsRoot from "./app/yogana/payments/page";
 import InfluencerPage from "./app/Influencer/page";
 import InfluencerLayout from "./app/Influencer/InfluencerLayout";
-import InfluencerPageCopy from "./app/Influencer/page copy";
 
 export const templateLayouts: Record<
   string,
@@ -149,6 +148,6 @@ export const templates: Record<
     "/payments": MartivoPaymentsRoot,
   },
   influencer: {
-    "/": InfluencerPageCopy,
+    "/": InfluencerPage,
   },
 };
