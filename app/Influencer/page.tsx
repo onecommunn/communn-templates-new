@@ -113,7 +113,7 @@ const modernStyle = [
   // },
 ];
 
-type UserLocation = { lat: number; lng: number };
+type UserLocation = { lat: number; lng: number; city?: string };
 
 type Category = {
   community: string;
@@ -174,6 +174,25 @@ const geocodePlace = async (placeId: string) => {
   };
 };
 
+const reverseGeocodeCity = async (lat: number, lng: number) => {
+  const geocoder = new window.google.maps.Geocoder();
+
+  const results = await new Promise<google.maps.GeocoderResult[]>(
+    (resolve, reject) => {
+      geocoder.geocode({ location: { lat, lng } }, (res, status) => {
+        if (status === "OK" && res) resolve(res);
+        else reject(new Error(status));
+      });
+    }
+  );
+
+  const cityComp = results[0]?.address_components?.find((c) =>
+    c.types.includes("locality")
+  );
+
+  return cityComp?.long_name || "Nearby";
+};
+
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
 export default function InfluencerPage() {
@@ -183,7 +202,6 @@ export default function InfluencerPage() {
   const isMobile = useIsMobile();
 
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
-  const [searchInput, setSearchInput] = useState("");
   const [listQuery, setListQuery] = useState("");
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -223,6 +241,24 @@ export default function InfluencerPage() {
   };
 
   const onLoad = React.useCallback((mapInstance: google.maps.Map) => {
+    setMap(mapInstance);
+  }, []);
+
+  useEffect(() => {
+    if (!map) return;
+
+    if (searchLocation) {
+      map.panTo(searchLocation);
+      map.setZoom(13);
+      return;
+    }
+
+    if (userLocation) {
+      map.panTo(userLocation);
+      map.setZoom(12);
+      return;
+    }
+
     const bounds = new window.google.maps.LatLngBounds();
     touristPlacesListing.forEach((item) => {
       bounds.extend({
@@ -230,9 +266,8 @@ export default function InfluencerPage() {
         lng: item.details.longitude,
       });
     });
-    mapInstance.fitBounds(bounds, 80);
-    setMap(mapInstance);
-  }, []);
+    map.fitBounds(bounds, 80);
+  }, [map, userLocation, searchLocation]);
 
   const onUnmount = React.useCallback(() => setMap(null), []);
 
@@ -246,11 +281,26 @@ export default function InfluencerPage() {
     setIsLocating(true);
 
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        let city = "Nearby";
+        try {
+          city = await reverseGeocodeCity(lat, lng);
+        } catch (e) {
+          console.warn("City reverse geocode failed");
+        }
+
+        setUserLocation({ lat, lng, city });
+
+        setSearchLocation({ lat, lng });
+
+        if (map) {
+          map.panTo({ lat, lng });
+          map.setZoom(12);
+        }
+
         setIsLocating(false);
       },
       (err) => {
@@ -262,6 +312,10 @@ export default function InfluencerPage() {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );
   };
+
+  useEffect(() => {
+    getUserLocation();
+  }, []);
 
   // Fetch categories
   useEffect(() => {
@@ -437,7 +491,7 @@ export default function InfluencerPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="h-9 text-xs"
+                        className="h-9 text-xs shadow-none cursor-pointer"
                       >
                         <MapPin className="h-3 w-3 mr-1" />
                         Directions
@@ -445,7 +499,7 @@ export default function InfluencerPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="h-9 text-xs"
+                        className="h-9 text-xs shadow-none cursor-pointer"
                       >
                         <BookmarkPlus className="h-3 w-3 mr-1" />
                         Save
@@ -453,7 +507,7 @@ export default function InfluencerPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="h-9 text-xs"
+                        className="h-9 text-xs shadow-none cursor-pointer"
                       >
                         <Share2 className="h-3 w-3 mr-1" />
                         Share
@@ -483,10 +537,12 @@ export default function InfluencerPage() {
               <p className="text-sm md:text-lg font-semibold text-slate-900">
                 {isLocating
                   ? "Finding nearby..."
+                  : placeValue?.label
+                  ? placeValue.label
+                  : userLocation?.city
+                  ? `${userLocation.city} (50 km)`
                   : userLocation
                   ? "Nearby (50 km)"
-                  : placeValue
-                  ? placeValue?.label
                   : "Explore places"}
               </p>
             </div>
@@ -495,10 +551,14 @@ export default function InfluencerPage() {
               <Button
                 variant="outline"
                 className="h-9 rounded-md cursor-pointer"
+                onClick={() => toast.info("Under Development")}
               >
                 View Saved
               </Button>
-              <Button className="h-9 rounded-md bg-[#1F4AA8] hover:bg-[#163A87] cursor-pointer">
+              <Button
+                onClick={() => toast.info("Under Development")}
+                className="h-9 rounded-md bg-[#1F4AA8] hover:bg-[#163A87] cursor-pointer"
+              >
                 Explore
               </Button>
             </div>
@@ -591,7 +651,7 @@ export default function InfluencerPage() {
             </div>
 
             {/* Chips */}
-            <div className="w-full md:flex-1 flex md:flex-wrap items-center gap-2 overflow-x-auto overflow-y-hidden mr-10 pr-2 overscroll-x-contain">
+            <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden mr-10 pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
                 className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
@@ -620,7 +680,7 @@ export default function InfluencerPage() {
                     }`}
                     onClick={() => setActiveCategory(name)}
                   >
-                    {Icon && <Icon size={18} strokeWidth={1.5} />}
+                    <span>{Icon && <Icon size={16} strokeWidth={1.5} />}</span>
                     {name}
                   </Badge>
                 );
@@ -739,8 +799,8 @@ export default function InfluencerPage() {
 
           <TabsContent value="map">
             {/* same as your map tab… keep as-is or reuse the same block */}
-            <div className={`flex ${panelOpen ? "gap-4" : "gap-0"}`}>
-              <div className="flex-1 min-w-0">
+            <div className={`flex ${panelOpen ? "gap-4" : "gap-0"} rounded-xl`}>
+              <div className="flex-1 min-w-0 rounded-xl">
                 <div className="bg-white rounded-xl border overflow-hidden relative h-[calc(100vh-180px)] md:h-[calc(100vh-140px)]">
                   <button
                     onClick={getUserLocation}
@@ -759,7 +819,7 @@ export default function InfluencerPage() {
                     )}
                   </button>
 
-                  <div className="h-full">
+                  <div className="h-full rounded-xl">
                     <GoogleMap
                       mapContainerStyle={{ width: "100%", height: "100%" }}
                       onLoad={onLoad}
@@ -822,7 +882,9 @@ export default function InfluencerPage() {
             {filteredPlaces.length === 0 ? (
               <div className="h-[70vh] flex flex-col items-center justify-center text-center text-slate-500 p-6">
                 <MapPin className="h-8 w-8 md:h-10 md:w-10 mb-2 opacity-60" />
-                <p className="font-medium text-sm md:text-xl">No places found</p>
+                <p className="font-medium text-sm md:text-xl">
+                  No places found
+                </p>
                 <p className="text-xs md:text-[16px] mt-1">
                   Try changing category, search, or location
                 </p>
