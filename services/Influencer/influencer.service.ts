@@ -1,6 +1,39 @@
 import { BASE_URL_V2 } from "@/configurations/url.config";
 import axios from "axios";
 
+type InfluencerCMSBundle = {
+  recommandations: any | null;
+  categories: any | null;
+};
+
+async function fetchJSON(url: string) {
+  try {
+    const r = await axios.get(url);
+    return r.data;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchInfluencerBundle(
+  communityId: string
+): Promise<InfluencerCMSBundle> {
+  const [recommandations,categories] = await Promise.all([
+    fetchJSON(`${BASE_URL_V2}/cms/recommandations/${communityId}`),
+    fetchJSON( `${BASE_URL_V2}/cms/recommandation-category/${communityId}`),
+  ]);
+
+  return {
+    recommandations: recommandations?.data ?? null,
+    categories:categories?.data ?? null
+  };
+}
+
+export async function getInfluencerCMSBundle(communityId: string) {
+  return fetchInfluencerBundle(communityId);
+}
+
+
 export const getInfluencerCategories = async (communityId: string) => {
   try {
     const response = await axios.get(
@@ -11,7 +44,7 @@ export const getInfluencerCategories = async (communityId: string) => {
         },
       }
     );
-    return response?.data;
+    return response?.data ?? null;
   } catch (err) {
     console.log("ERR :", err);
     return { status: 500, data: [] };

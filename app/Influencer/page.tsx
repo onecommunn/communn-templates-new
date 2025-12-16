@@ -25,17 +25,11 @@ import {
 
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import MarkerItem from "./_components/MarkerItem";
-import { touristPlacesListing } from "./data/data-listing";
 import InfluencerPageSkeleton from "./_components/InfluencerPageSkeleton";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaOptionsType } from "embla-carousel";
@@ -48,13 +42,15 @@ import Image from "next/image";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { splitCamelCase } from "@/utils/StringFunctions";
-import {
-  getInfluencerCategories,
-  getInfluencerRecommendations,
-} from "@/services/Influencer/influencer.service";
 import { AuthContext } from "@/contexts/Auth.context";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useCMS } from "./CMSProvider.client";
+import {
+  Category,
+  Recommendation,
+} from "@/models/templates/Influencer/influencer-home-model";
+import Link from "next/link";
 
 const API_KEY = "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
@@ -115,17 +111,6 @@ const modernStyle = [
 
 type UserLocation = { lat: number; lng: number; city?: string };
 
-type Category = {
-  community: string;
-  createdAt: string;
-  name: string;
-  updatedAt: string;
-  __v: number;
-  _id: string;
-};
-
-type Recommendation = any; // replace with your real type if you have it
-
 const normalizeArray = <T,>(raw: any): T[] => {
   if (Array.isArray(raw)) return raw as T[];
   if (Array.isArray(raw?.data)) return raw.data as T[];
@@ -133,7 +118,7 @@ const normalizeArray = <T,>(raw: any): T[] => {
   return [];
 };
 
-const getDistanceInKm = (
+export const getDistanceInKm = (
   lat1: number,
   lng1: number,
   lat2: number,
@@ -196,8 +181,7 @@ const reverseGeocodeCity = async (lat: number, lng: number) => {
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
 export default function InfluencerPage() {
-  const auth = useContext(AuthContext);
-  const { communityId } = auth;
+  const { recommandations, categories } = useCMS();
 
   const isMobile = useIsMobile();
 
@@ -207,8 +191,6 @@ export default function InfluencerPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
   const [placeValue, setPlaceValue] = useState<any>(null);
   const [searchLocation, setSearchLocation] = useState<UserLocation | null>(
@@ -260,10 +242,10 @@ export default function InfluencerPage() {
     }
 
     const bounds = new window.google.maps.LatLngBounds();
-    touristPlacesListing.forEach((item) => {
+    recommandations.forEach((item: Recommendation) => {
       bounds.extend({
-        lat: item.details.latitude,
-        lng: item.details.longitude,
+        lat: Number(item?.location?.latitude),
+        lng: Number(item?.location?.longitude),
       });
     });
     map.fitBounds(bounds, 80);
@@ -313,47 +295,9 @@ export default function InfluencerPage() {
     );
   };
 
-  useEffect(() => {
-    getUserLocation();
-  }, []);
-
-  // Fetch categories
-  useEffect(() => {
-    const fetchCategories = async () => {
-      if (!communityId) return;
-
-      try {
-        const res = await getInfluencerCategories(communityId);
-        const list = normalizeArray<Category>(res?.data);
-        setCategories(list);
-      } catch (e) {
-        console.error(e);
-        toast.error("Failed to fetch Categories");
-        setCategories([]);
-      }
-    };
-
-    fetchCategories();
-  }, [communityId]);
-
-  // Fetch recommendations
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      if (!communityId) return;
-
-      try {
-        const res = await getInfluencerRecommendations(communityId);
-        const list = normalizeArray<Recommendation>(res?.data);
-        setRecommendations(list);
-      } catch (e) {
-        console.error(e);
-        toast.error("Failed to fetch Recommendations");
-        setRecommendations([]);
-      }
-    };
-
-    fetchRecommendations();
-  }, [communityId]);
+  // useEffect(() => {
+  //   getUserLocation();
+  // }, []);
 
   useEffect(() => {
     if (!map || !userLocation) return;
@@ -362,15 +306,15 @@ export default function InfluencerPage() {
   }, [map, userLocation]);
 
   const filteredPlaces = useMemo(() => {
-    return touristPlacesListing.filter((place) => {
+    return recommandations.filter((place: Recommendation) => {
       const matchesCategory =
-        activeCategory === "all" || place.details.category === activeCategory;
+        activeCategory === "all" || place?.category === activeCategory;
       if (!matchesCategory) return false;
 
       const q = listQuery.trim().toLowerCase();
       if (q) {
         const text =
-          `${place.details.name} ${place.details.city} ${place.details.area} ${place.details.description}`.toLowerCase();
+          `${place?.placeName} ${place?.city} ${place?.address} ${place?.description}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
@@ -379,8 +323,8 @@ export default function InfluencerPage() {
         const d = getDistanceInKm(
           base.lat,
           base.lng,
-          place.details.latitude,
-          place.details.longitude
+          Number(place.location.latitude),
+          Number(place.location.longitude)
         );
         return d <= 50;
       }
@@ -409,49 +353,47 @@ export default function InfluencerPage() {
           </div>
         ) : (
           <div className="p-4 space-y-3 overflow-y-auto md:h-full">
-            {filteredPlaces.map((place) => {
-              const isSelected = selectedId === place.uuid;
-              const { name, city, area, description, imageUrl } = place.details;
+            {filteredPlaces.map((place: Recommendation) => {
+              const isSelected = selectedId === place._id;
+              const { placeName, city, address, description, imageUrl } = place;
 
-              const images = Array.isArray(imageUrl)
-                ? imageUrl
-                : imageUrl
-                ? [imageUrl]
-                : [];
+              const imageSrc = place?.imageUrl || [
+                "/assets/map-image-placeholder.jpg",
+              ];
 
               return (
                 <Card
-                  key={place.uuid}
+                  key={place._id}
                   className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
                     isSelected ? "border-slate-300" : "hover:border-slate-300"
                   }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
                     handlePlaceClick(
-                      place.uuid!,
-                      place.details.latitude,
-                      place.details.longitude
+                      place._id!,
+                      Number(place.location.latitude),
+                      Number(place.location.longitude)
                     );
                   }}
                 >
                   <div className="p-4 pb-0 space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="font-semibold text-sm">{name}</p>
+                        <p className="font-semibold text-sm">{placeName}</p>
                         <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                           <MapPin className="h-3 w-3" />
-                          {area || city}
+                          {address || city}
                         </p>
                       </div>
                       <Badge
                         variant="outline"
                         className="text-[10px] rounded-full bg-slate-100"
                       >
-                        {place.details.category}
+                        {place?.category}
                       </Badge>
                     </div>
 
-                    {images.length > 0 && (
+                    {imageSrc.length > 0 && (
                       <Carousel
                         className="w-full"
                         plugins={[
@@ -464,12 +406,12 @@ export default function InfluencerPage() {
                         opts={OPTIONS}
                       >
                         <CarouselContent>
-                          {images.map((item, idx) => (
+                          {imageSrc.map((item, idx) => (
                             <CarouselItem key={idx} className="basis-2/5">
                               <div className="relative w-full h-[150px] rounded-xl overflow-hidden">
                                 <Image
-                                  src={item}
-                                  alt={`img-${idx}`}
+                                  src={imageSrc?.[0]}
+                                  alt={`${place?.placeName}-img-${idx}`}
                                   fill
                                   className="object-cover"
                                   unoptimized
@@ -488,30 +430,39 @@ export default function InfluencerPage() {
 
                   <CardContent className="p-4 pt-3">
                     <div className="grid grid-cols-3 gap-2">
+                      <Link href={place?.googleMapLink ?? "/"}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-9 text-xs shadow-none cursor-pointer w-full"
+                        >
+                          <MapPin className="h-3 w-3 mr-1" />
+                          Directions
+                        </Button>
+                      </Link>
+
                       <Button
                         variant="outline"
                         size="sm"
-                        className="h-9 text-xs shadow-none cursor-pointer"
-                      >
-                        <MapPin className="h-3 w-3 mr-1" />
-                        Directions
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-9 text-xs shadow-none cursor-pointer"
+                        className="h-9 text-xs shadow-none cursor-pointer w-full"
+                        onClick={() => toast.info("Under Development")}
                       >
                         <BookmarkPlus className="h-3 w-3 mr-1" />
                         Save
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-9 text-xs shadow-none cursor-pointer"
+                      <Link
+                        href={`https://api.whatsapp.com/send?text=${place.googleMapLink}`}
+                        target="_blank"
                       >
-                        <Share2 className="h-3 w-3 mr-1" />
-                        Share
-                      </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-9 text-xs shadow-none cursor-pointer w-full"
+                        >
+                          <Share2 className="h-3 w-3 mr-1" />
+                          Share
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -550,17 +501,18 @@ export default function InfluencerPage() {
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
-                className="h-9 rounded-md cursor-pointer"
+                className="h-9 rounded-md cursor-pointer shadow-none"
                 onClick={() => toast.info("Under Development")}
               >
                 View Saved
               </Button>
-              <Button
-                onClick={() => toast.info("Under Development")}
-                className="h-9 rounded-md bg-[#1F4AA8] hover:bg-[#163A87] cursor-pointer"
-              >
-                Explore
-              </Button>
+              <Link href={"/explore"}>
+                <Button
+                  className="h-9 rounded-md cursor-pointer shadow-none"
+                >
+                  Explore
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -651,7 +603,7 @@ export default function InfluencerPage() {
             </div>
 
             {/* Chips */}
-            <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden mr-10 pr-2 overscroll-x-contain">
+            <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
                 className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
@@ -664,7 +616,7 @@ export default function InfluencerPage() {
                 All
               </Badge>
 
-              {categories.map((cat) => {
+              {categories.map((cat: Category) => {
                 const name = (cat?.name || "").trim();
                 const isActive = activeCategory === name;
                 const Icon = CATEGORY_ICON[name];
@@ -742,8 +694,8 @@ export default function InfluencerPage() {
                       onUnmount={onUnmount}
                       options={mapOptions}
                     >
-                      {filteredPlaces.map((item) => (
-                        <MarkerItem item={item} key={item.uuid} />
+                      {filteredPlaces.map((item: Recommendation) => (
+                        <MarkerItem item={item} key={item._id} />
                       ))}
                     </GoogleMap>
                   </div>
@@ -826,8 +778,8 @@ export default function InfluencerPage() {
                       onUnmount={onUnmount}
                       options={mapOptions}
                     >
-                      {filteredPlaces.map((item) => (
-                        <MarkerItem item={item} key={item.uuid} />
+                      {filteredPlaces.map((item: Recommendation) => (
+                        <MarkerItem item={item} key={item._id} />
                       ))}
                     </GoogleMap>
                   </div>
@@ -891,13 +843,13 @@ export default function InfluencerPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2">
-                {filteredPlaces.map((item, idx) => {
+                {filteredPlaces.map((item: Recommendation, idx: number) => {
                   const locText =
-                    item?.details?.area && item?.details?.city
-                      ? `${item.details.area}, ${item.details.city}`
-                      : item?.details?.city || item?.details?.area || "";
+                    item?.address && item?.city
+                      ? `${item.address}, ${item.city}`
+                      : item?.city || item?.address || "";
 
-                  const imageSrc = item?.details?.imageUrl || [
+                  const imageSrc = item?.imageUrl || [
                     "/assets/map-image-placeholder.jpg",
                   ];
 
@@ -909,7 +861,7 @@ export default function InfluencerPage() {
                       <div className="relative h-40 w-full overflow-hidden">
                         <img
                           src={imageSrc?.[0]}
-                          alt={item?.details?.name}
+                          alt={item?.placeName}
                           className="h-full w-full object-cover"
                         />
                       </div>
@@ -917,18 +869,18 @@ export default function InfluencerPage() {
                       <CardContent className="p-4 space-y-3">
                         <div className="flex items-center justify-between gap-2">
                           <p className="font-semibold text-sm line-clamp-1">
-                            {item?.details?.name}
+                            {item?.placeName}
                           </p>
                           <Badge
                             variant="secondary"
                             className="text-[11px] px-2 py-0.5 rounded-full"
                           >
-                            {splitCamelCase(item?.details?.category)}
+                            {splitCamelCase(item?.category)}
                           </Badge>
                         </div>
 
                         <p className="text-xs text-slate-600 line-clamp-2">
-                          {item?.details?.description}
+                          {item?.description}
                         </p>
 
                         {locText && (
