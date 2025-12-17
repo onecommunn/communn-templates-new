@@ -50,6 +50,8 @@ import {
   Recommendation,
 } from "@/models/templates/Influencer/influencer-home-model";
 import Link from "next/link";
+import { AuthContext } from "@/contexts/Auth.context";
+import { useRouter } from "next/navigation";
 
 const API_KEY = "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
@@ -181,8 +183,9 @@ const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
 export default function InfluencerPage() {
   const { recommandations, categories } = useCMS();
-
+  const authContext = useContext(AuthContext);
   const isMobile = useIsMobile();
+  const router = useRouter();
 
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
   const [listQuery, setListQuery] = useState("");
@@ -294,9 +297,9 @@ export default function InfluencerPage() {
     );
   };
 
-  // useEffect(() => {
-  //   getUserLocation();
-  // }, []);
+  useEffect(() => {
+    getUserLocation();
+  }, []);
 
   useEffect(() => {
     if (!map || !userLocation) return;
@@ -501,7 +504,13 @@ export default function InfluencerPage() {
               <Button
                 variant="outline"
                 className="h-9 rounded-md cursor-pointer shadow-none font-medium"
-                onClick={() => toast.info("Under Development")}
+                onClick={() => {
+                  if (authContext?.isAuthenticated) {
+                    toast.info("Under Development");
+                  } else {
+                    router.push("/login");
+                  }
+                }}
               >
                 View Saved
               </Button>
@@ -888,7 +897,11 @@ export default function InfluencerPage() {
                         )}
 
                         <div className="mt-3 flex gap-2">
-                          <Link href={item?.videoUrl?.[0] ?? "/"} target="_blank" className="w-full">
+                          <Link
+                            href={item?.videoUrl?.[0] ?? "/"}
+                            target="_blank"
+                            className="w-full"
+                          >
                             <Button
                               variant="outline"
                               size="sm"

@@ -66,6 +66,7 @@ import InfluencerPage from "./app/Influencer/page";
 import InfluencerLayout from "./app/Influencer/InfluencerLayout";
 import InfluencerExploreRoot from "./app/Influencer/explore/page";
 import InfluencerLogin from "./app/Influencer/login/page";
+import InfluencerSignup from "./app/Influencer/sign-up/page";
 
 export const templateLayouts: Record<
   string,
@@ -151,7 +152,8 @@ export const templates: Record<
   },
   influencer: {
     "/": InfluencerPage,
-    "/explore":InfluencerExploreRoot,
-    "/login":InfluencerLogin
+    "/explore": InfluencerExploreRoot,
+    "/login": InfluencerLogin,
+    "/sign-up": InfluencerSignup,
   },
 };
