@@ -5,6 +5,7 @@ import { MarkerF, OverlayView } from "@react-google-maps/api";
 import React, { useState } from "react";
 import { MapPin, Play, X } from "lucide-react";
 import { splitCamelCase } from "@/utils/StringFunctions";
+import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
 
 const CATEGORY_ICONS: Record<string, string> = {
   Restaurants: "/assets/map-markers/bell-pin.svg",
@@ -12,30 +13,22 @@ const CATEGORY_ICONS: Record<string, string> = {
   Cafes: "/assets/map-markers/coffee-pin.svg",
   Products: "/assets/map-markers/box-pin.svg",
   Travel: "/assets/map-markers/map-pin.svg",
-  Experiences:"/assets/map-markers/lib-pin.svg"
+  Experiences: "/assets/map-markers/lib-pin.svg",
 };
 
 type MarkerItemProps = {
-  item: {
-    uuid?: string;
-    details: {
-      latitude: number;
-      longitude: number;
-      category: string;
-      description: string;
-      name: string;
-      // optional extra fields for UI
-      area?: string; // e.g. "Indiranagar"
-      city?: string; // e.g. "Bangalore"
-      imageUrl?: string[]; // thumbnail for the card
-      [key: string]: any;
-    };
-  };
+  item: Recommendation;
 };
 
 const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
-  const { latitude, longitude, category } = item.details;
+  const { location, category } = item;
   const iconUrl = CATEGORY_ICONS[category] || CATEGORY_ICONS["Default"];
+
+  const lat = Number(item?.location?.latitude);
+  const lng = Number(item?.location?.longitude);
+
+  // ✅ protect google maps from NaN
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
 
   const [selectedPlace, setSelectedPlace] = useState<
     MarkerItemProps["item"] | null
@@ -43,7 +36,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
 
   const handleMarkerClick = () => {
     // toggle if same marker clicked again
-    if (selectedPlace?.uuid && item.uuid && selectedPlace.uuid === item.uuid) {
+    if (selectedPlace?._id && item._id && selectedPlace._id === item._id) {
       setSelectedPlace(null);
     } else {
       setSelectedPlace(item);
@@ -51,21 +44,21 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
   };
 
   const locText =
-    selectedPlace?.details?.area && selectedPlace?.details?.city
-      ? `${selectedPlace.details.area}, ${selectedPlace.details.city}`
-      : selectedPlace?.details?.city || selectedPlace?.details?.area || "";
+    selectedPlace?.address && selectedPlace?.city
+      ? `${selectedPlace?.address}, ${selectedPlace?.city}`
+      : selectedPlace?.city || selectedPlace?.address || "";
 
-  const imageSrc =
-    selectedPlace?.details?.imageUrl || "/assets/map-image-placeholder.jpg";
-    
+  const imageSrc = selectedPlace?.imageUrl || [
+    "/assets/map-image-placeholder.jpg",
+  ];
 
   return (
     <>
       <MarkerF
-        position={{ lat: latitude, lng: longitude }}
+        position={{ lat, lng }}
         icon={{
           url: iconUrl,
-          scaledSize: new window.google.maps.Size(40, 60),
+          scaledSize: new window.google.maps.Size(50, 70),
         }}
         onClick={handleMarkerClick}
       />
@@ -73,8 +66,8 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
       {selectedPlace && (
         <OverlayView
           position={{
-            lat: selectedPlace.details.latitude,
-            lng: selectedPlace.details.longitude,
+            lat: Number(selectedPlace.location.latitude),
+            lng: Number(selectedPlace.location.longitude),
           }}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
           // center card above marker
@@ -94,7 +87,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
               </button>
               <img
                 src={imageSrc?.[0]}
-                alt={selectedPlace.details.name}
+                alt={selectedPlace?.placeName}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -103,19 +96,19 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
               {/* Title + Category */}
               <div className="flex items-center justify-between gap-2">
                 <p className="font-semibold text-sm line-clamp-1">
-                  {selectedPlace.details.name}
+                  {selectedPlace?.placeName}
                 </p>
                 <Badge
                   variant="secondary"
                   className="text-[11px] px-2 py-0.5 rounded-full"
                 >
-                  {splitCamelCase(selectedPlace.details.category)}
+                  {splitCamelCase(selectedPlace?.category)}
                 </Badge>
               </div>
 
               {/* Description */}
               <p className="text-xs text-slate-600 line-clamp-2">
-                {selectedPlace.details.description}
+                {selectedPlace?.description}
               </p>
 
               {/* Location */}
