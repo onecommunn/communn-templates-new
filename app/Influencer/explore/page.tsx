@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import Image from "next/image";
 import { toast } from "sonner";
 import {
   Banknote,
@@ -13,20 +12,15 @@ import {
   Package,
   MapPin,
   Search,
-  Play,
   ChevronLeft,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AuthContext } from "@/contexts/Auth.context";
-import { getInfluencerCategories } from "@/services/Influencer/influencer.service";
-import { touristPlacesListing } from "../data/data-listing";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCMS } from "../CMSProvider.client";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
-import Link from "next/link";
-// import { getDistanceInKm } from "../page";
+import Link from "next/link";;
 import InfluencerExploreSkeleton from "./_components/InfluencerExploreSkeleton";
 
 type Category = {

@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { MapPin, Play, X } from "lucide-react";
 import { splitCamelCase } from "@/utils/StringFunctions";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
+import Link from "next/link";
 
 const CATEGORY_ICONS: Record<string, string> = {
   Restaurants: "/assets/map-markers/bell-pin.svg",
@@ -121,24 +122,26 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
 
               {/* Buttons */}
               <div className="mt-3 flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer"
-                  // onClick={() => ...} // hook your reel logic here
-                >
-                  <span>
-                    <Play className="h-3 w-3" />
-                  </span>
-                  View Reel
-                </Button>
-                <Button
-                  size="sm"
-                  className="flex-1 justify-center text-xs cursor-pointer"
-                  // onClick={() => ...} // open Google Maps link here
-                >
-                  Go to Maps
-                </Button>
+                <Link href={item?.videoUrl?.[0] ?? "/"} target="_blank" className="w-full">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer w-full"
+                  >
+                    <span>
+                      <Play className="h-3 w-3" />
+                    </span>
+                    View Reel
+                  </Button>
+                </Link>
+                <Link target="_blank" href={item?.googleMapLink ?? "/"} className="w-full">
+                  <Button
+                    size="sm"
+                    className="flex-1 justify-center text-xs cursor-pointer w-full"
+                  >
+                    Go to Maps
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
