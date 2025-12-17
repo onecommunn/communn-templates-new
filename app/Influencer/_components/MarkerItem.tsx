@@ -77,7 +77,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
             y: -height - 16,
           })}
         >
-          <Card className="w-[320px] rounded-2xl shadow-xl border border-slate-200 overflow-hidden p-0 gap-2">
+          <Card className="w-[320px] rounded-2xl shadow-xl border border-slate-200 overflow-hidden p-0 gap-2 font-montserrat">
             {/* Image */}
             <div className="relative h-40 w-full overflow-hidden">
               <button
@@ -101,22 +101,22 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
                 </p>
                 <Badge
                   variant="secondary"
-                  className="text-[11px] px-2 py-0.5 rounded-full"
+                  className="text-[11px] px-2 py-0.5 rounded-full font-medium"
                 >
                   {splitCamelCase(selectedPlace?.category)}
                 </Badge>
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-600 line-clamp-2">
+              <p className="text-xs text-slate-600 line-clamp-2 font-medium">
                 {selectedPlace?.description}
               </p>
 
               {/* Location */}
               {locText && (
-                <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-600">
-                  <MapPin className="h-3 w-3" />
-                  <span className="truncate">{locText}</span>
+                <div className="mt-1 flex items-center gap-2 text-xs ">
+                  <MapPin className="h-4 w-4" />
+                  <span className="truncate font-medium">{locText}</span>
                 </div>
               )}
 
@@ -126,7 +126,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer w-full"
+                    className="flex-1 flex items-center justify-center gap-1 text-xs cursor-pointer w-full font-medium"
                   >
                     <span>
                       <Play className="h-3 w-3" />
@@ -137,7 +137,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
                 <Link target="_blank" href={item?.googleMapLink ?? "/"} className="w-full">
                   <Button
                     size="sm"
-                    className="flex-1 justify-center text-xs cursor-pointer w-full"
+                    className="flex-1 justify-center text-xs cursor-pointer w-full font-medium"
                   >
                     Go to Maps
                   </Button>

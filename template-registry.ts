@@ -65,6 +65,7 @@ import YoganaPaymentsRoot from "./app/yogana/payments/page";
 import InfluencerPage from "./app/Influencer/page";
 import InfluencerLayout from "./app/Influencer/InfluencerLayout";
 import InfluencerExploreRoot from "./app/Influencer/explore/page";
+import InfluencerLogin from "./app/Influencer/login/page";
 
 export const templateLayouts: Record<
   string,
@@ -150,6 +151,7 @@ export const templates: Record<
   },
   influencer: {
     "/": InfluencerPage,
-    "/explore":InfluencerExploreRoot
+    "/explore":InfluencerExploreRoot,
+    "/login":InfluencerLogin
   },
 };

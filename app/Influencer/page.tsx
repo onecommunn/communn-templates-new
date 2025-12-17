@@ -476,7 +476,7 @@ export default function InfluencerPage() {
   if (!isLoaded) return <InfluencerPageSkeleton />;
 
   return (
-    <main className="relative min-h-screen bg-[#F6F7FB]">
+    <main className="relative min-h-screen bg-[#F6F7FB] font-montserrat">
       <Tabs defaultValue="map">
         {/* ===== Header ===== */}
         <div className="bg-white border-b sticky top-0 z-20">
@@ -484,7 +484,7 @@ export default function InfluencerPage() {
           <div className="py-2 px-6 flex items-center justify-between">
             <div>
               <p className="text-xs text-slate-500">Location</p>
-              <p className="text-sm md:text-lg font-semibold text-slate-900">
+              <p className="text-sm md:text-lg font-semibold text-slate-900 line-clamp-1">
                 {isLocating
                   ? "Finding nearby..."
                   : placeValue?.label
@@ -500,13 +500,13 @@ export default function InfluencerPage() {
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
-                className="h-9 rounded-md cursor-pointer shadow-none"
+                className="h-9 rounded-md cursor-pointer shadow-none font-medium"
                 onClick={() => toast.info("Under Development")}
               >
                 View Saved
               </Button>
               <Link href={"/explore"}>
-                <Button className="h-9 rounded-md cursor-pointer shadow-none">
+                <Button className="h-9 rounded-md cursor-pointer shadow-none font-medium">
                   Explore
                 </Button>
               </Link>
@@ -603,7 +603,7 @@ export default function InfluencerPage() {
             <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
+                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
                   activeCategory === "all"
                     ? "bg-slate-900 text-white"
                     : "bg-white hover:bg-slate-50"
@@ -622,7 +622,7 @@ export default function InfluencerPage() {
                   <Badge
                     key={cat._id}
                     variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer ${
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
                       isActive
                         ? "bg-slate-900 text-white"
                         : "bg-white hover:bg-slate-50"
@@ -863,7 +863,7 @@ export default function InfluencerPage() {
                         />
                       </div>
 
-                      <CardContent className="p-4 space-y-3">
+                      <CardContent className="p-4 space-y-3 font-medium">
                         <div className="flex items-center justify-between gap-2">
                           <p className="font-semibold text-sm line-clamp-1">
                             {item?.placeName}

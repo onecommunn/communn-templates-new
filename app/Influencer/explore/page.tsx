@@ -154,7 +154,7 @@ export default function InfluencerExploreRoot() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white font-montserrat">
       {/* ===== Top bar ===== */}
       <div className="sticky top-0 z-20 bg-white border-b">
         {/* row-1 */}
@@ -250,7 +250,7 @@ export default function InfluencerExploreRoot() {
                 <Badge
                   key={cat._id}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer flex items-center gap-2 ${isActive
+                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium cursor-pointer flex items-center gap-2 ${isActive
                     ? "bg-slate-900 text-white"
                     : "bg-white hover:bg-slate-50"
                     }`}
@@ -348,7 +348,7 @@ export default function InfluencerExploreRoot() {
                       <Link href={item?.googleMapLink ?? "/"} target="_blank">
                         <Button
                           variant="outline"
-                          className="cursor-pointer w-full border-slate-200 text-slate-900"
+                          className="cursor-pointer w-full border-slate-200 text-slate-900 font-medium"
                         >
                           Go to Maps
                         </Button>

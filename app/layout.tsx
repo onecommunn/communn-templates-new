@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import {
   Poppins,
@@ -13,6 +12,7 @@ import {
   Marcellus,
   Kanit,
   Archivo,
+  Montserrat_Alternates,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -25,7 +25,7 @@ const poppins = Poppins({
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800","900"],
   variable: "--font-montserrat",
 });
 
