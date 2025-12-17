@@ -26,7 +26,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useCMS } from "../CMSProvider.client";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
 import Link from "next/link";
-import { getDistanceInKm } from "../page";
+// import { getDistanceInKm } from "../page";
 import InfluencerExploreSkeleton from "./_components/InfluencerExploreSkeleton";
 
 type Category = {
@@ -94,19 +94,37 @@ export default function InfluencerExploreRoot() {
 
   useEffect(() => setMounted(true), []);
 
+  const getDistanceInKm = (
+    lat1: number,
+    lng1: number,
+    lat2: number,
+    lng2: number
+  ) => {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLng = ((lng2 - lng1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  };
+
   // ✅ Filter places for grid (category + search text)
   const filteredPlaces = useMemo(() => {
     const q = listQuery.trim().toLowerCase();
 
-    return recommandations.filter((p: Recommendation) => {
+    return recommandations?.filter((p: Recommendation) => {
       const catOk = activeCategory === "all" || p?.category === activeCategory;
 
       if (!catOk) return false;
 
       if (q) {
-        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${
-          p?.city ?? ""
-        } ${p?.description ?? ""}`.toLowerCase();
+        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${p?.city ?? ""
+          } ${p?.description ?? ""}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
@@ -127,7 +145,7 @@ export default function InfluencerExploreRoot() {
   // ✅ Areas explored pills (you can replace with real counts)
   const areasExplored = useMemo(() => {
     const areaCount = new Map<string, number>();
-    recommandations.forEach((p: Recommendation) => {
+    recommandations?.forEach((p: Recommendation) => {
       const area = (p?.address || "Others").trim();
       areaCount.set(area, (areaCount.get(area) || 0) + 1);
     });
@@ -220,11 +238,10 @@ export default function InfluencerExploreRoot() {
           <div className="flex-1 flex items-center justify-end gap-2 overflow-x-auto">
             <Badge
               variant={activeCategory === "all" ? "secondary" : "outline"}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${
-                activeCategory === "all"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white hover:bg-slate-50"
-              }`}
+              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${activeCategory === "all"
+                ? "bg-slate-900 text-white"
+                : "bg-white hover:bg-slate-50"
+                }`}
               onClick={() => setActiveCategory("all")}
             >
               All
@@ -239,11 +256,10 @@ export default function InfluencerExploreRoot() {
                 <Badge
                   key={cat._id}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer flex items-center gap-2 ${
-                    isActive
-                      ? "bg-slate-900 text-white"
-                      : "bg-white hover:bg-slate-50"
-                  }`}
+                  className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer flex items-center gap-2 ${isActive
+                    ? "bg-slate-900 text-white"
+                    : "bg-white hover:bg-slate-50"
+                    }`}
                   onClick={() => setActiveCategory(name)}
                 >
                   {Icon ? <Icon size={14} strokeWidth={1.5} /> : null}
@@ -287,7 +303,7 @@ export default function InfluencerExploreRoot() {
       {/* ===== Page layout ===== */}
       <section className="p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          {filteredPlaces.map((item: Recommendation, idx: number) => {
+          {filteredPlaces?.map((item: Recommendation, idx: number) => {
             const img =
               Array.isArray(item?.imageUrl) && item?.imageUrl.length > 0
                 ? item?.imageUrl[0]
@@ -295,7 +311,7 @@ export default function InfluencerExploreRoot() {
 
             const area = item?.address || "";
             const city = item?.city || "";
-            const locText = [area, city].filter(Boolean).join(", ");
+            const locText = [area, city]?.filter(Boolean).join(", ");
 
             return (
               <Card
@@ -351,7 +367,7 @@ export default function InfluencerExploreRoot() {
           })}
         </div>
 
-        {filteredPlaces.length === 0 && (
+        {filteredPlaces?.length === 0 && (
           <div className="py-20 text-center text-slate-500 text-lg h-[60vh] flex items-center justify-center">
             No places found.
           </div>
