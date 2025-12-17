@@ -346,7 +346,7 @@ export default function InfluencerPage() {
     return (
       <>
         {filteredPlaces.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 p-6">
+          <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 p-6 font-montserrat">
             <MapPin className="h-8 w-8 mb-2 opacity-60" />
             <p className="font-medium text-sm">No places found</p>
             <p className="text-xs mt-1">
@@ -354,7 +354,7 @@ export default function InfluencerPage() {
             </p>
           </div>
         ) : (
-          <div className="p-4 space-y-3 overflow-y-auto md:h-full">
+          <div className="p-4 space-y-3 overflow-y-auto md:h-full font-montserrat">
             {filteredPlaces.map((place: Recommendation) => {
               const isSelected = selectedId === place._id;
               const { placeName, city, address, description, imageUrl } = place;
