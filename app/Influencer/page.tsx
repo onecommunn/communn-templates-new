@@ -447,7 +447,14 @@ export default function InfluencerPage() {
                         variant="outline"
                         size="sm"
                         className="h-9 text-xs shadow-none cursor-pointer w-full"
-                        onClick={() => toast.info("Under Development")}
+                        onClick={() => {
+                          if (authContext?.isAuthenticated) {
+                            toast.info("Under Development");
+                          } else {
+                            toast.info("Login required to save places.");
+                            router.push("/login");
+                          }
+                        }}
                       >
                         <BookmarkPlus className="h-3 w-3 mr-1" />
                         Save
@@ -508,6 +515,7 @@ export default function InfluencerPage() {
                   if (authContext?.isAuthenticated) {
                     toast.info("Under Development");
                   } else {
+                    toast.info("Please Login");
                     router.push("/login");
                   }
                 }}
