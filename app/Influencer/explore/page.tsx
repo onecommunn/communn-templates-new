@@ -77,6 +77,9 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 export default function InfluencerExploreRoot() {
   const { recommandations, categories } = useCMS();
 
+  // console.log(recommandations, "recommandations");
+  // console.log(categories, "categories");
+
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
 
   const [mounted, setMounted] = useState(false);
@@ -152,6 +155,11 @@ export default function InfluencerExploreRoot() {
   if (!recommandations) {
     return <InfluencerExploreSkeleton />;
   }
+
+  const uniqueCategories = Array.from(
+    new Set(recommandations.map((item: Recommendation) => item?.category))
+  );
+
 
   return (
     <main className="min-h-screen bg-white font-montserrat">
@@ -241,22 +249,22 @@ export default function InfluencerExploreRoot() {
               All
             </Badge>
 
-            {categories.map((cat: Category) => {
-              const name = (cat?.name || "").trim();
-              const Icon = CATEGORY_ICON[name];
+            {uniqueCategories.map((cat: any, index) => {
+              const name = cat?.trim();
               const isActive = activeCategory === name;
+              const Icon = CATEGORY_ICON[name];
 
               return (
                 <Badge
-                  key={cat._id}
+                  key={index}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium cursor-pointer flex items-center gap-2 ${isActive
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
                     ? "bg-slate-900 text-white"
                     : "bg-white hover:bg-slate-50"
                     }`}
                   onClick={() => setActiveCategory(name)}
                 >
-                  {Icon ? <Icon size={14} strokeWidth={1.5} /> : null}
+                  {Icon && <Icon size={20} strokeWidth={1.5} />}
                   {name}
                 </Badge>
               );
@@ -329,7 +337,7 @@ export default function InfluencerExploreRoot() {
                   <div className="px-4 pt-4 pb-3">
                     {/* Title + chip */}
                     <div className="flex items-center justify-between gap-3">
-                      <p className="text-[16px] font-semibold text-slate-900 leading-none">
+                      <p className="text-[15px] font-semibold text-slate-900 leading-none">
                         {item?.placeName}
                       </p>
                       <Badge className="rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-4 py-1">
@@ -338,9 +346,9 @@ export default function InfluencerExploreRoot() {
                     </div>
 
                     {/* Location */}
-                    <div className="mt-1 flex items-center gap-2 text-slate-700">
+                    <div className="mt-2 flex items-center gap-2 text-slate-700">
                       <MapPin className="h-4 w-4 text-slate-700" />
-                      <span className="text-sm">{locText}</span>
+                      <span className="text-xs">{locText}</span>
                     </div>
 
                     {/* Button */}
