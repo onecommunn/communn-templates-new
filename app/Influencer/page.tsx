@@ -264,7 +264,7 @@ export default function InfluencerPage() {
 
 
   const uniqueCategories = Array.from(
-    new Set(recommandations.map((item: Recommendation) => item?.category))
+    new Set(recommandations?.map((item: Recommendation) => item?.category))
   );
 
 
@@ -646,7 +646,7 @@ export default function InfluencerPage() {
                 All
               </Badge>
 
-              {uniqueCategories.map((cat: any, index) => {
+              {uniqueCategories?.map((cat: any, index) => {
                 const name = cat?.trim();
                 const isActive = activeCategory === name;
                 const Icon = CATEGORY_ICON[name];
