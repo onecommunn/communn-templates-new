@@ -15,6 +15,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   Products: "/assets/map-markers/box-pin.svg",
   Travel: "/assets/map-markers/map-pin.svg",
   Experiences: "/assets/map-markers/lib-pin.svg",
+  Default: "/assets/map-markers/map-pin.svg",
 };
 
 type MarkerItemProps = {
@@ -122,7 +123,11 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
 
               {/* Buttons */}
               <div className="mt-3 flex gap-2">
-                <Link href={item?.videoUrl?.[0] ?? "/"} target="_blank" className="w-full">
+                <Link
+                  href={item?.videoUrl?.[0] ?? "/"}
+                  target="_blank"
+                  className="w-full"
+                >
                   <Button
                     variant="outline"
                     size="sm"
@@ -134,7 +139,11 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
                     View Reel
                   </Button>
                 </Link>
-                <Link target="_blank" href={item?.googleMapLink ?? "/"} className="w-full">
+                <Link
+                  target="_blank"
+                  href={item?.googleMapLink ?? "/"}
+                  className="w-full"
+                >
                   <Button
                     size="sm"
                     className="flex-1 justify-center text-xs cursor-pointer w-full font-medium"
