@@ -143,7 +143,7 @@ export default function InfluencerExploreRoot() {
   const areasExplored = useMemo(() => {
     const areaCount = new Map<string, number>();
     recommandations?.forEach((p: Recommendation) => {
-      const area = (p?.address || "Others").trim();
+      const area = (p?.city || "Others").trim();
       areaCount.set(area, (areaCount.get(area) || 0) + 1);
     });
     return Array.from(areaCount.entries())
