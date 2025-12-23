@@ -45,7 +45,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log(form, "form");
+    // console.log(form, "form");
 
     try {
       const payload = { ...form, communityId };

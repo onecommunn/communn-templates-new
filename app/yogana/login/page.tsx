@@ -114,8 +114,6 @@ const YoganaLogin = () => {
           null
         );
 
-        console.log(res, "res");
-
         if (res.status === 200) {
           toast.success("Login successful!");
           await new Promise((resolve) => setTimeout(resolve, 50));

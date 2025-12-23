@@ -103,7 +103,7 @@ const InfluencerLogin = () => {
           null
         );
 
-        console.log(res, "res");
+        // console.log(res, "res");
 
         if (res.status === 200) {
           toast.success("Login successful!");

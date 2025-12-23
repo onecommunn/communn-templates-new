@@ -341,7 +341,7 @@ const RestraintSubscriptions = ({
         toast.info(res?.data?.message);
       }
 
-      console.log(res, "res");
+      // console.log(res, "res");
 
       setIsPauseOpen(false);
     } catch (err) {

@@ -231,7 +231,6 @@ const SpawellProfilePage = ({
         setIsPlansLoading(true);
         setIsLoading(true);
         const response = await loadUserPlans(userId, communityId);
-        console.log(response, "loadUserPlans");
         setFormValues({
           id: response?.id ?? "",
           firstName: response?.firstName ?? "",

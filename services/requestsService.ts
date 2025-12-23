@@ -9,7 +9,7 @@ export const sendRequestToJoin = async (token: string, formData: any) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response;
   } catch (err) {
     console.log('ERR :', err);

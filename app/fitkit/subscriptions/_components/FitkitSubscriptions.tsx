@@ -343,7 +343,7 @@ const FitkitSubscriptions = ({
         toast.info(res?.data?.message);
       }
 
-      console.log(res, "res");
+      // console.log(res, "res");
 
       setIsPauseOpen(false);
     } catch (err) {
@@ -548,7 +548,6 @@ const FitkitSubscriptions = ({
 
                 // 2️⃣ Immediately re-fetch latest sequences for UI
                 await handlegetSequencesById();
-                console.log("handlegetSequencesById");
 
                 // 3️⃣ Show success popup
                 setSuccessOpen(true);

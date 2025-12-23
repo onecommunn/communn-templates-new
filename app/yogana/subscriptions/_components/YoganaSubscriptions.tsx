@@ -345,8 +345,6 @@ const YoganaSubscriptions = ({
         toast.info(res?.data?.message);
       }
 
-      console.log(res, "res");
-
       setIsPauseOpen(false);
     } catch (err) {
       console.error("Error pausing subscription", err);

@@ -35,7 +35,7 @@ const UpcomingPayments = () => {
     fetchDuePayments();
   }, []);
 
-  console.log(dueList, "dueList");
+  // console.log(dueList, "dueList");
   return (
     <div className="border border-[#E0E0E0] rounded-[12px] bg-white overflow-auto m-1 min-h-[60vh]">
       <div className="md:block hidden">

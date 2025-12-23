@@ -19,7 +19,7 @@ export const fetchCreatorAbout = async (communityId: string) => {
     const response = await axios.get(
       `${BASE_URL_V2}/cms/get-section/community/${communityId}?templateId=creator&page=about`
     );
-    console.log("Fetched:", response.data);
+    // console.log("Fetched:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching:", error);
@@ -33,7 +33,7 @@ export const fetchCreatorHome = async (communityId: string) => {
     const response = await axios.get(
       `${BASE_URL_V2}/cms/get-section/community/${communityId}?templateId=creator&page=home`
     );
-    console.log("Fetched:", response.data);
+    // console.log("Fetched:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching:", error);
@@ -61,7 +61,7 @@ export const fetchCreatorFooter = async (communityId: string) => {
     const response = await axios.get(
       `${BASE_URL_V2}/cms/get-section/community/${communityId}?templateId=creator&page=footer`
     );
-    console.log("Fetched:", response.data);
+    // console.log("Fetched:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching:", error);
