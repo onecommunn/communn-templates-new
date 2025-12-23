@@ -335,6 +335,7 @@ export default function InfluencerPage() {
 
   const filteredPlaces = useMemo(() => {
     return recommandations?.filter((place: Recommendation) => {
+      if (!place?.isPublished) return false;
       const matchesCategory =
         activeCategory === "all" || place?.category === activeCategory;
       if (!matchesCategory) return false;

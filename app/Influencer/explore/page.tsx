@@ -137,6 +137,7 @@ export default function InfluencerExploreRoot() {
     const q = listQuery.trim().toLowerCase();
 
     return recommandations?.filter((p: Recommendation) => {
+      if (!p?.isPublished) return false;
       const catOk = activeCategory === "all" || p?.category === activeCategory;
 
       if (!catOk) return false;

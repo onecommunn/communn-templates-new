@@ -27,6 +27,7 @@ export interface Recommendation {
     facebookLink: string;
     instagramLink: string;
   };
+  isPublished?: boolean;
 }
 
 export type Category = {
