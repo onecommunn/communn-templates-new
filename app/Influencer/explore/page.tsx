@@ -11,8 +11,21 @@ import {
   Map as MapIcon,
   Package,
   MapPin,
+  Map as Mapicon,
   Search,
   ChevronLeft,
+  Sparkles,
+  CalendarDays,
+  Home,
+  HeartPulse,
+  Dumbbell,
+  Music,
+  Palette,
+  ShoppingBag,
+  GraduationCap,
+  Users,
+  Shapes,
+  Briefcase,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +33,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCMS } from "../CMSProvider.client";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
-import Link from "next/link";;
+import Link from "next/link";
 import InfluencerExploreSkeleton from "./_components/InfluencerExploreSkeleton";
 
 type Category = {
@@ -65,13 +78,22 @@ const geocodePlace = async (placeId: string) => {
   };
 };
 
-const CATEGORY_ICON: Record<string, React.ElementType> = {
+export const CATEGORY_ICON: Record<string, React.ElementType> = {
+  Experiences: Sparkles,
+  Events: CalendarDays,
   Cafes: Coffee,
   Restaurants: ConciergeBell,
-  Travel: MapIcon,
-  Products: Package,
-  Stays: House,
-  Experiences: Banknote,
+  Travel: Mapicon,
+  Stays: Home,
+  Wellness: HeartPulse,
+  "Fitness & Sports": Dumbbell,
+  Entertainment: Music,
+  "Arts & Culture": Palette,
+  "Shopping & Products": ShoppingBag,
+  "Workshops & Learning": GraduationCap,
+  "Community & Meetups": Users,
+  Services: Briefcase,
+  Others: Shapes,
 };
 
 export default function InfluencerExploreRoot() {
@@ -104,8 +126,8 @@ export default function InfluencerExploreRoot() {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLng / 2) ** 2;
 
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
@@ -120,8 +142,9 @@ export default function InfluencerExploreRoot() {
       if (!catOk) return false;
 
       if (q) {
-        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${p?.city ?? ""
-          } ${p?.description ?? ""}`.toLowerCase();
+        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${
+          p?.city ?? ""
+        } ${p?.description ?? ""}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
@@ -159,7 +182,6 @@ export default function InfluencerExploreRoot() {
   const uniqueCategories = Array.from(
     new Set(recommandations?.map((item: Recommendation) => item?.category))
   );
-
 
   return (
     <main className="min-h-screen bg-white font-montserrat">
@@ -240,10 +262,11 @@ export default function InfluencerExploreRoot() {
           <div className="flex-1 flex items-center justify-end gap-2 overflow-x-auto">
             <Badge
               variant={activeCategory === "all" ? "secondary" : "outline"}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${activeCategory === "all"
-                ? "bg-slate-900 text-white"
-                : "bg-white hover:bg-slate-50"
-                }`}
+              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${
+                activeCategory === "all"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white hover:bg-slate-50"
+              }`}
               onClick={() => setActiveCategory("all")}
             >
               All
@@ -258,10 +281,11 @@ export default function InfluencerExploreRoot() {
                 <Badge
                   key={index}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
-                    ? "bg-slate-900 text-white"
-                    : "bg-white hover:bg-slate-50"
-                    }`}
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                    isActive
+                      ? "bg-slate-900 text-white"
+                      : "bg-white hover:bg-slate-50"
+                  }`}
                   onClick={() => setActiveCategory(name)}
                 >
                   {Icon && <Icon size={20} strokeWidth={1.5} />}
@@ -272,7 +296,7 @@ export default function InfluencerExploreRoot() {
           </div>
         </div>
         {/* row-2 */}
-        <div className="px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="px-6 pb-3 pt-1 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
             <span>
               <MapPin size={18} className="text-slate-500" />
@@ -317,12 +341,12 @@ export default function InfluencerExploreRoot() {
 
             return (
               <Card
-                className="rounded-[10px] border border-slate-200 bg-white shadow-none overflow-hidden p-0"
                 key={idx}
+                className="rounded-[10px] border border-slate-200 bg-white shadow-none overflow-hidden p-0 flex flex-col"
               >
-                <CardContent className="p-0">
+                <CardContent className="p-0 flex flex-col flex-1">
                   {/* Image */}
-                  <div className="relative p-2 pb-0">
+                  <div className="relative p-2 pb-0 shrink-0">
                     <div className="relative h-[390px] w-full overflow-hidden rounded-[6px] bg-slate-100">
                       <img
                         src={img}
@@ -334,26 +358,33 @@ export default function InfluencerExploreRoot() {
                   </div>
 
                   {/* Content */}
-                  <div className="px-4 pt-4 pb-3">
-                    {/* Title + chip */}
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-[15px] font-semibold text-slate-900 leading-none">
-                        {item?.placeName}
-                      </p>
-                      <Badge className="rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-4 py-1">
-                        {item?.category}
-                      </Badge>
+                  <div className="px-4 pt-4 pb-3 flex flex-col flex-1">
+                    {/* Top content */}
+                    <div className="space-y-2">
+                      {/* Title + chip */}
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-[15px] font-semibold text-slate-900 leading-none line-clamp-1">
+                          {item?.placeName}
+                        </p>
+                        <Badge className="rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-4 py-1 shrink-0">
+                          {item?.category}
+                        </Badge>
+                      </div>
+
+                      {/* Location */}
+                      <div className="flex min-w-0 items-start gap-2 text-slate-700">
+                        <MapPin className="h-4 w-4 shrink-0 text-slate-700 mt-[2px]" />
+                        <span className="text-xs line-clamp-2">{locText}</span>
+                      </div>
                     </div>
 
-                    {/* Location */}
-                    <div className="mt-2 flex items-center gap-2 text-slate-700">
-                      <MapPin className="h-4 w-4 text-slate-700" />
-                      <span className="text-xs">{locText}</span>
-                    </div>
-
-                    {/* Button */}
-                    <div className="mt-4">
-                      <Link href={item?.googleMapLink ?? "/"} target="_blank">
+                    {/* Button pinned to bottom */}
+                    <div className="mt-auto pt-4">
+                      <Link
+                        href={item?.googleMapLink ?? "/"}
+                        target="_blank"
+                        className="block"
+                      >
                         <Button
                           variant="outline"
                           className="cursor-pointer w-full border-slate-200 text-slate-900 font-medium"
