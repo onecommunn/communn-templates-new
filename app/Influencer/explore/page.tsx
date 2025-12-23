@@ -4,14 +4,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { toast } from "sonner";
 import {
-  Banknote,
   Coffee,
   ConciergeBell,
-  House,
   Map as MapIcon,
-  Package,
   MapPin,
-  Map as Mapicon,
   Search,
   ChevronLeft,
   Sparkles,
@@ -78,12 +74,12 @@ const geocodePlace = async (placeId: string) => {
   };
 };
 
-export const CATEGORY_ICON: Record<string, React.ElementType> = {
+const CATEGORY_ICON: Record<string, React.ElementType> = {
   Experiences: Sparkles,
   Events: CalendarDays,
   Cafes: Coffee,
   Restaurants: ConciergeBell,
-  Travel: Mapicon,
+  Travel: MapIcon,
   Stays: Home,
   Wellness: HeartPulse,
   "Fitness & Sports": Dumbbell,
@@ -126,8 +122,8 @@ export default function InfluencerExploreRoot() {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
 
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
@@ -143,9 +139,8 @@ export default function InfluencerExploreRoot() {
       if (!catOk) return false;
 
       if (q) {
-        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${
-          p?.city ?? ""
-        } ${p?.description ?? ""}`.toLowerCase();
+        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${p?.city ?? ""
+          } ${p?.description ?? ""}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
@@ -263,11 +258,10 @@ export default function InfluencerExploreRoot() {
           <div className="flex-1 flex items-center justify-end gap-2 overflow-x-auto">
             <Badge
               variant={activeCategory === "all" ? "secondary" : "outline"}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${
-                activeCategory === "all"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white hover:bg-slate-50"
-              }`}
+              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${activeCategory === "all"
+                ? "bg-slate-900 text-white"
+                : "bg-white hover:bg-slate-50"
+                }`}
               onClick={() => setActiveCategory("all")}
             >
               All
@@ -282,11 +276,10 @@ export default function InfluencerExploreRoot() {
                 <Badge
                   key={index}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                    isActive
-                      ? "bg-slate-900 text-white"
-                      : "bg-white hover:bg-slate-50"
-                  }`}
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
+                    ? "bg-slate-900 text-white"
+                    : "bg-white hover:bg-slate-50"
+                    }`}
                   onClick={() => setActiveCategory(name)}
                 >
                   {Icon && <Icon size={20} strokeWidth={1.5} />}
