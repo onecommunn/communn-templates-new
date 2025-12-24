@@ -384,7 +384,7 @@ const YogansEventDetail = ({
             <div className="rounded-2xl overflow-hidden mb-8">
               <div className="relative aspect-[18/9] w-full">
                 <Image
-                  src={eventData?.coverImage?.value}
+                  src={eventData?.coverImage?.value || "/assets/spawell-event-image-3.png"}
                   alt={eventData?.coverImage?.label || "Event Image"}
                   fill
                   className="object-cover"

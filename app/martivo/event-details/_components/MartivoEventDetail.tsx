@@ -356,18 +356,22 @@ const MartivoEventDetail = ({
           </div>
           <div className="max-w-6xl mx-auto px-4 py-4">
             {/* Cover image */}
-            <div className="rounded-2xl overflow-hidden mb-8">
-              <div className="relative aspect-[18/9] w-full">
-                <Image
-                  src={eventData?.coverImage?.value}
-                  alt={eventData?.coverImage?.label || "Event Image"}
-                  fill
-                  className="object-cover"
-                  priority={true}
-                  unoptimized
-                />
+            {eventData?.coverImage?.value && (
+              <div className="rounded-2xl overflow-hidden mb-8">
+                <div className="relative aspect-[18/9] w-full">
+                  <Image
+                    src={
+                      eventData?.coverImage?.value
+                    }
+                    alt={eventData?.coverImage?.label || "Event Image"}
+                    fill
+                    className="object-cover"
+                    priority={true}
+                    unoptimized
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Content + Form */}
             <div className="grid md:grid-cols-3 gap-8">

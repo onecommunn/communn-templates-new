@@ -386,7 +386,7 @@ export default function RestraintEvents({
                         >
                           <Link href={`/event-details?eventid=${event._id}`}>
                             <EventCard
-                              image={event?.coverImage?.value}
+                              image={event?.coverImage?.value || "/assets/spawell-event-image-3.png"}
                               title={event?.title}
                               blurb={event?.description}
                               date={formatMonthDay(availability?.[0]?.day)}

@@ -348,26 +348,29 @@ const RestraintEventDetail = ({
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-6">
-            <h2
-              className="text-3xl font-marcellus md:text-5xl mb-4 text-[var(--pri)]"
-            >
+            <h2 className="text-3xl font-marcellus md:text-5xl mb-4 text-[var(--pri)]">
               {eventData?.title}
             </h2>
           </div>
           <div className="max-w-6xl mx-auto px-4 py-4">
             {/* Cover image */}
-            <div className="rounded-2xl overflow-hidden mb-8">
-              <div className="relative aspect-[18/9] w-full">
-                <Image
-                  src={eventData?.coverImage?.value}
-                  alt={eventData?.coverImage?.label || "Event Image"}
-                  fill
-                  className="object-cover"
-                  priority={true}
-                  unoptimized
-                />
+            {eventData?.coverImage?.value && (
+              <div className="rounded-2xl overflow-hidden mb-8">
+                <div className="relative aspect-[18/9] w-full">
+                  <Image
+                    src={
+                      eventData?.coverImage?.value ||
+                      "/assets/spawell-event-image-3.png"
+                    }
+                    alt={eventData?.coverImage?.label || "Event Image"}
+                    fill
+                    className="object-cover"
+                    priority={true}
+                    unoptimized
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Content + Form */}
             <div className="grid md:grid-cols-3 gap-8">
