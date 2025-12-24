@@ -67,6 +67,7 @@ import InfluencerLayout from "./app/Influencer/InfluencerLayout";
 import InfluencerExploreRoot from "./app/Influencer/explore/page";
 import InfluencerLogin from "./app/Influencer/login/page";
 import InfluencerSignup from "./app/Influencer/sign-up/page";
+import AutoLogin from "./app/default/auto-login/page";
 
 export const templateLayouts: Record<
   string,
@@ -96,6 +97,7 @@ export const templates: Record<
     "/subscriptions": CreatorSubscriptionsPage,
     "/event-details": CreatorEventDetailsPage,
     "/sign-up": CreatorSignup,
+    "/auto-login": AutoLogin,
   },
   default: { "/": DefaultRoot },
   yogana: {
@@ -107,6 +109,7 @@ export const templates: Record<
     "/service": YoganaServiceRoot,
     "/profile": YoganaProfileRoot,
     "/payments": YoganaPaymentsRoot,
+    "/auto-login": AutoLogin,
   },
   spawell: {
     "/": SpawellRoot,
@@ -117,6 +120,7 @@ export const templates: Record<
     "/service": SpawellServiceRoot,
     "/profile": SpawellProfileRoot,
     "/payments": SpawellPaymentsRoot,
+    "/auto-login": AutoLogin,
   },
   fitkit: {
     "/": FitkitRoot,
@@ -127,6 +131,7 @@ export const templates: Record<
     "/service": FitkitServiceRoot,
     "/profile": FitkitProfileRoot,
     "/payments": FitkitPaymentsRoot,
+    "/auto-login": AutoLogin,
   },
   restraint: {
     "/": RestraintRoot,
@@ -139,6 +144,7 @@ export const templates: Record<
     "/service": RestraintServiceRoot,
     "/profile": RestraintProfileRoot,
     "/payments": RestraintPaymentsRoot,
+    "/auto-login": AutoLogin,
   },
   martivo: {
     "/": MartivoRoot,
@@ -149,11 +155,13 @@ export const templates: Record<
     "/service": MartivoServiceRoot,
     "/profile": MartivoProfileRoot,
     "/payments": MartivoPaymentsRoot,
+    "/auto-login": AutoLogin,
   },
   influencer: {
     "/": InfluencerPage,
     "/explore": InfluencerExploreRoot,
     "/login": InfluencerLogin,
     "/sign-up": InfluencerSignup,
+    "/auto-login": AutoLogin,
   },
 };
