@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import { IoClose } from "react-icons/io5";
 import { FaRupeeSign } from "react-icons/fa";
-import successAnimation from ".././public/lotties/payment-success.json"; // Update path accordingly
+import successAnimation from ".././public/lotties/payment-success.json";
 import { usePathname } from "next/navigation";
 
 interface PaymentSuccessProps {
@@ -19,25 +19,29 @@ const PaymentSuccess = ({
   open,
   amount,
   txnid,
-  timer: initialTimer,
+  timer,
   onClose,
 }: PaymentSuccessProps) => {
-  const [time, setTime] = useState(initialTimer);
+  const [time, setTime] = useState(timer);
   const pathname = usePathname();
 
   const getMessage = (path: string) => {
     if (path.includes("/plans/subscription") || path.includes("/plan/")) {
       return "Plan subscribed successfully!";
-    } else if (path.includes("/plans") || path.includes("/payments")) {
+    }
+    if (path.includes("/plans") || path.includes("/payments")) {
       return "Custom Payment successful!";
-    } else if (path.includes("/events") || path.includes("/event")) {
+    }
+    if (path.includes("/events") || path.includes("/event")) {
       return "Event Registration Successful!";
-    } else if (
+    }
+    if (
       path.includes("/appointments") ||
       path.includes("/book-appointment")
     ) {
       return "Appointment Booked Successfully!";
-    } else if (path.includes("/courses")) {
+    }
+    if (path.includes("/courses")) {
       return "You’ve successfully enrolled in the course!";
     }
     return "Payment Successful!";
@@ -45,24 +49,25 @@ const PaymentSuccess = ({
 
   useEffect(() => {
     if (open) {
-      setTime(initialTimer);
+      setTime(timer);
     }
-  }, [open, initialTimer]);
+  }, [open, timer]);
 
   useEffect(() => {
     if (!open) return;
+
     const interval = setInterval(() => {
-      setTime((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          onClose();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTime((prev) => Math.max(prev - 1, 0));
     }, 1000);
+
     return () => clearInterval(interval);
   }, [open]);
+
+  useEffect(() => {
+    if (open && time === 0) {
+      onClose();
+    }
+  }, [time, open, onClose]);
 
   if (!open) return null;
 
@@ -71,10 +76,12 @@ const PaymentSuccess = ({
       <div className="bg-white rounded-xl w-full max-w-md p-6 relative shadow-lg">
         {/* Top bar */}
         <div className="flex justify-between items-center mb-4">
-          <span className="text-sm text-gray-500">Auto closing in {time}s</span>
+          <span className="text-sm text-gray-500">
+            Auto closing in {time}s
+          </span>
           <button
             onClick={onClose}
-            className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white p-1 rounded-full"
+            className="bg-blue-500 hover:bg-blue-600 text-white p-1 rounded-full"
           >
             <IoClose size={18} />
           </button>
@@ -84,7 +91,7 @@ const PaymentSuccess = ({
         <div className="flex justify-center mb-4">
           <Lottie
             animationData={successAnimation}
-            loop={true}
+            loop
             style={{ height: 100, width: 100 }}
           />
         </div>
@@ -100,7 +107,6 @@ const PaymentSuccess = ({
           {getMessage(pathname)}
         </div>
 
-        {/* Thank you note */}
         <p className="text-center text-sm text-gray-600 px-4">
           Your payment has been processed successfully. Thank you!
         </p>

@@ -16,6 +16,9 @@ import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import CreatorSectionHeader from "@/components/CustomComponents/Creator/CreatorSectionHeader";
 import { formatDate } from "@/utils/StringFunctions";
+import { IPaymentList } from "@/models/payment.model";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 
 export const formatTime = (time24: string) => {
   if (!time24) return "--:--";
@@ -56,6 +59,8 @@ const CreatorEventDetail = ({
     phoneNumber: "",
   });
   const [transactionAmount, setTransactionAmount] = useState("");
+  const [transaction, setTransaction] = useState<IPaymentList | null>(null);
+  const [timer, setTimer] = useState(5);
   const [successOpen, setSuccessOpen] = useState(false);
   const [failureOpen, setFailureOpen] = useState(false);
 
@@ -83,6 +88,16 @@ const CreatorEventDetail = ({
 
     fetchEventInfo();
   }, [eventId, router]);
+
+  const handleSuccessClose = () => {
+    setTimer(3);
+    setSuccessOpen(false);
+  };
+
+  const handleFailureClose = () => {
+    setTimer(3);
+    setFailureOpen(false);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -240,6 +255,7 @@ const CreatorEventDetail = ({
               transactionId
             );
             setTransactionAmount(paymentStatus[0]?.amount);
+            setTransaction(paymentStatus[0]);
             if (paymentStatus && paymentStatus.length > 0) {
               clearInterval(intervalRef);
               windowRef?.close();
@@ -472,6 +488,12 @@ const CreatorEventDetail = ({
                   className="space-y-2 text-black font-semibold text-[16px] list-disc ml-6"
                   style={{ color: secondaryColor }}
                 >
+                  <li>
+                    Price :{" "}
+                    <span className="font-lato">
+                      {eventData?.pricing ? `₹${eventData.pricing} /-` : "Free"}
+                    </span>
+                  </li>
                   <li className="font-semibold text-[16px] ">
                     {`${formatDate(
                       eventData?.availability[0]?.day
@@ -677,6 +699,21 @@ const CreatorEventDetail = ({
             </div>
           </div>
         </div>
+        <PaymentSuccess
+          txnid={transaction?.txnid || ""}
+          open={successOpen}
+          amount={transactionAmount || ""}
+          timer={timer}
+          onClose={handleSuccessClose}
+        />
+
+        <PaymentFailure
+          open={failureOpen}
+          onClose={handleFailureClose}
+          amount={transactionAmount || ""}
+          txnid={transaction?.txnid || ""}
+          timer={timer}
+        />
       </section>
     </>
   );

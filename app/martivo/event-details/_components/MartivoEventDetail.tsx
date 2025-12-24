@@ -16,6 +16,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { WavyStroke } from "../../_components/Icons/WavyStroke";
+import { IPaymentList } from "@/models/payment.model";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 
 export enum PaymentStatus {
   SUCCESS = "SUCCESS",
@@ -43,6 +46,8 @@ const MartivoEventDetail = ({
     phoneNumber: "",
   });
   const [transactionAmount, setTransactionAmount] = useState("");
+  const [transaction, setTransaction] = useState<IPaymentList | null>(null);
+  const [timer, setTimer] = useState(5);
   const [successOpen, setSuccessOpen] = useState(false);
   const [failureOpen, setFailureOpen] = useState(false);
 
@@ -182,6 +187,16 @@ const MartivoEventDetail = ({
     }
   };
 
+  const handleSuccessClose = () => {
+    setTimer(3);
+    setSuccessOpen(false);
+  };
+
+  const handleFailureClose = () => {
+    setTimer(3);
+    setFailureOpen(false);
+  };
+
   const handleProceedToPayment = async (
     eventId: string,
     name: string,
@@ -227,6 +242,7 @@ const MartivoEventDetail = ({
               transactionId
             );
             setTransactionAmount(paymentStatus[0]?.amount);
+            setTransaction(paymentStatus[0]);
             if (paymentStatus && paymentStatus.length > 0) {
               clearInterval(intervalRef);
               windowRef?.close();
@@ -348,7 +364,7 @@ const MartivoEventDetail = ({
         }
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-          <div className="text-center mb-6 flex flex-col items-center">
+          <div className="text-center mb-2 flex flex-col items-center">
             <h2 className="text-3xl font-lato md:text-4xl font-bold mb-4 text-black">
               {eventData?.title}
             </h2>
@@ -360,9 +376,7 @@ const MartivoEventDetail = ({
               <div className="rounded-2xl overflow-hidden mb-8">
                 <div className="relative aspect-[18/9] w-full">
                   <Image
-                    src={
-                      eventData?.coverImage?.value
-                    }
+                    src={eventData?.coverImage?.value}
                     alt={eventData?.coverImage?.label || "Event Image"}
                     fill
                     className="object-cover"
@@ -388,6 +402,12 @@ const MartivoEventDetail = ({
                   Access Information
                 </h3>
                 <ul className="space-y-2 text-black text-[16px] list-disc ml-6 font-lato">
+                  <li>
+                    Price :{" "}
+                    <span className="font-lato">
+                      {eventData?.pricing ? `₹${eventData.pricing} /-` : "Free"}
+                    </span>
+                  </li>
                   <li className="font-semibold text-[16px] ">
                     {`${formatDate(
                       eventData?.availability[0]?.day
@@ -545,6 +565,21 @@ const MartivoEventDetail = ({
             </div>
           </div>
         </div>
+        <PaymentSuccess
+          txnid={transaction?.txnid || ""}
+          open={successOpen}
+          amount={transactionAmount || ""}
+          timer={timer}
+          onClose={handleSuccessClose}
+        />
+
+        <PaymentFailure
+          open={failureOpen}
+          onClose={handleFailureClose}
+          amount={transactionAmount || ""}
+          txnid={transaction?.txnid || ""}
+          timer={timer}
+        />
       </section>
     </>
   );

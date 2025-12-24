@@ -15,6 +15,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { IPaymentList } from "@/models/payment.model";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 
 export enum PaymentStatus {
   SUCCESS = "SUCCESS",
@@ -46,6 +49,8 @@ const SpawellEventDetail = ({
   const [transactionAmount, setTransactionAmount] = useState("");
   const [successOpen, setSuccessOpen] = useState(false);
   const [failureOpen, setFailureOpen] = useState(false);
+  const [transaction, setTransaction] = useState<IPaymentList | null>(null);
+  const [timer, setTimer] = useState(5);
 
   useEffect(() => {
     const fetchEventInfo = async () => {
@@ -183,6 +188,16 @@ const SpawellEventDetail = ({
     }
   };
 
+  const handleSuccessClose = () => {
+    setTimer(3);
+    setSuccessOpen(false);
+  };
+
+  const handleFailureClose = () => {
+    setTimer(3);
+    setFailureOpen(false);
+  };
+
   const handleProceedToPayment = async (
     eventId: string,
     name: string,
@@ -228,6 +243,7 @@ const SpawellEventDetail = ({
               transactionId
             );
             setTransactionAmount(paymentStatus[0]?.amount);
+            setTransaction(paymentStatus[0]);
             if (paymentStatus && paymentStatus.length > 0) {
               clearInterval(intervalRef);
               windowRef?.close();
@@ -346,23 +362,23 @@ const SpawellEventDetail = ({
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-          <div className="text-center mb-6">
+          <div className="text-center mb-2">
             <h2
-              className="text-3xl font-cormorant md:text-5xl font-bold mb-4 text-[#0C0407]"
+              className="text-3xl font-cormorant md:text-5xl font-bold text-[#0C0407]"
               style={{
                 color: primaryColor,
               }}
             >
               {eventData?.title}
             </h2>
-            {eventData?.description && (
+            {/* {eventData?.description && (
               <p
                 className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta"
                 style={{ color: primaryColor }}
               >
                 {eventData?.description}
               </p>
-            )}
+            )} */}
           </div>
           <div className="max-w-6xl mx-auto px-4 py-4">
             {/* Cover image */}
@@ -389,7 +405,7 @@ const SpawellEventDetail = ({
               {/* Left: Event details */}
               <div className="md:col-span-2">
                 <h2
-                  className="md:text-[32px] text-2xl font-semibold mb-4 font-cormorant"
+                  className="md:text-[32px] text-2xl font-semibold font-cormorant"
                   style={{ color: primaryColor }}
                 >
                   {eventData.title}
@@ -411,6 +427,12 @@ const SpawellEventDetail = ({
                   className="space-y-2 text-[#707070] text-[16px] list-disc ml-6 font-plus-jakarta"
                   style={{ color: primaryColor }}
                 >
+                  <li>
+                    Price :{" "}
+                    <span className="font-lato">
+                      {eventData?.pricing ? `₹${eventData.pricing} /-` : "Free"}
+                    </span>
+                  </li>
                   <li className="font-semibold text-[16px] ">
                     {`${formatDate(
                       eventData?.availability[0]?.day
@@ -572,6 +594,21 @@ const SpawellEventDetail = ({
             </div>
           </div>
         </div>
+        <PaymentSuccess
+          txnid={transaction?.txnid || ""}
+          open={successOpen}
+          amount={transactionAmount || ""}
+          timer={timer}
+          onClose={handleSuccessClose}
+        />
+
+        <PaymentFailure
+          open={failureOpen}
+          onClose={handleFailureClose}
+          amount={transactionAmount || ""}
+          txnid={transaction?.txnid || ""}
+          timer={timer}
+        />
       </section>
     </>
   );

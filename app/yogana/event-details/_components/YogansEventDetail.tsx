@@ -15,6 +15,9 @@ import { Event } from "@/models/event.model";
 import { CalendarDays, Clock, LoaderCircle, MapPin, User } from "lucide-react";
 import Image from "next/image";
 import { formatDate } from "@/utils/StringFunctions";
+import { IPaymentList } from "@/models/payment.model";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 
 export const formatTime = (time24: string) => {
   if (!time24) return "--:--";
@@ -57,6 +60,8 @@ const YogansEventDetail = ({
     phoneNumber: "",
   });
   const [transactionAmount, setTransactionAmount] = useState("");
+  const [transaction, setTransaction] = useState<IPaymentList | null>(null);
+  const [timer, setTimer] = useState(5);
   const [successOpen, setSuccessOpen] = useState(false);
   const [failureOpen, setFailureOpen] = useState(false);
 
@@ -196,6 +201,16 @@ const YogansEventDetail = ({
     }
   };
 
+  const handleSuccessClose = () => {
+    setTimer(3);
+    setSuccessOpen(false);
+  };
+
+  const handleFailureClose = () => {
+    setTimer(3);
+    setFailureOpen(false);
+  };
+
   const handleProceedToPayment = async (
     eventId: string,
     name: string,
@@ -241,6 +256,7 @@ const YogansEventDetail = ({
               transactionId
             );
             setTransactionAmount(paymentStatus[0]?.amount);
+            setTransaction(paymentStatus[0]);
             if (paymentStatus && paymentStatus.length > 0) {
               clearInterval(intervalRef);
               windowRef?.close();
@@ -356,41 +372,46 @@ const YogansEventDetail = ({
     <>
       <section
         className="sm:py-1 md:py-10 font-cormorant bg-[#C2A74E1A]"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+        // style={{
+        //   backgroundColor: `${primaryColor}1A`,
+        // }}
       >
         <div className="container mx-auto px-2 sm:px-6 lg:px-20">
-          <div className="hidden md:block text-center mb-6 md:display-none">
+          <div className="hidden md:block text-center mb-2 md:display-none">
             <h2
-              className="text-2xl font-plus-jakarta md:text-4xl font-bold mb-4 text-[#0C0407]"
+              className="text-2xl font-plus-jakarta md:text-4xl font-bold text-[#0C0407]"
               style={{
                 color: primaryColor,
               }}
             >
               {eventData?.title}
             </h2>
-            {eventData?.description && (
+            {/* {eventData?.description && (
               <p
                 className="text-[16px] text-[#707070] max-w-2xl mx-auto font-plus-jakarta"
                 style={{ color: neutralColor }}
               >
                 {eventData?.description}
               </p>
-            )}
+            )} */}
           </div>
           <div className="max-w-6xl mx-auto px-4 py-4">
             {/* Cover image */}
             <div className="rounded-2xl overflow-hidden mb-8">
               <div className="relative aspect-[18/9] w-full">
-                <Image
-                  src={eventData?.coverImage?.value || "/assets/spawell-event-image-3.png"}
-                  alt={eventData?.coverImage?.label || "Event Image"}
-                  fill
-                  className="object-cover"
-                  priority={false}
-                  unoptimized
-                />
+                {eventData?.coverImage?.value && (
+                  <Image
+                    src={
+                      eventData?.coverImage?.value ||
+                      "/assets/spawell-event-image-3.png"
+                    }
+                    alt={eventData?.coverImage?.label || "Event Image"}
+                    fill
+                    className="object-cover"
+                    priority={false}
+                    unoptimized
+                  />
+                )}
               </div>
             </div>
 
@@ -399,7 +420,7 @@ const YogansEventDetail = ({
               {/* Left: Event details */}
               <div className="md:col-span-2">
                 <h2
-                  className="md:text-[28px] text-[16px] font-semibold mb-4 font-plus-jakarta"
+                  className="md:text-[28px] text-[16px] font-semibold font-plus-jakarta"
                   style={{ color: secondaryColor }}
                 >
                   {eventData.title}
@@ -418,19 +439,31 @@ const YogansEventDetail = ({
                   Access Information
                 </h3>
                 <ul
-                  className="space-y-2 text-[#707070] text-[14px] ml-6 font-plus-jakarta"
+                  className="space-y-2 text-[#707070] text-[14px] font-plus-jakarta"
                   style={{ color: neutralColor }}
                 >
+                  <li className="flex items-center gap-2  text-[16px]">
+                    Price :{" "}
+                    <span className="font-lato font-semibold">
+                      {eventData?.pricing ? `₹${eventData.pricing} /-` : "Free"}
+                    </span>
+                  </li>
                   <li className="flex items-center gap-2 font-semibold text-[16px]">
                     <CalendarDays size={18} className="text-[#707070]" />
-                    {`${formatDate(eventData?.availability[0]?.day)} - ${formatDate(
-                      eventData?.availability[eventData?.availability.length - 1]?.day
+                    {`${formatDate(
+                      eventData?.availability[0]?.day
+                    )} - ${formatDate(
+                      eventData?.availability[
+                        eventData?.availability.length - 1
+                      ]?.day
                     )}`}
                   </li>
 
                   <li className="flex items-center gap-2">
                     <Clock size={18} className="text-[#707070]" />
-                    {`${formatTime(times.startTime)} - ${formatTime(times.endTime)}`}
+                    {`${formatTime(times.startTime)} - ${formatTime(
+                      times.endTime
+                    )}`}
                   </li>
 
                   <li className="flex items-center gap-2">
@@ -484,10 +517,11 @@ const YogansEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${!isFormValid || isLoading
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                            }`}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
+                            !isFormValid || isLoading
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           disabled={!isFormValid}
                           onClick={() => {
                             if (!eventData?._id || !eventData?.community?._id) {
@@ -514,10 +548,11 @@ const YogansEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${!isFormValid || isLoading
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                            }`}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
+                            !isFormValid || isLoading
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           disabled={!isFormValid}
                           onClick={() => {
                             if (
@@ -548,10 +583,11 @@ const YogansEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${!isFormValid || isLoading
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                            }`}
+                          className={`w-full rounded-none h-fit py-2.5 bg-[#C2A74E] font-plus-jakarta ${
+                            !isFormValid || isLoading
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           onClick={() => {
                             if (!eventData?._id || !eventData?.community?._id) {
                               return;
@@ -586,6 +622,21 @@ const YogansEventDetail = ({
             </div>
           </div>
         </div>
+        <PaymentSuccess
+          txnid={transaction?.txnid || ""}
+          open={successOpen}
+          amount={transactionAmount || ""}
+          timer={timer}
+          onClose={handleSuccessClose}
+        />
+
+        <PaymentFailure
+          open={failureOpen}
+          onClose={handleFailureClose}
+          amount={transactionAmount || ""}
+          txnid={transaction?.txnid || ""}
+          timer={timer}
+        />
       </section>
     </>
   );

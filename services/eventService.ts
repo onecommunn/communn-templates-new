@@ -120,7 +120,7 @@ export const getPaymentStatusByIdNoAuth = async (id: string) => {
 export const getPaymentStatusNoAuth = async (id: string) => {
   try {
     const response = await axios.post(
-      `${BASE_URL_V2}/payments/get-status`,
+      `${BASE_URL}/payments/get-status`,
       { txnid: id },
       {
         headers: {

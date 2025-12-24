@@ -16,6 +16,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { IPaymentList } from "@/models/payment.model";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 
 export enum PaymentStatus {
   SUCCESS = "SUCCESS",
@@ -43,6 +46,8 @@ const FitKitEventDetail = ({
     phoneNumber: "",
   });
   const [transactionAmount, setTransactionAmount] = useState("");
+  const [transaction, setTransaction] = useState<IPaymentList | null>(null);
+  const [timer, setTimer] = useState(5);
   const [successOpen, setSuccessOpen] = useState(false);
   const [failureOpen, setFailureOpen] = useState(false);
 
@@ -182,6 +187,16 @@ const FitKitEventDetail = ({
     }
   };
 
+  const handleSuccessClose = () => {
+    setTimer(3);
+    setSuccessOpen(false);
+  };
+
+  const handleFailureClose = () => {
+    setTimer(3);
+    setFailureOpen(false);
+  };
+
   const handleProceedToPayment = async (
     eventId: string,
     name: string,
@@ -227,6 +242,7 @@ const FitKitEventDetail = ({
               transactionId
             );
             setTransactionAmount(paymentStatus[0]?.amount);
+            setTransaction(paymentStatus[0]);
             if (paymentStatus && paymentStatus.length > 0) {
               clearInterval(intervalRef);
               windowRef?.close();
@@ -358,7 +374,10 @@ const FitKitEventDetail = ({
             <div className="rounded-none overflow-hidden mb-8">
               <div className="relative aspect-[18/9] w-full">
                 <Image
-                  src={eventData?.coverImage?.value || "/assets/fitkit-services-image2.png"}
+                  src={
+                    eventData?.coverImage?.value ||
+                    "/assets/fitkit-services-image2.png"
+                  }
                   alt={eventData?.coverImage?.label || "Event Image"}
                   fill
                   className="object-cover"
@@ -372,7 +391,7 @@ const FitKitEventDetail = ({
             <div className="grid md:grid-cols-3 gap-8">
               {/* Left: Event details */}
               <div className="md:col-span-2">
-                <h2 className="md:text-[32px] text-2xl mb-4 text-black font-kanit">
+                <h2 className="md:text-[32px] text-2xl text-black font-kanit">
                   {eventData.title}
                 </h2>
                 <p className="text-gray-600 text-[16px] mb-6">
@@ -386,6 +405,12 @@ const FitKitEventDetail = ({
                   className="space-y-2 text-[#707070] text-[16px] list-disc ml-6"
                   style={{ color: primaryColor }}
                 >
+                  <li>
+                    Price :{" "}
+                    <span className="font-lato">
+                      {eventData?.pricing ? `₹${eventData.pricing} /-` : "Free"}
+                    </span>
+                  </li>
                   <li className="text-[16px] ">
                     {`${formatDate(
                       eventData?.availability[0]?.day
@@ -535,6 +560,21 @@ const FitKitEventDetail = ({
             </div>
           </div>
         </div>
+        <PaymentSuccess
+          txnid={transaction?.txnid || ""}
+          open={successOpen}
+          amount={transactionAmount || ""}
+          timer={timer}
+          onClose={handleSuccessClose}
+        />
+
+        <PaymentFailure
+          open={failureOpen}
+          onClose={handleFailureClose}
+          amount={transactionAmount || ""}
+          txnid={transaction?.txnid || ""}
+          timer={timer}
+        />
       </section>
     </>
   );
