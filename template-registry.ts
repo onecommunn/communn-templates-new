@@ -68,6 +68,7 @@ import InfluencerExploreRoot from "./app/Influencer/explore/page";
 import InfluencerLogin from "./app/Influencer/login/page";
 import InfluencerSignup from "./app/Influencer/sign-up/page";
 import AutoLogin from "./app/default/auto-login/page";
+import InfluencerDetailsRoot from "./app/Influencer/details/page";
 
 export const templateLayouts: Record<
   string,
@@ -163,5 +164,6 @@ export const templates: Record<
     "/login": InfluencerLogin,
     "/sign-up": InfluencerSignup,
     "/auto-login": AutoLogin,
+    "/details":InfluencerDetailsRoot
   },
 };

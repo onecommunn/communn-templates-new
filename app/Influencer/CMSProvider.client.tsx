@@ -9,7 +9,7 @@ import React, {
 } from "react";
 
 export type Bundle = {
-  recommandations: any | null;
+  recommendations: any | null;
   categories: any | null;
 };
 
@@ -19,7 +19,7 @@ type CMSContext = Bundle & {
 };
 
 const defaultBundle: Bundle = {
-  recommandations: null,
+  recommendations: null,
   categories: null,
   // add more pages
 };

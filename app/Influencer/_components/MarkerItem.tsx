@@ -87,19 +87,24 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
               >
                 <X size={18} />
               </button>
-              <img
-                src={imageSrc?.[0]}
-                alt={selectedPlace?.placeName}
-                className="h-full w-full object-cover"
-              />
+              <Link href={`/details?id=${item._id}`}>
+                <img
+                  src={imageSrc?.[0]}
+                  alt={selectedPlace?.placeName}
+                  className="h-full w-full object-cover"
+                />
+              </Link>
             </div>
 
-            <CardContent className="p-4 space-y-3">
+            <CardContent className="p-4 space-y-2 pt-2">
               {/* Title + Category */}
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-semibold text-sm line-clamp-1">
-                  {selectedPlace?.placeName}
-                </p>
+              <div className="flex items-start justify-between gap-2">
+                <Link href={`/details?id=${item._id}`}>
+                  <p className="font-semibold text-sm">
+                    {selectedPlace?.placeName}
+                  </p>
+                </Link>
+
                 <Badge
                   variant="secondary"
                   className="text-[11px] px-2 py-0.5 rounded-full font-medium"
@@ -109,15 +114,15 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-600 line-clamp-2 font-medium">
+              <p className="text-xs text-slate-600 font-medium">
                 {selectedPlace?.description}
               </p>
 
               {/* Location */}
               {locText && (
-                <div className="mt-1 flex items-center gap-2 text-xs ">
-                  <MapPin className="h-4 w-4" />
-                  <span className="truncate font-medium">{locText}</span>
+                <div className="mt-1 flex items-start gap-2 text-xs ">
+                  <MapPin className="h-4 w-4 shrink-0" />
+                  <span className="font-medium">{locText}</span>
                 </div>
               )}
 

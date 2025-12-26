@@ -31,6 +31,7 @@ import { useCMS } from "../CMSProvider.client";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
 import Link from "next/link";
 import InfluencerExploreSkeleton from "./_components/InfluencerExploreSkeleton";
+import { useRouter } from "next/navigation";
 
 type Category = {
   community: string;
@@ -93,12 +94,10 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 };
 
 export default function InfluencerExploreRoot() {
-  const { recommandations, categories } = useCMS();
-
-  // console.log(recommandations, "recommandations");
-  // console.log(categories, "categories");
-
+  const { recommendations, categories } = useCMS();
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
+  const [activeArea, setActiveArea] = useState<string | "all">("all");
 
   const [mounted, setMounted] = useState(false);
   const [placeValue, setPlaceValue] = useState<any>(null);
@@ -122,8 +121,8 @@ export default function InfluencerExploreRoot() {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLng / 2) ** 2;
 
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
@@ -132,15 +131,16 @@ export default function InfluencerExploreRoot() {
   const filteredPlaces = useMemo(() => {
     const q = listQuery.trim().toLowerCase();
 
-    return recommandations?.filter((p: Recommendation) => {
+    return recommendations?.filter((p: Recommendation) => {
       if (!p?.isPublished) return false;
       const catOk = activeCategory === "all" || p?.category === activeCategory;
 
       if (!catOk) return false;
 
       if (q) {
-        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${p?.city ?? ""
-          } ${p?.description ?? ""}`.toLowerCase();
+        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${
+          p?.city ?? ""
+        } ${p?.description ?? ""}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
@@ -161,7 +161,7 @@ export default function InfluencerExploreRoot() {
   // ✅ Areas explored pills (you can replace with real counts)
   const areasExplored = useMemo(() => {
     const areaCount = new Map<string, number>();
-    recommandations?.forEach((p: Recommendation) => {
+    filteredPlaces?.forEach((p: Recommendation) => {
       const area = (p?.city || "Others").trim();
       areaCount.set(area, (areaCount.get(area) || 0) + 1);
     });
@@ -171,12 +171,12 @@ export default function InfluencerExploreRoot() {
       .map(([name, count]) => ({ name, count }));
   }, []);
 
-  if (!recommandations) {
+  if (!recommendations) {
     return <InfluencerExploreSkeleton />;
   }
 
   const uniqueCategories = Array.from(
-    new Set(recommandations?.map((item: Recommendation) => item?.category))
+    new Set(recommendations?.map((item: Recommendation) => item?.category))
   );
 
   return (
@@ -258,10 +258,11 @@ export default function InfluencerExploreRoot() {
           <div className="flex-1 flex items-center justify-end gap-2 overflow-x-auto">
             <Badge
               variant={activeCategory === "all" ? "secondary" : "outline"}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${activeCategory === "all"
-                ? "bg-slate-900 text-white"
-                : "bg-white hover:bg-slate-50"
-                }`}
+              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${
+                activeCategory === "all"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white hover:bg-slate-50"
+              }`}
               onClick={() => setActiveCategory("all")}
             >
               All
@@ -276,10 +277,11 @@ export default function InfluencerExploreRoot() {
                 <Badge
                   key={index}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
-                    ? "bg-slate-900 text-white"
-                    : "bg-white hover:bg-slate-50"
-                    }`}
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                    isActive
+                      ? "bg-slate-900 text-white"
+                      : "bg-white hover:bg-slate-50"
+                  }`}
                   onClick={() => setActiveCategory(name)}
                 >
                   {Icon && <Icon size={20} strokeWidth={1.5} />}
@@ -300,8 +302,13 @@ export default function InfluencerExploreRoot() {
           <div className="flex gap-2  overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
             <Badge
               variant="secondary"
-              className="rounded-full bg-slate-100 text-slate-700 cursor-pointer"
-              onClick={() => setListQuery("")}
+              className={`rounded-full ${
+                activeArea === "all" ? "bg-slate-300" : "bg-slate-100"
+              } text-slate-700 cursor-pointer`}
+              onClick={() => {
+                setListQuery("");
+                setActiveArea("all");
+              }}
             >
               All
             </Badge>
@@ -310,8 +317,13 @@ export default function InfluencerExploreRoot() {
               <Badge
                 key={a.name}
                 variant="secondary"
-                className="rounded-full bg-slate-100 text-slate-700 cursor-pointer"
-                onClick={() => setListQuery(a.name)}
+                className={`rounded-full ${
+                  activeArea === a.name ? "bg-slate-300" : "bg-slate-100"
+                }  text-slate-700 cursor-pointer`}
+                onClick={() => {
+                  setListQuery(a.name);
+                  setActiveArea(a.name);
+                }}
               >
                 {a.name} ({String(a.count).padStart(2, "0")})
               </Badge>
@@ -340,8 +352,8 @@ export default function InfluencerExploreRoot() {
               >
                 <CardContent className="p-0 flex flex-col flex-1">
                   {/* Image */}
-                  <div className="relative p-2 pb-0 shrink-0">
-                    <div className="relative h-[390px] w-full overflow-hidden rounded-[6px] bg-slate-100">
+                  <div className="relative pb-0 shrink-0 cursor-pointer overflow-hidden">
+                    <div className="relative h-40 w-full bg-slate-100">
                       <img
                         src={img}
                         alt={item?.placeName}
@@ -352,38 +364,57 @@ export default function InfluencerExploreRoot() {
                   </div>
 
                   {/* Content */}
-                  <div className="px-4 pt-4 pb-3 flex flex-col flex-1">
+                  <div className="px-4 pt-2 pb-3 flex flex-col flex-1">
                     {/* Top content */}
                     <div className="space-y-2">
                       {/* Title + chip */}
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-[15px] font-semibold text-slate-900 leading-none line-clamp-1">
-                          {item?.placeName}
-                        </p>
-                        <Badge className="rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-4 py-1 shrink-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <Link href={`/details?id=${item._id}`}>
+                          <p className="font-semibold text-sm hover:underline cursor-pointer">
+                            {item?.placeName}
+                          </p>
+                        </Link>
+
+                        <Badge
+                          variant="secondary"
+                          className="text-[11px] px-2 py-0.5 rounded-full font-medium"
+                        >
                           {item?.category}
                         </Badge>
                       </div>
+                      {/* description */}
+                      <p className="text-xs text-slate-600 font-medium">
+                        {item?.description}
+                      </p>
 
                       {/* Location */}
-                      <div className="flex min-w-0 items-start gap-2 text-slate-700">
+                      <div className="flex min-w-0 items-start gap-2">
                         <MapPin className="h-4 w-4 shrink-0 text-slate-700 mt-[2px]" />
-                        <span className="text-xs line-clamp-2">{locText}</span>
+                        <span className="text-xs font-medium">{locText}</span>
                       </div>
                     </div>
 
                     {/* Button pinned to bottom */}
-                    <div className="mt-auto pt-4">
+                    <div className="mt-auto pt-4 items-center gap-2 grid grid-cols-2">
                       <Link
                         href={item?.googleMapLink ?? "/"}
                         target="_blank"
                         className="block"
                       >
                         <Button
-                          variant="outline"
-                          className="cursor-pointer w-full border-slate-200 text-slate-900 font-medium"
+                          variant="default"
+                          className="cursor-pointer w-full font-medium"
                         >
                           Go to Maps
+                        </Button>
+                      </Link>
+                      <Link href={`/details?id=${item._id}`} className="w-full">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-9 text-xs shadow-none cursor-pointer w-full"
+                        >
+                          View Details
                         </Button>
                       </Link>
                     </div>

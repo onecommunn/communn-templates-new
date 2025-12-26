@@ -134,13 +134,6 @@ const modernStyle = [
 
 type UserLocation = { lat: number; lng: number; city?: string };
 
-const normalizeArray = <T,>(raw: any): T[] => {
-  if (Array.isArray(raw)) return raw as T[];
-  if (Array.isArray(raw?.data)) return raw.data as T[];
-  if (Array.isArray(raw?.results)) return raw.results as T[];
-  return [];
-};
-
 const getDistanceInKm = (
   lat1: number,
   lng1: number,
@@ -154,8 +147,8 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
@@ -204,10 +197,8 @@ const reverseGeocodeCity = async (lat: number, lng: number) => {
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" };
 
 export default function InfluencerPage() {
-  const { recommandations, categories } = useCMS();
-  const authContext = useContext(AuthContext);
+  const { recommendations } = useCMS();
   const isMobile = useIsMobile();
-  const router = useRouter();
 
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
   const [listQuery, setListQuery] = useState("");
@@ -266,7 +257,7 @@ export default function InfluencerPage() {
     }
 
     const bounds = new window.google.maps.LatLngBounds();
-    recommandations?.forEach((item: Recommendation) => {
+    recommendations?.forEach((item: Recommendation) => {
       bounds.extend({
         lat: Number(item?.location?.latitude),
         lng: Number(item?.location?.longitude),
@@ -278,7 +269,7 @@ export default function InfluencerPage() {
   const onUnmount = React.useCallback(() => setMap(null), []);
 
   const uniqueCategories = Array.from(
-    new Set(recommandations?.map((item: Recommendation) => item?.category))
+    new Set(recommendations?.map((item: Recommendation) => item?.category))
   );
 
   const getUserLocation = () => {
@@ -334,7 +325,7 @@ export default function InfluencerPage() {
   }, [map, userLocation]);
 
   const filteredPlaces = useMemo(() => {
-    return recommandations?.filter((place: Recommendation) => {
+    return recommendations?.filter((place: Recommendation) => {
       if (!place?.isPublished) return false;
       const matchesCategory =
         activeCategory === "all" || place?.category === activeCategory;
@@ -393,8 +384,9 @@ export default function InfluencerPage() {
               return (
                 <Card
                   key={place._id}
-                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${isSelected ? "border-slate-300" : "hover:border-slate-300"
-                    }`}
+                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
+                    isSelected ? "border-slate-300" : "hover:border-slate-300"
+                  }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
                     handlePlaceClick(
@@ -457,7 +449,7 @@ export default function InfluencerPage() {
                   </div>
 
                   <CardContent className="p-4 pt-3">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       <Link href={place?.googleMapLink ?? "/"} target="_blank">
                         <Button
                           variant="outline"
@@ -498,6 +490,18 @@ export default function InfluencerPage() {
                           Share
                         </Button>
                       </Link>
+                      <Link
+                        href={`/details?id=${place._id}`}
+                        className="w-full"
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-9 text-xs shadow-none cursor-pointer w-full"
+                        >
+                          View Details
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -511,6 +515,18 @@ export default function InfluencerPage() {
 
   if (!isLoaded) return <InfluencerPageSkeleton />;
 
+  const resultsCount = filteredPlaces?.length || 0;
+
+  const titleText = isLocating
+    ? "Finding nearby..."
+    : placeValue?.label
+    ? placeValue.label
+    : userLocation?.city
+    ? `${userLocation.city} (50 km)`
+    : userLocation
+    ? "Nearby (50 km)"
+    : "Explore places";
+
   return (
     <main className="relative min-h-screen bg-[#F6F7FB] font-montserrat">
       <Tabs defaultValue="map">
@@ -521,15 +537,12 @@ export default function InfluencerPage() {
             <div>
               <p className="text-xs text-slate-500">Location</p>
               <p className="text-sm md:text-lg font-semibold text-slate-900 line-clamp-1">
-                {isLocating
-                  ? "Finding nearby..."
-                  : placeValue?.label
-                    ? placeValue.label
-                    : userLocation?.city
-                      ? `${userLocation.city} (50 km)`
-                      : userLocation
-                        ? "Nearby (50 km)"
-                        : "Explore places"}
+                {titleText}
+                {!isLocating && resultsCount > 0 && (
+                  <span className="ml-2 text-xs md:text-sm font-normal text-slate-500">
+                    ({resultsCount})
+                  </span>
+                )}
               </p>
             </div>
 
@@ -646,10 +659,11 @@ export default function InfluencerPage() {
             <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${activeCategory === "all"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white hover:bg-slate-50"
-                  }`}
+                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                  activeCategory === "all"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white hover:bg-slate-50"
+                }`}
                 onClick={() => setActiveCategory("all")}
               >
                 All
@@ -664,10 +678,11 @@ export default function InfluencerPage() {
                   <Badge
                     key={index}
                     variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
-                      ? "bg-slate-900 text-white"
-                      : "bg-white hover:bg-slate-50"
-                      }`}
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                      isActive
+                        ? "bg-slate-900 text-white"
+                        : "bg-white hover:bg-slate-50"
+                    }`}
                     onClick={() => setActiveCategory(name)}
                   >
                     {Icon && <Icon size={16} strokeWidth={1.5} />}
@@ -742,8 +757,9 @@ export default function InfluencerPage() {
 
               {/* RIGHT PANEL */}
               <div
-                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
-                  } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
               >
                 {/* <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -758,8 +774,9 @@ export default function InfluencerPage() {
                 </button> */}
 
                 <div
-                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
-                    }`}
+                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -823,8 +840,9 @@ export default function InfluencerPage() {
               </div>
 
               <div
-                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
-                  } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
               >
                 {/* <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -839,8 +857,9 @@ export default function InfluencerPage() {
                 </button> */}
 
                 <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
-                    }`}
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -953,9 +972,22 @@ export default function InfluencerPage() {
                           >
                             <Button
                               size="sm"
+                              variant={'outline'}
                               className="justify-center text-xs w-full"
                             >
                               Go to Maps
+                            </Button>
+                          </Link>
+                          <Link
+                            href={`/details?id=${item._id}`}
+                            className="w-full"
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-9 text-xs shadow-none cursor-pointer w-full"
+                            >
+                              View Details
                             </Button>
                           </Link>
                         </div>

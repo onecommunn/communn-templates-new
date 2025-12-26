@@ -8,8 +8,8 @@ export default async function InfluencerLayout({
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getInfluencerCMSBundle(community._id);
-  const source = bundle?.recommandations;
-  const initialLoading = !bundle?.recommandations || source;
+  const source = bundle?.recommendations;
+  const initialLoading = !bundle?.recommendations || source;
 
   return (
     <>

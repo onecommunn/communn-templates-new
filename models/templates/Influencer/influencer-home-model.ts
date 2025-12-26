@@ -9,7 +9,7 @@ export interface Recommendation {
   address: string;
   city: string;
   googleMapLink: string;
-  tags: string;
+  tags: string[];
   priceRange: string;
   reservationLink: string;
   phoneNumber: string;

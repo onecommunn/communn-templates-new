@@ -2,7 +2,7 @@ import { BASE_URL_V2 } from "@/configurations/url.config";
 import axios from "axios";
 
 type InfluencerCMSBundle = {
-  recommandations: any | null;
+  recommendations: any | null;
   categories: any | null;
 };
 
@@ -18,21 +18,20 @@ async function fetchJSON(url: string) {
 async function fetchInfluencerBundle(
   communityId: string
 ): Promise<InfluencerCMSBundle> {
-  const [recommandations,categories] = await Promise.all([
+  const [recommendations, categories] = await Promise.all([
     fetchJSON(`${BASE_URL_V2}/cms/recommandations/${communityId}`),
-    fetchJSON( `${BASE_URL_V2}/cms/recommandation-category/${communityId}`),
+    fetchJSON(`${BASE_URL_V2}/cms/recommandation-category/${communityId}`),
   ]);
 
   return {
-    recommandations: recommandations?.data ?? null,
-    categories:categories?.data ?? null
+    recommendations: recommendations?.data ?? null,
+    categories: categories?.data ?? null,
   };
 }
 
 export async function getInfluencerCMSBundle(communityId: string) {
   return fetchInfluencerBundle(communityId);
 }
-
 
 export const getInfluencerCategories = async (communityId: string) => {
   try {
@@ -70,4 +69,12 @@ export const getInfluencerRecommendations = async (
       data: [],
     };
   }
+};
+
+export const getByIdInfluencerRecommendations = async (id: string) => {
+  const response = await axios.get(
+    `${BASE_URL_V2}/cms/specific-recommandation/${id}`
+  );
+
+  return response;
 };
