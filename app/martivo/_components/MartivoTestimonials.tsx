@@ -124,7 +124,7 @@ const MartivoTestimonials = ({
                           }`}
                       >
                         <Image
-                          src={s.avatar}
+                          src={s.avatar || `https://placehold.co/400/EEE/31343C?font=lato&text=${s.name?.[0]}`}
                           alt={s.name}
                           fill
                           className="object-cover rounded-full"

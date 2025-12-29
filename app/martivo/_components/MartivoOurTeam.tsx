@@ -98,7 +98,7 @@ const MartivoOurTeam = ({
                       <div className="relative rounded-xl p-2">
                         <div className="overflow-hidden rounded-full">
                           <Image
-                            src={each.media}
+                            src={each.media || `https://placehold.co/400/EEE/31343C?font=lato&text=${each.name?.[0]}`}
                             alt={`${each.name} photo`}
                             width={320}
                             height={320}

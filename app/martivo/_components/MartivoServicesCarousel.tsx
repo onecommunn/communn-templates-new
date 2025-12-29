@@ -120,7 +120,7 @@ export default function MartivoServicesCarousel({
                     ) : (
                       <Image
                         unoptimized
-                        src={s?.icon || ""}
+                        src={s?.icon || `https://placehold.co/400/EEE/31343C?font=lato&text=${s.title?.[0]}`}
                         alt={s?.title || "feature"}
                         width={60}
                         height={60}
