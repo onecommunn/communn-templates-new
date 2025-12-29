@@ -430,7 +430,7 @@ export default function InfluencerPage() {
                             <CarouselItem key={idx} className="basis-2/5">
                               <div className="relative w-full h-[150px] rounded-xl overflow-hidden">
                                 <Image
-                                  src={imageSrc?.[0]}
+                                  src={item}
                                   alt={`${place?.placeName}-img-${idx}`}
                                   fill
                                   className="object-cover"
