@@ -12,7 +12,8 @@ import {
   Marcellus,
   Kanit,
   Archivo,
-  Montserrat_Alternates,
+  Fraunces,
+  Lexend,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -25,7 +26,7 @@ const poppins = Poppins({
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800","900"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-montserrat",
 });
 
@@ -95,6 +96,20 @@ const archivo = Archivo({
   variable: "--font-archivo",
 });
 
+const fraunces = Fraunces({
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  weight: ["400", "100", "200", "300", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+});
+
+const lexend = Lexend({
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  weight: ["400", "100", "200", "300", "500", "600", "700", "800", "900"],
+  style: ["normal"],
+  variable: "--font-lexend",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -103,7 +118,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

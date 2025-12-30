@@ -69,6 +69,8 @@ import InfluencerLogin from "./app/Influencer/login/page";
 import InfluencerSignup from "./app/Influencer/sign-up/page";
 import AutoLogin from "./app/default/auto-login/page";
 import InfluencerDetailsRoot from "./app/Influencer/details/page";
+import ConsultingoRoot from "./app/consultingo/pages";
+import ConsultingoShell from "./app/consultingo/ConsultingoShell";
 
 export const templateLayouts: Record<
   string,
@@ -82,6 +84,7 @@ export const templateLayouts: Record<
   restraint: RestraintShell,
   fitkit: FitKitShell,
   influencer: InfluencerLayout,
+  consultingo: ConsultingoShell,
 };
 
 export const templates: Record<
@@ -164,6 +167,10 @@ export const templates: Record<
     "/login": InfluencerLogin,
     "/sign-up": InfluencerSignup,
     "/auto-login": AutoLogin,
-    "/details":InfluencerDetailsRoot
+    "/details": InfluencerDetailsRoot,
+  },
+  consultingo: {
+    "/": ConsultingoRoot,
+    "/auto-login": AutoLogin,
   },
 };

@@ -18,6 +18,8 @@
   --font-marcellus: var(--font-marcellus), serif;
   --font-kanit: var(--font-kanit), serif;
   --font-archivo: var(--font-archivo), serif;
+  --font-fraunces: var(--font-fraunces);
+  --font-lexend: var(--font-lexend), serif;
 }
 
 .font-lora {
