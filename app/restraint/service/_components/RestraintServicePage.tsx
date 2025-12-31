@@ -1,5 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
+import type { FC } from "react";
 
 import { Service } from "@/models/templates/restraint/restraint-home-model";
 import { useSearchParams } from "next/navigation";
@@ -9,12 +10,12 @@ import RestraintServiceContent from "./RestraintServiceContent";
 import RestraintCTA from "../../_components/RestraintCTA";
 import { fetchRestraintServiceBundle } from "@/services/Restraint/restraint.service";
 
-const RestraintServicePage = ({
-  primaryColor,
-  secondaryColor,
-}: {
+const RestraintServicePage: FC<{
   primaryColor: string;
   secondaryColor: string;
+}> = ({
+  primaryColor,
+  secondaryColor,
 }) => {
   const searchParams = useSearchParams();
   const serviceName = searchParams.get("name");

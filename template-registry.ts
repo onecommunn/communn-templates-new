@@ -72,6 +72,7 @@ import InfluencerDetailsRoot from "./app/Influencer/details/page";
 import ConsultingoRoot from "./app/consultingo/pages";
 import ConsultingoShell from "./app/consultingo/ConsultingoShell";
 import ConsultingoAboutUsRoot from "./app/consultingo/about-us/page";
+import ConsultingoServiceRoot from "./app/consultingo/service/page";
 
 export const templateLayouts: Record<
   string,
@@ -174,5 +175,6 @@ export const templates: Record<
     "/": ConsultingoRoot,
     "/auto-login": AutoLogin,
     "/about-us": ConsultingoAboutUsRoot,
+    "/service": ConsultingoServiceRoot,
   },
 };
