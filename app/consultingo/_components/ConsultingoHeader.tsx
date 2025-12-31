@@ -80,7 +80,7 @@ const ConsultingoHeader = () => {
               Home
             </Link>
             <Link
-              href="/#about-us"
+              href="/about-us"
               className="font-lexend hover:font-semibold text-sm md:text-[16px]"
             >
               About us
