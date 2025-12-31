@@ -73,6 +73,7 @@ import ConsultingoRoot from "./app/consultingo/pages";
 import ConsultingoShell from "./app/consultingo/ConsultingoShell";
 import ConsultingoAboutUsRoot from "./app/consultingo/about-us/page";
 import ConsultingoServiceRoot from "./app/consultingo/service/page";
+import ConsultingoEventDetailsRoot from "./app/consultingo/event-details/page";
 
 export const templateLayouts: Record<
   string,
@@ -176,5 +177,6 @@ export const templates: Record<
     "/auto-login": AutoLogin,
     "/about-us": ConsultingoAboutUsRoot,
     "/service": ConsultingoServiceRoot,
+    "/event-details": ConsultingoEventDetailsRoot,
   },
 };

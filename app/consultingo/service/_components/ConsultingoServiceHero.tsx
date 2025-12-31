@@ -3,7 +3,7 @@ import React from "react";
 
 const ConsultingoServiceHero = () => {
   return (
-    <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-16">
+    <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-10 md:py-16">
       <div className="relative container mx-auto px-6 md:px-20 text-[#4F2910] flex flex-col items-center">
         {/* header */}
         <div className="text-center flex flex-col items-center">

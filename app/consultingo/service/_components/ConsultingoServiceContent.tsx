@@ -32,7 +32,7 @@ alignment with business objectives and supporting informed decision-making for s
 
 const ConsultingoServiceContent = () => {
   return (
-    <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-16">
+    <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-10 md:py-16">
       <div className="relative container mx-auto px-6 text-[#4F2910] flex flex-col items-center md:max-w-[70%]">
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold font-fraunces text-[40px]/[52px]">
