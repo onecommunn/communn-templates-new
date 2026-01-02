@@ -130,7 +130,7 @@ const ConsultingoHeader = () => {
             {/* )} */}
 
             <Link
-              href="/#contact"
+              href="/contact-us"
               className="font-lexend hover:font-semibold text-sm md:text-[16px]"
             >
               Contact
@@ -390,7 +390,7 @@ const ConsultingoHeader = () => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/#about-us"
+                      href="/about-us"
                       className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       About us
@@ -442,7 +442,7 @@ const ConsultingoHeader = () => {
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/#contact"
+                      href="/contact-us"
                       className="px-4 py-3 font-inter hover:font-semibold"
                     >
                       Contact

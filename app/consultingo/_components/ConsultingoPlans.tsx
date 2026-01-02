@@ -204,7 +204,7 @@ const ConsultingoPlans = () => {
                     >
                       {/* Title & Price */}
                       <h3
-                        className={`text-2xl font-fraunces my-4 ${
+                        className={`text-2xl font-fraunces capitalize my-4 ${
                           index % 2 !== 0 ? "text-white" : "text-[#BC4C37]"
                         }`}
                       >

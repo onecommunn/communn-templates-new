@@ -75,6 +75,7 @@ import ConsultingoAboutUsRoot from "./app/consultingo/about-us/page";
 import ConsultingoServiceRoot from "./app/consultingo/service/page";
 import ConsultingoEventDetailsRoot from "./app/consultingo/event-details/page";
 import ConsultingoSubscriptionsRoot from "./app/consultingo/subscriptions/pages";
+import ConsultingoContactusRoot from "./app/consultingo/contact-us/page";
 
 export const templateLayouts: Record<
   string,
@@ -180,5 +181,6 @@ export const templates: Record<
     "/service": ConsultingoServiceRoot,
     "/event-details": ConsultingoEventDetailsRoot,
     "/subscriptions": ConsultingoSubscriptionsRoot,
+    "/contact-us":ConsultingoContactusRoot
   },
 };
