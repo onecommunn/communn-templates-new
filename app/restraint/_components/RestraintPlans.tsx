@@ -142,7 +142,6 @@ export default function RestraintPlans({
   const userId: string | undefined =
     (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
 
-
   const isSubscribedCommunity =
     joinedCommunityLocal ||
     communityData?.community?.members?.some(
@@ -199,7 +198,13 @@ export default function RestraintPlans({
             setApi={setApi}
             opts={{ align: "start", loop: false, dragFree: true }}
             className="relative"
-            plugins={[Autoplay({ delay: 3500, stopOnInteraction: false })]}
+            plugins={[
+              Autoplay({
+                delay: 3500,
+                stopOnInteraction: true,
+                stopOnMouseEnter: true,
+              }),
+            ]}
           >
             <CarouselContent className="-ml-4">
               {data.map((plan, idx) => {
