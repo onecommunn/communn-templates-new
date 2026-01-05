@@ -18,7 +18,7 @@ type Testimonial = {
 const testimonials: Testimonial[] = [
   {
     image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ac20c5a29535b4242ec0cdcbc2d211542665e37c.jpg",
+      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/a667f5b5ab637abb7b14f094693a6673a9e5a184.jpg",
     quote:
       "Perfect for festive occasions. The saree looked royal and felt extremely comfortable all day.",
     name: "Priya",
@@ -26,14 +26,14 @@ const testimonials: Testimonial[] = [
   },
   {
     image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/28683a34ce4fec00a49cec22115dbb7f426257d7.jpg",
+      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ff6155a7c370f9b1c7bb8fd89c143e191175fb00.jpg",
     quote: "It feels special knowing this saree supports traditional artisans.",
     name: "Nithya",
     country: "India",
   },
   {
     image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/650f35bcb3082d5821188c7ea7ad65bbbbb6caaf.jpg",
+      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9d53821c68fee3c1e58e11b5892e3724b2210106.jpg",
     quote:
       "The saree quality exceeded my expectations. The fabric, color and finish were exactly as shown. Truly elegant.",
     name: "Ananya",
@@ -41,19 +41,10 @@ const testimonials: Testimonial[] = [
   },
   {
     image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/330b6b3b09b00a2723d6dfc435eb9f2eeb0f0370.jpg",
+      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9c13dbbf6c883c9709971ad364209b4983a67b37.jpg",
     quote: "It feels special. The handloom work is stunning.",
     name: "Andreya",
     country: "Canada",
-  },
-  // duplicate a few for smoother loop feel (optional)
-  {
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7ed8c4ddc9ff11584127fbc7d3687648301cfef9.jpg",
-    quote:
-      "Perfect for festive occasions. The saree looked royal and felt extremely comfortable all day.",
-    name: "Priya",
-    country: "India",
   },
 ];
 
@@ -117,11 +108,8 @@ function TestimonialCard({ t }: { t: Testimonial }) {
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* dark overlay like screenshot */}
-      <div className="absolute inset-0 bg-black/10" />
-
       {/* bottom fade */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-transparent" />
 
       {/* content */}
       <div className="relative z-10 flex h-full flex-col justify-end p-6">

@@ -7,6 +7,7 @@ import CollectionsGallery from "./_components/CollectionsGallery";
 import CollectionsFAQs from "./_components/CollectionsFAQs";
 import CollectionsCTA from "./_components/CollectionsCTA";
 import CollectionsTestimonials from "./_components/CollectionsTestimonials";
+import CollectionsService from "./_components/CollectionsService";
 
 const CollectionsRoot = () => {
   const primaryColor = "#C09932";
@@ -18,6 +19,7 @@ const CollectionsRoot = () => {
       <CollectionsFeatures/>
       <CollectionsGallery/>
       <CollectionsFAQs/>
+      <CollectionsService/>
       <CollectionsCTA/>
       <CollectionsTestimonials/>
     </>
