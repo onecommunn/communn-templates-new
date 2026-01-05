@@ -262,58 +262,59 @@ const ConsultingoEventDetailsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
-        <div className="mx-auto px-4 py-8">
-          {/* Cover image */}
-          <div className="rounded-2xl overflow-hidden mb-8">
-            <div className="relative aspect-[16/9] w-full">
-              <Skeleton className="absolute inset-0" />
+      <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-10 md:py-16">
+        <div className="relative container mx-auto px-6 md:px-20 flex flex-col gap-14">
+          {/* ================= HERO ================= */}
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-8 items-center">
+            {/* Left text */}
+            <div className="space-y-6">
+              <Skeleton className="h-16 w-3/4 rounded-lg" />
+              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-5 w-[95%]" />
+              <Skeleton className="h-5 w-[85%]" />
+
+              <Skeleton className="h-12 w-44 rounded-full mt-6" />
+            </div>
+
+            {/* Right image blob */}
+            <div className="flex justify-end">
+              <Skeleton className="w-full md:w-[410px] h-[490px] md:h-[550px] rounded-full" />
             </div>
           </div>
 
-          {/* Content + Form */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Left: Event details */}
-            <div className="md:col-span-2 space-y-4">
-              <Skeleton className="h-7 w-3/4" /> {/* title */}
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-[92%]" />
-                <Skeleton className="h-4 w-[88%]" />
-                <Skeleton className="h-4 w-[80%]" />
+          {/* ================= DETAILS PILLS ================= */}
+          <div className="flex flex-col md:flex-row items-center w-full rounded-[30px] md:rounded-[300px] border border-[#0000001A] bg-[#F4EFE1] overflow-hidden divide-y md:divide-y-0 md:divide-x divide-[#0000001A]">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="w-full py-6 px-6 space-y-3">
+                <Skeleton className="h-8 w-32 mx-auto md:mx-0" />
+                <Skeleton className="h-4 w-24 mx-auto md:mx-0" />
               </div>
-              <Skeleton className="h-5 w-56 mt-6" /> {/* Access Information */}
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-64" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-52" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-40" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Skeleton className="h-2 w-2 rounded-full" />
-                  <Skeleton className="h-4 w-72" />
-                </div>
-              </div>
+            ))}
+          </div>
+
+          {/* ================= BOOKING SECTION ================= */}
+          <div className="grid grid-cols-1 md:grid-cols-[3fr_4fr] gap-10 w-full md:w-[80%] mx-auto">
+            {/* Left image card */}
+            <div className="w-full h-[550px] rounded-[30px] overflow-hidden">
+              <Skeleton className="w-full h-full" />
             </div>
 
-            {/* Right: Form card */}
-            <div className="bg-white rounded-xl shadow border p-6 space-y-4">
-              <Skeleton className="h-5 w-32" /> {/* Enter Details */}
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" />
-              <Skeleton className="h-10 w-full rounded-md" /> {/* button */}
+            {/* Right form */}
+            <div className="w-full rounded-[30px] p-10 bg-white flex flex-col justify-between">
+              <div className="space-y-10">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="space-y-3">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-12 w-full rounded-md" />
+                  </div>
+                ))}
+              </div>
+
+              <Skeleton className="h-12 w-full rounded-lg mt-12" />
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -358,7 +359,10 @@ const ConsultingoEventDetailsPage = () => {
               {eventData?.title}
             </h3>
             <p className="text-[#4F2910] text-lg">{eventData?.description}</p>
-            <Link href={'#book-now'} className="bg-[#BC4C37] w-fit cursor-pointer text-white px-8 py-4 rounded-full flex items-center gap-3 group/btn hover:bg-[#3d2314] transition-all">
+            <Link
+              href={"#book-now"}
+              className="bg-[#BC4C37] w-fit cursor-pointer text-white px-8 py-4 rounded-full flex items-center gap-3 group/btn hover:bg-[#3d2314] transition-all"
+            >
               <span className="font-medium">Book Now</span>
               <div className="bg-white/20 rounded-full p-1 group-hover/btn:rotate-45 transition-transform">
                 <MoveUpRight size={18} />
@@ -430,7 +434,10 @@ const ConsultingoEventDetailsPage = () => {
           </div>
         </div>
         {/* Enter details */}
-        <div className="grid grid-cols-1 md:grid-cols-[3fr_4fr] gap-10 w-full md:w-[80%]" id="book-now">
+        <div
+          className="grid grid-cols-1 md:grid-cols-[3fr_4fr] gap-10 w-full md:w-[80%]"
+          id="book-now"
+        >
           {/* left */}
           <div className="w-full h-[550px] relative rounded-[30px] overflow-hidden group">
             <Image
