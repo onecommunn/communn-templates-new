@@ -14,6 +14,8 @@ import {
   Archivo,
   Fraunces,
   Lexend,
+  Kalnia,
+  Figtree,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -110,6 +112,20 @@ const lexend = Lexend({
   variable: "--font-lexend",
 });
 
+const kalnia = Kalnia({
+  subsets: ["latin", "latin-ext", "math"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  style: ["normal"],
+  variable: "--font-kalnia",
+});
+
+const figtree = Figtree({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-figtree",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -118,7 +134,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable}`}
+      className={`${figtree.variable} ${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable} ${kalnia.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

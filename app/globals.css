@@ -20,6 +20,8 @@
   --font-archivo: var(--font-archivo), serif;
   --font-fraunces: var(--font-fraunces);
   --font-lexend: var(--font-lexend), serif;
+  --font-kalnia: var(--font-kalnia), serif;
+  --font-figtree: var(--font-figtree), serif;
 }
 
 .font-lora {

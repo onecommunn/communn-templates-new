@@ -76,6 +76,8 @@ import ConsultingoServiceRoot from "./app/consultingo/service/page";
 import ConsultingoEventDetailsRoot from "./app/consultingo/event-details/page";
 import ConsultingoSubscriptionsRoot from "./app/consultingo/subscriptions/pages";
 import ConsultingoContactusRoot from "./app/consultingo/contact-us/page";
+import CollectionsRoot from "./app/collections/page";
+import CollectionsShell from "./app/collections/CollectionsShell";
 
 export const templateLayouts: Record<
   string,
@@ -90,6 +92,7 @@ export const templateLayouts: Record<
   fitkit: FitKitShell,
   influencer: InfluencerLayout,
   consultingo: ConsultingoShell,
+  collections: CollectionsShell,
 };
 
 export const templates: Record<
@@ -181,6 +184,9 @@ export const templates: Record<
     "/service": ConsultingoServiceRoot,
     "/event-details": ConsultingoEventDetailsRoot,
     "/subscriptions": ConsultingoSubscriptionsRoot,
-    "/contact-us":ConsultingoContactusRoot
+    "/contact-us": ConsultingoContactusRoot,
+  },
+  collections: {
+    "/": CollectionsRoot,
   },
 };
