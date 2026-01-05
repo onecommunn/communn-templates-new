@@ -2,9 +2,9 @@ import React from "react";
 import { CMSProvider } from "./CMSProvider.client";
 
 const EMPTY_BUNDLE = {
-  header: null,
-  footer: null,
   home: null,
+  aboutUs:null,
+  contact:null
 };
 
 const ConsultingoLayout = ({ children }: { children: React.ReactNode }) => {

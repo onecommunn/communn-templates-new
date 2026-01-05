@@ -10,6 +10,8 @@ import React, {
 
 export type Bundle = {
   home: any | null;
+  aboutUs: any | null;
+  contact: any | null;
   // add more pages
 };
 
@@ -20,6 +22,8 @@ type CMSContext = Bundle & {
 
 const defaultBundle: Bundle = {
   home: null,
+  aboutUs: null,
+  contact: null,
   // add more pages
 };
 
