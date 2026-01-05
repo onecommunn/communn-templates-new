@@ -25,6 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AuthContext } from "@/contexts/Auth.context";
+import { Header } from "@/models/templates/consultingo/consultingo-home-model";
 import { logoutService } from "@/services/logoutService";
 import {
   ArrowRight,
@@ -37,7 +38,18 @@ import {
 import Link from "next/link";
 import React, { useContext, useState } from "react";
 
-const ConsultingoHeader = () => {
+const ConsultingoHeader = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+  data,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+  data: Header;
+}) => {
+  const content = data?.content
   const auth = useContext(AuthContext);
   const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
   const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
@@ -55,12 +67,22 @@ const ConsultingoHeader = () => {
   };
 
   return (
-    <header className="sticky font-lexend top-0 z-50 backdrop-blur bg-[#fcf6e8] text-[#4F2910]">
+    <header
+      className="sticky font-lexend top-0 z-50 backdrop-blur bg-[var(--neu)] text-[var(--sec)]"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
+                content?.media?.[0] ||
                 "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg"
               }
               alt="logo"
@@ -235,7 +257,7 @@ const ConsultingoHeader = () => {
               </div>
             ) : (
               <Link href="/login" aria-label="Login">
-                <Button className="cursor-pointer bg-[#BC4C37] text-white border border-white rounded-full text-sm px-6 w-fit inline-flex items-center gap-2">
+                <Button className="cursor-pointer bg-[var(--pri)] text-white border border-white rounded-full text-sm px-6 w-fit inline-flex items-center gap-2">
                   Login
                   <span>
                     <ArrowRight className="h-4 w-4" />
@@ -353,7 +375,17 @@ const ConsultingoHeader = () => {
                   <Menu className="h-6 w-6" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85vw] sm:max-w-sm px-0">
+              <SheetContent
+                side="right"
+                className="w-[85vw] sm:max-w-sm px-0"
+                style={
+                  {
+                    "--pri": primaryColor,
+                    "--sec": secondaryColor,
+                    "--neu": neutralColor,
+                  } as React.CSSProperties
+                }
+              >
                 {/* Header inside sheet */}
                 <SheetHeader className="px-4">
                   <div className="flex items-center justify-between">
@@ -377,7 +409,7 @@ const ConsultingoHeader = () => {
 
                 {/* Nav list (mobile) */}
                 <nav
-                  className="flex flex-col space-y-1 py-2"
+                  className="flex flex-col space-y-1 py-2 text-[var(--sec)]"
                   aria-label="Mobile"
                 >
                   <SheetClose asChild>
@@ -455,7 +487,7 @@ const ConsultingoHeader = () => {
                   <SheetClose asChild>
                     {!auth.isAuthenticated && (
                       <Link href="/login" className="w-full">
-                        <Button className="rounded-full text-lg font-normal px-5 h-12 w-full inline-flex items-center gap-2 bg-[#BC4C37] text-white">
+                        <Button className="rounded-full text-lg font-normal px-5 h-12 w-full inline-flex items-center gap-2 bg-[var(--pri)] text-white">
                           Login <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>
