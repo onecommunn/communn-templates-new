@@ -16,23 +16,47 @@ const services = [
 ];
 
 const CollectionsService = () => {
+  const primaryColor = "#C09932";
+
   return (
     <section
-      className="w-full"
-      style={{
-        backgroundColor: "#C09932",
-        backgroundImage: `url("/assets/collections-header-bg-image.png")`,
-        backgroundRepeat: "repeat",
-        backgroundSize: "auto",
-        backgroundBlendMode: "multiply",
-      }}
+      className="relative w-full overflow-hidden"
+      style={{ backgroundColor: primaryColor }}
     >
-      <div className="mx-auto max-w-[1400px] px-6 md:px-0 py-10 md:py-0">
+      {/* Pattern layer (Safari-safe) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: `url("/assets/collections-header-bg-image.png")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "auto",
+          backgroundPosition: "center",
+          opacity: 0.5,
+          transform: "translateZ(0)",
+          WebkitTransform: "translateZ(0)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Tint overlay (no blend-mode → Safari friendly) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundColor: primaryColor,
+          opacity: 0.8,
+          transform: "translateZ(0)",
+          WebkitTransform: "translateZ(0)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Content */}
+      <div className="relative mx-auto max-w-[1400px] px-6 md:px-0 py-10 md:py-0">
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5">
           {services.map(({ label, Icon }, idx) => (
             <div
               key={label}
-              className={`flex flex-col items-center justify-center text-center py-6 md:py-12 gap-4 relative`}
+              className="relative flex flex-col items-center justify-center gap-4 py-6 md:py-12 text-center"
             >
               {/* Icon */}
               <div className="text-white">
@@ -43,8 +67,10 @@ const CollectionsService = () => {
               <p className="font-figtree text-white text-[16px] md:text-[20px] leading-tight">
                 {label}
               </p>
+
+              {/* Divider */}
               {idx !== services.length - 1 && (
-                <div className="absolute hidden md:flex md:right-0 top-1/2 -translate-y-1/2 bg-[#FAEEDC]/50 w-[1px] h-20" />
+                <div className="absolute hidden md:flex right-0 top-1/2 -translate-y-1/2 bg-[#FAEEDC]/50 w-[1px] h-20" />
               )}
             </div>
           ))}

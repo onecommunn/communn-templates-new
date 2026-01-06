@@ -15,7 +15,7 @@ const sliderData = [
     image: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg", // The hero image you uploaded
     title: "Gorgeous designs that perfectly express your romantic stories",
     description:
-      "Quam id leo in vitae turpis massa sed elementum tempus. Massa ultricies mi quis hendrerit dolor magna eget est varius vel pharetra vel turpis nunc.",
+      "Vinutha Saree Verse began as a passionate dream woven from tradition, creativity and a deep love for Indian textiles.",
   },
   {
     id: 2,

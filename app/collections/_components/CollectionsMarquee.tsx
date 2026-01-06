@@ -1,15 +1,17 @@
+"use client";
+
 import { Marquee } from "@/components/CustomComponents/marquee";
 import React from "react";
 
 function Word({ children }: { children: React.ReactNode }) {
   return (
-    <span className="px-6 font-marcellus text-3xl md:text-4xl text-[#fff] bg-transparent">
+    <span className="px-6 font-marcellus text-3xl md:text-4xl text-white bg-transparent">
       {children}
     </span>
   );
 }
 
-const pointes = [
+const points = [
   "Silk Saree",
   "Wedding Saree",
   "Embroidered Saree",
@@ -20,39 +22,49 @@ const pointes = [
 const CollectionsMarquee = ({ primaryColor }: { primaryColor: string }) => {
   return (
     <section
-      className="py-8 md:py-12 text-white space-y-10" // Added text-white to match your previous design
-      style={
-        {
-          "--pri": primaryColor,
-          backgroundColor: "var(--pri)",
+      className="relative overflow-hidden py-8 md:py-12 space-y-10 text-white"
+      style={{ backgroundColor: primaryColor }}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 h-full"
+        style={{
           backgroundImage: `url("/assets/collections-header-bg-image.png")`,
           backgroundRepeat: "repeat",
           backgroundSize: "auto",
-          backgroundBlendMode: "multiply",
           backgroundPosition: "center",
-        } as React.CSSProperties
-      }
-    >
-      {/* Row 1 → right (reverse) */}
-      <div className="mx-auto space-y-10">
-        <div className="relative">
-          <Marquee className="[--duration:26s] [--gap:3.5rem]" reverse>
-            {pointes?.map((item, idx) => (
-              <Word key={idx}>{item}</Word>
-            ))}
-          </Marquee>
-        </div>
-      </div>
+          opacity: 0.5,
+          transform: "translateZ(0)",
+          WebkitTransform: "translateZ(0)",
+        }}
+        aria-hidden="true"
+      />
 
-      {/* Row-2 -> left  */}
-      <div className="mx-auto space-y-10">
-        <div className="relative">
-          <Marquee className="[--duration:26s] [--gap:3.5rem]">
-            {pointes?.map((item, idx) => (
-              <Word key={idx}>{item}</Word>
-            ))}
-          </Marquee>
-        </div>
+      <div
+        className="pointer-events-none absolute inset-0 h-full"
+        style={{
+          backgroundColor: primaryColor,
+          opacity: 0.8,
+          transform: "translateZ(0)",
+          WebkitTransform: "translateZ(0)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Content must be above overlays */}
+      <div className="relative mx-auto space-y-10">
+        {/* Row 1 → right */}
+        <Marquee className="[--duration:26s] [--gap:3.5rem]" reverse>
+          {points.map((item, idx) => (
+            <Word key={idx}>{item}</Word>
+          ))}
+        </Marquee>
+
+        {/* Row 2 → left */}
+        <Marquee className="[--duration:26s] [--gap:3.5rem]">
+          {points.map((item, idx) => (
+            <Word key={idx}>{item}</Word>
+          ))}
+        </Marquee>
       </div>
     </section>
   );

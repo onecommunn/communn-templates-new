@@ -71,15 +71,34 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
     >
       {/* Top Strip - Gold Textured Bar */}
       <div
-        className="relative font-lora text-white py-2 px-6 lg:px-20 flex flex-row items-center justify-center md:justify-between z-30 overflow-hidden"
-        style={{
-          backgroundColor: "var(--pri)",
-          backgroundImage: `url("/assets/collections-header-bg-image.png")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "auto",
-          backgroundBlendMode: "multiply",
-        }}
+        className="relative overflow-hidden font-lora text-white py-2 px-6 lg:px-20 flex items-center justify-center md:justify-between"
+        style={{ backgroundColor: primaryColor }}
       >
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `url("/assets/collections-header-bg-image.png")`,
+            backgroundRepeat: "repeat",
+            backgroundSize: "auto",
+            backgroundPosition: "center",
+            opacity: 0.5,
+            transform: "translateZ(0)",
+            WebkitTransform: "translateZ(0)",
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Tint overlay */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundColor: primaryColor,
+            opacity: 0.8,
+            transform: "translateZ(0)",
+            WebkitTransform: "translateZ(0)",
+          }}
+          aria-hidden="true"
+        />
         {/* Social Icons */}
         <div className="flex items-center gap-4 z-10">
           <Link href="#">
