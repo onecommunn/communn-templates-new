@@ -447,7 +447,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/#about-us"
+                      href="/about"
                       className="px-4 py-3 font-figtree hover:font-semibold"
                       style={{ color: primaryColor }}
                     >
@@ -457,7 +457,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
 
                   <SheetClose asChild>
                     <Link
-                      href="/#collections"
+                      href="/collections"
                       className="px-4 py-3 font-figtree hover:font-semibold"
                       style={{ color: primaryColor }}
                     >
@@ -466,7 +466,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                   </SheetClose>
                   <SheetClose asChild>
                     <Link
-                      href="/#contact"
+                      href="/contact"
                       className="px-4 py-3 font-figtree hover:font-semibold"
                       style={{ color: primaryColor }}
                     >
