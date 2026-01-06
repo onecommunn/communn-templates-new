@@ -6,31 +6,31 @@ import { Plus, Minus } from "lucide-react";
 const Faqs = [
   {
     q: "Do the sarees match the photos shown on website ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "Yes. Product images show true colors, texture, and detailing. Minor variation may occur due to handwoven nature and screen settings.",
   },
   {
     q: "Are these sarees suitable for weddings ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "Yes. The collection includes designs suited for weddings, festivals, rituals, and special occasions, along with elegant everyday options.",
   },
   {
     q: "Do you offer customization or blouse stitching ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "Customization depends on the saree type. Blouse stitching and design guidance are available on request through support.",
   },
   {
     q: "Where are the sarees sourced from ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "Our sarees come directly from trusted weavers and artisan clusters across India. Each piece reflects authentic handloom and regional craft.",
   },
   {
     q: "Are the designs traditional, contemporary, or mixed ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "The collection includes classic traditional motifs, modern minimal patterns, and designs that blend both styles.",
   },
   {
     q: "Do the fabrics feel comfortable for long wear ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "Yes. Fabrics are chosen for breathability, softness, and ease of movement, suitable for extended wear.",
   },
   {
     q: "How durable are the fabrics with regular use ?",
-    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+    a: "With proper care, the fabrics retain color, texture, and structure over time.",
   },
 ];
 

@@ -3,9 +3,9 @@
 import React from "react";
 
 const features = [
-  { icon: "✨", text: "Curated Collections with a Modern Eye" },
-  { icon: "🔥", text: "Personalized Styling & Storytelling" },
-  { icon: "⚡", text: "Blend of Heritage & Contemporary Aesthetics" },
+  { text: "Curated Collections with a Modern Eye" },
+  { text: "Personalized Styling & Storytelling" },
+  { text: "Blend of Heritage & Contemporary Aesthetics" },
 ];
 
 const CollectionsFeatures = () => {
@@ -61,7 +61,6 @@ const CollectionsFeatures = () => {
                 key={index}
                 className="w-full md:w-[32%] bg-[#FFF5E6] rounded-full py-3 px-6 flex items-center justify-center gap-3 shadow-sm transition-transform hover:scale-[1.03]"
               >
-                <span className="text-[#C09932] text-lg">{feature.icon}</span>
                 <p className="text-[#C09932] font-serif text-xs lg:text-sm font-medium text-center">
                   {feature.text}
                 </p>
