@@ -106,8 +106,8 @@ const CollectionsFooter = () => {
       {/* Bottom Bar */}
       <div className="border-t border-gray-700">
         <div className="md:px-20 mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 gap-4">
-          <p className="font-serif italic">
-            ©Vinutha verse all rights Reserved
+          <p className="font-lora">
+            © Vinutha verse all rights Reserved
           </p>
           <p>
             Powered by{" "}
