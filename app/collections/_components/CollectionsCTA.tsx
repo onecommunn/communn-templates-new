@@ -25,14 +25,14 @@ const CollectionsCTA = () => {
 
             {/* Heading */}
             <h1 className="font-kalnia text-white text-[38px] leading-[44px] md:text-[42px] md:leading-[50px] tracking-wide">
-              The Best Online Shopping Experience Compared to In-Store
+              Discover sarees curated for timeless style and everyday elegance.
             </h1>
 
             {/* Description */}
             <p className="mt-6 font-figtree text-white/85 text-[14px] md:text-[16px] leading-6 md:leading-7 max-w-3xl mx-auto">
-              Eros donec ac odio tempor orci. Et molestie ac feugiat sed lectus
-              vestibulum mattis. Felis eget nunc lobortis mattis aliquam
-              faucibus. Purus in massa tempor nec feugiat nisl pretium.
+              Explore a wide range of handpicked saree designs, from classic
+              weaves to modern drapes. Each piece reflects refined
+              craftsmanship, rich fabrics, and thoughtful detailing.
             </p>
 
             {/* CTA */}

@@ -92,8 +92,9 @@ const CollectionsProducts = () => {
           Enhance Your Look
         </h3>
         <p className="font-figtree text-sm md:text-base md:max-w-lg text-center text-gray-600">
-          Sed viverra tellus in hac habitasse. Nulla posuere sollicitudin
-          aliquam ultrices orci. libero volutpat sed cras ornare.
+          Each look highlights detailed drapes, subtle jewelry, and composed
+          expressions.. The styling reflects grace, confidence, and cultural
+          depth.
         </p>
       </div>
 

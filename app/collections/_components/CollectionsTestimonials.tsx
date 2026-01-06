@@ -62,13 +62,11 @@ const CollectionsTestimonials = () => {
         {/* Top */}
         <div className="flex flex-col items-center text-center">
           <OmIcon size={60} />
-          <h3 className="text-3xl md:text-[42px]/[50px] text-center font-kalnia">
-            Reviews From Our Clients
+          <h3 className="text-3xl md:text-[42px]/[50px] text-center font-kalnia whitespace-normal break-words">
+            {"Reviews From Our Clients"}
           </h3>
           <p className="mt-5 max-w-3xl font-figtree text-[14px] md:text-[16px] leading-6 md:leading-7">
-            Proin fermentum leo vel orci porta non pulvinar. Lectus nulla at
-            volutpat diam. Ut hac habitasse platea placerat orci nulla
-            pellentesque.
+            Real stories from women who chose our sarees for meaningful moments.
           </p>
         </div>
 

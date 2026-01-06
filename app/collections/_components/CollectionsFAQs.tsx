@@ -5,27 +5,31 @@ import { Plus, Minus } from "lucide-react";
 
 const Faqs = [
   {
-    q: "How Do I Choose The Best Wedding Sarees?",
+    q: "Do the sarees match the photos shown on website ?",
     a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
   },
   {
-    q: "Which Type Of Saree Is Best For Summer?",
+    q: "Are these sarees suitable for weddings ?",
     a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
   },
   {
-    q: "How To Find The Best Embroidery Saree?",
+    q: "Do you offer customization or blouse stitching ?",
     a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
   },
   {
-    q: "Do You Provide Shipping To Other Countries?",
+    q: "Where are the sarees sourced from ?",
     a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
   },
   {
-    q: "Can I Return Or Exchange Fee Items?",
+    q: "Are the designs traditional, contemporary, or mixed ?",
     a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
   },
   {
-    q: "How To Redeem My Gift Card?",
+    q: "Do the fabrics feel comfortable for long wear ?",
+    a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
+  },
+  {
+    q: "How durable are the fabrics with regular use ?",
     a: "Neque volutpat ac tincidunt vitae semper quis lectus. A scelerisque purus semper eget duis at tellus at. A arcu cursus vitae congue mauris rhoncus aenean vel elit. Porta lorem mollis aliquam ut. Molestie a iaculis at erat pellentesque adipiscing.",
   },
 ];
@@ -45,9 +49,9 @@ const CollectionsFAQs = () => {
           <h2 className="text-[42px]/[50px]">Frequently Asked Questions</h2>
 
           <p className="font-figtree text-[15px] leading-6 text-zinc-700">
-            Lacinia quis vel eros donec ac odio tempor orci. Aliquet eget sit
-            amet tellus cras adipiscing enim eu turpis. Eu sem integer vitae
-            justo eget magna fermentum.
+            Quick answers about fabric, weave, and design details.This helps you
+            understand material quality, craftsmanship, and styling so you
+            choose the right saree with clarity and ease.
           </p>
 
           <img
@@ -70,16 +74,14 @@ const CollectionsFAQs = () => {
                   <span className="text-[18px] md:text-[20px]">
                     {index + 1}.
                   </span>
-                  <span className="text-[18px] md:text-[20px]">
-                    {faq.q}
-                  </span>
+                  <span className="text-[18px] md:text-[20px]">{faq.q}</span>
                 </div>
 
                 <span className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full bg-zinc-200/70">
                   {openIndex === index ? (
-                    <Minus className="h-[18px] w-[18px]" strokeWidth={2}/>
+                    <Minus className="h-[18px] w-[18px]" strokeWidth={2} />
                   ) : (
-                    <Plus className="h-[18px] w-[18px]" strokeWidth={2}/>
+                    <Plus className="h-[18px] w-[18px]" strokeWidth={2} />
                   )}
                 </span>
               </button>

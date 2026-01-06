@@ -110,7 +110,7 @@ const CollectionsTestimonialsSection = () => {
           <button
             type="button"
             onClick={prev}
-            className="group absolute left-2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/10 transition hover:bg-white"
+            className="group cursor-pointer absolute left-2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/10 transition hover:bg-white"
             aria-label="Previous review"
           >
             <span className="text-black/70 transition group-hover:text-black">
@@ -121,7 +121,7 @@ const CollectionsTestimonialsSection = () => {
           <button
             type="button"
             onClick={next}
-            className="group absolute right-2 top-1/2 hidden translate-x-1/2 -translate-y-1/2 md:flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/10 transition hover:bg-white"
+            className="group cursor-pointer absolute right-2 top-1/2 hidden translate-x-1/2 -translate-y-1/2 md:flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/10 transition hover:bg-white"
             aria-label="Next review"
           >
             <span className="text-black/70 transition group-hover:text-black">
@@ -137,7 +137,7 @@ const CollectionsTestimonialsSection = () => {
           >
             <OmIcon size={60} />
 
-            <h2 className="mt-5 font-kalnia text-[30px] leading-[42px] text-black md:text-[52px] text-center whitespace-normal break-words max-w-[900px] text-balance">
+            <h2 className="mt-5 font-kalnia text-[30px] leading-[42px] text-black md:text-[52px] text-center whitespace-normal break-words text-balance">
               {"Here's Our Clients Honest Review"}
             </h2>
 
