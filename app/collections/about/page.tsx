@@ -4,10 +4,23 @@ import CollectionsService from "../_components/CollectionsService";
 import CollectionsPersonaliseSection from "./_components/CollectionsPersonaliseSection";
 import CollectionsTestimonialsSection from "./_components/CollectionsTestimonialsSection";
 import CollectionsAboutGallery from "./_components/CollectionsAboutGallery";
+import Breadcum from "../contact-us/_components/Breadcum";
 
 const CollectionsAboutRoot = () => {
+
+
+  const heroBanner = "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Background1.png";
+
   return (
     <>
+      <Breadcum
+        title="About Us"
+        bannerImage={heroBanner}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "About Us" },
+        ]}
+      />
       <CollectionsAboutSection
         title="Woven with culture and care"
         description="We curate handcrafted sarees that reflect India’s rich textile heritage while embracing contemporary style. "
@@ -31,10 +44,10 @@ const CollectionsAboutRoot = () => {
         }}
         imagePlace="Right"
       />
-      <CollectionsPersonaliseSection/>
-      <CollectionsService/>
-      <CollectionsTestimonialsSection/>
-      <CollectionsAboutGallery/>
+      <CollectionsPersonaliseSection />
+      <CollectionsService />
+      <CollectionsTestimonialsSection />
+      <CollectionsAboutGallery />
     </>
   );
 };
