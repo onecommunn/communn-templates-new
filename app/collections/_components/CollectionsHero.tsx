@@ -53,8 +53,8 @@ const CollectionsHero = () => {
 
               {/* Content Container */}
               <div className="container relative mx-auto h-full px-6 md:px-20 flex flex-col justify-center items-start text-white">
-                <div className="max-w-2xl space-y-6">
-                  <h1 className="font-kalnia text-4xl md:text-6xl leading-tight animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <div className="md:max-w-[70%] space-y-6">
+                  <h1 className="font-kalnia text-4xl md:text-[44px]/[52px] leading-tight animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     {slide.title}
                   </h1>
                   

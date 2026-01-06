@@ -80,6 +80,7 @@ import CollectionsRoot from "./app/collections/page";
 import CollectionsShell from "./app/collections/CollectionsShell";
 import CollectionsContactusRoot from "./app/collections/contact-us/page";
 import CollectionsAboutRoot from "./app/collections/about/page";
+import CollectionsCollectionsPageRoot from "./app/collections/collections/page";
 
 export const templateLayouts: Record<
   string,
@@ -192,5 +193,6 @@ export const templates: Record<
     "/": CollectionsRoot,
     "/contact": CollectionsContactusRoot,
     "/about": CollectionsAboutRoot,
+    "/collections": CollectionsCollectionsPageRoot,
   },
 };

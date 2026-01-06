@@ -19,7 +19,7 @@ const ContactItem = ({ icon, title, content, link }: ContactItemProps) => (
             {link ? (
                 <a
                     href={link}
-                    className="text-[#C09932] hover:text-gold-dark transition-colors text-sm font-figtree text-sm"
+                    className="text-[#C09932] hover:text-gold-dark transition-colors font-figtree text-sm"
                 >
                     {content}
                 </a>
@@ -34,7 +34,7 @@ const ContactInfo = () => {
     return (
         <div className="flex-1">
             <OmIcon size={60} />
-            <h2 className="font-kalnia text-3xl md:text-4xl text-foreground mb-4">
+            <h2 className="font-kalnia text-3xl md:text-4xl text-foreground my-4">
                 Speak With Us
             </h2>
             <p className="text-muted-foreground font-figtree text-sm mb-8 max-w-md">

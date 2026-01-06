@@ -9,7 +9,7 @@ import Breadcum from "../contact-us/_components/Breadcum";
 const CollectionsAboutRoot = () => {
 
 
-  const heroBanner = "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Background1.png";
+  const heroBanner = "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Background2323.png";
 
   return (
     <>

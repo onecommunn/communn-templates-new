@@ -58,7 +58,7 @@ const ContactFormCollection = () => {
     return (
         <div className="bg-[#FAEEDC] p-6 md:p-10 rounded-sm w-full">
             <OmIcon size={60} />
-            <h2 className="font-kalnia text-2xl md:text-3xl text-card-foreground mb-3">
+            <h2 className="font-kalnia text-2xl md:text-3xl text-card-foreground my-3">
                 24/7 Support
             </h2>
             <p className="text-muted-foreground font-figtree text-sm mb-6">
