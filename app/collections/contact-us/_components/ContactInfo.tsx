@@ -13,13 +13,13 @@ const ContactItem = ({ icon, title, content, link }: ContactItemProps) => (
     <div className="flex gap-4">
         <div className="flex-shrink-0 text-foreground">{icon}</div>
         <div>
-            <h4 className="font-figtree text-lg font-semibold text-foreground mb-1">
+            <h4 className="font-figtree text-[24px] text-foreground mb-1">
                 {title}
             </h4>
             {link ? (
                 <a
                     href={link}
-                    className="text-[#C09932] hover:text-gold-dark transition-colors text-sm font-sans"
+                    className="text-[#C09932] hover:text-gold-dark transition-colors text-sm font-figtree text-sm"
                 >
                     {content}
                 </a>
@@ -38,8 +38,7 @@ const ContactInfo = () => {
                 Speak With Us
             </h2>
             <p className="text-muted-foreground font-figtree text-sm mb-8 max-w-md">
-                Justo donec enim diam vulputate ut pharetra. Urna id volutpat lacus
-                laoreet non. Eu ultrices vitae auctor eu augue ut lectus.
+                Visit us at our studio in Bengaluru for a closer look at our collections. Call or WhatsApp us for quick assistance during business hours.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

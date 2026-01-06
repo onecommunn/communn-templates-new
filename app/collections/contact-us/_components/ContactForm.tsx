@@ -62,8 +62,7 @@ const ContactFormCollection = () => {
                 24/7 Support
             </h2>
             <p className="text-muted-foreground font-figtree text-sm mb-6">
-                Diam maecenas sed enim ut sem viverra aliquet. Sit amet purus gravida
-                quis blandit. Purus sit amet luctus lectus.
+                Whether you need help choosing a design, understanding fabric details, tracking an order, or custom requirements, our team responds with care and clarity.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">

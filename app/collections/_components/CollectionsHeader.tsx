@@ -116,12 +116,12 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
       </div>
 
       {/* Main header */}
-      <div className="container font-figtree mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
+      <div className="container font-figtree mx-auto px-4 sm:px-6 md:px-6 lg:px-6">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Container.svg"
+                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
               }
               alt="logo"
               className="w-fit h-15 object-cover"
