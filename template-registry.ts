@@ -79,6 +79,7 @@ import ConsultingoContactusRoot from "./app/consultingo/contact-us/page";
 import CollectionsRoot from "./app/collections/page";
 import CollectionsShell from "./app/collections/CollectionsShell";
 import CollectionsContactusRoot from "./app/collections/contact-us/page";
+import CollectionsAboutRoot from "./app/collections/about/page";
 
 export const templateLayouts: Record<
   string,
@@ -190,5 +191,6 @@ export const templates: Record<
   collections: {
     "/": CollectionsRoot,
     "/contact": CollectionsContactusRoot,
+    "/about": CollectionsAboutRoot,
   },
 };
