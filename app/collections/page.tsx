@@ -11,17 +11,18 @@ import CollectionsService from "./_components/CollectionsService";
 
 const CollectionsRoot = () => {
   const primaryColor = "#C09932";
+
   return (
     <>
       <CollectionsHero />
       <CollectionsMarquee primaryColor={primaryColor} />
-      <CollectionsProducts/>
-      <CollectionsFeatures/>
-      <CollectionsGallery/>
-      <CollectionsFAQs/>
-      <CollectionsService/>
-      <CollectionsCTA/>
-      <CollectionsTestimonials/>
+      <CollectionsProducts />
+      <CollectionsFeatures />
+      <CollectionsGallery />
+      <CollectionsFAQs />
+      <CollectionsService />
+      <CollectionsCTA />
+      <CollectionsTestimonials />
     </>
   );
 };
