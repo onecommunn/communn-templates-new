@@ -17,7 +17,7 @@ const products = [
     title: "Banarasi Silk Wedding Saree",
     price: "4000",
     image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg", // Replace with your image paths
+      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg",
   },
   {
     id: 2,
@@ -79,7 +79,7 @@ const products = [
 
 const CollectionsProducts = () => {
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: false })
+    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
   );
   return (
     <section className="mx-auto px-6 md:px-20 py-10 md:py-16 font-kalnia bg-[#E5E5E5]/30">
@@ -142,8 +142,8 @@ const CollectionsProducts = () => {
 
           {/* Controls - Positioned relative to the container */}
           <div className="hidden md:block">
-            <CarouselPrevious className="-left-12 border-[#C09932] text-[#C09932] hover:bg-[#C09932] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:bg-gray-300" />
-            <CarouselNext className="-right-12 border-[#C09932] text-[#C09932] hover:bg-[#C09932] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:bg-gray-300" />
+            <CarouselPrevious className="-left-12 border-[#C09932] text-[#C09932] hover:bg-[#C09932] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed" />
+            <CarouselNext className="-right-12 border-[#C09932] text-[#C09932] hover:bg-[#C09932] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed" />
           </div>
         </Carousel>
       </div>

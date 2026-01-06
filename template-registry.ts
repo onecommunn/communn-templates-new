@@ -78,6 +78,7 @@ import ConsultingoSubscriptionsRoot from "./app/consultingo/subscriptions/pages"
 import ConsultingoContactusRoot from "./app/consultingo/contact-us/page";
 import CollectionsRoot from "./app/collections/page";
 import CollectionsShell from "./app/collections/CollectionsShell";
+import CollectionsAboutRoot from "./app/collections/about/page";
 
 export const templateLayouts: Record<
   string,
@@ -188,5 +189,6 @@ export const templates: Record<
   },
   collections: {
     "/": CollectionsRoot,
+    "/about": CollectionsAboutRoot,
   },
 };
