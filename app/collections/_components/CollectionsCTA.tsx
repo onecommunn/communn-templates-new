@@ -1,5 +1,5 @@
 import React from "react";
-import OnOutlineIcon from "./icons/OnOutlineIcon";
+import OmIcon from "./icons/OmIcon";
 
 const CollectionsCTA = () => {
   return (
@@ -20,13 +20,12 @@ const CollectionsCTA = () => {
           <div className="max-w-4xl text-center">
             {/* Logo / Icon */}
             <div className="mx-auto mb-4 flex items-center justify-center">
-             <OnOutlineIcon size={80}/>
+              <OmIcon size={80} color="#fff" />
             </div>
 
             {/* Heading */}
             <h1 className="font-kalnia text-white text-[38px] leading-[44px] md:text-[42px] md:leading-[50px] tracking-wide">
-              The Best Online Shopping 
-              Experience Compared to In-Store
+              The Best Online Shopping Experience Compared to In-Store
             </h1>
 
             {/* Description */}
