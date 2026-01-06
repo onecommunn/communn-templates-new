@@ -46,7 +46,7 @@ const CollectionsFAQs = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Left */}
         <div className="flex flex-col gap-4">
-          <h2 className="text-[42px]/[50px]">Frequently Asked Questions</h2>
+          <h2 className="text-[30px]/[50px]">Frequently Asked Questions</h2>
 
           <p className="font-figtree text-[15px] leading-6 text-zinc-700">
             Quick answers about fabric, weave, and design details.This helps you

@@ -24,7 +24,7 @@ const CollectionsCTA = () => {
             </div>
 
             {/* Heading */}
-            <h1 className="font-kalnia text-white text-[38px] leading-[44px] md:text-[42px] md:leading-[50px] tracking-wide">
+            <h1 className="font-kalnia text-white text-2xl leading-[44px] md:text-[42px] md:leading-[50px] tracking-wide">
               Discover sarees curated for timeless style and everyday elegance.
             </h1>
 
