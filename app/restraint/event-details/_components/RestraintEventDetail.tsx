@@ -478,11 +478,10 @@ const RestraintEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-lg h-fit py-2.5 bg-[#C2A74E] font-sora ${
-                            !isFormValid || isLoading
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
+                          className={`w-full rounded-lg h-fit py-2.5 bg-[#C2A74E] font-sora ${!isFormValid || isLoading
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                            }`}
                           disabled={!isFormValid}
                           onClick={() => {
                             if (!eventData?._id || !eventData?.community?._id) {
@@ -509,11 +508,10 @@ const RestraintEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-lg h-fit py-2.5 bg-[#C2A74E] font-sora ${
-                            !isFormValid || isLoading
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
+                          className={`w-full rounded-lg h-fit py-2.5 bg-[#C2A74E] font-sora ${!isFormValid || isLoading
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                            }`}
                           disabled={!isFormValid}
                           onClick={() => {
                             if (
@@ -544,11 +542,10 @@ const RestraintEventDetail = ({
                           style={{
                             backgroundColor: primaryColor,
                           }}
-                          className={`w-full rounded-lg h-fit py-2.5 bg-[#C2A74E] font-sora ${
-                            !isFormValid || isLoading
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
+                          className={`w-full rounded-lg h-fit py-2.5 bg-[#C2A74E] font-sora ${!isFormValid || isLoading
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                            }`}
                           onClick={() => {
                             if (!eventData?._id || !eventData?.community?._id) {
                               return;
