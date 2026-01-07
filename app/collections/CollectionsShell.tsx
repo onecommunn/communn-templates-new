@@ -18,7 +18,9 @@ export default async function CollectionsShell({
   const initialLoading = !bundle?.home || source;
   const primaryColor = "#C09932";
 
-
+  const message = encodeURIComponent(
+    "Hi 👋 I’m interested in exploring the saree collections at Vinutha Saree Verse. Please share more details."
+  );
 
   return (
     <>
@@ -45,7 +47,7 @@ export default async function CollectionsShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=7259253666`}
+        href={`https://api.whatsapp.com/send?phone=7259253666&text=${message}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"
