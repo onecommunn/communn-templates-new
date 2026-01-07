@@ -2,17 +2,19 @@
 import React, { useContext, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowRight,
+  Dribbble,
   Facebook,
+  Globe,
+  Linkedin,
   LogOut,
   Menu,
   Twitter,
-  User,
   UserRoundPen,
   Wallet,
+  Youtube,
 } from "lucide-react";
-import { FaInstagram, FaYoutube, FaThreads } from "react-icons/fa6";
-import { FaPhoneAlt } from "react-icons/fa";
+import { FaInstagram, FaYoutube, FaThreads, FaXTwitter } from "react-icons/fa6";
+import { FaPhoneAlt, FaPinterest } from "react-icons/fa";
 import { IoMail } from "react-icons/io5";
 import { AuthContext } from "@/contexts/Auth.context";
 import { logoutService } from "@/services/logoutService";
@@ -38,16 +40,39 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  FooterSection,
+  Header,
+  SocialMediaLink,
+} from "@/models/templates/collections/collections-home-model";
+import { formatUrl } from "@/utils/StringFunctions";
 
-const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
-  primaryColor,
-}) => {
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: FaInstagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+  twitter: FaXTwitter,
+  youtube: Youtube,
+  pinterest: FaPinterest,
+  threads: FaThreads,
+};
+
+const CollectionsHeader: React.FC<{
+  primaryColor: string;
+  data: Header;
+  footerData: FooterSection;
+}> = ({ primaryColor, data, footerData }) => {
+  const content = data?.content;
+  const footerContent = footerData?.content
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const auth = useContext(AuthContext);
 
   const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
   const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
+
+  const normalize = (s?: string) => (s ?? "").trim();
 
   const handleLogout = async () => {
     const success = await logoutService();
@@ -101,34 +126,29 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
         />
         {/* Social Icons */}
         <div className="flex items-center gap-4 z-10">
-          <Link href="#">
-            <FaThreads className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
-          </Link>
-          <Link href="#">
-            <FaInstagram className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
-          </Link>
-          <Link href="#">
-            <Facebook className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
-          </Link>
-          <Link href="#">
-            <FaYoutube className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
-          </Link>
-          <Link href="#">
-            <Twitter className="w-4 h-4 hover:scale-110 transition-transform" />
-          </Link>
+          {footerContent?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
+            const key = normalize(each.platform).toLowerCase();
+            const Icon = PLATFORM_ICON[key] ?? Globe;
+            const url = formatUrl(each.url) || "/";
+            return (
+              <Link href={url ?? "/"} key={key}>
+                <Icon className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
+              </Link>
+            );
+          })}
         </div>
 
         {/* Contact Info */}
         <div className="md:flex items-center hidden gap-6 text-sm font-light z-10">
           <div className="flex items-center gap-2 text-base font-lora">
             <FaPhoneAlt size={14} />
-            <span>+91 72592 53666</span>
+            <span>{footerContent?.contact?.phoneNumber}</span>
           </div>
           <span className="opacity-50">|</span>
           <div className="flex items-center gap-2">
             <IoMail size={16} />
             <span className="hidden sm:inline text-base">
-              vinuthaprajwalco@gmail.com
+              {footerContent?.contact?.email}
             </span>
           </div>
         </div>
@@ -140,10 +160,10 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
+                content?.media?.[0] ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
               }
               alt="logo"
-            // className="w-fit"
+              // className="w-fit"
             />
           </Link>
 
@@ -151,25 +171,25 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
           <nav className="hidden md:flex items-center space-x-12 font-figtree">
             <Link
               href="/"
-              className="text-gray-700 hover:text-[#C09932] transition-colors"
+              className="text-gray-700 hover:text-[var(--pri)] transition-colors"
             >
               Home
             </Link>
             <Link
               href="/about"
-              className="text-gray-700 hover:text-[#C09932] transition-colors"
+              className="text-gray-700 hover:text-[var(--pri)] transition-colors"
             >
               About Us
             </Link>
             <Link
               href="/collections"
-              className="text-gray-700 hover:text-[#C09932] transition-colors"
+              className="text-gray-700 hover:text-[var(--pri)] transition-colors"
             >
               Collections
             </Link>
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-[#C09932] transition-colors"
+              className="text-gray-700 hover:text-[var(--pri)] transition-colors"
             >
               Contact
             </Link>
@@ -281,7 +301,6 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
             ) : (
               <Link href="/" aria-label="Login">
                 <Button className="cursor-pointer hover:bg-transparent hover:text-[var(--pri)] border border-[var(--pri)] rounded-[5px] text-sm bg-[var(--pri)] px-6 w-fit inline-flex items-center gap-2">
-
                   <span>
                     <UserRoundPen strokeWidth={1.5} />
                   </span>
@@ -425,7 +444,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
                         }
                         alt="Logo"
-                      // className="w-25 h-15 object-contain"
+                        // className="w-25 h-15 object-contain"
                       />
                     </Link>
                   </div>

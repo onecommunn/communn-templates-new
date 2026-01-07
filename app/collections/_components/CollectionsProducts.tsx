@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
+import { CollectionsSection } from "@/models/templates/collections/collections-home-model";
 
 const products = [
   {
@@ -77,24 +78,36 @@ const products = [
   },
 ];
 
-const CollectionsProducts = () => {
+const CollectionsProducts = ({
+  data,
+  primaryColor,
+}: {
+  data: CollectionsSection;
+  primaryColor: string;
+}) => {
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
   );
+  const content = data?.content;
   return (
-    <section className="mx-auto px-6 md:px-20 py-10 md:py-16 font-kalnia bg-[#E5E5E5]/30">
+    <section
+      className="mx-auto px-6 md:px-20 py-10 md:py-16 font-kalnia bg-[#E5E5E5]/30"
+      style={
+        {
+          "--pri": primaryColor,
+        } as React.CSSProperties
+      }
+    >
       {/* Header */}
       <div className="flex items-center flex-col justify-center gap-4 mb-6 md:mb-12">
-        <div className="text-[#C09932]">
-          <OmIcon size={60} />
+        <div className="text-[var(--pri)]">
+          <OmIcon size={60} color={primaryColor}/>
         </div>
         <h3 className="text-3xl md:text-[42px]/[50px] text-center font-kalnia">
-          Enhance Your Look
+          {content?.heading}
         </h3>
         <p className="font-figtree text-sm md:text-base md:max-w-lg text-center text-gray-600">
-          Each look highlights detailed drapes, subtle jewelry, and composed
-          expressions.. The styling reflects grace, confidence, and cultural
-          depth.
+          {content?.description}
         </p>
       </div>
 
@@ -130,7 +143,7 @@ const CollectionsProducts = () => {
                         <h4 className="text-lg font-medium text-gray-900 line-clamp-1">
                           {product.title}
                         </h4>
-                        <p className="text-[#C09932] font-semibold font-figtree">
+                        <p className="text-[var(--pri)] font-semibold font-figtree">
                           ₹{product.price}
                         </p>
                       </div>
@@ -143,8 +156,8 @@ const CollectionsProducts = () => {
 
           {/* Controls - Positioned relative to the container */}
           <div className="hidden md:block">
-            <CarouselPrevious className="-left-12 border-[#C09932] text-[#C09932] hover:bg-[#C09932] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed" />
-            <CarouselNext className="-right-12 border-[#C09932] text-[#C09932] hover:bg-[#C09932] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed" />
+            <CarouselPrevious className="-left-12 border-[var(--pri)] text-[var(--pri)] hover:bg-[var(--pri)] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed" />
+            <CarouselNext className="-right-12 border-[var(--pri)] text-[var(--pri)] hover:bg-[var(--pri)] hover:text-white cursor-pointer disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed" />
           </div>
         </Carousel>
       </div>

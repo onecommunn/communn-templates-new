@@ -7,16 +7,27 @@ import CollectionsFooter from "./_components/CollectionsFooter";
 import Link from "next/link";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
 import PhoneIcon from "@/components/icons/PhoneIcon";
+import { HomeSection } from "@/models/templates/consultingo/consultingo-home-model";
+import { FooterSection, Header } from "@/models/templates/collections/collections-home-model";
+import { HomedummyData } from "./home-dummy-data";
 
 export default async function CollectionsShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getCollectionsCMSBundle(community._id);
-  const source = bundle?.home;
+  const source = bundle?.home ?? HomedummyData;
 
   const initialLoading = !bundle?.home || source;
-  const primaryColor = "#C09932";
+  const primaryColor = source?.color?.primary ?? "#C09932";
+
+  const headerData = source?.sections?.find(
+    (s: HomeSection): s is Header => s.sectionName === "headerSection"
+  );
+
+  const footerData = source?.sections?.find(
+    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
+  );
 
   const message = encodeURIComponent(
     "Hi 👋 I’m interested in exploring the saree collections at Vinutha Saree Verse. Please share more details."
@@ -70,9 +81,9 @@ export default async function CollectionsShell({
         </button>
       </Link>
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
-        <CollectionsHeader primaryColor={primaryColor} />
+        <CollectionsHeader primaryColor={primaryColor} data={headerData} footerData={footerData}/>
         <main>{children}</main>
-        <CollectionsFooter />
+        <CollectionsFooter data={footerData}/>
       </CMSProvider>
     </>
   );

@@ -6,6 +6,7 @@ import FreeShippingIcon from "./icons/FreeShippingIcon";
 import LiveShoppingIcon from "./icons/LiveShoppingIcon";
 import CustomerCareIcon from "./icons/CustomerCareIcon";
 import StitchingIcon from "./icons/StitchingIcon";
+import { FeatureStripSection } from "@/models/templates/collections/collections-home-model";
 
 const services = [
   { label: "Safe & Secure Payment", Icon: SecurePaymentIcon },
@@ -15,9 +16,14 @@ const services = [
   { label: "Stitching Service", Icon: StitchingIcon },
 ];
 
-const CollectionsService = () => {
-  const primaryColor = "#C09932";
-
+const CollectionsService = ({
+  data,
+  primaryColor,
+}: {
+  data: FeatureStripSection;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
   return (
     <section
       className="relative w-full overflow-hidden"
@@ -53,19 +59,19 @@ const CollectionsService = () => {
       {/* Content */}
       <div className="relative mx-auto max-w-[1400px] px-6 md:px-0 py-10 md:py-0">
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5">
-          {services.map(({ label, Icon }, idx) => (
+          {content?.chips?.map(({ text, image }, idx) => (
             <div
-              key={label}
+              key={text}
               className="relative flex flex-col items-center justify-center gap-4 py-6 md:py-12 text-center"
             >
               {/* Icon */}
               <div className="text-white">
-                <Icon />
+                <img src={image} alt={`${text} image`} className="w-14 h-14"/>
               </div>
 
               {/* Title */}
               <p className="font-figtree text-white text-[16px] md:text-[20px] leading-tight">
-                {label}
+                {text}
               </p>
 
               {/* Divider */}

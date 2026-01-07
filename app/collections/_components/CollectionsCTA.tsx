@@ -1,13 +1,32 @@
 import React from "react";
 import OmIcon from "./icons/OmIcon";
+import { CTAsection } from "@/models/templates/collections/collections-home-model";
+import Link from "next/link";
 
-const CollectionsCTA = () => {
+const CollectionsCTA = ({
+  data,
+  primaryColor,
+}: {
+  data: CTAsection;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
   return (
-    <section className="px-4 md:px-10 py-8">
+    <section
+      className="px-4 md:px-10 py-8"
+      style={
+        {
+          "--pri": primaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="relative w-full overflow-hidden rounded-[12px] min-h-[520px] md:min-h-[620px]">
         {/* Background Image */}
         <img
-          src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg"
+          src={
+            content?.media ??
+            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg"
+          }
           alt="Hero background"
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -25,29 +44,28 @@ const CollectionsCTA = () => {
 
             {/* Heading */}
             <h1 className="font-kalnia text-white text-2xl leading-[44px] md:text-[42px] md:leading-[50px] tracking-wide">
-              Discover sarees curated for timeless style and everyday elegance.
+              {content?.heading}
             </h1>
 
             {/* Description */}
             <p className="mt-6 font-figtree text-white/85 text-[14px] md:text-[16px] leading-6 md:leading-7 max-w-3xl mx-auto">
-              Explore a wide range of handpicked saree designs, from classic
-              weaves to modern drapes. Each piece reflects refined
-              craftsmanship, rich fabrics, and thoughtful detailing.
+              {content?.description}
             </p>
 
             {/* CTA */}
             <div className="mt-10 flex justify-center">
-              <button
+              <Link
+                href={content?.buttons?.url}
                 className="
-                  bg-[#B8922D] hover:bg-[#a98123] cursor-pointer
+                  bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer
                   text-white font-figtree
                   px-10 py-4 rounded-[6px]
                   text-[14px] md:text-[15px]
                   transition
                 "
               >
-                Get in touch
-              </button>
+                {content?.buttons?.label}
+              </Link>
             </div>
           </div>
         </div>
