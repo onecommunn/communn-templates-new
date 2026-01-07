@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import OmIcon from "../../_components/icons/OmIcon";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import { useEffect, useRef } from "react";
+import { TestimoniesSection } from "@/models/templates/collections/collections-about-model";
 
 type Review = {
   id: string;
@@ -11,30 +12,6 @@ type Review = {
   name: string;
   role?: string;
 };
-
-const items: Review[] = [
-  {
-    id: "1",
-    rating: 5,
-    text: "The saree quality exceeded my expectations. The fabric, color and finish were exactly as shown. Truly elegant.\nPerfect for festive occasions. The saree looked royal and felt extremely comfortable all day.\nIt feels special knowing this saree supports traditional artisans. The handloom work is stunning.\nIt feels special knowing this saree supports traditional artisans. The handloom work is stunning.",
-    name: "Mehwish Nihal",
-    role: "Architect",
-  },
-  {
-    id: "2",
-    rating: 5,
-    text: "Loved the drape and detailing. The weave is premium and the finish looks even better in person.\nCustomer support helped me choose the right shade for my occasion—super smooth experience.",
-    name: "Ananya Rao",
-    role: "Product Designer",
-  },
-  {
-    id: "3",
-    rating: 4,
-    text: "Beautiful saree and delivery was on time. The blouse piece is also high quality.\nWould definitely recommend for weddings and celebrations.",
-    name: "Shreya Menon",
-    role: "Consultant",
-  },
-];
 
 function StarRow({ rating = 5 }: { rating?: number }) {
   const stars = Array.from({ length: 5 }, (_, i) => i < rating);
@@ -64,7 +41,15 @@ function StarRow({ rating = 5 }: { rating?: number }) {
   );
 }
 
-const CollectionsTestimonialsSection = () => {
+const CollectionsTestimonialsSection = ({
+  data,
+  primaryColor,
+}: {
+  data: TestimoniesSection;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
+  const items = content?.testimonies;
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const AUTOPLAY_DELAY = 3000; // 5 seconds
 
@@ -103,7 +88,14 @@ const CollectionsTestimonialsSection = () => {
 
   const current = items[active];
   return (
-    <section className="w-full bg-[#C09932]/20 overflow-hidden">
+    <section
+      className="w-full bg-[var(--pri)]/20 overflow-hidden"
+      style={
+        {
+          "--pri": primaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="mx-auto  px-4 sm:px-6 lg:px-8">
         <div className="relative py-14 md:py-20">
           {/* Prev / Next buttons */}
@@ -135,27 +127,27 @@ const CollectionsTestimonialsSection = () => {
             onMouseEnter={stopAutoplay}
             onMouseLeave={startAutoplay}
           >
-            <OmIcon size={60} />
+            <OmIcon size={60} color={primaryColor} />
 
             <h2 className="mt-5 font-kalnia text-[30px] leading-[42px] text-black md:text-[52px] text-center whitespace-normal break-words text-balance">
-              {"Here's Our Clients Honest Review"}
+              {content?.heading}
             </h2>
 
             <div className="mt-8 text-[#0B2239]">
-              <StarRow rating={current.rating} />
+              <StarRow rating={current?.rating} />
             </div>
 
             <p className="mt-8 whitespace-pre-line text-[16px] leading-8 text-black/70 md:text-[18px]">
-              {current.text}
+              {current?.quote}
             </p>
 
             <div className="mt-10">
               <p className="font-kalnia text-[22px] text-black/80 md:text-[26px]">
-                {current.name}
+                {current?.name}
               </p>
-              {current.role ? (
+              {current?.designation ? (
                 <p className="mt-1 font-kalnia text-[14px] tracking-wide text-black/60">
-                  - {current.role}
+                  - {current?.designation}
                 </p>
               ) : null}
             </div>

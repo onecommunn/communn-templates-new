@@ -13,6 +13,7 @@ interface CollectionsAboutSection {
     label: string;
     url: string;
   };
+  primaryColor: string;
 }
 
 const CollectionsAboutSection = ({
@@ -22,12 +23,22 @@ const CollectionsAboutSection = ({
   image,
   button,
   imagePlace = "Left",
+  primaryColor,
 }: CollectionsAboutSection) => {
   return (
-    <section className="mx-auto px-6 md:px-20 py-10">
+    <section
+      className="mx-auto px-6 md:px-20 py-10"
+      style={
+        {
+          "--pri": primaryColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Left */}
-        <div className={`${imagePlace === "Left" ? "md:order-0" : "md:order-1"}`}>
+        <div
+          className={`${imagePlace === "Left" ? "md:order-0" : "md:order-1"}`}
+        >
           <img
             src={image}
             alt={title}
@@ -36,15 +47,17 @@ const CollectionsAboutSection = ({
         </div>
         {/* Right */}
         <div className="flex flex-col gap-4">
-          <OmIcon size={60} />
-          <h3 className="font-kalnia text-[24px]/[34px] md:text-[35px]/[50px]">{title}</h3>
+          <OmIcon size={60} color={primaryColor} />
+          <h3 className="font-kalnia text-[24px]/[34px] md:text-[35px]/[50px]">
+            {title}
+          </h3>
           <p className="font-figtree text-base">{description}</p>
           <ul className="space-y-4">
             {pointes &&
               pointes.length > 0 &&
               pointes?.map((p, idx) => (
                 <li className="flex items-center gap-2" key={idx}>
-                  <CollectionsPointIcon size={30} />
+                  <CollectionsPointIcon size={30} color={primaryColor}/>
                   <p className="font-lora text-base">{p}</p>
                 </li>
               ))}
@@ -52,7 +65,7 @@ const CollectionsAboutSection = ({
 
           <Link
             href={button?.url ?? "/"}
-            className="bg-[#C09932] w-fit font-figtree cursor-pointer hover:bg-[#A6822B] text-white px-8 py-3 text-sm font-medium rounded-sm transition-all transform hover:scale-105"
+            className="bg-[var(--pri)] w-fit font-figtree cursor-pointer hover:bg-[var(--pri)]/90 text-white px-8 py-3 text-sm font-medium rounded-sm transition-all transform hover:scale-105"
           >
             {button?.label}
           </Link>

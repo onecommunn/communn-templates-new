@@ -55,7 +55,7 @@ const CollectionsCTA = ({
             {/* CTA */}
             <div className="mt-10 flex justify-center">
               <Link
-                href={content?.buttons?.url}
+                href={content?.buttons?.url ?? '/'}
                 className="
                   bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer
                   text-white font-figtree
