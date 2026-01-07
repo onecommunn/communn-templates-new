@@ -110,9 +110,9 @@ const CollectionsFooter = () => {
             © Vinutha verse all rights Reserved
           </p>
           <p>
-            Powered by{" "}
+            Made with ❤️ by {" "}
             <span className="text-white font-medium">
-              <Link href={"https://communn.io/"}>Communn</Link>
+              <Link href={"https://communn.io/"}>communn.io</Link>
             </span>
           </p>
         </div>

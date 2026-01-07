@@ -143,7 +143,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                 "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
               }
               alt="logo"
-              className="w-fit h-15 object-cover"
+            // className="w-fit"
             />
           </Link>
 
@@ -279,11 +279,11 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                 </Popover>
               </div>
             ) : (
-              <Link href="/login" aria-label="Login">
+              <Link href="/" aria-label="Login">
                 <Button className="cursor-pointer hover:bg-transparent hover:text-[var(--pri)] border border-[var(--pri)] rounded-[5px] text-sm bg-[var(--pri)] px-6 w-fit inline-flex items-center gap-2">
-                  Login
+
                   <span>
-                    <ArrowRight className="h-4 w-4" />
+                    <UserRoundPen strokeWidth={1.5} />
                   </span>
                 </Button>
               </Link>
@@ -422,10 +422,10 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                     >
                       <img
                         src={
-                          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Container.svg"
+                          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
                         }
                         alt="Logo"
-                        className="w-25 h-15 object-contain"
+                      // className="w-25 h-15 object-contain"
                       />
                     </Link>
                   </div>
@@ -476,7 +476,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                 </nav>
 
                 {/* CTA pinned at bottom */}
-                <div className="px-4 pt-2 pb-6">
+                {/* <div className="px-4 pt-2 pb-6">
                   <SheetClose asChild>
                     {!auth.isAuthenticated && (
                       <Link href="/login" className="w-full">
@@ -486,7 +486,7 @@ const CollectionsHeader: React.FC<{ primaryColor: string }> = ({
                       </Link>
                     )}
                   </SheetClose>
-                </div>
+                </div> */}
               </SheetContent>
             </Sheet>
           </div>

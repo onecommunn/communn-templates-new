@@ -30,7 +30,7 @@ export default async function CollectionsShell({
           boxShadow:
             "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
         }}
-        className="fixed flex items-center justify-center bottom-[2%] left-[2%]! z-[99] bg-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
+        className="fixed flex items-center justify-center bottom-[7%] left-[2%]! z-[99] bg-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
       >
         <button className="cursor-pointer">
           <PhoneIcon
@@ -55,7 +55,7 @@ export default async function CollectionsShell({
             "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
           backgroundImage: "linear-gradient(to right, #59ee75, #28d045)",
         }}
-        className="fixed flex items-center justify-center bottom-[2%] right-[2%]! z-[99] text-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
+        className="fixed flex items-center justify-center bottom-[7%] right-[2%]! z-[99] text-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
       >
         <button className="cursor-pointer">
           <WhatsappIcon
