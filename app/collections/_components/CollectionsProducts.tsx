@@ -11,79 +11,17 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import { CollectionsSection } from "@/models/templates/collections/collections-home-model";
+import { ItemsSections } from "@/models/templates/collections/collections-collection-model";
 
-const products = [
-  {
-    id: 1,
-    title: "Banarasi Silk Wedding Saree",
-    price: "4000",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg",
-  },
-  {
-    id: 2,
-    title: "Fashion Georgette Saree",
-    price: "6000",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ac20c5a29535b4242ec0cdcbc2d211542665e37c.jpg",
-  },
-  {
-    id: 3,
-    title: "Designer Lahenga Choli",
-    price: "4800",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/28683a34ce4fec00a49cec22115dbb7f426257d7.jpg",
-  },
-  {
-    id: 4,
-    title: "Bengali Bridal Saree",
-    price: "8000",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/650f35bcb3082d5821188c7ea7ad65bbbbb6caaf.jpg",
-  },
-  {
-    id: 5,
-    title: "A Line Long Sleeve Gown",
-    price: "4000",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/330b6b3b09b00a2723d6dfc435eb9f2eeb0f0370.jpg",
-  },
-  {
-    id: 6,
-    title: "A Line Sleeveless Wedding Dress",
-    price: "600",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7ed8c4ddc9ff11584127fbc7d3687648301cfef9.jpg",
-  },
-  {
-    id: 7,
-    title: "Banarasi Silk Wedding Saree",
-    price: "4800",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
-  },
-  {
-    id: 8,
-    title: "Bengali Bridal Saree",
-    price: "8000",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/a125603cb16bf58d39bc761d5a4361da4f00ad2b.jpg",
-  },
-  {
-    id: 9,
-    title: "Bridal Wedding Saree",
-    price: "12000",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/71b586be092c99929a4d1095d0bce841d99cffaa.jpg",
-  },
-];
 
 const CollectionsProducts = ({
   data,
   primaryColor,
+  products,
 }: {
   data: CollectionsSection;
   primaryColor: string;
+  products: ItemsSections;
 }) => {
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
@@ -101,7 +39,7 @@ const CollectionsProducts = ({
       {/* Header */}
       <div className="flex items-center flex-col justify-center gap-4 mb-6 md:mb-12">
         <div className="text-[var(--pri)]">
-          <OmIcon size={60} color={primaryColor}/>
+          <OmIcon size={60} color={primaryColor} />
         </div>
         <h3 className="text-3xl md:text-[42px]/[50px] text-center font-kalnia">
           {content?.heading}
@@ -122,9 +60,9 @@ const CollectionsProducts = ({
           plugins={[plugin.current]}
         >
           <CarouselContent className="-ml-4">
-            {products.map((product) => (
+            {products?.content?.itembox?.map((product, idx) => (
               <CarouselItem
-                key={product.id}
+                key={idx}
                 className="pl-4 md:basis-1/3 lg:basis-1/4"
               >
                 <div className="group cursor-pointer">
@@ -133,7 +71,7 @@ const CollectionsProducts = ({
                       {/* Image Container */}
                       <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
                         <img
-                          src={product.image}
+                          src={product.media}
                           alt={product.title}
                           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                         />

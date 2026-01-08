@@ -5,6 +5,7 @@ type CollectionsCMSBundle = {
   home: any | null;
   aboutUs: any | null;
   contact: any | null;
+  collections: any | null;
 };
 
 async function fetchJSON(url: string) {
@@ -20,10 +21,11 @@ async function fetchCollectionsBundle(
   communityId: string
 ): Promise<CollectionsCMSBundle> {
   const base = `${BASE_URL_V2}/cms/get-section/community`;
-  const [home, aboutUs, contact] = await Promise.all([
+  const [home, aboutUs, contact, collections] = await Promise.all([
     fetchJSON(`${base}/${communityId}?templateId=collections&page=home`),
     fetchJSON(`${base}/${communityId}?templateId=collections&page=aboutUs`),
     fetchJSON(`${base}/${communityId}?templateId=collections&page=contact`),
+    fetchJSON(`${base}/${communityId}?templateId=collections&page=collections`),
     // add more pages
   ]);
 
@@ -31,6 +33,7 @@ async function fetchCollectionsBundle(
     home: home?.data ?? null,
     aboutUs: aboutUs?.data ?? null,
     contact: contact?.data ?? null,
+    collections: collections?.data ?? null,
     // add more pages
   };
 }

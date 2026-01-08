@@ -24,13 +24,27 @@ import {
   TestimoniesSection,
 } from "@/models/templates/collections/collections-home-model";
 import { HomedummyData } from "./home-dummy-data";
+import {
+  CollectionsCollectionPage,
+  CollectionSection,
+  ItemsSections,
+} from "@/models/templates/collections/collections-collection-model";
+import { CollectiondummyData } from "./collections/collections-dummy-data";
 
 const CollectionsRoot = () => {
-  const { home } = useCMS();
+  const { home, collections } = useCMS();
   const isLoading = home === undefined;
   const source: CollectionsHomePage | undefined = !isLoading
     ? (home as CollectionsHomePage | undefined) ?? HomedummyData
     : undefined;
+
+  const isCollectionLoading = collections === undefined;
+
+  const collectionsSource: CollectionsCollectionPage | undefined =
+    !isCollectionLoading
+      ? (collections as CollectionsCollectionPage | undefined) ??
+        CollectiondummyData
+      : undefined;
 
   const primaryColor = source?.color?.primary ?? "#C09932";
 
@@ -79,6 +93,11 @@ const CollectionsRoot = () => {
       s.sectionName === "testimoniesSection" && s.isActive
   );
 
+  const itemsSection = collectionsSource?.sections?.find(
+    (s: CollectionSection): s is ItemsSections =>
+      s.sectionName === "itemsSections" && s.isActive
+  );
+
   return (
     <>
       {heroSectionData && (
@@ -91,10 +110,11 @@ const CollectionsRoot = () => {
         />
       )}
 
-      {collectionsSectionData && (
+      {collectionsSectionData && itemsSection && (
         <CollectionsProducts
           data={collectionsSectionData}
           primaryColor={primaryColor}
+          products={itemsSection}
         />
       )}
 
