@@ -47,9 +47,9 @@ const getDistance = (
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * (Math.PI / 180)) *
-      Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // Distance in km
 };
@@ -215,7 +215,7 @@ const InfluencerDetailsPage = () => {
     <main className="min-h-screen bg-white font-montserrat pb-20">
       {/* ===== Header Navigation ===== */}
       <div className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b">
-        <div className="mx-auto px-6 py-3 flex items-center justify-between gap-2">
+        <div className="mx-auto  px-2 md:px-2 py-3 flex items-center justify-between gap-2">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -251,14 +251,14 @@ const InfluencerDetailsPage = () => {
         </div>
       </div>
 
-      <div className="mx-auto px-6 mt-6">
+      <div className="mx-auto px-2 md:px-2 mt-2 md:mt-2">
         {/* ===== Interactive Gallery Section ===== */}
-        <div className="grid grid-cols-12 gap-2 md:h-[500px]">
+        <div className="grid grid-cols-12 gap-5 md:h-[500px]">
           {/* Main Display Image */}
           <div className="col-span-12 md:col-span-10 relative overflow-hidden rounded-lg bg-gray-100">
             <img
               src={images[activeIndex]}
-              className="w-full h-[500px] object-contain "
+              className="w-full h-[500px] object-cover "
               alt={`Main view of ${recommendation?.placeName}`}
             />
 
@@ -311,11 +311,10 @@ const InfluencerDetailsPage = () => {
                 aria-label={`View image ${idx + 1}`}
                 onClick={() => setActiveIndex(idx)}
                 // Fixed height (h-[162px]) ensures 3 are visible at once, but more can be scrolled
-                className={`relative h-[100px] w-1/3 md:w-full md:h-[162px] flex-shrink-0 cursor-pointer overflow-hidden rounded-lg transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
-                  activeIndex === idx
-                    ? "ring-4 ring-slate-300"
-                    : "opacity-70 hover:opacity-100"
-                }`}
+                className={`relative h-[100px] w-1/3 md:w-full md:h-[162px] flex-shrink-0 cursor-pointer overflow-hidden rounded-lg transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${activeIndex === idx
+                  ? "ring-4 ring-slate-300"
+                  : "opacity-70 hover:opacity-100"
+                  }`}
               >
                 <img
                   src={img}
@@ -331,11 +330,11 @@ const InfluencerDetailsPage = () => {
         </div>
 
         {/* ===== Main Content Area ===== */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-5">
           <div className="md:col-span-2 space-y-4">
             <section>
               <h2 className="text-xl font-bold mb-1">Description</h2>
-              <p className="text-[#646464] text-sm leading-relaxed">
+              <p className="text-[#646464] text-[12px] md:text-[13px] leading-relaxed">
                 {recommendation?.description}
               </p>
             </section>
@@ -446,16 +445,16 @@ const InfluencerDetailsPage = () => {
                     icon={<Facebook size={16} />}
                     text={recommendation?.socialLink?.facebookLink}
                   />
+                </div>
+                <div className="mt-5 space-y-3">
                   <Link
                     href={recommendation?.googleMapLink || "#"}
                     target="_blank"
                     className="text-slate-600 text-[13px] font-bold block pt-2 hover:underline"
                   >
-                    View on Google Maps
+                    <Button className="w-full"> View on Google Maps</Button>
+
                   </Link>
-                </div>
-                <div className="mt-8 space-y-3">
-                  <Button className="w-full">Make Reservation</Button>
                   {/* <Button
                     variant="outline"
                     className="w-full h-[52px] rounded-xl font-bold text-sm border-gray-200 hover:bg-gray-50 text-gray-700 transition-all active:scale-[0.98]"

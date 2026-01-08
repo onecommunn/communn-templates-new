@@ -185,7 +185,12 @@ export default function MartivoFooter({
             {content?.copyrightText}
           </div>
           <div className="py-4 text-center text-[15px] text-white/70">
-            Made with ❤️ by communn.io
+            <p>
+              Made with ❤️ by {" "}
+              <span className="text-slate-600 font-medium">
+                <Link href={"https://communn.io/"}>communn.io</Link>
+              </span>
+            </p>
           </div>
         </div>
       </div>

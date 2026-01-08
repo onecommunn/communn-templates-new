@@ -186,7 +186,12 @@ export default function RestraintFooter({
         <div className="mt-6 flex flex-col-reverse items-center md:items-start justify-between gap-4 text-xs text-white sm:flex-row">
           <p>{content?.copyrightText}</p>
 
-          <p> Made with ❤️ by communn.io</p>
+          <p>
+            Made with ❤️ by {" "}
+            <span className="text-slate-600 font-medium">
+              <Link href={"https://communn.io/"}>communn.io</Link>
+            </span>
+          </p>
         </div>
       </div>
     </footer>
