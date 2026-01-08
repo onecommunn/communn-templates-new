@@ -147,8 +147,8 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) ** 2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
@@ -235,6 +235,7 @@ export default function InfluencerPage() {
     mapTypeId: "roadmap",
     disableDefaultUI: true,
     minZoom: 3,
+    gestureHandling: "greedy",
   };
 
   const onLoad = React.useCallback((mapInstance: google.maps.Map) => {
@@ -384,9 +385,8 @@ export default function InfluencerPage() {
               return (
                 <Card
                   key={place._id}
-                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
-                    isSelected ? "border-slate-300" : "hover:border-slate-300"
-                  }`}
+                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${isSelected ? "border-slate-300" : "hover:border-slate-300"
+                    }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
                     handlePlaceClick(
@@ -520,12 +520,12 @@ export default function InfluencerPage() {
   const titleText = isLocating
     ? "Finding nearby..."
     : placeValue?.label
-    ? placeValue.label
-    : userLocation?.city
-    ? `${userLocation.city} (50 km)`
-    : userLocation
-    ? "Nearby (50 km)"
-    : "Explore places";
+      ? placeValue.label
+      : userLocation?.city
+        ? `${userLocation.city} (50 km)`
+        : userLocation
+          ? "Nearby (50 km)"
+          : "Explore places";
 
   return (
     <main className="relative min-h-screen bg-[#F6F7FB] font-montserrat">
@@ -659,11 +659,10 @@ export default function InfluencerPage() {
             <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                  activeCategory === "all"
-                    ? "bg-slate-900 text-white"
-                    : "bg-white hover:bg-slate-50"
-                }`}
+                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${activeCategory === "all"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white hover:bg-slate-50"
+                  }`}
                 onClick={() => setActiveCategory("all")}
               >
                 All
@@ -678,11 +677,10 @@ export default function InfluencerPage() {
                   <Badge
                     key={index}
                     variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                      isActive
-                        ? "bg-slate-900 text-white"
-                        : "bg-white hover:bg-slate-50"
-                    }`}
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
+                      ? "bg-slate-900 text-white"
+                      : "bg-white hover:bg-slate-50"
+                      }`}
                     onClick={() => setActiveCategory(name)}
                   >
                     {Icon && <Icon size={16} strokeWidth={1.5} />}
@@ -757,9 +755,8 @@ export default function InfluencerPage() {
 
               {/* RIGHT PANEL */}
               <div
-                className={`relative hidden md:flex ${
-                  panelOpen ? "w-[30rem]" : "w-[0px]"
-                } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
+                  } shrink-0 transition-all`}
               >
                 {/* <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -774,9 +771,8 @@ export default function InfluencerPage() {
                 </button> */}
 
                 <div
-                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${
-                    panelOpen ? "" : "hidden"
-                  }`}
+                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
+                    }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -840,11 +836,10 @@ export default function InfluencerPage() {
               </div>
 
               <div
-                className={`relative hidden md:flex ${
-                  panelOpen ? "w-[30rem]" : "w-[0px]"
-                } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
+                  } shrink-0 transition-all`}
               >
-                {/* <button
+                <button
                   onClick={() => setPanelOpen((p) => !p)}
                   className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
                   title="Toggle panel"
@@ -854,12 +849,11 @@ export default function InfluencerPage() {
                   ) : (
                     <ChevronLeft className="h-4 w-4" />
                   )}
-                </button> */}
+                </button>
 
                 <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
-                    panelOpen ? "" : "hidden"
-                  }`}
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
+                    }`}
                 >
                   {renderResultsList()}
                 </div>
