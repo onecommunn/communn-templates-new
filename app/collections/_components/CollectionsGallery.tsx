@@ -15,12 +15,12 @@ const CollectionsGallery = ({
         {/* Column 1: Far Left (Smallest) */}
         <div className="md:col-span-1 flex flex-col gap-1 md:gap-2 h-full">
           <img
-            src={images[0]}
+            src={images[1]}
             className="h-full w-full object-cover rounded-sm"
             alt="gallery"
           />
           <img
-            src={images[1]}
+            src={images[2]}
             className="h-full w-full object-cover rounded-sm"
             alt="gallery"
           />
@@ -29,12 +29,12 @@ const CollectionsGallery = ({
         {/* Column 2: Inner Left (Medium) */}
         <div className="md:col-span-1 flex flex-col gap-1 md:gap-2 h-full">
           <img
-            src={images[2]}
+            src={images[3]}
             className="h-[60%] w-full object-cover rounded-sm"
             alt="gallery"
           />
           <img
-            src={images[3]}
+            src={images[4]}
             className="h-[40%] w-full object-cover rounded-sm"
             alt="gallery"
           />
@@ -43,7 +43,7 @@ const CollectionsGallery = ({
         {/* Column 3: THE CENTER (Large Feature) */}
         <div className="col-span-2 md:col-span-6 h-full overflow-hidden rounded-md group relative">
           <img
-            src={images[4]}
+            src={images[0]}
             className="w-full h-full object-cover max-h-[500px]"
             alt="End of Season Sale"
           />

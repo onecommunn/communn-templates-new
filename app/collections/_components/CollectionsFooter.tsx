@@ -53,16 +53,21 @@ const CollectionsFooter = ({ data }: { data: FooterSection }) => {
             {content?.description}
           </p>
           <div className="flex items-center gap-5 text-gray-300">
-            {content?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
-              const key = normalize(each.platform).toLowerCase();
-              const Icon = PLATFORM_ICON[key] ?? Globe;
-              const url = formatUrl(each.url) || "/";
-              return (
-                <Link href={url ?? "/"} key={key}>
-                  <Icon className="size-5 hover:text-white transition-colors" />
-                </Link>
-              );
-            })}
+            {content?.socialMedia
+              ?.filter(
+                (each: SocialMediaLink) =>
+                  each.url && each.url.trim().length > 0
+              )
+              .map((each: SocialMediaLink, idx: number) => {
+                const key = normalize(each.platform).toLowerCase();
+                const Icon = PLATFORM_ICON[key] ?? Globe;
+                const url = formatUrl(each.url) || "/";
+                return (
+                  <Link href={url ?? "/"} key={key}>
+                    <Icon className="size-5 hover:text-white transition-colors" />
+                  </Link>
+                );
+              })}
           </div>
         </div>
 

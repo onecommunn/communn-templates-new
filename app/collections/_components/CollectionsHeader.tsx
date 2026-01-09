@@ -64,7 +64,7 @@ const CollectionsHeader: React.FC<{
   footerData: FooterSection;
 }> = ({ primaryColor, data, footerData }) => {
   const content = data?.content;
-  const footerContent = footerData?.content
+  const footerContent = footerData?.content;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const auth = useContext(AuthContext);
@@ -126,16 +126,21 @@ const CollectionsHeader: React.FC<{
         />
         {/* Social Icons */}
         <div className="flex items-center gap-4 z-10">
-          {footerContent?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
-            const key = normalize(each.platform).toLowerCase();
-            const Icon = PLATFORM_ICON[key] ?? Globe;
-            const url = formatUrl(each.url) || "/";
-            return (
-              <Link href={url ?? "/"} key={key}>
-                <Icon className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
-              </Link>
-            );
-          })}
+          {footerContent?.socialMedia
+            ?.filter(
+              (each: SocialMediaLink) => each.url && each.url.trim().length > 0
+            )
+            .map((each: SocialMediaLink) => {
+              const key = normalize(each.platform).toLowerCase();
+              const Icon = PLATFORM_ICON[key] ?? Globe;
+              const url = formatUrl(each.url);
+
+              return (
+                <Link href={url} key={key}>
+                  <Icon className="w-6 h-6 md:w-4 md:h-4 hover:scale-110 transition-transform" />
+                </Link>
+              );
+            })}
         </div>
 
         {/* Contact Info */}
@@ -160,7 +165,8 @@ const CollectionsHeader: React.FC<{
           <Link href="/" className="flex items-center space-x-2">
             <img
               src={
-                content?.media?.[0] ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
+                content?.media?.[0] ??
+                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
               }
               alt="logo"
               // className="w-fit"
