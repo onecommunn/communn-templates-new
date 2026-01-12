@@ -156,7 +156,7 @@ const CollectionsProductesList = ({
                   <h4 className="text-xs md:text-lg font-normal text-gray-900 font-kalnia">
                     {product.title}
                   </h4>
-                  <p className="text-[#C09932] font-semibold font-figtree text-lg md:text-[20px]">
+                  <p className="text-[var(--pri)] font-semibold font-figtree text-lg md:text-[20px]">
                     ₹{product.price}
                   </p>
                 </div>
@@ -185,7 +185,7 @@ const CollectionsProductesList = ({
               onClick={() => goTo(1)}
               className={`h-9 w-9 rounded-full border transition font-figtree text-sm ${
                 currentPage === 1
-                  ? "bg-[#C09932] text-white border-[#C09932]"
+                  ? "bg-[var(--pri)] text-white border-[var(--pri)]"
                   : "bg-white text-black/70 border-black/15 hover:bg-black/5"
               }`}
             >
@@ -204,7 +204,7 @@ const CollectionsProductesList = ({
             onClick={() => goTo(p)}
             className={`h-9 w-9 rounded-full cursor-pointer border transition font-figtree text-sm ${
               currentPage === p
-                ? "bg-[#C09932] text-white border-[#C09932]"
+                ? "bg-[var(--pri)] text-white border-[var(--pri)]"
                 : "bg-white text-black/70 border-black/15 hover:bg-black/5"
             }`}
             aria-current={currentPage === p ? "page" : undefined}
@@ -223,7 +223,7 @@ const CollectionsProductesList = ({
               onClick={() => goTo(totalPages)}
               className={`h-9 w-9 rounded-full border transition font-figtree text-sm ${
                 currentPage === totalPages
-                  ? "bg-[#C09932] text-white border-[#C09932]"
+                  ? "bg-[var(--pri)] text-white border-[var(--pri)]"
                   : "bg-white text-black/70 border-black/15 hover:bg-black/5"
               }`}
             >
