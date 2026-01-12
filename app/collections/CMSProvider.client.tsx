@@ -12,6 +12,7 @@ export type Bundle = {
   home: any | null;
   aboutUs: any | null;
   contact: any | null;
+  collections: any | null;
   // add more pages
 };
 
@@ -24,6 +25,7 @@ const defaultBundle: Bundle = {
   home: null,
   aboutUs: null,
   contact: null,
+  collections: null,
   // add more pages
 };
 

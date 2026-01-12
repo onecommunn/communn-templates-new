@@ -1,23 +1,48 @@
 "use client";
 
 import React from "react";
-import SecurePaymentIcon from "./icons/SecurePaymentIcon";
-import FreeShippingIcon from "./icons/FreeShippingIcon";
-import LiveShoppingIcon from "./icons/LiveShoppingIcon";
-import CustomerCareIcon from "./icons/CustomerCareIcon";
-import StitchingIcon from "./icons/StitchingIcon";
+import { FeatureStripSection } from "@/models/templates/collections/collections-home-model";
+import Image from "next/image";
+import type { ComponentType, SVGProps } from "react";
+import * as Icons from "lucide-react";
 
-const services = [
-  { label: "Safe & Secure Payment", Icon: SecurePaymentIcon },
-  { label: "Free Shipping", Icon: FreeShippingIcon },
-  { label: "Live Shopping", Icon: LiveShoppingIcon },
-  { label: "Customer Care Service", Icon: CustomerCareIcon },
-  { label: "Stitching Service", Icon: StitchingIcon },
-];
+function IconOrImage({ src, alt }: { src: string; alt: string }) {
+  const isImage =
+    String(src || "").includes("/") || String(src || "").includes(".");
 
-const CollectionsService = () => {
-  const primaryColor = "#C09932";
+  if (!isImage && src in Icons) {
+    const Ico = Icons[src as keyof typeof Icons] as ComponentType<
+      SVGProps<SVGSVGElement>
+    >;
+    return (
+      <Ico
+        className="h-14 w-14 text-[#fff]"
+        aria-label={alt}
+        strokeWidth={1}
+      />
+    );
+  }
+  return (
+    <Image
+      src={src || "/assets/restraint-about-image01.svg"}
+      alt={alt}
+      width={50}
+      height={50}
+     className="w-14 h-14"
+      unoptimized
+    />
+  );
+}
 
+const CollectionsService = ({
+  data,
+  primaryColor,
+}: {
+  data: FeatureStripSection;
+  primaryColor: string;
+}) => {
+  const content = data?.content;
+  const services = content?.chips;
   return (
     <section
       className="relative w-full overflow-hidden"
@@ -53,19 +78,19 @@ const CollectionsService = () => {
       {/* Content */}
       <div className="relative mx-auto max-w-[1400px] px-6 md:px-0 py-10 md:py-0">
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5">
-          {services.map(({ label, Icon }, idx) => (
+          {content?.chips?.map(({ text, image }, idx) => (
             <div
-              key={label}
+              key={`${text}-${idx}`}
               className="relative flex flex-col items-center justify-center gap-4 py-6 md:py-12 text-center"
             >
               {/* Icon */}
               <div className="text-white">
-                <Icon />
+                <IconOrImage src={image} alt={`${text} image`} />
               </div>
 
               {/* Title */}
               <p className="font-figtree text-white text-[16px] md:text-[20px] leading-tight">
-                {label}
+                {text}
               </p>
 
               {/* Divider */}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Marquee } from "@/components/CustomComponents/marquee";
+import { ScrollSection } from "@/models/templates/collections/collections-home-model";
 import React from "react";
 
 function Word({ children }: { children: React.ReactNode }) {
@@ -11,15 +12,14 @@ function Word({ children }: { children: React.ReactNode }) {
   );
 }
 
-const points = [
-  "Silk Saree",
-  "Wedding Saree",
-  "Embroidered Saree",
-  "Casual Wear",
-  "Engagement Saree",
-];
-
-const CollectionsMarquee = ({ primaryColor }: { primaryColor: string }) => {
+const CollectionsMarquee = ({
+  primaryColor,
+  data,
+}: {
+  primaryColor: string;
+  data: ScrollSection;
+}) => {
+  const content = data?.content;
   return (
     <section
       className="relative overflow-hidden py-8 md:py-12 space-y-10 text-white"
@@ -54,14 +54,14 @@ const CollectionsMarquee = ({ primaryColor }: { primaryColor: string }) => {
       <div className="relative mx-auto space-y-10">
         {/* Row 1 → right */}
         <Marquee className="[--duration:26s] [--gap:3.5rem]" reverse>
-          {points.map((item, idx) => (
+          {content?.items?.map((item, idx) => (
             <Word key={idx}>{item}</Word>
           ))}
         </Marquee>
 
         {/* Row 2 → left */}
         <Marquee className="[--duration:26s] [--gap:3.5rem]">
-          {points.map((item, idx) => (
+          {content?.items?.map((item, idx) => (
             <Word key={idx}>{item}</Word>
           ))}
         </Marquee>

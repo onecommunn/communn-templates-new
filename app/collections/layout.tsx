@@ -5,6 +5,7 @@ const EMPTY_BUNDLE = {
   home: null,
   aboutUs: null,
   contact: null,
+  collections: null,
 };
 
 const CollectionsLayout = ({ children }: { children: React.ReactNode }) => {
