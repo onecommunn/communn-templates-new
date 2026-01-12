@@ -80,7 +80,7 @@ const CollectionsService = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5">
           {content?.chips?.map(({ text, image }, idx) => (
             <div
-              key={text}
+              key={`${text}-${idx}`}
               className="relative flex flex-col items-center justify-center gap-4 py-6 md:py-12 text-center"
             >
               {/* Icon */}

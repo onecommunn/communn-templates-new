@@ -137,7 +137,7 @@ const CollectionsTestimonialsSection = ({
               <StarRow rating={current?.rating} />
             </div>
 
-            <p className="mt-8 whitespace-pre-line text-[16px] leading-8 text-black/70 md:text-[18px]">
+            <p className="mt-8 whitespace-pre-line text-[16px] leading-8 text-black/70 md:text-[18px] md:px-20 px-10">
               {current?.quote}
             </p>
 

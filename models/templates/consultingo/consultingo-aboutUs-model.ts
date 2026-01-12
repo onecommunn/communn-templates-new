@@ -1,6 +1,6 @@
 export interface ConsultingoAboutUsPage {
   templateId: "consultingo";
-  pageName: "home";
+  pageName: "aboutUs";
   status: "published" | "draft" | string;
   __v?: number;
   sections: AboutSection[];

@@ -24,7 +24,7 @@ async function fetchCollectionsBundle(
   const [home, aboutUs, contact, collections] = await Promise.all([
     fetchJSON(`${base}/${communityId}?templateId=collections&page=home`),
     fetchJSON(`${base}/${communityId}?templateId=collections&page=aboutUs`),
-    fetchJSON(`${base}/${communityId}?templateId=collections&page=contact`),
+    fetchJSON(`${base}/${communityId}?templateId=collections&page=contactUs`),
     fetchJSON(`${base}/${communityId}?templateId=collections&page=collections`),
     // add more pages
   ]);

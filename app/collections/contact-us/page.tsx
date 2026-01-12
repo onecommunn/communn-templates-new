@@ -21,10 +21,10 @@ import {
 } from "@/models/templates/collections/collections-contact-model";
 
 const CollectionsContactusRoot: React.FC = () => {
-  const { home } = useCMS();
-  const isLoading = home === undefined;
+  const { contact } = useCMS();
+  const isLoading = contact === undefined;
   const source: CollectionsContactPage | undefined = !isLoading
-    ? (home as CollectionsContactPage | undefined) ?? ContactdummyData
+    ? (contact as CollectionsContactPage | undefined) ?? ContactdummyData
     : undefined;
 
   const primaryColor = source?.color?.primary ?? "#C09932";
@@ -113,14 +113,14 @@ const CollectionsContactusRoot: React.FC = () => {
         <section className="py-16 md:py-16 px-4 md:px-4 lg:px-8">
           <div className="container mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              <div className="lg:col-span-6">
-                {contactInfoSection && (
+              {contactInfoSection && (
+                <div className="lg:col-span-6">
                   <ContactInfo
                     data={contactInfoSection}
                     primaryColor={primaryColor}
                   />
-                )}
-              </div>
+                </div>
+              )}
 
               <div className="lg:col-span-6">
                 {contactFormSection && (
@@ -139,15 +139,19 @@ const CollectionsContactusRoot: React.FC = () => {
           <ShoppingBanner data={ctaSection} primaryColor={primaryColor} />
         )}
 
-        <div className="relative min-h-[500px] my-20">
-          <iframe
-            title={contactInfoSection?.content?.contact?.location ?? "Location"}
-            src={contactInfoSection?.content?.contact?.googleMapLink}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 h-full w-full border-0"
-          />
-        </div>
+        {contactInfoSection?.content?.contact?.googleMapLink && (
+          <div className="relative min-h-[500px] my-20">
+            <iframe
+              title={
+                contactInfoSection?.content?.contact?.location ?? "Location"
+              }
+              src={contactInfoSection?.content?.contact?.googleMapLink}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 h-full w-full border-0"
+            />
+          </div>
+        )}
       </div>
     </>
   );
