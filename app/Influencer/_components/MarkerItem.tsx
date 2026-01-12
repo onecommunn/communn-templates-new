@@ -46,9 +46,9 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
   };
 
   const locText =
-    selectedPlace?.address && selectedPlace?.city
-      ? `${selectedPlace?.address}, ${selectedPlace?.city}`
-      : selectedPlace?.city || selectedPlace?.address || "";
+    selectedPlace?.address
+      ? `${selectedPlace?.address}`
+      : selectedPlace?.address || "";
 
   const imageSrc = selectedPlace?.imageUrl || [
     "/assets/map-image-placeholder.jpg",
@@ -80,7 +80,7 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
         >
           <Card className="w-[320px] rounded-2xl shadow-xl border border-slate-200 overflow-hidden p-0 gap-2 font-montserrat">
             {/* Image */}
-            <div className="relative h-40 w-full overflow-hidden">
+            <div className="p-2 relative h-40 w-full overflow-hidden">
               <button
                 onClick={() => setSelectedPlace(null)}
                 className="absolute top-2 right-2 cursor-pointer rounded-full p-1 bg-white"
@@ -91,20 +91,24 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
                 <img
                   src={imageSrc?.[0]}
                   alt={selectedPlace?.placeName}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover rounded-sm cursor-pointer"
                 />
               </Link>
             </div>
 
-            <CardContent className="p-4 space-y-2 pt-2">
+            <CardContent className="p-2 space-y-2 pt-2">
               {/* Title + Category */}
               <div className="flex items-start justify-between gap-2">
-                <Link href={`/details?id=${item._id}`}>
+                {/* <Link href={`/details?id=${item._id}`}>
                   <p className="font-semibold text-sm">
                     {selectedPlace?.placeName}
                   </p>
+                </Link> */}
+                <Link href={`/details?id=${item._id}`}>
+                  <p className="font-semibold text-sm hover:underline cursor-pointer">
+                    {selectedPlace?.placeName}
+                  </p>
                 </Link>
-
                 <Badge
                   variant="secondary"
                   className="text-[11px] px-2 py-0.5 rounded-full font-medium"
@@ -114,15 +118,21 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-600 font-medium">
+              {/* <p className="text-xs text-slate-600 font-medium">
                 {selectedPlace?.description}
-              </p>
+              </p> */}
 
+              <Link href={`/details?id=${item._id}`}>
+                <p className="text-[12px] text-[#3E3E3E] cursor-pointer">
+                  {selectedPlace?.description?.length > 90 ? selectedPlace?.description?.slice(0, 90) + "..." : selectedPlace?.description}
+                </p>
+              </Link>
               {/* Location */}
               {locText && (
                 <div className="mt-1 flex items-start gap-2 text-xs ">
                   <MapPin className="h-4 w-4 shrink-0" />
-                  <span className="font-medium">{locText}</span>
+                  <span className="text-[12px] font-medium">
+                    {locText?.length > 80 ? locText?.slice(0, 80) + "..." : locText}</span>
                 </div>
               )}
 

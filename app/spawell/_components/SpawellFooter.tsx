@@ -202,7 +202,12 @@ const SpawellFooter = ({
             {source?.copyrightText}
           </div>
           <div className="py-4 text-center text-xs text-[var(--sec)]/80">
-            Made with ❤️ by communn.io
+            <p>
+              Made with ❤️ by {" "}
+              <span className="text-slate-600 font-medium">
+                <Link href={"https://communn.io/"}>communn.io</Link>
+              </span>
+            </p>
           </div>
         </div>
       </div>

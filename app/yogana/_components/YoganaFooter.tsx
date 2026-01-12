@@ -246,7 +246,12 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
           {data?.content?.copyrightText}
         </div>
         <div className="max-w-7xl py-6 text-center text-sm text-neutral-400">
-          Made with ❤️ by communn.io
+          <p>
+            Made with ❤️ by {" "}
+            <span className="text-slate-600 font-medium">
+              <Link href={"https://communn.io/"}>communn.io</Link>
+            </span>
+          </p>
         </div>
       </div>
     </>

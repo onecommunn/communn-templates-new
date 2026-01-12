@@ -65,6 +65,7 @@ import {
 import Link from "next/link";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useRouter } from "next/navigation";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 const API_KEY = "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
@@ -147,8 +148,8 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) ** 2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
@@ -235,6 +236,7 @@ export default function InfluencerPage() {
     mapTypeId: "roadmap",
     disableDefaultUI: true,
     minZoom: 3,
+    gestureHandling: "greedy",
   };
 
   const onLoad = React.useCallback((mapInstance: google.maps.Map) => {
@@ -384,9 +386,8 @@ export default function InfluencerPage() {
               return (
                 <Card
                   key={place._id}
-                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
-                    isSelected ? "border-slate-300" : "hover:border-slate-300"
-                  }`}
+                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${isSelected ? "border-slate-300" : "hover:border-slate-300"
+                    }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
                     handlePlaceClick(
@@ -400,10 +401,13 @@ export default function InfluencerPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="font-semibold text-sm">{placeName}</p>
-                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                          <MapPin className="h-3 w-3" />
-                          {address || city}
+                        <p className="text-xs text-slate-500 flex gap-1 mt-0.5">
+                          <MapPin className="h-3 w-3 mt-1 shrink-0" />
+                          <span className="leading-relaxed">
+                            {address}
+                          </span>
                         </p>
+
                       </div>
                       <Badge
                         variant="outline"
@@ -477,19 +481,7 @@ export default function InfluencerPage() {
                         <BookmarkPlus className="h-3 w-3 mr-1" />
                         Save
                       </Button> */}
-                      <Link
-                        href={`https://api.whatsapp.com/send?text=${place.googleMapLink}`}
-                        target="_blank"
-                      >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-9 text-xs shadow-none cursor-pointer w-full"
-                        >
-                          <Share2 className="h-3 w-3 mr-1" />
-                          Share
-                        </Button>
-                      </Link>
+
                       <Link
                         href={`/details?id=${place._id}`}
                         className="w-full"
@@ -500,6 +492,20 @@ export default function InfluencerPage() {
                           className="h-9 text-xs shadow-none cursor-pointer w-full"
                         >
                           View Details
+                        </Button>
+                      </Link>
+                      <Link
+                        href={`https://api.whatsapp.com/send?text=${place.googleMapLink}`}
+                        target="_blank"
+                      >
+                        <Button
+                          variant="default"
+                          className="cursor-pointer w-full font-medium"
+                          size="sm"
+
+                        >
+                          <Share2 className="h-3 w-3 mr-1" />
+                          Share
                         </Button>
                       </Link>
                     </div>
@@ -520,12 +526,12 @@ export default function InfluencerPage() {
   const titleText = isLocating
     ? "Finding nearby..."
     : placeValue?.label
-    ? placeValue.label
-    : userLocation?.city
-    ? `${userLocation.city} (50 km)`
-    : userLocation
-    ? "Nearby (50 km)"
-    : "Explore places";
+      ? placeValue.label
+      : userLocation?.city
+        ? `${userLocation.city} (50 km)`
+        : userLocation
+          ? "Nearby (50 km)"
+          : "Explore places";
 
   return (
     <main className="relative min-h-screen bg-[#F6F7FB] font-montserrat">
@@ -561,11 +567,15 @@ export default function InfluencerPage() {
               >
                 View Saved
               </Button> */}
+
               <Link href={"/explore"}>
                 <Button className="h-9 rounded-md cursor-pointer shadow-none font-medium">
                   Explore
                 </Button>
               </Link>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src="https://github.com/shadcn.png" />
+              </Avatar>
             </div>
           </div>
 
@@ -659,11 +669,10 @@ export default function InfluencerPage() {
             <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                  activeCategory === "all"
-                    ? "bg-slate-900 text-white"
-                    : "bg-white hover:bg-slate-50"
-                }`}
+                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${activeCategory === "all"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white hover:bg-slate-50"
+                  }`}
                 onClick={() => setActiveCategory("all")}
               >
                 All
@@ -678,11 +687,10 @@ export default function InfluencerPage() {
                   <Badge
                     key={index}
                     variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                      isActive
-                        ? "bg-slate-900 text-white"
-                        : "bg-white hover:bg-slate-50"
-                    }`}
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
+                      ? "bg-slate-900 text-white"
+                      : "bg-white hover:bg-slate-50"
+                      }`}
                     onClick={() => setActiveCategory(name)}
                   >
                     {Icon && <Icon size={16} strokeWidth={1.5} />}
@@ -751,15 +759,29 @@ export default function InfluencerPage() {
                         <MarkerItem item={item} key={item._id} />
                       ))}
                     </GoogleMap>
+                    <a
+                      href="https://communn.io"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute bottom-0 right-0 bg-white/90 backdrop-blur
+               text-xs text-slate-600 px-3 py-1.5 rounded-sm shadow-md
+               hover:text-blue-600 hover:shadow-lg transition"
+                    >
+                      <p>
+                        Made with ❤️ by {" "}
+                        <span className="text-slate-600 font-medium">
+                          <Link href={"https://communn.io/"}>communn.io</Link>
+                        </span>
+                      </p>
+                    </a>
                   </div>
                 </div>
               </div>
 
               {/* RIGHT PANEL */}
               <div
-                className={`relative hidden md:flex ${
-                  panelOpen ? "w-[30rem]" : "w-[0px]"
-                } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
+                  } shrink-0 transition-all`}
               >
                 {/* <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -774,9 +796,8 @@ export default function InfluencerPage() {
                 </button> */}
 
                 <div
-                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${
-                    panelOpen ? "" : "hidden"
-                  }`}
+                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
+                    }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -835,16 +856,30 @@ export default function InfluencerPage() {
                         <MarkerItem item={item} key={item._id} />
                       ))}
                     </GoogleMap>
+                    <a
+                      href="https://communn.io"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute bottom-0 right-0 bg-white/90 backdrop-blur
+               text-xs text-slate-600 px-3 py-1.5 rounded-sm shadow-md
+               hover:text-blue-600 hover:shadow-lg transition"
+                    >
+                      <p>
+                        Made with ❤️ by {" "}
+                        <span className="text-slate-600 font-medium">
+                          <Link href={"https://communn.io/"}>communn.io</Link>
+                        </span>
+                      </p>
+                    </a>
                   </div>
                 </div>
               </div>
 
               <div
-                className={`relative hidden md:flex ${
-                  panelOpen ? "w-[30rem]" : "w-[0px]"
-                } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
+                  } shrink-0 transition-all`}
               >
-                {/* <button
+                <button
                   onClick={() => setPanelOpen((p) => !p)}
                   className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
                   title="Toggle panel"
@@ -854,12 +889,11 @@ export default function InfluencerPage() {
                   ) : (
                     <ChevronLeft className="h-4 w-4" />
                   )}
-                </button> */}
+                </button>
 
                 <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
-                    panelOpen ? "" : "hidden"
-                  }`}
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
+                    }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -898,9 +932,9 @@ export default function InfluencerPage() {
               <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2">
                 {filteredPlaces.map((item: Recommendation, idx: number) => {
                   const locText =
-                    item?.address && item?.city
-                      ? `${item.address}, ${item.city}`
-                      : item?.city || item?.address || "";
+                    item?.address
+                      ? `${item.address}`
+                      : item?.address || "";
 
                   const imageSrc = item?.imageUrl || [
                     "/assets/map-image-placeholder.jpg",
@@ -925,9 +959,11 @@ export default function InfluencerPage() {
                         {/* Top content */}
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
-                            <p className="font-semibold text-sm line-clamp-1">
-                              {item?.placeName}
-                            </p>
+                            <Link href={`/details?id=${item._id}`}>
+                              <p className="font-semibold text-sm hover:underline cursor-pointer">
+                                {item?.placeName}
+                              </p>
+                            </Link>
                             <Badge
                               variant="secondary"
                               className="text-[11px] px-2 py-0.5 rounded-full"
@@ -936,14 +972,19 @@ export default function InfluencerPage() {
                             </Badge>
                           </div>
 
-                          <p className="text-xs text-slate-600 line-clamp-2">
+                          {/* <p className="text-xs text-slate-600 line-clamp-2">
                             {item?.description}
-                          </p>
+                          </p> */}
+                          <Link href={`/details?id=${item._id}`}>
+                            <p className="text-[12px] text-[#3E3E3E] cursor-pointer">
+                              {item?.description?.length > 90 ? item?.description?.slice(0, 90) + "..." : item?.description}
+                            </p>
+                          </Link>
 
                           {locText && (
                             <div className="flex items-center gap-1.5 text-xs text-slate-600">
                               <MapPin className="h-3 w-3 shrink-0" />
-                              <span className="truncate">{locText}</span>
+                              <span className="text-[12px] font-medium">{locText?.length > 80 ? locText?.slice(0, 80) + "..." : locText}</span>
                             </div>
                           )}
                         </div>

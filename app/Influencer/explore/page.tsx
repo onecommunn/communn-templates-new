@@ -121,8 +121,8 @@ export default function InfluencerExploreRoot() {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
 
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
@@ -138,9 +138,8 @@ export default function InfluencerExploreRoot() {
       if (!catOk) return false;
 
       if (q) {
-        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${
-          p?.city ?? ""
-        } ${p?.description ?? ""}`.toLowerCase();
+        const text = `${p?.placeName ?? ""} ${p?.address ?? ""} ${p?.city ?? ""
+          } ${p?.description ?? ""}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
@@ -184,7 +183,7 @@ export default function InfluencerExploreRoot() {
       {/* ===== Top bar ===== */}
       <div className="sticky top-0 z-20 bg-white border-b">
         {/* row-1 */}
-        <div className="px-6 py-3 flex flex-col md:flex-row md:items-center gap-6">
+        <div className="px-2 md:px-2 py-3 flex flex-col md:flex-row md:items-center gap-6">
           {/* Left search (sidebar also has search in screenshot; keep here if you want) */}
           <div className="md:max-w-[340px] w-full flex items-center gap-2">
             <Link href={"/"}>
@@ -258,11 +257,10 @@ export default function InfluencerExploreRoot() {
           <div className="flex-1 flex items-center justify-end gap-2 overflow-x-auto">
             <Badge
               variant={activeCategory === "all" ? "secondary" : "outline"}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${
-                activeCategory === "all"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white hover:bg-slate-50"
-              }`}
+              className={`shrink-0 rounded-full px-4 py-2 text-xs cursor-pointer ${activeCategory === "all"
+                ? "bg-slate-900 text-white"
+                : "bg-white hover:bg-slate-50"
+                }`}
               onClick={() => setActiveCategory("all")}
             >
               All
@@ -277,11 +275,10 @@ export default function InfluencerExploreRoot() {
                 <Badge
                   key={index}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                    isActive
-                      ? "bg-slate-900 text-white"
-                      : "bg-white hover:bg-slate-50"
-                  }`}
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
+                    ? "bg-slate-900 text-white"
+                    : "bg-white hover:bg-slate-50"
+                    }`}
                   onClick={() => setActiveCategory(name)}
                 >
                   {Icon && <Icon size={20} strokeWidth={1.5} />}
@@ -292,7 +289,7 @@ export default function InfluencerExploreRoot() {
           </div>
         </div>
         {/* row-2 */}
-        <div className="px-6 pb-3 pt-1 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="px-2 md:px-2 pb-3 pt-1 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
             <span>
               <MapPin size={18} className="text-slate-500" />
@@ -302,9 +299,8 @@ export default function InfluencerExploreRoot() {
           <div className="flex gap-2  overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
             <Badge
               variant="secondary"
-              className={`rounded-full ${
-                activeArea === "all" ? "bg-slate-300" : "bg-slate-100"
-              } text-slate-700 cursor-pointer`}
+              className={`rounded-full ${activeArea === "all" ? "bg-slate-300" : "bg-slate-100"
+                } text-slate-700 cursor-pointer`}
               onClick={() => {
                 setListQuery("");
                 setActiveArea("all");
@@ -317,9 +313,8 @@ export default function InfluencerExploreRoot() {
               <Badge
                 key={a.name}
                 variant="secondary"
-                className={`rounded-full ${
-                  activeArea === a.name ? "bg-slate-300" : "bg-slate-100"
-                }  text-slate-700 cursor-pointer`}
+                className={`rounded-full ${activeArea === a.name ? "bg-slate-300" : "bg-slate-100"
+                  }  text-slate-700 cursor-pointer`}
                 onClick={() => {
                   setListQuery(a.name);
                   setActiveArea(a.name);
@@ -333,8 +328,8 @@ export default function InfluencerExploreRoot() {
       </div>
 
       {/* ===== Page layout ===== */}
-      <section className="p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      <section className="p-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
           {filteredPlaces?.map((item: Recommendation, idx: number) => {
             const img =
               Array.isArray(item?.imageUrl) && item?.imageUrl.length > 0
@@ -342,29 +337,31 @@ export default function InfluencerExploreRoot() {
                 : "/assets/map-image-placeholder.jpg";
 
             const area = item?.address || "";
-            const city = item?.city || "";
-            const locText = [area, city]?.filter(Boolean).join(", ");
+            // const city = item?.city || "";
+            const locText = [area]?.filter(Boolean).join("");
 
             return (
               <Card
                 key={idx}
                 className="rounded-[10px] border border-slate-200 bg-white shadow-none overflow-hidden p-0 flex flex-col"
               >
-                <CardContent className="p-0 flex flex-col flex-1">
+                <CardContent className="p-2 flex flex-col flex-1">
                   {/* Image */}
                   <div className="relative pb-0 shrink-0 cursor-pointer overflow-hidden">
                     <div className="relative h-40 w-full bg-slate-100">
-                      <img
-                        src={img}
-                        alt={item?.placeName}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
+                      <Link href={`/details?id=${item._id}`} className="w-full">
+                        <img
+                          src={img}
+                          alt={item?.placeName}
+                          className="h-full w-full object-cover rounded-sm cursor-pointer"
+                          loading="lazy"
+                        />
+                      </Link>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="px-4 pt-2 pb-3 flex flex-col flex-1">
+                  <div className="pt-2 flex flex-col flex-1">
                     {/* Top content */}
                     <div className="space-y-2">
                       {/* Title + chip */}
@@ -383,19 +380,31 @@ export default function InfluencerExploreRoot() {
                         </Badge>
                       </div>
                       {/* description */}
-                      <p className="text-xs text-slate-600 font-medium">
-                        {item?.description}
-                      </p>
-
+                      <Link href={`/details?id=${item._id}`}>
+                        <p className="text-[12px] text-[#3E3E3E] cursor-pointer">
+                          {item?.description?.length > 90 ? item?.description?.slice(0, 90) + "..." : item?.description}
+                        </p>
+                      </Link>
                       {/* Location */}
                       <div className="flex min-w-0 items-start gap-2">
-                        <MapPin className="h-4 w-4 shrink-0 text-slate-700 mt-[2px]" />
-                        <span className="text-xs font-medium">{locText}</span>
+                        <MapPin className="h-4 w-4 shrink-0 text-slate-700" />
+                        <span className="text-[12px] font-medium">
+                          {locText?.length > 80 ? locText?.slice(0, 80) + "..." : locText}</span>
                       </div>
                     </div>
 
                     {/* Button pinned to bottom */}
                     <div className="mt-auto pt-4 items-center gap-2 grid grid-cols-2">
+
+                      <Link href={`/details?id=${item._id}`} className="w-full">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-9 text-xs shadow-none cursor-pointer w-full"
+                        >
+                          View Details
+                        </Button>
+                      </Link>
                       <Link
                         href={item?.googleMapLink ?? "/"}
                         target="_blank"
@@ -406,15 +415,6 @@ export default function InfluencerExploreRoot() {
                           className="cursor-pointer w-full font-medium"
                         >
                           Go to Maps
-                        </Button>
-                      </Link>
-                      <Link href={`/details?id=${item._id}`} className="w-full">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-9 text-xs shadow-none cursor-pointer w-full"
-                        >
-                          View Details
                         </Button>
                       </Link>
                     </div>
