@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { use, useContext, useEffect, useMemo, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import {
   Banknote,
@@ -66,6 +66,8 @@ import Link from "next/link";
 import { AuthContext } from "@/contexts/Auth.context";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { getCommunityData } from "@/services/communityService";
+import { headers } from "next/headers";
 
 const API_KEY = "AIzaSyD2SajVKCMNsJEI4H7m6pV4eN0IV9VtV-4";
 
@@ -362,6 +364,30 @@ export default function InfluencerPage() {
     map.setZoom(11);
   };
 
+  const [data, setData] = useState<any>(null);
+  useEffect(() => {
+    const fetchCommunity = async () => {
+      try {
+        const communityData: any = await getCommunityData(
+          window.location.hostname
+        );
+        // console.log("Community Data:", communityData);
+        setData(communityData.community);
+      } catch (error) {
+        console.error("Error fetching community ID:", error);
+      }
+    };
+    fetchCommunity();
+  }, []);
+
+  const adminMember = data?.members?.find(
+    (member: any) => member?.user?._id === data?.createdBy
+  );
+
+  const avatarUrl = adminMember?.user?.avatar;
+
+
+
   const renderResultsList = () => {
     return (
       <>
@@ -523,6 +549,9 @@ export default function InfluencerPage() {
 
   const resultsCount = filteredPlaces?.length || 0;
 
+
+
+
   const titleText = isLocating
     ? "Finding nearby..."
     : placeValue?.label
@@ -573,9 +602,13 @@ export default function InfluencerPage() {
                   Explore
                 </Button>
               </Link>
-              <Avatar className="h-10 w-10">
-                <AvatarImage src="https://github.com/shadcn.png" />
+              <Avatar >
+                <AvatarImage
+                  src={avatarUrl || "https://github.com/shadcn.png"}
+                  alt={adminMember?.user?.firstName}
+                />
               </Avatar>
+
             </div>
           </div>
 
@@ -759,21 +792,18 @@ export default function InfluencerPage() {
                         <MarkerItem item={item} key={item._id} />
                       ))}
                     </GoogleMap>
-                    <a
-                      href="https://communn.io"
+                    <Link
+                      href="https://communn.io/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="absolute bottom-0 right-0 bg-white/90 backdrop-blur
-               text-xs text-slate-600 px-3 py-1.5 rounded-sm shadow-md
-               hover:text-blue-600 hover:shadow-lg transition"
+             text-xs text-slate-600 px-3 py-1.5 rounded-sm shadow-md
+             hover:text-blue-600 hover:shadow-lg transition"
                     >
-                      <p>
-                        Made with ❤️ by {" "}
-                        <span className="text-slate-600 font-medium">
-                          <Link href={"https://communn.io/"}>communn.io</Link>
-                        </span>
-                      </p>
-                    </a>
+                      Made with ❤️ by{" "}
+                      <span className="font-medium">communn.io</span>
+                    </Link>
+
                   </div>
                 </div>
               </div>
@@ -846,6 +876,7 @@ export default function InfluencerPage() {
                   </button>
 
                   <div className="h-full rounded-xl">
+
                     <GoogleMap
                       mapContainerStyle={{ width: "100%", height: "100%" }}
                       onLoad={onLoad}
@@ -856,21 +887,18 @@ export default function InfluencerPage() {
                         <MarkerItem item={item} key={item._id} />
                       ))}
                     </GoogleMap>
-                    <a
-                      href="https://communn.io"
+                    <Link
+                      href="https://communn.io/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="absolute bottom-0 right-0 bg-white/90 backdrop-blur
-               text-xs text-slate-600 px-3 py-1.5 rounded-sm shadow-md
-               hover:text-blue-600 hover:shadow-lg transition"
+             text-xs text-slate-600 px-3 py-1.5 rounded-sm shadow-md
+             hover:text-blue-600 hover:shadow-lg transition"
                     >
-                      <p>
-                        Made with ❤️ by {" "}
-                        <span className="text-slate-600 font-medium">
-                          <Link href={"https://communn.io/"}>communn.io</Link>
-                        </span>
-                      </p>
-                    </a>
+                      Made with ❤️ by{" "}
+                      <span className="font-medium">communn.io</span>
+                    </Link>
+
                   </div>
                 </div>
               </div>
@@ -881,13 +909,13 @@ export default function InfluencerPage() {
               >
                 <button
                   onClick={() => setPanelOpen((p) => !p)}
-                  className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-white border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
+                  className="cursor-pointer absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-black border rounded-md h-12 w-6 flex items-center justify-center shadow-sm"
                   title="Toggle panel"
                 >
                   {panelOpen ? (
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-4 w-4 text-white" />
                   ) : (
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-4 w-4 text-white" />
                   )}
                 </button>
 
@@ -1040,7 +1068,7 @@ export default function InfluencerPage() {
             )}
           </TabsContent>
         </div>
-      </Tabs>
+      </Tabs >
 
       <button
         onClick={() => setIsDrawerOpen((prev) => !prev)}
@@ -1048,6 +1076,6 @@ export default function InfluencerPage() {
       >
         <ChevronUp size={24} />
       </button>
-    </main>
+    </main >
   );
 }
