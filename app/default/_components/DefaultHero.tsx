@@ -7,9 +7,9 @@ type DefaultHeroProps = {
   logo: string;
   banner: string;
   membersCount: number;
-  postsCount?: number;
   type: string;
   phoneNumber: number;
+  numberOfPost: number;
 };
 
 const DefaultHero = ({
@@ -17,7 +17,7 @@ const DefaultHero = ({
   logo,
   banner,
   membersCount,
-  postsCount,
+  numberOfPost,
   type,
   phoneNumber,
 }: DefaultHeroProps) => {
@@ -88,8 +88,7 @@ const DefaultHero = ({
             No of Posts
           </span>
           <span className="text-xs md:text-2xl font-bold">
-            {" "}
-            {postsCount ? Number(postsCount).toLocaleString() : "-"}
+            {Number(numberOfPost).toLocaleString()}
           </span>
         </div>
 

@@ -114,7 +114,7 @@ export const templates: Record<
     "/sign-up": CreatorSignup,
     "/auto-login": AutoLogin,
   },
-  default: { "/": DefaultRoot },
+  default: { "/": DefaultRoot, "/auto-login": AutoLogin },
   yogana: {
     "/": YoganaRoot,
     "/event-details": YoganaEventDetailsPage,

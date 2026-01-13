@@ -26,6 +26,7 @@ const DefaultRoot = () => {
         membersCount={source?.members?.length}
         type={source?.type}
         phoneNumber={source?.phoneNumber}
+        numberOfPost={source?.numberOfPost}
       />
       <DefaultTabs />
       <DefaultAbout

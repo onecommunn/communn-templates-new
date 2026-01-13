@@ -46,6 +46,7 @@ export interface Community {
   mission: string;
   email: string;
   vision: string;
+  numberOfPost:number
   directorMessage: string;
   phoneNumber: number;
 }
@@ -225,6 +226,7 @@ export async function getCommunityData(
         vision: "",
         email:'',
         updatedAt: "",
+        numberOfPost:0,
         template: "default",
       },
     };
