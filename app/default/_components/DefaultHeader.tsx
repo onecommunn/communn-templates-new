@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { Menu } from "lucide-react";
+import React, { useContext, useState } from "react";
+import { LogOut, Menu, UserRoundPen, Wallet } from "lucide-react";
 import {
   Sheet,
   SheetClose,
@@ -11,6 +11,24 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { AuthContext } from "@/contexts/Auth.context";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { logoutService } from "@/services/logoutService";
 
 type DefaultHeaderProps = {
   name: string;
@@ -19,9 +37,24 @@ type DefaultHeaderProps = {
 
 const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const auth = useContext(AuthContext);
+
+  const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
+  const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
+
+  const handleLogout = async () => {
+    const success = await logoutService();
+    if (success) {
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
+      window.location.reload();
+    } else {
+      console.error("Logout failed, unable to navigate to login.");
+    }
+  };
 
   return (
-    <header className="sticky font-montserrat top-0 z-50 backdrop-blur bg-white">
+    <header className="sticky font-montserrat top-0 z-50 backdrop-blur bg-white border-b border-gray-200">
       <div className="container mx-auto px-4 sm:px-6 md:px-20">
         <div className="flex items-center justify-between py-4 gap-4">
           {/* Logo */}
@@ -46,23 +79,212 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
 
           {/* Desktop Login */}
           <div className="hidden md:flex items-center">
-            <Link
-              href="/login"
-              className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full font-semibold hover:bg-black hover:scale-105 transition-transform"
-            >
-              Log in
-            </Link>
+            {auth.isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <div className="text-center min-w-fit text-black font-medium">
+                  Hi, {auth.user?.firstName || auth.user?.emailId}
+                </div>
+                <Popover
+                  open={desktopPopoverOpen}
+                  onOpenChange={setDesktopPopoverOpen}
+                >
+                  <PopoverTrigger asChild>
+                    <Avatar className="cursor-pointer size-9">
+                      <AvatarImage
+                        src={auth?.user?.avatar}
+                        alt={auth?.user?.firstName}
+                      />
+                      <AvatarFallback>
+                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-72 mt-1 rounded-md p-2 mr-4">
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <Avatar className="cursor-pointer size-12">
+                            <AvatarImage
+                              src={auth?.user?.avatar}
+                              alt={auth?.user?.firstName}
+                            />
+                            <AvatarFallback>
+                              {auth?.user?.firstName?.[0] ??
+                                auth?.user?.emailId?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <div className="col-span-3">
+                          <h4 className="font-semibold">
+                            {auth?.user?.firstName}
+                          </h4>
+                          <p className="text-gray-500 text-[12px] font-semibold">
+                            {auth?.user?.emailId}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/profile?id=${auth?.user?.id}`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <UserRoundPen strokeWidth={1.5} />
+                        Account
+                      </Link>
+                      <Link
+                        href={`/payments`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <Wallet strokeWidth={1.5} />
+                        Payments
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold py-2 bg-white rounded-[10px] text-sm w-full">
+                          <LogOut strokeWidth={1.5} />
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-montserrat">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full font-semibold hover:bg-black hover:scale-105 transition-transform"
+              >
+                Log in
+              </Link>
+            )}
           </div>
 
           {/* Mobile Actions */}
           <div className="md:hidden flex items-center gap-2">
             {/* Mobile Login (outside sheet) */}
-            <Link
-              href="/login"
-              className="bg-[#1A1A1A] text-white px-4 py-1.5 rounded-full text-xs font-semibold"
-            >
-              Log in
-            </Link>
+            {auth.isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <Popover
+                  open={mobilePopoverOpen}
+                  onOpenChange={setMobilePopoverOpen}
+                >
+                  <PopoverTrigger asChild>
+                    <Avatar className="cursor-pointer size-9">
+                      <AvatarImage
+                        src={auth?.user?.avatar}
+                        alt={auth?.user?.firstName}
+                      />
+                      <AvatarFallback>
+                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-72 mt-1 rounded-md p-2 mr-4">
+                    <div className="grid gap-2">
+                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <Avatar className="cursor-pointer size-12">
+                            <AvatarImage
+                              src={auth?.user?.avatar}
+                              alt={auth?.user?.firstName}
+                            />
+                            <AvatarFallback>
+                              {auth?.user?.firstName?.[0] ??
+                                auth?.user?.emailId?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <div className="col-span-3">
+                          <h4 className="font-semibold">
+                            {auth?.user?.firstName}
+                          </h4>
+                          <p className="text-gray-500 text-[12px] font-semibold">
+                            {auth?.user?.emailId}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/profile?id=${auth?.user?.id}`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <UserRoundPen strokeWidth={1.5} />
+                        Account
+                      </Link>
+                      <Link
+                        href={`/payments`}
+                        onClick={() => setDesktopPopoverOpen(false)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
+                      >
+                        <Wallet strokeWidth={1.5} />
+                        Payments
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold py-2 bg-white rounded-[10px] text-sm w-full">
+                          <LogOut strokeWidth={1.5} />
+                          Logout
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="font-montserrat">
+                              Are you sure you want to logout?
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border">
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full font-semibold hover:bg-black hover:scale-105 transition-transform"
+              >
+                Log in
+              </Link>
+            )}
 
             {/* Mobile Menu */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
