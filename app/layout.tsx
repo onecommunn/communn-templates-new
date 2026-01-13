@@ -16,6 +16,7 @@ import {
   Lexend,
   Kalnia,
   Figtree,
+  Quattrocento_Sans,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -126,6 +127,13 @@ const figtree = Figtree({
   variable: "--font-figtree",
 });
 
+const quattrocento = Quattrocento_Sans({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400","700",],
+  style: ["normal", "italic"],
+  variable: "--font-quattrocento",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -134,7 +142,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable} ${kalnia.variable}`}
+      className={`${quattrocento.variable} ${figtree.variable} ${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable} ${kalnia.variable}`}
     >
       <body>
         <Providers>{children}</Providers>

@@ -1,0 +1,108 @@
+"use client"
+import React from "react";
+import Image from "next/image";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Badge } from "@/components/ui/badge";
+import Autoplay from "embla-carousel-autoplay";
+
+const DefaultCourses = () => {
+  const courses = [
+    {
+      id: 1,
+      title: "Learn To Code",
+      description:
+        "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
+      price: "Free",
+      image:
+        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/e22a1b0cb76687c01226918d3f9ba0aa2bf10e36.jpg",
+    },
+    {
+      id: 2,
+      title: "Learn To Code",
+      description:
+        "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
+      price: "Free",
+      image:
+        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/e22a1b0cb76687c01226918d3f9ba0aa2bf10e36.jpg",
+    },
+    {
+      id: 3,
+      title: "Learn To Code",
+      description:
+        "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
+      price: "Free",
+      image:
+        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/e22a1b0cb76687c01226918d3f9ba0aa2bf10e36.jpg",
+    },
+  ];
+  const plugin = React.useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: true })
+  );
+  return (
+    <section
+      id="courses"
+      className="max-w-6xl mx-auto px-6 py-12 font-montserrat relative scroll-mt-[40px] md:scroll-mt-[90px]"
+    >
+      <h2 className="text-2xl font-bold mb-8 text-black">Courses</h2>
+
+      <Carousel
+        plugins={[plugin.current]}
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        className="w-full"
+      >
+        <CarouselContent>
+          {courses.map((course, idx) => (
+            <CarouselItem key={idx} className="pl-6 md:basis-1/2 lg:basis-1/3">
+              <div className="bg-white cursor-pointer rounded-[2.5rem] p-4 border border-gray-200 flex flex-col h-full group">
+                {/* Course Image */}
+                <div className="relative h-48 w-full rounded-3xl overflow-hidden mb-6">
+                  <Image
+                    src={course.image}
+                    alt={course.title}
+                    fill
+                    className="object-cover group-hover:scale-[1.03] transition-transform"
+                  />
+                </div>
+
+                {/* Course Content */}
+                <div className="flex flex-col flex-grow">
+                  <h3 className="text-2xl font-bold mb-4 text-black">
+                    {course.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-grow">
+                    {course.description}
+                  </p>
+
+                  {/* Price Badge */}
+                  <div className="mt-auto">
+                    <Badge
+                      variant="secondary"
+                      className="bg-gray-100 text-gray-400 hover:bg-gray-100 px-4 py-1 rounded-md font-medium text-xs border-none"
+                    >
+                      {course.price}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {/* Navigation Arrows positioned on the sides */}
+        <CarouselPrevious className="hidden lg:flex -left-12 size-12 border-none bg-transparent text-gray-400 hover:text-black hover:bg-transparent" />
+        <CarouselNext className="hidden lg:flex -right-12 size-12 border-none bg-transparent text-gray-400 hover:text-black hover:bg-transparent" />
+      </Carousel>
+    </section>
+  );
+};
+
+export default DefaultCourses;

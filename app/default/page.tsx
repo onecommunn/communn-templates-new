@@ -1,18 +1,29 @@
-import FuzzyText from "@/components/CustomComponents/FuzzyText";
 import React from "react";
+import DefaultHero from "./_components/DefaultHero";
+import DefaultAbout from "./_components/DefaultAbout";
+import DefaultTabs from "./_components/DefaultTabs";
+import DefaultGallery from "./_components/DefaultGallery";
+import DefaultEvents from "./_components/DefaultEvents";
+import DefaultPlans from "./_components/DefaultPlans";
+import DefaultCourses from "./_components/DefaultCourses";
+import DefaultOurTeam from "./_components/DefaultOurTeam";
+import DefaultContactMe from "./_components/DefaultContactMe";
+import DefaultFAQ from "./_components/DefaultFAQ";
 
 const DefaultRoot = () => {
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center font-sans text-gray-800">
-      <FuzzyText
-        baseIntensity={0.2}
-        hoverIntensity={3}
-        enableHover={true}
-      >
-        404
-        Not Found
-      </FuzzyText>
-    </div>
+    <>
+      <DefaultHero />
+      <DefaultTabs/>
+      <DefaultAbout />
+      <DefaultGallery/>
+      <DefaultEvents/>
+      <DefaultPlans/>
+      <DefaultCourses/>
+      <DefaultOurTeam/>
+      <DefaultContactMe/>
+      <DefaultFAQ/>
+    </>
   );
 };
 

@@ -1,10 +1,17 @@
-// templates/default/DefaultShell.tsx
 import React from "react";
 import { Community } from "@/services/communityService";
+import DefaultHeader from "./_components/DefaultHeader";
+import DefaultFooter from "./_components/DefaultFooter";
 
 export default function DefaultShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
-  return <div>{children}</div>;
+  return (
+    <>
+      <DefaultHeader />
+      <main>{children}</main>
+      <DefaultFooter />
+    </>
+  );
 }
