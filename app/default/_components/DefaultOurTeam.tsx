@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 import { UserRound } from "lucide-react";
+
 type DefaultOurTeamProps = {
   teams: any[];
 };
@@ -84,7 +85,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
         className="w-full"
       >
         <CarouselContent className="-ml-6">
-          {teams.map((member) => (
+          {teams?.map((member) => (
             <CarouselItem
               key={member._id}
               className="pl-6 md:basis-1/2 lg:basis-1/3 pt-16"
@@ -127,7 +128,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
 
         {/* Corrected Dynamic Pagination */}
         <div className="flex justify-center items-center gap-2 mt-12">
-          {Array.from({ length: count }).map((_, index) => (
+          {Array.from({ length: count })?.map((_, index) => (
             <button
               key={index}
               onClick={() => api?.scrollTo(index)}

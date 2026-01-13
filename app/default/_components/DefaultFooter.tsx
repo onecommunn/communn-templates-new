@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -76,7 +77,7 @@ const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
           </p>
 
           <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-semibold text-gray-700">
-            {navLinks.map((link) => (
+            {navLinks?.map((link) => (
               <Link
                 key={link}
                 href={`#${link}`}
@@ -149,7 +150,7 @@ const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
           <p>© 2021 All Rights Reserved</p>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {bottomLinks.map((link) => (
+            {bottomLinks?.map((link) => (
               <Link key={link} href="/" className="hover:underline">
                 {link}
               </Link>

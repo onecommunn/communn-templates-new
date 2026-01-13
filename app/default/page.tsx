@@ -16,7 +16,6 @@ import { Community } from "@/services/communityService";
 const DefaultRoot = () => {
   const { community } = useCMS();
   const source: Community = community;
-  const isLoading = community === undefined;
   return (
     <>
       <DefaultHero

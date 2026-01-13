@@ -90,7 +90,7 @@ const DefaultEvents = () => {
           plugins={[plugin.current]}
         >
           <CarouselContent>
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 6 })?.map((_, i) => (
               <CarouselItem
                 key={i}
                 className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/3"
@@ -123,7 +123,7 @@ const DefaultEvents = () => {
         className="w-full"
       >
         <CarouselContent className="-ml-4">
-          {events.map((event) => {
+          {events?.map((event) => {
             return (
               <CarouselItem
                 key={event._id}

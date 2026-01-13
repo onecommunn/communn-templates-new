@@ -71,7 +71,7 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
         className="w-full"
       >
         <CarouselContent>
-          {courses.map((course, idx) => (
+          {courses?.map((course, idx) => (
             <CarouselItem key={idx} className="md:basis-1/2 lg:basis-1/3">
               <div className="bg-white cursor-pointer rounded-[2.5rem] p-4 border border-gray-200 flex flex-col h-full group">
                 {/* Course Image */}

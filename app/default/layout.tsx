@@ -2,7 +2,7 @@ import React from "react";
 import { CMSProvider } from "./CMSProvider.client";
 
 const EMPTY_BUNDLE = {
-  home: null,
+  community: null,
 };
 
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {

@@ -121,7 +121,7 @@ const DefaultPlans = () => {
       >
         <CarouselContent>
           {isLoading
-            ? [1, 2, 3].map((i) => (
+            ? [1, 2, 3]?.map((i) => (
                 <CarouselItem
                   key={i}
                   className="pl-6 md:basis-1/2 lg:basis-1/3"
@@ -129,7 +129,7 @@ const DefaultPlans = () => {
                   <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-[2.5rem]" />
                 </CarouselItem>
               ))
-            : plans.map((plan, idx) => {
+            : plans?.map((plan, idx) => {
                 const userSubscribedToPlan =
                   !!isLoggedIn &&
                   plan.subscribers?.some(

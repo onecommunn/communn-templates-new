@@ -21,7 +21,7 @@ const DefaultGallery = ({ gallery }: DefaultGalleryProps) => {
 
       {/* Responsive Image Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {gallery.map((src, index) => (
+        {gallery?.map((src, index) => (
           <div
             key={index}
             onClick={() => setSelectedImage(src)}

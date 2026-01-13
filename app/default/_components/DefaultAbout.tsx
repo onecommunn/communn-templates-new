@@ -1,5 +1,6 @@
+"use client"
 import React from "react";
-import { Eye, Target } from "lucide-react";
+import { Eye } from "lucide-react";
 import { TbTargetArrow } from "react-icons/tb";
 
 type DefaultAboutProps = {

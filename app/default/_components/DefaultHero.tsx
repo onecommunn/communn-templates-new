@@ -1,6 +1,6 @@
+"use client"
 import React from "react";
 import Image from "next/image";
-import { FaPhoneAlt } from "react-icons/fa";
 
 type DefaultHeroProps = {
   name: string;
@@ -98,7 +98,7 @@ const DefaultHero = ({
         <div className="flex flex-col items-center">
           <span className="text-[12px] md:text-sm text-black mb-1">Access</span>
           <span className="text-xs md:text-2xl font-bold text-black capitalize">
-            {type.toLowerCase()}
+            {type?.toLowerCase()}
           </span>
         </div>
 
