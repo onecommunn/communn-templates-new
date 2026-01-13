@@ -2,13 +2,32 @@ import React from "react";
 import Image from "next/image";
 import { FaPhoneAlt } from "react-icons/fa";
 
-const DefaultHero = () => {
+type DefaultHeroProps = {
+  name: string;
+  logo: string;
+  banner: string;
+  membersCount: number;
+  postsCount?: number;
+  type: string;
+  phoneNumber: number;
+};
+
+const DefaultHero = ({
+  name,
+  logo,
+  banner,
+  membersCount,
+  postsCount,
+  type,
+  phoneNumber,
+}: DefaultHeroProps) => {
   return (
     <section className="relative flex flex-col items-center pt-8 pb-12 font-montserrat">
       {/* Banner Image */}
       <div className="relative w-[90%] max-w-6xl h-48 md:h-64 rounded-2xl overflow-hidden shadow-lg">
         <Image
           src={
+            banner ??
             "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/0bd20f5258772df219803cab7a887485d34a2e70.jpg"
           }
           alt="Community Banner"
@@ -23,7 +42,10 @@ const DefaultHero = () => {
       <div className="relative -mt-12 md:-mt-16 z-10">
         <div className="bg-white p-4 rounded-2xl md:w-[120px] md:h-[120px] h-[90px] w-[90px] shadow-xl border border-gray-100">
           <Image
-            src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+            src={
+              logo ??
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+            }
             alt="One Communn Logo"
             height={95}
             width={95}
@@ -35,7 +57,7 @@ const DefaultHero = () => {
       {/* Community Title */}
       <div className="text-center mt-6">
         <h1 className="text-2xl md:text-4xl font-bold text-[#2E59A7]">
-          One Communn Community
+          {name}
         </h1>
         <p className="text-sm text-gray-500 font-medium mt-1">By One Communn</p>
       </div>
@@ -53,7 +75,9 @@ const DefaultHero = () => {
           <span className="text-[12px] md:text-sm text-black mb-1">
             Members
           </span>
-          <span className="text-xs md:text-2xl font-bold">10,2023</span>
+          <span className="text-xs md:text-2xl font-bold">
+            {Number(membersCount).toLocaleString()}
+          </span>
         </div>
 
         {/* <div className="hidden md:block h-12 w-[1px] bg-gray-300" /> */}
@@ -63,7 +87,10 @@ const DefaultHero = () => {
           <span className="text-[12px] md:text-sm text-black mb-1">
             No of Posts
           </span>
-          <span className="text-xs md:text-2xl font-bold">122</span>
+          <span className="text-xs md:text-2xl font-bold">
+            {" "}
+            {postsCount ? Number(postsCount).toLocaleString() : "-"}
+          </span>
         </div>
 
         {/* <div className="hidden md:block h-12 w-[1px] bg-gray-300" /> */}
@@ -71,7 +98,9 @@ const DefaultHero = () => {
         {/* Access */}
         <div className="flex flex-col items-center">
           <span className="text-[12px] md:text-sm text-black mb-1">Access</span>
-          <span className="text-xs md:text-2xl font-bold text-black">Free</span>
+          <span className="text-xs md:text-2xl font-bold text-black capitalize">
+            {type.toLowerCase()}
+          </span>
         </div>
 
         {/* <div className="hidden md:block h-12 w-[1px] bg-gray-300" /> */}
@@ -81,7 +110,10 @@ const DefaultHero = () => {
           <span className="text-[12px] md:text-sm text-black mb-1">
             Call Now
           </span>
-          <FaPhoneAlt className="size-[12px] md:size-6" />
+          {/* <FaPhoneAlt className="size-[12px] md:size-6" /> */}
+          <span className="text-xs md:text-2xl font-bold text-black">
+            {phoneNumber}
+          </span>
         </div>
       </div>
 

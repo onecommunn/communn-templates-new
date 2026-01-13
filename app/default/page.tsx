@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import DefaultHero from "./_components/DefaultHero";
 import DefaultAbout from "./_components/DefaultAbout";
@@ -9,20 +10,42 @@ import DefaultCourses from "./_components/DefaultCourses";
 import DefaultOurTeam from "./_components/DefaultOurTeam";
 import DefaultContactMe from "./_components/DefaultContactMe";
 import DefaultFAQ from "./_components/DefaultFAQ";
+import { useCMS } from "./CMSProvider.client";
+import { Community } from "@/services/communityService";
 
 const DefaultRoot = () => {
+  const { community } = useCMS();
+  const source: Community = community;
+  const isLoading = community === undefined;
   return (
     <>
-      <DefaultHero />
-      <DefaultTabs/>
-      <DefaultAbout />
-      <DefaultGallery/>
-      <DefaultEvents/>
-      <DefaultPlans/>
-      <DefaultCourses/>
-      <DefaultOurTeam/>
-      <DefaultContactMe/>
-      <DefaultFAQ/>
+      <DefaultHero
+        name={source?.name}
+        logo={source?.logo}
+        banner={source?.banner}
+        membersCount={source?.members?.length}
+        type={source?.type}
+        phoneNumber={source?.phoneNumber}
+      />
+      <DefaultTabs />
+      <DefaultAbout
+        description={source?.description}
+        vision={source?.vision}
+        mission={source?.mission}
+      />
+      <DefaultGallery gallery={source?.gallery} />
+      <DefaultEvents />
+      <DefaultPlans />
+      <DefaultCourses courses={source?.course} />
+      <DefaultOurTeam teams={source?.teams} />
+      <DefaultContactMe
+        message={source?.directorMessage}
+        address={source?.city ?? "-"}
+        socialLinks={source?.socialLinks}
+        email={source?.email ?? "-"}
+        phoneNumber={source?.phoneNumber}
+      />
+      <DefaultFAQ faqs={source?.faq}/>
     </>
   );
 };

@@ -1,9 +1,39 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Facebook, Github, Instagram, Send, Figma } from "lucide-react"; // Using Lucide for icons
+import {
+  Facebook,
+  Github,
+  Instagram,
+  Send,
+  Figma,
+  Linkedin,
+  Youtube,
+  Dribbble,
+  Globe,
+} from "lucide-react";
+import { FaInstagram, FaPinterest } from "react-icons/fa";
+import { FaThreads, FaXTwitter } from "react-icons/fa6";
+import { formatUrl } from "@/utils/StringFunctions";
 
-const DefaultFooter = () => {
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: FaInstagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+  twitter: FaXTwitter,
+  youtube: Youtube,
+  pinterest: FaPinterest,
+  threads: FaThreads,
+};
+
+type DefaultFooterProps = {
+  logo: string;
+  name: string;
+  socialLinks: any[];
+};
+
+const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
   const navLinks = [
     "Gallery",
     "Services",
@@ -13,7 +43,6 @@ const DefaultFooter = () => {
     "Directors Message",
     "FAQ's",
   ];
-
   const bottomLinks = [
     "Privacy Policy",
     "Terms of Use",
@@ -22,20 +51,25 @@ const DefaultFooter = () => {
     "Site Map",
   ];
 
+  const normalize = (s?: string) => (s ?? "").trim();
+
   return (
     <footer className="bg-[#F3F4F6] pt-16 pb-8 px-4 font-montserrat text-[#4B5563]">
       <div className="container mx-auto max-w-7xl">
         {/* Top Section: Logo and Main Nav */}
         <div className="flex flex-col items-center text-center mb-16">
           <Image
-            src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+            src={
+              logo ??
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+            }
             alt="One Communn Logo"
-            width={80}
-            height={80}
-            className="mb-4"
+            width={100}
+            height={100}
+            className="mb-4 rounded-[12px] overflow-hidden"
           />
           <h2 className="text-3xl md:text-4xl font-bold text-[#1E4D91] mb-1">
-            One Communn Community
+            {name}
           </h2>
           <p className="text-sm text-gray-400 mb-8 font-medium">
             By One Communn
@@ -90,15 +124,20 @@ const DefaultFooter = () => {
           <div className="flex flex-col items-center">
             <h4 className="font-bold text-black mb-4">Follow us</h4>
             <div className="flex gap-3">
-              {[Facebook, Github, Send, Instagram, Figma].map((Icon, index) => (
-                <Link
-                  href={"/"}
-                  key={index}
-                  className="bg-white p-2 rounded-full shadow-xl cursor-pointer hover:shadow-md transition-shadow"
-                >
-                  <Icon size={18} strokeWidth={1.5} />
-                </Link>
-              ))}
+              {socialLinks?.map((each: any, idx) => {
+                const key = normalize(each.type).toLowerCase();
+                const Icon = PLATFORM_ICON[key] ?? Globe;
+                const url = formatUrl(each.value) || "/";
+                return (
+                  <Link
+                    href={url ?? "/"}
+                    key={idx}
+                    className="bg-white p-2 rounded-full shadow-xl cursor-pointer hover:shadow-md transition-shadow"
+                  >
+                    <Icon size={18} strokeWidth={1.5} />
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>

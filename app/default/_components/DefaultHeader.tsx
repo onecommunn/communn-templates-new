@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -12,7 +12,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const DefaultHeader = () => {
+type DefaultHeaderProps = {
+  name: string;
+  logo: string;
+};
+
+const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   return (
@@ -23,7 +28,10 @@ const DefaultHeader = () => {
           <Link href="/" className="flex items-center gap-3">
             <div className="relative h-[30px] shrink-0 md:h-[40px] w-[30px] md:w-[40px]">
               <Image
-                src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+                src={
+                  logo ??
+                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+                }
                 alt="Logo"
                 width={48}
                 height={48}
@@ -32,7 +40,7 @@ const DefaultHeader = () => {
               />
             </div>
             <span className="text-[#1E4D91] font-bold md:text-lg text-sm">
-              One Communn Community
+              {name}
             </span>
           </Link>
 
@@ -76,7 +84,10 @@ const DefaultHeader = () => {
                 {/* Nav list */}
                 <nav className="flex flex-col space-y-1 py-2">
                   <SheetClose asChild>
-                    <Link href="/#home" className="px-4 py-3 hover:font-semibold">
+                    <Link
+                      href="/#home"
+                      className="px-4 py-3 hover:font-semibold"
+                    >
                       Home
                     </Link>
                   </SheetClose>

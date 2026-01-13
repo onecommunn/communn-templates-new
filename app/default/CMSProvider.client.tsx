@@ -9,7 +9,7 @@ import React, {
 } from "react";
 
 export type Bundle = {
-  home: any | null;
+  community: any | null;
 };
 
 type CMSContext = Bundle & {
@@ -18,7 +18,7 @@ type CMSContext = Bundle & {
 };
 
 const defaultBundle: Bundle = {
-  home: null,
+  community: null,
   // add more pages
 };
 

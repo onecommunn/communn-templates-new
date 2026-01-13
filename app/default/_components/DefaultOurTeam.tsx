@@ -9,8 +9,12 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
+import { UserRound } from "lucide-react";
+type DefaultOurTeamProps = {
+  teams: any[];
+};
 
-const DefaultOurTeam = () => {
+const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -64,10 +68,13 @@ const DefaultOurTeam = () => {
   }, [api]);
 
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true,stopOnMouseEnter:true })
+    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
   );
   return (
-    <section id="team" className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]">
+    <section
+      id="team"
+      className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+    >
       <h2 className="text-2xl font-bold mb-12 text-black">Our Team</h2>
 
       <Carousel
@@ -77,35 +84,41 @@ const DefaultOurTeam = () => {
         className="w-full"
       >
         <CarouselContent className="-ml-6">
-          {teamMembers.map((member) => (
+          {teams.map((member) => (
             <CarouselItem
-              key={member.id}
+              key={member._id}
               className="pl-6 md:basis-1/2 lg:basis-1/3 pt-16"
             >
               <div className="relative bg-white rounded-[3rem] p-8 pt-20 border border-gray-200 flex flex-col items-center text-center h-full">
                 {/* Fixed Overlapping Profile Image */}
                 <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full shadow-lg overflow-hidden z-20">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
-                  />
+                  {member?.image ? (
+                    <Image
+                      src={member.image}
+                      alt={member.name ?? "Member avatar"}
+                      fill
+                      className="object-cover"
+                      sizes="128px"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full bg-gray-100">
+                      <UserRound className="w-12 h-12 text-gray-400" />
+                    </div>
+                  )}
                 </div>
 
                 {/* Team Info Styling */}
                 <h3 className="text-2xl font-bold text-[#2E59A7] mb-2">
-                  {member.name}
+                  {member?.name}
                 </h3>
 
-                <div className="flex items-center gap-3 text-gray-400 font-medium mb-6">
-                  <span>{member.role}</span>
-                  <div className="w-[1.5px] h-4 bg-gray-200" />
-                  <span>{member.experience}</span>
+                <div className="flex flex-col items-center gap-3 text-gray-400 font-medium mb-6">
+                  <span>{member?.designation}</span>
+                  <span className="text-[#2E59A7]">{member?.experience} Experience</span>
                 </div>
 
                 <p className="text-gray-500 text-base leading-relaxed line-clamp-5">
-                  {member.bio}
+                  {member?.description}
                 </p>
               </div>
             </CarouselItem>
