@@ -4,14 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
-  Calendar,
   MapPin,
   Globe,
-  User,
   Users,
   LoaderCircle,
   ArrowLeft,
-  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -25,6 +22,8 @@ import {
 } from "@/services/eventService";
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
+import { Event } from "@/models/event.model";
+import Link from "next/link";
 
 const DefaultEventDetails = () => {
   const searchParams = useSearchParams();
@@ -32,7 +31,7 @@ const DefaultEventDetails = () => {
   const eventId = searchParams.get("eventid");
 
   // State Management
-  const [eventData, setEventData] = useState<any>(null);
+  const [eventData, setEventData] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isBooking, setIsBooking] = useState(false);
 
@@ -67,30 +66,46 @@ const DefaultEventDetails = () => {
           router.push("/");
           return;
         }
+
         const res: any = await getEventById(eventId);
         if (res?.events) {
           setEventData(res.events);
-        } else if (res) {
-          // Handle case where response is the event object itself
-          setEventData(res);
+        } else {
+          toast.warning("Event not found");
         }
       } catch (error) {
-        toast.error("Error loading event details.");
+        console.error("Error fetching event:", error);
+        toast.error("Something went wrong. Please try again.");
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchEventInfo();
   }, [eventId, router]);
+
+  if (!eventData) {
+    return (
+      <main className="flex-grow flex items-center justify-center h-2/5">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-black mb-4">
+            Event Not Found
+          </h1>
+          <Link href="/">
+            <Button variant={"default"}>Back to Events</Button>
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   // Validation Logic
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
   const isValidPhone = /^[0-9]{10}$/.test(formData.phoneNumber);
   const isFormValid =
-    formData.name.trim() !== "" &&
-    isValidEmail &&
-    isValidPhone
-  const isSoldOut = eventData?.attendees?.length >= eventData?.limitCapacity;
+    formData.name.trim() !== "" && isValidEmail && isValidPhone;
+
+  const isSoldOut = eventData?.limitCapacity > 0 && eventData?.attendees?.length >= eventData?.limitCapacity;
 
   const handleBookingAction = async () => {
     if (!isFormValid) return;

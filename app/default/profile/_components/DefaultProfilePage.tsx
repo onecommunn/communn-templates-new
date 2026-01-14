@@ -431,7 +431,7 @@ const DefaultProfilePage = () => {
                               )}&communityid=${encodeURIComponent(
                                 communityId || ""
                               )}`}
-                              className=" flex items-center justify-center h-8 px-3 text-xs font-medium text-white rounded-md cursor-pointer"
+                              className="flex items-center justify-center h-8 px-3 text-xs font-medium text-white rounded-md cursor-pointer bg-[#1e5598]"
                             >
                               Manage
                             </Link>
