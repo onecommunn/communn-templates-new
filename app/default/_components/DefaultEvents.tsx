@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Carousel,
@@ -14,49 +14,21 @@ import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-
-const events = [
-  {
-    id: 1,
-    title: "Community Meetup 2024",
-    description:
-      "Our platform streamlines member organization and invites, letting you focus on community growth.",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fe6a4b806e873a81d332bf491042932e809a78a9.jpg",
-  },
-  {
-    id: 2,
-    title: "Digital Marketing Workshop",
-    description:
-      "Assign roles, elevate members, and manage who enters your community.",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fe6a4b806e873a81d332bf491042932e809a78a9.jpg",
-  },
-  {
-    id: 3,
-    title: "Networking Dinner",
-    description:
-      "Customize your community with member-defined roles and contributions.",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fe6a4b806e873a81d332bf491042932e809a78a9.jpg",
-  },
-  {
-    id: 4,
-    title: "Annual Tech Summit",
-    description:
-      "Our platform streamlines member organization and invites, letting you focus on community growth.",
-    image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fe6a4b806e873a81d332bf491042932e809a78a9.jpg",
-  },
-];
+import { AuthContext } from "@/contexts/Auth.context";
+import { LockKeyhole } from "lucide-react";
+import LoginPopUp from "./LoginPopUp";
 
 const DefaultEvents = () => {
+  const auth = useContext(AuthContext);
+  const isLoggedIn = !!auth?.isAuthenticated;
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
   );
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { communityId } = useCommunity();
+  const { communityId, communityData } = useCommunity();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
   const fetchEvents = async () => {
     try {
@@ -73,6 +45,11 @@ const DefaultEvents = () => {
   useEffect(() => {
     if (communityId) fetchEvents();
   }, [communityId]);
+
+  const handleLoginTrigger = (eventId: string) => {
+    setRedirectPath(`/event-details?eventid=${eventId}`);
+    setIsLoginOpen(true);
+  };
 
   if (isLoading) {
     return (
@@ -155,12 +132,24 @@ const DefaultEvents = () => {
                     </p>
 
                     {/* Button always aligned */}
-                    <Link
-                      href={`/event-details?eventid=${event._id}`}
-                      className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white font-semibold text-sm hover:bg-[#25468a] transition-colors"
-                    >
-                      View Details
-                    </Link>
+                    {!isLoggedIn ? (
+                      <button
+                        onClick={() => handleLoginTrigger(event._id)}
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white font-semibold text-sm hover:bg-[#25468a] transition-colors"
+                      >
+                        {communityData?.community?.type === "PRIVATE" && (
+                          <LockKeyhole size={18} />
+                        )}
+                        Login to Participate
+                      </button>
+                    ) : (
+                      <Link
+                        href={`/event-details?eventid=${event._id}`}
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white font-semibold text-sm hover:bg-[#25468a] transition-colors"
+                      >
+                        View Details
+                      </Link>
+                    )}
                   </div>
                 </div>
               </CarouselItem>
@@ -171,6 +160,12 @@ const DefaultEvents = () => {
         <CarouselPrevious className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />
         <CarouselNext className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />
       </Carousel>
+
+      <LoginPopUp
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        redirectTo={redirectPath}
+      />
     </section>
   );
 };

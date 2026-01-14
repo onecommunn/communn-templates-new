@@ -25,6 +25,9 @@ export interface Event {
   attendees: Attendee[];
   createdAt: string;
   updatedAt: string;
+  plans: any[];
+  isCustomLinkEnabled: boolean;
+  customLink: string;
 }
 
 export interface CoverImage {
