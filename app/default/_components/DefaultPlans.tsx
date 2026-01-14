@@ -31,6 +31,7 @@ import { AuthContext } from "@/contexts/Auth.context";
 import { TrainingPlan } from "@/models/plan.model";
 import { capitalizeWords } from "@/utils/StringFunctions";
 import { cn } from "@/lib/utils";
+import LoginPopUp from "./LoginPopUp";
 
 const DefaultPlans = () => {
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
@@ -39,6 +40,7 @@ const DefaultPlans = () => {
   const { SendCommunityRequest } = useRequests();
   const { communityId, communityData } = useCommunity();
   const auth = useContext(AuthContext);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -207,18 +209,13 @@ const DefaultPlans = () => {
                       <div className="mt-auto">
                         {!isLoggedIn ? (
                           <Button
-                            asChild
-                            className="w-full py-6 rounded-xl font-bold bg-[#2E59A7] hover:bg-[#1E4D91]"
+                            onClick={() => setIsLoginOpen(true)}
+                            className="flex items-center gap-2 w-full py-6 rounded-xl font-bold bg-[#2E59A7] hover:bg-[#1E4D91]"
                           >
-                            <Link
-                              href="/login"
-                              className="flex items-center gap-2"
-                            >
-                              {communityData?.community?.type === "PRIVATE" && (
-                                <LockKeyhole size={18} />
-                              )}
-                              Login to Subscribe
-                            </Link>
+                            {communityData?.community?.type === "PRIVATE" && (
+                              <LockKeyhole size={18} />
+                            )}
+                            Login to Subscribe
                           </Button>
                         ) : !isSubscribedCommunity ? (
                           <Dialog>
@@ -260,7 +257,11 @@ const DefaultPlans = () => {
                             variant={"outline"}
                             className={cn(
                               "w-full py-6 rounded-xl font-bold",
-                              `${userSubscribedToPlan ? "text-[#2E59A7] border-[#2E59A7] " : "text-white bg-[#2E59A7]"}`
+                              `${
+                                userSubscribedToPlan
+                                  ? "text-[#2E59A7] border-[#2E59A7] "
+                                  : "text-white bg-[#2E59A7]"
+                              }`
                             )}
                           >
                             <Link
@@ -283,6 +284,11 @@ const DefaultPlans = () => {
         <CarouselPrevious className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />
         <CarouselNext className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />
       </Carousel>
+      <LoginPopUp
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        redirectTo={"/#plans"}
+      />
     </section>
   );
 };

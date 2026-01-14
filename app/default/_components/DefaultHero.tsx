@@ -36,9 +36,7 @@ const DefaultHero = ({
       (member: any) => member.user?._id === auth?.user?.id
     );
   }, [communityData?.community?.members, auth?.user?.id]);
-  console.log(isAlreadyJoined);
-  console.log(auth?.user?.id);
-  console.log(communityData?.community?.members);
+
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const router = useRouter();
 

@@ -102,11 +102,11 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo }: LoginPopUpProps) => {
         } else if (res.status === 404) {
           toast.error("User not found. Please sign up.");
           onClose();
-          router.push(
-            `/sign-up?${useEmail ? "email" : "mobile"}=${encodeURIComponent(
-              mobileNumber
-            )}`
-          );
+          // router.push(
+          //   `/sign-up?${useEmail ? "email" : "mobile"}=${encodeURIComponent(
+          //     mobileNumber
+          //   )}`
+          // );
         } else {
           toast.error(res?.data?.message || "Login failed");
         }

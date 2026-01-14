@@ -29,6 +29,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { logoutService } from "@/services/logoutService";
+import LoginPopUp from "./LoginPopUp";
 
 type DefaultHeaderProps = {
   name: string;
@@ -38,6 +39,7 @@ type DefaultHeaderProps = {
 const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const auth = useContext(AuthContext);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [desktopPopoverOpen, setDesktopPopoverOpen] = useState(false);
   const [mobilePopoverOpen, setMobilePopoverOpen] = useState(false);
@@ -355,6 +357,11 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
           </div>
         </div>
       </div>
+      <LoginPopUp
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        redirectTo={"/"}
+      />
     </header>
   );
 };
