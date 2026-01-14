@@ -118,7 +118,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
                   <span className="text-[#2E59A7]">{member?.experience} Experience</span>
                 </div>
 
-                <p className="text-gray-500 text-base leading-relaxed line-clamp-5">
+                <p className="text-gray-500 text-sm leading-relaxed line-clamp-5">
                   {member?.description}
                 </p>
               </div>

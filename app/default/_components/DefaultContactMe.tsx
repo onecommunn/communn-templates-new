@@ -51,7 +51,7 @@ const DefaultContactMe = ({
       <h2 className="text-2xl font-bold mb-8 text-black">Contact Me</h2>
 
       {/* Description Text */}
-      <p className="text-gray-600 text-base leading-relaxed max-w-6xl mb-16">
+      <p className="text-gray-600 text-sm leading-relaxed max-w-6xl mb-16">
         {message ?? "-"}
       </p>
 
@@ -60,26 +60,26 @@ const DefaultContactMe = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 flex-grow">
           {/* Call Info */}
           <div>
-            <h4 className="text-lg font-bold text-black mb-2">Call</h4>
-            <p className="text-gray-600 text-lg">{phoneNumber ?? "-"}</p>
+            <h4 className="text-base font-bold text-black mb-2">Call</h4>
+            <p className="text-gray-600 text-sm">{phoneNumber ?? "-"}</p>
           </div>
 
           {/* Email Info */}
           <div>
-            <h4 className="text-lg font-bold text-black mb-2">Email</h4>
-            <p className="text-gray-600 text-lg">{email}</p>
+            <h4 className="text-base font-bold text-black mb-2">Email</h4>
+            <p className="text-gray-600 text-sm">{email}</p>
           </div>
 
           {/* Address Info */}
           <div>
-            <h4 className="text-lg font-bold text-black mb-2">Address</h4>
-            <p className="text-gray-600 text-lg">{address}</p>
+            <h4 className="text-base font-bold text-black mb-2">Address</h4>
+            <p className="text-gray-600 text-sm">{address}</p>
           </div>
         </div>
 
         {/* Social Follow Links */}
         <div className="flex flex-col items-start md:items-end min-w-[200px]">
-          <h4 className="text-lg font-bold text-black mb-2">Follow Us</h4>
+          <h4 className="text-base font-bold text-black mb-2">Follow Us</h4>
           <div className="flex gap-4">
             {socialLinks?.map((each: any, idx) => {
               const key = normalize(each.type).toLowerCase();

@@ -178,7 +178,7 @@ const DefaultPlans = () => {
                         </span>
                       </div>
                       {plan.description && (
-                        <div className="flex items-start gap-3 text-base mb-4 text-gray-600">
+                        <div className="flex items-start gap-3 text-sm mb-4 text-gray-600">
                           <span className="line-clamp-3">
                             {plan.description}
                           </span>
