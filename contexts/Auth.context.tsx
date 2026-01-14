@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import { createContext } from 'react';
-import { ILoginData } from '../models/user.model';
-
+import { createContext } from "react";
+import { ILoginData } from "../models/user.model";
 
 export interface IAuthContext {
   loading: boolean;
@@ -15,18 +14,20 @@ export interface IAuthContext {
   autoLogin: (phoneNumber: string, emailId: string, token: any) => void;
   autoCreate: (a: any) => void;
   roleType: boolean;
-  communityId:string;
+  communityId: string;
+  userData: any;
 }
 export const AuthContext = createContext<IAuthContext>({
   loading: true,
-  user: '',
+  user: "",
   isAuthenticated: false,
-  getAccessToken: () => '',
-  login: (a: ILoginData) => { },
-  logout: () => { },
+  getAccessToken: () => "",
+  login: (a: ILoginData) => {},
+  logout: () => {},
   getCommunity: () => "",
-  autoLogin: (phoneNumber: string) => { },
-  autoCreate: (a: any) => { },
+  autoLogin: (phoneNumber: string) => {},
+  autoCreate: (a: any) => {},
   roleType: false,
-  communityId:'',
+  communityId: "",
+  userData: null,
 });

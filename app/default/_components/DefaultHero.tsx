@@ -1,6 +1,11 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
+import { AuthContext } from "@/contexts/Auth.context";
+import { useCommunity } from "@/hooks/useCommunity";
+import Link from "next/link";
+import LoginPopUp from "./LoginPopUp";
+import { useRouter } from "next/navigation";
 
 type DefaultHeroProps = {
   name: string;
@@ -21,6 +26,30 @@ const DefaultHero = ({
   type,
   phoneNumber,
 }: DefaultHeroProps) => {
+  const auth = useContext(AuthContext);
+  const { communityData } = useCommunity();
+
+  const isAlreadyJoined = React.useMemo(() => {
+    if (!auth?.user?.id || !communityData?.community?.members) return false;
+
+    return communityData?.community?.members?.some(
+      (member: any) => member.user?._id === auth?.user?.id
+    );
+  }, [communityData?.community?.members, auth?.user?.id]);
+  console.log(isAlreadyJoined);
+  console.log(auth?.user?.id);
+  console.log(communityData?.community?.members);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (auth.isAuthenticated) {
+      router.push("/#plans");
+    } else {
+      setIsLoginOpen(true);
+    }
+  };
+
   return (
     <section className="relative flex flex-col items-center pt-8 pb-12 font-montserrat">
       {/* Banner Image */}
@@ -40,7 +69,7 @@ const DefaultHero = ({
 
       {/* Overlapping Profile Logo */}
       <div className="relative -mt-12 md:-mt-16 z-10">
-        <div className="bg-white p-4 rounded-2xl md:w-[120px] md:h-[120px] h-[90px] w-[90px] shadow-xl border border-gray-100">
+        <div className="bg-white p-4 rounded-[20px] md:w-[120px] md:h-[120px] h-[90px] w-[90px] shadow-xl border border-gray-100">
           <Image
             src={
               logo ??
@@ -117,9 +146,27 @@ const DefaultHero = ({
       </div>
 
       {/* Subscribe Button */}
-      <button className="cursor-pointer mt-8 bg-[#3056A7] text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all">
-        Subscribe
-      </button>
+
+      {isAlreadyJoined ? (
+        <Link
+          href={"/#plans"}
+          className="cursor-pointer mt-8 bg-[#3056A7] text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
+        >
+          Subscribe
+        </Link>
+      ) : (
+        <button
+          onClick={handleClick}
+          className="cursor-pointer mt-8 bg-[#3056A7] text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
+        >
+          Join Community
+        </button>
+      )}
+      <LoginPopUp
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        redirectTo={"/#plans"}
+      />
     </section>
   );
 };

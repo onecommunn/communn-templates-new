@@ -59,7 +59,7 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
         <div className="flex items-center justify-between py-4 gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="relative h-[30px] shrink-0 md:h-[40px] w-[30px] md:w-[40px]">
+            <div className="relative h-[30px] shrink-0 md:h-[40px] w-[30px] md:w-[40px] rounded-full overflow-hidden">
               <Image
                 src={
                   logo ??

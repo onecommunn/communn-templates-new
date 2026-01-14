@@ -161,16 +161,6 @@ const DefaultEventDetails = () => {
     eventData?.limitCapacity > 0 &&
     eventData?.attendees?.length >= eventData?.limitCapacity;
 
-  const eventLink = eventData?.isCustomLinkEnabled
-    ? eventData?.customLink
-    : eventData?.meetingLink;
-
-  const firstSlot = eventData?.availability?.[0];
-  const displayDate = firstSlot?.day || "Date not set";
-  const displayTime = firstSlot?.availableTimes?.[0]
-    ? `${firstSlot.availableTimes[0].startTime} - ${firstSlot.availableTimes[0].endTime}`
-    : "Time not set";
-
   const handleBookingAction = async () => {
     if (!isEventIncluded && !isFormValid) return;
 
@@ -265,8 +255,8 @@ const DefaultEventDetails = () => {
                 unoptimized
               />
             </div>
-            <div className="space-y-4 text-center md:text-left">
-              <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight capitalize">
+            <div className="space-y-2 text-center md:text-left">
+              <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight capitalize">
                 {eventData?.title}
               </h1>
               <div className="flex flex-wrap gap-3">
@@ -294,7 +284,7 @@ const DefaultEventDetails = () => {
 
           {/* Date, Timing and Meeting Link Section */}
           <div className="space-y-6">
-            <div className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm space-y-6">
+            <div className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm">
               {/* Timings & Date Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
                 <div>
@@ -320,6 +310,14 @@ const DefaultEventDetails = () => {
                           eventData.availability[0].availableTimes[0].endTime
                         )}`
                       : "Timings not specified"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+                    Hosted By
+                  </p>
+                  <p className="text-lg font-bold text-slate-800">
+                    {eventData?.hostedBy}
                   </p>
                 </div>
               </div>
@@ -352,6 +350,7 @@ const DefaultEventDetails = () => {
 
               {/* Description */}
               <div>
+                <hr className="mb-4"/>
                 <h3 className="text-xl font-bold mb-4">Description</h3>
                 <p className="text-slate-600 leading-relaxed text-lg">
                   {eventData?.description}
