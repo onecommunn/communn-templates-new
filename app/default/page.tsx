@@ -18,8 +18,8 @@ const DefaultRoot = () => {
   const source: Community = community;
   // console.log("DefaultRoot community data:", source);
 
-  const creatorMember = source.members.find(
-    (member) => member.user?._id === source.createdBy
+  const creatorMember = source?.members?.find(
+    (member) => member?.user?._id === source?.createdBy
   );
 
   const adminName = creatorMember?.user?.firstName
