@@ -118,6 +118,7 @@ const DefaultEvents = () => {
                       alt={event.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      unoptimized
                     />
                   </div>
 

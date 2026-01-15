@@ -32,6 +32,7 @@ const DefaultGallery = ({ gallery }: DefaultGalleryProps) => {
               alt={`Gallery image ${index + 1}`}
               fill
               className="object-cover"
+              unoptimized
             />
           </div>
         ))}

@@ -74,6 +74,7 @@ const DefaultFooter = ({ logo, name, socialLinks, adminName, fullAddress, zipCod
             width={100}
             height={100}
             className="mb-4 overflow-hidden bg-white p-4 rounded-[20px] shadow-md"
+            unoptimized
           />
           <h2 className="text-xl md:text-3xl font-bold text-[#1E4D91] mb-1">
             {name}

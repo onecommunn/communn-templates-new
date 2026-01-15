@@ -63,6 +63,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
                       fill
                       className="object-cover"
                       sizes="128px"
+                      unoptimized
                     />
                   ) : (
                     <div className="flex items-center justify-center w-full h-full bg-gray-100">

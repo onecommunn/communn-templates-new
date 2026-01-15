@@ -86,6 +86,7 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
                     }
                     fill
                     className="object-cover group-hover:scale-[1.03] transition-transform"
+                    unoptimized
                   />
                 </div>
 
