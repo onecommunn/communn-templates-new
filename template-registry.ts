@@ -81,6 +81,11 @@ import CollectionsShell from "./app/collections/CollectionsShell";
 import CollectionsContactusRoot from "./app/collections/contact-us/page";
 import CollectionsAboutRoot from "./app/collections/about/page";
 import CollectionsCollectionsPageRoot from "./app/collections/collections/page";
+import DefaultEventDetailsPage from "./app/default/event-details/page";
+import DefaultLogin from "./app/default/login/page";
+import DefaultProfileRoot from "./app/default/profile/page";
+import DefaultPaymentsRoot from "./app/default/payments/page";
+import DefaultSubscriptionsRoot from "./app/default/subscriptions/pages";
 
 export const templateLayouts: Record<
   string,
@@ -114,7 +119,15 @@ export const templates: Record<
     "/sign-up": CreatorSignup,
     "/auto-login": AutoLogin,
   },
-  default: { "/": DefaultRoot },
+  default: {
+    "/": DefaultRoot,
+    "/auto-login": AutoLogin,
+    "/event-details": DefaultEventDetailsPage,
+    "/login": DefaultLogin,
+    "/profile":DefaultProfileRoot,
+    "/payments": DefaultPaymentsRoot,
+    "/subscriptions":DefaultSubscriptionsRoot
+  },
   yogana: {
     "/": YoganaRoot,
     "/event-details": YoganaEventDetailsPage,

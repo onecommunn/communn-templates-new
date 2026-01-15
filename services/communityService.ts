@@ -43,6 +43,12 @@ export interface Community {
   updatedAt: string;
   template: string;
   requests: any[];
+  mission: string;
+  email: string;
+  vision: string;
+  numberOfPost:number
+  directorMessage: string;
+  phoneNumber: number;
 }
 
 export interface EnabledService {
@@ -78,7 +84,7 @@ export interface User {
   _id: string;
   firstName: string;
   lastName: string;
-  phoneNumber: number;
+  phoneNumber?: number;
   emailId: string;
   hash: string;
   salt: string;
@@ -214,7 +220,13 @@ export async function getCommunityData(
         socialLinks: [],
         requests: [],
         createdAt: "",
+        phoneNumber: 0,
+        mission: "",
+        directorMessage: "",
+        vision: "",
+        email:'',
         updatedAt: "",
+        numberOfPost:0,
         template: "default",
       },
     };

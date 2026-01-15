@@ -88,6 +88,7 @@ interface UserResponseData {
 export const useAuth = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [roleType, setRoleType] = useState<boolean>(false);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
