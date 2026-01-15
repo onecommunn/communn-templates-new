@@ -58,9 +58,9 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
   return (
     <section
       id="courses"
-      className="max-w-6xl mx-auto px-6 py-12 font-montserrat relative scroll-mt-[40px] md:scroll-mt-[90px]"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat relative scroll-mt-[40px] md:scroll-mt-[90px]"
     >
-      <h2 className="text-2xl font-bold mb-8 text-black">Courses</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">Courses</h2>
 
       <Carousel
         plugins={[plugin.current]}
@@ -73,14 +73,14 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
         <CarouselContent>
           {courses?.map((course, idx) => (
             <CarouselItem key={idx} className="md:basis-1/2 lg:basis-1/3">
-              <div className="bg-white cursor-pointer rounded-[2.5rem] p-4 border border-gray-200 flex flex-col h-full group">
+              <div className="bg-white cursor-pointer rounded-[20px] p-4 border border-gray-200 flex flex-col h-full group">
                 {/* Course Image */}
                 <div className="relative h-48 w-full rounded-3xl overflow-hidden mb-6">
                   <Image
                     alt={course?.name}
                     src={
                       typeof course?.coverImage === "object" &&
-                      course?.coverImage
+                        course?.coverImage
                         ? (course?.coverImage as IMultiMedia).value
                         : "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default%20Courses.png"
                     }
@@ -91,10 +91,10 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
 
                 {/* Course Content */}
                 <div className="flex flex-col flex-grow">
-                  <h3 className="text-2xl font-bold mb-4 text-black line-clamp-1">
+                  <h3 className="text-lg md:text-xl font-bold mb-4 text-black line-clamp-1">
                     {course?.name}
                   </h3>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-grow line-clamp-5">
+                  <p className="text-gray-500 text-xs md:text-sm leading-relaxed mb-6 flex-grow line-clamp-5">
                     {course.description}
                   </p>
 

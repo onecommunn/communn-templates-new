@@ -32,9 +32,13 @@ type DefaultFooterProps = {
   logo: string;
   name: string;
   socialLinks: any[];
+  adminName?: string;
+  fullAddress?: string;
+  zipCode?: string;
+
 };
 
-const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
+const DefaultFooter = ({ logo, name, socialLinks, adminName, fullAddress, zipCode }: DefaultFooterProps) => {
   const navLinks = [
     "Gallery",
     "Services",
@@ -47,12 +51,14 @@ const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
   const bottomLinks = [
     "Privacy Policy",
     "Terms of Use",
-    "Sales and Refunds",
-    "Legal",
-    "Site Map",
+    // "Sales and Refunds",
+    // "Legal",
+    // "Site Map",
   ];
 
   const normalize = (s?: string) => (s ?? "").trim();
+
+  const year = new Date().getFullYear();
 
   return (
     <footer className="bg-[#F3F4F6] pt-16 pb-8 px-4 font-montserrat text-[#4B5563]">
@@ -67,13 +73,13 @@ const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
             alt="One Communn Logo"
             width={100}
             height={100}
-            className="mb-4 rounded-[12px] overflow-hidden"
+            className="mb-4 overflow-hidden bg-white p-4 rounded-[20px] shadow-md"
           />
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1E4D91] mb-1">
+          <h2 className="text-xl md:text-3xl font-bold text-[#1E4D91] mb-1">
             {name}
           </h2>
           <p className="text-sm text-gray-400 mb-8 font-medium">
-            By One Communn
+            By {adminName}
           </p>
 
           <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-semibold text-gray-700">
@@ -147,7 +153,7 @@ const DefaultFooter = ({ logo, name, socialLinks }: DefaultFooterProps) => {
 
         {/* Bottom Section: Copyright & Legal */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-medium">
-          <p>© 2021 All Rights Reserved</p>
+          <p>© {year} All Rights Reserved</p>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             {bottomLinks?.map((link) => (

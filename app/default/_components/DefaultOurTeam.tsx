@@ -20,44 +20,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
-  const teamMembers = [
-    {
-      id: 1,
-      name: "Harry Styles",
-      role: "Manager",
-      experience: "20 yrs Exp",
-      bio: "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7928e22e19aa18f29459db2f3a1ed0cbcabfa799.jpg",
-    },
-    {
-      id: 2,
-      name: "Harry Styles",
-      role: "Manager",
-      experience: "20 yrs Exp",
-      bio: "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7928e22e19aa18f29459db2f3a1ed0cbcabfa799.jpg",
-    },
-    {
-      id: 3,
-      name: "Harry Styles",
-      role: "Manager",
-      experience: "20 yrs Exp",
-      bio: "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7928e22e19aa18f29459db2f3a1ed0cbcabfa799.jpg",
-    },
-    {
-      id: 4,
-      name: "Harry Styles",
-      role: "Manager",
-      experience: "20 yrs Exp",
-      bio: "Transform your home into a global hub for homemakers to share recipes, home decor ideas, parenting tips, and more, cultivating a family-like, nurturing community.",
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7928e22e19aa18f29459db2f3a1ed0cbcabfa799.jpg",
-    },
-  ];
+
 
   useEffect(() => {
     if (!api) return;
@@ -74,9 +37,9 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
   return (
     <section
       id="team"
-      className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
     >
-      <h2 className="text-2xl font-bold mb-12 text-black">Our Team</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">Our Team</h2>
 
       <Carousel
         plugins={[plugin.current]}
@@ -90,7 +53,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
               key={member._id}
               className="pl-6 md:basis-1/2 lg:basis-1/3 pt-16"
             >
-              <div className="relative bg-white rounded-[3rem] p-8 pt-20 border border-gray-200 flex flex-col items-center text-center h-full">
+              <div className="relative bg-white rounded-[20px] p-8 pt-20 border border-gray-200 flex flex-col items-center text-center h-full">
                 {/* Fixed Overlapping Profile Image */}
                 <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full shadow-lg overflow-hidden z-20">
                   {member?.image ? (
@@ -109,16 +72,16 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
                 </div>
 
                 {/* Team Info Styling */}
-                <h3 className="text-2xl font-bold text-[#2E59A7] mb-2">
+                <h3 className="text-lg md:text-xl font-bold text-[#2E59A7] mb-2">
                   {member?.name}
                 </h3>
 
                 <div className="flex flex-col items-center gap-3 text-gray-400 font-medium mb-6">
                   <span>{member?.designation}</span>
-                  <span className="text-[#2E59A7]">{member?.experience} Experience</span>
+                  <span className="text-[#2E59A7]">{member?.experience} Years of Experience</span>
                 </div>
 
-                <p className="text-gray-500 text-sm leading-relaxed line-clamp-5">
+                <p className="text-gray-500 text-xs md:text-sm leading-relaxed line-clamp-5">
                   {member?.description}
                 </p>
               </div>

@@ -14,10 +14,10 @@ const DefaultGallery = ({ gallery }: DefaultGalleryProps) => {
   return (
     <section
       id="gallery"
-      className="max-w-6xl mx-auto px-6 py-12 font-montserrat"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat"
     >
       {/* Section Header */}
-      <h2 className="text-2xl font-bold mb-8 text-black">Gallery</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">Gallery</h2>
 
       {/* Responsive Image Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -39,18 +39,18 @@ const DefaultGallery = ({ gallery }: DefaultGalleryProps) => {
 
       {/* Lightbox Modal */}
       {selectedImage && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-300"
           onClick={() => setSelectedImage(null)}
         >
-          <button 
+          <button
             className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-[110] cursor-pointer"
             onClick={() => setSelectedImage(null)}
           >
             <X size={40} />
           </button>
-          
-          <div 
+
+          <div
             className="relative w-full max-w-5xl aspect-auto max-h-[90vh] overflow-hidden rounded-2xl"
             onClick={(e) => e.stopPropagation()}
           >

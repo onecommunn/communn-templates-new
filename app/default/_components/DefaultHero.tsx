@@ -15,6 +15,7 @@ type DefaultHeroProps = {
   type: string;
   phoneNumber: number;
   numberOfPost: number;
+  adminName?: string;
 };
 
 const DefaultHero = ({
@@ -25,6 +26,7 @@ const DefaultHero = ({
   numberOfPost,
   type,
   phoneNumber,
+  adminName
 }: DefaultHeroProps) => {
   const auth = useContext(AuthContext);
   const { communityData } = useCommunity();
@@ -49,9 +51,9 @@ const DefaultHero = ({
   };
 
   return (
-    <section className="relative flex flex-col items-center pt-8 pb-12 font-montserrat">
+    <section className="relative flex flex-col items-center pt-8 pb-8 font-montserrat">
       {/* Banner Image */}
-      <div className="relative w-[90%] max-w-6xl h-48 md:h-64 rounded-2xl overflow-hidden shadow-lg">
+      <div className="relative w-[95%] max-w-6xl h-30 md:h-64 rounded-2xl overflow-hidden shadow-md">
         <Image
           src={
             banner ??
@@ -59,7 +61,7 @@ const DefaultHero = ({
           }
           alt="Community Banner"
           fill
-          className="object-cover"
+          className="object-cover rounded-2xl"
           priority
           unoptimized
         />
@@ -77,16 +79,17 @@ const DefaultHero = ({
             height={95}
             width={95}
             unoptimized
+            className="object-cover rounded-[8px]"
           />
         </div>
       </div>
 
       {/* Community Title */}
       <div className="text-center mt-6">
-        <h1 className="text-2xl md:text-4xl font-bold text-[#2E59A7]">
+        <h1 className="text-xl md:text-3xl font-bold text-[#2E59A7]">
           {name}
         </h1>
-        <p className="text-sm text-gray-500 font-medium mt-1">By One Communn</p>
+        <p className="text-sm text-gray-500 font-medium mt-1">By {adminName}</p>
       </div>
 
       {/* Stats Card */}
@@ -95,7 +98,7 @@ const DefaultHero = ({
           background:
             "linear-gradient(90deg, rgba(223, 34, 90, 0.1) 9.3%, rgba(59, 155, 127, 0.1) 34.8%, rgba(80, 161, 202, 0.1) 64.3%, rgba(42, 83, 162, 0.1) 95.3%)",
         }}
-        className="mt-10 w-[90%] max-w-4xl bg-white/70 backdrop-blur-md border border-gray-100 rounded-2xl shadow-lg grid grid-cols-4 py-4 md:py-6 px-2 md:px-4"
+        className="mt-10 w-[95%] max-w-6xl bg-white/70 backdrop-blur-md border border-gray-100 rounded-2xl shadow-md grid grid-cols-4 py-4 md:py-6 px-2 md:px-4"
       >
         {/* Members */}
         <div className="flex flex-col items-center">
@@ -145,27 +148,29 @@ const DefaultHero = ({
 
       {/* Subscribe Button */}
 
-      {isAlreadyJoined ? (
-        <Link
-          href={"/#plans"}
-          className="cursor-pointer mt-8 bg-[#3056A7] text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
-        >
-          Subscribe
-        </Link>
-      ) : (
-        <button
-          onClick={handleClick}
-          className="cursor-pointer mt-8 bg-[#3056A7] text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
-        >
-          Join Community
-        </button>
-      )}
+      {
+        isAlreadyJoined ? (
+          <Link
+            href={"/#plans"}
+            className="cursor-pointer mt-8 bg-[#3056A7] text-white px-12 py-3 md:text-lg text-xs  rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
+          >
+            Subscribe
+          </Link>
+        ) : (
+          <button
+            onClick={handleClick}
+            className="cursor-pointer mt-8 bg-[#3056A7] md:text-lg text-xs  text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
+          >
+            Join Community
+          </button>
+        )
+      }
       <LoginPopUp
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         redirectTo={"/#plans"}
       />
-    </section>
+    </section >
   );
 };
 

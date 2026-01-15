@@ -55,10 +55,10 @@ const DefaultEvents = () => {
     return (
       <section
         id="events"
-        className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+        className="max-w-6xl mx-auto px-3 md:px-6 py-6  font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
       >
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-black">Events</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-black">Events</h2>
         </div>
 
         <Carousel
@@ -85,10 +85,10 @@ const DefaultEvents = () => {
   return (
     <section
       id="events"
-      className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
     >
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-black">Events</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-black">Events</h2>
       </div>
 
       <Carousel
@@ -107,7 +107,7 @@ const DefaultEvents = () => {
                 className="pl-4 md:basis-1/2 lg:basis-1/3 flex"
               >
                 {/* Card */}
-                <div className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-200  transition-all duration-300 group flex flex-col h-full w-full">
+                <div className="bg-white rounded-[20px] overflow-hidden border border-gray-200  transition-all duration-300 group flex flex-col h-full w-full">
                   {/* Image */}
                   <div className="relative h-64 w-full overflow-hidden shrink-0">
                     <Image
@@ -123,11 +123,11 @@ const DefaultEvents = () => {
 
                   {/* Content */}
                   <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-xl font-bold mb-4 text-gray-900 line-clamp-1">
+                    <h3 className="text-lg md:text-xl font-bold mb-4 text-gray-900 line-clamp-1">
                       {event.title}
                     </h3>
 
-                    <p className="text-sm font-medium line-clamp-3 mb-4">
+                    <p className="text-xs md:text-sm font-medium line-clamp-3 mb-4">
                       {event?.description}
                     </p>
 
@@ -135,7 +135,7 @@ const DefaultEvents = () => {
                     {!isLoggedIn ? (
                       <button
                         onClick={() => handleLoginTrigger(event._id)}
-                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white font-semibold text-sm hover:bg-[#25468a] transition-colors"
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white text-xs md:text-sm hover:bg-[#25468a] transition-colors"
                       >
                         {communityData?.community?.type === "PRIVATE" && (
                           <LockKeyhole size={18} />
@@ -145,7 +145,7 @@ const DefaultEvents = () => {
                     ) : (
                       <Link
                         href={`/event-details?eventid=${event._id}`}
-                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white font-semibold text-sm hover:bg-[#25468a] transition-colors"
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white text-xs md:text-sm hover:bg-[#25468a] transition-colors"
                       >
                         View Details
                       </Link>

@@ -13,14 +13,14 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
   return (
     <section
       id="home"
-      className="max-w-6xl mx-auto px-6 py-8 md:py-16 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 md:py-16 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
     >
       {/* Community Description Section */}
-      <div className="mb-8 md:mb-16">
-        <h2 className="text-2xl font-bold mb-4 text-black">
+      <div className="mb-6 md:mb-6">
+        <h2 className="text-xl md:text-2xl font-bold mb-4 text-black">
           Community Description
         </h2>
-        <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
+        <p className="text-gray-600 leading-relaxed text-xs md:text-sm">{description}</p>
       </div>
 
       {/* Vision & Mission Cards */}
@@ -33,7 +33,7 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
           <h3 className="text-2xl md:text-3xl font-bold mb-6 text-black">
             Vision
           </h3>
-          <p className="text-black text-sm leading-relaxed mb-8">{vision}</p>
+          <p className="text-black text-xs md:text-sm leading-relaxed mb-8">{vision}</p>
           {/* Floating Bottom Icon */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center border border-[#00000033]">
             <Eye className="w-10 h-10 text-black stroke-[1.5]" />
@@ -48,7 +48,7 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
           <h3 className="text-2xl md:text-3xl font-bold mb-6 text-black">
             Mission
           </h3>
-          <p className="text-black text-sm leading-relaxed mb-8">{mission}</p>
+          <p className="text-black text-xs md:text-sm leading-relaxed mb-8">{mission}</p>
           {/* Floating Bottom Icon */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center border border-[#00000033]">
             <TbTargetArrow className="w-10 h-10 text-black stroke-[1.5]" />

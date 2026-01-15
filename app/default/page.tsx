@@ -16,6 +16,14 @@ import { Community } from "@/services/communityService";
 const DefaultRoot = () => {
   const { community } = useCMS();
   const source: Community = community;
+  // console.log("DefaultRoot community data:", source);
+
+  const creatorMember = source.members.find(
+    (member) => member.user?._id === source.createdBy
+  );
+
+  const adminName = creatorMember?.user?.firstName
+
   return (
     <>
       <DefaultHero
@@ -26,6 +34,7 @@ const DefaultRoot = () => {
         type={source?.type}
         phoneNumber={source?.phoneNumber}
         numberOfPost={source?.numberOfPost}
+        adminName={adminName}
       />
       <DefaultTabs />
       <DefaultAbout
@@ -44,8 +53,10 @@ const DefaultRoot = () => {
         socialLinks={source?.socialLinks}
         email={source?.email ?? "-"}
         phoneNumber={source?.phoneNumber}
+        fullAddress={source?.fullAddress}
+        zipCode={source?.zipCode || ""}
       />
-      <DefaultFAQ faqs={source?.faq}/>
+      <DefaultFAQ faqs={source?.faq} />
     </>
   );
 };

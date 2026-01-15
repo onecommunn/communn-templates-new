@@ -110,10 +110,10 @@ const DefaultPlans = () => {
   return (
     <section
       id="plans"
-      className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
     >
-      <div className="flex justify-between items-end mb-10">
-        <h2 className="text-3xl font-bold text-black">Plans</h2>
+      <div className="flex justify-between items-end mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-black">Plans</h2>
       </div>
 
       <Carousel
@@ -124,162 +124,161 @@ const DefaultPlans = () => {
         <CarouselContent>
           {isLoading
             ? [1, 2, 3]?.map((i) => (
-                <CarouselItem
-                  key={i}
-                  className="pl-6 md:basis-1/2 lg:basis-1/3"
-                >
-                  <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-[2.5rem]" />
-                </CarouselItem>
-              ))
+              <CarouselItem
+                key={i}
+                className="pl-6 md:basis-1/2 lg:basis-1/3"
+              >
+                <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-[2.5rem]" />
+              </CarouselItem>
+            ))
             : plans?.map((plan, idx) => {
-                const userSubscribedToPlan =
-                  !!isLoggedIn &&
-                  plan.subscribers?.some(
-                    (sub: any) => (sub?._id ?? sub?.id) === userId
-                  );
+              const userSubscribedToPlan =
+                !!isLoggedIn &&
+                plan.subscribers?.some(
+                  (sub: any) => (sub?._id ?? sub?.id) === userId
+                );
 
-                return (
-                  <CarouselItem
-                    key={plan._id}
-                    className="md:basis-1/2 lg:basis-1/3"
+              return (
+                <CarouselItem
+                  key={plan._id}
+                  className="md:basis-1/2 lg:basis-1/3"
+                >
+                  <div
+                    className={cn(
+                      "relative rounded-[20px] flex flex-col h-full p-4 pt-4 border transition-all duration-300",
+                      "bg-white border-gray-200"
+                    )}
                   >
-                    <div
-                      className={cn(
-                        "relative rounded-[2.5rem] flex flex-col h-full p-8 pt-10 border transition-all duration-300",
-                        "bg-white border-gray-200"
-                      )}
-                    >
-                      {/* Icon & Label */}
-                      <div className="mb-6 flex justify-between items-start">
-                        <div
-                          className={cn(
-                            "relative w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center",
-                            "bg-[#A7F3D0] text-[#065F46]"
-                          )}
-                        >
-                          <Image
-                            src={
-                              plan.image?.value ??
-                              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Planss.png"
-                            }
-                            alt={plan.name ?? "Plan image"}
-                            fill
-                            className="object-cover"
-                            sizes="40px"
-                          />
-                        </div>
-                      </div>
-
-                      <h3 className="text-2xl font-bold text-black">
-                        {capitalizeWords(plan.name)}
-                      </h3>
-                      <div className="flex items-center gap-3 my-3 text-lg font-bold text-[#2E59A7] capitalize">
-                        <span>
-                          ₹{plan.pricing || plan.totalPlanValue} /{" "}
-                          {plan.duration.toLowerCase()}
-                        </span>
-                      </div>
-                      {plan.description && (
-                        <div className="flex items-start gap-3 text-sm mb-4 text-gray-600">
-                          <span className="line-clamp-3">
-                            {plan.description}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Features List */}
-                      <div className="space-y-4 mb-10 flex-grow">
-                        <div className="flex items-center gap-3 text-sm text-gray-500">
-                          <Check size={18} className="text-black" />
-                          <span>
-                            {`Duration: ${plan.interval} ${capitalizeWords(
-                              plan.duration
-                            )}`}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-500">
-                          <Check size={18} className="text-black" />
-                          <span>
-                            {`Subscribers: ${plan.subscribers?.length ?? 0}`}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* CTA Logic from Reference */}
-                      <div className="mt-auto">
-                        {!isLoggedIn ? (
-                          <Button
-                            onClick={() => setIsLoginOpen(true)}
-                            className="flex items-center gap-2 w-full py-6 rounded-xl font-bold bg-[#2E59A7] hover:bg-[#1E4D91]"
-                          >
-                            {communityData?.community?.type === "PRIVATE" && (
-                              <LockKeyhole size={18} />
-                            )}
-                            Login to Subscribe
-                          </Button>
-                        ) : !isSubscribedCommunity ? (
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button className="w-full py-6 rounded-xl font-bold bg-[#2E59A7] hover:bg-[#1E4D91]">
-                                {communityData?.community?.type === "PRIVATE"
-                                  ? "Request to Join"
-                                  : "Join Community"}
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogTitle>
-                                Community Membership Required
-                              </DialogTitle>
-                              <DialogDescription>
-                                {communityData?.community?.type === "PRIVATE"
-                                  ? "This is a private community. Send a request to the admin to get access to plans."
-                                  : "You need to join the community before subscribing to a plan."}
-                              </DialogDescription>
-                              <div className="flex justify-end mt-4">
-                                <DialogClose asChild>
-                                  <Button
-                                    onClick={
-                                      communityData?.community?.type ===
-                                      "PRIVATE"
-                                        ? handleRequest
-                                        : handleJoin
-                                    }
-                                  >
-                                    Confirm
-                                  </Button>
-                                </DialogClose>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        ) : (
-                          <Button
-                            asChild={!userSubscribedToPlan}
-                            variant={"outline"}
-                            className={cn(
-                              "w-full py-6 rounded-xl font-bold",
-                              `${
-                                userSubscribedToPlan
-                                  ? "text-[#2E59A7] border-[#2E59A7] "
-                                  : "text-white bg-[#2E59A7]"
-                              }`
-                            )}
-                          >
-                            <Link
-                              href={`/subscriptions/?planid=${plan._id}&communityid=${communityId}`}
-                            >
-                              {userSubscribedToPlan ? (
-                                <span>Subscribed</span>
-                              ) : (
-                                <span>Subscribe</span>
-                              )}
-                            </Link>
-                          </Button>
+                    {/* Icon & Label */}
+                    <div className="mb-6 flex justify-between items-start">
+                      <div
+                        className={cn(
+                          "relative w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center",
+                          "bg-[#A7F3D0] text-[#065F46]"
                         )}
+                      >
+                        <Image
+                          src={
+                            plan.image?.value ??
+                            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Planss.png"
+                          }
+                          alt={plan.name ?? "Plan image"}
+                          fill
+                          className="object-cover"
+                          sizes="40px"
+                        />
                       </div>
                     </div>
-                  </CarouselItem>
-                );
-              })}
+
+                    <h3 className="text-lg md:text-xl font-bold text-black">
+                      {capitalizeWords(plan.name)}
+                    </h3>
+                    <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[#2E59A7] capitalize">
+                      <span>
+                        ₹{plan.pricing || plan.totalPlanValue} /{" "}
+                        {plan.duration.toLowerCase()}
+                      </span>
+                    </div>
+                    {plan.description && (
+                      <div className="flex items-start gap-3 text-xs md:text-sm mb-4 text-gray-600">
+                        <span className="line-clamp-3">
+                          {plan.description}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Features List */}
+                    <div className="space-y-4 mb-10 flex-grow">
+                      <div className="flex items-center gap-3 text-xs md:text-sm text-gray-500">
+                        <Check size={18} className="text-black" />
+                        <span>
+                          {`Duration: ${plan.interval} ${capitalizeWords(
+                            plan.duration
+                          )}`}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs md:text-sm text-gray-500">
+                        <Check size={18} className="text-black" />
+                        <span>
+                          {`Subscribers: ${plan.subscribers?.length ?? 0}`}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* CTA Logic from Reference */}
+                    <div className="mt-auto">
+                      {!isLoggedIn ? (
+                        <Button
+                          onClick={() => setIsLoginOpen(true)}
+                          className="flex items-center gap-2 w-full py-6 rounded-xl bg-[#2E59A7] hover:bg-[#1E4D91]"
+                        >
+                          {communityData?.community?.type === "PRIVATE" && (
+                            <LockKeyhole size={18} />
+                          )}
+                          Login to Subscribe
+                        </Button>
+                      ) : !isSubscribedCommunity ? (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button className="w-full py-6 rounded-xl font-bold bg-[#2E59A7] hover:bg-[#1E4D91]">
+                              {communityData?.community?.type === "PRIVATE"
+                                ? "Request to Join"
+                                : "Join Community"}
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogTitle>
+                              Community Membership Required
+                            </DialogTitle>
+                            <DialogDescription>
+                              {communityData?.community?.type === "PRIVATE"
+                                ? "This is a private community. Send a request to the admin to get access to plans."
+                                : "You need to join the community before subscribing to a plan."}
+                            </DialogDescription>
+                            <div className="flex justify-end mt-4">
+                              <DialogClose asChild>
+                                <Button
+                                  onClick={
+                                    communityData?.community?.type ===
+                                      "PRIVATE"
+                                      ? handleRequest
+                                      : handleJoin
+                                  }
+                                >
+                                  Confirm
+                                </Button>
+                              </DialogClose>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      ) : (
+                        <Button
+                          asChild={!userSubscribedToPlan}
+                          variant={"outline"}
+                          className={cn(
+                            "w-full py-6 rounded-xl font-bold",
+                            `${userSubscribedToPlan
+                              ? "text-[#2E59A7] border-[#2E59A7] "
+                              : "text-white bg-[#2E59A7]"
+                            }`
+                          )}
+                        >
+                          <Link
+                            href={`/subscriptions/?planid=${plan._id}&communityid=${communityId}`}
+                          >
+                            {userSubscribedToPlan ? (
+                              <span>Subscribed</span>
+                            ) : (
+                              <span>Subscribe</span>
+                            )}
+                          </Link>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CarouselItem>
+              );
+            })}
         </CarouselContent>
         <CarouselPrevious className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />
         <CarouselNext className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />

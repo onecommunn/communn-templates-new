@@ -7,15 +7,15 @@ type DefaultFAQProps = {
   faqs: any[];
 };
 
-const DefaultFAQ = ({faqs}:DefaultFAQProps) => {
+const DefaultFAQ = ({ faqs }: DefaultFAQProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section
       id="faq"
-      className="max-w-6xl mx-auto px-6 py-16 font-montserrat bg-[#F9FAFB] rounded-[20px] mb-10"
+      className="max-w-6xl mx-3 md:mx-auto px-3 md:px-6 py-6 font-montserrat bg-[#F9FAFB] rounded-[20px] mb-8"
     >
-      <h2 className="text-2xl font-bold mb-8 text-black">
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">
         Frequently Asked Questions
       </h2>
 
@@ -32,7 +32,7 @@ const DefaultFAQ = ({faqs}:DefaultFAQProps) => {
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
               className="w-full flex items-center justify-between text-left gap-4"
             >
-              <span className="text-base font-bold text-gray-900 leading-tight">
+              <span className="text-[14px] md:text-[16px] font-medium text-gray-900 leading-tight">
                 {faq.question}
               </span>
               <div
@@ -60,7 +60,7 @@ const DefaultFAQ = ({faqs}:DefaultFAQProps) => {
                   : "max-h-0 opacity-0"
               )}
             >
-              <p className="text-gray-500 leading-relaxed text-sm">
+              <p className="text-gray-500 text-[12px] md:text-[14px] leading-relaxed text-sm">
                 {faq.answer}
               </p>
             </div>

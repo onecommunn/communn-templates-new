@@ -20,6 +20,8 @@ type DefaultContactMeProps = {
   address: string;
   phoneNumber: number;
   email: string;
+  fullAddress: string;
+  zipCode: string;
   socialLinks: any[];
 };
 
@@ -40,18 +42,20 @@ const DefaultContactMe = ({
   phoneNumber,
   email,
   socialLinks,
+  fullAddress,
+  zipCode
 }: DefaultContactMeProps) => {
   const normalize = (s?: string) => (s ?? "").trim();
   return (
     <section
       id="contact"
-      className="max-w-6xl mx-auto px-6 py-12 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
     >
       {/* Section Heading */}
-      <h2 className="text-2xl font-bold mb-8 text-black">Contact Me</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">Contact Me</h2>
 
       {/* Description Text */}
-      <p className="text-gray-600 text-sm leading-relaxed max-w-6xl mb-16">
+      <p className="text-gray-600 text-xs md:text-sm leading-relaxed max-w-6xl mb-6">
         {message ?? "-"}
       </p>
 
@@ -73,7 +77,7 @@ const DefaultContactMe = ({
           {/* Address Info */}
           <div>
             <h4 className="text-base font-bold text-black mb-2">Address</h4>
-            <p className="text-gray-600 text-sm">{address}</p>
+            <p className="text-gray-600 text-sm">{fullAddress} - {zipCode}</p>
           </div>
         </div>
 

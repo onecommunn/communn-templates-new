@@ -57,7 +57,7 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
 
   return (
     <header className="sticky font-montserrat top-0 z-50 backdrop-blur bg-white border-b border-gray-200">
-      <div className="container mx-auto px-4 sm:px-6 md:px-20">
+      <div className="container mx-auto px-4 sm:px-6 md:px-0">
         <div className="flex items-center justify-between py-4 gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
@@ -74,9 +74,10 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
                 priority
               />
             </div>
-            <span className="text-[#1E4D91] font-bold md:text-lg text-sm">
+            <span className="text-[#1E4D91] font-bold md:text-lg text-xs truncate max-w-[150px] md:max-w-[600px] block">
               {name}
             </span>
+
           </Link>
 
           {/* Desktop Login */}
@@ -178,7 +179,7 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
             ) : (
               <Link
                 href="/login"
-                className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full font-semibold hover:bg-black hover:scale-105 transition-transform"
+                className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full text-xs md:text-md font-semibold hover:bg-black hover:scale-105 transition-transform"
               >
                 Log in
               </Link>
@@ -282,7 +283,7 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
             ) : (
               <Link
                 href="/login"
-                className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full font-semibold hover:bg-black hover:scale-105 transition-transform"
+                className="bg-[#1A1A1A] text-white px-8 py-2 rounded-full text-xs md:text-md font-semibold hover:bg-black hover:scale-105 transition-transform"
               >
                 Log in
               </Link>
