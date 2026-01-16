@@ -90,49 +90,7 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 };
 
 const modernStyle = [
-  // {
-  //   featureType: "all",
-  //   elementType: "labels.text",
-  //   stylers: [{ color: "#878787" }],
-  // },
-  // {
-  //   featureType: "all",
-  //   elementType: "labels.text.stroke",
-  //   stylers: [{ visibility: "off" }],
-  // },
-  // {
-  //   featureType: "landscape",
-  //   elementType: "all",
-  //   stylers: [{ color: "#e7ebf1" }],
-  // },
-  // {
-  //   featureType: "road.highway",
-  //   elementType: "all",
-  //   stylers: [{ color: "#f5f5f5" }],
-  // },
-  // {
-  //   featureType: "road.highway",
-  //   elementType: "geometry.stroke",
-  //   stylers: [{ color: "#c9c9c9" }],
-  // },
-  // { featureType: "water", elementType: "all", stylers: [{ color: "#ACDBFE" }] },
-
-  // hide all POI markers + labels
   { featureType: "poi", elementType: "all", stylers: [{ visibility: "off" }] },
-
-  // optional: hide transit icons/labels too
-  // {
-  //   featureType: "transit",
-  //   elementType: "all",
-  //   stylers: [{ visibility: "off" }],
-  // },
-
-  // optional: hide road icons (sometimes show up)
-  // {
-  //   featureType: "road",
-  //   elementType: "labels.icon",
-  //   stylers: [{ visibility: "off" }],
-  // },
 ];
 
 type UserLocation = { lat: number; lng: number; city?: string };
@@ -150,8 +108,8 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
@@ -386,8 +344,6 @@ export default function InfluencerPage() {
 
   const avatarUrl = adminMember?.user?.avatar;
 
-
-
   const renderResultsList = () => {
     return (
       <>
@@ -412,8 +368,9 @@ export default function InfluencerPage() {
               return (
                 <Card
                   key={place._id}
-                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${isSelected ? "border-slate-300" : "hover:border-slate-300"
-                    }`}
+                  className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
+                    isSelected ? "border-slate-300" : "hover:border-slate-300"
+                  }`}
                   onClick={() => {
                     setIsDrawerOpen(false);
                     handlePlaceClick(
@@ -429,11 +386,8 @@ export default function InfluencerPage() {
                         <p className="font-semibold text-sm">{placeName}</p>
                         <p className="text-xs text-slate-500 flex gap-1 mt-0.5">
                           <MapPin className="h-3 w-3 mt-1 shrink-0" />
-                          <span className="leading-relaxed">
-                            {address}
-                          </span>
+                          <span className="leading-relaxed">{address}</span>
                         </p>
-
                       </div>
                       <Badge
                         variant="outline"
@@ -528,7 +482,6 @@ export default function InfluencerPage() {
                           variant="default"
                           className="cursor-pointer w-full font-medium"
                           size="sm"
-
                         >
                           <Share2 className="h-3 w-3 mr-1" />
                           Share
@@ -549,18 +502,15 @@ export default function InfluencerPage() {
 
   const resultsCount = filteredPlaces?.length || 0;
 
-
-
-
   const titleText = isLocating
     ? "Finding nearby..."
     : placeValue?.label
-      ? placeValue.label
-      : userLocation?.city
-        ? `${userLocation.city} (50 km)`
-        : userLocation
-          ? "Nearby (50 km)"
-          : "Explore places";
+    ? placeValue.label
+    : userLocation?.city
+    ? `${userLocation.city} (50 km)`
+    : userLocation
+    ? "Nearby (50 km)"
+    : "Explore places";
 
   return (
     <main className="relative min-h-screen bg-[#F6F7FB] font-montserrat">
@@ -602,13 +552,12 @@ export default function InfluencerPage() {
                   Explore
                 </Button>
               </Link>
-              <Avatar >
+              <Avatar>
                 <AvatarImage
                   src={avatarUrl || "https://github.com/shadcn.png"}
                   alt={adminMember?.user?.firstName}
                 />
               </Avatar>
-
             </div>
           </div>
 
@@ -621,8 +570,6 @@ export default function InfluencerPage() {
                   apiKey={API_KEY}
                   selectProps={{
                     value: placeValue,
-
-                    // ✅ user typing (for listQuery filter)
                     onInputChange: (val, meta) => {
                       if (meta.action === "input-change") {
                         setListQuery(val);
@@ -702,10 +649,11 @@ export default function InfluencerPage() {
             <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
               <Badge
                 variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${activeCategory === "all"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white hover:bg-slate-50"
-                  }`}
+                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                  activeCategory === "all"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white hover:bg-slate-50"
+                }`}
                 onClick={() => setActiveCategory("all")}
               >
                 All
@@ -720,10 +668,11 @@ export default function InfluencerPage() {
                   <Badge
                     key={index}
                     variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
-                      ? "bg-slate-900 text-white"
-                      : "bg-white hover:bg-slate-50"
-                      }`}
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                      isActive
+                        ? "bg-slate-900 text-white"
+                        : "bg-white hover:bg-slate-50"
+                    }`}
                     onClick={() => setActiveCategory(name)}
                   >
                     {Icon && <Icon size={16} strokeWidth={1.5} />}
@@ -803,15 +752,15 @@ export default function InfluencerPage() {
                       Made with ❤️ by{" "}
                       <span className="font-medium">communn.io</span>
                     </Link>
-
                   </div>
                 </div>
               </div>
 
               {/* RIGHT PANEL */}
               <div
-                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
-                  } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
               >
                 {/* <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -826,8 +775,9 @@ export default function InfluencerPage() {
                 </button> */}
 
                 <div
-                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
-                    }`}
+                  className={`h-[calc(100vh-126px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -876,7 +826,6 @@ export default function InfluencerPage() {
                   </button>
 
                   <div className="h-full rounded-xl">
-
                     <GoogleMap
                       mapContainerStyle={{ width: "100%", height: "100%" }}
                       onLoad={onLoad}
@@ -898,14 +847,14 @@ export default function InfluencerPage() {
                       Made with ❤️ by{" "}
                       <span className="font-medium">communn.io</span>
                     </Link>
-
                   </div>
                 </div>
               </div>
 
               <div
-                className={`relative hidden md:flex ${panelOpen ? "w-[30rem]" : "w-[0px]"
-                  } shrink-0 transition-all`}
+                className={`relative hidden md:flex ${
+                  panelOpen ? "w-[30rem]" : "w-[0px]"
+                } shrink-0 transition-all`}
               >
                 <button
                   onClick={() => setPanelOpen((p) => !p)}
@@ -920,8 +869,9 @@ export default function InfluencerPage() {
                 </button>
 
                 <div
-                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${panelOpen ? "" : "hidden"
-                    }`}
+                  className={`h-[calc(100vh-140px)] w-full bg-white rounded-xl border overflow-hidden ${
+                    panelOpen ? "" : "hidden"
+                  }`}
                 >
                   {renderResultsList()}
                 </div>
@@ -959,10 +909,9 @@ export default function InfluencerPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2">
                 {filteredPlaces.map((item: Recommendation, idx: number) => {
-                  const locText =
-                    item?.address
-                      ? `${item.address}`
-                      : item?.address || "";
+                  const locText = item?.address
+                    ? `${item.address}`
+                    : item?.address || "";
 
                   const imageSrc = item?.imageUrl || [
                     "/assets/map-image-placeholder.jpg",
@@ -1005,14 +954,20 @@ export default function InfluencerPage() {
                           </p> */}
                           <Link href={`/details?id=${item._id}`}>
                             <p className="text-[12px] text-[#3E3E3E] cursor-pointer">
-                              {item?.description?.length > 90 ? item?.description?.slice(0, 90) + "..." : item?.description}
+                              {item?.description?.length > 90
+                                ? item?.description?.slice(0, 90) + "..."
+                                : item?.description}
                             </p>
                           </Link>
 
                           {locText && (
                             <div className="flex items-center gap-1.5 text-xs text-slate-600">
                               <MapPin className="h-3 w-3 shrink-0" />
-                              <span className="text-[12px] font-medium">{locText?.length > 80 ? locText?.slice(0, 80) + "..." : locText}</span>
+                              <span className="text-[12px] font-medium">
+                                {locText?.length > 80
+                                  ? locText?.slice(0, 80) + "..."
+                                  : locText}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -1041,7 +996,7 @@ export default function InfluencerPage() {
                           >
                             <Button
                               size="sm"
-                              variant={'outline'}
+                              variant={"outline"}
                               className="justify-center text-xs w-full"
                             >
                               Go to Maps
@@ -1068,7 +1023,7 @@ export default function InfluencerPage() {
             )}
           </TabsContent>
         </div>
-      </Tabs >
+      </Tabs>
 
       <button
         onClick={() => setIsDrawerOpen((prev) => !prev)}
@@ -1076,6 +1031,6 @@ export default function InfluencerPage() {
       >
         <ChevronUp size={24} />
       </button>
-    </main >
+    </main>
   );
 }
