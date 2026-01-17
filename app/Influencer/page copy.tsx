@@ -28,12 +28,38 @@ import {
   List,
   Bookmark,
   PlusCircle,
+  MapPin,
+  Share2,
+  ChevronDown,
+  ChevronUp,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import HeaderSearch from "./_components/HeaderSearch";
+import FooterTabs from "./_components/FooterTabs";
+import MapInstance from "./_components/MapInstance";
+import ResultsList from "./_components/ResultsList";
+import PlaceDetailsDrawer from "./_components/PlaceDetailsDrawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type UserLocation = { lat: number; lng: number; city?: string };
 type CategoryCountMap = Record<string, number>;
@@ -96,31 +122,7 @@ const modernStyle = [
   { featureType: "poi", elementType: "all", stylers: [{ visibility: "off" }] },
 ];
 
-const CATEGORY_ICON: Record<string, React.ElementType> = {
-  Experiences: Sparkles,
-  Events: CalendarDays,
-  Cafes: Coffee,
-  Restaurants: ConciergeBell,
-  Travel: MapIcon,
-  Stays: Home,
-  Wellness: HeartPulse,
-  "Fitness & Sports": Dumbbell,
-  Entertainment: Music,
-  "Arts & Culture": Palette,
-  "Shopping & Products": ShoppingBag,
-  "Workshops & Learning": GraduationCap,
-  "Community & Meetups": Users,
-  Services: Briefcase,
-  Others: Shapes,
-};
-
-const TABS = [
-  { value: "1", label: "Home", Icon: Home },
-  { value: "2", label: "List", Icon: List },
-  { value: "3", label: "Map", Icon: MapIcon }, // Use the renamed Icon
-  { value: "4", label: "Saved", Icon: Bookmark },
-  { value: "5", label: "Add", Icon: PlusCircle },
-];
+type TabKey = "home" | "list" | "explore" | "saved" | "add";
 
 const InfluencerCopy = () => {
   const { recommendations } = useCMS();
@@ -134,11 +136,18 @@ const InfluencerCopy = () => {
   );
   const [placeValue, setPlaceValue] = useState<any>(null);
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<TabKey>("home");
+  const [selectedPlace, setSelectedPlace] = useState<Recommendation | null>(
+    null
+  );
+  const [isPlaceDrawerOpen, setIsPlaceDrawerOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: API_KEY,
-    libraries: ["places"],
   });
 
   const mapOptions: google.maps.MapOptions = useMemo(
@@ -228,6 +237,13 @@ const InfluencerCopy = () => {
     });
   }, [recommendations]);
 
+  const handlePlaceClick = (uuid: string, lat: number, lng: number) => {
+    setSelectedId(uuid);
+    if (!map) return;
+    map.panTo({ lat, lng });
+    map.setZoom(11);
+  };
+
   const fallbackCenter = useMemo(() => {
     // Priority: searched location → user location → average of all markers → (0,0)
     if (searchLocation) return searchLocation;
@@ -296,274 +312,148 @@ const InfluencerCopy = () => {
     return <div className="h-screen w-full bg-slate-100 animate-pulse" />;
 
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-[#F6F7FB] font-montserrat">
-      <Tabs className="gap-0" defaultValue="1">
-        {/* Full-screen Search Overlay */}
-        <div
-          className={`
-  absolute z-[60] flex flex-col items-center
-  ${
-    isSearchFocused
-      ? "inset-0 bg-white w-full h-screen flex flex-col"
-      : "top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[500px] flex items-center gap-2"
-  }
-`}
-        >
-          <div
-            className={`
-    flex items-center w-full
-    ${
-      isSearchFocused
-        ? "px-2 py-3 border-b border-slate-100"
-        : "bg-white rounded-xl border border-gray-100 px-3 py-1 gap-2"
-    }
-  `}
-          >
-            {/* 1. Back Button (Mobile style) */}
-            {isSearchFocused && (
-              <button
-                onClick={() => setIsSearchFocused(false)}
-                className="p-2 mr-1 hover:bg-slate-100 rounded-full transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#334155"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-            )}
+    <main className="relative h-screen w-full overflow-hidden bg-white font-montserrat">
+      {/* ✅ Header ALWAYS visible */}
+      <div className="absolute top-0 left-0 right-0 z-[60]">
+        <HeaderSearch
+          apiKey={API_KEY}
+          map={map}
+          activeCategory={activeCategory}
+          uniqueCategories={uniqueCategories}
+          categoryCountMap={categoryCountMap}
+          isSearchFocused={isSearchFocused}
+          setIsSearchFocused={setIsSearchFocused}
+          placeValue={placeValue}
+          setActiveCategory={setActiveCategory}
+          setPlaceValue={setPlaceValue}
+          setSearchLocation={setSearchLocation}
+          activeTab={activeTab}
+        />
+      </div>
 
-            {!isSearchFocused && (
-              <img
-                src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
-                className="w-8 h-8 rounded-full object-cover shrink-0"
-                alt="Profile"
-              />
-            )}
-
-            {/* 2. The Autocomplete Component */}
-            <div className="flex-1">
-              <GooglePlacesAutocomplete
-                apiKey={API_KEY}
-                selectProps={{
-                  value: placeValue,
-                  onMenuOpen: () => setIsSearchFocused(true),
-                  placeholder: "Search places...",
-                  onChange: async (val: any) => {
-                    if (!val) {
-                      setPlaceValue(null);
-                      setSearchLocation(null);
-                      return;
-                    }
-
-                    try {
-                      const { lat, lng, formatted } = await geocodePlace(
-                        val.value.place_id
-                      );
-
-                      const nextVal = {
-                        ...val,
-                        label: formatted || val.label,
-                      };
-
-                      setPlaceValue(nextVal);
-                      setSearchLocation({ lat, lng });
-                      if (map) {
-                        map.panTo({ lat, lng });
-                        map.setZoom(13);
-                      }
-                      setIsSearchFocused(false);
-                    } catch (e) {
-                      console.error(e);
-                      toast.error("Unable to locate this place");
-                    }
-                  },
-                  styles: {
-                    container: (base) => ({
-                      ...base,
-                      width: "100%",
-                    }),
-                    control: (base) => ({
-                      ...base,
-                      border: "none",
-                      boxShadow: "none",
-                      background: "transparent",
-                      fontSize: "12px",
-                      minHeight: "40px",
-                    }),
-                    menu: (base) => ({
-                      ...base,
-                      width: isSearchFocused ? "100vw" : "100%",
-                      left: isSearchFocused ? "0px" : "0",
-                      position: isSearchFocused ? "fixed" : "absolute",
-                      top: isSearchFocused ? "60px" : "100%",
-                      height: isSearchFocused ? "calc(100vh - 60px)" : "auto",
-                      margin: 0,
-                      borderRadius: 0,
-                      boxShadow: "none",
-                      border: "none",
-                      backgroundColor: "white",
-                    }),
-                    menuList: (base) => ({
-                      ...base,
-                      padding: 0,
-                      maxHeight: "100%",
-                    }),
-                    option: (base, state) => ({
-                      ...base,
-                      padding: "16px 20px",
-                      borderBottom: "1px solid #f1f5f9",
-                      backgroundColor: state.isFocused ? "#f8fafc" : "white",
-                      color: "#334155",
-                      fontSize: "15px",
-                      "&:active": { backgroundColor: "#f1f5f9" },
-                    }),
-                  },
-                }}
-              />
-            </div>
-
-            {!isSearchFocused && (
-              <button className="w-8 h-8 bg-[#2B52A1] rounded-full flex items-center justify-center text-white shrink-0">
-                <span className="font-medium">A</span>
-              </button>
-            )}
-          </div>
-          {!isSearchFocused && (
-            <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
-              <Badge
-                variant={activeCategory === "all" ? "secondary" : "outline"}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                  activeCategory === "all"
-                    ? "bg-slate-900 text-white"
-                    : "bg-white hover:bg-slate-50"
-                }`}
-                onClick={() => setActiveCategory("all")}
-              >
-                All
-              </Badge>
-              {uniqueCategories.map((name: string, index: number) => {
-                const isActive = activeCategory === name;
-                const Icon = CATEGORY_ICON[name];
-                const count = categoryCountMap[name];
-
-                return (
-                  <Badge
-                    key={index}
-                    variant={isActive ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                      isActive
-                        ? "bg-slate-900 text-white"
-                        : "bg-white hover:bg-slate-50"
-                    }`}
-                    onClick={() => setActiveCategory(name)}
-                  >
-                    {Icon && <Icon size={16} strokeWidth={1.5} />}
-                    {name}
-                    <span>({count})</span>
-                  </Badge>
-                );
-              })}
-            </div>
-          )}
-
-          {/* 3. Empty State Background (Optional) */}
-          {isSearchFocused && <div className="flex-1 bg-white" />}
-        </div>
-
-        {/* Map Instance */}
-        <div className="bg-white overflow-hidden relative h-[calc(100vh-66px)] md:h-[calc(100vh-126px)]">
-          <div className="h-full" style={{ textAlign: "left" }}>
-            <GoogleMap
-              mapContainerStyle={{ width: "100%", height: "100%" }}
-              center={fallbackCenter}
-              zoom={userLocation || searchLocation ? 12 : 3}
+      {/* ✅ Main content area (IMPORTANT: padding for header + footer) */}
+      <div
+        className={`h-full  pb-[60px] ${
+          activeTab == "home" ? "" : "pt-[104px]"
+        }`}
+      >
+        {activeTab === "home" && (
+          <div className="h-full bg-white overflow-hidden relative">
+            <MapInstance
+              fallbackCenter={fallbackCenter}
+              isLocating={isLocating}
+              map={map}
+              mapOptions={mapOptions}
               onLoad={onLoad}
+              onLocate={getUserLocation}
               onUnmount={onUnmount}
-              options={mapOptions}
-            >
-              {filteredPlaces.map((item: Recommendation) => (
-                <MarkerItem item={item} key={item._id} />
-              ))}
-            </GoogleMap>
-          </div>
-          {/* Floating Controls */}
-          <div className="absolute right-4 bottom-6 md:bottom-10 flex flex-col gap-2 z-10">
-            <button
-              onClick={getUserLocation}
-              className="w-10 h-10 bg-white hover:bg-gray-50 flex items-center justify-center text-slate-600 border border-slate-200 rounded-lg"
-              disabled={isLocating}
-            >
-              {isLocating ? (
-                <LoaderCircle className="animate-spin w-5 h-5" />
-              ) : (
-                <LocateFixed className="w-5 h-5" />
-              )}
-            </button>
+              places={filteredPlaces}
+              renderMarker={(p) => (
+                <MarkerItem
+                  item={p}
+                  key={p._id}
+                  disableOverlay={isMobile}
+                  onMarkerClick={(place) => {
+                    setSelectedPlace(place);
+                    setIsPlaceDrawerOpen(true);
+                    setIsDrawerOpen(false);
 
-            <div className="flex flex-col bg-white rounded-lg border border-slate-200 overflow-hidden">
-              <button
-                onClick={() => map?.setZoom((map.getZoom() || 12) + 1)}
-                className="w-10 h-10 hover:bg-gray-50 flex items-center justify-center border-b border-slate-100"
-              >
-                <Plus size={18} className="text-black" />
-              </button>
-              <button
-                onClick={() => map?.setZoom((map.getZoom() || 12) - 1)}
-                className="w-10 h-10 hover:bg-gray-50 flex items-center justify-center"
-              >
-                <Minus size={18} className="text-black" />
-              </button>
+                    const lat = Number(place.location.latitude);
+                    const lng = Number(place.location.longitude);
+                    map?.panTo({ lat, lng });
+                    map?.setZoom(13);
+                  }}
+                />
+              )}
+            />
+          </div>
+        )}
+
+        {activeTab === "list" && (
+          <div className="h-full overflow-y-auto bg-white">
+            {/* ✅ Your list content here */}
+            <ResultsList
+              places={filteredPlaces}
+              selectedId={selectedId}
+              setIsDrawerOpen={setIsDrawerOpen}
+              handlePlaceClick={handlePlaceClick}
+            />
+          </div>
+        )}
+
+        {activeTab === "explore" && (
+          <div className="h-full bg-white overflow-hidden">
+            <div className="h-full flex items-center justify-center text-sm text-slate-500">
+              Explore tab content
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Footer Branding */}
-        <Link
-          href="https://communn.io/"
-          target="_blank"
-          className="absolute bottom-0 right-0 bg-white/90 backdrop-blur px-3 py-1.5 text-[10px] text-black rounded-tl-lg z-10 hidden md:flex"
-        >
-          Create yours with <span className="font-bold">communn.io</span>
-        </Link>
+        {activeTab === "saved" && (
+          <div className="h-full bg-white overflow-hidden">
+            <div className="h-full flex items-center justify-center text-sm text-slate-500">
+              Saved tab content
+            </div>
+          </div>
+        )}
 
-        {/* Floating Navigation Footer */}
-        <div className="w-full z-50 h-18">
-          <TabsList className="bg-white rounded-none border border-gray-100 px-2 py-2 flex items-center justify-between h-full w-full gap-1">
-            {TABS.map((tab) => {
-              const Icon = tab.Icon;
+        {activeTab === "add" && (
+          <div className="h-full bg-white overflow-hidden">
+            <div className="h-full flex items-center justify-center text-sm text-slate-500">
+              Add tab content
+            </div>
+          </div>
+        )}
+      </div>
 
-              return (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  className={cn(
-                    "group flex h-fit max-w-fit items-center gap-2 px-3 py-2.5 rounded-full",
-                    "text-slate-500 hover:bg-slate-100 transition-all duration-300 ease-out",
-                    "data-[state=active]:bg-[#2B52A1] data-[state=active]:text-white",
-                    "data-[state=active]:px-5 [&_svg:not([class*='size-'])]:size-5 cursor-pointer"
-                  )}
-                >
-                  <Icon />
-                  <span className="hidden group-data-[state=active]:inline font-medium text-sm">
-                    {tab.label}
-                  </span>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-        </div>
-      </Tabs>
+      {/* ✅ Optional: Bottom list drawer opener (show only on map/home if you want) */}
+      {(activeTab === "home") && (
+        <>
+          <button
+            onClick={() => setIsDrawerOpen((prev) => !prev)}
+            className="cursor-pointer md:hidden fixed z-50 left-1/2 -translate-x-1/2 bottom-[calc(60px+env(safe-area-inset-bottom))] border border-slate-200 rounded-t-2xl py-1 px-14 bg-white hover:bg-gray-200"
+          >
+            <ChevronUp size={24} />
+          </button>
+
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+            <DrawerContent className="h-[80vh] p-0 md:hidden bg-white">
+              <DrawerHeader>
+                <DrawerTitle className="font-medium text-left flex items-center justify-between">
+                  <p>Recommendations</p>
+                  <button
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="cursor-pointer p-2 rounded-full hover:bg-slate-100"
+                  >
+                    <X size={18} />
+                  </button>
+                </DrawerTitle>
+              </DrawerHeader>
+
+              <div className="h-full overflow-y-auto bg-white">
+                <ResultsList
+                  places={filteredPlaces}
+                  selectedId={selectedId}
+                  setIsDrawerOpen={setIsDrawerOpen}
+                  handlePlaceClick={handlePlaceClick}
+                />
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </>
+      )}
+
+      {/* ✅ Place details drawer */}
+      <PlaceDetailsDrawer
+        open={isPlaceDrawerOpen}
+        onOpenChange={setIsPlaceDrawerOpen}
+        place={selectedPlace}
+      />
+
+      {/* ✅ Footer ALWAYS visible */}
+      <div className="fixed bottom-0 left-0 right-0 z-[80] bg-white">
+        <FooterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
     </main>
   );
 };

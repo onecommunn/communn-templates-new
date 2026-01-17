@@ -20,9 +20,11 @@ const CATEGORY_ICONS: Record<string, string> = {
 
 type MarkerItemProps = {
   item: Recommendation;
+  onMarkerClick?: (item: Recommendation) => void;
+  disableOverlay: boolean;
 };
 
-const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
+const MarkerItem: React.FC<MarkerItemProps> = ({ item, onMarkerClick ,disableOverlay}) => {
   const { location, category } = item;
   const iconUrl = CATEGORY_ICONS[category] || CATEGORY_ICONS["Default"];
 
@@ -37,7 +39,8 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
   >(null);
 
   const handleMarkerClick = () => {
-    // toggle if same marker clicked again
+    if (disableOverlay) return;
+
     if (selectedPlace?._id && item._id && selectedPlace._id === item._id) {
       setSelectedPlace(null);
     } else {
@@ -45,10 +48,9 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
     }
   };
 
-  const locText =
-    selectedPlace?.address
-      ? `${selectedPlace?.address}`
-      : selectedPlace?.address || "";
+  const locText = selectedPlace?.address
+    ? `${selectedPlace?.address}`
+    : selectedPlace?.address || "";
 
   const imageSrc = selectedPlace?.imageUrl || [
     "/assets/map-image-placeholder.jpg",
@@ -62,10 +64,12 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
           url: iconUrl,
           scaledSize: new window.google.maps.Size(50, 70),
         }}
-        onClick={handleMarkerClick}
+        onClick={() => {
+          handleMarkerClick(), onMarkerClick?.(item);
+        }}
       />
 
-      {selectedPlace && (
+      {!disableOverlay && selectedPlace &&  (
         <OverlayView
           position={{
             lat: Number(selectedPlace.location.latitude),
@@ -124,7 +128,9 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
 
               <Link href={`/details?id=${item._id}`}>
                 <p className="text-[12px] text-[#3E3E3E] cursor-pointer">
-                  {selectedPlace?.description?.length > 90 ? selectedPlace?.description?.slice(0, 90) + "..." : selectedPlace?.description}
+                  {selectedPlace?.description?.length > 90
+                    ? selectedPlace?.description?.slice(0, 90) + "..."
+                    : selectedPlace?.description}
                 </p>
               </Link>
               {/* Location */}
@@ -132,7 +138,10 @@ const MarkerItem: React.FC<MarkerItemProps> = ({ item }) => {
                 <div className="mt-1 flex items-start gap-2 text-xs ">
                   <MapPin className="h-4 w-4 shrink-0" />
                   <span className="text-[12px] font-medium">
-                    {locText?.length > 80 ? locText?.slice(0, 80) + "..." : locText}</span>
+                    {locText?.length > 80
+                      ? locText?.slice(0, 80) + "..."
+                      : locText}
+                  </span>
                 </div>
               )}
 
