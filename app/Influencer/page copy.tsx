@@ -5,13 +5,22 @@ import MarkerItem from "./_components/MarkerItem";
 import Link from "next/link";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
 import { useCMS } from "./CMSProvider.client";
-import { MapPin, ChevronUp, X, Search, Clock } from "lucide-react";
+import {
+  MapPin,
+  ChevronUp,
+  X,
+  Search,
+  Clock,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
@@ -22,8 +31,16 @@ import MapInstance from "./_components/MapInstance";
 import ResultsList from "./_components/ResultsList";
 import PlaceDetailsDrawer from "./_components/PlaceDetailsDrawer";
 import { useIsMobile } from "@/hooks/use-mobile";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { CATEGORY_ICON } from "./data/data-listing";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import RecommendationsList from "./_components/RecommendationsList";
 
 type UserLocation = { lat: number; lng: number; city?: string };
 type CategoryCountMap = Record<string, number>;
@@ -49,20 +66,6 @@ const getDistanceInKm = (
       Math.cos((lat2 * Math.PI) / 180) *
       Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-};
-
-const geocodePlace = async (placeId: string) => {
-  const geocoder = new window.google.maps.Geocoder();
-  const result = await geocoder.geocode({ placeId });
-  if (result.results[0]) {
-    const loc = result.results[0].geometry.location;
-    return {
-      lat: loc.lat(),
-      lng: loc.lng(),
-      formatted: result.results[0].formatted_address,
-    };
-  }
-  throw new Error("No results found");
 };
 
 const reverseGeocodeCity = async (lat: number, lng: number) => {
@@ -108,6 +111,7 @@ const InfluencerCopy = () => {
   const [isPlaceDrawerOpen, setIsPlaceDrawerOpen] = useState(false);
   const isMobile = useIsMobile();
   const [activeArea, setActiveArea] = useState<string | "all">("all");
+  const [panelOpen, setPanelOpen] = useState(false);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -312,12 +316,14 @@ const InfluencerCopy = () => {
           setPlaceValue={setPlaceValue}
           setSearchLocation={setSearchLocation}
           activeTab={activeTab}
+          setPanelOpen={setPanelOpen}
+          setActiveTab={setActiveTab}
         />
       </div>
 
-      {/* ✅ Main content area (IMPORTANT: padding for header + footer) */}
+      {/* Main content area */}
       <div
-        className={`flex flex-col h-[100dvh] pb-[60px] ${
+        className={`flex flex-col h-[100dvh] pb-[60px] md:pb-0 ${
           activeTab === "home" ? "" : "pt-[104px]"
         }`}
       >
@@ -339,7 +345,9 @@ const InfluencerCopy = () => {
                   disableOverlay={isMobile}
                   onMarkerClick={(place) => {
                     setSelectedPlace(place);
-                    setIsPlaceDrawerOpen(true);
+                    if (isMobile) {
+                      setIsPlaceDrawerOpen(true);
+                    }
                     setIsDrawerOpen(false);
 
                     const lat = Number(place.location.latitude);
@@ -354,14 +362,9 @@ const InfluencerCopy = () => {
         )}
 
         {activeTab === "list" && (
-          <div className="h-full overflow-y-auto bg-white">
+          <div className="h-full overflow-y-auto bg-white md:px-12 px-4">
             {/* ✅ Your list content here */}
-            <ResultsList
-              places={filteredPlaces}
-              selectedId={selectedId}
-              setIsDrawerOpen={setIsDrawerOpen}
-              handlePlaceClick={handlePlaceClick}
-            />
+            <RecommendationsList places={filteredPlaces} />
           </div>
         )}
 
@@ -644,6 +647,66 @@ const InfluencerCopy = () => {
         </>
       )}
 
+      {/* RIGHT PANEL as Shadcn Sheet (Desktop only) */}
+      <div className="hidden md:block">
+        <Sheet open={panelOpen} onOpenChange={setPanelOpen} modal={false}>
+          <SheetContent
+            side="right"
+            className="z-[80] sm:max-w-[500px] bg-white"
+          >
+            <button
+              onClick={() => setPanelOpen(false)}
+              className="
+          absolute -left-8 top-1/2 -translate-y-1/2 cursor-pointer
+          bg-white text-black px-1 py-8
+          rounded-l-[12px] shadow-md
+          hover:bg-gray-50
+          transition-all duration-300 ease-in-out
+        "
+            >
+              <ChevronRight />
+            </button>
+            <SheetHeader className="border-b border-slate-100 px-4 py-3">
+              <div className="flex items-center justify-between">
+                <VisuallyHidden>
+                  <SheetTitle>Recommendations</SheetTitle>
+                </VisuallyHidden>
+
+                <p className="text-base font-semibold text-slate-900">
+                  Recommendations
+                </p>
+              </div>
+            </SheetHeader>
+
+            {/* Scroll area */}
+            <div className="overflow-y-auto">
+              <ResultsList
+                places={filteredPlaces}
+                selectedId={selectedId}
+                setIsDrawerOpen={setIsDrawerOpen}
+                handlePlaceClick={handlePlaceClick}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {activeTab === "home" && (
+        <button
+          onClick={() => setPanelOpen(true)}
+          className={`
+    absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer hidden md:flex
+    bg-white text-black px-1 py-8
+    rounded-l-[12px] shadow-md
+    hover:bg-gray-50
+    transition-all duration-300 ease-in-out
+    ${panelOpen ? "opacity-0 pointer-events-none" : "opacity-100"}
+  `}
+        >
+          <ChevronLeft />
+        </button>
+      )}
+
       {/* ✅ Place details drawer */}
       <PlaceDetailsDrawer
         open={isPlaceDrawerOpen}
@@ -652,7 +715,7 @@ const InfluencerCopy = () => {
       />
 
       {/* ✅ Footer ALWAYS visible */}
-      <div className="fixed bottom-0 left-0 right-0 z-[80] bg-white">
+      <div className="fixed bottom-0 left-0 right-0 z-[80] bg-white md:hidden">
         <FooterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </main>

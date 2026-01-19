@@ -680,6 +680,27 @@ export default function InfluencerPage() {
                   </Badge>
                 );
               })}
+                 {uniqueCategories?.map((cat: any, index) => {
+                const name = cat?.trim();
+                const isActive = activeCategory === name;
+                const Icon = CATEGORY_ICON[name];
+
+                return (
+                  <Badge
+                    key={index}
+                    variant={isActive ? "secondary" : "outline"}
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                      isActive
+                        ? "bg-slate-900 text-white"
+                        : "bg-white hover:bg-slate-50"
+                    }`}
+                    onClick={() => setActiveCategory(name)}
+                  >
+                    {Icon && <Icon size={16} strokeWidth={1.5} />}
+                    {name}
+                  </Badge>
+                );
+              })}
             </div>
 
             {/* Right controls */}

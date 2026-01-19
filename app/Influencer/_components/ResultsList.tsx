@@ -146,7 +146,7 @@ export default function ResultsList(props: {
                     >
                       <Button
                         variant="default"
-                        className="cursor-pointer w-full font-medium"
+                        className="cursor-pointer w-full font-medium bg-[#2B52A1] hover:bg-[#2B52A1]"
                         size="sm"
                       >
                         <Share2 className="h-3 w-3 mr-1" />
