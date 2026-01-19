@@ -5,7 +5,7 @@ import MarkerItem from "./_components/MarkerItem";
 import Link from "next/link";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
 import { useCMS } from "./CMSProvider.client";
-import { MapPin, ChevronUp, X, Search } from "lucide-react";
+import { MapPin, ChevronUp, X, Search, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -520,18 +520,26 @@ const InfluencerCopy = () => {
         )}
 
         {activeTab === "saved" && (
-          <div className="h-full bg-white overflow-hidden">
-            <div className="h-full flex items-center justify-center text-sm text-slate-500">
-              Saved tab content
+          <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
+            <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+              <Clock className="h-6 w-6 text-slate-400" />
             </div>
+
+            <p className="text-sm text-slate-500 mt-1">
+              This feature is coming soon. Stay tuned!
+            </p>
           </div>
         )}
 
         {activeTab === "create" && (
-          <div className="h-full bg-white overflow-hidden">
-            <div className="h-full flex items-center justify-center text-sm text-slate-500">
-              Create tab content
+          <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
+            <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+              <Clock className="h-6 w-6 text-slate-400" />
             </div>
+
+            <p className="text-sm text-slate-500 mt-1">
+              This feature is coming soon. Stay tuned!
+            </p>
           </div>
         )}
       </div>
