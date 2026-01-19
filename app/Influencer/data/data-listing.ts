@@ -1,3 +1,21 @@
+import {
+  Briefcase,
+  CalendarDays,
+  Map as MapIcon,
+  Coffee,
+  ConciergeBell,
+  Dumbbell,
+  GraduationCap,
+  HeartPulse,
+  Home,
+  Music,
+  Palette,
+  Shapes,
+  ShoppingBag,
+  Sparkles,
+  Users,
+} from "lucide-react";
+
 export const touristPlacesListing = [
   {
     uuid: "ind-t1-delhi-001",
@@ -323,3 +341,21 @@ export const touristPlacesListing = [
   //   },
   // },
 ];
+
+export const CATEGORY_ICON: Record<string, React.ElementType> = {
+  Experiences: Sparkles,
+  Events: CalendarDays,
+  Cafes: Coffee,
+  Restaurants: ConciergeBell,
+  Travel: MapIcon,
+  Stays: Home,
+  Wellness: HeartPulse,
+  "Fitness & Sports": Dumbbell,
+  Entertainment: Music,
+  "Arts & Culture": Palette,
+  "Shopping & Products": ShoppingBag,
+  "Workshops & Learning": GraduationCap,
+  "Community & Meetups": Users,
+  Services: Briefcase,
+  Others: Shapes,
+};

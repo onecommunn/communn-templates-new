@@ -3,15 +3,15 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Home, List, Map as MapIcon, Bookmark, PlusCircle } from "lucide-react";
-type TabKey = "home" | "list" | "explore" | "saved" | "add";
+import { Home, List, PlusCircle, BookmarkPlus, MapPin } from "lucide-react";
+type TabKey = "home" | "list" | "explore" | "saved" | "create";
 
 const TABS = [
   { value: "home", label: "Home", Icon: Home },
   { value: "list", label: "List", Icon: List },
-  { value: "explore", label: "Explore", Icon: MapIcon },
-  { value: "saved", label: "Saved", Icon: Bookmark },
-  { value: "add", label: "Add", Icon: PlusCircle },
+  { value: "explore", label: "Explore", Icon: MapPin },
+  { value: "saved", label: "Saved", Icon: BookmarkPlus },
+  { value: "create", label: "Create", Icon: PlusCircle },
 ] as const;
 
 export default function FooterTabs(props: {
@@ -21,8 +21,8 @@ export default function FooterTabs(props: {
   const { activeTab, setActiveTab } = props;
 
   return (
-    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabKey)} className="z-[60]">
-      <TabsList className="bg-white rounded-none border border-gray-100 px-2 py-2 flex items-center justify-between h-full w-full gap-1">
+    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabKey)} className="z-[60] bg-[#EEF1F8] border-[#EEF1F8] border font-montserrat">
+      <TabsList className="bg-[#EEF1F8] rounded-none border border-[#EEF1F8] px-2 py-2 flex items-center justify-between h-full w-full gap-1">
         {TABS.map((tab) => {
           const Icon = tab.Icon;
 
@@ -32,12 +32,12 @@ export default function FooterTabs(props: {
               value={tab.value}
               className={cn(
                 "group flex h-fit max-w-fit items-center gap-2 px-3 py-2.5 rounded-full",
-                "text-slate-500 hover:bg-slate-100 transition-all duration-300 ease-out",
+                "text-[#646464] hover:bg-slate-100 transition-all duration-300 ease-out",
                 "data-[state=active]:bg-[#2B52A1] data-[state=active]:text-white",
                 "data-[state=active]:px-5 [&_svg:not([class*='size-'])]:size-5 cursor-pointer"
               )}
             >
-              <Icon />
+              <Icon strokeWidth={1.5}/>
               <span className="hidden group-data-[state=active]:inline font-medium text-sm">
                 {tab.label}
               </span>

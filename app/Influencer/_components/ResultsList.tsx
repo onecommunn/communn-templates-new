@@ -18,7 +18,7 @@ export default function ResultsList(props: {
   handlePlaceClick: (
     placeId: string,
     latitude: number,
-    longitude: number
+    longitude: number,
   ) => void;
   setIsDrawerOpen: (a: boolean) => void;
 }) {
@@ -54,7 +54,7 @@ export default function ResultsList(props: {
                   handlePlaceClick(
                     place._id!,
                     Number(place.location.latitude),
-                    Number(place.location.longitude)
+                    Number(place.location.longitude),
                   );
                 }}
               >
@@ -75,34 +75,25 @@ export default function ResultsList(props: {
                     </Badge>
                   </div>
 
-                  {imageSrc.length > 0 && (
-                    <Carousel
-                      className="w-full"
-                      plugins={[
-                        Autoplay({
-                          delay: 3500,
-                          stopOnInteraction: false,
-                          stopOnMouseEnter: true,
-                        }),
-                      ]}
-                      opts={{ loop: true, align: "start" }}
-                    >
-                      <CarouselContent>
-                        {imageSrc.map((item, idx) => (
-                          <CarouselItem key={idx} className="basis-2/5">
-                            <div className="relative w-full h-[150px] rounded-xl overflow-hidden">
-                              <Image
-                                src={item}
-                                alt={`${place?.placeName}-img-${idx}`}
-                                fill
-                                className="object-cover"
-                                unoptimized
-                              />
-                            </div>
-                          </CarouselItem>
+                  {place?.imageUrl?.length > 0 && (
+                    <div className="pt-4">
+                      <div className="flex gap-2 overflow-x-auto">
+                        {place?.imageUrl?.map((src, idx) => (
+                          <div
+                            key={idx}
+                            className="relative h-[120px] w-[180px] rounded-xl overflow-hidden shrink-0"
+                          >
+                            <Image
+                              src={src}
+                              alt={`img-${idx}`}
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
                         ))}
-                      </CarouselContent>
-                    </Carousel>
+                      </div>
+                    </div>
                   )}
 
                   <p className="text-xs text-slate-600 line-clamp-2">

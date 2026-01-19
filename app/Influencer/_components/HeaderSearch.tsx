@@ -1,26 +1,9 @@
 "use client";
 import React from "react";
-import {
-  Sparkles,
-  CalendarDays,
-  Coffee,
-  ConciergeBell,
-  Map as MapIcon,
-  Home,
-  HeartPulse,
-  Dumbbell,
-  Music,
-  Palette,
-  GraduationCap,
-  ShoppingBag,
-  Users,
-  Briefcase,
-  Shapes,
-} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { toast } from "sonner";
+import { CATEGORY_ICON } from "../data/data-listing";
 
 type CategoryCountMap = Record<string, number>;
 type UserLocation = { lat: number; lng: number; city?: string };
@@ -39,23 +22,6 @@ const geocodePlace = async (placeId: string) => {
   throw new Error("No results found");
 };
 
-const CATEGORY_ICON: Record<string, React.ElementType> = {
-  Experiences: Sparkles,
-  Events: CalendarDays,
-  Cafes: Coffee,
-  Restaurants: ConciergeBell,
-  Travel: MapIcon,
-  Stays: Home,
-  Wellness: HeartPulse,
-  "Fitness & Sports": Dumbbell,
-  Entertainment: Music,
-  "Arts & Culture": Palette,
-  "Shopping & Products": ShoppingBag,
-  "Workshops & Learning": GraduationCap,
-  "Community & Meetups": Users,
-  Services: Briefcase,
-  Others: Shapes,
-};
 
 export default function HeaderSearch(props: {
   apiKey: string;
@@ -73,7 +39,7 @@ export default function HeaderSearch(props: {
 
   placeValue: any;
   setPlaceValue: (v: any) => void;
-  activeTab: "home" | "list" | "explore" | "saved" | "add";
+  activeTab: "home" | "list" | "explore" | "saved" | "create";
 }) {
   const {
     apiKey,
@@ -92,7 +58,7 @@ export default function HeaderSearch(props: {
   return (
     <div
       className={`
-     z-[60] flex flex-col items-center mx-auto
+     z-50 flex flex-col items-center mx-auto font-montserrat
       ${activeTab === "home" ? "absolute" : "static"}
       ${
         isSearchFocused
@@ -115,7 +81,7 @@ export default function HeaderSearch(props: {
         {isSearchFocused && (
           <button
             onClick={() => setIsSearchFocused(false)}
-            className="p-2 mr-1 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-2 mr-1 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -31,7 +31,7 @@ export default function MapInstance(props: {
     renderMarker,
   } = props;
   return (
-    <div className="relative h-full bg-white">
+    <div className="relative h-full bg-white font-montserrat">
       <div className="absolute inset-0">
         <GoogleMap
           mapContainerStyle={{ width: "100%", height: "100%" }}

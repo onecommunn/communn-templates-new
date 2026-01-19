@@ -98,7 +98,7 @@ const InfluencerDetailsPage = () => {
     fetchNearbyFromOurList();
   }, [recommendations]);
 
-  console.log(nearbySpots, "nearbySpots");
+  // console.log(nearbySpots, "nearbySpots");
   useEffect(() => {
     if (!id) return;
     const fetchData = async () => {
@@ -225,16 +225,7 @@ const InfluencerDetailsPage = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-black" />
               <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/explore"
-                  className="text-black font-medium"
-                >
-                  Recommendations
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-black" />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="font-semibold text-gray-500">
+                <BreadcrumbPage className="font-semibold text-gray-500 line-clamp-1">
                   {recommendation.placeName}
                 </BreadcrumbPage>
               </BreadcrumbItem>

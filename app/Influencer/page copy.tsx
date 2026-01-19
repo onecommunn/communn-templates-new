@@ -1,53 +1,15 @@
 "use client";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader } from "@react-google-maps/api";
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import MarkerItem from "./_components/MarkerItem";
 import Link from "next/link";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
 import { useCMS } from "./CMSProvider.client";
-import {
-  Coffee,
-  ConciergeBell,
-  LocateFixed,
-  LoaderCircle,
-  Sparkles,
-  CalendarDays,
-  Map as MapIcon,
-  Home,
-  HeartPulse,
-  Dumbbell,
-  Music,
-  Palette,
-  GraduationCap,
-  ShoppingBag,
-  Users,
-  Briefcase,
-  Shapes,
-  Plus,
-  Minus,
-  List,
-  Bookmark,
-  PlusCircle,
-  MapPin,
-  Share2,
-  ChevronDown,
-  ChevronUp,
-  X,
-} from "lucide-react";
+import { MapPin, ChevronUp, X, Search } from "lucide-react";
 import { toast } from "sonner";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import Image from "next/image";
 import {
   Drawer,
   DrawerContent,
@@ -60,6 +22,8 @@ import MapInstance from "./_components/MapInstance";
 import ResultsList from "./_components/ResultsList";
 import PlaceDetailsDrawer from "./_components/PlaceDetailsDrawer";
 import { useIsMobile } from "@/hooks/use-mobile";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import { CATEGORY_ICON } from "./data/data-listing";
 
 type UserLocation = { lat: number; lng: number; city?: string };
 type CategoryCountMap = Record<string, number>;
@@ -73,7 +37,7 @@ const getDistanceInKm = (
   lat1: number,
   lng1: number,
   lat2: number,
-  lng2: number
+  lng2: number,
 ) => {
   if (!lat1 || !lng1 || !lat2 || !lng2) return Infinity;
   const R = 6371;
@@ -87,7 +51,6 @@ const getDistanceInKm = (
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
-// Helper: Geocode Place ID to Lat/Lng
 const geocodePlace = async (placeId: string) => {
   const geocoder = new window.google.maps.Geocoder();
   const result = await geocoder.geocode({ placeId });
@@ -110,10 +73,10 @@ const reverseGeocodeCity = async (lat: number, lng: number) => {
         if (status === "OK" && res) resolve(res);
         else reject(new Error(status));
       });
-    }
+    },
   );
   const cityComp = results[0]?.address_components?.find((c) =>
-    c.types.includes("locality")
+    c.types.includes("locality"),
   );
   return cityComp?.long_name || "Nearby";
 };
@@ -122,7 +85,7 @@ const modernStyle = [
   { featureType: "poi", elementType: "all", stylers: [{ visibility: "off" }] },
 ];
 
-type TabKey = "home" | "list" | "explore" | "saved" | "add";
+type TabKey = "home" | "list" | "explore" | "saved" | "create";
 
 const InfluencerCopy = () => {
   const { recommendations } = useCMS();
@@ -132,7 +95,7 @@ const InfluencerCopy = () => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [searchLocation, setSearchLocation] = useState<UserLocation | null>(
-    null
+    null,
   );
   const [placeValue, setPlaceValue] = useState<any>(null);
   const [activeCategory, setActiveCategory] = useState<string | "all">("all");
@@ -140,10 +103,11 @@ const InfluencerCopy = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabKey>("home");
   const [selectedPlace, setSelectedPlace] = useState<Recommendation | null>(
-    null
+    null,
   );
   const [isPlaceDrawerOpen, setIsPlaceDrawerOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [activeArea, setActiveArea] = useState<string | "all">("all");
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -161,7 +125,7 @@ const InfluencerCopy = () => {
       disableDefaultUI: true,
       zoomControl: false,
     }),
-    []
+    [],
   );
 
   const filteredPlaces = useMemo(() => {
@@ -170,6 +134,10 @@ const InfluencerCopy = () => {
       const matchesCategory =
         activeCategory === "all" || place?.category === activeCategory;
       if (!matchesCategory) return false;
+
+      const matchesArea =
+        activeArea === "all" || place?.city?.trim() === activeArea;
+      if (!matchesArea) return false;
 
       // Filter by text query
       const q = listQuery.trim().toLowerCase();
@@ -186,7 +154,7 @@ const InfluencerCopy = () => {
           base.lat,
           base.lng,
           Number(place.location.latitude),
-          Number(place.location.longitude)
+          Number(place.location.longitude),
         );
         return d <= 50;
       }
@@ -198,6 +166,7 @@ const InfluencerCopy = () => {
     listQuery,
     userLocation,
     searchLocation,
+    activeArea,
   ]);
 
   const getUserLocation = () => {
@@ -221,7 +190,7 @@ const InfluencerCopy = () => {
       () => {
         toast.error("Unable to fetch location");
         setIsLocating(false);
-      }
+      },
     );
   };
 
@@ -256,7 +225,7 @@ const InfluencerCopy = () => {
           acc.lng += Number(p.location.longitude);
           return acc;
         },
-        { lat: 0, lng: 0 }
+        { lat: 0, lng: 0 },
       );
 
       return {
@@ -303,18 +272,33 @@ const InfluencerCopy = () => {
       acc[category] = (acc[category] || 0) + 1;
       return acc;
     },
-    {} as CategoryCountMap
+    {} as CategoryCountMap,
   );
 
   const uniqueCategories = Object.keys(categoryCountMap);
+
+  const areasExplored = useMemo(() => {
+    const areaCount = new Map<string, number>();
+    filteredPlaces?.forEach((p: Recommendation) => {
+      const area = (p?.city || "Others").trim();
+      areaCount.set(area, (areaCount.get(area) || 0) + 1);
+    });
+
+    return Array.from(areaCount.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([name, count]) => ({ name, count }));
+  }, [filteredPlaces]);
 
   if (!isLoaded)
     return <div className="h-screen w-full bg-slate-100 animate-pulse" />;
 
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-white font-montserrat">
+    <main className="relative h-[100dvh] w-full overflow-hidden bg-white font-montserrat">
       {/* ✅ Header ALWAYS visible */}
-      <div className="absolute top-0 left-0 right-0 z-[60]">
+      <div
+        className={`absolute top-0 left-0 right-0 z-[60] ${isDrawerOpen ? "hidden" : ""}`}
+      >
         <HeaderSearch
           apiKey={API_KEY}
           map={map}
@@ -333,8 +317,8 @@ const InfluencerCopy = () => {
 
       {/* ✅ Main content area (IMPORTANT: padding for header + footer) */}
       <div
-        className={`h-full  pb-[60px] ${
-          activeTab == "home" ? "" : "pt-[104px]"
+        className={`flex flex-col h-[100dvh] pb-[60px] ${
+          activeTab === "home" ? "" : "pt-[104px]"
         }`}
       >
         {activeTab === "home" && (
@@ -382,11 +366,157 @@ const InfluencerCopy = () => {
         )}
 
         {activeTab === "explore" && (
-          <div className="h-full bg-white overflow-hidden">
-            <div className="h-full flex items-center justify-center text-sm text-slate-500">
-              Explore tab content
+          <section className="p-2 h-full flex flex-col min-h-0">
+            {/* Header / filters (fixed) */}
+            <div className="md:px-2 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                <span>
+                  <MapPin size={18} className="text-slate-500" />
+                </span>
+                Areas Explored
+              </div>
+
+              <div className="flex gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain shrink-0">
+                <Badge
+                  variant="secondary"
+                  className={`rounded-full ${
+                    activeArea === "all" ? "bg-slate-300" : "bg-slate-100"
+                  } text-slate-700 cursor-pointer`}
+                  onClick={() => {
+                    setListQuery("");
+                    setActiveArea("all");
+                  }}
+                >
+                  All
+                </Badge>
+
+                {areasExplored.map((a) => (
+                  <Badge
+                    key={a.name}
+                    variant="secondary"
+                    className={`rounded-full ${
+                      activeArea === a.name ? "bg-slate-300" : "bg-slate-100"
+                    } text-slate-700 cursor-pointer`}
+                    onClick={() => {
+                      setListQuery(a.name);
+                      setActiveArea(a.name);
+                    }}
+                  >
+                    {a.name} ({String(a.count).padStart(2, "0")})
+                  </Badge>
+                ))}
+              </div>
             </div>
-          </div>
+
+            {/* ✅ Scrollable cards area */}
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                {filteredPlaces?.map((item: Recommendation, idx: number) => {
+                  const img =
+                    Array.isArray(item?.imageUrl) && item?.imageUrl.length > 0
+                      ? item?.imageUrl[0]
+                      : "/assets/map-image-placeholder.jpg";
+
+                  const locText = item?.address || "";
+
+                  return (
+                    <Card
+                      key={idx}
+                      className="rounded-[10px] border border-slate-200 bg-white shadow-none overflow-hidden p-0 flex flex-col"
+                    >
+                      <CardContent className="p-2 flex flex-col flex-1">
+                        <div className="relative pb-0 shrink-0 cursor-pointer overflow-hidden">
+                          <div className="relative h-40 w-full bg-slate-100">
+                            <Link
+                              href={`/details?id=${item._id}`}
+                              className="w-full"
+                            >
+                              <img
+                                src={img}
+                                alt={item?.placeName}
+                                className="h-full w-full object-cover rounded-sm cursor-pointer"
+                                loading="lazy"
+                              />
+                            </Link>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 flex flex-col flex-1">
+                          <div className="space-y-2">
+                            <div className="flex items-start justify-between gap-3">
+                              <Link href={`/details?id=${item._id}`}>
+                                <p className="font-semibold text-sm hover:underline cursor-pointer">
+                                  {item?.placeName}
+                                </p>
+                              </Link>
+
+                              <Badge
+                                variant="secondary"
+                                className="text-[11px] px-2 py-0.5 rounded-full font-medium"
+                              >
+                                {item?.category}
+                              </Badge>
+                            </div>
+
+                            <Link href={`/details?id=${item._id}`}>
+                              <p className="text-[12px] text-[#3E3E3E] cursor-pointer">
+                                {item?.description?.length > 90
+                                  ? item?.description?.slice(0, 90) + "..."
+                                  : item?.description}
+                              </p>
+                            </Link>
+
+                            <div className="flex min-w-0 items-start gap-2">
+                              <MapPin className="h-4 w-4 shrink-0 text-slate-700" />
+                              <span className="text-[12px] font-medium">
+                                {locText?.length > 80
+                                  ? locText?.slice(0, 80) + "..."
+                                  : locText}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="mt-auto pt-4 items-center gap-2 grid grid-cols-2">
+                            <Link
+                              href={`/details?id=${item._id}`}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-9 text-xs shadow-none cursor-pointer w-full"
+                              >
+                                View Details
+                              </Button>
+                            </Link>
+
+                            <Link
+                              href={item?.googleMapLink ?? "/"}
+                              target="_blank"
+                              className="block"
+                            >
+                              <Button
+                                variant="default"
+                                className="cursor-pointer w-full font-medium"
+                              >
+                                Go to Maps
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+
+              {filteredPlaces?.length === 0 && (
+                <div className="py-20 text-center text-slate-500 text-lg h-[60vh] flex items-center justify-center">
+                  No places found.
+                </div>
+              )}
+            </div>
+          </section>
         )}
 
         {activeTab === "saved" && (
@@ -397,27 +527,27 @@ const InfluencerCopy = () => {
           </div>
         )}
 
-        {activeTab === "add" && (
+        {activeTab === "create" && (
           <div className="h-full bg-white overflow-hidden">
             <div className="h-full flex items-center justify-center text-sm text-slate-500">
-              Add tab content
+              Create tab content
             </div>
           </div>
         )}
       </div>
 
       {/* ✅ Optional: Bottom list drawer opener (show only on map/home if you want) */}
-      {(activeTab === "home") && (
+      {activeTab === "home" && (
         <>
           <button
             onClick={() => setIsDrawerOpen((prev) => !prev)}
-            className="cursor-pointer md:hidden fixed z-50 left-1/2 -translate-x-1/2 bottom-[calc(60px+env(safe-area-inset-bottom))] border border-slate-200 rounded-t-2xl py-1 px-14 bg-white hover:bg-gray-200"
+            className="cursor-pointer md:hidden fixed  z-50 left-1/2 -translate-x-1/2 bottom-[calc(60px+env(safe-area-inset-bottom))] border-none rounded-t-2xl py-1 px-14 bg-white hover:bg-gray-200"
           >
             <ChevronUp size={24} />
           </button>
 
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-            <DrawerContent className="h-[80vh] p-0 md:hidden bg-white">
+            <DrawerContent className="h-[75dvh] p-0 md:hidden bg-white">
               <DrawerHeader>
                 <DrawerTitle className="font-medium text-left flex items-center justify-between">
                   <p>Recommendations</p>
@@ -428,9 +558,72 @@ const InfluencerCopy = () => {
                     <X size={18} />
                   </button>
                 </DrawerTitle>
+                <div className="flex items-center w-full bg-white rounded-[10px] border border-[#E7EBF1] px-3 py-2 my-1 gap-2">
+                  <div className="flex items-center gap-2 flex-1">
+                    <Search className="h-4 w-4 text-slate-400 shrink-0" />
+                    <input
+                      value={listQuery}
+                      onChange={(e) => setListQuery(e.target.value)}
+                      placeholder="Search recommendations ..."
+                      className="w-full bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400 h-8"
+                    />
+                  </div>
+
+                  {listQuery?.trim()?.length > 0 && (
+                    <button
+                      onClick={() => setListQuery("")}
+                      className="h-8 w-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600"
+                      aria-label="Clear search"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+
+                <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
+                  <Badge
+                    variant={activeCategory === "all" ? "secondary" : "outline"}
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                      activeCategory === "all"
+                        ? "bg-slate-900 text-white"
+                        : "bg-white hover:bg-slate-50"
+                    }`}
+                    onClick={() => {
+                      setListQuery("");
+                      setActiveCategory("all");
+                    }}
+                  >
+                    All
+                  </Badge>
+                  {uniqueCategories.map((name: string, index: number) => {
+                    const isActive = activeCategory === name;
+                    const Icon = CATEGORY_ICON[name];
+                    const count = categoryCountMap[name];
+
+                    return (
+                      <Badge
+                        key={index}
+                        variant={isActive ? "secondary" : "outline"}
+                        className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                          isActive
+                            ? "bg-slate-900 text-white"
+                            : "bg-white hover:bg-slate-50"
+                        }`}
+                        onClick={() => {
+                          setListQuery("");
+                          setActiveCategory(name);
+                        }}
+                      >
+                        {Icon && <Icon size={16} strokeWidth={1.5} />}
+                        {name}
+                        <span>({count})</span>
+                      </Badge>
+                    );
+                  })}
+                </div>
               </DrawerHeader>
 
-              <div className="h-full overflow-y-auto bg-white">
+              <div className="h-full overflow-y-auto bg-white pb-[68px] md:pb-0">
                 <ResultsList
                   places={filteredPlaces}
                   selectedId={selectedId}
