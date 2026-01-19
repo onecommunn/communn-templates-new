@@ -397,7 +397,7 @@ const DefaultEventDetails = () => {
 
                   </>
                 ) : (
-                  <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                  <div className="text-lg sm:text-2xl font-bold text-slate-900 leading-tight">
                     {eventData?.pricing ? `₹${eventData.pricing}` : "Free"}
                   </div>
                 )}
@@ -503,7 +503,7 @@ const DefaultEventDetails = () => {
                   ? "bg-slate-200 text-slate-500 hover:bg-slate-200 cursor-not-allowed"
                   : isEventIncluded
                     ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                    : "bg-[#1E4D91] hover:bg-[#1E4D91] text-white"
               )}
             >
               {isBooking ? (
