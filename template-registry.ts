@@ -86,6 +86,7 @@ import DefaultLogin from "./app/default/login/page";
 import DefaultProfileRoot from "./app/default/profile/page";
 import DefaultPaymentsRoot from "./app/default/payments/page";
 import DefaultSubscriptionsRoot from "./app/default/subscriptions/pages";
+import InfluencerCopy from "./app/Influencer/page copy";
 
 export const templateLayouts: Record<
   string,
@@ -187,6 +188,7 @@ export const templates: Record<
   },
   influencer: {
     "/": InfluencerPage,
+    "/copy":InfluencerCopy,
     "/explore": InfluencerExploreRoot,
     "/login": InfluencerLogin,
     "/sign-up": InfluencerSignup,
