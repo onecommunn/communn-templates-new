@@ -76,5 +76,14 @@ export const getByIdInfluencerRecommendations = async (id: string) => {
     `${BASE_URL_V2}/cms/specific-recommandation/${id}`
   );
 
+  
   return response;
+};
+
+export const getInfluencerAdminProfile = async (communityId: string) => {
+  const response = await axios.get(
+    `${BASE_URL_V2}/cms/${communityId}/recommandation-admin-profile`
+  );
+
+  return response.data;
 };

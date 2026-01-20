@@ -41,6 +41,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import RecommendationsList from "./_components/RecommendationsList";
+import CreatePage from "./create/page";
 
 type UserLocation = { lat: number; lng: number; city?: string };
 type CategoryCountMap = Record<string, number>;
@@ -535,14 +536,17 @@ const InfluencerCopy = () => {
         )}
 
         {activeTab === "create" && (
-          <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
-            <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
-              <Clock className="h-6 w-6 text-slate-400" />
-            </div>
+          // <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
+          //   <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+          //     <Clock className="h-6 w-6 text-slate-400" />
+          //   </div>
 
-            <p className="text-sm text-slate-500 mt-1">
-              This feature is coming soon. Stay tuned!
-            </p>
+          //   <p className="text-sm text-slate-500 mt-1">
+          //     This feature is coming soon. Stay tuned!
+          //   </p>
+          // </div>
+          <div className="h-full overflow-y-auto bg-white">
+            <CreatePage />
           </div>
         )}
       </div>

@@ -87,6 +87,7 @@ import DefaultProfileRoot from "./app/default/profile/page";
 import DefaultPaymentsRoot from "./app/default/payments/page";
 import DefaultSubscriptionsRoot from "./app/default/subscriptions/pages";
 import InfluencerCopy from "./app/Influencer/page copy";
+import CreatePage from "./app/Influencer/create/page";
 
 export const templateLayouts: Record<
   string,
@@ -125,9 +126,9 @@ export const templates: Record<
     "/auto-login": AutoLogin,
     "/event-details": DefaultEventDetailsPage,
     "/login": DefaultLogin,
-    "/profile":DefaultProfileRoot,
+    "/profile": DefaultProfileRoot,
     "/payments": DefaultPaymentsRoot,
-    "/subscriptions":DefaultSubscriptionsRoot
+    "/subscriptions": DefaultSubscriptionsRoot,
   },
   yogana: {
     "/": YoganaRoot,
@@ -188,7 +189,8 @@ export const templates: Record<
   },
   influencer: {
     "/": InfluencerCopy,
-    "/copy":InfluencerPage,
+    "/copy": InfluencerPage,
+    "/create": CreatePage,
     "/explore": InfluencerExploreRoot,
     "/login": InfluencerLogin,
     "/sign-up": InfluencerSignup,

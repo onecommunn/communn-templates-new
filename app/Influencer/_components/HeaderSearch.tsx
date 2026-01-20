@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { toast } from "sonner";
@@ -11,6 +11,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CircleUserRound, Map, TextAlignJustify } from "lucide-react";
 import { AuthContext } from "@/contexts/Auth.context";
+import { useCommunity } from "@/hooks/useCommunity";
+import { getInfluencerAdminProfile } from "@/services/Influencer/influencer.service";
 
 type CategoryCountMap = Record<string, number>;
 type UserLocation = { lat: number; lng: number; city?: string };
@@ -68,7 +70,29 @@ export default function HeaderSearch(props: {
   } = props;
   const isMobile = useIsMobile();
   const auth = useContext(AuthContext);
-  console.log(auth, "auth");
+  const { communityId } = useCommunity();
+  const [data, setData] = useState<{
+    profileName: string;
+    instagramHandler: string;
+    profileImage: string;
+  }>();
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        if (!communityId) return;
+
+        const res = await getInfluencerAdminProfile(communityId);
+        if (!res) return;
+
+        setData(res?.data);
+      } catch (error) {
+        console.error("Failed to fetch influencer profile:", error);
+        toast.error("Failed to load profile details");
+      }
+    };
+
+    fetchProfile();
+  }, [communityId]);
   return (
     <div
       className={`
@@ -86,13 +110,17 @@ export default function HeaderSearch(props: {
           {/* left */}
           <div className="flex items-center gap-2">
             <img
-              src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
+              src={
+                data?.profileImage ??
+                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
+              }
               className="w-10 h-10 rounded-full object-cover shrink-0"
               alt="Profile"
             />
+            
             <div className="flex flex-col gap-1">
-              <p className="text-sm">Ashvini Sihra</p>
-              <p className="text-[#646464] text-xs">@ashvinisihra</p>
+              <p className="text-sm">{data?.profileName}</p>
+              <p className="text-[#646464] text-xs">{data?.instagramHandler}</p>
             </div>
           </div>
           {/* right */}
@@ -167,7 +195,7 @@ export default function HeaderSearch(props: {
 
           {!isSearchFocused && (
             <img
-              src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
+              src={data?.profileImage ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"}
               className="w-8 h-8 rounded-full object-cover shrink-0 md:hidden"
               alt="Profile"
             />
