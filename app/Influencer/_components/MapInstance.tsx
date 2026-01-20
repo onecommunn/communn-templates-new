@@ -31,7 +31,7 @@ export default function MapInstance(props: {
     renderMarker,
   } = props;
   return (
-    <div className="relative h-full bg-white">
+    <div className="relative h-full bg-white font-montserrat">
       <div className="absolute inset-0">
         <GoogleMap
           mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -79,7 +79,7 @@ export default function MapInstance(props: {
         target="_blank"
         className="absolute bottom-0 right-0 bg-white/90 backdrop-blur px-3 py-1.5 text-[10px] text-black rounded-tl-lg z-10 hidden md:flex"
       >
-        Create yours with <span className="font-bold">communn.io</span>
+        Create yours with &nbsp;<span className="font-bold">communn.io</span>
       </Link>
     </div>
   );

@@ -187,8 +187,8 @@ export const templates: Record<
     "/auto-login": AutoLogin,
   },
   influencer: {
-    "/": InfluencerPage,
-    "/copy":InfluencerCopy,
+    "/": InfluencerCopy,
+    "/copy":InfluencerPage,
     "/explore": InfluencerExploreRoot,
     "/login": InfluencerLogin,
     "/sign-up": InfluencerSignup,
