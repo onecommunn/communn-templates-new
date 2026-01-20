@@ -1,13 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
 import { Recommendation } from "@/models/templates/Influencer/influencer-home-model";
-import Autoplay from "embla-carousel-autoplay";
 import { MapPin, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,7 +40,7 @@ export default function ResultsList(props: {
             return (
               <Card
                 key={place._id}
-                className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer p-0 shadow-none ${
+                className={`border rounded-2xl overflow-hidden gap-2 cursor-pointer font-montserrat p-0 shadow-none ${
                   isSelected ? "border-slate-300" : "hover:border-slate-300"
                 }`}
                 onClick={() => {

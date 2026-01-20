@@ -558,8 +558,8 @@ const InfluencerCopy = () => {
           </button>
 
           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-            <DrawerContent className="h-[75dvh] p-0 md:hidden bg-white">
-              <DrawerHeader>
+            <DrawerContent className="md:hidden bg-white p-0 flex flex-col max-h-[75dvh] font-montserrat">
+              <DrawerHeader className="sticky top-0 z-10 bg-white">
                 <DrawerTitle className="font-medium text-left flex items-center justify-between">
                   <p>Recommendations</p>
                   <button
@@ -576,7 +576,7 @@ const InfluencerCopy = () => {
                       value={listQuery}
                       onChange={(e) => setListQuery(e.target.value)}
                       placeholder="Search recommendations ..."
-                      className="w-full bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400 h-8"
+                      className="w-full bg-transparent outline-none text-[16px] text-slate-900 placeholder:text-slate-400 h-8"
                     />
                   </div>
 
@@ -591,12 +591,12 @@ const InfluencerCopy = () => {
                   )}
                 </div>
 
-                <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain">
+                <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain font-montserrat">
                   <Badge
                     variant={activeCategory === "all" ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 font-montserrat py-1.5 text-xs cursor-pointer font-medium ${
                       activeCategory === "all"
-                        ? "bg-slate-900 text-white"
+                        ? "bg-[#2B52A1] text-white"
                         : "bg-white hover:bg-slate-50"
                     }`}
                     onClick={() => {
@@ -615,9 +615,9 @@ const InfluencerCopy = () => {
                       <Badge
                         key={index}
                         variant={isActive ? "secondary" : "outline"}
-                        className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
+                        className={`shrink-0 flex items-center gap-2 font-montserrat rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
                           isActive
-                            ? "bg-slate-900 text-white"
+                            ? "bg-[#2B52A1] text-white"
                             : "bg-white hover:bg-slate-50"
                         }`}
                         onClick={() => {
@@ -634,7 +634,7 @@ const InfluencerCopy = () => {
                 </div>
               </DrawerHeader>
 
-              <div className="h-full overflow-y-auto bg-white pb-[68px] md:pb-0">
+              <div className="flex-1 overflow-y-auto bg-white pb-[calc(68px+env(safe-area-inset-bottom))] md:pb-0">
                 <ResultsList
                   places={filteredPlaces}
                   selectedId={selectedId}

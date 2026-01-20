@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { Badge } from "@/components/ui/badge";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { toast } from "sonner";
@@ -9,7 +9,8 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Map, TextAlignJustify } from "lucide-react";
+import { CircleUserRound, Map, TextAlignJustify } from "lucide-react";
+import { AuthContext } from "@/contexts/Auth.context";
 
 type CategoryCountMap = Record<string, number>;
 type UserLocation = { lat: number; lng: number; city?: string };
@@ -66,6 +67,8 @@ export default function HeaderSearch(props: {
     setActiveTab,
   } = props;
   const isMobile = useIsMobile();
+  const auth = useContext(AuthContext);
+  console.log(auth, "auth");
   return (
     <div
       className={`
@@ -108,12 +111,21 @@ export default function HeaderSearch(props: {
                 Explore
               </Button>
             </Link>
-            <Avatar>
-              <AvatarImage src={"https://githubcom/shadcn.png"} alt="avthar" />
-              <AvatarFallback className="bg-[#2B52A1] text-white font-medium">
-                A
-              </AvatarFallback>
-            </Avatar>
+            {auth.isAuthenticated ? (
+              <Avatar>
+                <AvatarImage
+                  src={auth?.user?.avatar ?? "https://githubcom/shadcn.png"}
+                  alt="avthar"
+                />
+                <AvatarFallback className="bg-[#2B52A1] text-white font-medium uppercase">
+                  {auth?.user?.firstName?.[0]}
+                </AvatarFallback>
+              </Avatar>
+            ) : (
+              <div className="rounded-full bg-gray-200 text-gray-500 hidden md:flex">
+                <CircleUserRound strokeWidth={1.5} size={32} />
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -270,11 +282,22 @@ export default function HeaderSearch(props: {
             />
           </div>
 
-          {!isSearchFocused && (
-            <button className="w-8 h-8 bg-[#2B52A1] rounded-full flex items-center justify-center text-white shrink-0 md:hidden">
-              <span className="font-medium">A</span>
-            </button>
-          )}
+          {!isSearchFocused &&
+            (auth?.isAuthenticated ? (
+              <Avatar className="md:hidden">
+                <AvatarImage
+                  src={auth?.user?.avatar ?? "https://githubcom/shadcn.png"}
+                  alt="avthar"
+                />
+                <AvatarFallback className="bg-[#2B52A1] text-white font-medium uppercase">
+                  {auth?.user?.firstName?.[0]}
+                </AvatarFallback>
+              </Avatar>
+            ) : (
+              <div className="rounded-full bg-gray-200 text-gray-400 md:hidden">
+                <CircleUserRound strokeWidth={1.5} size={28} />
+              </div>
+            ))}
         </div>
         {/* categories */}
         {!isSearchFocused && (
