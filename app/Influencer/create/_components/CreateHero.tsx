@@ -1,4 +1,5 @@
 import { House } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 const CreateHero = () => {
@@ -25,18 +26,21 @@ const CreateHero = () => {
                 Create your own recommendations map
               </h1>
               <p className="text-[#666666] text-xs md:text-sm leading-relaxed max-w-[480px]">
-                Curate and share your personal map of cafes, restaurants, travel
+                Create and share your personal map of cafes, restaurants, travel
                 spots, and hidden gems. Let others discover the world through
                 your eyes.
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <button className="bg-[#2653A3] text-sm hover:bg-[#1e44a3] text-white px-8 py-3.5 rounded-xl font-semibold transition-all shadow-lg shadow-blue-200">
+                <Link href={"https://communn.io/admin"}
+                  target="_blank" className="bg-[#2653A3] text-sm hover:bg-[#1e44a3] text-white px-8 py-3.5 rounded-xl font-semibold transition-all">
                   Create your map
-                </button>
-                <button className="bg-white text-sm hover:bg-gray-50 text-[#333333] px-8 py-3.5 rounded-xl font-semibold border border-[#E7EBF1] transition-all">
+                </Link>
+                {/* <Link
+                  href={"https://communn.io"}
+                  target="_blank" className="bg-white text-sm hover:bg-gray-50 text-[#333333] px-8 py-3.5 rounded-xl font-semibold border border-[#E7EBF1] transition-all">
                   Explore
-                </button>
+                </Link> */}
               </div>
             </div>
 

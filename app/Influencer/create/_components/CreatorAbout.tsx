@@ -21,7 +21,7 @@ const CreatorAbout = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-[#fff] font-montserrat">
+    <section className="px-6 bg-[#fff] font-montserrat">
       <div className="max-w-6xl mx-auto text-center">
         {/* Header Section */}
         <h2 className="text-base md:text-lg font-bold text-[#111111] mb-3">
@@ -34,8 +34,8 @@ const CreatorAbout = () => {
         {/* Features Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="bg-white p-10 rounded-[20px] flex flex-col items-center text-center border border-[#E7EBF1]"
             >
               <div className="mb-6">

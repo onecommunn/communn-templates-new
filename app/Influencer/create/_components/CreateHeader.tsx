@@ -5,7 +5,7 @@ import React from "react";
 
 const CreateHeader = () => {
   return (
-    <header className="flex items-center justify-between py-3 px-6 md:px-10 font-montserrat">
+    <header className="flex items-center justify-center py-3 px-1 md:px-10 font-montserrat">
       <div className="flex items-center gap-2">
         {/* Replace with your actual small horizontal logo path */}
         <Image
@@ -34,12 +34,13 @@ const CreateHeader = () => {
           </span>
         </span>
       </div>
-      <Link
-        href={"/login"}
-        className="font-medium text-white bg-[#2653A3] px-[20px] py-[10px] rounded-[8px] text-xs"
+      {/* <Link
+        href={"https://communn.io/admin"}
+        target="_blank"
+        className="font-medium text-white bg-[#2653A3] px-[20px] py-[10px] rounded-[8px] text-sm md:md"
       >
-        Login
-      </Link>
+        Create
+      </Link> */}
     </header>
   );
 };

@@ -98,29 +98,44 @@ export default function HeaderSearch(props: {
       className={`
      z-50 flex flex-col items-center md:items-start mx-auto font-montserrat
       ${activeTab === "home" ? "absolute" : "static"}
-      ${
-        isSearchFocused
+      ${isSearchFocused
           ? "inset-0 bg-white w-full h-screen flex flex-col"
           : `${activeTab == "home" ? "top-3 left-1/2 -translate-x-1/2" : "py-3"} w-[95%] max-w-[500px] md:max-w-full flex items-center gap-2`
-      }
+        }
     `}
     >
       {!isSearchFocused && (
         <div className="hidden md:flex items-center justify-between w-full">
           {/* left */}
           <div className="flex items-center gap-2">
-            <img
-              src={
-                data?.profileImage ??
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
-              }
-              className="w-10 h-10 rounded-full object-cover shrink-0"
-              alt="Profile"
-            />
-            
+            <a
+              href={`https://www.instagram.com/${data?.instagramHandler}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col"
+            >
+              <img
+                src={
+                  data?.profileImage ??
+                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
+                }
+                className="w-10 h-10 rounded-full object-cover shrink-0"
+                alt="Profile"
+              />
+            </a>
             <div className="flex flex-col gap-1">
-              <p className="text-sm">{data?.profileName}</p>
-              <p className="text-[#646464] text-xs">{data?.instagramHandler}</p>
+              <a
+                href={`https://www.instagram.com/${data?.instagramHandler}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col"
+              >
+                <p className="text-sm">{data?.profileName}</p>
+                <p className="text-[#646464] text-xs">
+                  @{data?.instagramHandler}
+                </p>
+              </a>
+
             </div>
           </div>
           {/* right */}
@@ -162,11 +177,10 @@ export default function HeaderSearch(props: {
         <div
           className={`
         flex items-center w-full 
-        ${
-          isSearchFocused
-            ? "px-2 py-3 border-b border-slate-100 "
-            : "bg-white rounded-[8px] border border-gray-100 px-3 py-1 gap-2 cursor-text md:max-w-[340px]"
-        }
+        ${isSearchFocused
+              ? "px-2 py-3 border-b border-slate-100 "
+              : "bg-white rounded-[8px] border border-gray-100 px-3 py-1 gap-2 cursor-text md:max-w-[340px]"
+            }
       `}
         >
           {/* 1. Back Button (Mobile style) */}
@@ -248,7 +262,7 @@ export default function HeaderSearch(props: {
                     border: "none",
                     boxShadow: "none",
                     background: "transparent",
-                    fontSize: isMobile ? "12px" : "14px",
+                    fontSize: isMobile ? "16px" : "14px",
                     minHeight: "32px",
                     height: "32px",
                     display: "flex",
@@ -302,7 +316,7 @@ export default function HeaderSearch(props: {
                     borderBottom: "1px solid #f1f5f9",
                     backgroundColor: state.isFocused ? "#f8fafc" : "white",
                     color: "#334155",
-                    fontSize: "15px",
+                    fontSize: isMobile ? '12px' : "14px",
                     "&:active": { backgroundColor: "#f1f5f9" },
                   }),
                 },
@@ -332,11 +346,10 @@ export default function HeaderSearch(props: {
           <div className="w-full md:w-fit flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 md:pr-0 overscroll-x-contain">
             <Badge
               variant={activeCategory === "all" ? "secondary" : "outline"}
-              className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                activeCategory === "all"
-                  ? "bg-[#2B52A1] text-white"
-                  : "bg-white hover:bg-slate-50"
-              }`}
+              className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${activeCategory === "all"
+                ? "bg-[#2B52A1] text-white"
+                : "bg-white hover:bg-slate-50"
+                }`}
               onClick={() => setActiveCategory("all")}
             >
               All
@@ -350,11 +363,10 @@ export default function HeaderSearch(props: {
                 <Badge
                   key={index}
                   variant={isActive ? "secondary" : "outline"}
-                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                    isActive
-                      ? "bg-[#2B52A1] text-white"
-                      : "bg-white hover:bg-slate-50"
-                  }`}
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
+                    ? "bg-[#2B52A1] text-white"
+                    : "bg-white hover:bg-slate-50"
+                    }`}
                   onClick={() => setActiveCategory(name)}
                 >
                   {Icon && <Icon size={16} strokeWidth={1.5} />}

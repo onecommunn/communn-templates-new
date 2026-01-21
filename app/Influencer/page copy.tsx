@@ -64,8 +64,8 @@ const getDistanceInKm = (
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
@@ -304,30 +304,39 @@ const InfluencerCopy = () => {
       <div
         className={`absolute top-0 left-0 right-0 z-[60] ${isDrawerOpen ? "hidden" : ""}`}
       >
-        <HeaderSearch
-          apiKey={API_KEY}
-          map={map}
-          activeCategory={activeCategory}
-          uniqueCategories={uniqueCategories}
-          categoryCountMap={categoryCountMap}
-          isSearchFocused={isSearchFocused}
-          setIsSearchFocused={setIsSearchFocused}
-          placeValue={placeValue}
-          setActiveCategory={setActiveCategory}
-          setPlaceValue={setPlaceValue}
-          setSearchLocation={setSearchLocation}
-          activeTab={activeTab}
-          setPanelOpen={setPanelOpen}
-          setActiveTab={setActiveTab}
-        />
+        {activeTab !== "create" && (
+          <>
+            <HeaderSearch
+              apiKey={API_KEY}
+              map={map}
+              activeCategory={activeCategory}
+              uniqueCategories={uniqueCategories}
+              categoryCountMap={categoryCountMap}
+              isSearchFocused={isSearchFocused}
+              setIsSearchFocused={setIsSearchFocused}
+              placeValue={placeValue}
+              setActiveCategory={setActiveCategory}
+              setPlaceValue={setPlaceValue}
+              setSearchLocation={setSearchLocation}
+              activeTab={activeTab}
+              setPanelOpen={setPanelOpen}
+              setActiveTab={setActiveTab}
+            />
+          </>
+        )}
+
       </div>
 
       {/* Main content area */}
       <div
-        className={`flex flex-col h-[100dvh] pb-[60px] md:pb-0 ${
-          activeTab === "home" ? "" : "pt-[104px]"
-        }`}
+        className={`flex flex-col h-[100dvh] pb-[60px] md:pb-0 ${activeTab === "home"
+          ? ""
+          : activeTab !== "create"
+            ? "pt-[105px]"
+            : "pt-[5px]"
+          }`}
       >
+
         {activeTab === "home" && (
           <div className="h-full bg-white overflow-hidden relative">
             <MapInstance
@@ -383,9 +392,8 @@ const InfluencerCopy = () => {
               <div className="flex gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain shrink-0">
                 <Badge
                   variant="secondary"
-                  className={`rounded-full ${
-                    activeArea === "all" ? "bg-slate-300" : "bg-slate-100"
-                  } text-slate-700 cursor-pointer`}
+                  className={`rounded-full ${activeArea === "all" ? "bg-slate-300" : "bg-slate-100"
+                    } text-slate-700 cursor-pointer`}
                   onClick={() => {
                     setListQuery("");
                     setActiveArea("all");
@@ -398,9 +406,8 @@ const InfluencerCopy = () => {
                   <Badge
                     key={a.name}
                     variant="secondary"
-                    className={`rounded-full ${
-                      activeArea === a.name ? "bg-slate-300" : "bg-slate-100"
-                    } text-slate-700 cursor-pointer`}
+                    className={`rounded-full ${activeArea === a.name ? "bg-slate-300" : "bg-slate-100"
+                      } text-slate-700 cursor-pointer`}
                     onClick={() => {
                       setListQuery(a.name);
                       setActiveArea(a.name);
@@ -408,12 +415,13 @@ const InfluencerCopy = () => {
                   >
                     {a.name} ({String(a.count).padStart(2, "0")})
                   </Badge>
-                ))}
-              </div>
-            </div>
+                ))
+                }
+              </div >
+            </div >
 
             {/* ✅ Scrollable cards area */}
-            <div className="flex-1 min-h-0 overflow-y-auto">
+            <div className="flex-1 min-h-0 overflow-y-auto" >
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
                 {filteredPlaces?.map((item: Recommendation, idx: number) => {
                   const img =
@@ -514,142 +522,148 @@ const InfluencerCopy = () => {
                 })}
               </div>
 
-              {filteredPlaces?.length === 0 && (
-                <div className="py-20 text-center text-slate-500 text-lg h-[60vh] flex items-center justify-center">
-                  No places found.
-                </div>
-              )}
+              {
+                filteredPlaces?.length === 0 && (
+                  <div className="py-20 text-center text-slate-500 text-lg h-[60vh] flex items-center justify-center">
+                    No places found.
+                  </div>
+                )
+              }
+            </div >
+          </section >
+        )}
+
+        {
+          activeTab === "saved" && (
+            <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
+              <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+                <Clock className="h-6 w-6 text-slate-400" />
+              </div>
+
+              <p className="text-sm text-slate-500 mt-1">
+                This feature is coming soon. Stay tuned!
+              </p>
             </div>
-          </section>
-        )}
+          )
+        }
 
-        {activeTab === "saved" && (
-          <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
-            <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
-              <Clock className="h-6 w-6 text-slate-400" />
+        {
+          activeTab === "create" && (
+            // <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
+            //   <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+            //     <Clock className="h-6 w-6 text-slate-400" />
+            //   </div>
+
+            //   <p className="text-sm text-slate-500 mt-1">
+            //     This feature is coming soon. Stay tuned!
+            //   </p>
+            // </div>
+            <div className="h-full overflow-y-auto bg-white">
+              <CreatePage />
             </div>
-
-            <p className="text-sm text-slate-500 mt-1">
-              This feature is coming soon. Stay tuned!
-            </p>
-          </div>
-        )}
-
-        {activeTab === "create" && (
-          // <div className="h-full flex flex-col items-center justify-center text-center px-6 bg-white">
-          //   <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mb-2">
-          //     <Clock className="h-6 w-6 text-slate-400" />
-          //   </div>
-
-          //   <p className="text-sm text-slate-500 mt-1">
-          //     This feature is coming soon. Stay tuned!
-          //   </p>
-          // </div>
-          <div className="h-full overflow-y-auto bg-white">
-            <CreatePage />
-          </div>
-        )}
-      </div>
+          )
+        }
+      </div >
 
       {/* ✅ Optional: Bottom list drawer opener (show only on map/home if you want) */}
-      {activeTab === "home" && (
-        <>
-          <button
-            onClick={() => setIsDrawerOpen((prev) => !prev)}
-            className="cursor-pointer md:hidden fixed  z-50 left-1/2 -translate-x-1/2 bottom-[calc(60px+env(safe-area-inset-bottom))] border-none rounded-t-2xl py-1 px-14 bg-white hover:bg-gray-200"
-          >
-            <ChevronUp size={24} />
-          </button>
+      {
+        activeTab === "home" && (
+          <>
+            <button
+              onClick={() => setIsDrawerOpen((prev) => !prev)}
+              className="cursor-pointer md:hidden fixed  z-50 left-1/2 -translate-x-1/2 bottom-[calc(60px+env(safe-area-inset-bottom))] border-none rounded-t-2xl py-1 px-14 bg-white hover:bg-gray-200"
+            >
+              <ChevronUp size={24} />
+            </button>
 
-          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-            <DrawerContent className="md:hidden bg-white p-0 flex flex-col max-h-[75dvh] font-montserrat">
-              <DrawerHeader className="sticky top-0 z-10 bg-white">
-                <DrawerTitle className="font-medium text-left flex items-center justify-between">
-                  <p>Recommendations</p>
-                  <button
-                    onClick={() => setIsDrawerOpen(false)}
-                    className="cursor-pointer p-2 rounded-full hover:bg-slate-100"
-                  >
-                    <X size={18} />
-                  </button>
-                </DrawerTitle>
-                <div className="flex items-center w-full bg-white rounded-[10px] border border-[#E7EBF1] px-3 py-2 my-1 gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <Search className="h-4 w-4 text-slate-400 shrink-0" />
-                    <input
-                      value={listQuery}
-                      onChange={(e) => setListQuery(e.target.value)}
-                      placeholder="Search recommendations ..."
-                      className="w-full bg-transparent outline-none text-[16px] text-slate-900 placeholder:text-slate-400 h-8"
-                    />
+            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+              <DrawerContent className="md:hidden bg-white p-0 flex flex-col max-h-[75dvh] font-montserrat">
+                <DrawerHeader className="sticky top-0 z-10 bg-white">
+                  <DrawerTitle className="font-medium text-left flex items-center justify-between">
+                    <p className="font-montserrat">Recommendations</p>
+                    <button
+                      onClick={() => setIsDrawerOpen(false)}
+                      className="cursor-pointer p-2 rounded-full hover:bg-slate-100"
+                    >
+                      <X size={18} />
+                    </button>
+                  </DrawerTitle>
+                  <div className="flex items-center w-full bg-white rounded-[10px] border border-[#E7EBF1] px-3 py-2 my-1 gap-2">
+                    <div className="flex items-center gap-2 flex-1">
+                      <Search className="h-4 w-4 text-slate-400 shrink-0" />
+                      <input
+                        value={listQuery}
+                        onChange={(e) => setListQuery(e.target.value)}
+                        placeholder="Search recommendations ..."
+                        className="w-full bg-transparent outline-none text-[16px] text-slate-900 placeholder:text-slate-400"
+                      />
+                    </div>
+
+                    {listQuery?.trim()?.length > 0 && (
+                      <button
+                        onClick={() => setListQuery("")}
+                        className="h-8 w-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600"
+                        aria-label="Clear search"
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
                   </div>
 
-                  {listQuery?.trim()?.length > 0 && (
-                    <button
-                      onClick={() => setListQuery("")}
-                      className="h-8 w-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600"
-                      aria-label="Clear search"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-
-                <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain font-montserrat">
-                  <Badge
-                    variant={activeCategory === "all" ? "secondary" : "outline"}
-                    className={`shrink-0 flex items-center gap-2 rounded-full px-4 font-montserrat py-1.5 text-xs cursor-pointer font-medium ${
-                      activeCategory === "all"
+                  <div className="w-full md:flex-1 flex items-center gap-2 overflow-x-auto overflow-y-hidden pr-2 overscroll-x-contain font-montserrat">
+                    <Badge
+                      variant={activeCategory === "all" ? "secondary" : "outline"}
+                      className={`shrink-0 flex items-center gap-2 rounded-full px-4 font-montserrat py-1.5 text-xs cursor-pointer font-medium ${activeCategory === "all"
                         ? "bg-[#2B52A1] text-white"
                         : "bg-white hover:bg-slate-50"
-                    }`}
-                    onClick={() => {
-                      setListQuery("");
-                      setActiveCategory("all");
-                    }}
-                  >
-                    All
-                  </Badge>
-                  {uniqueCategories.map((name: string, index: number) => {
-                    const isActive = activeCategory === name;
-                    const Icon = CATEGORY_ICON[name];
-                    const count = categoryCountMap[name];
+                        }`}
+                      onClick={() => {
+                        setListQuery("");
+                        setActiveCategory("all");
+                      }}
+                    >
+                      All
+                    </Badge>
+                    {uniqueCategories.map((name: string, index: number) => {
+                      const isActive = activeCategory === name;
+                      const Icon = CATEGORY_ICON[name];
+                      const count = categoryCountMap[name];
 
-                    return (
-                      <Badge
-                        key={index}
-                        variant={isActive ? "secondary" : "outline"}
-                        className={`shrink-0 flex items-center gap-2 font-montserrat rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${
-                          isActive
+                      return (
+                        <Badge
+                          key={index}
+                          variant={isActive ? "secondary" : "outline"}
+                          className={`shrink-0 flex items-center gap-2 font-montserrat rounded-full px-4 py-1.5 text-xs cursor-pointer font-medium ${isActive
                             ? "bg-[#2B52A1] text-white"
                             : "bg-white hover:bg-slate-50"
-                        }`}
-                        onClick={() => {
-                          setListQuery("");
-                          setActiveCategory(name);
-                        }}
-                      >
-                        {Icon && <Icon size={16} strokeWidth={1.5} />}
-                        {name}
-                        <span>({count})</span>
-                      </Badge>
-                    );
-                  })}
-                </div>
-              </DrawerHeader>
+                            }`}
+                          onClick={() => {
+                            setListQuery("");
+                            setActiveCategory(name);
+                          }}
+                        >
+                          {Icon && <Icon size={16} strokeWidth={1.5} />}
+                          {name}
+                          <span>({count})</span>
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                </DrawerHeader>
 
-              <div className="flex-1 overflow-y-auto bg-white pb-[calc(68px+env(safe-area-inset-bottom))] md:pb-0">
-                <ResultsList
-                  places={filteredPlaces}
-                  selectedId={selectedId}
-                  setIsDrawerOpen={setIsDrawerOpen}
-                  handlePlaceClick={handlePlaceClick}
-                />
-              </div>
-            </DrawerContent>
-          </Drawer>
-        </>
-      )}
+                <div className="flex-1 overflow-y-auto bg-white pb-[calc(68px+env(safe-area-inset-bottom))] md:pb-0">
+                  <ResultsList
+                    places={filteredPlaces}
+                    selectedId={selectedId}
+                    setIsDrawerOpen={setIsDrawerOpen}
+                    handlePlaceClick={handlePlaceClick}
+                  />
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </>
+        )
+      }
 
       {/* RIGHT PANEL as Shadcn Sheet (Desktop only) */}
       <div className="hidden md:block">
@@ -676,7 +690,7 @@ const InfluencerCopy = () => {
                   <SheetTitle>Recommendations</SheetTitle>
                 </VisuallyHidden>
 
-                <p className="text-base font-semibold text-slate-900">
+                <p className="text-base font-semibold text-slate-900 font-montserrat">
                   Recommendations
                 </p>
               </div>
@@ -695,10 +709,11 @@ const InfluencerCopy = () => {
         </Sheet>
       </div>
 
-      {activeTab === "home" && (
-        <button
-          onClick={() => setPanelOpen(true)}
-          className={`
+      {
+        activeTab === "home" && (
+          <button
+            onClick={() => setPanelOpen(true)}
+            className={`
     absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer hidden md:flex
     bg-white text-black px-1 py-8
     rounded-l-[12px] shadow-md
@@ -706,10 +721,11 @@ const InfluencerCopy = () => {
     transition-all duration-300 ease-in-out
     ${panelOpen ? "opacity-0 pointer-events-none" : "opacity-100"}
   `}
-        >
-          <ChevronLeft />
-        </button>
-      )}
+          >
+            <ChevronLeft />
+          </button>
+        )
+      }
 
       {/* ✅ Place details drawer */}
       <PlaceDetailsDrawer
@@ -722,7 +738,7 @@ const InfluencerCopy = () => {
       <div className="fixed bottom-0 left-0 right-0 z-[80] bg-white md:hidden">
         <FooterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
-    </main>
+    </main >
   );
 };
 

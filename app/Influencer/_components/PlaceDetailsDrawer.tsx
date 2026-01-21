@@ -98,7 +98,7 @@ export default function PlaceDetailsDrawer({
           {/* Description */}
           {place?.description && (
             <div className="px-4 pt-3">
-              <p className="text-sm text-slate-700 leading-relaxed line-clamp-6">
+              <p className="text-sm text-slate-700 leading-relaxed line-clamp-4">
                 {place.description}
               </p>
             </div>

@@ -75,7 +75,7 @@ export default function MapInstance(props: {
         </div>
       </div>
       <Link
-        href="https://communn.io/"
+        href="https://communn.io/admin"
         target="_blank"
         className="absolute bottom-0 right-0 bg-white/90 backdrop-blur px-3 py-1.5 text-[10px] text-black rounded-tl-lg z-10 hidden md:flex"
       >
