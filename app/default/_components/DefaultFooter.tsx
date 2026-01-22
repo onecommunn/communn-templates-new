@@ -1,31 +1,14 @@
-"use client"
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Facebook,
-  Github,
-  Instagram,
-  Send,
-  Figma,
-  Linkedin,
-  Youtube,
-  Dribbble,
-  Globe,
-} from "lucide-react";
-import { FaInstagram, FaPinterest } from "react-icons/fa";
-import { FaThreads, FaXTwitter } from "react-icons/fa6";
-import { formatUrl } from "@/utils/StringFunctions";
 
-const PLATFORM_ICON: Record<string, React.ElementType> = {
-  instagram: FaInstagram,
-  facebook: Facebook,
-  linkedin: Linkedin,
-  dribbble: Dribbble,
-  twitter: FaXTwitter,
-  youtube: Youtube,
-  pinterest: FaPinterest,
-  threads: FaThreads,
+const PLATFORM_ICON: Record<string, string> = {
+  instagram: "/assets/instagram-svg-icon.svg",
+  facebook: "/assets/facebook-svg-icon.svg",
+  twitter: "/assets/twitter-svg-icon.svg",
+  youtube: "/assets/youtube-svg-icon.svg",
+  linkedin:'/assets/linkedin-svg-icon.svg'
 };
 
 type DefaultFooterProps = {
@@ -35,18 +18,17 @@ type DefaultFooterProps = {
   adminName?: string;
   fullAddress?: string;
   zipCode?: string;
-
 };
 
-const DefaultFooter = ({ logo, name, socialLinks, adminName, fullAddress, zipCode }: DefaultFooterProps) => {
-  const navLinks = [
-    "Home",
-    "Events",
-    "Plans",
-    "Courses",
-    "Team",
-    "Contact"
-  ];
+const DefaultFooter = ({
+  logo,
+  name,
+  socialLinks,
+  adminName,
+  fullAddress,
+  zipCode,
+}: DefaultFooterProps) => {
+  const navLinks = ["Home", "Events", "Plans", "Courses", "Team", "Contact"];
   const bottomLinks = [
     "Privacy Policy",
     "Terms of Use",
@@ -133,15 +115,17 @@ const DefaultFooter = ({ logo, name, socialLinks, adminName, fullAddress, zipCod
             <div className="flex gap-3">
               {socialLinks?.map((each: any, idx) => {
                 const key = normalize(each.type).toLowerCase();
-                const Icon = PLATFORM_ICON[key] ?? Globe;
-                const url = formatUrl(each.value) || "/";
+                const Icon = PLATFORM_ICON[key];
+                const url = each.value;
+                if (!url) return null;
                 return (
                   <Link
                     href={url ?? "/"}
                     key={idx}
-                    className="bg-white p-2 rounded-full shadow-xl cursor-pointer hover:shadow-md transition-shadow"
+                    target="_blank"
+                    className="cursor-pointer"
                   >
-                    <Icon size={18} strokeWidth={1.5} />
+                    <img src={Icon} alt="key" className="w-10 h-10 object-cover"/>
                   </Link>
                 );
               })}
