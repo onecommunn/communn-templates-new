@@ -40,13 +40,12 @@ type DefaultFooterProps = {
 
 const DefaultFooter = ({ logo, name, socialLinks, adminName, fullAddress, zipCode }: DefaultFooterProps) => {
   const navLinks = [
-    "Gallery",
-    "Services",
+    "Home",
+    "Events",
     "Plans",
     "Courses",
     "Team",
-    "Directors Message",
-    "FAQ's",
+    "Contact"
   ];
   const bottomLinks = [
     "Privacy Policy",
@@ -87,7 +86,7 @@ const DefaultFooter = ({ logo, name, socialLinks, adminName, fullAddress, zipCod
             {navLinks?.map((link) => (
               <Link
                 key={link}
-                href={`#${link}`}
+                href={`#${link?.toLowerCase()}`}
                 className="hover:text-blue-600 transition-colors"
               >
                 {link}

@@ -53,7 +53,7 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
   //   },
   // ];
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+    Autoplay({ delay: 3000, stopOnInteraction: true }),
   );
   return (
     <section
@@ -80,7 +80,7 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
                     alt={course?.name}
                     src={
                       typeof course?.coverImage === "object" &&
-                        course?.coverImage
+                      course?.coverImage
                         ? (course?.coverImage as IMultiMedia).value
                         : "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default%20Courses.png"
                     }
@@ -95,19 +95,21 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
                   <h3 className="text-lg md:text-xl font-bold mb-4 text-black line-clamp-1">
                     {course?.name}
                   </h3>
-                  <p className="text-gray-500 text-xs md:text-sm leading-relaxed mb-6 flex-grow line-clamp-5">
+                  <p className="text-gray-500 text-xs md:text-sm leading-relaxed mb-4 flex-grow line-clamp-5">
                     {course.description}
                   </p>
 
                   {/* Price Badge */}
-                  <div className="mt-auto mb-4">
-                    <Badge
-                      variant="secondary"
-                      className="bg-gray-100 text-gray-400 hover:bg-gray-100 px-4 py-1 rounded-md font-medium text-xs border-none"
-                    >
-                      {course?.pricing}
-                    </Badge>
-                  </div>
+                  {course?.pricing && (
+                    <div className="mt-auto mb-4">
+                      <Badge
+                        variant="secondary"
+                        className="bg-gray-100 text-gray-400 hover:bg-gray-100 px-4 py-1 rounded-md font-medium text-xs border-none"
+                      >
+                        {course?.pricing}
+                      </Badge>
+                    </div>
+                  )}
                 </div>
               </div>
             </CarouselItem>
