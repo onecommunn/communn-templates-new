@@ -37,7 +37,7 @@ const DefaultContactMe = ({
     >
       {/* Section Heading */}
       <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">
-        Contact Me
+        Contact
       </h2>
 
       {/* Description Text */}

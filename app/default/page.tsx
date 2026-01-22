@@ -19,10 +19,10 @@ const DefaultRoot = () => {
   // console.log("DefaultRoot community data:", source);
 
   const creatorMember = source?.members?.find(
-    (member) => member?.user?._id === source?.createdBy
+    (member) => member?.user?._id === source?.createdBy,
   );
 
-  const adminName = creatorMember?.user?.firstName
+  const adminName = creatorMember?.user?.firstName;
 
   return (
     <>
@@ -56,7 +56,7 @@ const DefaultRoot = () => {
         fullAddress={source?.fullAddress}
         zipCode={source?.zipCode || ""}
       />
-      <DefaultFAQ faqs={source?.faq} />
+      {source?.faq?.length > 0 && <DefaultFAQ faqs={source?.faq} />}
     </>
   );
 };

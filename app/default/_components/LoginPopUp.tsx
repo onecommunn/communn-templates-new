@@ -18,12 +18,13 @@ interface LoginPopUpProps {
   isOpen: boolean;
   onClose: () => void;
   redirectTo?: string | null;
+  onSuccess?: () => void;
 }
 
 type Mode = "login" | "signup";
 type Step = "mobile" | "otp" | "signup";
 
-const LoginPopUp = ({ isOpen, onClose, redirectTo }: LoginPopUpProps) => {
+const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) => {
   // LOGIN (OTP) STATE
   const [identifier, setIdentifier] = useState(""); // mobile or email
   const [otp, setOtp] = useState("");
@@ -151,6 +152,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo }: LoginPopUpProps) => {
 
       if (res?.status === 200) {
         toast.success("Login successful!");
+        onSuccess?.(); 
         onClose();
         if (redirectTo) router.push(redirectTo);
         else router.push("/");
@@ -212,6 +214,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo }: LoginPopUpProps) => {
 
       if (response?.status === 200) {
         toast.success("Account created successfully");
+        onSuccess?.(); 
         onClose();
         if (redirectTo) router.push(redirectTo);
         else router.push("/");

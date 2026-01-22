@@ -18,7 +18,7 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
       {/* Community Description Section */}
       <div className="mb-6 md:mb-6">
         <h2 className="text-xl md:text-2xl font-bold mb-4 text-black">
-          Community Description
+          Know Community
         </h2>
         <p className="text-gray-600 leading-relaxed text-xs md:text-sm">{description}</p>
       </div>
