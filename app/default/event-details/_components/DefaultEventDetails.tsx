@@ -87,10 +87,10 @@ const DefaultEventDetails = () => {
           return;
         }
 
-        if (!auth?.user?.id) {
-          router.push("/");
-          return;
-        }
+        // if (!auth?.user?.id) {
+        //   router.push("/");
+        //   return;
+        // }
 
         const res: any = await getEventById(eventId);
 
