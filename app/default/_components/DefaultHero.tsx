@@ -216,7 +216,7 @@ const DefaultHero = ({
 
       {/* Title */}
       <div className="text-center mt-6">
-        <h1 className="text-xl md:text-3xl font-bold text-[#2E59A7]">{name}</h1>
+        <h1 className="text-xl md:text-3xl font-bold text-[#1c2120]">{name}</h1>
         {adminName ? (
           <p className="text-sm text-gray-500 font-medium mt-1">By {adminName}</p>
         ) : null}
@@ -260,7 +260,7 @@ const DefaultHero = ({
       {/* CTA (popup-only flow) */}
       <button
         onClick={handlePrimaryCTA}
-        className="cursor-pointer mt-8 bg-[#3056A7] md:text-lg text-xs text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#25468a] transition-all"
+        className="cursor-pointer mt-8 bg-[#ef3340] md:text-lg text-xs text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#ef3340] transition-all"
       >
         {isAlreadyJoined ? "View Plans" : "Join Community"}
       </button>

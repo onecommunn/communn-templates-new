@@ -6,7 +6,7 @@ const DefaultTabs = () => {
   return (
     <section className="w-full py-3 px-4 justify-center overflow-hidden font-montserrat hidden md:flex sticky top-16 z-10">
       <div className="w-full max-w-5xl">
-        <div className="bg-[#50A1CA] h-14 p-1.5 rounded-full flex items-center w-full overflow-x-auto no-scrollbar justify-start md:justify-around">
+        <div className="bg-[#ef3340] h-14 p-1.5 rounded-full flex items-center w-full overflow-x-auto no-scrollbar justify-start md:justify-around">
           {["Home", "Events", "Plans", "Courses", "Team", "Contact"]?.map(
             (tab) => (
               <Link

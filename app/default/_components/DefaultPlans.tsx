@@ -174,7 +174,7 @@ const DefaultPlans = () => {
                       <h3 className="text-lg md:text-xl font-bold text-black">
                         {capitalizeWords(plan.name)}
                       </h3>
-                      <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[#2E59A7] capitalize">
+                      <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[#ef3340] capitalize">
                         <span>
                           ₹{plan.pricing || plan.totalPlanValue} /{" "}
                           {plan.duration.toLowerCase()}
@@ -228,7 +228,7 @@ const DefaultPlans = () => {
                         {!isLoggedIn ? (
                           <Button
                             onClick={() => setIsLoginOpen(true)}
-                            className="flex items-center gap-2 w-full py-6 rounded-xl bg-[#2E59A7] hover:bg-[#1E4D91] cursor-pointer"
+                            className="flex items-center gap-2 w-full py-6 rounded-xl bg-[#ef3340] hover:bg-[#ef3340] cursor-pointer"
                           >
                             {communityData?.community?.type === "PRIVATE" && (
                               <LockKeyhole size={18} />
@@ -238,7 +238,7 @@ const DefaultPlans = () => {
                         ) : !isSubscribedCommunity ? (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button className="w-full py-6 rounded-xl font-bold bg-[#2E59A7] hover:bg-[#1E4D91] cursor-pointer">
+                              <Button className="w-full py-6 rounded-xl font-bold bg-[#ef3340] hover:bg-[#ef3340] cursor-pointer">
                                 {communityData?.community?.type === "PRIVATE"
                                   ? "Request to Join"
                                   : "Join Community"}
@@ -277,8 +277,8 @@ const DefaultPlans = () => {
                               "w-full py-6 rounded-xl font-bold",
                               `${
                                 userSubscribedToPlan
-                                  ? "text-[#2E59A7] border-[#2E59A7] "
-                                  : "text-white bg-[#2E59A7]"
+                                  ? "text-[#ef3340] border-[#ef3340] "
+                                  : "text-white bg-[#ef3340]"
                               }`,
                             )}
                           >

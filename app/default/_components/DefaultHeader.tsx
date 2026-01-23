@@ -76,7 +76,7 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
                   priority
                 />
               </div>
-              <span className="text-[#1E4D91] font-bold md:text-lg text-xs truncate max-w-[150px] md:max-w-[600px] block">
+              <span className="text-[#1c2120] font-bold md:text-lg text-xs truncate max-w-[150px] md:max-w-[600px] block">
                 {name}
               </span>
             </Link>

@@ -57,7 +57,7 @@ const DefaultFooter = ({
             className="mb-4 overflow-hidden bg-white p-4 rounded-[20px] shadow-md"
             unoptimized
           />
-          <h2 className="text-xl md:text-3xl font-bold text-[#1E4D91] mb-1">
+          <h2 className="text-xl md:text-3xl font-bold text-[#1c2120] mb-1">
             {name}
           </h2>
           <p className="text-sm text-gray-400 mb-8 font-medium">

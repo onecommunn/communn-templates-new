@@ -136,7 +136,7 @@ const DefaultEvents = () => {
                     {!isLoggedIn ? (
                       <button
                         onClick={() => handleLoginTrigger(event._id)}
-                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white text-xs md:text-sm hover:bg-[#25468a] transition-colors"
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#ef3340] text-white text-xs md:text-sm hover:bg-[#ef3340] transition-colors"
                       >
                         {communityData?.community?.type === "PRIVATE" && (
                           <LockKeyhole size={18} />
@@ -146,7 +146,7 @@ const DefaultEvents = () => {
                     ) : (
                       <Link
                         href={`/event-details?eventid=${event._id}`}
-                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#3056A7] text-white text-xs md:text-sm hover:bg-[#25468a] transition-colors"
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#ef3340] text-white text-xs md:text-sm hover:bg-[#ef3340] transition-colors"
                       >
                         View Details
                       </Link>

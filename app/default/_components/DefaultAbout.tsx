@@ -36,7 +36,7 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
           <p className="text-black text-xs md:text-sm leading-relaxed mb-8">{vision}</p>
           {/* Floating Bottom Icon */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center border border-[#00000033]">
-            <Eye className="w-10 h-10 text-black stroke-[1.5]" />
+            <Eye className="w-10 h-10 text-[#ef3340] stroke-[1.5]" />
           </div>
         </div>
 
@@ -51,7 +51,7 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
           <p className="text-black text-xs md:text-sm leading-relaxed mb-8">{mission}</p>
           {/* Floating Bottom Icon */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center border border-[#00000033]">
-            <TbTargetArrow className="w-10 h-10 text-black stroke-[1.5]" />
+            <TbTargetArrow className="w-10 h-10 text-[#ef3340] stroke-[1.5]" />
           </div>
         </div>
       </div>

@@ -73,13 +73,13 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
                 </div>
 
                 {/* Team Info Styling */}
-                <h3 className="text-lg md:text-xl font-bold text-[#2E59A7] mb-2">
+                <h3 className="text-lg md:text-xl font-bold text-[#ef3340] mb-2">
                   {member?.name}
                 </h3>
 
                 <div className="flex flex-col items-center gap-3 text-gray-400 font-medium mb-6">
                   <span>{member?.designation}</span>
-                  <span className="text-[#2E59A7]">{member?.experience} Years of Experience</span>
+                  <span className="text-[#ef3340]">{member?.experience} Years of Experience</span>
                 </div>
 
                 <p className="text-gray-500 text-xs md:text-sm leading-relaxed line-clamp-5">
@@ -99,7 +99,7 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
               className={cn(
                 "transition-all duration-300 rounded-full",
                 current === index
-                  ? "w-8 h-2 bg-[#2E59A7]" // Active: Blue elongated pill
+                  ? "w-8 h-2 bg-[#ef3340]" // Active: Blue elongated pill
                   : "w-2 h-2 bg-gray-200" // Inactive: Small gray circle
               )}
               aria-label={`Go to slide ${index + 1}`}
