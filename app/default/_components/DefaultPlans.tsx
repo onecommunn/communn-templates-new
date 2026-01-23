@@ -33,7 +33,15 @@ import { capitalizeWords } from "@/utils/StringFunctions";
 import { cn } from "@/lib/utils";
 import LoginPopUp from "./LoginPopUp";
 
-const DefaultPlans = () => {
+const DefaultPlans = ({
+  colors,
+}: {
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
+}) => {
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
   const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } =
     usePlans();
@@ -111,6 +119,13 @@ const DefaultPlans = () => {
     <section
       id="plans"
       className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
     >
       <div className="flex justify-between items-end mb-6">
         <h2 className="text-xl md:text-2xl font-bold text-black">Plans</h2>
@@ -174,7 +189,7 @@ const DefaultPlans = () => {
                       <h3 className="text-lg md:text-xl font-bold text-black">
                         {capitalizeWords(plan.name)}
                       </h3>
-                      <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[#ef3340] capitalize">
+                      <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[var(--pri)] capitalize">
                         <span>
                           ₹{plan.pricing || plan.totalPlanValue} /{" "}
                           {plan.duration.toLowerCase()}
@@ -189,11 +204,12 @@ const DefaultPlans = () => {
                                 .map((t) => t.trim())
                                 .filter(Boolean)
                                 .map((text, idx) => (
-                                  <div className="flex items-center gap-3 text-xs md:text-sm text-gray-500" key={idx}>
+                                  <div
+                                    className="flex items-center gap-3 text-xs md:text-sm text-gray-500"
+                                    key={idx}
+                                  >
                                     <Check size={18} className="text-black" />
-                                    <span>
-                                     {text}
-                                    </span>
+                                    <span>{text}</span>
                                   </div>
                                 ))}
                             </ul>
@@ -228,7 +244,7 @@ const DefaultPlans = () => {
                         {!isLoggedIn ? (
                           <Button
                             onClick={() => setIsLoginOpen(true)}
-                            className="flex items-center gap-2 w-full py-6 rounded-xl bg-[#ef3340] hover:bg-[#ef3340] cursor-pointer"
+                            className="flex items-center gap-2 w-full py-6 rounded-xl bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
                           >
                             {communityData?.community?.type === "PRIVATE" && (
                               <LockKeyhole size={18} />
@@ -277,8 +293,8 @@ const DefaultPlans = () => {
                               "w-full py-6 rounded-xl font-bold",
                               `${
                                 userSubscribedToPlan
-                                  ? "text-[#ef3340] border-[#ef3340] "
-                                  : "text-white bg-[#ef3340]"
+                                  ? "text-[var(--pri)] border-[var(--pri)] "
+                                  : "text-white bg-[var(--pri)]"
                               }`,
                             )}
                           >
@@ -306,6 +322,11 @@ const DefaultPlans = () => {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         redirectTo={"/#plans"}
+        colors={{
+          primaryColor: colors?.primaryColor,
+          secondaryColor: colors?.secondaryColor,
+          textcolor: colors?.textcolor,
+        }}
       />
     </section>
   );

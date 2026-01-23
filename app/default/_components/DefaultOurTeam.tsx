@@ -13,14 +13,17 @@ import { UserRound } from "lucide-react";
 
 type DefaultOurTeamProps = {
   teams: any[];
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 };
 
-const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
+const DefaultOurTeam = ({ teams, colors }: DefaultOurTeamProps) => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
-
-
 
   useEffect(() => {
     if (!api) return;
@@ -32,14 +35,23 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
   }, [api]);
 
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
+    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true }),
   );
   return (
     <section
       id="team"
       className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
     >
-      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">Our Team</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">
+        Our Team
+      </h2>
 
       <Carousel
         plugins={[plugin.current]}
@@ -73,13 +85,15 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
                 </div>
 
                 {/* Team Info Styling */}
-                <h3 className="text-lg md:text-xl font-bold text-[#ef3340] mb-2">
+                <h3 className="text-lg md:text-xl font-bold text-[var(--pri)] mb-2">
                   {member?.name}
                 </h3>
 
                 <div className="flex flex-col items-center gap-3 text-gray-400 font-medium mb-6">
                   <span>{member?.designation}</span>
-                  <span className="text-[#ef3340]">{member?.experience} Years of Experience</span>
+                  <span className="text-[var(--pri)]">
+                    {member?.experience} Years of Experience
+                  </span>
                 </div>
 
                 <p className="text-gray-500 text-xs md:text-sm leading-relaxed line-clamp-5">
@@ -99,8 +113,8 @@ const DefaultOurTeam = ({ teams }: DefaultOurTeamProps) => {
               className={cn(
                 "transition-all duration-300 rounded-full",
                 current === index
-                  ? "w-8 h-2 bg-[#ef3340]" // Active: Blue elongated pill
-                  : "w-2 h-2 bg-gray-200" // Inactive: Small gray circle
+                  ? "w-8 h-2 bg-[var(--pri)]" // Active: Blue elongated pill
+                  : "w-2 h-2 bg-gray-200", // Inactive: Small gray circle
               )}
               aria-label={`Go to slide ${index + 1}`}
             />

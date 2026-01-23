@@ -16,13 +16,29 @@ import { Community } from "@/services/communityService";
 const DefaultRoot = () => {
   const { community } = useCMS();
   const source: Community = community;
-  // console.log("DefaultRoot community data:", source);
 
   const creatorMember = source?.members?.find(
     (member) => member?.user?._id === source?.createdBy,
   );
 
   const adminName = creatorMember?.user?.firstName;
+
+  const pramodcolors = {
+    primaryColor: "#ef3340",
+    secondaryColor: "#d2d6c0",
+    textcolor: "#000",
+  };
+
+  const defaultColors = {
+    primaryColor: "#2952A2",
+    secondaryColor: "#2952A2",
+    textcolor: "#fff",
+  };
+
+  const color =
+    community?._id === "692c12e23571140d3e5d3ab0"
+      ? pramodcolors
+      : defaultColors;
 
   return (
     <>
@@ -35,18 +51,20 @@ const DefaultRoot = () => {
         phoneNumber={source?.phoneNumber}
         numberOfPost={source?.numberOfPost}
         adminName={adminName}
+        colors={color}
       />
-      <DefaultTabs />
+      <DefaultTabs colors={color}/>
       <DefaultAbout
         description={source?.description}
         vision={source?.vision}
         mission={source?.mission}
+        colors={color}
       />
       <DefaultGallery gallery={source?.gallery} />
-      <DefaultEvents />
-      <DefaultPlans />
+      <DefaultEvents colors={color}/>
+      <DefaultPlans  colors={color}/>
       <DefaultCourses courses={source?.course} />
-      <DefaultOurTeam teams={source?.teams} />
+      <DefaultOurTeam teams={source?.teams} colors={color}/>
       <DefaultContactMe
         message={source?.directorMessage}
         address={source?.city ?? "-"}
@@ -56,7 +74,7 @@ const DefaultRoot = () => {
         fullAddress={source?.fullAddress}
         zipCode={source?.zipCode || ""}
       />
-      {source?.faq?.length > 0 && <DefaultFAQ faqs={source?.faq} />}
+      {source?.faq?.length > 0 && <DefaultFAQ faqs={source?.faq} colors={color}/>}
     </>
   );
 };

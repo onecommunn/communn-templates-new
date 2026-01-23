@@ -5,15 +5,27 @@ import { cn } from "@/lib/utils";
 
 type DefaultFAQProps = {
   faqs: any[];
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 };
 
-const DefaultFAQ = ({ faqs }: DefaultFAQProps) => {
+const DefaultFAQ = ({ faqs, colors }: DefaultFAQProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section
       id="faq"
       className="max-w-6xl mx-3 md:mx-auto px-3 md:px-6 py-6 font-montserrat bg-[#F9FAFB] rounded-[20px] mb-8"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
     >
       <h2 className="text-xl md:text-2xl font-bold mb-6 text-black">
         Frequently Asked Questions
@@ -25,7 +37,7 @@ const DefaultFAQ = ({ faqs }: DefaultFAQProps) => {
             key={index}
             className={cn(
               "bg-white rounded-lg p-6 transition-all duration-300 border border-transparent shadow-sm h-fit",
-              openIndex === index ? "shadow-md" : "hover:border-gray-100"
+              openIndex === index ? "shadow-md" : "hover:border-gray-100",
             )}
           >
             <button
@@ -39,8 +51,8 @@ const DefaultFAQ = ({ faqs }: DefaultFAQProps) => {
                 className={cn(
                   "flex-shrink-0 p-2 rounded-[6px] flex items-center justify-center transition-colors cursor-pointer",
                   openIndex === index
-                    ? "bg-[#2E59A7] text-white"
-                    : "bg-[#E5E7EB] text-[#2E59A7]"
+                    ? "bg-[var(--pri)] text-white"
+                    : "bg-[#E5E7EB] text-[var(--pri)]",
                 )}
               >
                 {openIndex === index ? (
@@ -57,7 +69,7 @@ const DefaultFAQ = ({ faqs }: DefaultFAQProps) => {
                 "overflow-hidden transition-all duration-300",
                 openIndex === index
                   ? "max-h-40 mt-4 opacity-100"
-                  : "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0",
               )}
             >
               <p className="text-gray-500 text-[12px] md:text-[14px] leading-relaxed text-sm">

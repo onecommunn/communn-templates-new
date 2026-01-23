@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { toast } from "sonner";
 
 import { AuthContext } from "@/contexts/Auth.context";
@@ -22,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { TrainingPlan } from "@/models/plan.model";
+import { useRouter } from "next/navigation";
 
 type DefaultHeroProps = {
   name: string;
@@ -32,6 +32,11 @@ type DefaultHeroProps = {
   phoneNumber: number;
   numberOfPost: number;
   adminName?: string;
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 };
 
 const DefaultHero = ({
@@ -43,9 +48,11 @@ const DefaultHero = ({
   type,
   phoneNumber,
   adminName,
+  colors,
 }: DefaultHeroProps) => {
   const auth = useContext(AuthContext);
   const { communityData, communityId } = useCommunity();
+  const router = useRouter();
 
   const { joinToPublicCommunity, getPlansList, getCommunityPlansListAuth } =
     usePlans();
@@ -60,47 +67,58 @@ const DefaultHero = ({
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const isLoggedIn = !!auth?.isAuthenticated;
+  // ✅ Post-auth intent to avoid race-condition (auth + community data delay)
+  const [postAuthIntent, setPostAuthIntent] = useState(false);
 
-  // ✅ unify user id (you used _id in other places)
+  // ✅ Optimistic join flag to avoid "join again" flash after join API success
+  const [joinedOptimistic, setJoinedOptimistic] = useState(false);
+
+  const isLoggedIn = !!auth?.isAuthenticated;
   const userId = (auth as any)?.user?._id ?? (auth as any)?.user?.id;
 
   const communityType = communityData?.community?.type; // "PUBLIC" | "PRIVATE"
 
   const isAlreadyJoined = useMemo(() => {
+    if (joinedOptimistic) return true;
+
     const members = communityData?.community?.members || [];
     if (!userId || !members?.length) return false;
 
-    return members.some(
-      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
-    );
-  }, [communityData?.community?.members, userId]);
+    return members.some((m: any) => (m?.user?._id ?? m?.user?.id) === userId);
+  }, [communityData?.community?.members, userId, joinedOptimistic]);
 
-  // ✅ Fetch plans only when we want to show plans popup (or when logged-in state changes)
-  const fetchPlans = async () => {
-    if (!communityId) return;
+  const fetchPlans = async (): Promise<TrainingPlan[]> => {
+    if (!communityId) return [];
     setIsLoadingPlans(true);
+
     try {
       const resp = isLoggedIn
         ? await getCommunityPlansListAuth(communityId)
         : await getPlansList(communityId);
 
-      if (Array.isArray(resp)) {
-        setPlans(resp);
-      } else if (resp && typeof resp === "object" && "myPlans" in resp) {
-        setPlans((resp as any).myPlans);
-      } else {
-        setPlans([]);
-      }
+      let list: TrainingPlan[] = [];
+
+      if (Array.isArray(resp)) list = resp;
+      else if (resp && typeof resp === "object" && "myPlans" in resp)
+        list = (resp as any).myPlans;
+
+      setPlans(list);
+      return list;
     } catch (e) {
       console.error("Failed to fetch plans:", e);
       setPlans([]);
+      return [];
     } finally {
       setIsLoadingPlans(false);
     }
   };
 
-  // Optional: keep plans warm after login
+  const isSubscribedToAnyPlan = useMemo(() => {
+    const plansList = auth?.userData?.subscriptionDetail ?? [];
+    return plansList.length > 0;
+  }, [userId, auth]);
+
+  // Keep plans warm after login if already joined (optional)
   useEffect(() => {
     if (!communityId) return;
     if (isLoggedIn && isAlreadyJoined) {
@@ -109,18 +127,53 @@ const DefaultHero = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isLoggedIn, isAlreadyJoined]);
 
-  // ✅ This is called AFTER successful login/signup
-  const afterAuthFlow = () => {
-    // If already a member => open plans popup
-    if (isAlreadyJoined) {
-      fetchPlans();
-      setIsPlansOpen(true);
-      return;
-    }
+  // ✅ Post-auth flow runs only when auth is committed (prevents join dialog flicker)
+  useEffect(() => {
+    if (!postAuthIntent) return;
+    if (!isLoggedIn) return;
+    if (!communityId) return;
+    if (!userId) return;
 
-    // Else ask them to Join/Request first
-    setActionDialogOpen(true);
-  };
+    const run = async () => {
+      // Ensure no stale dialog stays open
+      setActionDialogOpen(false);
+
+      // Fetch latest plans (auth is now valid)
+      const list = await fetchPlans();
+
+      // Decide subscription based on fetched list (most reliable)
+      const alreadySubscribed = list.some((p: any) =>
+        p?.subscribers?.some((s: any) => (s?._id ?? s?.id) === userId),
+      );
+
+      // Determine joined:
+      // - members list can be stale right after login
+      // - For PUBLIC, if plans API works and returns something, treat as joined
+      const joinedFromMembers = isAlreadyJoined;
+      const joinedFromPlansAccess =
+        communityType !== "PRIVATE" && Array.isArray(list) && list.length > 0;
+
+      const joinedFinal = joinedFromMembers || joinedFromPlansAccess;
+
+      if (!joinedFinal) {
+        setActionDialogOpen(true);
+        setPostAuthIntent(false);
+        return;
+      }
+
+      if (alreadySubscribed) {
+        // toast.success("You are already subscribed ✅");
+        setPostAuthIntent(false);
+        return;
+      }
+
+      setIsPlansOpen(true);
+      setPostAuthIntent(false);
+    };
+
+    run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postAuthIntent, isLoggedIn, communityId, userId, communityType]);
 
   const handleConfirmJoinOrRequest = async () => {
     if (!communityId) return;
@@ -128,7 +181,6 @@ const DefaultHero = ({
     setActionLoading(true);
     try {
       if (communityType === "PRIVATE") {
-        // Send request
         const formData = new FormData();
         formData.append("community", communityId);
         formData.append("Message", "Request to join the community.");
@@ -147,41 +199,64 @@ const DefaultHero = ({
 
       // PUBLIC join
       await joinToPublicCommunity(communityId);
-
+      setJoinedOptimistic(true);
       toast.success("Successfully joined the community");
       setActionDialogOpen(false);
 
-      // After join => open plans popup
-      await fetchPlans();
+      // Fetch plans and open popup only if not subscribed
+      const list = await fetchPlans();
+      const alreadySubscribed = list.some((p: any) =>
+        p?.subscribers?.some((s: any) => (s?._id ?? s?.id) === userId),
+      );
+
+      if (alreadySubscribed) {
+        // toast.success("You are already subscribed ✅");
+        return;
+      }
+
       setIsPlansOpen(true);
     } catch (e) {
       toast.error(
         communityType === "PRIVATE"
           ? "Could not send request."
-          : "Could not join the community."
+          : "Could not join the community.",
       );
     } finally {
       setActionLoading(false);
     }
   };
 
-  const handlePrimaryCTA = () => {
+  const handlePrimaryCTA = async () => {
     if (!isLoggedIn) {
       setIsLoginOpen(true);
       return;
     }
 
+    if (isSubscribedToAnyPlan) {
+      router.push(`/profile?id=${userId}`);
+      return;
+    }
+
     // Logged in
     if (isAlreadyJoined) {
-      fetchPlans();
       setIsPlansOpen(true);
-    } else {
-      setActionDialogOpen(true);
+      return;
     }
+
+    setActionDialogOpen(true);
   };
 
   return (
-    <section className="relative flex flex-col items-center pt-8 pb-8 font-montserrat">
+    <section
+      className="relative flex flex-col items-center pt-8 pb-8 font-montserrat"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
+    >
       {/* Banner */}
       <div className="relative w-[95%] max-w-6xl h-30 md:h-64 rounded-2xl overflow-hidden shadow-md">
         <Image
@@ -216,9 +291,13 @@ const DefaultHero = ({
 
       {/* Title */}
       <div className="text-center mt-6">
-        <h1 className="text-xl md:text-3xl font-bold text-[#1c2120]">{name}</h1>
+        <h1 className="text-xl md:text-3xl font-bold text-[var(--pri)]">
+          {name}
+        </h1>
         {adminName ? (
-          <p className="text-sm text-gray-500 font-medium mt-1">By {adminName}</p>
+          <p className="text-sm text-gray-500 font-medium mt-1">
+            By {adminName}
+          </p>
         ) : null}
       </div>
 
@@ -231,14 +310,18 @@ const DefaultHero = ({
         className="mt-10 w-[95%] max-w-6xl bg-white/70 backdrop-blur-md border border-gray-100 rounded-2xl shadow-md grid grid-cols-4 py-4 md:py-6 px-2 md:px-4"
       >
         <div className="flex flex-col items-center">
-          <span className="text-[12px] md:text-sm text-black mb-1">Members</span>
+          <span className="text-[12px] md:text-sm text-black mb-1">
+            Members
+          </span>
           <span className="text-xs md:text-2xl font-bold">
             {Number(membersCount).toLocaleString()}
           </span>
         </div>
 
         <div className="flex flex-col items-center">
-          <span className="text-[12px] md:text-sm text-black mb-1">No of Posts</span>
+          <span className="text-[12px] md:text-sm text-black mb-1">
+            No of Posts
+          </span>
           <span className="text-xs md:text-2xl font-bold">
             {Number(numberOfPost).toLocaleString()}
           </span>
@@ -252,17 +335,25 @@ const DefaultHero = ({
         </div>
 
         <div className="flex flex-col items-center">
-          <span className="text-[12px] md:text-sm text-black mb-1">Call Now</span>
-          <span className="text-xs md:text-2xl font-bold text-black">{phoneNumber}</span>
+          <span className="text-[12px] md:text-sm text-black mb-1">
+            Call Now
+          </span>
+          <span className="text-xs md:text-2xl font-bold text-black">
+            {phoneNumber}
+          </span>
         </div>
       </div>
 
-      {/* CTA (popup-only flow) */}
+      {/* CTA */}
       <button
         onClick={handlePrimaryCTA}
-        className="cursor-pointer mt-8 bg-[#ef3340] md:text-lg text-xs text-white px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[#ef3340] transition-all"
+        className="cursor-pointer mt-8 bg-[var(--sec)] md:text-lg text-xs text-[var(--nue)] px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[var(--sec)] transition-all"
       >
-        {isAlreadyJoined ? "View Plans" : "Join Community"}
+        {isAlreadyJoined
+          ? isSubscribedToAnyPlan
+            ? "Subscribed"
+            : "Subscribe Plans"
+          : "Join Community"}
       </button>
 
       {/* Login popup */}
@@ -272,7 +363,12 @@ const DefaultHero = ({
         redirectTo={null}
         onSuccess={() => {
           setIsLoginOpen(false);
-          afterAuthFlow();
+          setPostAuthIntent(true); // ✅ avoid race condition
+        }}
+        colors={{
+          primaryColor: colors?.primaryColor,
+          secondaryColor: colors?.secondaryColor,
+          textcolor: colors?.textcolor,
         }}
       />
 
@@ -295,7 +391,10 @@ const DefaultHero = ({
               Cancel
             </Button>
 
-            <Button onClick={handleConfirmJoinOrRequest} disabled={actionLoading}>
+            <Button
+              onClick={handleConfirmJoinOrRequest}
+              disabled={actionLoading}
+            >
               {actionLoading
                 ? "Please wait..."
                 : communityType === "PRIVATE"
@@ -306,13 +405,14 @@ const DefaultHero = ({
         </DialogContent>
       </Dialog>
 
-      {/* Plans popup */}
+      {/* Plans popup (only if not subscribed) */}
       <PlansPopUp
-        isOpen={isPlansOpen}
+        isOpen={isPlansOpen && !isSubscribedToAnyPlan}
         onClose={() => setIsPlansOpen(false)}
         plans={plans}
         loading={isLoadingPlans}
         communityId={communityId || ""}
+        colors={colors}
       />
     </section>
   );

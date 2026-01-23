@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { Eye } from "lucide-react";
 import { TbTargetArrow } from "react-icons/tb";
@@ -7,20 +7,39 @@ type DefaultAboutProps = {
   description: string;
   vision: string;
   mission: string;
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 };
 
-const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
+const DefaultAbout = ({
+  description,
+  vision,
+  mission,
+  colors,
+}: DefaultAboutProps) => {
   return (
     <section
       id="home"
       className="max-w-6xl mx-auto px-3 md:px-6 py-6 md:py-16 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
     >
       {/* Community Description Section */}
       <div className="mb-6 md:mb-6">
         <h2 className="text-xl md:text-2xl font-bold mb-4 text-black">
           Know Community
         </h2>
-        <p className="text-gray-600 leading-relaxed text-xs md:text-sm">{description}</p>
+        <p className="text-gray-600 leading-relaxed text-xs md:text-sm">
+          {description}
+        </p>
       </div>
 
       {/* Vision & Mission Cards */}
@@ -33,10 +52,12 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
           <h3 className="text-2xl md:text-3xl font-bold mb-6 text-black">
             Vision
           </h3>
-          <p className="text-black text-xs md:text-sm leading-relaxed mb-8">{vision}</p>
+          <p className="text-black text-xs md:text-sm leading-relaxed mb-8">
+            {vision}
+          </p>
           {/* Floating Bottom Icon */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center border border-[#00000033]">
-            <Eye className="w-10 h-10 text-[#ef3340] stroke-[1.5]" />
+            <Eye className="w-10 h-10 text-[var(--pri)] stroke-[1.5]" />
           </div>
         </div>
 
@@ -48,10 +69,12 @@ const DefaultAbout = ({ description, vision, mission }: DefaultAboutProps) => {
           <h3 className="text-2xl md:text-3xl font-bold mb-6 text-black">
             Mission
           </h3>
-          <p className="text-black text-xs md:text-sm leading-relaxed mb-8">{mission}</p>
+          <p className="text-black text-xs md:text-sm leading-relaxed mb-8">
+            {mission}
+          </p>
           {/* Floating Bottom Icon */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center border border-[#00000033]">
-            <TbTargetArrow className="w-10 h-10 text-[#ef3340] stroke-[1.5]" />
+            <TbTargetArrow className="w-10 h-10 text-[var(--pri)] stroke-[1.5]" />
           </div>
         </div>
       </div>

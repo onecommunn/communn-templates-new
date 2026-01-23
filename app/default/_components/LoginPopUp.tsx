@@ -19,12 +19,23 @@ interface LoginPopUpProps {
   onClose: () => void;
   redirectTo?: string | null;
   onSuccess?: () => void;
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 }
 
 type Mode = "login" | "signup";
 type Step = "mobile" | "otp" | "signup";
 
-const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) => {
+const LoginPopUp = ({
+  isOpen,
+  onClose,
+  redirectTo,
+  onSuccess,
+  colors,
+}: LoginPopUpProps) => {
   // LOGIN (OTP) STATE
   const [identifier, setIdentifier] = useState(""); // mobile or email
   const [otp, setOtp] = useState("");
@@ -95,7 +106,9 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
   // ---------- OTP ----------
   const requestOtp = async () => {
     if (!isIdentifierValid()) {
-      toast.error(`Please enter a valid ${useEmail ? "email" : "mobile number"}`);
+      toast.error(
+        `Please enter a valid ${useEmail ? "email" : "mobile number"}`,
+      );
       return;
     }
 
@@ -106,7 +119,9 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
         : await getOtp(identifier);
 
       if (response?.status === 200) {
-        toast.success(`OTP sent to your ${useEmail ? "email" : "mobile number"}`);
+        toast.success(
+          `OTP sent to your ${useEmail ? "email" : "mobile number"}`,
+        );
         setStep("otp");
         setResendTimer(30);
 
@@ -147,12 +162,12 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
       const res: any = await authContext.autoLogin(
         useEmail ? "" : identifier,
         useEmail ? identifier : "",
-        null
+        null,
       );
 
       if (res?.status === 200) {
         toast.success("Login successful!");
-        onSuccess?.(); 
+        onSuccess?.();
         onClose();
         if (redirectTo) router.push(redirectTo);
         else router.push("/");
@@ -214,7 +229,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
 
       if (response?.status === 200) {
         toast.success("Account created successfully");
-        onSuccess?.(); 
+        onSuccess?.();
         onClose();
         if (redirectTo) router.push(redirectTo);
         else router.push("/");
@@ -226,7 +241,9 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
         return;
       }
 
-      toast.error(response?.data?.message || "Signup failed. Please try again.");
+      toast.error(
+        response?.data?.message || "Signup failed. Please try again.",
+      );
     } catch (err) {
       toast.error("Registration failed. Please try again.");
     } finally {
@@ -235,14 +252,19 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
   };
 
   const title =
-    mode === "login"
-      ? "Login"
-      : mode === "signup"
-        ? "Create Account"
-        : "Login";
+    mode === "login" ? "Login" : mode === "signup" ? "Create Account" : "Login";
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
+    >
       {/* Backdrop click */}
       <div className="absolute inset-0" onClick={onClose} />
 
@@ -275,7 +297,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                       setOtp("");
                       setStep("mobile");
                     }}
-                    className="text-sm font-medium text-[#3056A7] hover:underline transition-all cursor-pointer"
+                    className="text-sm font-medium text-[var(--pri)] hover:underline transition-all cursor-pointer"
                     disabled={loading}
                   >
                     {useEmail ? "Use Mobile Number" : "Use Email Address"}
@@ -293,11 +315,13 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                       setIdentifier(
                         useEmail
                           ? e.target.value
-                          : e.target.value.replace(/\D/g, "")
+                          : e.target.value.replace(/\D/g, ""),
                       )
                     }
-                    placeholder={useEmail ? "name@company.com" : "Enter 10 digit number"}
-                    className="w-full px-4 py-3 mt-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#3056A7] focus:outline-none transition-all"
+                    placeholder={
+                      useEmail ? "name@company.com" : "Enter 10 digit number"
+                    }
+                    className="w-full px-4 py-3 mt-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--pri)] focus:outline-none transition-all"
                     disabled={loading}
                   />
                 </div>
@@ -305,11 +329,10 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                 <button
                   onClick={requestOtp}
                   disabled={!isIdentifierValid() || loading}
-                  className="w-full cursor-pointer bg-[#3056A7] text-white py-3 rounded-xl font-semibold hover:bg-[#2a4d98] disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
+                  className="w-full cursor-pointer bg-[var(--pri)] text-white py-3 rounded-xl font-semibold hover:bg-[var(--pri)] disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
                 >
                   {loading ? "Sending..." : "Get OTP"}
                 </button>
-
               </div>
             ) : (
               <div className="space-y-6">
@@ -331,7 +354,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                         <InputOTPSlot
                           key={i}
                           index={i}
-                          className="w-11 h-12 border-2 border-gray-200 rounded-lg text-lg focus:border-[#3056A7]"
+                          className="w-11 h-12 border-2 border-gray-200 rounded-lg text-lg focus:border-[var(--pri)]"
                         />
                       ))}
                     </InputOTPGroup>
@@ -341,7 +364,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                 <button
                   onClick={verifyOtpAndLogin}
                   disabled={otp.length !== 6 || loading}
-                  className="w-full bg-[#3056A7] text-white py-3 cursor-pointer rounded-xl font-semibold hover:bg-[#2a4d98] transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="w-full bg-[var(--pri)] text-white py-3 cursor-pointer rounded-xl font-semibold hover:bg-[var(--pri)] transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   {loading ? "Verifying..." : "Confirm Login"}
                 </button>
@@ -351,10 +374,12 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                     onClick={requestOtp}
                     disabled={resendTimer > 0 || loading}
                     className={`text-sm font-medium underline cursor-pointer ${
-                      resendTimer > 0 ? "text-gray-400" : "text-[#3056A7]"
+                      resendTimer > 0 ? "text-gray-400" : "text-[var(--pri)]"
                     }`}
                   >
-                    {resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend OTP"}
+                    {resendTimer > 0
+                      ? `Resend in ${resendTimer}s`
+                      : "Resend OTP"}
                   </button>
 
                   <button
@@ -392,7 +417,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                   showError("firstName", isNameValid)
                     ? "border-red-500"
                     : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3056A7]`}
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--pri)]`}
                 disabled={loading}
               />
               {showError("firstName", isNameValid) && (
@@ -418,7 +443,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                   showError("phoneNumber", isMobileValid)
                     ? "border-red-500"
                     : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3056A7]`}
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--pri)]`}
                 disabled={loading}
               />
               {showError("phoneNumber", isMobileValid) && (
@@ -444,7 +469,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                   showError("emailId", isEmailValid)
                     ? "border-red-500"
                     : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3056A7]`}
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--pri)]`}
                 disabled={loading}
               />
               {showError("emailId", isEmailValid) && (
@@ -457,7 +482,7 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
               disabled={!isSignupFormValid || loading}
               className={`w-full py-3 rounded-xl font-semibold transition-all ${
                 isSignupFormValid && !loading
-                  ? "bg-[#3056A7] text-white hover:bg-[#2a4d98]"
+                  ? "bg-[var(--pri)] text-white hover:bg-[var(--pri)]"
                   : "bg-gray-300 text-white cursor-not-allowed"
               }`}
             >
@@ -470,7 +495,11 @@ const LoginPopUp = ({ isOpen, onClose, redirectTo,onSuccess }: LoginPopUpProps) 
                   setMode("login");
                   setStep("mobile");
                   setSubmitted(false);
-                  setTouched({ firstName: false, phoneNumber: false, emailId: false });
+                  setTouched({
+                    firstName: false,
+                    phoneNumber: false,
+                    emailId: false,
+                  });
                 }}
                 className="text-sm font-medium text-gray-500 hover:underline"
                 disabled={loading}

@@ -34,9 +34,14 @@ import LoginPopUp from "./LoginPopUp";
 type DefaultHeaderProps = {
   name: string;
   logo: string;
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 };
 
-const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
+const DefaultHeader = ({ logo, name, colors }: DefaultHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const auth = useContext(AuthContext);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -371,6 +376,11 @@ const DefaultHeader = ({ logo, name }: DefaultHeaderProps) => {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         redirectTo={"/"}
+        colors={{
+          primaryColor: colors?.primaryColor,
+          secondaryColor: colors?.secondaryColor,
+          textcolor: colors?.textcolor,
+        }}
       />
     </>
   );

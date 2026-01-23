@@ -88,7 +88,7 @@ const DefaultContactMe = ({
                   <img
                     src={Icon}
                     alt="key"
-                    className="w-10 h-10 object-cover"
+                    className="w-7 h-7 object-cover"
                   />
                 </Link>
               );

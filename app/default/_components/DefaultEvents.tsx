@@ -18,11 +18,19 @@ import { AuthContext } from "@/contexts/Auth.context";
 import { LockKeyhole } from "lucide-react";
 import LoginPopUp from "./LoginPopUp";
 
-const DefaultEvents = () => {
+const DefaultEvents = ({
+  colors,
+}: {
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
+}) => {
   const auth = useContext(AuthContext);
   const isLoggedIn = !!auth?.isAuthenticated;
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: false })
+    Autoplay({ delay: 3000, stopOnInteraction: false }),
   );
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -82,10 +90,35 @@ const DefaultEvents = () => {
       </section>
     );
   }
+
+  if (events?.length === 0) {
+    return (
+      <section
+        id="events"
+        className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      >
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xl md:text-2xl font-bold text-black">Events</h2>
+        </div>
+        <div className="flex flex-col items-center justify-centertext-center">
+          <h3 className="text-xl font-semibold text-gray-400 font-montserrat">
+            No Upcoming Events
+          </h3>
+        </div>
+      </section>
+    );
+  }
   return (
     <section
       id="events"
       className="max-w-6xl mx-auto px-3 md:px-6 py-6 font-montserrat scroll-mt-[40px] md:scroll-mt-[90px]"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
     >
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-xl md:text-2xl font-bold text-black">Events</h2>
@@ -136,7 +169,7 @@ const DefaultEvents = () => {
                     {!isLoggedIn ? (
                       <button
                         onClick={() => handleLoginTrigger(event._id)}
-                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#ef3340] text-white text-xs md:text-sm hover:bg-[#ef3340] transition-colors"
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[var(--pri)] text-white text-xs md:text-sm hover:bg-[var(--pri)] transition-colors"
                       >
                         {communityData?.community?.type === "PRIVATE" && (
                           <LockKeyhole size={18} />
@@ -146,7 +179,7 @@ const DefaultEvents = () => {
                     ) : (
                       <Link
                         href={`/event-details?eventid=${event._id}`}
-                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[#ef3340] text-white text-xs md:text-sm hover:bg-[#ef3340] transition-colors"
+                        className="cursor-pointer text-center mt-auto w-full py-3 rounded-full bg-[var(--pri)] text-white text-xs md:text-sm hover:bg-[var(--pri)] transition-colors"
                       >
                         View Details
                       </Link>
@@ -166,6 +199,11 @@ const DefaultEvents = () => {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         redirectTo={redirectPath}
+        colors={{
+          primaryColor: colors?.primaryColor,
+          secondaryColor: colors?.secondaryColor,
+          textcolor: colors?.textcolor,
+        }}
       />
     </section>
   );

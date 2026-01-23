@@ -16,16 +16,30 @@ export default async function DefaultShell({
   const initialLoading = !bundle?.community;
 
   const creatorMember = source.members.find(
-    (member) => member.user?._id === source.createdBy
+    (member) => member.user?._id === source.createdBy,
   );
 
-  const adminName = creatorMember?.user?.firstName
+  const adminName = creatorMember?.user?.firstName;
 
-  // console.log("DefaultShell community data:", source, adminName);
+  const pramodcolors = {
+    primaryColor: "#ef3340",
+    secondaryColor: "#d2d6c0",
+    textcolor: "#000",
+  };
+
+  const defaultColors = {
+    primaryColor: "#2952A2",
+    secondaryColor: "#2952A2",
+    textcolor: "#fff",
+  };
+
+  const color =
+    community?._id === "692c12e23571140d3e5d3ab0"
+      ? pramodcolors
+      : defaultColors;
 
   return (
     <>
-
       <Link
         href={`tel:${source?.phoneNumber}`}
         target="_blank"
@@ -71,7 +85,7 @@ export default async function DefaultShell({
           />
         </button>
       </Link>
-      <DefaultHeader name={source?.name} logo={source?.logo} />
+      <DefaultHeader name={source?.name} logo={source?.logo} colors={color} />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>
       </CMSProvider>

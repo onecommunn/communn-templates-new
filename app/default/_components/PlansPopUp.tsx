@@ -11,6 +11,11 @@ type PlansPopUpProps = {
   plans: TrainingPlan[];
   loading?: boolean;
   communityId: string;
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    textcolor: string;
+  };
 };
 
 export default function PlansPopUp({
@@ -19,18 +24,28 @@ export default function PlansPopUp({
   plans,
   loading = false,
   communityId,
+  colors,
 }: PlansPopUpProps) {
   const [selectedId, setSelectedId] = useState<string>("");
 
   const selectedPlan = useMemo(
     () => plans?.find((p) => p._id === selectedId),
-    [plans, selectedId]
+    [plans, selectedId],
   );
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      style={
+        {
+          "--pri": colors?.primaryColor,
+          "--sec": colors?.secondaryColor,
+          "--nue": colors?.textcolor,
+        } as React.CSSProperties
+      }
+    >
       {/* Backdrop */}
       <div className="absolute inset-0" onClick={onClose} />
 
@@ -78,7 +93,7 @@ export default function PlansPopUp({
                   onClick={() => setSelectedId(plan._id)}
                   className={`text-left rounded-2xl border p-4 md:p-5 transition-all ${
                     selected
-                      ? "border-[#3056A7] ring-2 ring-[#3056A7]/20"
+                      ? "border-[var(--pri)] ring-2 ring-[var(--pri)]/20"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -91,7 +106,7 @@ export default function PlansPopUp({
                     </div>
 
                     {selected && (
-                      <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-[#3056A7] text-white">
+                      <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-[var(--pri)] text-white">
                         <Check size={16} />
                       </span>
                     )}
@@ -146,7 +161,10 @@ export default function PlansPopUp({
                 {selectedPlan?.name}
                 <span className="text-gray-500 font-medium">
                   {" "}
-                  • ₹{Number(selectedPlan?.pricing || selectedPlan?.totalPlanValue || 0).toLocaleString()}
+                  • ₹
+                  {Number(
+                    selectedPlan?.pricing || selectedPlan?.totalPlanValue || 0,
+                  ).toLocaleString()}
                 </span>
               </p>
             </div>
@@ -171,7 +189,7 @@ export default function PlansPopUp({
                 className={`w-full md:w-auto px-6 py-3 rounded-xl font-semibold text-white text-center transition-all
                 ${
                   selectedPlan && !loading
-                    ? "bg-[#3056A7] hover:bg-[#25468a]"
+                    ? "bg-[var(--pri)] hover:bg-[var(--pri)]"
                     : "bg-gray-300 pointer-events-none"
                 }`}
               >
