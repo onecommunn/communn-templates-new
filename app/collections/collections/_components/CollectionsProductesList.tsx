@@ -139,11 +139,11 @@ const CollectionsProductesList = ({
 
       {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {pageItems.map((product,idx) => (
+        {pageItems.map((product, idx) => (
           <div className="group cursor-pointer" key={idx}>
-            <Card className="border-none shadow-none bg-transparent overflow-hidden py-0">
+            <Card className="border-none shadow-none bg-transparent overflow-hidden py-0 rounded-none mb-6">
               <CardContent className="p-0">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
+                <div className="relative aspect-[3/4] overflow-hidden">
                   <img
                     src={product.media}
                     alt={product.title}
@@ -156,9 +156,9 @@ const CollectionsProductesList = ({
                   <h4 className="text-xs md:text-lg font-normal text-gray-900 font-kalnia">
                     {product.title}
                   </h4>
-                  <p className="text-[var(--pri)] font-semibold font-figtree text-lg md:text-[20px]">
+                  {/* <p className="text-[var(--pri)] font-semibold font-figtree text-lg md:text-[20px]">
                     ₹{product.price}
-                  </p>
+                  </p> */}
                 </div>
               </CardContent>
             </Card>
@@ -183,11 +183,10 @@ const CollectionsProductesList = ({
             <button
               type="button"
               onClick={() => goTo(1)}
-              className={`h-9 w-9 rounded-full border transition font-figtree text-sm ${
-                currentPage === 1
-                  ? "bg-[var(--pri)] text-white border-[var(--pri)]"
-                  : "bg-white text-black/70 border-black/15 hover:bg-black/5"
-              }`}
+              className={`h-9 w-9 rounded-full border transition font-figtree text-sm ${currentPage === 1
+                ? "bg-[var(--pri)] text-white border-[var(--pri)]"
+                : "bg-white text-black/70 border-black/15 hover:bg-black/5"
+                }`}
             >
               1
             </button>
@@ -202,11 +201,10 @@ const CollectionsProductesList = ({
             key={p}
             type="button"
             onClick={() => goTo(p)}
-            className={`h-9 w-9 rounded-full cursor-pointer border transition font-figtree text-sm ${
-              currentPage === p
-                ? "bg-[var(--pri)] text-white border-[var(--pri)]"
-                : "bg-white text-black/70 border-black/15 hover:bg-black/5"
-            }`}
+            className={`h-9 w-9 rounded-full cursor-pointer border transition font-figtree text-sm ${currentPage === p
+              ? "bg-[var(--pri)] text-white border-[var(--pri)]"
+              : "bg-white text-black/70 border-black/15 hover:bg-black/5"
+              }`}
             aria-current={currentPage === p ? "page" : undefined}
           >
             {p}
@@ -221,11 +219,10 @@ const CollectionsProductesList = ({
             <button
               type="button"
               onClick={() => goTo(totalPages)}
-              className={`h-9 w-9 rounded-full border transition font-figtree text-sm ${
-                currentPage === totalPages
-                  ? "bg-[var(--pri)] text-white border-[var(--pri)]"
-                  : "bg-white text-black/70 border-black/15 hover:bg-black/5"
-              }`}
+              className={`h-9 w-9 rounded-full border transition font-figtree text-sm ${currentPage === totalPages
+                ? "bg-[var(--pri)] text-white border-[var(--pri)]"
+                : "bg-white text-black/70 border-black/15 hover:bg-black/5"
+                }`}
             >
               {totalPages}
             </button>

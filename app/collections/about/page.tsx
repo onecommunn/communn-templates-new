@@ -31,9 +31,15 @@ const CollectionsAboutRoot = () => {
     ? (aboutUs as CollectionsAboutPage | undefined) ?? AboutusdummyData
     : undefined;
 
+  // const source: CollectionsHomePage | undefined = !isLoading
+  //     ? (home as CollectionsHomePage | undefined) ?? HomedummyData
+  //     : undefined;
+
   const homeSource: CollectionsHomePage | undefined = !isLoading
-    ? (aboutUs as CollectionsHomePage | undefined) ?? HomedummyData
+    ? (home as CollectionsHomePage | undefined) ?? HomedummyData
     : undefined;
+
+  // console.log(homeSource, "homeSource");
 
   const primaryColor = source?.color?.primary ?? "#C09932";
 

@@ -89,7 +89,7 @@ const CollectionsTestimonialsSection = ({
   const current = items[active];
   return (
     <section
-      className="w-full bg-[var(--pri)]/20 overflow-hidden"
+      className="w-full bg-[var(--pri)]/20 overflow-hidden mt-10"
       style={
         {
           "--pri": primaryColor,
@@ -185,9 +185,8 @@ const CollectionsTestimonialsSection = ({
                     key={i}
                     type="button"
                     onClick={() => setActive(i)}
-                    className={`h-2.5 w-2.5 rounded-full transition ${
-                      i === active ? "bg-black/60" : "bg-black/20"
-                    }`}
+                    className={`h-2.5 w-2.5 rounded-full transition ${i === active ? "bg-black/60" : "bg-black/20"
+                      }`}
                     aria-label={`Go to review ${i + 1}`}
                   />
                 ))}
@@ -229,11 +228,10 @@ const CollectionsTestimonialsSection = ({
                     stopAutoplay();
                     setActive(i);
                   }}
-                  className={`h-2.5 w-2.5 rounded-full transition ${
-                    i === active
-                      ? "bg-black/50"
-                      : "bg-black/15 hover:bg-black/25"
-                  }`}
+                  className={`h-2.5 w-2.5 rounded-full transition ${i === active
+                    ? "bg-black/50"
+                    : "bg-black/15 hover:bg-black/25"
+                    }`}
                   aria-label={`Go to review ${i + 1}`}
                 />
               ))}

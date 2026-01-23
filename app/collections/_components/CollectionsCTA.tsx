@@ -20,7 +20,7 @@ const CollectionsCTA = ({
         } as React.CSSProperties
       }
     >
-      <div className="relative w-full overflow-hidden rounded-[12px] min-h-[520px] md:min-h-[620px]">
+      <div className="relative w-full overflow-hidden rounded-[12px] ">
         {/* Background Image */}
         <img
           src={

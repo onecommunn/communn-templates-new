@@ -22,7 +22,7 @@ const CollectionsMarquee = ({
   const content = data?.content;
   return (
     <section
-      className="relative overflow-hidden py-8 md:py-12 space-y-10 text-white"
+      className="relative overflow-hidden py-8 md:py-12 space-y-10 text-white mt-20"
       style={{ backgroundColor: primaryColor }}
     >
       <div

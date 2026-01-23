@@ -78,12 +78,12 @@ const CollectionsProducts = ({
                       </div>
                       {/* Product Details */}
                       <div className="mt-4 space-y-1">
-                        <h4 className="text-lg font-medium text-gray-900 line-clamp-1">
+                        <h4 className="text-lg font-medium text-center text-gray-900 line-clamp-1">
                           {product.title}
                         </h4>
-                        <p className="text-[var(--pri)] font-semibold font-figtree">
+                        {/* <p className="text-[var(--pri)] font-semibold font-figtree">
                           ₹{product.price}
-                        </p>
+                        </p> */}
                       </div>
                     </CardContent>
                   </Card>

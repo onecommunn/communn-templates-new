@@ -8,6 +8,8 @@ const CollectionsAboutGallery = ({
   data: GallerySection;
 }) => {
   const content = data?.content;
+
+  // console.log(content, "content");
   return (
     <section className="py-10">
       <div className="relative">
