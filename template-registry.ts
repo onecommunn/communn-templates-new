@@ -88,6 +88,7 @@ import DefaultPaymentsRoot from "./app/default/payments/page";
 import DefaultSubscriptionsRoot from "./app/default/subscriptions/pages";
 import InfluencerCopy from "./app/Influencer/page copy";
 import CreatePage from "./app/Influencer/create/page";
+import CourseDetailsPageRoot from "./app/default/course-details/page";
 
 export const templateLayouts: Record<
   string,
@@ -129,6 +130,7 @@ export const templates: Record<
     "/profile": DefaultProfileRoot,
     "/payments": DefaultPaymentsRoot,
     "/subscriptions": DefaultSubscriptionsRoot,
+    "/video":CourseDetailsPageRoot
   },
   yogana: {
     "/": YoganaRoot,
