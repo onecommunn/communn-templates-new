@@ -21,75 +21,75 @@ export const CollectiondummyData: CollectionsCollectionPage = {
       content: {
         itembox: [
           {
-            title: "Banarasi Silk Wedding Saree",
+            title: "All sarees",
             price: "4000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link.webp",
             isfeatured: false,
           },
           {
-            title: "Fashion Georgette Saree",
+            title: "Kanjeevaram soft silk Sarees",
             price: "6000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ac20c5a29535b4242ec0cdcbc2d211542665e37c.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (1).webp",
             isfeatured: false,
           },
           {
-            title: "Designer Lahenga Choli",
+            title: "Pure Kancheepuram Sarees",
             price: "4800",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/28683a34ce4fec00a49cec22115dbb7f426257d7.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (2).webp",
             isfeatured: false,
           },
           {
-            title: "Bengali Bridal Saree",
+            title: "Mysore crepe silk sarees",
             price: "8000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/650f35bcb3082d5821188c7ea7ad65bbbbb6caaf.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (3).webp",
             isfeatured: false,
           },
           {
-            title: "A Line Long Sleeve Gown",
+            title: "Banarsi sarees",
             price: "4000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/330b6b3b09b00a2723d6dfc435eb9f2eeb0f0370.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Shop Primary Image.webp",
             isfeatured: false,
           },
           {
-            title: "A Line Sleeveless Wedding Dress",
+            title: "Semi Kanchi sarees",
             price: "600",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7ed8c4ddc9ff11584127fbc7d3687648301cfef9.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (6).webp",
             isfeatured: false,
           },
           {
-            title: "Banarasi Silk Wedding Saree",
+            title: "Cotton sarees",
             price: "4800",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (7).webp",
             isfeatured: false,
           },
           {
-            title: "Bengali Bridal Saree",
+            title: "Embroidered sarees",
             price: "8000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/a125603cb16bf58d39bc761d5a4361da4f00ad2b.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (5).webp",
             isfeatured: false,
           },
           {
-            title: "Bridal Wedding Saree",
+            title: "Sarees with custom order ",
             price: "12000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/71b586be092c99929a4d1095d0bce841d99cffaa.jpg",
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (8).webp",
             isfeatured: false,
           },
-          {
-            title: "Banarasi Silk Wedding Saree",
-            price: "4800",
-            media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
-            isfeatured: false,
-          },
+          // {
+          //   title: "Banarasi Silk Wedding Saree",
+          //   price: "4800",
+          //   media:
+          //     "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
+          //   isfeatured: false,
+          // },
         ],
       },
       isActive: true,

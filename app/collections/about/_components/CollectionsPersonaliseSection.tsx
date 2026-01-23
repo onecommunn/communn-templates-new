@@ -21,11 +21,10 @@ const CollectionsPersonaliseSection = ({
     >
       {/* Left */}
       <div className="flex flex-col items-center justify-center text-center gap-4 p-10 font-figtree order-1 md:order-0 bg-[var(--pri)]/20">
-        <p>{content?.heading}</p>
+        {/* <p>{content?.heading}</p> */}
         <img
           src={
-            content?.image ??
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b9a822240f19a1f79aa75b67f7b6ec33608b409a.png"
+            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/4359186c-0fab-49de-a5b8-0f69443c3250.png"
           }
           alt="logo"
           className="max-w-[380px] max-h-[146px] object-cover"
