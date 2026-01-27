@@ -3,7 +3,13 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { X, Check } from "lucide-react";
+import { toast } from "sonner";
+
 import { TrainingPlan } from "@/models/plan.model";
+import { usePlans } from "@/hooks/usePlan";
+import { usePayment } from "@/hooks/usePayments";
+import { AuthContext } from "@/contexts/Auth.context";
+import { useContext } from "react";
 
 type PlansPopUpProps = {
   isOpen: boolean;
@@ -18,6 +24,17 @@ type PlansPopUpProps = {
   };
 };
 
+function formatPeriodLabel(interval?: number, duration?: string) {
+  if (!interval || !duration) return "Per Month";
+
+  const unit = duration.toLowerCase();
+
+  if (interval === 1) return `Per ${unit}`;
+
+  const plural = interval > 1 ? unit + "s" : unit;
+  return `For ${interval} ${plural}`;
+}
+
 export default function PlansPopUp({
   isOpen,
   onClose,
@@ -27,11 +44,98 @@ export default function PlansPopUp({
   colors,
 }: PlansPopUpProps) {
   const [selectedId, setSelectedId] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const auth = useContext(AuthContext);
+  const userId = (auth as any)?.user?._id ?? (auth as any)?.user?.id;
+
+  const { createSubscriptionSequencesByPlanAndCommunityId, getSequencesById } =
+    usePlans();
+
+  const { initiatePaymentByIds } = usePayment();
 
   const selectedPlan = useMemo(
     () => plans?.find((p) => p._id === selectedId),
     [plans, selectedId],
   );
+
+  // ✅ your exact condition
+  const isSequencePlan = useMemo(() => {
+    return !!(
+      selectedPlan?.isSequenceAvailable &&
+      (selectedPlan as any)?.totalSequences > 0
+    );
+  }, [selectedPlan]);
+
+  const handleNonSequencePayNow = async () => {
+    if (!selectedPlan?._id || !communityId || !userId) {
+      toast.error("Missing required data");
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
+        userId,
+        communityId,
+        selectedPlan._id,
+      );
+
+      const subscriptionId = res?.subscription?._id;
+      if (!subscriptionId) {
+        toast.error("Subscription creation failed");
+        return;
+      }
+
+      // 2) fetch sequences by subscriptionId
+      const seqRes: any = await getSequencesById(subscriptionId, userId);
+      const sequences = seqRes?.sequences || [];
+
+      // 3) get first payable sequence
+      const firstPayable = sequences.find(
+        (s: any) =>
+          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
+          !s?.isnonPayable,
+      );
+
+      if (!firstPayable?._id) {
+        toast.error("No payable sequence found");
+        return;
+      }
+
+      // 4) amount (prefer backend pricing)
+      const amount =
+        Number(seqRes?.pricing ?? 0) ||
+        Number(selectedPlan?.pricing ?? 0) ||
+        Number(selectedPlan?.totalPlanValue ?? 0);
+
+      if (!amount || amount <= 0) {
+        toast.error("Invalid amount");
+        return;
+      }
+
+      // 5) initiate payment with first sequence
+      const payRes: any = await initiatePaymentByIds(
+        userId,
+        selectedPlan._id,
+        [firstPayable._id],
+        String(amount),
+      );
+
+      if (payRes?.url) {
+        toast.success("Redirecting to payment...");
+        window.open(payRes.url, "_blank", "noopener,noreferrer");
+        onClose();
+      } else {
+        toast.error("Payment URL not received");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Payment initiation failed");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -55,7 +159,7 @@ export default function PlansPopUp({
         <div className="relative px-6 md:px-8 py-5 border-b">
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 p-2 hover:bg-gray-100 rounded-full"
+            className="absolute right-4 top-4 p-2 hover:bg-gray-100 rounded-full cursor-pointer"
             aria-label="Close"
           >
             <X size={20} className="text-gray-600" />
@@ -69,12 +173,11 @@ export default function PlansPopUp({
           </p>
         </div>
 
-        {/* Body (scrollable) */}
-        <div className="max-h-[70vh] overflow-y-auto px-6 md:px-8 py-6">
+        {/* Body */}
+        <div className="max-h-[70vh] overflow-y-auto px-6 md:px-8 py-6 pb-12 md:pb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {(plans || []).map((plan) => {
               const selected = plan._id === selectedId;
-
               const price = Number(plan.pricing || plan.totalPlanValue || 0);
               const durationText = (plan.duration || "").toLowerCase();
 
@@ -91,7 +194,7 @@ export default function PlansPopUp({
                   key={plan._id}
                   type="button"
                   onClick={() => setSelectedId(plan._id)}
-                  className={`text-left rounded-2xl border p-4 md:p-5 transition-all ${
+                  className={`text-left rounded-2xl border flex flex-col p-4 md:p-5 transition-all ${
                     selected
                       ? "border-[var(--pri)] ring-2 ring-[var(--pri)]/20"
                       : "border-gray-200 hover:border-gray-300"
@@ -100,8 +203,11 @@ export default function PlansPopUp({
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="font-semibold text-gray-900">{plan.name}</p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {durationText || "Plan"}
+                      <p className="text-sm text-gray-500 mt-1 capitalize">
+                        {formatPeriodLabel(
+                          plan.interval as any,
+                          plan.duration as any,
+                        )}
                       </p>
                     </div>
 
@@ -118,7 +224,6 @@ export default function PlansPopUp({
                     </p>
                   </div>
 
-                  {/* Description / bullet list */}
                   {plan.description ? (
                     <div className="mt-3 text-sm text-gray-600">
                       {descParts ? (
@@ -143,18 +248,20 @@ export default function PlansPopUp({
             })}
           </div>
 
-          {/* Spacer so the sticky bar doesn't cover content */}
           <div className="h-24" />
         </div>
 
-        {/* Swiggy-style sticky action bar (appears only after selection) */}
+        {/* Sticky action bar */}
         <div
           className={`absolute left-0 right-0 bottom-0 border-t bg-white/95 backdrop-blur px-6 md:px-8 py-4
           transition-all duration-300
-          ${selectedPlan ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"}`}
+          ${
+            selectedPlan
+              ? "translate-y-0 opacity-100"
+              : "translate-y-full opacity-0 pointer-events-none"
+          }`}
         >
           <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
-            {/* Selected summary */}
             <div className="min-w-0">
               <p className="text-sm text-gray-500">Selected plan</p>
               <p className="font-semibold text-gray-900 truncate">
@@ -169,32 +276,37 @@ export default function PlansPopUp({
               </p>
             </div>
 
-            {/* Buttons */}
             <div className="flex flex-col md:flex-row gap-3 md:justify-end">
-              {/* <button
-                onClick={onClose}
-                className="w-full md:w-auto px-5 py-3 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition"
-                disabled={loading}
-              >
-                Not now
-              </button> */}
-
-              {/* Subscribe route same as your current system */}
-              <Link
-                href={
-                  selectedPlan
-                    ? `/subscriptions/?planid=${selectedPlan._id}&communityid=${communityId}`
-                    : "#"
-                }
-                className={`w-full md:w-auto px-6 py-3 rounded-xl font-semibold text-white text-center transition-all
-                ${
-                  selectedPlan && !loading
-                    ? "bg-[var(--pri)] hover:bg-[var(--pri)]"
-                    : "bg-gray-300 pointer-events-none"
-                }`}
-              >
-                {loading ? "Processing..." : "Subscribe & Join"}
-              </Link>
+              {isSequencePlan ? (
+                <Link
+                  href={
+                    selectedPlan
+                      ? `/subscriptions/?planid=${selectedPlan._id}&communityid=${communityId}`
+                      : "#"
+                  }
+                  className={`w-full md:w-auto px-6 py-3 rounded-xl font-semibold text-white text-center transition-all
+                  ${
+                    selectedPlan && !loading && !isProcessing
+                      ? "bg-[var(--pri)] hover:bg-[var(--pri)]"
+                      : "bg-gray-300 pointer-events-none"
+                  }`}
+                >
+                  {loading ? "Processing..." : "Subscribe & Join"}
+                </Link>
+              ) : (
+                <button
+                  onClick={handleNonSequencePayNow}
+                  disabled={!selectedPlan || loading || isProcessing}
+                  className={`w-full md:w-auto px-6 py-3 rounded-xl font-semibold text-white text-center transition-all
+                  ${
+                    selectedPlan && !loading && !isProcessing
+                      ? "bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
+                      : "bg-gray-300 cursor-not-allowed"
+                  }`}
+                >
+                  {isProcessing ? "Starting payment..." : "Pay & Join"}
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -72,6 +72,7 @@ const DefaultHero = ({
 
   // ✅ Optimistic join flag to avoid "join again" flash after join API success
   const [joinedOptimistic, setJoinedOptimistic] = useState(false);
+  const [requestedOptimistic, setRequestedOptimistic] = useState(false);
 
   const isLoggedIn = !!auth?.isAuthenticated;
   const userId = (auth as any)?.user?._id ?? (auth as any)?.user?.id;
@@ -118,6 +119,25 @@ const DefaultHero = ({
     return plansList.length > 0;
   }, [userId, auth]);
 
+  const ctaState = useMemo(() => {
+    if (!isLoggedIn) return "LOGIN";
+
+    if (isSubscribedToAnyPlan) return "SUBSCRIBED";
+
+    // If PRIVATE and request already sent, don’t show join again
+    if (communityType === "PRIVATE" && requestedOptimistic) return "REQUESTED";
+
+    if (isAlreadyJoined) return "VIEW_PLANS";
+
+    return "JOIN";
+  }, [
+    isLoggedIn,
+    isSubscribedToAnyPlan,
+    communityType,
+    requestedOptimistic,
+    isAlreadyJoined,
+  ]);
+
   // Keep plans warm after login if already joined (optional)
   useEffect(() => {
     if (!communityId) return;
@@ -146,9 +166,6 @@ const DefaultHero = ({
         p?.subscribers?.some((s: any) => (s?._id ?? s?.id) === userId),
       );
 
-      // Determine joined:
-      // - members list can be stale right after login
-      // - For PUBLIC, if plans API works and returns something, treat as joined
       const joinedFromMembers = isAlreadyJoined;
       const joinedFromPlansAccess =
         communityType !== "PRIVATE" && Array.isArray(list) && list.length > 0;
@@ -189,6 +206,7 @@ const DefaultHero = ({
 
         if (res?.status === 201) {
           toast.success("Request sent to admin.");
+          setRequestedOptimistic(true); // ✅ important
           setActionDialogOpen(false);
           return;
         }
@@ -199,22 +217,14 @@ const DefaultHero = ({
 
       // PUBLIC join
       await joinToPublicCommunity(communityId);
-      setJoinedOptimistic(true);
       toast.success("Successfully joined the community");
+
+      setJoinedOptimistic(true); // ✅ important
       setActionDialogOpen(false);
 
-      // Fetch plans and open popup only if not subscribed
-      const list = await fetchPlans();
-      const alreadySubscribed = list.some((p: any) =>
-        p?.subscribers?.some((s: any) => (s?._id ?? s?.id) === userId),
-      );
-
-      if (alreadySubscribed) {
-        // toast.success("You are already subscribed ✅");
-        return;
-      }
-
-      setIsPlansOpen(true);
+      // open plans only if not subscribed
+      await fetchPlans();
+      if (!isSubscribedToAnyPlan) setIsPlansOpen(true);
     } catch (e) {
       toast.error(
         communityType === "PRIVATE"
@@ -227,22 +237,27 @@ const DefaultHero = ({
   };
 
   const handlePrimaryCTA = async () => {
-    if (!isLoggedIn) {
+    if (ctaState === "LOGIN") {
       setIsLoginOpen(true);
       return;
     }
 
-    if (isSubscribedToAnyPlan) {
+    if (ctaState === "SUBSCRIBED") {
       router.push(`/profile?id=${userId}`);
       return;
     }
 
-    // Logged in
-    if (isAlreadyJoined) {
+    if (ctaState === "REQUESTED") {
+      toast.info("Request already sent. Please wait for admin approval.");
+      return;
+    }
+
+    if (ctaState === "VIEW_PLANS") {
       setIsPlansOpen(true);
       return;
     }
 
+    // JOIN
     setActionDialogOpen(true);
   };
 
@@ -347,13 +362,18 @@ const DefaultHero = ({
       {/* CTA */}
       <button
         onClick={handlePrimaryCTA}
-        className="cursor-pointer mt-8 bg-[var(--sec)] md:text-lg text-xs text-[var(--nue)] px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[var(--sec)] transition-all"
+        disabled={ctaState === "REQUESTED"}
+        className="cursor-pointer mt-8 bg-[var(--sec)] md:text-lg text-xs text-[var(--nue)] px-12 py-3 rounded-full font-semibold shadow-md hover:bg-[var(--sec)] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
       >
-        {isAlreadyJoined
-          ? isSubscribedToAnyPlan
+        {ctaState === "LOGIN"
+          ? "Join Community"
+          : ctaState === "SUBSCRIBED"
             ? "Subscribed"
-            : "Subscribe Plans"
-          : "Join Community"}
+            : ctaState === "REQUESTED"
+              ? "Request Sent"
+              : ctaState === "VIEW_PLANS"
+                ? "Subscribe Plans"
+                : "Join Community"}
       </button>
 
       {/* Login popup */}
