@@ -2,10 +2,7 @@ import React from "react";
 import { CMSProvider } from "./CMSProvider.client";
 
 const EMPTY_BUNDLE = {
-  home: null,
-  aboutUs: null,
-  contact: null,
-  collections: null,
+  community: null,
 };
 
 const MadivalaLayout = ({ children }: { children: React.ReactNode }) => {
