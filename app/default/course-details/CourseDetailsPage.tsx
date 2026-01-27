@@ -28,7 +28,13 @@ export type ActiveLesson = {
 export default function CourseDetailsPage() {
   // TODO: replace with useSearchParams later
   const searchParams = useSearchParams();
-  const courseId = searchParams.get("id") || "6840233f4d710a4b951a1c86";
+  // const courseId = searchParams.get("id") || "6840233f4d710a4b951a1c86";
+
+  const courseId = useMemo(
+    () => searchParams.get("id") ?? "",
+    [searchParams]
+  );
+
   const auth = useContext(AuthContext);
 
   const { getCourseByCourseId } = useCourses();
@@ -46,7 +52,7 @@ export default function CourseDetailsPage() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        if(!auth.isAuthenticated){
+        if (!auth.isAuthenticated) {
           return
         }
         setCourseDataLoading(true);
