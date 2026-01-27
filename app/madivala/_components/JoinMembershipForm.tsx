@@ -3,6 +3,10 @@
 
 import React, { useMemo, useState } from "react";
 import { Calendar, Upload, Plus, ArrowRight, Trash2 } from "lucide-react";
+import { sendJoinMembershipRequest } from "@/services/Madivala/Madivala.service";
+import { mapMemberToPayload } from "@/utils/mapMembershipPayload";
+import { useCommunity } from "@/hooks/useCommunity";
+import { toast } from "sonner";
 
 type Member = {
     fullName: string;
@@ -42,11 +46,24 @@ export default function JoinMembershipForm({
     const field = "#2f6660";
     const fieldBorder = "rgba(255,255,255,0.08)";
     const muted = "rgba(255,255,255,0.75)";
-
-    const submit = (e: React.FormEvent) => {
+    const { communityId } = useCommunity();
+    const submit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit?.({ primary, family });
+
+        try {
+            const payload = {
+                community: communityId,
+                primaryMember: mapMemberToPayload(primary),
+                familyMember: family.map(mapMemberToPayload),
+            };
+            await sendJoinMembershipRequest(payload);
+            toast("Membership request sent successfully");
+        } catch (error: any) {
+            console.error("Join membership failed", error);
+            toast("Something went wrong. Please try again.");
+        }
     };
+
 
     const addFamily = () => setFamily((p) => [...p, emptyMember()]);
 
