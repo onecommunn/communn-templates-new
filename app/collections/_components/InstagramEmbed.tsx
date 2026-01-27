@@ -23,7 +23,8 @@ export default function InstagramFullWidth() {
                     padding: '0px 40px',
                     display: 'flex',
                     justifyContent: 'center',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    alignContent: 'center'
                 }}
             >
                 <div className="flex flex-col items-center text-center mb-10">
@@ -33,16 +34,19 @@ export default function InstagramFullWidth() {
                     </h3>
 
                 </div>
-                <blockquote
-                    className="instagram-media"
-                    data-instgrm-permalink="https://www.instagram.com/vinuthasareeverse/"
-                    data-instgrm-version="12"
-                    style={{
-                        maxWidth: '100%',
-                        width: '100%',
-                        borderRadius: '16px'
-                    }}
-                />
+                <div className="flex justify-center">
+                    <blockquote
+                        className="instagram-media"
+                        data-instgrm-permalink="https://www.instagram.com/vinuthasareeverse/"
+                        data-instgrm-version="12"
+                        style={{
+                            maxWidth: '50%',
+                            width: '50%',
+                            borderRadius: '16px',
+                            justifyContent: 'center'
+                        }}
+                    />
+                </div>
             </div>
 
             <Script
