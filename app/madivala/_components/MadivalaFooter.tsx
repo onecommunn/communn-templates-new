@@ -31,7 +31,7 @@ export default function MadivalaFooter({
 
     const normalize = (s?: string) => (s ?? "").trim();
 
-    console.log(name, "name")
+    // console.log(name, "name")
 
     const menu = [
         { label: "Home", href: "/" },
@@ -42,7 +42,7 @@ export default function MadivalaFooter({
 
     const year = new Date().getFullYear();
 
-    console.log(socialLinks, "socialLinks")
+    // console.log(socialLinks, "socialLinks")
 
     return (
         <footer
