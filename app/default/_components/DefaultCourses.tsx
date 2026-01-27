@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
 import Autoplay from "embla-carousel-autoplay";
+import Link from "next/link";
 
 interface IMultiMedia {
   _id: string;
@@ -73,7 +74,7 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
         <CarouselContent>
           {courses?.map((course, idx) => (
             <CarouselItem key={idx} className="md:basis-1/2 lg:basis-1/3">
-              <div className="bg-white cursor-pointer rounded-[20px] p-4 border border-gray-200 flex flex-col h-full group">
+              <Link href={`/course-details?id=${course?._id}`} className="bg-white cursor-pointer rounded-[20px] p-4 border border-gray-200 flex flex-col h-full group">
                 {/* Course Image */}
                 <div className="relative h-48 w-full rounded-3xl overflow-hidden mb-6">
                   <Image
@@ -111,7 +112,7 @@ const DefaultCourses = ({ courses }: DefaultCoursesProps) => {
                     </div>
                   )}
                 </div>
-              </div>
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>

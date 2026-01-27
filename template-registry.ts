@@ -93,6 +93,7 @@ import MadivalaShell from "./app/madivala/MadivalaShell";
 import MadivalaTeamPageRoot from "./app/madivala/team/page";
 import MadivalaAboutPageRoot from "./app/madivala/about/page";
 import JoinMemberShipPageRoot from "./app/madivala/joinembership/page";
+import CourseDetailsPageRoot from "./app/default/course-details/page";
 
 export const templateLayouts: Record<
   string,
@@ -135,6 +136,7 @@ export const templates: Record<
     "/profile": DefaultProfileRoot,
     "/payments": DefaultPaymentsRoot,
     "/subscriptions": DefaultSubscriptionsRoot,
+    "/course-details": CourseDetailsPageRoot,
   },
   yogana: {
     "/": YoganaRoot,
