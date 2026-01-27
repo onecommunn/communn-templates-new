@@ -82,10 +82,10 @@ export default function JoinMembershipForm({
                     />
 
                     {/* Family label */}
-                    <div className="flex items-center gap-2 text-white/90">
+                    {/* <div className="flex items-center gap-2 text-white/90">
                         <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
                         <span className="text-sm font-medium">Member 01</span>
-                    </div>
+                    </div> */}
 
                     <div className="space-y-8">
                         {family.map((m, idx) => (
