@@ -232,11 +232,10 @@ const MartivoLogin = () => {
                   <button
                     onClick={handleGetOtp}
                     disabled={!isInputValid() || loading}
-                    className={`text-white px-6 py-3 rounded-lg font-medium w-full ${
-                      isInputValid() && !loading
+                    className={`text-white px-6 py-3 rounded-lg font-medium w-full ${isInputValid() && !loading
                         ? ""
                         : "bg-gray-300 cursor-not-allowed"
-                    }`}
+                      }`}
                     style={{ backgroundColor: primaryColor }}
                   >
                     {loading ? "Sending..." : "Get OTP"}
@@ -294,11 +293,10 @@ const MartivoLogin = () => {
                 <button
                   onClick={handleResendOtp}
                   disabled={resendTimer > 0 || loading}
-                  className={`text-sm underline font-medium ${
-                    resendTimer > 0
+                  className={`text-sm underline font-medium ${resendTimer > 0
                       ? "text-gray-400 cursor-not-allowed"
                       : "text-[var(--pri)]"
-                  }`}
+                    }`}
                 >
                   {resendTimer > 0
                     ? `Resend OTP in ${resendTimer}s`

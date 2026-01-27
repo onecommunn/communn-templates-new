@@ -1,0 +1,92 @@
+import { Community } from "@/services/communityService";
+import React from "react";
+import { getCollectionsCMSBundle } from "@/services/Collections/Collections.service";
+import Link from "next/link";
+import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import PhoneIcon from "@/components/icons/PhoneIcon";
+import { HomeSection } from "@/models/templates/consultingo/consultingo-home-model";
+import { FooterSection, Header } from "@/models/templates/collections/collections-home-model";
+import MadivalaHeader from "./_components/MadivalaHeader";
+import MadivalaFooter from "./_components/MadivalaFooter";
+import { HomedummyData } from "../collections/home-dummy-data";
+import { CMSProvider } from "./CMSProvider.client";
+
+
+export default async function MadivalaShell({
+  community,
+  children,
+}: React.PropsWithChildren<{ community: Community }>) {
+  const bundle = { community: community };
+  const source = bundle?.community;
+  const initialLoading = !bundle?.community;
+
+  const primaryColor = "#C09932";
+
+
+
+  const message = encodeURIComponent(
+    "Hi 👋 I’m interested in exploring the saree collections at Vinutha Saree Verse. Please share more details."
+  );
+
+  return (
+    <>
+      <Link
+        href={`tel:+917259253666`}
+        target="_blank"
+        title="Call us"
+        style={{
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        }}
+        className="fixed flex items-center justify-center bottom-[7%] left-[2%]! z-[99] bg-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
+      >
+        <button className="cursor-pointer">
+          <PhoneIcon
+            style={{
+              color: "#000",
+              width: "30px",
+              height: "30px",
+            }}
+          />
+        </button>
+      </Link>
+
+      {/* whatsapp Button */}
+      <Link
+        href={`https://api.whatsapp.com/send?phone=7259253666&text=${message}`}
+        target="_blank"
+        data-bs-toggle="tooltip"
+        data-bs-html="true"
+        title="WhatsApp Us"
+        style={{
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          backgroundImage: "linear-gradient(to right, #59ee75, #28d045)",
+        }}
+        className="fixed flex items-center justify-center bottom-[7%] right-[2%]! z-[99] text-white border-none outline-none cursor-pointer w-[50px] h-[50px] rounded-full"
+      >
+        <button className="cursor-pointer">
+          <WhatsappIcon
+            style={{
+              color: "#fff",
+              width: "40px",
+              height: "40px",
+            }}
+          />
+        </button>
+      </Link>
+      <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
+        <MadivalaHeader name={source?.name} logo={source?.logo} primaryColor={primaryColor}
+
+        />
+        <main>{children}</main>
+        <MadivalaFooter name={source?.name}
+          logo={source?.logo}
+          socialLinks={source?.socialLinks}
+          fullAddress={source?.fullAddress}
+          zipCode={source?.zipCode || ""}
+        />
+      </CMSProvider>
+    </>
+  );
+}

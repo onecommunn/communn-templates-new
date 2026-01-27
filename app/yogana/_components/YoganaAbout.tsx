@@ -52,13 +52,13 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
               className="rounded-3xl absolute bottom-10 md:-right-14 right-0 w-30 md:w-[226px]"
               unoptimized
             />
-            <Image
+            {/* <Image
               src={"/assets/yogana-about-image-3.png"}
               alt="yogana-about-image-2"
               width={236}
               height={227}
               className="rounded-3xl absolute -top-10 left-0 md:-left-0 w-30 md:w-[236px]"
-            />
+            /> */}
 
           </div>
           <div className="my-auto">

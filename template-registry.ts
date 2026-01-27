@@ -88,6 +88,11 @@ import DefaultPaymentsRoot from "./app/default/payments/page";
 import DefaultSubscriptionsRoot from "./app/default/subscriptions/pages";
 import InfluencerCopy from "./app/Influencer/page copy";
 import CreatePage from "./app/Influencer/create/page";
+import MadivalaRoot from "./app/madivala/page";
+import MadivalaShell from "./app/madivala/MadivalaShell";
+import MadivalaTeamPageRoot from "./app/madivala/team/page";
+import MadivalaAboutPageRoot from "./app/madivala/about/page";
+import JoinMemberShipPageRoot from "./app/madivala/joinembership/page";
 import CourseDetailsPageRoot from "./app/default/course-details/page";
 
 export const templateLayouts: Record<
@@ -104,6 +109,7 @@ export const templateLayouts: Record<
   influencer: InfluencerLayout,
   consultingo: ConsultingoShell,
   collections: CollectionsShell,
+  madivala: MadivalaShell,
 };
 
 export const templates: Record<
@@ -130,7 +136,7 @@ export const templates: Record<
     "/profile": DefaultProfileRoot,
     "/payments": DefaultPaymentsRoot,
     "/subscriptions": DefaultSubscriptionsRoot,
-    "/course-details":CourseDetailsPageRoot
+    "/course-details": CourseDetailsPageRoot,
   },
   yogana: {
     "/": YoganaRoot,
@@ -213,5 +219,11 @@ export const templates: Record<
     "/contact": CollectionsContactusRoot,
     "/about": CollectionsAboutRoot,
     "/collections": CollectionsCollectionsPageRoot,
+  },
+  madivala: {
+    "/": MadivalaRoot,
+    "/team": MadivalaTeamPageRoot,
+    "/about": MadivalaAboutPageRoot,
+    "/join-member": JoinMemberShipPageRoot,
   },
 };
