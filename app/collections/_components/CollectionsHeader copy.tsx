@@ -160,355 +160,7 @@ const CollectionsHeader: React.FC<{
       </div>
 
       {/* Main header */}
-
-
-      <div className="container font-figtree mx-auto px-4 sm:px-6 md:px-6 lg:px-6">
-        {/* Centered header row */}
-        <div className="relative flex items-center justify-center h-16">
-          {/* LEFT: Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-12 font-figtree absolute left-0">
-            <Link href="/" className="text-gray-700 hover:text-[var(--pri)] transition-colors">
-              Home
-            </Link>
-            <Link href="/about" className="text-gray-700 hover:text-[var(--pri)] transition-colors">
-              About Us
-            </Link>
-            <Link href="/collections" className="text-gray-700 hover:text-[var(--pri)] transition-colors">
-              Collections
-            </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-[var(--pri)] transition-colors">
-              Contact
-            </Link>
-          </nav>
-
-          {/* CENTER: Logo */}
-          <Link href="/" className="flex items-center justify-center">
-            <img
-              className=""
-              src={
-                content?.media?.[0] ??
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
-              }
-              alt="logo"
-            />
-          </Link>
-
-          {/* RIGHT: Desktop CTA / Auth */}
-          <div className="hidden md:flex items-center absolute right-0">
-            {auth.isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <div className="text-center min-w-fit text-[var(--pri)] font-semibold">
-                  Hi, {auth.user?.firstName || auth.user?.emailId}
-                </div>
-                <Popover
-                  open={desktopPopoverOpen}
-                  onOpenChange={setDesktopPopoverOpen}
-                >
-                  <PopoverTrigger asChild>
-                    <Avatar className="cursor-pointer size-9">
-                      <AvatarImage
-                        src={auth?.user?.avatar}
-                        alt={auth?.user?.firstName}
-                      />
-                      <AvatarFallback>
-                        {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-72 mt-1 rounded-md p-2 mr-4 shadow-lg border bg-white z-50"
-                    style={
-                      {
-                        "--pri": primaryColor,
-                      } as React.CSSProperties
-                    }
-                  >
-                    <div className="grid gap-2">
-                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
-                        <div className="col-span-1 flex items-center justify-center">
-                          <Avatar className="cursor-pointer size-12">
-                            <AvatarImage
-                              src={auth?.user?.avatar}
-                              alt={auth?.user?.firstName}
-                            />
-                            <AvatarFallback>
-                              {auth?.user?.firstName?.[0] ??
-                                auth?.user?.emailId?.[0]}
-                            </AvatarFallback>
-                          </Avatar>
-                        </div>
-                        <div className="col-span-3">
-                          <h4 className="font-semibold">
-                            {auth?.user?.firstName}
-                          </h4>
-                          <p className="text-gray-500 text-[12px] font-semibold">
-                            {auth?.user?.emailId}
-                          </p>
-                        </div>
-                      </div>
-                      <Link
-                        href={`/profile?id=${auth?.user?.id}`}
-                        onClick={() => setDesktopPopoverOpen(false)}
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
-                      >
-                        <UserRoundPen strokeWidth={1.5} />
-                        Account
-                      </Link>
-                      <Link
-                        href={`/payments`}
-                        onClick={() => setDesktopPopoverOpen(false)}
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
-                      >
-                        <Wallet strokeWidth={1.5} />
-                        Payments
-                      </Link>
-                      <AlertDialog>
-                        <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold font-sora py-2 bg-white rounded-[10px] text-sm w-full">
-                          <LogOut strokeWidth={1.5} />
-                          Logout
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle className="font-sora">
-                              Are you sure you want to logout?
-                            </AlertDialogTitle>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="border">
-                              Cancel
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={handleLogout}
-                              className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
-                            >
-                              Continue
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-            ) : (
-              <Link href="/" aria-label="Login">
-                <Button className="cursor-pointer hover:bg-transparent hover:text-[var(--pri)] border border-[var(--pri)] rounded-[5px] text-sm bg-[var(--pri)] px-6 w-fit inline-flex items-center gap-2">
-                  <span>
-                    <UserRoundPen strokeWidth={1.5} />
-                  </span>
-                </Button>
-              </Link>
-            )}
-          </div>
-
-          {/* Mobile: keep menu + avatar on right, logo stays centered */}
-          <div className="md:hidden flex items-center gap-2 absolute right-0">
-            {auth.isAuthenticated && (
-              <Popover
-                open={mobilePopoverOpen}
-                onOpenChange={setMobilePopoverOpen}
-              >
-                <PopoverTrigger asChild>
-                  <Avatar className="cursor-pointer size-9">
-                    <AvatarImage
-                      src={auth?.user?.avatar}
-                      alt={auth?.user?.firstName}
-                    />
-                    <AvatarFallback>
-                      {auth?.user?.firstName?.[0] ?? auth?.user?.emailId?.[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-72 mt-1 rounded-md p-2 mr-1 shadow-lg"
-                  style={
-                    {
-                      "--pri": primaryColor,
-                    } as React.CSSProperties
-                  }
-                >
-                  <div className="grid gap-2">
-                    <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
-                      <div className="col-span-1 flex items-center justify-center">
-                        <Avatar className="cursor-pointer size-12">
-                          <AvatarImage
-                            src={auth?.user?.avatar}
-                            alt={auth?.user?.firstName}
-                          />
-                          <AvatarFallback>
-                            {auth?.user?.firstName?.[0] ??
-                              auth?.user?.emailId?.[0]}
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-                      <div className="col-span-3">
-                        <h4 className="font-semibold">
-                          {auth?.user?.firstName}
-                        </h4>
-                        <p className="text-gray-500 text-[12px] font-semibold">
-                          {auth?.user?.emailId}
-                        </p>
-                      </div>
-                    </div>
-                    <Link
-                      href={`/profile?id=${auth?.user?.id}`}
-                      onClick={() => setDesktopPopoverOpen(false)}
-                      style={{
-                        cursor: "pointer",
-                      }}
-                      className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
-                    >
-                      <UserRoundPen strokeWidth={1.5} />
-                      Account
-                    </Link>
-                    <Link
-                      href={`/payments`}
-                      onClick={() => setDesktopPopoverOpen(false)}
-                      style={{
-                        cursor: "pointer",
-                      }}
-                      className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
-                    >
-                      <Wallet strokeWidth={1.5} />
-                      Payments
-                    </Link>
-                    <AlertDialog>
-                      <AlertDialogTrigger className="flex items-center gap-2 cursor-pointer text-[var(--pri)]/70 hover:text-[#df2431] px-4 font-semibold font-sora py-2 bg-white rounded-[10px] text-sm w-full">
-                        <LogOut strokeWidth={1.5} />
-                        Logout
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle className="font-sora">
-                            Are you sure you want to logout?
-                          </AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="border">
-                            Cancel
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={handleLogout}
-                            className="bg-[#df2431] hover:text-white text-white px-6 py-2 rounded-md hover:bg-[#ba1c26] cursor-pointer"
-                          >
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            )}
-
-            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-              <SheetTrigger asChild>
-                <button
-                  className="cursor-pointer p-2"
-                  aria-controls="creator-mobile-menu"
-                  aria-label="Open menu"
-                >
-                  <Menu className="h-6 w-6" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[85vw] sm:max-w-sm px-0"
-                style={
-                  {
-                    "--pri": primaryColor,
-                  } as React.CSSProperties
-                }
-              >
-                {/* Header inside sheet */}
-                <SheetHeader className="px-4 pb-2">
-                  <div className="flex items-center justify-between">
-                    <SheetTitle className="sr-only">Menu</SheetTitle>
-                    <Link
-                      href="/"
-                      aria-label="Go home"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-2"
-                    >
-                      <img
-                        src={
-                          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
-                        }
-                        alt="Logo"
-                      // className="w-25 h-15 object-contain"
-                      />
-                    </Link>
-                  </div>
-                </SheetHeader>
-
-                {/* Nav list (mobile) */}
-                <nav
-                  className="flex flex-col space-y-1 py-2"
-                  aria-label="Mobile"
-                >
-                  <SheetClose asChild>
-                    <Link
-                      href="/"
-                      className="px-4 py-3 font-figtree hover:font-semibold"
-                      style={{ color: "#000000" }}
-                    >
-                      Home
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/about"
-                      className="px-4 py-3 font-figtree hover:font-semibold"
-                      style={{ color: "#000000" }}
-                    >
-                      About us
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
-                      href="/collections"
-                      className="px-4 py-3 font-figtree hover:font-semibold"
-                      style={{ color: "#000000" }}
-                    >
-                      Collections
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/contact"
-                      className="px-4 py-3 font-figtree hover:font-semibold"
-                      style={{ color: "#000000" }}
-                    >
-                      Contact
-                    </Link>
-                  </SheetClose>
-                </nav>
-
-                {/* CTA pinned at bottom */}
-                {/* <div className="px-4 pt-2 pb-6">
-                  <SheetClose asChild>
-                    {!auth.isAuthenticated && (
-                      <Link href="/login" className="w-full">
-                        <Button className="rounded-[5px] text-white font-figtree text-sm px-5 w-full inline-flex items-center gap-2 bg-[var(--pri)]">
-                          Login <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    )}
-                  </SheetClose>
-                </div> */}
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-      </div>
-      {/* <div className="container font-figtree mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
+      <div className="container font-figtree mx-auto px-4 sm:px-6 md:px-6 lg:px-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <img
@@ -517,11 +169,11 @@ const CollectionsHeader: React.FC<{
                 "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
               }
               alt="logo"
-
+            // className="w-fit"
             />
           </Link>
 
-
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-12 font-figtree">
             <Link
               href="/"
@@ -549,7 +201,7 @@ const CollectionsHeader: React.FC<{
             </Link>
           </nav>
 
-
+          {/* Desktop CTA / Auth */}
           <div className="hidden md:flex md:items-center">
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-4">
@@ -663,7 +315,7 @@ const CollectionsHeader: React.FC<{
             )}
           </div>
 
-
+          {/* Mobile Menu */}
           <div className="md:hidden flex items-center gap-2">
             {auth.isAuthenticated && (
               <div className="flex items-center gap-4">
@@ -783,7 +435,7 @@ const CollectionsHeader: React.FC<{
                   } as React.CSSProperties
                 }
               >
-
+                {/* Header inside sheet */}
                 <SheetHeader className="px-4 pb-2">
                   <div className="flex items-center justify-between">
                     <SheetTitle className="sr-only">Menu</SheetTitle>
@@ -798,13 +450,13 @@ const CollectionsHeader: React.FC<{
                           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
                         }
                         alt="Logo"
-
+                      // className="w-25 h-15 object-contain"
                       />
                     </Link>
                   </div>
                 </SheetHeader>
 
-
+                {/* Nav list (mobile) */}
                 <nav
                   className="flex flex-col space-y-1 py-2"
                   aria-label="Mobile"
@@ -848,13 +500,23 @@ const CollectionsHeader: React.FC<{
                   </SheetClose>
                 </nav>
 
-
+                {/* CTA pinned at bottom */}
+                {/* <div className="px-4 pt-2 pb-6">
+                  <SheetClose asChild>
+                    {!auth.isAuthenticated && (
+                      <Link href="/login" className="w-full">
+                        <Button className="rounded-[5px] text-white font-figtree text-sm px-5 w-full inline-flex items-center gap-2 bg-[var(--pri)]">
+                          Login <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    )}
+                  </SheetClose>
+                </div> */}
               </SheetContent>
             </Sheet>
           </div>
         </div>
-      </div> */}
-
+      </div>
     </header>
   );
 };

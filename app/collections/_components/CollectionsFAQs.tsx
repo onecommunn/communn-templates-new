@@ -43,10 +43,10 @@ const CollectionsFAQs = ({ data }: { data: FaqSection }) => {
                 className="w-full flex items-start justify-between gap-4 text-left"
               >
                 <div className="flex gap-3 items-start">
-                  <span className="text-[18px] md:text-[20px]">
+                  <span className="text-[16px] md:text-[19px]">
                     {index + 1}.
                   </span>
-                  <span className="text-[18px] md:text-[20px]">
+                  <span className="text-[16px] md:text-[19px]">
                     {faq?.question}
                   </span>
                 </div>

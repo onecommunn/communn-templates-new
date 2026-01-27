@@ -30,6 +30,7 @@ import {
   ItemsSections,
 } from "@/models/templates/collections/collections-collection-model";
 import { CollectiondummyData } from "./collections/collections-dummy-data";
+import InstagramEmbed from "./_components/InstagramEmbed";
 
 const CollectionsRoot = () => {
   const { home, collections } = useCMS();
@@ -38,12 +39,13 @@ const CollectionsRoot = () => {
     ? (home as CollectionsHomePage | undefined) ?? HomedummyData
     : undefined;
 
+  // console.log(source, "source")
   const isCollectionLoading = collections === undefined;
 
   const collectionsSource: CollectionsCollectionPage | undefined =
     !isCollectionLoading
       ? (collections as CollectionsCollectionPage | undefined) ??
-        CollectiondummyData
+      CollectiondummyData
       : undefined;
 
   const primaryColor = source?.color?.primary ?? "#C09932";
@@ -126,6 +128,10 @@ const CollectionsRoot = () => {
       )}
 
       {gallerySectionData && <CollectionsGallery data={gallerySectionData} />}
+
+      <div className="container mx-auto py-5">
+        <InstagramEmbed />
+      </div>
 
       {faqSectionData && <CollectionsFAQs data={faqSectionData} />}
 
