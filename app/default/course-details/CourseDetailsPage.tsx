@@ -42,30 +42,7 @@ export default function CourseDetailsPage() {
         { id: "w3l3", title: "week-3 Article", type: "article" },
       ],
     },
-    {
-      id: "w4",
-      title: "Week 4 - Beginner - Introduction to Yoga",
-      lessons: [
-        { id: "w4l1", title: "Week-4 Class", type: "video" },
-        { id: "w4l3", title: "week-4 Article", type: "article" },
-      ],
-    },
-    {
-      id: "w5",
-      title: "Week 5 - Beginner - Introduction to Yoga",
-      lessons: [
-        { id: "w5l1", title: "Week-5 Class", type: "video" },
-        { id: "w5l3", title: "week-5 Article", type: "article" },
-      ],
-    },
-    {
-      id: "w6",
-      title: "Week 6 - Beginner - Introduction to Yoga",
-      lessons: [
-        { id: "w6l1", title: "Week-6 Class", type: "video" },
-        { id: "w6l3", title: "week-6 Article", type: "article" },
-      ],
-    },
+   
   ];
 
   const lesson = {

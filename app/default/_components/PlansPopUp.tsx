@@ -171,13 +171,13 @@ export default function PlansPopUp({
 
             {/* Buttons */}
             <div className="flex flex-col md:flex-row gap-3 md:justify-end">
-              <button
+              {/* <button
                 onClick={onClose}
                 className="w-full md:w-auto px-5 py-3 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition"
                 disabled={loading}
               >
                 Not now
-              </button>
+              </button> */}
 
               {/* Subscribe route same as your current system */}
               <Link

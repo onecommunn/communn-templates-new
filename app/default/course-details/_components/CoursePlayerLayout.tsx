@@ -9,6 +9,7 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import LMSsectionIcon from "./icons/LMSsectionIcon";
 import LMSopenBookIcon from "./icons/LMSopenBookIcon";
 import LMSdocumentDownloadIcon from "./icons/LMSdocumentDownloadIcon";
+import NotesPanel from "./NotesPanel";
 
 type Props = {
   course: any;
@@ -31,25 +32,25 @@ export default function CoursePlayerLayout({
         <div className="space-y-4">
           {/* Header */}
           <div>
-            <div className="mx-auto py-2 flex items-center justify-between">
-              <div>
+            <div className="mx-auto py-2 flex items-start gap-2 justify-between">
+              <div className="flex flex-col gap-1">
                 <p className="text-lg font-semibold">{course.title}</p>
-                <div className="text-sm flex items-center gap-2 text-[#969696]">
+                <div className="text-sm flex items-center gap-2 text-[#969696] flex-wrap">
                   <span className="text-[#969696] flex items-center gap-2 font-semibold w-fit">
                     <FaChalkboardTeacher size={18} strokeWidth={2} />
                     {course.instructor}
                   </span>
-                  |
+                  <span className="hidden md:flex">|</span>
                   <span className="text-[#969696] flex items-center gap-2 font-semibold w-fit">
                     <LMSsectionIcon />
                     {course.sectionsCount} Sections
                   </span>
-                  |
+                  <span className="hidden md:flex">|</span>
                   <span className="text-[#969696] flex items-center gap-2 font-semibold w-fit">
                     <LMSopenBookIcon />
                     {course.lessonsCount} Items
                   </span>
-                  |
+                  <span className="hidden md:flex">|</span>
                   <span className="text-[#969696] flex items-center gap-2 font-semibold w-fit">
                     <LMSdocumentDownloadIcon />
                     {course.resourcesCount} Downloadable Resources
@@ -81,19 +82,19 @@ export default function CoursePlayerLayout({
           />
 
           <Card className="p-4">
-            <p className="text-sm font-semibold mb-3">Notes</p>
-            <Separator className="mb-4" />
-            {/* <NotesPanel courseId={course.id} lessonId={lesson.id} /> */}
+            <NotesPanel />
           </Card>
         </div>
 
         {/* Right sidebar */}
-        <Card className="p-3 pb-6 h-[calc(100vh-140px)] sticky top-6 overflow-y-auto">
-          <LessonSidebar
-            courseId={course.id}
-            sections={sections}
-            activeLessonId={activeLessonId}
-          />
+        <Card className="p-3 h-auto md:h-fit md:max-h-[calc(100vh-140px)] sticky top-24">
+          <div className="overflow-y-auto h-full">
+            <LessonSidebar
+              courseId={course.id}
+              sections={sections}
+              activeLessonId={activeLessonId}
+            />
+          </div>
         </Card>
       </div>
     </div>

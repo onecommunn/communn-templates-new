@@ -20,7 +20,7 @@ export default function LessonSidebar({
       <ScrollArea className="flex-1">
         <Accordion type="multiple" defaultValue={[sections?.[0]?.id]} className="space-y-2">
           {sections.map((sec) => (
-            <AccordionItem key={sec.id} value={sec.id} className="last:mb-4 border-none">
+            <AccordionItem key={sec.id} value={sec.id} className="border-none">
               <AccordionTrigger className="text-base cursor-pointer hover:no-underline font-semibold p-[12px] bg-[#F0F9FF] [&_svg]:text-black [&_svg]:h-5 [&_svg]:w-5">
                 {sec.title}
               </AccordionTrigger>

@@ -1,7 +1,7 @@
 "use client";
 
 import Hls from "hls.js";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
   Pause,
   Play,
@@ -34,12 +34,7 @@ function formatTime(sec: number) {
 
 const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-export default function CustomVideoPlayer({
-  src,
-  poster,
-  onProgress,
-  onEnded,
-}: Props) {
+export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: Props) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -57,6 +52,9 @@ export default function CustomVideoPlayer({
 
   const [showMenu, setShowMenu] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
+
+  // ✅ NEW: only enable keyboard shortcuts when player is active (hover/focus)
+  const [shortcutsEnabled, setShortcutsEnabled] = useState(false);
 
   const isHls = useMemo(() => src.includes(".m3u8"), [src]);
 
@@ -159,37 +157,51 @@ export default function CustomVideoPlayer({
     return () => clearTimeout(t);
   }, [playing, current, isDragging]);
 
-  const togglePlay = async () => {
+  const togglePlay = useCallback(async () => {
     const v = videoRef.current;
     if (!v) return;
     if (v.paused) await v.play();
     else v.pause();
-  };
+  }, []);
 
-  const seekTo = (t: number) => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.currentTime = clamp(t, 0, duration || 0);
-  };
+  const seekTo = useCallback(
+    (t: number) => {
+      const v = videoRef.current;
+      if (!v) return;
+      v.currentTime = clamp(t, 0, duration || 0);
+    },
+    [duration]
+  );
 
-  const toggleFullscreen = async () => {
+  const toggleFullscreen = useCallback(async () => {
     const el = wrapperRef.current;
     if (!el) return;
 
     if (!document.fullscreenElement) await el.requestFullscreen();
     else await document.exitFullscreen();
-  };
+  }, []);
 
   const restart = () => seekTo(0);
 
-  // keyboard shortcuts
+  // ✅ FIXED keyboard shortcuts:
+  // - only work when shortcutsEnabled === true (hover/focus on player)
+  // - ignored while typing in inputs / textareas / contenteditable (TipTap)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      // avoid capturing when typing
-      const target = e.target as HTMLElement | null;
-      if (target && ["INPUT", "TEXTAREA"].includes(target.tagName)) return;
+      if (!shortcutsEnabled) return;
 
-      if (e.code === "Space") {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      const isTypingField =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable ||
+        !!target.closest("[contenteditable='true']");
+
+      if (isTypingField) return;
+
+      if (e.code === "Space" || e.key.toLowerCase() === "k") {
         e.preventDefault();
         togglePlay();
       }
@@ -202,8 +214,7 @@ export default function CustomVideoPlayer({
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current, duration]);
+  }, [shortcutsEnabled, current, seekTo, toggleFullscreen, togglePlay]);
 
   const progressPct = duration ? (current / duration) * 100 : 0;
   const bufferedPct = duration ? (bufferedEnd / duration) * 100 : 0;
@@ -211,9 +222,16 @@ export default function CustomVideoPlayer({
   return (
     <div
       ref={wrapperRef}
-      className="relative w-full overflow-hidden rounded-2xl bg-black border border-white/10"
+      tabIndex={0} // ✅ makes focus possible
+      className="relative w-full overflow-hidden rounded-2xl bg-black border border-white/10 outline-none"
       onMouseMove={() => setShowControls(true)}
-      onMouseLeave={() => playing && setShowControls(false)}
+      onMouseEnter={() => setShortcutsEnabled(true)} // ✅ enable shortcuts
+      onMouseLeave={() => {
+        setShortcutsEnabled(false); // ✅ disable shortcuts
+        if (playing) setShowControls(false);
+      }}
+      onFocus={() => setShortcutsEnabled(true)} // ✅ enable on focus
+      onBlur={() => setShortcutsEnabled(false)} // ✅ disable on blur
     >
       <video
         ref={videoRef}
@@ -235,8 +253,9 @@ export default function CustomVideoPlayer({
           onClick={togglePlay}
           className="absolute inset-0 flex items-center justify-center"
           aria-label="Play"
+          type="button"
         >
-          <span className="h-16 w-16 md:h-20 md:w-20  cursor-pointer hover:scale-105 rounded-full bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center hover:bg-white/20 transition">
+          <span className="h-16 w-16 md:h-20 md:w-20 cursor-pointer hover:scale-105 rounded-full bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center hover:bg-white/20 transition">
             <Play className="h-7 w-7 md:h-8 md:w-8 text-white translate-x-[1px]" />
           </span>
         </button>
@@ -251,10 +270,7 @@ export default function CustomVideoPlayer({
         {/* progress bar */}
         <div className="relative mb-3">
           <div className="h-2 w-full rounded-full bg-white/15 overflow-hidden">
-            <div
-              className="h-full bg-white/20"
-              style={{ width: `${bufferedPct}%` }}
-            />
+            <div className="h-full bg-white/20" style={{ width: `${bufferedPct}%` }} />
           </div>
           <div
             className="absolute top-0 left-0 h-2 rounded-full bg-white"
@@ -292,10 +308,7 @@ export default function CustomVideoPlayer({
               <RotateCcw className="h-5 w-5" />
             </IconButton>
 
-            <IconButton
-              onClick={() => setMuted((p) => !p)}
-              label={muted ? "Unmute" : "Mute"}
-            >
+            <IconButton onClick={() => setMuted((p) => !p)} label={muted ? "Unmute" : "Mute"}>
               {muted || volume === 0 ? (
                 <VolumeX className="h-5 w-5" />
               ) : (
@@ -346,6 +359,7 @@ export default function CustomVideoPlayer({
                             ? "bg-white text-black border-white"
                             : "bg-white/10 text-white border-white/10 hover:bg-white/15"
                         }`}
+                        type="button"
                       >
                         {s}x
                       </button>
@@ -354,10 +368,12 @@ export default function CustomVideoPlayer({
 
                   <div className="border-t border-white/10 my-1" />
 
-                  {/* Placeholder for quality (HLS later) */}
                   <p className="px-2 py-1 text-[11px] text-white/70">Quality</p>
                   <div className="px-1 pb-1">
-                    <button className="w-full rounded-md px-2 py-2 text-xs border bg-white/10 text-white border-white/10 hover:bg-white/15 text-left">
+                    <button
+                      className="w-full rounded-md px-2 py-2 text-xs border bg-white/10 text-white border-white/10 hover:bg-white/15 text-left"
+                      type="button"
+                    >
                       Auto (default)
                     </button>
                   </div>
@@ -366,11 +382,7 @@ export default function CustomVideoPlayer({
             </div>
 
             <IconButton onClick={toggleFullscreen} label="Fullscreen">
-              {isFullscreen ? (
-                <Minimize className="h-5 w-5" />
-              ) : (
-                <Maximize className="h-5 w-5" />
-              )}
+              {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
             </IconButton>
           </div>
         </div>
