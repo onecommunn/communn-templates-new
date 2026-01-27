@@ -21,7 +21,6 @@ import {
   Trash2,
   Pencil,
   X,
-  NotebookPen,
 } from "lucide-react";
 
 type Note = {
@@ -34,31 +33,36 @@ export default function NotesPanel() {
   const [mounted, setMounted] = useState(false);
   const [notes, setNotes] = useState<Note[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editorTick, setEditorTick] = useState(0);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     content: "",
-    immediatelyRender: false, // ✅ Fix TipTap SSR hydration mismatch
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
           "prose prose-sm max-w-none dark:prose-invert focus:outline-none min-h-[120px] px-3 py-2",
       },
     },
+    onUpdate: () => setEditorTick((t) => t + 1),
+    onSelectionUpdate: () => setEditorTick((t) => t + 1),
+    onTransaction: () => setEditorTick((t) => t + 1),
   });
-
+  
   const canSave = useMemo(() => {
-    const text = editor?.getText()?.trim() ?? "";
+    if (!editor) return false;
+    const text = editor.getText().trim();
     return text.length > 0;
-  }, [editor, editor?.getText()]);
+  }, [editor, editorTick]);
 
   const resetEditor = () => {
-    editor?.commands.setContent("<p>Write your note…</p>");
+    if (!editor) return;
+    editor.commands.setContent("");
     setEditingId(null);
+    setEditorTick((t) => t + 1);
   };
 
   const onSave = () => {
@@ -91,6 +95,7 @@ export default function NotesPanel() {
 
     setEditingId(id);
     editor.commands.setContent(note.html);
+    setEditorTick((t) => t + 1);
   };
 
   const onDelete = (id: string) => {
@@ -98,12 +103,10 @@ export default function NotesPanel() {
     if (editingId === id) resetEditor();
   };
 
-  // ✅ Prevent rendering editor until client mounted
   if (!mounted) {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <NotebookPen className="h-5 w-5 text-muted-foreground" />
           <p className="text-sm font-semibold">Notes</p>
         </div>
 
@@ -235,7 +238,11 @@ export default function NotesPanel() {
         </div>
 
         {/* Editor */}
-        <EditorContent editor={editor} placeholder="Write your note…"/>
+        <div
+          onKeyDownCapture={(e) => e.stopPropagation()}
+        >
+          <EditorContent editor={editor} />
+        </div>
 
         {/* Actions */}
         <div className="flex items-center justify-between border-t p-2">
@@ -244,6 +251,7 @@ export default function NotesPanel() {
               <button
                 onClick={resetEditor}
                 className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm hover:bg-muted transition"
+                type="button"
               >
                 <X className="h-4 w-4" />
                 Cancel
@@ -253,6 +261,7 @@ export default function NotesPanel() {
             <button
               onClick={onSave}
               disabled={!canSave}
+              type="button"
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition ${
                 canSave
                   ? "bg-primary text-primary-foreground cursor-pointer hover:opacity-90"
@@ -324,8 +333,8 @@ function ToolBtn({
       disabled={disabled}
       aria-label={label}
       className={`h-9 w-9 inline-flex items-center justify-center rounded-lg border transition
-        ${active ? "bg-background" : "bg-transparent"}
-        ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-background"}
+        ${active ? "bg-primary text-primary-foreground border-primary hover:text-primary" : "bg-transparent"}
+        ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-background cursor-pointer"}
       `}
     >
       {children}

@@ -21,16 +21,16 @@ export interface Course {
   endDateDuration: string;
   endDateDurationCount: string;
   isPlanAvailable: boolean;
-  plan: TrainingPlan[]; // update with a specific type if available
+  plan: TrainingPlan[];
   status: string;
   sections: Section[];
   documents: Document[];
   instructorName: string;
   amount: string;
   isAmountAvailable: boolean;
-  attendees: Attendee[]; // update with a specific type if needed
-  courseNotes: any[]; // update with a specific type if needed
-  links: Link[];
+  attendees: Attendee[];
+  courseNotes: any[];
+  links: CourseLink[];
   createdAt: string;
   updatedAt: string;
 }
@@ -54,11 +54,11 @@ export interface Section {
   name: string;
   description: string;
   createdBy: string;
-  links: Link[];
+  links: CourseLink[];
   documents: Document[];
 }
 
-export interface Link {
+export interface CourseLink {
   _id: string;
   name: string;
   value: string;

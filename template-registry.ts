@@ -130,7 +130,7 @@ export const templates: Record<
     "/profile": DefaultProfileRoot,
     "/payments": DefaultPaymentsRoot,
     "/subscriptions": DefaultSubscriptionsRoot,
-    "/video":CourseDetailsPageRoot
+    "/course-details":CourseDetailsPageRoot
   },
   yogana: {
     "/": YoganaRoot,
