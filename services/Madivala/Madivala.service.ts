@@ -18,23 +18,3 @@ export const sendJoinMembershipRequest = async (
   });
 };
 
-export const uploadImage = async (
-  file: File,
-  fieldName: string = "teams",
-): Promise<UploadedFile> => {
-  const formData = new FormData();
-  formData.append(fieldName, file);
-
-  const res = await axios.post(
-    `${BASE_URL_V2}/files/upload-single-file`,
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer`,
-        "Content-Type": "multipart/form-data",
-      },
-    },
-  );
-
-  return res.data;
-};

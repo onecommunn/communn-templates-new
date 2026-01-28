@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Autoplay from "embla-carousel-autoplay";
@@ -43,14 +43,12 @@ type DefaultCoursesProps = {
   colors?: { primaryColor: string; secondaryColor: string; textcolor: string };
 };
 
-// ✅ initiateCoursePayment actual payload (inside axios response .data)
 type InitiateCoursePaymentPayload = {
   url: string;
   transactionId: string;
   transaction: any;
 };
 
-// ✅ unwrap axios response or direct payload
 const unwrapAxios = <T,>(res: any): T | null => {
   if (!res) return null;
   if (typeof res === "object" && "data" in res) return res.data as T;
@@ -69,7 +67,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
 
   const isAuthenticated = !!auth?.isAuthenticated;
 
-  // ✅ based on your code
   const userId: string | undefined = auth?.user?.id;
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -89,8 +86,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
       : "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default%20Courses.png";
   };
 
-  // ✅ Access rule:
-  // must be logged in and userId exists and user in attendees and isPlanAvailable true
   const canAccessCourseDetails = (course: any) => {
     const attendees: string[] = Array.isArray(course?.attendees)
       ? course.attendees
@@ -100,7 +95,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
     );
   };
 
-  // Payment rules
   const hasPlanAmount = (course: any) =>
     Array.isArray(course?.plan) &&
     course?.plan?.length > 0 &&
@@ -109,13 +103,27 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
   const hasDirectAmount = (course: any) =>
     course?.isAmountAvailable && Number(course?.amount) > 0;
 
+  const isFreeCourse = (course: any) => {
+    return !hasDirectAmount(course) && !hasPlanAmount(course);
+  };
+
   const getActionText = (course: any) => {
+    if (isFreeCourse(course)) return "View Course";
+
     if (!isAuthenticated || !userId) return "Login to Continue";
     if (canAccessCourseDetails(course)) return "View Course";
     return "Pay to Access";
   };
 
-  // ✅ One payment flow (no separate iOS)
+  // ✅ SHOW ONLY PUBLISHED
+  const publishedCourses = useMemo(() => {
+    const list = Array.isArray(courses) ? courses : [];
+    return list.filter((c) => {
+      const status = String(c?.status ?? "").toUpperCase();
+      return status === "PUBLISHED";
+    });
+  }, [courses]);
+
   const handlePayment = async (courseId: string, uid: string) => {
     setLoadingCourseId(courseId);
     try {
@@ -138,7 +146,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
         return;
       }
 
-      // open centered popup
       const screenWidth = window.screen.width;
       const screenHeight = window.screen.height;
       const width = Math.min(1000, screenWidth);
@@ -155,8 +162,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
       const intervalRef = setInterval(async () => {
         try {
           const paymentStatusRes = await getPaymentStatusById(transactionId);
-
-          // ✅ your typings show: IPaymentList[]
           const status = (paymentStatusRes as any)?.[0]?.status;
           if (!status) return;
 
@@ -165,11 +170,8 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
           clearInterval(intervalRef);
           windowRef?.close();
 
-          if (status === PaymentStatus.SUCCESS) {
-            setSuccessOpen(true);
-          } else {
-            setFailureOpen(true);
-          }
+          if (status === PaymentStatus.SUCCESS) setSuccessOpen(true);
+          else setFailureOpen(true);
         } catch (err) {
           console.error("Error fetching payment status:", err);
         }
@@ -193,17 +195,21 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
 
     const courseId = course?._id as string;
 
-    // if plan amount exists OR direct amount exists -> pay
     if (hasPlanAmount(course) || hasDirectAmount(course)) {
       await handlePayment(courseId, userId);
       return;
     }
 
-    // free fallback
     router.push(`/course-details?id=${courseId}`);
   };
 
   const handleCourseClick = async (course: any) => {
+    // ✅ FREE COURSE → allow direct access
+    if (isFreeCourse(course)) {
+      router.push(`/course-details?id=${course?._id}`);
+      return;
+    }
+
     if (!isAuthenticated || !userId) {
       setPendingCourseId(course?._id);
       setRedirectPath(`/course-details?id=${course?._id}`);
@@ -219,15 +225,14 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
     await startPaymentFlow(course);
   };
 
-  // after login auto-continue
   useEffect(() => {
     if (!isAuthenticated || !userId || !pendingCourseId) return;
 
-    const c = courses?.find((x) => x?._id === pendingCourseId);
+    const c = publishedCourses?.find((x) => x?._id === pendingCourseId);
     if (!c) return;
 
     (async () => {
-      if (canAccessCourseDetails(c)) {
+      if (isFreeCourse(c) || canAccessCourseDetails(c)) {
         router.push(`/course-details?id=${pendingCourseId}`);
       } else {
         await startPaymentFlow(c);
@@ -235,7 +240,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
       setPendingCourseId(null);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, userId, pendingCourseId]);
+  }, [isAuthenticated, userId, pendingCourseId, publishedCourses]);
 
   const handleSuccessClose = () => {
     setTimer(5);
@@ -247,7 +252,8 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
     setFailureOpen(false);
   };
 
-  if (!courses || courses.length === 0) {
+  // ✅ No published courses
+  if (!publishedCourses || publishedCourses.length === 0) {
     return (
       <section
         id="courses"
@@ -288,16 +294,12 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
           className="w-full"
         >
           <CarouselContent>
-            {courses?.map((course, idx) => {
+            {publishedCourses?.map((course, idx) => {
               const cover = getCover(course);
               const eligible = isAuthenticated
                 ? canAccessCourseDetails(course)
                 : false;
               const locked = isAuthenticated && !eligible;
-
-              const showPrice =
-                !!course?.isAmountAvailable && Number(course?.amount) > 0;
-              const priceText = showPrice ? `₹${course?.amount}` : "Free";
 
               return (
                 <CarouselItem
@@ -312,7 +314,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                   >
                     <div className="relative rounded-3xl p-[1px] bg-gradient-to-b from-gray-200 to-gray-100 hover:from-gray-300 hover:to-gray-200 transition">
                       <div className="relative overflow-hidden rounded-3xl bg-white shadow-sm border border-gray-100">
-                        {/* image */}
                         <div className="relative h-52 w-full">
                           <Image
                             alt={course?.name || "Course"}
@@ -331,7 +332,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                           ) : null}
                         </div>
 
-                        {/* content */}
                         <div className="p-5">
                           <div className="flex items-start justify-between gap-3">
                             <h3 className="text-base md:text-lg font-bold text-gray-900 line-clamp-1">
@@ -342,25 +342,25 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                               <ArrowRight size={16} />
                             </span>
                           </div>
-                          {priceText ? (
-                            <p className="text-sm md:text-md text-[var(--pri)] font-bold my-2">
-                              {Number(course?.amount) > 0 &&
-                              course?.plan?.length > 0
-                                ? `₹ ${course?.amount} + Plan`
-                                : Number(course?.amount) > 0
-                                  ? `₹ ${course?.amount}`
-                                  : course?.plan.length > 0
-                                    ? "Plan"
-                                    : "Free"}
-                              {course?.endDateDuration && (
-                                <>
-                                  {" "}
-                                  / {course?.endDateDurationCount}{" "}
-                                  {getStaticValue(course?.endDateDuration)}
-                                </>
-                              )}
-                            </p>
-                          ) : null}
+
+                          <p className="text-sm md:text-md text-[var(--pri)] font-bold my-2">
+                            {Number(course?.amount) > 0 &&
+                            course?.plan?.length > 0
+                              ? `₹ ${course?.amount} + Plan`
+                              : Number(course?.amount) > 0
+                                ? `₹ ${course?.amount}`
+                                : course?.plan?.length > 0
+                                  ? "Plan"
+                                  : "Free"}
+                            {course?.endDateDuration && (
+                              <>
+                                {" "}
+                                / {course?.endDateDurationCount}{" "}
+                                {getStaticValue(course?.endDateDuration)}
+                              </>
+                            )}
+                          </p>
+
                           <p className="mt-2 text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-3 min-h-[3.75rem]">
                             {course?.description}
                           </p>
@@ -381,7 +381,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             </span>
                           </div>
 
-                          {/* action bar */}
                           <div className="mt-5 cursor-pointer w-full rounded-2xl px-4 py-3 flex items-center justify-between text-xs md:text-sm font-semibold bg-[var(--pri)] text-white">
                             <span>
                               {loadingCourseId === course?._id
