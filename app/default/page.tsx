@@ -63,7 +63,7 @@ const DefaultRoot = () => {
       <DefaultGallery gallery={source?.gallery} />
       <DefaultEvents colors={color}/>
       <DefaultPlans  colors={color}/>
-      <DefaultCourses courses={source?.course} />
+      <DefaultCourses courses={source?.course} colors={color}/>
       <DefaultOurTeam teams={source?.teams} colors={color}/>
       <DefaultContactMe
         message={source?.directorMessage}
