@@ -53,18 +53,20 @@ const DefaultRoot = () => {
         adminName={adminName}
         colors={color}
       />
-      <DefaultTabs colors={color}/>
+      <DefaultTabs colors={color} />
       <DefaultAbout
         description={source?.description}
         vision={source?.vision}
         mission={source?.mission}
         colors={color}
       />
-      <DefaultGallery gallery={source?.gallery} />
-      <DefaultEvents colors={color}/>
-      <DefaultPlans  colors={color}/>
-      <DefaultCourses courses={source?.course} colors={color}/>
-      <DefaultOurTeam teams={source?.teams} colors={color}/>
+      {source?.faq?.length > 0 &&
+        <DefaultGallery gallery={source?.gallery} />
+      }
+      <DefaultEvents colors={color} />
+      <DefaultPlans colors={color} />
+      <DefaultCourses courses={source?.course} colors={color} />
+      <DefaultOurTeam teams={source?.teams} colors={color} />
       <DefaultContactMe
         message={source?.directorMessage}
         address={source?.city ?? "-"}
@@ -74,7 +76,7 @@ const DefaultRoot = () => {
         fullAddress={source?.fullAddress}
         zipCode={source?.zipCode || ""}
       />
-      {source?.faq?.length > 0 && <DefaultFAQ faqs={source?.faq} colors={color}/>}
+      {source?.faq?.length > 0 && <DefaultFAQ faqs={source?.faq} colors={color} />}
     </>
   );
 };
