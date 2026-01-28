@@ -60,7 +60,7 @@ const DefaultRoot = () => {
         mission={source?.mission}
         colors={color}
       />
-      {source?.faq?.length > 0 &&
+      {source?.gallery?.length > 0 &&
         <DefaultGallery gallery={source?.gallery} />
       }
       <DefaultEvents colors={color} />
