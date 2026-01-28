@@ -93,6 +93,7 @@ function TeamCard({ member }: { member: TeamMember }) {
                     fill
                     className="object-cover object-top transition duration-300 group-hover:scale-[1.02]"
                     priority={false}
+                    unoptimized
                 />
 
                 {/* Soft vignette / dark overlay at bottom */}

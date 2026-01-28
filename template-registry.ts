@@ -94,6 +94,7 @@ import MadivalaTeamPageRoot from "./app/madivala/team/page";
 import MadivalaAboutPageRoot from "./app/madivala/about/page";
 import JoinMemberShipPageRoot from "./app/madivala/joinembership/page";
 import CourseDetailsPageRoot from "./app/default/course-details/page";
+import MemberShipCardPageRoot from "./app/madivala/idcard/page";
 
 export const templateLayouts: Record<
   string,
@@ -225,5 +226,6 @@ export const templates: Record<
     "/team": MadivalaTeamPageRoot,
     "/about": MadivalaAboutPageRoot,
     "/join-member": JoinMemberShipPageRoot,
+    "/id-card": MemberShipCardPageRoot,
   },
 };

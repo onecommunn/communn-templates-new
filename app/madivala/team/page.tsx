@@ -7,9 +7,9 @@ import MadivalaTeamGrid from "../_components/MadivalaTeamGrid";
 const members2018_2019 = [
     {
         id: "1",
-        name: "ಶ್ರೀ ಸಿ ಸಂಜೀವ್\nಅಧ್ಯಕ್ಷರು",
+        name: "ಶ್ರೀ ಸಿ ನಂಜಪ್ಪ\nಅಧ್ಯಕ್ಷರು",
         phone: "6364476167",
-        image: "/members/1.jpg",
+        image: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ChatGPT Image Jan 28, 2026, 10_27_21 AM.png",
     },
     {
         id: "2",

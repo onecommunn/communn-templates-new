@@ -3,7 +3,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Calendar, Upload, Plus, ArrowRight, Trash2 } from "lucide-react";
-import { sendJoinMembershipRequest } from "@/services/Madivala/Madivala.service";
+import { sendJoinMembershipRequest, uploadImage } from "@/services/Madivala/Madivala.service";
 import { mapMemberToPayload } from "@/utils/mapMembershipPayload";
 import { useCommunity } from "@/hooks/useCommunity";
 import { toast } from "sonner";
@@ -17,7 +17,7 @@ type Member = {
     caste: string;
     subCaste: string;
     profileImage?: File | null;
-    documents?: FileList | null;
+    document?: FileList | null;
 };
 
 const emptyMember = (): Member => ({
@@ -29,7 +29,7 @@ const emptyMember = (): Member => ({
     caste: "",
     subCaste: "",
     profileImage: null,
-    documents: null,
+    document: null,
 });
 
 export default function JoinMembershipForm({
@@ -41,6 +41,9 @@ export default function JoinMembershipForm({
 }) {
     const [primary, setPrimary] = useState<Member>(emptyMember());
     const [family, setFamily] = useState<Member[]>([emptyMember()]);
+
+    const [firstUploading, setFirstUploading] = useState(false);
+
 
     const bg = primaryColor;
     const field = "#2f6660";
@@ -281,7 +284,7 @@ function MemberBlock({
                         <UploadBox
                             id={docsInputId}
                             label="Upload Documents"
-                            onFiles={(fl) => onChange({ ...value, documents: fl })}
+                            onFiles={(fl) => onChange({ ...value, document: fl })}
                             multiple
                         />
                     </div>

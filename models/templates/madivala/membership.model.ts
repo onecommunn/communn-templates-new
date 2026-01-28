@@ -1,15 +1,13 @@
-// models/membership.model.ts
-
 export interface MemberPayload {
   name: string;
   emailId: string;
   mobileNumber: string;
-  dob: string; // dd/mm/yyyy
+  dateOfBirth: string;
   caste: string;
   subCaste: string;
   city: string;
-  profile?: string; // uploaded image URL
-  document?: string; // uploaded document URL
+  profileImage?: string;
+  document?: string;
 }
 
 export interface JoinMembershipPayload {
