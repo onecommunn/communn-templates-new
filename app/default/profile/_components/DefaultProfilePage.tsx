@@ -103,16 +103,16 @@ const DefaultProfilePage = () => {
 
   const handleChange =
     (field: keyof FormValues) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const value = e.target.value;
-      setFormValues((prev) => ({
-        ...prev,
-        [field]:
-          field === "whatsappNumber"
-            ? Number(value || 0)
-            : (value as (typeof prev)[typeof field]),
-      }));
-    };
+      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.target.value;
+        setFormValues((prev) => ({
+          ...prev,
+          [field]:
+            field === "whatsappNumber"
+              ? Number(value || 0)
+              : (value as (typeof prev)[typeof field]),
+        }));
+      };
 
   /* --------------------------- SAVE / UPDATE CALL -------------------------- */
 
@@ -248,8 +248,8 @@ const DefaultProfilePage = () => {
         const rawSubs = Array.isArray(response?.subscriptionDetail)
           ? response.subscriptionDetail
           : Array.isArray(response)
-          ? response
-          : [];
+            ? response
+            : [];
 
         const mapped: UserPlanCard[] = rawSubs
           .filter((sub: any) => sub?.subscription_status === "ACTIVE")
@@ -415,12 +415,12 @@ const DefaultProfilePage = () => {
                                 {plan?.nextDueDate === "forever"
                                   ? "Forever"
                                   : `Due on: ${new Date(
-                                      plan?.nextDueDate
-                                    ).toLocaleDateString("en-GB", {
-                                      year: "numeric",
-                                      month: "short",
-                                      day: "2-digit",
-                                    })}`}
+                                    plan?.nextDueDate
+                                  ).toLocaleDateString("en-GB", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "2-digit",
+                                  })}`}
                               </p>
                             )}
                           </div>
@@ -516,11 +516,10 @@ const DefaultProfilePage = () => {
                     <div className="flex items-center justify-between">
                       <Label>Mobile Number</Label>
                       <Badge
-                        className={`text-xs font-medium rounded-full px-3 py-1 flex items-center gap-1 ${
-                          formValues.isPhoneVerified
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-amber-100 text-amber-800"
-                        }`}
+                        className={`text-xs font-medium rounded-full px-3 py-1 flex items-center gap-1 ${formValues.isPhoneVerified
+                          ? "bg-emerald-100 text-emerald-800"
+                          : "bg-amber-100 text-amber-800"
+                          }`}
                       >
                         {formValues.isPhoneVerified ? (
                           <>
@@ -546,11 +545,10 @@ const DefaultProfilePage = () => {
                     <div className="flex items-center justify-between">
                       <Label>Email</Label>
                       <Badge
-                        className={`text-xs font-medium rounded-full px-3 py-1 flex items-center gap-1 ${
-                          formValues.isEmailVerified
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-amber-100 text-amber-800"
-                        }`}
+                        className={`text-xs font-medium rounded-full px-3 py-1 flex items-center gap-1 ${formValues.isEmailVerified
+                          ? "bg-emerald-100 text-emerald-800"
+                          : "bg-amber-100 text-amber-800"
+                          }`}
                       >
                         {formValues.isEmailVerified ? (
                           <>

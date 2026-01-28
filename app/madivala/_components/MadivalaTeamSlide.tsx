@@ -71,6 +71,7 @@ const MadivalaTeamSlide = ({
                                             fill
                                             className="object-cover object-center transition duration-300 group-hover:scale-[1.02]"
                                             sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 360px"
+                                            unoptimized
                                         />
 
                                         {/* Left soft fade */}

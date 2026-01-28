@@ -93,6 +93,7 @@ export default function MadivalaHero({
                                         fill
                                         className="object-cover object-top"
                                         priority
+                                        unoptimized
                                     />
                                 </div>
 

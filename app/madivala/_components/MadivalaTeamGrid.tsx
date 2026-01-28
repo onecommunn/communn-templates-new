@@ -58,6 +58,7 @@ function MemberCard({ m }: { m: Member }) {
                     fill
                     className="object-cover object-top"
                     sizes="(max-width: 640px) 45vw, (max-width: 1024px) 22vw, 220px"
+                    unoptimized
                 />
 
                 {/* Bottom overlay like screenshot */}
