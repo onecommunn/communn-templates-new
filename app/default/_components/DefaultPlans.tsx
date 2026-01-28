@@ -133,7 +133,7 @@ const DefaultPlans = ({
 
       <Carousel
         plugins={[plugin.current]}
-        opts={{ align: "start", loop: true }}
+        opts={{ align: "start", loop: false }}
         className="w-full"
       >
         <CarouselContent>
@@ -254,7 +254,7 @@ const DefaultPlans = ({
                         ) : !isSubscribedCommunity ? (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button className="w-full py-6 rounded-xl font-bold bg-[#ef3340] hover:bg-[#ef3340] cursor-pointer">
+                              <Button className="w-full py-6 rounded-xl font-bold bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer">
                                 {communityData?.community?.type === "PRIVATE"
                                   ? "Request to Join"
                                   : "Join Community"}
