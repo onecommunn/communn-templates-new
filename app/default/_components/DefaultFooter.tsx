@@ -68,7 +68,7 @@ const DefaultFooter = ({
             {navLinks?.map((link) => (
               <Link
                 key={link}
-                href={`#${link?.toLowerCase()}`}
+                href={`/#${link?.toLowerCase()}`}
                 className="hover:text-blue-600 transition-colors"
               >
                 {link}
