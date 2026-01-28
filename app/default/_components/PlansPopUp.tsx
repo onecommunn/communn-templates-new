@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Link from "next/link";
 import { X, Check } from "lucide-react";
 import { toast } from "sonner";
@@ -9,7 +9,9 @@ import { TrainingPlan } from "@/models/plan.model";
 import { usePlans } from "@/hooks/usePlan";
 import { usePayment } from "@/hooks/usePayments";
 import { AuthContext } from "@/contexts/Auth.context";
-import { useContext } from "react";
+
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
 
 type PlansPopUpProps = {
   isOpen: boolean;
@@ -26,11 +28,8 @@ type PlansPopUpProps = {
 
 function formatPeriodLabel(interval?: number, duration?: string) {
   if (!interval || !duration) return "Per Month";
-
   const unit = duration.toLowerCase();
-
   if (interval === 1) return `Per ${unit}`;
-
   const plural = interval > 1 ? unit + "s" : unit;
   return `For ${interval} ${plural}`;
 }
@@ -46,17 +45,23 @@ export default function PlansPopUp({
   const [selectedId, setSelectedId] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // ✅ Payment dialogs state
+  const [timer, setTimer] = useState(5);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [failureOpen, setFailureOpen] = useState(false);
+  const [transaction, setTransaction] = useState<any>(null);
+
   const auth = useContext(AuthContext);
   const userId = (auth as any)?.user?._id ?? (auth as any)?.user?.id;
 
   const { createSubscriptionSequencesByPlanAndCommunityId, getSequencesById } =
     usePlans();
 
-  const { initiatePaymentByIds } = usePayment();
+  const { initiatePaymentByIds, getPaymentStatusById } = usePayment();
 
   const selectedPlan = useMemo(
     () => plans?.find((p) => p._id === selectedId),
-    [plans, selectedId],
+    [plans, selectedId]
   );
 
   // ✅ your exact condition
@@ -67,6 +72,81 @@ export default function PlansPopUp({
     );
   }, [selectedPlan]);
 
+  const handleSuccessClose = () => {
+    setTimer(5);
+    setSuccessOpen(false);
+    // optional: close popup after success
+    onClose();
+  };
+
+  const handleFailureClose = () => {
+    setTimer(5);
+    setFailureOpen(false);
+  };
+
+  /**
+   * ✅ Common popup open helper
+   * - Opens centered popup
+   * - Polls status
+   * - Shows success/failure dialog
+   */
+  const openPaymentAndTrack = async (payRes: any) => {
+    const url = payRes?.url ?? payRes?.data?.url;
+    const transactionId = payRes?.transactionId ?? payRes?.data?.transactionId;
+    const txn = payRes?.transaction ?? payRes?.data?.transaction;
+
+    if (txn) setTransaction(txn);
+
+    if (!url || !transactionId) {
+      toast.error("Payment URL not received");
+      console.log("initiatePaymentByIds response:", payRes);
+      return;
+    }
+
+    // ✅ open centered window
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    const width = Math.min(1000, screenWidth);
+    const height = Math.min(1000, screenHeight);
+    const left = (screenWidth - width) / 2;
+    const top = (screenHeight - height) / 2;
+
+    const windowRef = window.open(
+      url,
+      "paymentWindow",
+      `width=${width},height=${height},left=${left},top=${top},resizable=no`
+    );
+
+    // ✅ poll payment status
+    const intervalRef = setInterval(async () => {
+      try {
+        const statusRes: any = await getPaymentStatusById(transactionId);
+
+        // Your project sometimes returns array, sometimes object, handle both:
+        const status =
+          statusRes?.[0]?.status ??
+          statusRes?.status ??
+          statusRes?.data?.status ??
+          statusRes?.data?.[0]?.status;
+
+        if (!status) return;
+
+        if (status === "PENDING") return;
+
+        clearInterval(intervalRef);
+        windowRef?.close();
+
+        if (status === "SUCCESS") {
+          setSuccessOpen(true);
+        } else {
+          setFailureOpen(true);
+        }
+      } catch (err) {
+        console.error("Error fetching payment status:", err);
+      }
+    }, 1000);
+  };
+
   const handleNonSequencePayNow = async () => {
     if (!selectedPlan?._id || !communityId || !userId) {
       toast.error("Missing required data");
@@ -75,10 +155,11 @@ export default function PlansPopUp({
 
     setIsProcessing(true);
     try {
+      // 1) create subscription
       const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
         userId,
         communityId,
-        selectedPlan._id,
+        selectedPlan._id
       );
 
       const subscriptionId = res?.subscription?._id;
@@ -87,15 +168,14 @@ export default function PlansPopUp({
         return;
       }
 
-      // 2) fetch sequences by subscriptionId
+      // 2) fetch sequences
       const seqRes: any = await getSequencesById(subscriptionId, userId);
       const sequences = seqRes?.sequences || [];
 
-      // 3) get first payable sequence
+      // 3) first payable sequence
       const firstPayable = sequences.find(
         (s: any) =>
-          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
-          !s?.isnonPayable,
+          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) && !s?.isnonPayable
       );
 
       if (!firstPayable?._id) {
@@ -103,32 +183,30 @@ export default function PlansPopUp({
         return;
       }
 
-      // 4) amount (prefer backend pricing)
+      // 4) amount
       const amount =
         Number(seqRes?.pricing ?? 0) ||
-        Number(selectedPlan?.pricing ?? 0) ||
-        Number(selectedPlan?.totalPlanValue ?? 0);
+        Number((selectedPlan as any)?.pricing ?? 0) ||
+        Number((selectedPlan as any)?.totalPlanValue ?? 0);
 
       if (!amount || amount <= 0) {
         toast.error("Invalid amount");
         return;
       }
 
-      // 5) initiate payment with first sequence
+      // 5) initiate payment
       const payRes: any = await initiatePaymentByIds(
         userId,
         selectedPlan._id,
         [firstPayable._id],
-        String(amount),
+        String(amount)
       );
 
-      if (payRes?.url) {
-        toast.success("Redirecting to payment...");
-        window.open(payRes.url, "_blank", "noopener,noreferrer");
-        onClose();
-      } else {
-        toast.error("Payment URL not received");
-      }
+      toast.success("Redirecting to payment...");
+      await openPaymentAndTrack(payRes);
+
+      // ✅ keep popup open, so success/failure dialog can show on same page
+      // onClose();  // DO NOT close here
     } catch (err) {
       console.error(err);
       toast.error("Payment initiation failed");
@@ -178,8 +256,7 @@ export default function PlansPopUp({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {(plans || []).map((plan) => {
               const selected = plan._id === selectedId;
-              const price = Number(plan.pricing || plan.totalPlanValue || 0);
-              const durationText = (plan.duration || "").toLowerCase();
+              const price = Number((plan as any).pricing || (plan as any).totalPlanValue || 0);
 
               const descParts =
                 plan.description && plan.description.includes("/")
@@ -205,8 +282,8 @@ export default function PlansPopUp({
                       <p className="font-semibold text-gray-900">{plan.name}</p>
                       <p className="text-sm text-gray-500 mt-1 capitalize">
                         {formatPeriodLabel(
-                          plan.interval as any,
-                          plan.duration as any,
+                          (plan as any).interval,
+                          (plan as any).duration
                         )}
                       </p>
                     </div>
@@ -270,7 +347,9 @@ export default function PlansPopUp({
                   {" "}
                   • ₹
                   {Number(
-                    selectedPlan?.pricing || selectedPlan?.totalPlanValue || 0,
+                    (selectedPlan as any)?.pricing ||
+                      (selectedPlan as any)?.totalPlanValue ||
+                      0
                   ).toLocaleString()}
                 </span>
               </p>
@@ -311,6 +390,23 @@ export default function PlansPopUp({
           </div>
         </div>
       </div>
+
+      {/* ✅ Payment dialogs */}
+      <PaymentSuccess
+        txnid={transaction?.txnid || ""}
+        open={successOpen}
+        amount={transaction?.amount || ""}
+        timer={timer}
+        onClose={handleSuccessClose}
+      />
+
+      <PaymentFailure
+        open={failureOpen}
+        onClose={handleFailureClose}
+        amount={transaction?.amount || ""}
+        txnid={transaction?.txnid || ""}
+        timer={timer}
+      />
     </div>
   );
 }
