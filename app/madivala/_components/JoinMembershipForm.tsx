@@ -9,10 +9,10 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { toast } from "sonner";
 
 type Member = {
-    fullName: string;
-    email: string;
-    dob: string;
-    mobile: string;
+    name: string;
+    emailId: string;
+    dateOfBirth: string;
+    mobileNumber: string;
     city: string;
     caste: string;
     subCaste: string;
@@ -21,10 +21,10 @@ type Member = {
 };
 
 const emptyMember = (): Member => ({
-    fullName: "",
-    email: "",
-    dob: "",
-    mobile: "",
+    name: "",
+    emailId: "",
+    dateOfBirth: "",
+    mobileNumber: "",
     city: "",
     caste: "",
     subCaste: "",
@@ -101,11 +101,7 @@ export default function JoinMembershipForm({
                         colors={{ field, fieldBorder, muted }}
                     />
 
-                    {/* Family label */}
-                    {/* <div className="flex items-center gap-2 text-white/90">
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
-                        <span className="text-sm font-medium">Member 01</span>
-                    </div> */}
+
 
                     <div className="space-y-8">
                         {family.map((m, idx) => (
@@ -214,16 +210,16 @@ function MemberBlock({
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <InputBox
                         placeholder="Full Name"
-                        value={value.fullName}
-                        onChange={(v) => onChange({ ...value, fullName: v })}
+                        value={value.name}
+                        onChange={(v) => onChange({ ...value, name: v })}
                         bg={field}
                         border={fieldBorder}
                         placeholderColor={muted}
                     />
                     <InputBox
                         placeholder="Email Address"
-                        value={value.email}
-                        onChange={(v) => onChange({ ...value, email: v })}
+                        value={value.emailId}
+                        onChange={(v) => onChange({ ...value, emailId: v })}
                         bg={field}
                         border={fieldBorder}
                         placeholderColor={muted}
@@ -231,8 +227,8 @@ function MemberBlock({
 
                     <DateInput
                         placeholder="Date of Birth"
-                        value={value.dob}
-                        onChange={(v) => onChange({ ...value, dob: v })}
+                        value={value.dateOfBirth}
+                        onChange={(v) => onChange({ ...value, dateOfBirth: v })}
                         bg={field}
                         border={fieldBorder}
                         placeholderColor={muted}
@@ -240,8 +236,8 @@ function MemberBlock({
 
                     <InputBox
                         placeholder="Mobile Number"
-                        value={value.mobile}
-                        onChange={(v) => onChange({ ...value, mobile: v })}
+                        value={value.mobileNumber}
+                        onChange={(v) => onChange({ ...value, mobileNumber: v })}
                         bg={field}
                         border={fieldBorder}
                         placeholderColor={muted}
