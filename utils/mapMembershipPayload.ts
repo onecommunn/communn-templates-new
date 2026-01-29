@@ -8,6 +8,6 @@ export const mapMemberToPayload = (m: any): MemberPayload => ({
   caste: m.caste,
   subCaste: m.subCaste,
   city: m.city,
-  profileImage: m.profileImage ? "https://photo.jpg" : "",
-  document: m.document ? "https://upload.pdf" : "",
+  profileImage: m.profileImage,
+  document: m.document,
 });
