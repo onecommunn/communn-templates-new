@@ -44,6 +44,18 @@ enum PaymentStatus {
   PENDING = "PENDING",
 }
 
+const formatDate = (date: string | Date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 const DefaultPlans = ({
   colors,
 }: {
@@ -53,7 +65,9 @@ const DefaultPlans = ({
     textcolor: string;
   };
 }) => {
-  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
+  const plugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }),
+  );
 
   const {
     getPlansList,
@@ -91,9 +105,7 @@ const DefaultPlans = ({
     const members = communityData?.community?.members || [];
     return (
       joinedCommunityLocal ||
-      members?.some(
-        (m: any) => (m?.user?._id ?? m?.user?.id) === userId
-      )
+      members?.some((m: any) => (m?.user?._id ?? m?.user?.id) === userId)
     );
   }, [joinedCommunityLocal, communityData, userId]);
 
@@ -192,7 +204,7 @@ const DefaultPlans = ({
     const windowRef = window.open(
       url,
       "paymentWindow",
-      `width=${width},height=${height},left=${left},top=${top},resizable=no`
+      `width=${width},height=${height},left=${left},top=${top},resizable=no`,
     );
 
     const intervalRef = setInterval(async () => {
@@ -239,7 +251,7 @@ const DefaultPlans = ({
       const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
         userId,
         communityId,
-        plan._id
+        plan._id,
       );
 
       const subscriptionId = res?.subscription?._id;
@@ -256,7 +268,7 @@ const DefaultPlans = ({
       const firstPayable = sequences.find(
         (s: any) =>
           !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
-          !s?.isnonPayable
+          !s?.isnonPayable,
       );
 
       if (!firstPayable?._id) {
@@ -280,7 +292,7 @@ const DefaultPlans = ({
         userId,
         plan._id,
         [firstPayable._id],
-        String(amount)
+        String(amount),
       );
 
       toast.success("Redirecting to payment...");
@@ -317,7 +329,10 @@ const DefaultPlans = ({
         <CarouselContent>
           {isLoading
             ? [1, 2, 3]?.map((i) => (
-                <CarouselItem key={i} className="pl-6 md:basis-1/2 lg:basis-1/3">
+                <CarouselItem
+                  key={i}
+                  className="pl-6 md:basis-1/2 lg:basis-1/3"
+                >
                   <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-[2.5rem]" />
                 </CarouselItem>
               ))
@@ -325,7 +340,7 @@ const DefaultPlans = ({
                 const userSubscribedToPlan =
                   !!isLoggedIn &&
                   plan.subscribers?.some(
-                    (sub: any) => (sub?._id ?? sub?.id) === userId
+                    (sub: any) => (sub?._id ?? sub?.id) === userId,
                   );
 
                 const isSequencePlan =
@@ -344,12 +359,27 @@ const DefaultPlans = ({
                 const durationLabel =
                   (plan as any)?.duration?.toLowerCase?.() ?? "";
 
+                const nextDue = (plan as any)?.nextDueDate;
+
+                const isActivePlan =
+                  !!nextDue &&
+                  (nextDue === "forever" || new Date(nextDue) >= new Date());
+
+                const isExpiredPlan =
+                  !!nextDue &&
+                  nextDue !== "forever" &&
+                  new Date(nextDue) < new Date();
+
                 return (
-                  <CarouselItem key={plan._id} className="md:basis-1/2 lg:basis-1/3">
+                  <CarouselItem
+                    key={plan._id}
+                    className="md:basis-1/2 lg:basis-1/3"
+                  >
                     <div
                       className={cn(
                         "relative rounded-[20px] flex flex-col h-full p-4 pt-4 border transition-all duration-300",
-                        "bg-white border-gray-200"
+                        "bg-white border-gray-200",
+                        `${userSubscribedToPlan && isExpiredPlan ? "border-red-500" : ""}`,
                       )}
                     >
                       {/* Icon & Label */}
@@ -357,7 +387,7 @@ const DefaultPlans = ({
                         <div
                           className={cn(
                             "relative w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center",
-                            "bg-[#A7F3D0] text-[#065F46]"
+                            "bg-[#A7F3D0] text-[#065F46]",
                           )}
                         >
                           <Image
@@ -368,6 +398,20 @@ const DefaultPlans = ({
                             sizes="80px"
                             unoptimized
                           />
+                        </div>
+                        {/* Status chip (top-right) */}
+                        <div className="">
+                          {userSubscribedToPlan && isActivePlan && (
+                            <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              Active
+                            </span>
+                          )}
+
+                          {userSubscribedToPlan && isExpiredPlan && (
+                            <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                              Expired on {formatDate(nextDue)}
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -400,7 +444,9 @@ const DefaultPlans = ({
                                 ))}
                             </ul>
                           ) : (
-                            <span className="line-clamp-3">{(plan as any)?.description}</span>
+                            <span className="line-clamp-3">
+                              {(plan as any)?.description}
+                            </span>
                           )}
                         </div>
                       )}
@@ -418,6 +464,7 @@ const DefaultPlans = ({
                             Login to Subscribe
                           </Button>
                         ) : !isSubscribedCommunity ? (
+                          // join community dialog (same as your code)
                           <Dialog>
                             <DialogTrigger asChild>
                               <Button className="w-full py-6 rounded-xl font-bold bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer">
@@ -427,7 +474,9 @@ const DefaultPlans = ({
                               </Button>
                             </DialogTrigger>
                             <DialogContent>
-                              <DialogTitle>Community Membership Required</DialogTitle>
+                              <DialogTitle>
+                                Community Membership Required
+                              </DialogTitle>
                               <DialogDescription>
                                 {communityData?.community?.type === "PRIVATE"
                                   ? "This is a private community. Send a request to the admin to get access to plans."
@@ -437,7 +486,8 @@ const DefaultPlans = ({
                                 <DialogClose asChild>
                                   <Button
                                     onClick={
-                                      communityData?.community?.type === "PRIVATE"
+                                      communityData?.community?.type ===
+                                      "PRIVATE"
                                         ? handleRequest
                                         : handleJoin
                                     }
@@ -448,7 +498,8 @@ const DefaultPlans = ({
                               </div>
                             </DialogContent>
                           </Dialog>
-                        ) : userSubscribedToPlan ? (
+                        ) : userSubscribedToPlan && isActivePlan ? (
+                          // ✅ subscribed + active
                           <Button
                             variant="outline"
                             className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
@@ -456,7 +507,35 @@ const DefaultPlans = ({
                           >
                             Subscribed
                           </Button>
+                        ) : userSubscribedToPlan && isExpiredPlan ? (
+                          // ✅ subscribed but expired → pay based on sequence/non-sequence
+                          isSequencePlan ? (
+                            <Button
+                              asChild
+                              variant="outline"
+                              className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
+                              disabled={isProcessing}
+                            >
+                              <Link
+                                href={`/subscriptions/?planid=${plan._id}&communityid=${communityId}`}
+                              >
+                                {isProcessing ? "Processing..." : "Renew & Pay"}
+                              </Link>
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => handleNonSequencePayNow(plan)}
+                              variant="outline"
+                              className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
+                              disabled={isProcessing}
+                            >
+                              {isProcessing
+                                ? "Starting payment..."
+                                : "Pay to Renew"}
+                            </Button>
+                          )
                         ) : isSequencePlan ? (
+                          // ✅ not subscribed (or no dueDate) but sequence available
                           <Button
                             asChild
                             className="w-full py-6 rounded-xl font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
@@ -469,12 +548,15 @@ const DefaultPlans = ({
                             </Link>
                           </Button>
                         ) : (
+                          // ✅ not subscribed (or no dueDate) non-sequence
                           <Button
                             onClick={() => handleNonSequencePayNow(plan)}
                             className="w-full py-6 rounded-xl font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
                             disabled={isProcessing}
                           >
-                            {isProcessing ? "Starting payment..." : "Pay & Join"}
+                            {isProcessing
+                              ? "Starting payment..."
+                              : "Pay & Join"}
                           </Button>
                         )}
                       </div>
