@@ -112,13 +112,6 @@ export default function CoursePlayerLayout({
                     <LMSopenBookIcon />
                     {itemsCount} Items
                   </span>
-
-                  <span className="hidden md:flex">|</span>
-
-                  <span className="text-[#969696] flex items-center gap-2 font-semibold w-fit">
-                    <LMSdocumentDownloadIcon />
-                    {resourcesCount} Downloadable Resources
-                  </span>
                 </div>
               </div>
 
