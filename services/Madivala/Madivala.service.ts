@@ -18,3 +18,10 @@ export const sendJoinMembershipRequest = async (
   });
 };
 
+export const fetchUserDatabyId = async (userId: string) => {
+  return axios.get(`${BASE_URL_V2}/cms/user/${userId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
