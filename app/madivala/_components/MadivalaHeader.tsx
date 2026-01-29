@@ -31,14 +31,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/Auth.context";
 import { logoutService } from "@/services/logoutService";
-import {
-    Header,
-    ServiceSection,
-} from "@/models/templates/restraint/restraint-home-model";
-import {
-    toSnakeCase,
-    underscoreToSpace,
-} from "@/utils/StringFunctions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Popover,
@@ -126,21 +118,21 @@ const MadivalaHeader = ({ logo, name, primaryColor }: DefaultHeaderProps) => {
                         </Link>
 
                         <Link
-                            href="/#about-us"
+                            href="/events"
                             className="font-inter hover:font-semibold text-[#000000] text-[16px] font-[500]"
                         >
                             Events
                         </Link>
 
                         <Link
-                            href="/#about-us"
+                            href="/infrastructure"
                             className="font-inter hover:font-semibold text-[#000000] text-[16px] font-[500]"
                         >
                             Infrastructure
                         </Link>
 
                         <Link
-                            href="/#about-us"
+                            href="/news"
                             className="font-inter hover:font-semibold text-[#000000] text-[16px] font-[500]"
                         >
                             News
@@ -166,7 +158,7 @@ const MadivalaHeader = ({ logo, name, primaryColor }: DefaultHeaderProps) => {
                         )} */}
 
                         <Link
-                            href="/#contact"
+                            href="/contact"
                             className="font-inter hover:font-semibold text-[#000000] text-[16px] font-[500]"
                         >
                             Contact

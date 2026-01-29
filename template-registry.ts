@@ -95,6 +95,10 @@ import MadivalaAboutPageRoot from "./app/madivala/about/page";
 import JoinMemberShipPageRoot from "./app/madivala/joinembership/page";
 import CourseDetailsPageRoot from "./app/default/course-details/page";
 import MemberShipCardPageRoot from "./app/madivala/idcard/page";
+import MadivalaContactPage from "./app/madivala/contact/page";
+import MadivalaEventsPageRoot from "./app/madivala/events/pages";
+import MadivalaInfrastructurePageRoot from "./app/madivala/infrastructure/page";
+import MadivalaNewsPageRoot from "./app/madivala/news/page";
 
 export const templateLayouts: Record<
   string,
@@ -227,5 +231,9 @@ export const templates: Record<
     "/about": MadivalaAboutPageRoot,
     "/join-member": JoinMemberShipPageRoot,
     "/id-card": MemberShipCardPageRoot,
+    "/contact": MadivalaContactPage,
+    "/events": MadivalaEventsPageRoot,
+    "/infrastructure": MadivalaInfrastructurePageRoot,
+    "/news": MadivalaNewsPageRoot,
   },
 };
