@@ -8,9 +8,13 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { toast } from "sonner";
 import { useUpload } from "@/hooks/useUpload";
 
-type UploadedFile = { url?: string } | string;
+type UploadResponse = {
+  type?: string;
+  value?: string;
+  label?: string;
+  _id?: string;
+};
 
-// ✅ keep your sir’s field names
 type Member = {
   name: string;
   emailId: string;
@@ -20,16 +24,19 @@ type Member = {
   caste: string;
   subCaste: string;
 
+  // local selection
   profileImage?: File | null;
-  document?: FileList | null;
+  document?: File | null;
 
-  // ✅ needed for UX + payload update
-  profilePreviewUrl?: string; // local preview
-  profileImageUrl?: string; // uploaded url
-  documentUrls?: string[]; // uploaded urls
+  // UI helpers
+  profilePreviewUrl?: string;
 
-  // ✅ just for showing label nicely (optional)
-  documentNames?: string[];
+  // uploaded urls (SINGLE URL)
+  profileImageUrl?: string;
+  documentUrl?: string;
+
+  // file names for label
+  documentName?: string;
 };
 
 type MemberErrors = Partial<Record<keyof Member, string>> & {
@@ -49,8 +56,8 @@ const emptyMember = (): Member => ({
   document: null,
   profilePreviewUrl: "",
   profileImageUrl: "",
-  documentUrls: [],
-  documentNames: [],
+  documentUrl: "",
+  documentName: "",
 });
 
 const emptyErrors = (): MemberErrors => ({});
@@ -58,16 +65,20 @@ const emptyErrors = (): MemberErrors => ({});
 const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-const isValidMobile = (mobile: string) =>
-  /^[0-9]{10}$/.test(mobile.trim());
+const isValidMobile = (mobile: string) => /^[0-9]{10}$/.test(mobile.trim());
 
-function toUrls(uploadResult: UploadedFile[] = []): string[] {
-  return uploadResult
-    .map((x) => (typeof x === "string" ? x : x?.url))
-    .filter((u): u is string => !!u);
+function pickUploadedUrl(res: any): string {
+  if (!res) return "";
+  if (typeof res === "string") return res;
+  if (typeof res.value === "string") return res.value;
+  if (typeof res.url === "string") return res.url;
+  return "";
 }
 
-function validateMemberFields(m: Member): MemberErrors {
+function validateMemberFields(
+  m: Member,
+  opts: { isPrimary: boolean },
+): MemberErrors {
   const e: MemberErrors = {};
 
   if (!m.name?.trim()) e.name = "Name is required";
@@ -75,18 +86,13 @@ function validateMemberFields(m: Member): MemberErrors {
   if (!m.emailId?.trim()) e.emailId = "Email is required";
   else if (!isValidEmail(m.emailId)) e.emailId = "Enter a valid email";
 
-  if (!m.dateOfBirth?.trim()) e.dateOfBirth = "Date of Birth is required";
-
   if (!m.mobileNumber?.trim()) e.mobileNumber = "Mobile Number is required";
-  else if (!isValidMobile(m.mobileNumber)) e.mobileNumber = "Enter a valid 10-digit mobile";
+  else if (!isValidMobile(m.mobileNumber))
+    e.mobileNumber = "Enter a valid 10-digit mobile";
 
-  if (!m.city?.trim()) e.city = "City is required";
-  if (!m.caste?.trim()) e.caste = "Caste is required";
-  if (!m.subCaste?.trim()) e.subCaste = "Sub Caste is required";
-
-  // uploads mandatory
-  if (!m.profileImageUrl) e.profileImage = "Profile image is required";
-  if (!m.documentUrls || m.documentUrls.length === 0) e.document = "Documents are required";
+  if (opts.isPrimary) {
+    if (!m.documentUrl?.trim()) e.document = "Documents are required";
+  }
 
   return e;
 }
@@ -95,33 +101,46 @@ function hasAnyError(err: MemberErrors) {
   return Object.values(err).some(Boolean);
 }
 
+const withTimestampFileName = (file: File) => {
+  const ext = file.name.split(".").pop();
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+
+  const newName = `${file.name}-${timestamp}.${ext}`;
+
+  return new File([file], newName, {
+    type: file.type,
+    lastModified: Date.now(),
+  });
+};
+
 export default function JoinMembershipForm({
   primaryColor = "#1F514C",
 }: {
   primaryColor?: string;
 }) {
-  const { uploadImages } = useUpload(); // returns array (string or {url})
+  const { uploadImages } = useUpload();
   const { communityId } = useCommunity();
 
   const [primary, setPrimary] = useState<Member>(emptyMember());
-  const [family, setFamily] = useState<Member[]>([emptyMember()]);
+  const [family, setFamily] = useState<Member[]>([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedOnce, setSubmittedOnce] = useState(false);
 
-  const [primaryErrors, setPrimaryErrors] = useState<MemberErrors>(emptyErrors());
-  const [familyErrors, setFamilyErrors] = useState<MemberErrors[]>([emptyErrors()]);
+  const [primaryErrors, setPrimaryErrors] =
+    useState<MemberErrors>(emptyErrors());
+  const [familyErrors, setFamilyErrors] = useState<MemberErrors[]>([
+    emptyErrors(),
+  ]);
 
   const [uploading, setUploading] = useState<{
     primaryProfile: boolean;
-    primaryDocs: boolean;
+    primaryDoc: boolean;
     familyProfile: Record<number, boolean>;
-    familyDocs: Record<number, boolean>;
   }>({
     primaryProfile: false,
-    primaryDocs: false,
+    primaryDoc: false,
     familyProfile: {},
-    familyDocs: {},
   });
 
   const bg = primaryColor;
@@ -135,90 +154,114 @@ export default function JoinMembershipForm({
   };
 
   const removeFamily = (idx: number) => {
-    setFamily((prev) => (prev.length <= 1 ? prev : prev.filter((_, i) => i !== idx)));
-    setFamilyErrors((prev) => (prev.length <= 1 ? prev : prev.filter((_, i) => i !== idx)));
+    setFamily((prev) =>
+      prev.length <= 1 ? prev : prev.filter((_, i) => i !== idx),
+    );
+    setFamilyErrors((prev) =>
+      prev.length <= 1 ? prev : prev.filter((_, i) => i !== idx),
+    );
     setUploading((p) => {
       const fp = { ...p.familyProfile };
-      const fd = { ...p.familyDocs };
       delete fp[idx];
-      delete fd[idx];
-      return { ...p, familyProfile: fp, familyDocs: fd };
+      return { ...p, familyProfile: fp };
     });
   };
 
   const validateAll = () => {
-    const pErr = validateMemberFields(primary);
-    const fErr = family.map(validateMemberFields);
+    const pErr = validateMemberFields(primary, { isPrimary: true });
+    const fErr = family.map((m) =>
+      validateMemberFields(m, { isPrimary: false }),
+    );
     setPrimaryErrors(pErr);
     setFamilyErrors(fErr);
     return !(hasAnyError(pErr) || fErr.some(hasAnyError));
   };
 
-  // =========================
-  // ✅ Upload immediately (and update state => payload auto-updates)
-  // =========================
-
   const uploadPrimaryProfile = async (file: File | null) => {
-    // cleanup old preview
-    if (primary.profilePreviewUrl) URL.revokeObjectURL(primary.profilePreviewUrl);
+    setPrimary((prev) => {
+      if (prev.profilePreviewUrl) URL.revokeObjectURL(prev.profilePreviewUrl);
+      const preview = file ? URL.createObjectURL(file) : "";
+      const next = {
+        ...prev,
+        profileImage: file,
+        profilePreviewUrl: preview,
+        profileImageUrl: file ? "" : "",
+      };
+      if (submittedOnce)
+        setPrimaryErrors(validateMemberFields(next, { isPrimary: true }));
+      return next;
+    });
 
-    if (!file) {
-      const next = { ...primary, profileImage: null, profilePreviewUrl: "", profileImageUrl: "" };
-      setPrimary(next);
-      if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
-      return;
-    }
-
-    const preview = URL.createObjectURL(file);
-    setPrimary((p) => ({ ...p, profileImage: file, profilePreviewUrl: preview, profileImageUrl: "" }));
+    if (!file) return;
 
     try {
       setUploading((p) => ({ ...p, primaryProfile: true }));
-      const res = await uploadImages([file]);
-      const url = toUrls(res)[0] || "";
-      const next = { ...primary, profileImage: file, profilePreviewUrl: preview, profileImageUrl: url };
-      setPrimary(next);
-      if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
+
+      const renamedFile = withTimestampFileName(file);
+      const [res] = (await uploadImages([renamedFile])) as UploadResponse[];
+      const url = pickUploadedUrl(res);
+
+      setPrimary((prev) => {
+        const next = { ...prev, profileImageUrl: url };
+        if (submittedOnce)
+          setPrimaryErrors(validateMemberFields(next, { isPrimary: true }));
+        return next;
+      });
     } catch (e) {
       console.error(e);
       toast("Profile image upload failed");
-      const next = { ...primary, profileImage: file, profilePreviewUrl: preview, profileImageUrl: "" };
-      setPrimary(next);
-      if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
+      setPrimary((prev) => {
+        const next = { ...prev, profileImageUrl: "" };
+        if (submittedOnce)
+          setPrimaryErrors(validateMemberFields(next, { isPrimary: true }));
+        return next;
+      });
     } finally {
       setUploading((p) => ({ ...p, primaryProfile: false }));
     }
   };
 
-  const uploadPrimaryDocs = async (fl: FileList | null) => {
-    if (!fl || fl.length === 0) {
-      const next = { ...primary, document: null, documentUrls: [], documentNames: [] };
-      setPrimary(next);
-      if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
-      return;
-    }
+  const uploadPrimaryDocument = async (file: File | null) => {
+    setPrimary((prev) => {
+      const next = {
+        ...prev,
+        document: file,
+        documentUrl: "",
+        documentName: file?.name ?? "",
+      };
+      if (submittedOnce)
+        setPrimaryErrors(validateMemberFields(next, { isPrimary: true }));
+      return next;
+    });
 
-    const files = Array.from(fl);
-    const names = files.map((f) => f.name);
-
-    // set selected immediately (UX)
-    setPrimary((p) => ({ ...p, document: fl, documentUrls: [], documentNames: names }));
+    if (!file) return;
 
     try {
-      setUploading((p) => ({ ...p, primaryDocs: true }));
-      const res = await uploadImages(files);
-      const urls = toUrls(res);
-      const next = { ...primary, document: fl, documentUrls: urls, documentNames: names };
-      setPrimary(next);
-      if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
+      setUploading((p) => ({ ...p, primaryDoc: true }));
+
+      const renamedFile = withTimestampFileName(file);
+      const [res] = (await uploadImages([renamedFile])) as UploadResponse[];
+
+      const url = pickUploadedUrl(res);
+      const label = res?.label || file.name;
+
+      setPrimary((prev) => {
+        const next = { ...prev, documentUrl: url, documentName: label };
+        if (submittedOnce)
+          setPrimaryErrors(validateMemberFields(next, { isPrimary: true }));
+        return next;
+      });
     } catch (e) {
       console.error(e);
-      toast("Documents upload failed");
-      const next = { ...primary, document: fl, documentUrls: [], documentNames: names };
-      setPrimary(next);
-      if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
+      toast("Document upload failed");
+      setPrimary((prev) => {
+        const next = { ...prev, documentUrl: "" };
+        if (submittedOnce)
+          setPrimaryErrors(validateMemberFields(next, { isPrimary: true }));
+        return next;
+      });
     } finally {
-      setUploading((p) => ({ ...p, primaryDocs: false }));
+      setUploading((p) => ({ ...p, primaryDoc: false }));
     }
   };
 
@@ -228,79 +271,65 @@ export default function JoinMembershipForm({
         if (i !== idx) return m;
         if (m.profilePreviewUrl) URL.revokeObjectURL(m.profilePreviewUrl);
         const preview = file ? URL.createObjectURL(file) : "";
-        return { ...m, profileImage: file, profilePreviewUrl: preview, profileImageUrl: "" };
-      })
+        const next = {
+          ...m,
+          profileImage: file,
+          profilePreviewUrl: preview,
+          profileImageUrl: "",
+        };
+        return next;
+      }),
     );
 
     if (!file) {
       if (submittedOnce) {
-        setFamilyErrors((prev) =>
-          prev.map((e, i) => (i === idx ? validateMemberFields({ ...family[idx], profileImageUrl: "" }) : e))
+        setFamilyErrors((prevErr) =>
+          prevErr.map((e, i) =>
+            i === idx
+              ? validateMemberFields(family[idx], { isPrimary: false })
+              : e,
+          ),
         );
       }
       return;
     }
 
     try {
-      setUploading((p) => ({ ...p, familyProfile: { ...p.familyProfile, [idx]: true } }));
-      const res = await uploadImages([file]);
-      const url = toUrls(res)[0] || "";
+      setUploading((p) => ({
+        ...p,
+        familyProfile: { ...p.familyProfile, [idx]: true },
+      }));
 
-      setFamily((prev) => prev.map((m, i) => (i === idx ? { ...m, profileImageUrl: url } : m)));
+      const [res] = (await uploadImages([file])) as UploadResponse[];
+      const url = pickUploadedUrl(res);
+
+      setFamily((prev) =>
+        prev.map((m, i) => (i === idx ? { ...m, profileImageUrl: url } : m)),
+      );
 
       if (submittedOnce) {
-        setFamilyErrors((prev) =>
-          prev.map((e, i) => (i === idx ? validateMemberFields({ ...family[idx], profileImageUrl: url }) : e))
+        setFamilyErrors((prevErr) =>
+          prevErr.map((e, i) =>
+            i === idx
+              ? validateMemberFields(
+                  { ...family[idx], profileImageUrl: url },
+                  { isPrimary: false },
+                )
+              : e,
+          ),
         );
       }
     } catch (e) {
       console.error(e);
       toast("Profile image upload failed");
-      setFamily((prev) => prev.map((m, i) => (i === idx ? { ...m, profileImageUrl: "" } : m)));
-    } finally {
-      setUploading((p) => ({ ...p, familyProfile: { ...p.familyProfile, [idx]: false } }));
-    }
-  };
-
-  const uploadFamilyDocs = async (idx: number, fl: FileList | null) => {
-    if (!fl || fl.length === 0) {
       setFamily((prev) =>
-        prev.map((m, i) => (i === idx ? { ...m, document: null, documentUrls: [], documentNames: [] } : m))
+        prev.map((m, i) => (i === idx ? { ...m, profileImageUrl: "" } : m)),
       );
-      if (submittedOnce) {
-        setFamilyErrors((prev) =>
-          prev.map((e, i) => (i === idx ? validateMemberFields({ ...family[idx], documentUrls: [] }) : e))
-        );
-      }
-      return;
-    }
-
-    const files = Array.from(fl);
-    const names = files.map((f) => f.name);
-
-    // set selected immediately
-    setFamily((prev) =>
-      prev.map((m, i) => (i === idx ? { ...m, document: fl, documentUrls: [], documentNames: names } : m))
-    );
-
-    try {
-      setUploading((p) => ({ ...p, familyDocs: { ...p.familyDocs, [idx]: true } }));
-      const res = await uploadImages(files);
-      const urls = toUrls(res);
-
-      setFamily((prev) => prev.map((m, i) => (i === idx ? { ...m, documentUrls: urls } : m)));
-
-      if (submittedOnce) {
-        setFamilyErrors((prev) =>
-          prev.map((e, i) => (i === idx ? validateMemberFields({ ...family[idx], documentUrls: urls }) : e))
-        );
-      }
-    } catch (e) {
-      console.error(e);
-      toast("Documents upload failed");
-      setFamily((prev) => prev.map((m, i) => (i === idx ? { ...m, documentUrls: [] } : m)));
     } finally {
-      setUploading((p) => ({ ...p, familyDocs: { ...p.familyDocs, [idx]: false } }));
+      setUploading((p) => ({
+        ...p,
+        familyProfile: { ...p.familyProfile, [idx]: false },
+      }));
     }
   };
 
@@ -320,19 +349,38 @@ export default function JoinMembershipForm({
 
       const payload = {
         community: communityId,
-        primaryMember: mapMemberToPayload(primary),
-        familyMember: family.map(mapMemberToPayload),
+        primaryMember: mapMemberToPayload({
+          ...primary,
+          profileImage: primary.profileImageUrl || "",
+          document: primary.documentUrl || "",
+        }),
+        familyMember: family.map((m) =>
+          mapMemberToPayload({
+            ...m,
+            profileImage: m.profileImageUrl || "",
+            document: "", // family document not sent
+          }),
+        ),
       };
 
       await sendJoinMembershipRequest(payload);
       toast("Membership request sent successfully");
 
-      // cleanup preview blobs
-      if (primary.profilePreviewUrl) URL.revokeObjectURL(primary.profilePreviewUrl);
-      family.forEach((m) => m.profilePreviewUrl && URL.revokeObjectURL(m.profilePreviewUrl));
+      // cleanup previews
+      setPrimary((prev) => {
+        if (prev.profilePreviewUrl) URL.revokeObjectURL(prev.profilePreviewUrl);
+        return prev;
+      });
+      setFamily((prev) => {
+        prev.forEach(
+          (m) =>
+            m.profilePreviewUrl && URL.revokeObjectURL(m.profilePreviewUrl),
+        );
+        return prev;
+      });
 
       setPrimary(emptyMember());
-      setFamily([emptyMember()]);
+      setFamily([]);
       setPrimaryErrors(emptyErrors());
       setFamilyErrors([emptyErrors()]);
       setSubmittedOnce(false);
@@ -357,23 +405,29 @@ export default function JoinMembershipForm({
         </h1>
 
         <form onSubmit={submit} className="mt-10 space-y-10">
+          {/* Primary */}
           <MemberBlock
             title="Membership"
             showTitle={false}
             value={primary}
             onChange={(next) => {
               setPrimary(next);
-              if (submittedOnce) setPrimaryErrors(validateMemberFields(next));
+              if (submittedOnce)
+                setPrimaryErrors(
+                  validateMemberFields(next, { isPrimary: true }),
+                );
             }}
             errors={submittedOnce ? primaryErrors : emptyErrors()}
             colors={{ field, fieldBorder, muted }}
             disabled={isSubmitting}
             isProfileUploading={uploading.primaryProfile}
-            isDocsUploading={uploading.primaryDocs}
+            isDocUploading={uploading.primaryDoc}
             onPickProfile={uploadPrimaryProfile}
-            onPickDocs={uploadPrimaryDocs}
+            onPickDocument={uploadPrimaryDocument}
+            showDocuments
           />
 
+          {/* Family */}
           <div className="space-y-8">
             {family.map((m, idx) => (
               <MemberBlock
@@ -381,22 +435,32 @@ export default function JoinMembershipForm({
                 title={`Member ${String(idx + 1).padStart(2, "0")}`}
                 value={m}
                 onChange={(next) => {
-                  setFamily((prev) => prev.map((x, i) => (i === idx ? next : x)));
+                  setFamily((prev) =>
+                    prev.map((x, i) => (i === idx ? next : x)),
+                  );
                   if (submittedOnce) {
                     setFamilyErrors((prev) =>
-                      prev.map((e, i) => (i === idx ? validateMemberFields(next) : e))
+                      prev.map((e, i) =>
+                        i === idx
+                          ? validateMemberFields(next, { isPrimary: false })
+                          : e,
+                      ),
                     );
                   }
                 }}
-                errors={submittedOnce ? familyErrors[idx] || emptyErrors() : emptyErrors()}
+                errors={
+                  submittedOnce
+                    ? familyErrors[idx] || emptyErrors()
+                    : emptyErrors()
+                }
                 colors={{ field, fieldBorder, muted }}
-                removable={family.length > 1}
+                removable={family.length > 0}
                 onRemove={() => removeFamily(idx)}
                 disabled={isSubmitting}
                 isProfileUploading={!!uploading.familyProfile[idx]}
-                isDocsUploading={!!uploading.familyDocs[idx]}
                 onPickProfile={(file) => uploadFamilyProfile(idx, file)}
-                onPickDocs={(fl) => uploadFamilyDocs(idx, fl)}
+                onPickDocument={() => {}}
+                showDocuments={false}
               />
             ))}
 
@@ -434,6 +498,10 @@ export default function JoinMembershipForm({
   );
 }
 
+// ===================================
+// UI Components
+// ===================================
+
 function MemberBlock({
   title,
   showTitle = true,
@@ -445,9 +513,10 @@ function MemberBlock({
   onRemove,
   disabled,
   isProfileUploading,
-  isDocsUploading,
+  isDocUploading,
   onPickProfile,
-  onPickDocs,
+  onPickDocument,
+  showDocuments = true,
 }: {
   title: string;
   showTitle?: boolean;
@@ -460,32 +529,24 @@ function MemberBlock({
   disabled?: boolean;
 
   isProfileUploading?: boolean;
-  isDocsUploading?: boolean;
+  isDocUploading?: boolean;
   onPickProfile: (file: File | null) => void;
-  onPickDocs: (fl: FileList | null) => void;
+  onPickDocument: (file: File | null) => void;
+  showDocuments?: boolean;
 }) {
   const { field, fieldBorder, muted } = colors;
 
-  // ✅ hydration-safe ids
   const rid = useId();
   const profileInputId = `profile-${rid}`;
   const docsInputId = `docs-${rid}`;
 
-  const profileLocked = !!value.profileImageUrl || !!isProfileUploading;
-  const docsLocked = (value.documentUrls?.length ?? 0) > 0 || !!isDocsUploading;
+  const profileLocked = !!isProfileUploading;
+  const docLocked = !!isDocUploading;
 
-  const docsLabel = (() => {
-    if (isDocsUploading) return "Uploading...";
-    if (value.documentNames && value.documentNames.length > 0) {
-      return value.documentNames.length === 1
-        ? value.documentNames[0]
-        : `${value.documentNames.length} files selected`;
-    }
-    if (value.documentUrls && value.documentUrls.length > 0) {
-      return value.documentUrls.length === 1
-        ? "1 file uploaded"
-        : `${value.documentUrls.length} files uploaded`;
-    }
+  const docLabel = (() => {
+    if (isDocUploading) return "Uploading...";
+    if (value.documentName) return value.documentName;
+    if (value.documentUrl) return "Document uploaded";
     return "Upload Documents";
   })();
 
@@ -540,18 +601,14 @@ function MemberBlock({
             />
           </FieldWithError>
 
-          <FieldWithError error={errors.dateOfBirth}>
-            <DateInput
-              placeholder="Date of Birth"
-              value={value.dateOfBirth}
-              onChange={(v) => onChange({ ...value, dateOfBirth: v })}
-              bg={field}
-              border={fieldBorder}
-              placeholderColor={muted}
-              disabled={disabled}
-              hasError={!!errors.dateOfBirth}
-            />
-          </FieldWithError>
+          <DateInput
+            placeholder="Date of Birth"
+            value={value.dateOfBirth}
+            onChange={(v) => onChange({ ...value, dateOfBirth: v })}
+            bg={field}
+            border={fieldBorder}
+            disabled={disabled}
+          />
 
           <FieldWithError error={errors.mobileNumber}>
             <InputBox
@@ -567,47 +624,40 @@ function MemberBlock({
           </FieldWithError>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:col-span-2">
-            <FieldWithError error={errors.city}>
-              <InputBox
-                placeholder="City"
-                value={value.city}
-                onChange={(v) => onChange({ ...value, city: v })}
-                bg={field}
-                border={fieldBorder}
-                placeholderColor={muted}
-                disabled={disabled}
-                hasError={!!errors.city}
-              />
-            </FieldWithError>
-
-            <FieldWithError error={errors.caste}>
-              <InputBox
-                placeholder="Caste"
-                value={value.caste}
-                onChange={(v) => onChange({ ...value, caste: v })}
-                bg={field}
-                border={fieldBorder}
-                placeholderColor={muted}
-                disabled={disabled}
-                hasError={!!errors.caste}
-              />
-            </FieldWithError>
-
-            <FieldWithError error={errors.subCaste}>
-              <InputBox
-                placeholder="Sub Caste"
-                value={value.subCaste}
-                onChange={(v) => onChange({ ...value, subCaste: v })}
-                bg={field}
-                border={fieldBorder}
-                placeholderColor={muted}
-                disabled={disabled}
-                hasError={!!errors.subCaste}
-              />
-            </FieldWithError>
+            <InputBox
+              placeholder="City"
+              value={value.city}
+              onChange={(v) => onChange({ ...value, city: v })}
+              bg={field}
+              border={fieldBorder}
+              placeholderColor={muted}
+              disabled={disabled}
+            />
+            <InputBox
+              placeholder="Caste"
+              value={value.caste}
+              onChange={(v) => onChange({ ...value, caste: v })}
+              bg={field}
+              border={fieldBorder}
+              placeholderColor={muted}
+              disabled={disabled}
+            />
+            <InputBox
+              placeholder="Sub Caste"
+              value={value.subCaste}
+              onChange={(v) => onChange({ ...value, subCaste: v })}
+              bg={field}
+              border={fieldBorder}
+              placeholderColor={muted}
+              disabled={disabled}
+            />
           </div>
 
-          <div className="md:col-span-2 grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div
+            className={`md:col-span-2 grid grid-cols-1 gap-5 ${
+              showDocuments ? "md:grid-cols-2" : ""
+            }`}
+          >
             <FieldWithError error={errors.profileImage}>
               <ProfileUploadWithPreview
                 id={profileInputId}
@@ -616,24 +666,31 @@ function MemberBlock({
                 locked={profileLocked}
                 uploading={!!isProfileUploading}
                 hasError={!!errors.profileImage}
-                onPick={(file) => onPickProfile(file)}
+                onPick={onPickProfile}
                 onRemove={() => onPickProfile(null)}
               />
             </FieldWithError>
 
-            <FieldWithError error={errors.document}>
-              <UploadBox
-                id={docsInputId}
-                label={docsLabel}
-                multiple
-                disabled={disabled}
-                accept=".pdf,.jpg,.jpeg,.png"
-                locked={docsLocked}
-                hasError={!!errors.document}
-                onFiles={(fl) => onPickDocs(fl)}
-                onClear={() => onPickDocs(null)}
-              />
-            </FieldWithError>
+            {showDocuments ? (
+              <FieldWithError error={errors.document}>
+                <div className="space-y-2">
+                  <p className="text-white capitalize text-base font-inter">
+                    Upload caste certification or education TC
+                  </p>
+
+                  <UploadBox
+                    id={docsInputId}
+                    label={docLabel}
+                    disabled={disabled}
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    locked={docLocked}
+                    hasError={!!errors.document}
+                    onFile={(f) => onPickDocument(f)}
+                    onClear={() => onPickDocument(null)}
+                  />
+                </div>
+              </FieldWithError>
+            ) : null}
           </div>
         </div>
       </div>
@@ -641,11 +698,19 @@ function MemberBlock({
   );
 }
 
-function FieldWithError({ children, error }: { children: React.ReactNode; error?: string }) {
+function FieldWithError({
+  children,
+  error,
+}: {
+  children: React.ReactNode;
+  error?: string;
+}) {
   return (
     <div className="space-y-1">
       {children}
-      {error ? <p className="text-[12px] leading-4 text-red-200 font-inter">{error}</p> : null}
+      {error ? (
+        <p className="text-[12px] leading-4 text-red-200 font-inter">{error}</p>
+      ) : null}
     </div>
   );
 }
@@ -672,47 +737,65 @@ function ProfileUploadWithPreview({
   const hasPreview = !!value.profilePreviewUrl;
 
   return (
-    <div className="flex items-center gap-3">
-      <UploadBox
-        id={id}
-        label={
-          uploading
-            ? "Uploading..."
-            : value.profileImageUrl
-            ? "Profile Image Uploaded"
-            : hasPreview
-            ? "Profile Image Selected"
-            : "Upload Profile Image"
-        }
-        disabled={disabled}
-        accept="image/*"
-        locked={locked}
-        hasError={hasError}
-        onFile={(f) => onPick(f)}
-        onClear={onRemove}
-      />
+    <div className="space-y-2">
+      <p className="text-white capitalize text-base font-inter">
+        Profile Image
+      </p>
 
-      {hasPreview ? (
-        <div className="relative h-[56px] w-[56px] rounded-[12px] border border-white/20 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={value.profilePreviewUrl}
-            alt="Profile preview"
-            className="h-full w-full object-cover"
-          />
-          <button
-            type="button"
-            onClick={onRemove}
-            className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-white text-black grid place-items-center shadow"
-            aria-label="Remove profile image"
-          >
-            <X className="h-3 w-3" />
-          </button>
-        </div>
-      ) : null}
+      <div className="flex items-center gap-3">
+        <UploadBox
+          id={id}
+          label={
+            uploading
+              ? "Uploading..."
+              : value.profileImageUrl
+                ? "Profile Image Uploaded"
+                : hasPreview
+                  ? "Profile Image Selected"
+                  : "Upload Profile Image"
+          }
+          disabled={disabled}
+          accept="image/*"
+          locked={locked}
+          hasError={hasError}
+          onFile={(f) => onPick(f)}
+          onClear={onRemove}
+          showRemove={!!value.profileImageUrl || hasPreview}
+        />
+
+        {hasPreview ? (
+          <div className="relative h-[56px] w-[56px] rounded-[12px] border border-white/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={value.profilePreviewUrl}
+              alt="Profile preview"
+              className="h-full w-full object-cover rounded-[12px]"
+            />
+            <button
+              type="button"
+              onClick={onRemove}
+              className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-white text-black grid place-items-center cursor-pointer hover:text-red-500 border"
+              aria-label="Remove profile image"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
+
+type InputBoxProps = {
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  bg: string;
+  border: string;
+  placeholderColor?: string;
+  disabled?: boolean;
+  hasError?: boolean;
+};
 
 function InputBox({
   placeholder,
@@ -723,16 +806,7 @@ function InputBox({
   placeholderColor,
   disabled,
   hasError,
-}: {
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  bg: string;
-  border: string;
-  placeholderColor: string;
-  disabled?: boolean;
-  hasError?: boolean;
-}) {
+}: InputBoxProps) {
   return (
     <div
       className="h-[56px] rounded-[12px] px-5 flex items-center"
@@ -748,14 +822,25 @@ function InputBox({
         placeholder={placeholder}
         className="w-full bg-transparent outline-none font-inter text-[16px] text-white disabled:opacity-60"
       />
+
       <style jsx>{`
         input::placeholder {
-          color: ${placeholderColor};
+          color: ${placeholderColor ?? "rgba(255,255,255,0.75)"};
         }
       `}</style>
     </div>
   );
 }
+
+type DateInputProps = {
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  bg: string;
+  border: string;
+  disabled?: boolean;
+  hasError?: boolean;
+};
 
 function DateInput({
   placeholder,
@@ -763,19 +848,9 @@ function DateInput({
   onChange,
   bg,
   border,
-  placeholderColor,
   disabled,
   hasError,
-}: {
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  bg: string;
-  border: string;
-  placeholderColor: string;
-  disabled?: boolean;
-  hasError?: boolean;
-}) {
+}: DateInputProps) {
   return (
     <div
       className="h-[56px] rounded-[12px] px-5 flex items-center justify-between gap-3"
@@ -794,9 +869,6 @@ function DateInput({
       />
       <Calendar className="h-4 w-4 text-white/80" />
       <style jsx>{`
-        input::placeholder {
-          color: ${placeholderColor};
-        }
         input::-webkit-calendar-picker-indicator {
           opacity: 0;
           cursor: pointer;
@@ -809,25 +881,23 @@ function DateInput({
 function UploadBox({
   id,
   label,
-  multiple,
   onFile,
-  onFiles,
   disabled,
   accept,
   locked,
   hasError,
   onClear,
+  showRemove = false,
 }: {
   id: string;
   label: string;
-  multiple?: boolean;
   onFile?: (f: File | null) => void;
-  onFiles?: (fl: FileList | null) => void;
   disabled?: boolean;
   accept?: string;
   locked?: boolean;
   hasError?: boolean;
   onClear?: () => void;
+  showRemove?: boolean;
 }) {
   return (
     <div className="flex items-center gap-3">
@@ -854,24 +924,22 @@ function UploadBox({
           id={id}
           type="file"
           className="hidden"
-          multiple={multiple}
           accept={accept}
           disabled={disabled || locked}
           onChange={(e) => {
             if (locked) return;
-            if (multiple) onFiles?.(e.target.files);
-            else onFile?.(e.target.files?.[0] ?? null);
-            e.currentTarget.value = ""; // allow same file again later
+            onFile?.(e.target.files?.[0] ?? null);
+            e.currentTarget.value = "";
           }}
         />
       </label>
 
-      {locked ? (
+      {showRemove ? (
         <button
           type="button"
           onClick={onClear}
           className="h-[36px] w-[36px] rounded-full bg-white text-black grid place-items-center shadow"
-          aria-label="Remove selected file(s)"
+          aria-label="Remove selected file"
         >
           <X className="h-4 w-4" />
         </button>
