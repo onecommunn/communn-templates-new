@@ -116,7 +116,6 @@ const CollectionsRoot = () => {
         <CollectionsProducts
           data={collectionsSectionData}
           primaryColor={primaryColor}
-          products={itemsSection}
         />
       )}
 

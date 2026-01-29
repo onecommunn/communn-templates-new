@@ -78,9 +78,11 @@ const MemberShipCardPage = () => {
     };
   }, [userData]);
 
+  if(status === "loading"){
+    return <CardSkeleton />
+  }
   return (
     <>
-      {status === "loading" && <CardSkeleton />}
 
       {(status === "not_found") && (
         <div className="mx-auto max-w-xl my-20 rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm">
