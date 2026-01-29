@@ -1,5 +1,7 @@
 import { BASE_URL_V2 } from "@/configurations/url.config";
+import { AuthContext, IAuthContext } from "@/contexts/Auth.context";
 import axios from "axios";
+import { useContext } from "react";
 
 type CollectionsCMSBundle = {
   home: any | null;
@@ -17,8 +19,9 @@ async function fetchJSON(url: string) {
   }
 }
 
+
 async function fetchCollectionsBundle(
-  communityId: string
+  communityId: string,
 ): Promise<CollectionsCMSBundle> {
   const base = `${BASE_URL_V2}/cms/get-section/community`;
   const [home, aboutUs, contact, collections] = await Promise.all([
@@ -41,3 +44,19 @@ async function fetchCollectionsBundle(
 export async function getCollectionsCMSBundle(communityId: string) {
   return fetchCollectionsBundle(communityId);
 }
+
+export const fetchProductsCategory = async (
+  communityId: string,
+) => {
+  const response = await axios.get(
+    `${BASE_URL_V2}/product-category/category/community/${communityId}`,
+    {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTYzZTI0NjdjN2I5NTdkZjQ4MDYwYSIsImlhdCI6MTc2OTY4NDk2NSwiZXhwIjoxNzcyMjc2OTY1fQ.Dcdis7-Yl1U1aoD6ujFOOS8iCz53EfVtizCJYgdcSgE`,
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  return response.data;
+};
