@@ -62,7 +62,7 @@ const MemberShipCardPage = () => {
     return {
       name: pm?.name ?? "-",
       role: pm?.isPrimary ? "Owner" : "Member",
-      idNumber: pm?._id ?? "-",
+      idNumber: pm?.uniqueId ?? pm?._id ?? "-",
       dob: pm?.dateOfBirth ?? "-",
       city: pm?.city ?? "-",
       phone: pm?.mobileNumber ?? "-",

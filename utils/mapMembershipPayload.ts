@@ -10,4 +10,5 @@ export const mapMemberToPayload = (m: any): MemberPayload => ({
   city: m.city,
   profileImage: m.profileImage,
   document: m.document,
+  adharCard:m.adharCard
 });

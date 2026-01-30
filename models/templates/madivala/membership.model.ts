@@ -8,6 +8,7 @@ export interface MemberPayload {
   city: string;
   profileImage?: string;
   document?: string;
+  adharCard?: string;
 }
 
 export interface JoinMembershipPayload {
