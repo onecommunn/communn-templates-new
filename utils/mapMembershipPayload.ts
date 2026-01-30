@@ -4,7 +4,7 @@ export const mapMemberToPayload = (m: any): MemberPayload => ({
   name: m.name,
   emailId: m.emailId,
   mobileNumber: m.mobileNumber,
-  dateOfBirth: m.dob,
+  dateOfBirth: m.dateOfBirth,
   caste: m.caste,
   subCaste: m.subCaste,
   city: m.city,
