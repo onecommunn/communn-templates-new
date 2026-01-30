@@ -233,7 +233,7 @@ export default function IdCardUI({
                 <div className="relative w-[560px] aspect-square overflow-hidden rounded-[28px] bg-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.22)]">
                   <img
                     src={
-                      "https://res.cloudinary.com/dxcob4mbd/image/upload/v1730444104/1_0004_Generative_Fill4_5d54a3f4_d440_4092_a5f5_80867443cd0c_e2417c591c.webp"
+                        data?.image ?? "https://res.cloudinary.com/dxcob4mbd/image/upload/v1730444104/1_0004_Generative_Fill4_5d54a3f4_d440_4092_a5f5_80867443cd0c_e2417c591c.webp"
                     }
                     alt={data?.name}
                     className="object-cover object-center w-full h-full"
