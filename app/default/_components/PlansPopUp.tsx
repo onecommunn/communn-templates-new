@@ -12,6 +12,7 @@ import { AuthContext } from "@/contexts/Auth.context";
 
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
+import { useRouter } from "next/navigation";
 
 type PlansPopUpProps = {
   isOpen: boolean;
@@ -44,6 +45,7 @@ export default function PlansPopUp({
 }: PlansPopUpProps) {
   const [selectedId, setSelectedId] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   // ✅ Payment dialogs state
   const [timer, setTimer] = useState(5);
@@ -61,7 +63,7 @@ export default function PlansPopUp({
 
   const selectedPlan = useMemo(
     () => plans?.find((p) => p._id === selectedId),
-    [plans, selectedId]
+    [plans, selectedId],
   );
 
   // ✅ your exact condition
@@ -77,6 +79,7 @@ export default function PlansPopUp({
     setSuccessOpen(false);
     // optional: close popup after success
     onClose();
+    router.refresh();
   };
 
   const handleFailureClose = () => {
@@ -114,7 +117,7 @@ export default function PlansPopUp({
     const windowRef = window.open(
       url,
       "paymentWindow",
-      `width=${width},height=${height},left=${left},top=${top},resizable=no`
+      `width=${width},height=${height},left=${left},top=${top},resizable=no`,
     );
 
     // ✅ poll payment status
@@ -159,7 +162,7 @@ export default function PlansPopUp({
       const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
         userId,
         communityId,
-        selectedPlan._id
+        selectedPlan._id,
       );
 
       const subscriptionId = res?.subscription?._id;
@@ -175,7 +178,8 @@ export default function PlansPopUp({
       // 3) first payable sequence
       const firstPayable = sequences.find(
         (s: any) =>
-          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) && !s?.isnonPayable
+          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
+          !s?.isnonPayable,
       );
 
       if (!firstPayable?._id) {
@@ -199,10 +203,9 @@ export default function PlansPopUp({
         userId,
         selectedPlan._id,
         [firstPayable._id],
-        String(amount)
+        String(amount),
       );
 
-      toast.success("Redirecting to payment...");
       await openPaymentAndTrack(payRes);
 
       // ✅ keep popup open, so success/failure dialog can show on same page
@@ -219,7 +222,7 @@ export default function PlansPopUp({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
       style={
         {
           "--pri": colors?.primaryColor,
@@ -256,7 +259,9 @@ export default function PlansPopUp({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {(plans || []).map((plan) => {
               const selected = plan._id === selectedId;
-              const price = Number((plan as any).pricing || (plan as any).totalPlanValue || 0);
+              const price = Number(
+                (plan as any).pricing || (plan as any).totalPlanValue || 0,
+              );
 
               const descParts =
                 plan.description && plan.description.includes("/")
@@ -283,7 +288,7 @@ export default function PlansPopUp({
                       <p className="text-sm text-gray-500 mt-1 capitalize">
                         {formatPeriodLabel(
                           (plan as any).interval,
-                          (plan as any).duration
+                          (plan as any).duration,
                         )}
                       </p>
                     </div>
@@ -349,7 +354,7 @@ export default function PlansPopUp({
                   {Number(
                     (selectedPlan as any)?.pricing ||
                       (selectedPlan as any)?.totalPlanValue ||
-                      0
+                      0,
                   ).toLocaleString()}
                 </span>
               </p>
@@ -370,7 +375,7 @@ export default function PlansPopUp({
                       : "bg-gray-300 pointer-events-none"
                   }`}
                 >
-                  {loading ? "Processing..." : "Subscribe & Join"}
+                  {loading ? "Processing..." : "Subscribe"}
                 </Link>
               ) : (
                 <button
@@ -383,7 +388,7 @@ export default function PlansPopUp({
                       : "bg-gray-300 cursor-not-allowed"
                   }`}
                 >
-                  {isProcessing ? "Starting payment..." : "Pay & Join"}
+                  {isProcessing ? "Starting payment..." : "Pay"}
                 </button>
               )}
             </div>
