@@ -299,7 +299,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
               const eligible = isAuthenticated
                 ? canAccessCourseDetails(course)
                 : false;
-              const locked = isAuthenticated && !eligible;
 
               return (
                 <CarouselItem
@@ -323,13 +322,6 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             unoptimized
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-black/0" />
-
-                          {locked ? (
-                            <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 text-gray-900 text-xs font-semibold border border-white/60 shadow-sm">
-                              <LockKeyhole size={14} />
-                              Locked
-                            </div>
-                          ) : null}
                         </div>
 
                         <div className="p-5">
