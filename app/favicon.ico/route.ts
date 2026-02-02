@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const community: Community = response.community;
 
   // fallback if not found
-  const logoUrl = community?.logo || "/app/default-favicon.ico";
+  const logoUrl = community?.logo || "/default-favicon.ico";
 
   // simplest: redirect browser to the logo
   return NextResponse.redirect(logoUrl, 302);
