@@ -87,7 +87,7 @@ export default function IdCardUI({
               {/* Image */}
               <div className="w-48 h-60 rounded-tl-[100px] overflow-hidden">
                 <img
-                  src={data.image}
+                  src={`/api/image-proxy?url=${encodeURIComponent(data.image)}`}
                   alt="Profile"
                   className="w-full h-full object-cover object-top"
                 />
@@ -186,10 +186,10 @@ export default function IdCardUI({
       <button
         onClick={handleDownload}
         disabled={downloading}
-        className="flex items-center gap-2 bg-black text-white px-8 py-3 rounded-full hover:scale-105 transition-transform"
+        className="flex items-center cursor-pointer gap-2 bg-[#1F514C] text-white px-8 py-3 rounded-full hover:scale-105 transition-transform"
       >
         <Download size={20} />
-        {downloading ? "Generating PNG..." : "Download Both Sides"}
+        {downloading ? "Generating PNG..." : "Download"}
       </button>
     </div>
   );
