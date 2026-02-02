@@ -4,6 +4,33 @@ import type { Community } from "./services/communityService";
 
 type MetaFn = (args: { community: Community }) => Promise<Metadata> | Metadata;
 
+// utils/favicon.ts
+export function getFaviconMeta(logo?: string) {
+  if (!logo) return undefined;
+
+  const ext = logo.split(".").pop()?.toLowerCase();
+
+  const typeMap: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    svg: "image/svg+xml",
+    webp: "image/webp",
+    ico: "image/x-icon",
+  };
+
+  return {
+    icon: [
+      {
+        url: logo,
+        type: typeMap[ext ?? ""] || "image/png",
+      },
+    ],
+    shortcut: logo,
+    apple: logo, // Apple touch icon (iOS)
+  };
+}
+
 export const templatePageMeta: Record<
   string, // template key
   Record<string, MetaFn> // path -> meta builder
@@ -55,6 +82,7 @@ export const templatePageMeta: Record<
       title: community?.name || "Home",
       description: community?.description || "",
       alternates: { canonical: "/" },
+      icons: getFaviconMeta(community.logo)
     }),
     "/event-details": ({ community }) => ({
       title: `${community.name} - Event`,
