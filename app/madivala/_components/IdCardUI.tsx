@@ -58,7 +58,7 @@ export default function IdCardUI({
   return (
     <div className="flex flex-col items-center gap-8 p-10 bg-gray-100 min-h-screen font-inter">
       {/* Container for Side-by-Side View */}
-      <div ref={exportRef} className="flex flex-row gap-6 p-6 bg-transparent">
+      <div ref={exportRef} className="flex flex-col md:flex-row gap-6 p-6 bg-transparent">
         {/* FRONT CARD */}
         <div className="w-[350px] h-[600px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative">
           {/* Top Dark Section */}
@@ -185,7 +185,7 @@ export default function IdCardUI({
 
       <button
         onClick={handleDownload}
-        disabled={downloading}
+        disabled={downloading}  
         className="flex items-center cursor-pointer gap-2 bg-[#1F514C] text-white px-8 py-3 rounded-full hover:scale-105 transition-transform"
       >
         <Download size={20} />

@@ -116,6 +116,11 @@ function validateMemberFields(
   else if (!isValidMobile(m.mobileNumber))
     e.mobileNumber = "Enter a valid 10-digit mobile";
 
+  // ✅ Profile Image required for everyone (primary + family)
+  if (!m.profileImageUrl?.trim()) {
+    e.profileImage = "Profile image is required";
+  }
+
   // ✅ only primary must upload document
   if (opts.isPrimary) {
     if (!m.documentUrl?.trim()) e.document = "Documents are required";
