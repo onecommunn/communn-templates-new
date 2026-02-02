@@ -36,7 +36,7 @@ const montserrat = Montserrat({
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "600", "700", "100", "200", "300", "500", "800", "900"],
   variable: "--font-inter",
 });
 
@@ -130,15 +130,15 @@ const figtree = Figtree({
 
 const quattrocento = Quattrocento_Sans({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "700",],
+  weight: ["400", "700"],
   style: ["normal", "italic"],
   variable: "--font-quattrocento",
 });
 
 const hedvig = Hedvig_Letters_Serif({
   subsets: ["latin", "latin-ext"],
-  weight: ["400",],
-  style: ["normal",],
+  weight: ["400"],
+  style: ["normal"],
   variable: "--font-hedvig",
 });
 export default function RootLayout({
