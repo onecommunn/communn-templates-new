@@ -66,7 +66,6 @@ export default function PlansPopUp({
     [plans, selectedId],
   );
 
-  // ✅ your exact condition
   const isSequencePlan = useMemo(() => {
     return !!(
       selectedPlan?.isSequenceAvailable &&
