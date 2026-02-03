@@ -50,6 +50,7 @@ const ConsultingoAppointments: React.FC = () => {
                     alt={item.title}
                     fill 
                     className="object-cover"
+                    unoptimized
                   />
                 </div>
               </div>

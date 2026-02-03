@@ -445,6 +445,7 @@ const ConsultingoEventDetailsPage = () => {
               alt="Client Success"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
+              unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent flex flex-col justify-end p-6">
               <h2 className="text-3xl md:text-[54px] font-fraunces text-[#4F2910] text-center mb-1 font-semibold">

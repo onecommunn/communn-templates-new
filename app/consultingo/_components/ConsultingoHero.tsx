@@ -20,6 +20,7 @@ const ConsultingoHero = () => {
               fill
               className="object-cover"
               priority
+              unoptimized
             />
           </div>
 
