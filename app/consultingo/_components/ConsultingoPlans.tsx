@@ -95,7 +95,7 @@ const ConsultingoPlans = () => {
 
   if (isLoading)
     return (
-      <section className="bg-[#fcf6e8] py-20 px-6 md:px-20 font-lexend">
+      <section className="bg-[#fcf6e8] py-20 px-6 md:px-20 font-lexend" id="plans">
         <div className="container mx-auto">
           {/* Title Skeleton */}
           <div className="mx-auto mb-16 h-12 w-64 animate-pulse rounded-lg bg-[#4F2910]/10" />
@@ -139,7 +139,7 @@ const ConsultingoPlans = () => {
       </section>
     );
   return (
-    <section className="bg-[#fcf6e8] py-10 md:py-20 px-6 md:px-20 font-lexend">
+    <section className="bg-[#fcf6e8] py-10 md:py-20 px-6 md:px-20 font-lexend" id="plans">
       <div className="container mx-auto">
         <h2 className="text-4xl md:text-5xl font-fraunces text-[#4F2910] text-center mb-16">
           Pricing plan

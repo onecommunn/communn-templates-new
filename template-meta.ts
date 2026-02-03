@@ -750,6 +750,16 @@ export const templatePageMeta: Record<string, Record<string, MetaFn>> = {
       },
       icons: getFaviconMeta(community.logo),
     }),
+    "/course-details": ({ community }) => ({
+      title: `Course Details - ${community.name}`,
+      description: `View course details, lessons, schedule, and enrollment information for this ${community.name} course.`,
+      openGraph: {
+        title: `Course Details - ${community?.name || ""}`,
+        description: `View course details, lessons, schedule, and enrollment information for this ${community.name} course.`,
+      },
+      alternates: { canonical: "/course-details" },
+      icons: getFaviconMeta(community.logo),
+    }),
   },
 
   collections: {

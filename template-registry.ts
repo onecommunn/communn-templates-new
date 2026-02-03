@@ -99,6 +99,7 @@ import MadivalaContactPage from "./app/madivala/contact/page";
 import MadivalaEventsPageRoot from "./app/madivala/events/pages";
 import MadivalaInfrastructurePageRoot from "./app/madivala/infrastructure/page";
 import MadivalaNewsPageRoot from "./app/madivala/news/page";
+import ConsultingoCourseDetailsRoot from "./app/consultingo/course-details/page";
 
 export const templateLayouts: Record<
   string,
@@ -218,6 +219,7 @@ export const templates: Record<
     "/event-details": ConsultingoEventDetailsRoot,
     "/subscriptions": ConsultingoSubscriptionsRoot,
     "/contact-us": ConsultingoContactusRoot,
+    "/course-details": ConsultingoCourseDetailsRoot,
   },
   collections: {
     "/": CollectionsRoot,

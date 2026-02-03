@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { FormEvent, useContext, useState } from "react";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { AuthContext } from "@/contexts/Auth.context";
@@ -21,7 +21,7 @@ const ConsultingoContactusRoot: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -138,11 +138,13 @@ const ConsultingoContactusRoot: React.FC = () => {
                 Name
               </label>
               <input
+                name="name"
                 type="text"
                 value={form.name}
                 onChange={handleChange}
+                placeholder="Enter Name"
                 required
-                className="w-full bg-[#F3EDE0] border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
               />
             </div>
 
@@ -151,11 +153,13 @@ const ConsultingoContactusRoot: React.FC = () => {
                 Email
               </label>
               <input
+                name="email"
+                type="email"
                 value={form.email}
+                placeholder="Enter Email"
                 onChange={handleChange}
                 required
-                type="email"
-                className="w-full bg-[#F3EDE0] border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
               />
             </div>
 
@@ -164,11 +168,13 @@ const ConsultingoContactusRoot: React.FC = () => {
                 Phone
               </label>
               <input
+                name="phoneNumber"
                 type="tel"
                 value={form.phoneNumber}
                 onChange={handleChange}
+                placeholder="Enter Phone Number"
                 required
-                className="w-full bg-[#F3EDE0] border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
               />
             </div>
 
@@ -177,10 +183,12 @@ const ConsultingoContactusRoot: React.FC = () => {
                 Subject
               </label>
               <input
+                name="subject"
                 value={form.subject}
                 onChange={handleChange}
+                placeholder="Subject"
                 required
-                className="w-full bg-[#F3EDE0] border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
               />
             </div>
 
@@ -189,19 +197,22 @@ const ConsultingoContactusRoot: React.FC = () => {
                 Message
               </label>
               <textarea
+                name="message"
+                placeholder="Message"
                 rows={5}
                 value={form.message}
                 onChange={handleChange}
                 required
-                className="w-full bg-[#F3EDE0] border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none resize-none"
+                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none resize-none"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#B85C44] text-white font-bold py-4 rounded-full text-lg hover:bg-[#a14e38] transition-colors mt-4"
+              disabled={loading}
+              className="w-full bg-[#B85C44] text-white font-bold py-4 rounded-full text-lg hover:bg-[#a14e38] transition-colors"
             >
-              {loading ? "Sending" : "Submit"}
+              {loading ? "Sending..." : "Submit"}
             </button>
           </form>
         </div>

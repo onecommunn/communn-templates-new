@@ -73,7 +73,7 @@ const ConsultingoEvents: React.FC = () => {
 
   if (isLoading) {
     return (
-      <section className="bg-[#fcf6e8] py-20 px-6 md:px-20">
+      <section className="bg-[#fcf6e8] py-20 px-6 md:px-20" id="events">
         <div className="container mx-auto max-w-6xl">
           {/* Title Skeleton */}
           <div className="mb-16 h-12 w-48 animate-pulse rounded-lg bg-[#4F2910]/10" />
@@ -113,7 +113,7 @@ const ConsultingoEvents: React.FC = () => {
   }
 
   return (
-    <section className="bg-[#fcf6e8] py-10 md:py-20 px-6 md:px-20 font-lexend">
+    <section className="bg-[#fcf6e8] py-10 md:py-20 px-6 md:px-20 font-lexend" id="events">
       <div className="container mx-auto max-w-6xl">
         <h2 className="text-4xl md:text-5xl font-fraunces text-[#4F2910] mb-10">
           Events

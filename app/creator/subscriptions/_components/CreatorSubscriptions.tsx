@@ -397,7 +397,7 @@ const CreatorSubscriptions = ({
 
   useEffect(() => {
     getPlanDataById();
-  }, []);
+  }, [planID, authContext]);
 
   const getPlanDataById = async () => {
     try {

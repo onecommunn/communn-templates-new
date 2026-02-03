@@ -56,7 +56,7 @@ export default function IdCardUI({
   };
 
   return (
-    <div className="flex flex-col items-center gap-8 p-10 bg-gray-100 min-h-screen font-inter">
+    <div className="flex flex-col items-center gap-8 p-10 bg-white min-h-screen font-inter">
       {/* Container for Side-by-Side View */}
       <div ref={exportRef} className="flex flex-col md:flex-row gap-6 p-6 bg-transparent">
         {/* FRONT CARD */}

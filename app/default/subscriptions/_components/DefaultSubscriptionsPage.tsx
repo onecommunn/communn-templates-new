@@ -392,7 +392,7 @@ const DefaultSubscriptionsPage = () => {
 
   useEffect(() => {
     getPlanDataById();
-  }, []);
+  }, [planID, authContext]);
 
   const getPlanDataById = async () => {
     try {

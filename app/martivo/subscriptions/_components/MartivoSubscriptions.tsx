@@ -395,7 +395,7 @@ const MartivoSubscriptions = ({
 
   useEffect(() => {
     getPlanDataById();
-  }, []);
+  }, [planID, authContext]);
 
   const getPlanDataById = async () => {
     try {

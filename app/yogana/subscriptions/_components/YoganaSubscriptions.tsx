@@ -398,7 +398,7 @@ const YoganaSubscriptions = ({
 
   useEffect(() => {
     getPlanDataById();
-  }, []);
+  }, [planID, authContext]);
 
   const getPlanDataById = async () => {
     try {

@@ -59,7 +59,7 @@ const ConsultingoServiceContent = () => {
           <div className="flex flex-col gap-8">
             {
               sections?.map((s,idx) => (
-                <div>
+                <div key={idx}>
                   <h4 className="text-[#4F2910] font-semibold text-[34px]/[44px] font-fraunces">{`${idx+1}. ${s.title}`}</h4>
                   <p className="text-[#8B715B] text-base mt-1">{s.des}</p>
                 </div>
