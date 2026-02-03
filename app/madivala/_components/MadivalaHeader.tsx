@@ -389,7 +389,7 @@ const MadivalaHeader = ({ logo, name, primaryColor }: DefaultHeaderProps) => {
                         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                             <SheetTrigger asChild>
                                 <button
-                                    className="cursor-pointer p-2 text-white"
+                                    className="cursor-pointer p-2 text-black"
                                     aria-controls="creator-mobile-menu"
                                     aria-label="Open menu"
                                 >
