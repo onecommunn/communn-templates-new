@@ -99,11 +99,11 @@ export const HomedummyData: CollectionsHomePage = {
       sectionName: "gallerySection",
       content: {
         media: [
+          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9b5e9e2c9a4ab8ec97112aed7b072acba46a197a.png",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ac20c5a29535b4242ec0cdcbc2d211542665e37c.jpg",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/28683a34ce4fec00a49cec22115dbb7f426257d7.jpg",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/650f35bcb3082d5821188c7ea7ad65bbbbb6caaf.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9b5e9e2c9a4ab8ec97112aed7b072acba46a197a.png",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/330b6b3b09b00a2723d6dfc435eb9f2eeb0f0370.jpg",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7ed8c4ddc9ff11584127fbc7d3687648301cfef9.jpg",
           "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
@@ -295,6 +295,14 @@ export const HomedummyData: CollectionsHomePage = {
         ],
       },
       order: 10,
+      isActive: true,
+    },
+    {
+      sectionName: "instagramSection",
+      content: {
+        instagramUrl: "https://www.instagram.com/vinuthasareeverse/",
+      },
+      order: 11,
       isActive: true,
     },
   ],
