@@ -22,6 +22,7 @@ import {
   ScrollSection,
   CTAsection,
   TestimoniesSection,
+  InstagramSection,
 } from "@/models/templates/collections/collections-home-model";
 import { HomedummyData } from "./home-dummy-data";
 import {
@@ -36,7 +37,7 @@ const CollectionsRoot = () => {
   const { home, collections } = useCMS();
   const isLoading = home === undefined;
   const source: CollectionsHomePage | undefined = !isLoading
-    ? (home as CollectionsHomePage | undefined) ?? HomedummyData
+    ? ((home as CollectionsHomePage | undefined) ?? HomedummyData)
     : undefined;
 
   // console.log(source, "source")
@@ -44,60 +45,65 @@ const CollectionsRoot = () => {
 
   const collectionsSource: CollectionsCollectionPage | undefined =
     !isCollectionLoading
-      ? (collections as CollectionsCollectionPage | undefined) ??
-      CollectiondummyData
+      ? ((collections as CollectionsCollectionPage | undefined) ??
+        CollectiondummyData)
       : undefined;
 
   const primaryColor = source?.color?.primary ?? "#C09932";
 
   const heroSectionData = source?.sections?.find(
     (s: HomeSection): s is HeroSection =>
-      s.sectionName === "heroSection" && s.isActive
+      s.sectionName === "heroSection" && s.isActive,
   );
 
   const scrollSectionData = source?.sections?.find(
     (s: HomeSection): s is ScrollSection =>
-      s.sectionName === "scrollSection" && s.isActive
+      s.sectionName === "scrollSection" && s.isActive,
   );
 
   const collectionsSectionData = source?.sections?.find(
     (s: HomeSection): s is CollectionsSection =>
-      s.sectionName === "collectionsSection" && s.isActive
+      s.sectionName === "collectionsSection" && s.isActive,
   );
 
   const featuresSectionData = source?.sections?.find(
     (s: HomeSection): s is FeaturesSection =>
-      s.sectionName === "featuresSection" && s.isActive
+      s.sectionName === "featuresSection" && s.isActive,
   );
 
   const gallerySectionData = source?.sections?.find(
     (s: HomeSection): s is GallerySection =>
-      s.sectionName === "gallerySection" && s.isActive
+      s.sectionName === "gallerySection" && s.isActive,
+  );
+
+  const instagramSectionData = source?.sections?.find(
+    (s: HomeSection): s is InstagramSection =>
+      s.sectionName === "instagramSection" && s.isActive,
   );
 
   const faqSectionData = source?.sections?.find(
     (s: HomeSection): s is FaqSection =>
-      s.sectionName === "faqSection" && s.isActive
+      s.sectionName === "faqSection" && s.isActive,
   );
 
   const featureStripSectionData = source?.sections?.find(
     (s: HomeSection): s is FeatureStripSection =>
-      s.sectionName === "featureStripSection" && s.isActive
+      s.sectionName === "featureStripSection" && s.isActive,
   );
 
   const ctaSectionData = source?.sections?.find(
     (s: HomeSection): s is CTAsection =>
-      s.sectionName === "ctaSection" && s.isActive
+      s.sectionName === "ctaSection" && s.isActive,
   );
 
   const testimoniesSectionData = source?.sections?.find(
     (s: HomeSection): s is TestimoniesSection =>
-      s.sectionName === "testimoniesSection" && s.isActive
+      s.sectionName === "testimoniesSection" && s.isActive,
   );
 
   const itemsSection = collectionsSource?.sections?.find(
     (s: CollectionSection): s is ItemsSections =>
-      s.sectionName === "itemsSections" && s.isActive
+      s.sectionName === "itemsSections" && s.isActive,
   );
 
   return (
@@ -128,9 +134,11 @@ const CollectionsRoot = () => {
 
       {gallerySectionData && <CollectionsGallery data={gallerySectionData} />}
 
-      <div className="container mx-auto py-5">
-        <InstagramEmbed />
-      </div>
+      {instagramSectionData && (
+        <div className="container mx-auto py-5">
+          <InstagramEmbed data={instagramSectionData} />
+        </div>
+      )}
 
       {faqSectionData && <CollectionsFAQs data={faqSectionData} />}
 

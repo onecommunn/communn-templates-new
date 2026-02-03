@@ -73,6 +73,13 @@ export interface GallerySection extends SectionBase {
   };
 }
 
+export interface InstagramSection extends SectionBase {
+  sectionName: "instagramSection";
+  content: {
+    instagramUrl: string;
+  };
+}
+
 export interface FaqSection extends SectionBase {
   sectionName: "faqSection";
   content: {
@@ -143,5 +150,6 @@ export type HomeSection =
   | GallerySection
   | CTAsection
   | FaqSection
+  | InstagramSection
   | TestimoniesSection
   | FooterSection;
