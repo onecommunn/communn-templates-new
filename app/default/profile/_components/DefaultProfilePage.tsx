@@ -311,11 +311,11 @@ const DefaultProfilePage = () => {
           <div className="w-20 h-1 mx-auto mt-4 rounded-full" />
         </div>
 
-        {/* MAIN GRID */}
+
         <div className="grid lg:grid-cols-3 gap-4 md:gap-8 relative">
-          {/* SIDEBAR */}
+
           <aside className="lg:col-span-1 space-y-4 md:space-y-8">
-            {/* PROFILE */}
+
             <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
               <CardContent className="p-0 flex md:flex-col items-center justify-start md:justify-center gap-6">
                 <div className="relative">
@@ -353,10 +353,10 @@ const DefaultProfilePage = () => {
               </CardContent>
             </Card>
 
-            {/* SUBSCRIBED PLANS */}
-            <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
+
+            {/* <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
               <CardContent className="p-0 flex flex-col gap-4 w-full">
-                {/* Header */}
+
                 <div className="flex items-center justify-between w-full mb-1">
                   <p className="text-base font-semibold font-montserrat">
                     Subscribed Plans
@@ -368,7 +368,7 @@ const DefaultProfilePage = () => {
                   </Badge>
                 </div>
 
-                {/* Plans List */}
+
                 {isPlansLoading && userPlans.length === 0 && (
                   <div className="w-full border border-dashed border-gray-200 rounded-lg p-3 text-xs text-gray-500 text-center">
                     Fetching your plans...
@@ -456,7 +456,7 @@ const DefaultProfilePage = () => {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="space-y-2">
-                        {/* Description */}
+
                         {plan.description && (
                           <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
                             {plan.description}
@@ -469,7 +469,7 @@ const DefaultProfilePage = () => {
                   </Accordion>
                 ))}
 
-                {/* CTA to see all plans */}
+
                 <Link href={"/#plans"}>
                   <button
                     type="button"
@@ -479,7 +479,7 @@ const DefaultProfilePage = () => {
                   </button>
                 </Link>
               </CardContent>
-            </Card>
+            </Card> */}
           </aside>
 
           {/* RIGHT COLUMN */}
