@@ -185,7 +185,7 @@ export default function IdCardUI({
 
       <button
         onClick={handleDownload}
-        disabled={downloading}  
+        disabled={downloading}
         className="flex items-center cursor-pointer gap-2 bg-[#1F514C] text-white px-8 py-3 rounded-full hover:scale-105 transition-transform"
       >
         <Download size={20} />
