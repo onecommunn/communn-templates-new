@@ -58,9 +58,12 @@ export default function IdCardUI({
   return (
     <div className="flex flex-col items-center gap-8 p-10 bg-white min-h-screen font-inter">
       {/* Container for Side-by-Side View */}
-      <div ref={exportRef} className="flex flex-col md:flex-row gap-6 p-6 bg-transparent">
+      <div
+        ref={exportRef}
+        className="flex flex-col md:flex-row gap-6 p-6 bg-transparent"
+      >
         {/* FRONT CARD */}
-        <div className="w-[350px] h-[600px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative">
+        <div className="w-[380px] h-[600px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative">
           {/* Top Dark Section */}
           <div
             style={{ backgroundColor: primaryColor }}
@@ -69,6 +72,7 @@ export default function IdCardUI({
             {/* Header */}
             <div className="flex items-center gap-3 px-8 mt-8">
               <span className="text-sm font-medium">Madivala Sangha</span>
+              <div className="h-[2px] flex-1 bg-[#fff] mr-10"></div>
             </div>
 
             {/* Name */}
@@ -129,7 +133,7 @@ export default function IdCardUI({
         </div>
 
         {/* BACK CARD */}
-        <div className="w-[350px] h-[600px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative">
+        <div className="w-[380px] h-[600px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative">
           <div className="p-8 flex flex-col flex-1">
             <div className="flex items-center gap-3 mb-6">
               <span className="text-sm font-inter font-medium text-[#1F514C]">

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef } from "react";
-import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
@@ -39,7 +38,7 @@ const testimonials: Testimonial[] = [
 const ConsultingoServiceTestimonial = () => {
   // 1. Initialize Autoplay and Carousel
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 3000, stopOnInteraction: false,stopOnMouseEnter:true }),
+    Autoplay({ delay: 3000, stopOnInteraction: true,stopOnMouseEnter:true }),
   ]);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
