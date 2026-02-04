@@ -1,32 +1,35 @@
 import React from "react";
-import { ShieldCheck, Diamond, Send, Zap } from "lucide-react";
 import { Marquee } from "@/components/CustomComponents/marquee";
+import { TrustedBySection } from "@/models/templates/consultingo/consultingo-home-model";
 
-const ConsultingoTrustedBy = () => {
-  const companies = [
-    {
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/668b9c808b6e4d158329ae6d_05.svg fill.svg",
-    },
-    {
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/668b9b1b9b28ad74d16ed10b_04.svg fill.svg",
-    },
-    {
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/668b9c80330799edcae36b23_03.svg fill.svg",
-    },
-    {
-      image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fdsgfdfdfgdfgd.svg",
-    },
-  ];
+const ConsultingoTrustedBy = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  data: TrustedBySection;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
+  const content = data?.content;
+  const companies = content?.media;
   return (
-    <section className="bg-[#fcf6e8] py-10 md:py-16">
+    <section
+      className="bg-[var(--neu)] py-10 md:py-16"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto">
         {/* Section Heading */}
-        <h2 className="text-center font-fraunces text-[#BC4C37] text-xl md:text-2xl mb-10">
-          Trusted by 130+ companies
+        <h2 className="text-center font-fraunces text-[var(--pri)] text-xl md:text-2xl mb-10">
+          {content?.heading}
         </h2>
 
         {/* Logos Grid */}
@@ -37,9 +40,9 @@ const ConsultingoTrustedBy = () => {
               {companies?.map((company, index) => (
                 <div
                   key={index}
-                  className="bg-[#f3ede0] px-10 py-6 rounded-full flex items-center gap-3 min-w-[180px] justify-center transition-transform hover:scale-105 cursor-default"
+                  className="bg-[var(--pri)]/5 px-10 py-6 rounded-full flex items-center gap-3 min-w-[180px] justify-center transition-transform hover:scale-105 cursor-default"
                 >
-                  <img src={company.image} alt={`image ${index}`} />
+                  <img src={company} alt={`image ${index}`} />
                 </div>
               ))}
             </Marquee>

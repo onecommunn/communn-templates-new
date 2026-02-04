@@ -102,15 +102,18 @@ export interface FeaturesSection extends SectionBase {
 
 export interface SustainabilitySection extends SectionBase {
   sectionName: "sustainabilitySection";
-  experienceBadge: {
-    value: string;
-    label: string;
+  content: {
+    heading: string;
+    experienceBadge: {
+      value: string;
+      label: string;
+    };
+    media: string[];
+    accordionData: {
+      title: string;
+      content: string;
+    }[];
   };
-  media: string[];
-  accordionData: {
-    title: string;
-    content: string;
-  }[];
 }
 
 export interface ServicesSection extends SectionBase {
@@ -123,6 +126,13 @@ export interface ServicesSection extends SectionBase {
       image: string;
       link: string;
     }[];
+  };
+}
+
+export interface AppointmentSection extends SectionBase {
+  sectionName: "appointmentSection";
+  content: {
+    heading: string;
   };
 }
 
@@ -194,6 +204,7 @@ export type HomeSection =
   | FeaturesSection
   | SustainabilitySection
   | ServicesSection
+  | AppointmentSection
   | PlansSection
   | EventsSection
   | TestimonialSection

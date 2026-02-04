@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
+import { TestimonialSection } from "@/models/templates/consultingo/consultingo-home-model";
 
 interface Testimonial {
   id: number;
@@ -37,7 +38,18 @@ const testimonials: Testimonial[] = [
 
 const AUTOPLAY_MS = 4500;
 
-const ConsultingoTestimonial = () => {
+const ConsultingoTestimonial = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  data: TestimonialSection;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
+  const content = data?.content;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -105,7 +117,16 @@ const ConsultingoTestimonial = () => {
   };
 
   return (
-    <div className="bg-[#FDF6EC] flex items-center justify-center py-10 px-6 md:px-20">
+    <div
+      className="bg-[var(--neu)] flex items-center justify-center py-10 px-6 md:px-20"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div
         className="w-full bg-white rounded-[40px] p-12 shadow-sm flex flex-col md:flex-row gap-12 md:gap-24 items-start"
         onMouseEnter={() => setIsPaused(true)}
@@ -114,7 +135,7 @@ const ConsultingoTestimonial = () => {
         {/* Left Section: Header & Nav */}
         <div className="w-full md:w-[40%] flex flex-1 flex-col h-full justify-between gap-8">
           <div>
-            <h2 className="text-[#4A2C19] text-[40px]/[52px] font-fraunces font-medium mb-4">
+            <h2 className="text-[var(--sec)] text-[40px]/[52px] font-fraunces font-medium mb-4">
               Client testimonials
             </h2>
             <p className="text-[#8B7E74] text-lg">
@@ -125,7 +146,7 @@ const ConsultingoTestimonial = () => {
           <div className="flex items-center gap-4 mt-auto">
             <button
               onClick={handlePrev}
-              className="p-2 rounded-full cursor-pointer bg-[#4A2C19] text-white hover:bg-[#5d3821] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-2 rounded-full cursor-pointer bg-[var(--sec)] text-white hover:bg-[var(--sec)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               aria-label="Previous testimonial"
               disabled={total <= 1}
               type="button"
@@ -135,7 +156,7 @@ const ConsultingoTestimonial = () => {
 
             <button
               onClick={handleNext}
-              className="p-2 rounded-full cursor-pointer bg-[#4A2C19] text-white hover:bg-[#5d3821] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-2 rounded-full cursor-pointer bg-[var(--sec)] text-white hover:bg-[var(--sec)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               aria-label="Next testimonial"
               disabled={total <= 1}
               type="button"
@@ -156,9 +177,7 @@ const ConsultingoTestimonial = () => {
                   key={i}
                   size={20}
                   className={
-                    filled
-                      ? "fill-[#C36A4D] text-[#C36A4D]"
-                      : "text-[#D9C9BF]"
+                    filled ? "fill-[var(--pri)] text-[var(--pri)]" : "text-[#D9C9BF]"
                   }
                 />
               );
@@ -166,7 +185,7 @@ const ConsultingoTestimonial = () => {
           </div>
 
           {/* Quote */}
-          <blockquote className="text-[#4A2C19] text-2xl font-fraunces font-semibold leading-snug mb-10">
+          <blockquote className="text-[var(--sec)] text-2xl font-fraunces font-semibold leading-snug mb-10">
             “{current.quote}”
           </blockquote>
 
@@ -179,7 +198,7 @@ const ConsultingoTestimonial = () => {
               loading="lazy"
             />
             <div>
-              <h4 className="text-[#4A2C19] font-semibold text-xl leading-tight">
+              <h4 className="text-[var(--sec)] font-semibold text-xl leading-tight">
                 {current.author}
               </h4>
               <p className="text-[#8B7E74] text-md">{current.role}</p>

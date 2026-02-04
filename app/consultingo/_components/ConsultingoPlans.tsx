@@ -33,12 +33,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { PlansSection } from "@/models/templates/consultingo/consultingo-home-model";
 
 type Feature = { text: string; available?: boolean };
 
-const ConsultingoPlans = () => {
+const ConsultingoPlans = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  data: PlansSection;
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
+  const content = data?.content;
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: false })
+    Autoplay({ delay: 3000, stopOnInteraction: false }),
   );
 
   const { getPlansList, getCommunityPlansListAuth, joinToPublicCommunity } =
@@ -57,7 +69,7 @@ const ConsultingoPlans = () => {
   const isSubscribedCommunity =
     joinedCommunityLocal ||
     communityData?.community?.members?.some(
-      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
+      (m: any) => (m?.user?._id ?? m?.user?.id) === userId,
     );
 
   const fetchPlans = async () => {
@@ -93,18 +105,28 @@ const ConsultingoPlans = () => {
     }
   };
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <section className="bg-[#fcf6e8] py-20 px-6 md:px-20 font-lexend" id="plans">
+      <section
+        className="bg-[var(--neu)] py-20 px-6 md:px-20 font-lexend"
+        id="plans"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+            "--neu": neutralColor,
+          } as React.CSSProperties
+        }
+      >
         <div className="container mx-auto">
           {/* Title Skeleton */}
-          <div className="mx-auto mb-16 h-12 w-64 animate-pulse rounded-lg bg-[#4F2910]/10" />
+          <div className="mx-auto mb-16 h-12 w-64 animate-pulse rounded-lg bg-[var(--sec)]/10" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="relative h-[680px] rounded-[60px] bg-white border border-[#f3ede0] p-10 flex flex-col items-center animate-pulse"
+                className="relative h-[680px] rounded-[60px] bg-white border border-[var(--neu)] p-10 flex flex-col items-center animate-pulse"
               >
                 {/* Plan Title Placeholder */}
                 <div className="my-4 h-8 w-40 rounded-md bg-slate-100" />
@@ -138,11 +160,23 @@ const ConsultingoPlans = () => {
         </div>
       </section>
     );
+  }
+
   return (
-    <section className="bg-[#fcf6e8] py-10 md:py-20 px-6 md:px-20 font-lexend" id="plans">
+    <section
+      className="bg-[var(--neu)] py-10 md:py-20 px-6 md:px-20 font-lexend"
+      id="plans"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto">
-        <h2 className="text-4xl md:text-5xl font-fraunces text-[#4F2910] text-center mb-16">
-          Pricing plan
+        <h2 className="text-4xl md:text-5xl font-fraunces text-[var(--sec)] text-center mb-16">
+          {content?.heading}
         </h2>
 
         {plans?.length === 0 ? (
@@ -162,7 +196,7 @@ const ConsultingoPlans = () => {
             <CarouselContent>
               {plans.map((plan, index) => {
                 const isUserSubscribedToPlan = plan.subscribers?.some(
-                  (sub) => sub?._id === userId
+                  (sub) => sub?._id === userId,
                 );
 
                 const period = `${
@@ -185,8 +219,8 @@ const ConsultingoPlans = () => {
                       !plan.nextDueDate
                         ? "Not Subscribed"
                         : new Date(plan.nextDueDate) >= new Date()
-                        ? "Active"
-                        : "Expired"
+                          ? "Active"
+                          : "Expired"
                     }`,
                   },
                 ];
@@ -198,21 +232,23 @@ const ConsultingoPlans = () => {
                     <div
                       className={`relative h-[650px] rounded-[60px] p-10 flex flex-col items-center text-center transition-all duration-300 ${
                         index % 2 !== 0
-                          ? "bg-[#BC4C37] text-white"
-                          : "bg-white border border-[#f3ede0]"
+                          ? "bg-[var(--pri)] text-white"
+                          : "bg-white border border-[var(--neu)]"
                       }`}
                     >
                       {/* Title & Price */}
                       <h3
                         className={`text-2xl font-fraunces capitalize my-4 ${
-                          index % 2 !== 0 ? "text-white" : "text-[#BC4C37]"
+                          index % 2 !== 0 ? "text-white" : "text-[var(--pri)]"
                         }`}
                       >
                         {plan.name}
                       </h3>
                       <p
                         className={`text-sm mb-6 line-clamp-4 ${
-                          index % 2 !== 0 ? "text-white/80" : "text-[#6b4f3a]"
+                          index % 2 !== 0
+                            ? "text-white/80"
+                            : "text-[var(--sec)]/70"
                         }`}
                       >
                         {plan.description}
@@ -233,7 +269,7 @@ const ConsultingoPlans = () => {
                               className={`rounded-full p-0.5 border ${
                                 index % 2 !== 0
                                   ? "border-white"
-                                  : "border-[#4F2910]"
+                                  : "border-[var(--sec)]"
                               }`}
                             >
                               <Check size={12} />
@@ -253,8 +289,8 @@ const ConsultingoPlans = () => {
                             href="/login"
                             className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
                               index % 2 !== 0
-                                ? "bg-white text-[#BC4C37]"
-                                : "bg-[#BC4C37] text-white"
+                                ? "bg-white text-[var(--pri)]"
+                                : "bg-[var(--pri)] text-white"
                             }`}
                           >
                             Login to Subscribe
@@ -266,8 +302,8 @@ const ConsultingoPlans = () => {
                               <button
                                 className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
                                   index % 2 !== 0
-                                    ? "bg-white text-[#BC4C37]"
-                                    : "bg-[#BC4C37] text-white"
+                                    ? "bg-white text-[var(--pri)]"
+                                    : "bg-[var(--pri)] text-white"
                                 }`}
                               >
                                 {communityData?.community?.type ===
@@ -298,8 +334,8 @@ const ConsultingoPlans = () => {
                             href={`/subscriptions/?planid=${plan._id}&communityid=${communityId}`}
                             className={`w-full py-4 rounded-full flex items-center justify-center gap-2 group transition-all font-bold ${
                               index % 2 !== 0
-                                ? "bg-white text-[#BC4C37]"
-                                : "bg-[#BC4C37] text-white"
+                                ? "bg-white text-[var(--pri)]"
+                                : "bg-[var(--pri)] text-white"
                             }`}
                           >
                             {isUserSubscribedToPlan
@@ -308,7 +344,7 @@ const ConsultingoPlans = () => {
                             <div
                               className={`rounded-full p-1 group-hover:rotate-45 transition-transform ${
                                 index % 2 !== 0
-                                  ? "bg-[#BC4C37]/10"
+                                  ? "bg-[var(--pri)]/10"
                                   : "bg-white/20"
                               }`}
                             >

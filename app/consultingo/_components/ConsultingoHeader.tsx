@@ -183,7 +183,7 @@ const ConsultingoHeader = ({
                   </PopoverTrigger>
                   <PopoverContent className="w-72 mt-1 rounded-md p-2 mr-4">
                     <div className="grid gap-2">
-                      <div className="grid grid-cols-4 gap-2 bg-[#f9f9f9] p-2 rounded-md">
+                      <div className="grid grid-cols-4 gap-2 bg-[var(--neu)] p-2 rounded-md">
                         <div className="col-span-1 flex items-center justify-center">
                           <Avatar className="cursor-pointer size-12">
                             <AvatarImage
