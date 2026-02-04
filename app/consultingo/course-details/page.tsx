@@ -1,9 +1,33 @@
 import React, { Suspense } from "react";
 import ConsultingoCourseDetailsPage from "./_components/ConsultingoCourseDetailsPage";
 
+const LoadingSkeleton = () => (
+  <div className="bg-[#fcf9f1] min-h-screen py-16 px-6 md:px-20 animate-pulse">
+    <div className="max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
+        <div className="space-y-6">
+          <div className="h-16 bg-gray-200 rounded-md w-3/4" />
+          <div className="h-4 bg-gray-200 rounded-md w-full" />
+          <div className="h-4 bg-gray-200 rounded-md w-5/6" />
+          <div className="h-12 bg-gray-200 rounded-full w-32" />
+        </div>
+        <div className="flex justify-end">
+          <div className="w-[350px] h-[500px] bg-gray-200 rounded-[200px]" />
+        </div>
+      </div>
+      <div className="max-w-4xl space-y-4">
+        <div className="h-10 bg-gray-200 rounded-md w-48 mb-10" />
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-16 bg-gray-200 rounded-xl w-full" />
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 const ConsultingoCourseDetailsRoot = () => {
   return (
-    <Suspense fallback={<></>}>
+    <Suspense fallback={<LoadingSkeleton/>}>
       <ConsultingoCourseDetailsPage/>
     </Suspense>
   );
