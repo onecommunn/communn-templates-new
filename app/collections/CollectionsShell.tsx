@@ -25,7 +25,7 @@ export default async function CollectionsShell({
     (s: HomeSection): s is Header => s.sectionName === "headerSection"
   );
 
-  const footerData = source?.sections?.find(
+  const footerData:FooterSection = source?.sections?.find(
     (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
   );
 
@@ -36,7 +36,7 @@ export default async function CollectionsShell({
   return (
     <>
       <Link
-        href={`tel:+917259253666`}
+        href={`tel:${footerData?.content?.contact?.phoneNumber}`}
         target="_blank"
         title="Call us"
         style={{
@@ -58,7 +58,7 @@ export default async function CollectionsShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=7259253666&text=${message}`}
+        href={`https://api.whatsapp.com/send?phone=${footerData?.content?.contact?.phoneNumber}&text=${message}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"
