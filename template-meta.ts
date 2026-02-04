@@ -760,6 +760,16 @@ export const templatePageMeta: Record<string, Record<string, MetaFn>> = {
       alternates: { canonical: "/course-details" },
       icons: getFaviconMeta(community.logo),
     }),
+    "/appointment-detail": ({ community }) => ({
+      title: `Appointment Details - ${community.name}`,
+      description: `View Appointment details, schedule, and booking information for this ${community.name} appointment.`,
+      openGraph: {
+        title: `Appointment Details - ${community.name}`,
+        description: `View Appointment details, schedule, and booking information for this ${community.name} appointment.`,
+      },
+      alternates: { canonical: "/appointment-detail" },
+      icons: getFaviconMeta(community.logo),
+    }),
   },
 
   collections: {
