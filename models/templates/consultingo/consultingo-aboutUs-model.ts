@@ -21,6 +21,7 @@ export interface HeroSection extends SectionBase {
   content: {
     heading: string;
     description: string;
+    media: string;
     statistics: {
       value: string;
       label: string;
@@ -47,7 +48,7 @@ export interface ValuesSection extends SectionBase {
       coreValues: {
         title: string;
         description: string;
-        variant: string;
+        variant: "white" | "beige" | "dark";
       }[];
     };
   };
