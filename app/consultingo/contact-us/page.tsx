@@ -13,6 +13,7 @@ import {
 } from "@/models/templates/consultingo/consultingo-contact.model";
 import { formatUrl } from "@/utils/StringFunctions";
 import Link from "next/link";
+import { contactUsDummyData } from "./contactUs-dummy-data";
 
 export interface SocialMediaLink {
   platform: string;
@@ -31,7 +32,7 @@ const ConsultingoContactusRoot: React.FC = () => {
   const { contact } = useCMS();
   const isLoading = contact === undefined;
   const source: ConsultingoContactPage | undefined = !isLoading
-    ? (contact as ConsultingoContactPage | undefined)
+    ? ((contact as ConsultingoContactPage | undefined) ?? contactUsDummyData)
     : undefined;
 
   const primaryColor = source?.color?.primary || "#BC4C37";

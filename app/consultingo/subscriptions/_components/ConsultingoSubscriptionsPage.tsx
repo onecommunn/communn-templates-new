@@ -217,9 +217,11 @@ const getStaticValue = (key: string) => {
 const ConsultingoSubscriptionsPage = ({
   primaryColor,
   secondaryColor,
+  neutralColor,
 }: {
   primaryColor: string;
   secondaryColor: string;
+  neutralColor: string;
 }) => {
   const [activeTab, setActiveTab] = useState("All");
   const [subscriptionId, setSubscriptionId] = useState<string>("");
@@ -693,6 +695,7 @@ const ConsultingoSubscriptionsPage = ({
           {
             "--pri": primaryColor,
             "--sec": secondaryColor,
+            "--neu": neutralColor,
           } as React.CSSProperties
         }
       >
@@ -772,11 +775,12 @@ const ConsultingoSubscriptionsPage = ({
 
   return (
     <main
-      className="flex-grow font-lexend bg-[#fcf6e8]"
+      className="flex-grow font-lexend bg-[var(--neu)]"
       style={
         {
           "--pri": primaryColor,
           "--sec": secondaryColor,
+          "--neu": neutralColor,
         } as React.CSSProperties
       }
     >
