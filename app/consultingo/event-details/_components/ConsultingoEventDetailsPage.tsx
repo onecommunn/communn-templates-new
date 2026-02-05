@@ -25,7 +25,15 @@ export enum PaymentStatus {
   PENDING = "PENDING",
 }
 
-const ConsultingoEventDetailsPage = () => {
+const ConsultingoEventDetailsPage = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const eventId = searchParams.get("eventid");
@@ -100,7 +108,7 @@ const ConsultingoEventDetailsPage = () => {
     name: string,
     email: string,
     phoneNumber: string,
-    communityId: string
+    communityId: string,
   ) => {
     setIsSubmitting(true);
     setFormData((prevState) => ({
@@ -115,11 +123,11 @@ const ConsultingoEventDetailsPage = () => {
         name,
         email,
         phoneNumber,
-        communityId
+        communityId,
       );
       if (response.status === 201) {
         toast.success(
-          "Event request submitted successfully! 🎉 We will update you soon "
+          "Event request submitted successfully! 🎉 We will update you soon ",
         );
         // const url = `/event-confirmation/${eventData?.title
         //   .trim()
@@ -144,7 +152,7 @@ const ConsultingoEventDetailsPage = () => {
     name: string,
     email: string,
     phoneNumber: string,
-    communityId: string
+    communityId: string,
   ) => {
     setIsSubmitting(true);
     setFormData((prevState) => ({
@@ -159,7 +167,7 @@ const ConsultingoEventDetailsPage = () => {
         name,
         email,
         phoneNumber,
-        communityId
+        communityId,
       );
       if (response.status === 201) {
         toast.success("Event booked successfully! 🎉 ");
@@ -197,7 +205,7 @@ const ConsultingoEventDetailsPage = () => {
     email: string,
     phoneNumber: string,
     amount: string,
-    commId: string
+    commId: string,
   ) => {
     setIsSubmitting(true);
     setFormData((prevState) => ({
@@ -214,7 +222,7 @@ const ConsultingoEventDetailsPage = () => {
         email,
         phoneNumber,
         amount,
-        commId
+        commId,
       );
       const responseData = response?.data;
       if (responseData?.url) {
@@ -228,13 +236,12 @@ const ConsultingoEventDetailsPage = () => {
         const windowRef = window.open(
           url,
           "paymentWindow",
-          `width=${width},height=${height},left=${left},top=${top},resizable=no`
+          `width=${width},height=${height},left=${left},top=${top},resizable=no`,
         );
         const intervalRef = setInterval(async () => {
           try {
-            const paymentStatus = await getPaymentStatusByIdNoAuth(
-              transactionId
-            );
+            const paymentStatus =
+              await getPaymentStatusByIdNoAuth(transactionId);
             setTransactionAmount(paymentStatus[0]?.amount);
             setTransaction(paymentStatus[0]);
             if (paymentStatus && paymentStatus.length > 0) {
@@ -262,7 +269,16 @@ const ConsultingoEventDetailsPage = () => {
 
   if (isLoading) {
     return (
-      <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-10 md:py-16">
+      <section
+        className="relative font-lexend bg-[var(--neu)] overflow-hidden py-10 md:py-16"
+        style={
+          {
+            "--pri": primaryColor,
+            "--sec": secondaryColor,
+            "--neu": neutralColor,
+          } as React.CSSProperties
+        }
+      >
         <div className="relative container mx-auto px-6 md:px-20 flex flex-col gap-14">
           {/* ================= HERO ================= */}
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-8 items-center">
@@ -349,19 +365,28 @@ const ConsultingoEventDetailsPage = () => {
     eventData.attendees.length >= eventData.limitCapacity;
 
   return (
-    <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-10 md:py-16 ">
-      <div className="relative container mx-auto px-6 md:px-20 text-[#4F2910] flex flex-col items-center">
+    <section
+      className="relative font-lexend bg-[var(--neu)] overflow-hidden py-10 md:py-16 "
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
+      <div className="relative container mx-auto px-6 md:px-20 text-[var(--sec)] flex flex-col items-center">
         {/* Hero */}
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
           {/* left */}
           <div className="flex flex-col gap-8 justify-center">
-            <h3 className="text-[#BC4C37] font-fraunces text-6xl/[70px]">
+            <h3 className="text-[var(--pri)] font-fraunces text-6xl/[70px]">
               {eventData?.title}
             </h3>
-            <p className="text-[#4F2910] text-lg">{eventData?.description}</p>
+            <p className="text-[var(--sec)] text-lg">{eventData?.description}</p>
             <Link
               href={"#book-now"}
-              className="bg-[#BC4C37] w-fit cursor-pointer text-white px-8 py-4 rounded-full flex items-center gap-3 group/btn hover:bg-[#3d2314] transition-all"
+              className="bg-[var(--pri)] w-fit cursor-pointer text-white px-8 py-4 rounded-full flex items-center gap-3 group/btn hover:bg-[var(--sec)] transition-all"
             >
               <span className="font-medium">Book Now</span>
               <div className="bg-white/20 rounded-full p-1 group-hover/btn:rotate-45 transition-transform">
@@ -392,43 +417,43 @@ const ConsultingoEventDetailsPage = () => {
           )}
         </div>
         {/* details */}
-        <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x items-center w-full my-10 md:my-16 rounded-[30px] md:rounded-[300px] border border-[#0000001A] bg-[#F4EFE1] md:px-[100px] md:py-[20px] divide-[#0000001A]">
+        <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x items-center w-full my-10 md:my-16 rounded-[30px] md:rounded-[300px] border border-[#0000001A] bg-[var(--neu)] md:px-[100px] md:py-[20px] divide-[#0000001A]">
           {/* Event Date */}
           <div className="font-fraunces w-full py-4 px-6">
-            <h4 className="text-[#BC4C37] font-semibold text-2xl leading-[54px]">
+            <h4 className="text-[var(--pri)] font-semibold text-2xl leading-[54px]">
               {`${formatDate(eventData?.availability[0]?.day)}`}
             </h4>
-            <p className="text-[#4F2910] font-semibold text-[20px] leading-[24px]">
+            <p className="text-[var(--sec)] font-semibold text-[20px] leading-[24px]">
               Event Date
             </p>
           </div>
 
           {/* Time */}
           <div className="font-fraunces w-full py-4 px-6">
-            <h4 className="text-[#BC4C37] font-semibold text-2xl leading-[54px]">
+            <h4 className="text-[var(--pri)] font-semibold text-2xl leading-[54px]">
               {`${formatTime(times.startTime)} - ${formatTime(times.endTime)}`}
             </h4>
-            <p className="text-[#4F2910] font-semibold text-[20px] leading-[24px]">
+            <p className="text-[var(--sec)] font-semibold text-[20px] leading-[24px]">
               Time
             </p>
           </div>
 
           {/* Amount */}
           <div className="font-fraunces w-full py-4 px-6">
-            <h4 className="text-[#BC4C37] font-semibold text-4xl leading-[54px]">
+            <h4 className="text-[var(--pri)] font-semibold text-4xl leading-[54px]">
               {eventData?.pricing ? `₹${eventData.pricing}` : "Free"}
             </h4>
-            <p className="text-[#4F2910] font-semibold text-[20px] leading-[24px]">
+            <p className="text-[var(--sec)] font-semibold text-[20px] leading-[24px]">
               Amount
             </p>
           </div>
 
           {/* Location */}
           <div className="font-fraunces w-full py-4 px-6">
-            <h4 className="text-[#BC4C37] font-semibold text-4xl leading-[54px] capitalize">
+            <h4 className="text-[var(--pri)] font-semibold text-4xl leading-[54px] capitalize">
               {eventData?.location.toLowerCase()}
             </h4>
-            <p className="text-[#4F2910] font-semibold text-[20px] leading-[24px]">
+            <p className="text-[var(--sec)] font-semibold text-[20px] leading-[24px]">
               Location
             </p>
           </div>
@@ -448,10 +473,10 @@ const ConsultingoEventDetailsPage = () => {
               unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent flex flex-col justify-end p-6">
-              <h2 className="text-3xl md:text-[54px] font-fraunces text-[#4F2910] text-center mb-1 font-semibold">
+              <h2 className="text-3xl md:text-[54px] font-fraunces text-[var(--sec)] text-center mb-1 font-semibold">
                 Enter details
               </h2>
-              <p className="text-[#8B715B] text-sm text-center mb-4">
+              <p className="text-[var(--sec)]/70 text-sm text-center mb-4">
                 Join a dynamic events that values innovation, collaboration, and
                 continuous learning, empowering you to thrive and excel in your
                 career.
@@ -467,7 +492,7 @@ const ConsultingoEventDetailsPage = () => {
             >
               <div className="space-y-10">
                 <div>
-                  <label htmlFor="name" className="text-base text-[#4F2910]">
+                  <label htmlFor="name" className="text-base text-[var(--sec)]">
                     Name
                   </label>
                   <input
@@ -475,12 +500,12 @@ const ConsultingoEventDetailsPage = () => {
                     name="name"
                     id="name"
                     placeholder="Enter Name"
-                    className="w-full rounded-md px-[30px] py-[10px] text-lg bg-[#F4EFE1] mt-2"
+                    className="w-full rounded-md px-[30px] py-[10px] text-lg bg-[var(--neu)] mt-2"
                     onChange={handleInputChange}
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="text-base text-[#4F2910]">
+                  <label htmlFor="email" className="text-base text-[var(--sec)]">
                     Email
                   </label>
                   <input
@@ -489,11 +514,11 @@ const ConsultingoEventDetailsPage = () => {
                     id="email"
                     placeholder="Enter Email Address"
                     onChange={handleInputChange}
-                    className="w-full rounded-md px-[30px] py-[10px] text-lg bg-[#F4EFE1] mt-2"
+                    className="w-full rounded-md px-[30px] py-[10px] text-lg bg-[var(--neu)] mt-2"
                   />
                 </div>
                 <div>
-                  <label htmlFor="number" className="text-base text-[#4F2910]">
+                  <label htmlFor="number" className="text-base text-[var(--sec)]">
                     Email
                   </label>
                   <input
@@ -501,7 +526,7 @@ const ConsultingoEventDetailsPage = () => {
                     id="number"
                     placeholder="Mobile Number"
                     name="phoneNumber"
-                    className="w-full rounded-md px-[30px] py-[10px] text-lg bg-[#F4EFE1] mt-2"
+                    className="w-full rounded-md px-[30px] py-[10px] text-lg bg-[var(--neu)] mt-2"
                     onChange={handleInputChange}
                   />
                 </div>
@@ -513,7 +538,7 @@ const ConsultingoEventDetailsPage = () => {
                 <>
                   {eventData?.guestApproval ? (
                     <Button
-                      className={`w-full rounded-lg h-fit py-2.5 bg-[#BC4C37] font-sora ${
+                      className={`w-full rounded-lg h-fit py-2.5 bg-[var(--pri)] font-sora ${
                         !isFormValid || isLoading
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -528,7 +553,7 @@ const ConsultingoEventDetailsPage = () => {
                           formData?.name,
                           formData?.email,
                           formData?.phoneNumber,
-                          eventData.community._id
+                          eventData.community._id,
                         );
                       }}
                     >
@@ -540,7 +565,7 @@ const ConsultingoEventDetailsPage = () => {
                     </Button>
                   ) : eventData?.isPaidService && !eventData?.guestApproval ? (
                     <Button
-                      className={`w-full rounded-lg h-fit py-2.5 bg-[#BC4C37] font-sora disabled:bg-gray-500 ${
+                      className={`w-full rounded-lg h-fit py-2.5 bg-[var(--pri)] font-sora disabled:bg-gray-500 ${
                         !isFormValid || isLoading
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -560,7 +585,7 @@ const ConsultingoEventDetailsPage = () => {
                           formData?.email,
                           formData?.phoneNumber,
                           eventData?.pricing.toString(),
-                          eventData.community._id
+                          eventData.community._id,
                         );
                       }}
                     >
@@ -572,7 +597,7 @@ const ConsultingoEventDetailsPage = () => {
                     </Button>
                   ) : (
                     <Button
-                      className={`w-full rounded-lg h-fit py-2.5 bg-[#BC4C37] font-sora ${
+                      className={`w-full rounded-lg h-fit py-2.5 bg-[var(--pri)] font-sora ${
                         !isFormValid || isLoading
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
@@ -586,7 +611,7 @@ const ConsultingoEventDetailsPage = () => {
                           formData?.name,
                           formData?.email,
                           formData?.phoneNumber,
-                          eventData.community._id
+                          eventData.community._id,
                         );
                       }}
                       disabled={!isFormValid}

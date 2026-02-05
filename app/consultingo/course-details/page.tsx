@@ -1,5 +1,9 @@
+"use client";
 import React, { Suspense } from "react";
 import ConsultingoCourseDetailsPage from "./_components/ConsultingoCourseDetailsPage";
+import { useCMS } from "../CMSProvider.client";
+import { ConsultingoHomePage } from "@/models/templates/consultingo/consultingo-home-model";
+import { homedummyData } from "../home-dummy-data";
 
 const LoadingSkeleton = () => (
   <div className="bg-[#fcf9f1] min-h-screen py-16 px-6 md:px-20 animate-pulse">
@@ -26,9 +30,22 @@ const LoadingSkeleton = () => (
 );
 
 const ConsultingoCourseDetailsRoot = () => {
+  const { home } = useCMS();
+  const isLoading = home === undefined;
+  const source: ConsultingoHomePage | undefined = !isLoading
+    ? ((home as ConsultingoHomePage | undefined) ?? homedummyData)
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#BC4C37";
+  const secondaryColor = source?.color?.secondary || "#4F2910";
+  const neutralColor = source?.color?.neutral || "#fcf6e8";
   return (
-    <Suspense fallback={<LoadingSkeleton/>}>
-      <ConsultingoCourseDetailsPage/>
+    <Suspense fallback={<LoadingSkeleton />}>
+      <ConsultingoCourseDetailsPage
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
     </Suspense>
   );
 };

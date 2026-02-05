@@ -150,7 +150,15 @@ function BookingCalendar({
   );
 }
 
-export default function ConsultingoAppointmentDetailsPage() {
+export default function ConsultingoAppointmentDetailsPage({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 11, 2)); // Dec 02, 2025
   const [month, setMonth] = useState<Date>(startOfMonth(selectedDate));
   const [selectedTime, setSelectedTime] = useState("1:00pm");
@@ -177,10 +185,19 @@ export default function ConsultingoAppointmentDetailsPage() {
   const isSubmitting = false;
 
   return (
-    <section className="bg-[#fcf9f1] min-h-screen py-16 px-6 md:px-20 text-[#4a3f35] font-lexend">
+    <section
+      className="bg-[var(--neu)] min-h-screen py-16 px-6 md:px-20 text-[var(--sec)] font-lexend"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       {/* Header Section */}
       <div className="mx-auto mb-12">
-        <h1 className="text-5xl md:text-6xl font-fraunces text-[#c2593f] mb-6">
+        <h1 className="text-5xl md:text-6xl font-fraunces text-[var(--pri)] mb-6">
           Explore consulting career opportunities
         </h1>
         <p className="text-lg leading-relaxed max-w-5xl">
@@ -192,7 +209,7 @@ export default function ConsultingoAppointmentDetailsPage() {
 
       {/* Calendar Card (MATCH IMAGE) */}
       <div
-        className="mx-auto bg-[#F4EFE1] border border-black/5 rounded-[60px] md:rounded-[300px] px-6 md:px-[90px] lg:px-[140px] py-10 md:py-[70px] flex flex-col lg:flex-row gap-10 items-center lg:items-stretch mb-20"
+        className="mx-auto bg-[var(--neu)] border border-black/5 rounded-[60px] md:rounded-[300px] px-6 md:px-[90px] lg:px-[140px] py-10 md:py-[70px] flex flex-col lg:flex-row gap-10 items-center lg:items-stretch mb-20"
         style={{ color: TEXT }}
       >
         {/* Left: Calendar */}
@@ -268,10 +285,10 @@ export default function ConsultingoAppointmentDetailsPage() {
             unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent flex flex-col justify-end p-8">
-            <h2 className="text-4xl md:text-[54px] font-fraunces text-[#4F2910] text-center mb-2 font-semibold">
+            <h2 className="text-4xl md:text-[54px] font-fraunces text-[var(--sec)] text-center mb-2 font-semibold">
               Enter details
             </h2>
-            <p className="text-[#8B715B] text-sm text-center">
+            <p className="text-[var(--sec)]/70 text-sm text-center">
               Join a dynamic event that values innovation and collaboration.
             </p>
           </div>
@@ -304,14 +321,14 @@ export default function ConsultingoAppointmentDetailsPage() {
                 },
               ].map((field) => (
                 <div key={field.name}>
-                  <label className="text-sm font-medium text-[#4F2910] mb-2 block">
+                  <label className="text-sm font-medium text-[var(--sec)] mb-2 block">
                     {field.label}
                   </label>
                   <input
                     type={field.type}
                     name={field.name}
                     placeholder={field.placeholder}
-                    className="w-full rounded-xl px-6 py-4 text-lg bg-[#F4EFE1] border-none focus:ring-2 focus:ring-[#c2593f] outline-none transition-all"
+                    className="w-full rounded-xl px-6 py-4 text-lg bg-[var(--neu)] border-none focus:ring-2 focus:ring-[var(--pri)] outline-none transition-all"
                     onChange={(e) =>
                       setFormData((p) => ({
                         ...p,
@@ -326,7 +343,7 @@ export default function ConsultingoAppointmentDetailsPage() {
             <button
               type="submit"
               disabled={!isFormValid || isSubmitting}
-              className="w-full rounded-xl py-4 bg-[#c2593f] text-white font-bold text-lg hover:bg-[#a34a35] disabled:bg-gray-300 transition-all flex justify-center items-center"
+              className="w-full rounded-xl py-4 bg-[var(--pri)] text-white font-bold text-lg hover:bg-[var(--pri)] disabled:bg-gray-300 transition-all flex justify-center items-center"
             >
               {isSubmitting ? (
                 <LoaderCircle className="animate-spin" />

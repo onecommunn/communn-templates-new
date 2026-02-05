@@ -22,7 +22,8 @@ const testimonials: Testimonial[] = [
       "Absolutely blown away by the superior sound quality. It's transformed the way I experience music and control my smart home. Couldn't be happier!",
     author: "Bryan Knight",
     role: "Creative Director",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
   },
   {
     id: 2,
@@ -31,27 +32,44 @@ const testimonials: Testimonial[] = [
       "The experience has been smooth and premium. Setup was easy and the product feels very high quality. Totally worth it.",
     author: "Ava Morgan",
     role: "Product Manager",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces",
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces",
   },
 ];
 
-const ConsultingoServiceTestimonial = () => {
+const ConsultingoServiceTestimonial = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   // 1. Initialize Autoplay and Carousel
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 3000, stopOnInteraction: true,stopOnMouseEnter:true }),
+    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true }),
   ]);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
   return (
-    <section className="bg-[#fcf6e8] py-20 px-6 min-h-[500px] flex items-center justify-center">
+    <section
+      className="bg-[var(--neu)] py-20 px-6 min-h-[500px] flex items-center justify-center"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="relative w-full max-w-4xl mx-auto">
-        
         {/* Navigation Buttons */}
         <button
           onClick={scrollPrev}
-          className="absolute -left-6 top-1/2 cursor-pointer -translate-y-1/2 z-10 p-3 bg-[#3d2b1f] text-white rounded-full hover:bg-opacity-90 transition-all md:-left-6"
+          className="absolute -left-6 top-1/2 cursor-pointer -translate-y-1/2 z-10 p-3 bg-[var(--sec)] text-white rounded-full hover:bg-opacity-90 transition-all md:-left-6"
           aria-label="Previous slide"
         >
           <ChevronLeft size={20} />
@@ -59,27 +77,32 @@ const ConsultingoServiceTestimonial = () => {
 
         <button
           onClick={scrollNext}
-          className="absolute -right-6 top-1/2 cursor-pointer -translate-y-1/2 z-10 p-3 bg-[#3d2b1f] text-white rounded-full hover:bg-opacity-90 transition-all md:-right-6"
+          className="absolute -right-6 top-1/2 cursor-pointer -translate-y-1/2 z-10 p-3 bg-[var(--sec)]/90 text-white rounded-full hover:bg-opacity-90 transition-all md:-right-6"
           aria-label="Next slide"
         >
           <ChevronRight size={20} />
         </button>
 
         {/* The Capsule Container */}
-        <div className="overflow-hidden bg-[#F4EFE1] rounded-[30px] md:rounded-[250px]" ref={emblaRef}>
+        <div
+          className="overflow-hidden bg-[var(--neu)] rounded-[30px] md:rounded-[250px]"
+          ref={emblaRef}
+        >
           <div className="flex">
             {testimonials.map((item) => (
-              <div key={item.id} className="flex-[0_0_100%] min-w-0 py-16 px-12 md:px-24 flex flex-col items-center text-center">
-                
+              <div
+                key={item.id}
+                className="flex-[0_0_100%] min-w-0 py-16 px-12 md:px-24 flex flex-col items-center text-center"
+              >
                 {/* Stars */}
                 <div className="flex gap-1 mb-6">
                   {[...Array(item.rating)].map((_, i) => (
-                    <Star key={i} size={18} fill="#BC4C37" color="#BC4C37" />
+                    <Star key={i} size={18} fill={primaryColor} color={primaryColor} />
                   ))}
                 </div>
 
                 {/* Quote */}
-                <p className="text-[#3d2b1f] text-lg md:text-2xl font-fraunces font-semibold leading-relaxed mb-8 max-w-2xl">
+                <p className="text-[var(--sec)] text-lg md:text-2xl font-fraunces font-semibold leading-relaxed mb-8 max-w-2xl">
                   {item.quote}
                 </p>
 
@@ -92,8 +115,12 @@ const ConsultingoServiceTestimonial = () => {
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  <h4 className="text-[#3d2b1f] font-normal font-lexend text-lg">{item.author}</h4>
-                  <p className="text-[#8B715B] text-base capitalize font-lexend tracking-widest">{item.role}</p>
+                  <h4 className="text-[var(--sec)] font-normal font-lexend text-lg">
+                    {item.author}
+                  </h4>
+                  <p className="text-[var(--sec)]/60 text-base capitalize font-lexend tracking-widest">
+                    {item.role}
+                  </p>
                 </div>
               </div>
             ))}

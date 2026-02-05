@@ -38,7 +38,15 @@ const curriculumData: CurriculumItem[] = [
   },
 ];
 
-const ConsultingoCourseDetailsPage = () => {
+const ConsultingoCourseDetailsPage = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -48,30 +56,42 @@ const ConsultingoCourseDetailsPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) return <LoadingSkeleton />;
+  if (isLoading)
+    return (
+      <LoadingSkeleton
+        primaryColor={primaryColor}
+        secondaryColor={secondaryColor}
+        neutralColor={neutralColor}
+      />
+    );
 
   return (
-    <section className="bg-[#fcf9f1] min-h-screen py-16 px-6 md:px-20 font-lexend">
+    <section
+      className="bg-[var(--neu)] min-h-screen py-16 px-6 md:px-20 font-lexend"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="max-w-7xl mx-auto">
         {/* --- Hero Section --- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
           <div className="space-y-6">
-            <h1 className="text-5xl md:text-6xl text-[#BC4C37] font-fraunces leading-tight font-medium">
+            <h1 className="text-5xl md:text-6xl text-[var(--pri)] font-fraunces leading-tight font-medium">
               Explore consulting career opportunities with Consultingo
             </h1>
-            <p className="text-[#3d2b1f] font-lexend text-sm md:text-base leading-relaxed opacity-80 max-w-xl">
+            <p className="text-[var(--sec)] font-lexend text-sm md:text-base leading-relaxed opacity-80 max-w-xl">
               Embark on a journey of professional growth and fulfillment as you
               explore a myriad of exciting consulting career opportunities
               within our team. Embark on a journey of professional growth and
               fulfillment as you explore a myriad of exciting consulting career
               opportunities within our team.
             </p>
-            <button className="flex font-lexend hover:scale-105 items-center gap-2 bg-[#BC4C37] text-white px-6 py-3 rounded-full hover:bg-[#BC4C37]/90 transition-all text-sm">
-              Buy Now{" "}
-              <ArrowUpRight
-                size={18}
-                strokeWidth={1.5}
-              />
+            <button className="flex font-lexend hover:scale-105 items-center gap-2 bg-[var(--pri)] text-white px-6 py-3 rounded-full hover:bg-[var(--pri)]/90 transition-all text-sm">
+              Buy Now <ArrowUpRight size={18} strokeWidth={1.5} />
             </button>
           </div>
 
@@ -89,7 +109,7 @@ const ConsultingoCourseDetailsPage = () => {
 
         {/* --- Course Curriculum Section --- */}
         <div className="max-w-full">
-          <h2 className="text-4xl text-[#3d2b1f] font-semibold mb-6 font-fraunces">
+          <h2 className="text-4xl text-[var(--sec)] font-semibold mb-6 font-fraunces">
             Course Curriculum
           </h2>
 
@@ -97,14 +117,14 @@ const ConsultingoCourseDetailsPage = () => {
             {curriculumData.map((item, idx) => (
               <div
                 key={idx}
-                className={`transition-all duration-300 rounded-xl overflow-hidden ${openIndex === idx ? "bg-[#f3eee0]" : "bg-transparent"}`}
+                className={`transition-all duration-300 rounded-xl overflow-hidden ${openIndex === idx ? "bg-[var(--neu)]" : "bg-transparent"}`}
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                  className="w-full cursor-pointer hover:bg-[#f3eee0] flex justify-between items-center px-6 py-4 text-left border-b border-[#3d2b1f]/10"
+                  className="w-full cursor-pointer hover:bg-[var(--neu)] flex justify-between items-center px-6 py-4 text-left border-b border-[var(--sec)]/10"
                 >
                   <span
-                    className={`text-xl font-medium ${openIndex === idx ? "text-[#c26d55]" : "text-[#3d2b1f]"}`}
+                    className={`text-xl font-medium ${openIndex === idx ? "text-[var(--pri)]" : "text-[var(--sec)]"}`}
                   >
                     {item.week} - {item.title}
                   </span>
@@ -121,9 +141,9 @@ const ConsultingoCourseDetailsPage = () => {
                       {item.modules.map((mod, i) => (
                         <li
                           key={i}
-                          className="text-[#3d2b1f]/70 text-base flex items-center gap-2"
+                          className="text-[var(--sec)]/70 text-base flex items-center gap-2"
                         >
-                          <span className="w-1.5 h-1.5 bg-[#c26d55] rounded-full" />
+                          <span className="w-1.5 h-1.5 bg-[var(--pri)] rounded-full" />
                           {mod}
                         </li>
                       ))}
@@ -140,8 +160,25 @@ const ConsultingoCourseDetailsPage = () => {
 };
 
 // --- Skeleton Component ---
-const LoadingSkeleton = () => (
-  <div className="bg-[#fcf9f1] min-h-screen py-16 px-6 md:px-20 animate-pulse">
+const LoadingSkeleton = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => (
+  <div
+    className="bg-[var(--neu)] min-h-screen py-16 px-6 md:px-20 animate-pulse"
+    style={
+      {
+        "--pri": primaryColor,
+        "--sec": secondaryColor,
+        "--neu": neutralColor,
+      } as React.CSSProperties
+    }
+  >
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
         <div className="space-y-6">

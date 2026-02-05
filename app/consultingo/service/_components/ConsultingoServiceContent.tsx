@@ -30,15 +30,32 @@ alignment with business objectives and supporting informed decision-making for s
   },
 ];
 
-const ConsultingoServiceContent = () => {
+const ConsultingoServiceContent = ({
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+  neutralColor: string;
+}) => {
   return (
-    <section className="relative font-lexend bg-[#fcf6e8] overflow-hidden py-10 md:py-16">
-      <div className="relative container mx-auto px-6 text-[#4F2910] flex flex-col items-center md:max-w-[70%]">
+    <section
+      className="relative font-lexend bg-[var(--neu)] overflow-hidden py-10 md:py-16"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
+      <div className="relative container mx-auto px-6 text-[var(--sec)] flex flex-col items-center md:max-w-[70%]">
         <div className="flex flex-col gap-2">
           <h3 className="font-semibold font-fraunces text-[40px]/[52px]">
             An in-depth look at our consulting solutions
           </h3>
-          <p className="text-base text-[#8B715B]">
+          <p className="text-base text-[var(--sec)]/70">
             Explore our consulting solutions tailored to address your unique
             business challenges and drive growth. We specialize in strategic
             planning, operational efficiency, market analysis, and
@@ -57,14 +74,12 @@ const ConsultingoServiceContent = () => {
             />
           </div>
           <div className="flex flex-col gap-8">
-            {
-              sections?.map((s,idx) => (
-                <div key={idx}>
-                  <h4 className="text-[#4F2910] font-semibold text-[34px]/[44px] font-fraunces">{`${idx+1}. ${s.title}`}</h4>
-                  <p className="text-[#8B715B] text-base mt-1">{s.des}</p>
-                </div>
-              ))
-            }
+            {sections?.map((s, idx) => (
+              <div key={idx}>
+                <h4 className="text-[var(--sec)] font-semibold text-[34px]/[44px] font-fraunces">{`${idx + 1}. ${s.title}`}</h4>
+                <p className="text-[var(--sec)]/70 text-base mt-1">{s.des}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
