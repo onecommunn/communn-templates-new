@@ -1,4 +1,4 @@
-export interface ConsultingoHomePage {
+export interface ConsultingoContactPage {
   templateId: "consultingo";
   pageName: "contact";
   status: "published" | "draft" | string;

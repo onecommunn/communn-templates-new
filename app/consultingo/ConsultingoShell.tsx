@@ -15,13 +15,14 @@ import {
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import Link from "next/link";
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
+import { homedummyData } from "./home-dummy-data";
 
 export default async function ConsultingoShell({
   community,
   children,
 }: React.PropsWithChildren<{ community: Community }>) {
   const bundle = await getConsultingoCMSBundle(community._id);
-  const source = bundle?.home;
+  const source = bundle?.home ?? homedummyData;
 
   const primaryColor = source?.color?.primary || "#BC4C37";
   const secondaryColor = source?.color?.secondary || "#4F2910";

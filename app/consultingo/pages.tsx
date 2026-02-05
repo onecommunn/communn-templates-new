@@ -23,12 +23,13 @@ import {
   TestimonialSection,
   TrustedBySection,
 } from "@/models/templates/consultingo/consultingo-home-model";
+import { homedummyData } from "./home-dummy-data";
 
 const ConsultingoRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: ConsultingoHomePage | undefined = !isLoading
-    ? (home as ConsultingoHomePage | undefined)
+    ? ((home as ConsultingoHomePage | undefined) ?? homedummyData)
     : undefined;
 
   const primaryColor = source?.color?.primary || "#BC4C37";
