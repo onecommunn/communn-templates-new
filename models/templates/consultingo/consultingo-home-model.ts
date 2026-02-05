@@ -124,7 +124,11 @@ export interface ServicesSection extends SectionBase {
       title: string;
       description: string;
       image: string;
-      link: string;
+      sections: {
+        title: string;
+        description: string;
+        image?: string;
+      }[];
     }[];
   };
 }

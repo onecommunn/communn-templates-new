@@ -170,7 +170,7 @@ export const homedummyData: ConsultingoHomePage = {
               "Strategic planning & seamless implementation of initiatives to drive organizational growth and achieve long-term objectives.",
             image:
               "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=600",
-            link: "/services/planning",
+            sections: [],
           },
           {
             title: "Process Optimization",
@@ -178,7 +178,7 @@ export const homedummyData: ConsultingoHomePage = {
               "Enhance efficiency through targeted process optimization, ensuring optimal performance and resource use.",
             image:
               "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600",
-            link: "/services/optimization",
+            sections: [],
           },
           {
             title: "Market Analysis",
@@ -186,7 +186,7 @@ export const homedummyData: ConsultingoHomePage = {
               "Comprehensive market research and analysis to inform strategic decisions and maximize opportunities.",
             image:
               "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=600",
-            link: "/services/market-analysis",
+            sections: [],
           },
         ],
       },
