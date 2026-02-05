@@ -1,12 +1,50 @@
 "use client";
 import React, { FormEvent, useContext, useState } from "react";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Dribbble, Facebook, Globe, Instagram, Linkedin, Twitter } from "lucide-react";
 import { AuthContext } from "@/contexts/Auth.context";
 import { ContactForm } from "@/models/contact.model";
 import { sendNotification } from "@/services/contactService";
 import { toast } from "sonner";
+import { useCMS } from "../CMSProvider.client";
+import {
+  ConsultingoContactPage,
+  ContactSection,
+  ContactSectionMain,
+} from "@/models/templates/consultingo/consultingo-contact.model";
+import { formatUrl } from "@/utils/StringFunctions";
+import Link from "next/link";
+
+export interface SocialMediaLink {
+  platform: string;
+  url: string;
+}
+
+const PLATFORM_ICON: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  dribbble: Dribbble,
+  twitter: Twitter,
+};
 
 const ConsultingoContactusRoot: React.FC = () => {
+  const { contact } = useCMS();
+  const isLoading = contact === undefined;
+  const source: ConsultingoContactPage | undefined = !isLoading
+    ? (contact as ConsultingoContactPage | undefined)
+    : undefined;
+
+  const primaryColor = source?.color?.primary || "#BC4C37";
+  const secondaryColor = source?.color?.secondary || "#4F2910";
+  const neutralColor = source?.color?.neutral || "#fcf6e8";
+
+  const data = source?.sections?.find(
+    (s: ContactSectionMain): s is ContactSection =>
+      s.sectionName === "contactSection" && s.isActive,
+  );
+
+  const content = data?.content;
+
   const auth = useContext(AuthContext);
   const { communityId } = auth;
 
@@ -51,12 +89,21 @@ const ConsultingoContactusRoot: React.FC = () => {
       setLoading(false);
     }
   };
-
+  const normalize = (s?: string) => (s ?? "").trim();
   return (
-    <section className="bg-[#FDF7E9] min-h-screen py-16 px-6 md:px-12 lg:px-24 font-lexend">
+    <section
+      className="bg-[var(--neu)] min-h-screen py-16 px-6 md:px-12 lg:px-24 font-lexend"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       {/* Header */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl md:text-6xl font-fraunces text-[#B85C44]">
+        <h1 className="text-5xl md:text-6xl font-fraunces text-[var(--pri)]">
           Contact us
         </h1>
       </div>
@@ -65,67 +112,64 @@ const ConsultingoContactusRoot: React.FC = () => {
         {/* Left Column: Info */}
         <div className="space-y-8">
           <header>
-            <h2 className="text-3xl font-bold text-[#4A2C19] mb-4">
-              Get in touch with us
+            <h2 className="text-3xl font-bold text-[var(--sec)] mb-4">
+              {content?.heading}
             </h2>
-            <p className="text-[#6B5E54] leading-relaxed max-w-md">
-              We're here to answer any questions you have and help you get
-              started on your journey to success. Reach out to us through any of
-              the following methods, and a member of our team will be in touch
-              shortly.
+            <p className="text-[var(--sec)]/70 leading-relaxed max-w-md">
+              {content?.description}
             </p>
           </header>
 
-          <div className="space-y-6 text-[#4A2C19]">
+          <div className="space-y-6 text-[var(--sec)]">
             <div>
               <h3 className="font-bold text-lg mb-1">Phone</h3>
-              <p className="text-[#6B5E54] underline">(123) 456-7890</p>
+              <p className="text-[var(--sec)]/70 underline">
+                {content?.contactDetails?.phone}
+              </p>
             </div>
 
             <div>
               <h3 className="font-bold text-lg mb-1">Email</h3>
-              <p className="text-[#6B5E54] underline">hello@example.com</p>
+              <p className="text-[var(--sec)]/70 underline">
+                {content?.contactDetails?.email}
+              </p>
             </div>
 
             <div>
               <h3 className="font-bold text-lg mb-1">Address</h3>
-              <p className="text-[#6B5E54]">
-                Chicago HQ Estica Cop. Macomb, MI 48042
+              <p className="text-[var(--sec)]/70">
+                {content?.contactDetails?.address}
               </p>
             </div>
 
             <div>
               <h3 className="font-bold text-lg mb-1">Business hours</h3>
-              <p className="text-[#6B5E54]">
-                Monday to Friday: 9:00 AM – 6:00 PM
-              </p>
+              {content?.availableTimings?.map?.((item, idx) => (
+                <p className="text-[var(--sec)]/70" key={idx}>
+                  {item?.day} - {item?.time}
+                </p>
+              ))}
             </div>
           </div>
 
           {/* Social Icons */}
           <div className="pt-4">
-            <h3 className="font-bold text-lg mb-4 text-[#4A2C19]">
+            <h3 className="font-bold text-lg mb-4 text-[var(--sec)]">
               Follow us on
             </h3>
             <div className="flex gap-4">
-              <a
-                href="#"
-                className="w-10 h-10 bg-[#4A2C19] rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-[#4A2C19] rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-[#4A2C19] rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-              >
-                <Twitter size={20} />
-              </a>
+              {content?.socialLinks?.map(
+                (each: SocialMediaLink, idx: number) => {
+                  const key = normalize(each.platform).toLowerCase();
+                  const Icon = PLATFORM_ICON[key] ?? Globe;
+                  const url = formatUrl(each.url) || "/";
+                  return (
+                    <Link href={url ?? "/"} key={idx}>
+                      <SocialIcon icon={<Icon />} />
+                    </Link>
+                  );
+                },
+              )}
             </div>
           </div>
         </div>
@@ -134,7 +178,7 @@ const ConsultingoContactusRoot: React.FC = () => {
         <div className="bg-white p-6 md:p-10 rounded-[20px] md:rounded-[40px] shadow-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-[#4A2C19] font-semibold mb-2 ml-1">
+              <label className="block text-[var(--sec)] font-semibold mb-2 ml-1">
                 Name
               </label>
               <input
@@ -144,12 +188,12 @@ const ConsultingoContactusRoot: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Enter Name"
                 required
-                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[var(--neu)] rounded-2xl p-4 focus:ring-2 focus:ring-[var(--pri)] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[#4A2C19] font-semibold mb-2 ml-1">
+              <label className="block text-[var(--sec)] font-semibold mb-2 ml-1">
                 Email
               </label>
               <input
@@ -159,12 +203,12 @@ const ConsultingoContactusRoot: React.FC = () => {
                 placeholder="Enter Email"
                 onChange={handleChange}
                 required
-                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[var(--neu)] rounded-2xl p-4 focus:ring-2 focus:ring-[var(--pri)] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[#4A2C19] font-semibold mb-2 ml-1">
+              <label className="block text-[var(--sec)] font-semibold mb-2 ml-1">
                 Phone
               </label>
               <input
@@ -174,12 +218,12 @@ const ConsultingoContactusRoot: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Enter Phone Number"
                 required
-                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[var(--neu)] rounded-2xl p-4 focus:ring-2 focus:ring-[var(--pri)] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[#4A2C19] font-semibold mb-2 ml-1">
+              <label className="block text-[var(--sec)] font-semibold mb-2 ml-1">
                 Subject
               </label>
               <input
@@ -188,12 +232,12 @@ const ConsultingoContactusRoot: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Subject"
                 required
-                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none"
+                className="w-full bg-[var(--neu)] rounded-2xl p-4 focus:ring-2 focus:ring-[var(--pri)] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[#4A2C19] font-semibold mb-2 ml-1">
+              <label className="block text-[var(--sec)] font-semibold mb-2 ml-1">
                 Message
               </label>
               <textarea
@@ -203,14 +247,14 @@ const ConsultingoContactusRoot: React.FC = () => {
                 value={form.message}
                 onChange={handleChange}
                 required
-                className="w-full bg-[#F3EDE0] rounded-2xl p-4 focus:ring-2 focus:ring-[#B85C44] outline-none resize-none"
+                className="w-full bg-[var(--neu)] rounded-2xl p-4 focus:ring-2 focus:ring-[var(--pri)] outline-none resize-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#B85C44] text-white font-bold py-4 rounded-full text-lg hover:bg-[#a14e38] transition-colors"
+              className="w-full cursor-pointer disabled:cursor-not-allowed bg-[var(--pri)]/90 text-white font-bold py-4 rounded-full text-lg hover:bg-[var(--pri)] transition-colors"
             >
               {loading ? "Sending..." : "Submit"}
             </button>
@@ -222,3 +266,9 @@ const ConsultingoContactusRoot: React.FC = () => {
 };
 
 export default ConsultingoContactusRoot;
+
+const SocialIcon = ({ icon }: { icon: React.ReactNode }) => (
+  <div className="w-10 h-10 bg-[var(--sec)] rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity">
+    {icon}
+  </div>
+);
