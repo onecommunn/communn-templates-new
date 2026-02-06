@@ -400,7 +400,7 @@ const DefaultPlans = ({
                           />
                         </div>
                         {/* Status chip (top-right) */}
-                        <div className="">
+                        {/* <div className="">
                           {userSubscribedToPlan && isActivePlan && (
                             <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                               Active
@@ -412,7 +412,23 @@ const DefaultPlans = ({
                               Expired on {formatDate(nextDue)}
                             </span>
                           )}
-                        </div>
+                        </div> */}
+                        {/* Next Due / Status – show ONLY ONE */}
+                        {isLoggedIn && userSubscribedToPlan && nextDue && (
+                          <div className="mt-2 text-sm font-medium">
+                            {nextDue === "forever" ? (
+                              <span className="text-gray-700"></span>
+                            ) : isExpiredPlan ? (
+                              <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                                Expired on {formatDate(nextDue)}
+                              </span>
+                            ) : (
+                              <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                Next due: {formatDate(nextDue)}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       <h3 className="text-lg md:text-xl font-bold text-black">
