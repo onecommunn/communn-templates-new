@@ -12,6 +12,8 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
 import { ServicesSection } from "@/models/templates/consultingo/consultingo-home-model";
+import Link from "next/link";
+import { underscoreToSpace } from "@/utils/StringFunctions";
 
 const ConsultingoServices = ({
   data,
@@ -88,8 +90,8 @@ const ConsultingoServices = ({
             {content?.services?.map((service, index) => (
               <CarouselItem key={index} className="basis-1/1 md:basis-1/3">
                 <div className="bg-white flex-1 h-full rounded-[32px] p-4 pt-6 md:p-8 flex flex-col items-center text-center">
-                  <h3 className="text-2xl font-fraunces text-[var(--sec)] mb-4">
-                    {service?.title}
+                  <h3 className="text-2xl font-fraunces text-[var(--sec)] mb-4 capitalize">
+                    {underscoreToSpace(service?.serviceName)}
                   </h3>
                   <p className="text-[var(--sec)]/70 text-sm leading-relaxed mb-10 line-clamp-2">
                     {service?.description}
@@ -99,16 +101,16 @@ const ConsultingoServices = ({
                   <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden group cursor-pointer mt-auto">
                     <Image
                       src={service?.image}
-                      alt={service?.title}
+                      alt={service?.serviceName}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                       unoptimized
                     />
 
                     <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="w-14 h-14 bg-[var(--pri)] rounded-full flex items-center justify-center text-white transform scale-50 group-hover:scale-100 transition-transform duration-300 ease-out shadow-xl">
+                      <Link href={`/service?name=${service?.serviceName}`}  className="w-14 h-14 bg-[var(--pri)] rounded-full flex items-center justify-center text-white transform scale-50 group-hover:scale-100 transition-transform duration-300 ease-out shadow-xl">
                         <MoveRight size={24} />
-                      </div>
+                      </Link>
                     </div>
                   </div>
                 </div>

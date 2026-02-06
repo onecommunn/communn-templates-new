@@ -58,7 +58,7 @@ const ConsultingoRoot = () => {
 
   const servicesSectionData = source?.sections?.find(
     (s: HomeSection): s is ServicesSection =>
-      s.sectionName === "servicesSection" && s.isActive,
+      s.sectionName === "serviceSection" && s.isActive,
   );
 
   const appointmentSectionData = source?.sections?.find(

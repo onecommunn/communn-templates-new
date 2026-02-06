@@ -62,7 +62,6 @@ const DefaultHeader = ({ logo, name, colors }: DefaultHeaderProps) => {
 
   return (
     <>
-      {" "}
       <header className="sticky font-montserrat top-0 z-50 backdrop-blur bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 md:px-12">
           <div className="flex items-center justify-between py-4 gap-4">

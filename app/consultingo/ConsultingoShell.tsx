@@ -10,6 +10,7 @@ import {
   FooterSection,
   Header,
   HomeSection,
+  ServicesSection,
   WhatsappWidgetSection,
 } from "@/models/templates/consultingo/consultingo-home-model";
 import PhoneIcon from "@/components/icons/PhoneIcon";
@@ -31,20 +32,25 @@ export default async function ConsultingoShell({
   const initialLoading = !bundle?.home || source;
 
   const headerData = source?.sections?.find(
-    (s: HomeSection): s is Header => s.sectionName === "headerSection"
+    (s: HomeSection): s is Header => s.sectionName === "headerSection",
   );
 
   const footerData = source?.sections?.find(
-    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
+    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection",
   );
 
   const CTAdata = source?.sections?.find(
-    (s: HomeSection): s is CtaSection => s.sectionName === "ctaSection"
+    (s: HomeSection): s is CtaSection => s.sectionName === "ctaSection",
   );
 
   const whatsappWidgetData = source?.sections?.find(
     (s: HomeSection): s is WhatsappWidgetSection =>
-      s.sectionName === "whatsappWidgetSection"
+      s.sectionName === "whatsappWidgetSection",
+  );
+
+  const servicesSectionData = source?.sections?.find(
+    (s: HomeSection): s is ServicesSection =>
+      s.sectionName === "serviceSection" && s.isActive,
   );
 
   return (
@@ -73,8 +79,9 @@ export default async function ConsultingoShell({
 
       {/* whatsapp Button */}
       <Link
-        href={`https://api.whatsapp.com/send?phone=${whatsappWidgetData?.content?.whatsappNumber
-          }&text=${whatsappWidgetData?.content?.predefinedMessage ?? "HI"}`}
+        href={`https://api.whatsapp.com/send?phone=${
+          whatsappWidgetData?.content?.whatsappNumber
+        }&text=${whatsappWidgetData?.content?.predefinedMessage ?? "HI"}`}
         target="_blank"
         data-bs-toggle="tooltip"
         data-bs-html="true"
@@ -101,6 +108,7 @@ export default async function ConsultingoShell({
         secondaryColor={secondaryColor}
         neutralColor={neutralColor}
         data={headerData}
+        servicesData={servicesSectionData}
       />
       <CMSProvider initialBundle={bundle} initialLoading={initialLoading}>
         <main>{children}</main>

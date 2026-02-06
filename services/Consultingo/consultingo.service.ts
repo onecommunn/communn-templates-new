@@ -7,6 +7,10 @@ type ConsultingoCMSBundle = {
   contact: any | null;
 };
 
+type ConsultingoServiceCMSBundle = {
+  data: any | null;
+};
+
 async function fetchJSON(url: string) {
   try {
     const r = await axios.get(url);
@@ -37,4 +41,17 @@ async function fetchConsultingoBundle(
 
 export async function getConsultingoCMSBundle(communityId: string) {
   return fetchConsultingoBundle(communityId);
+}
+
+export async function fetchConsultingoServiceBundle(
+  communityId: string,
+  serviceName: string
+): Promise<ConsultingoServiceCMSBundle> {
+  const url = `${BASE_URL_V2}/cms/get-service-detail/community/${communityId}?templateId=consultingo&service=${serviceName}`;
+
+  const data = await fetchJSON(url);
+
+  return {
+    data: data?.data ?? null,
+  };
 }

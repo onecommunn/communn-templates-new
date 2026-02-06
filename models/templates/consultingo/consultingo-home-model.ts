@@ -117,11 +117,11 @@ export interface SustainabilitySection extends SectionBase {
 }
 
 export interface ServicesSection extends SectionBase {
-  sectionName: "servicesSection";
+  sectionName: "serviceSection";
   content: {
     heading: string;
     services: {
-      title: string;
+      serviceName: string;
       description: string;
       image: string;
       sections: {

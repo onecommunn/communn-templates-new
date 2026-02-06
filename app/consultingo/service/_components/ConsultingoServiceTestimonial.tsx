@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { TestimonialSection } from "@/models/templates/consultingo/consultingo-home-model";
 
 interface Testimonial {
   id: number;
@@ -14,38 +15,18 @@ interface Testimonial {
   image: string;
 }
 
-const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    rating: 5,
-    quote:
-      "Absolutely blown away by the superior sound quality. It's transformed the way I experience music and control my smart home. Couldn't be happier!",
-    author: "Bryan Knight",
-    role: "Creative Director",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
-  },
-  {
-    id: 2,
-    rating: 5,
-    quote:
-      "The experience has been smooth and premium. Setup was easy and the product feels very high quality. Totally worth it.",
-    author: "Ava Morgan",
-    role: "Product Manager",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces",
-  },
-];
-
 const ConsultingoServiceTestimonial = ({
   primaryColor,
   secondaryColor,
   neutralColor,
+  data,
 }: {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  data: TestimonialSection;
 }) => {
+  const testimonials = data?.content?.testimonials;
   // 1. Initialize Autoplay and Carousel
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true }),
@@ -89,15 +70,20 @@ const ConsultingoServiceTestimonial = ({
           ref={emblaRef}
         >
           <div className="flex">
-            {testimonials.map((item) => (
+            {testimonials.map((item, idx) => (
               <div
-                key={item.id}
+                key={idx}
                 className="flex-[0_0_100%] min-w-0 py-16 px-12 md:px-24 flex flex-col items-center text-center"
               >
                 {/* Stars */}
                 <div className="flex gap-1 mb-6">
                   {[...Array(item.rating)].map((_, i) => (
-                    <Star key={i} size={18} fill={primaryColor} color={primaryColor} />
+                    <Star
+                      key={i}
+                      size={18}
+                      fill={primaryColor}
+                      color={primaryColor}
+                    />
                   ))}
                 </div>
 

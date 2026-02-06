@@ -160,12 +160,12 @@ export const homedummyData: ConsultingoHomePage = {
     },
     // servicesSection
     {
-      sectionName: "servicesSection",
+      sectionName: "serviceSection",
       content: {
         heading: "Innovative consulting services",
         services: [
           {
-            title: "Planning & Implementation",
+            serviceName: "Planning & Implementation",
             description:
               "Strategic planning & seamless implementation of initiatives to drive organizational growth and achieve long-term objectives.",
             image:
@@ -173,7 +173,7 @@ export const homedummyData: ConsultingoHomePage = {
             sections: [],
           },
           {
-            title: "Process Optimization",
+            serviceName: "Process Optimization",
             description:
               "Enhance efficiency through targeted process optimization, ensuring optimal performance and resource use.",
             image:
@@ -181,7 +181,7 @@ export const homedummyData: ConsultingoHomePage = {
             sections: [],
           },
           {
-            title: "Market Analysis",
+            serviceName: "Market Analysis",
             description:
               "Comprehensive market research and analysis to inform strategic decisions and maximize opportunities.",
             image:
