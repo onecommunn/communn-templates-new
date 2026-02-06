@@ -128,14 +128,14 @@ const ConsultingoRoot = () => {
         />
       )}
 
-      {appointmentSectionData && (
+      {/* {appointmentSectionData && (
         <ConsultingoAppointments
           data={appointmentSectionData}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           neutralColor={neutralColor}
         />
-      )}
+      )} */}
 
       {plansSectionData && (
         <ConsultingoPlans

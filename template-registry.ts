@@ -224,6 +224,7 @@ export const templates: Record<
     "/course-details": ConsultingoCourseDetailsRoot,
     "/appointment-detail": ConsultingoAppointmentDetailsPageRoot,
     "/profile": ConsultingoProfilePage,
+    "/payments": DefaultPaymentsRoot,
   },
   collections: {
     "/": CollectionsRoot,

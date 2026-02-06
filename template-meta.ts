@@ -770,6 +770,26 @@ export const templatePageMeta: Record<string, Record<string, MetaFn>> = {
       alternates: { canonical: "/appointment-detail" },
       icons: getFaviconMeta(community.logo),
     }),
+    "/profile": ({ community }) => ({
+      title: `Profile - ${community.name}`,
+      description: `View and manage your ${community.name} profile, membership, and account settings.`,
+      alternates: { canonical: "/profile" },
+      openGraph: {
+        title: `Profile - ${community?.name || ""}`,
+        description: `View and manage your ${community.name} profile, membership, and account settings.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+    "/payments": ({ community }) => ({
+      title: `Payments - ${community.name}`,
+      description: `View and manage your ${community.name} payments, transactions, invoices, and billing history.`,
+      alternates: { canonical: "/payments" },
+      openGraph: {
+        title: `Payments - ${community?.name || ""}`,
+        description: `View and manage your ${community.name} payments, transactions, invoices, and billing history.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
   },
 
   collections: {
