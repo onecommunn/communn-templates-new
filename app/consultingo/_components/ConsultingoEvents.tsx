@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { MoveUpRight } from "lucide-react";
+import React, { useContext, useEffect, useState } from "react";
+import { LockKeyhole, MoveUpRight } from "lucide-react";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";
 import Link from "next/link";
 import { EventsSection } from "@/models/templates/consultingo/consultingo-home-model";
-
+import { AuthContext } from "@/contexts/Auth.context";
+import LoginPopUp from "@/app/default/_components/LoginPopUp";
 
 export const formatMonthDay = (iso: string) =>
   new Intl.DateTimeFormat("en-US", {
@@ -30,9 +31,13 @@ const ConsultingoEvents = ({
   neutralColor: string;
 }) => {
   const content = data?.content;
+  const auth = useContext(AuthContext);
+  const isLoggedIn = !!auth?.isAuthenticated;
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { communityId } = useCommunity();
+  const { communityId, communityData } = useCommunity();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
   const fetchEvents = async () => {
     try {
@@ -44,6 +49,11 @@ const ConsultingoEvents = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleLoginTrigger = (eventId: string) => {
+    setRedirectPath(`/event-details?eventid=${eventId}`);
+    setIsLoginOpen(true);
   };
 
   useEffect(() => {
@@ -113,7 +123,7 @@ const ConsultingoEvents = ({
         } as React.CSSProperties
       }
     >
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-7xl">
         <h2 className="text-4xl md:text-5xl font-fraunces text-[var(--sec)] mb-10">
           {content?.heading}
         </h2>
@@ -123,14 +133,14 @@ const ConsultingoEvents = ({
             <p>No Events available.</p>
           </div>
         ) : (
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-4">
             {events.map((event) => {
               const availability = event?.availability;
               const end = availability?.[availability.length - 1]?.day;
               return (
                 <div
                   key={event._id}
-                  className="group bg-[var(--neu)] rounded-[30px] flex flex-col md:flex-row items-start md:items-center justify-between p-6 md:px-12 md:py-6 border-b border-[var(--sec)]/10 last:border-0"
+                  className="group bg-[var(--pri)]/10 rounded-[30px] flex flex-col md:flex-row items-start md:items-center justify-between p-6 md:px-12 md:py-6 border-b border-[var(--sec)]/10 last:border-0"
                 >
                   {/* Event Title */}
                   <div className="md:w-1/3 mb-4 md:mb-0">
@@ -161,17 +171,29 @@ const ConsultingoEvents = ({
 
                   {/* Action Button */}
                   <div className="w-auto ">
-                    <Link
-                      href={`/event-details?eventid=${event._id}`}
-                      className="flex items-center justify-between w-full md:w-auto gap-4 bg-[var(--sec)] hover:bg-[var(--pri)] text-white px-8 py-4 rounded-full transition-all duration-300 group-hover:shadow-lg"
-                    >
-                      <span className="font-semibold text-sm">
-                        View details
-                      </span>
-                      <div className="rounded-full bg-white/10 p-1">
-                        <MoveUpRight size={18} />
-                      </div>
-                    </Link>
+                    {!isLoggedIn ? (
+                      <button
+                        onClick={() => handleLoginTrigger(event._id)}
+                        className="flex items-center cursor-pointer justify-between w-full md:w-auto gap-4 bg-[var(--sec)] hover:bg-[var(--pri)] text-white px-8 py-4 rounded-full transition-all duration-300 group-hover:shadow-lg"
+                      >
+                        {communityData?.community?.type === "PRIVATE" && (
+                          <LockKeyhole size={18} />
+                        )}
+                        Login to Participate
+                      </button>
+                    ) : (
+                      <Link
+                        href={`/event-details?eventid=${event._id}`}
+                        className="flex items-center justify-between w-full md:w-auto gap-4 bg-[var(--sec)] hover:bg-[var(--pri)] text-white px-8 py-4 rounded-full transition-all duration-300 group-hover:shadow-lg"
+                      >
+                        <span className="font-semibold text-sm">
+                          View details
+                        </span>
+                        <div className="rounded-full bg-white/10 p-1">
+                          <MoveUpRight size={18} />
+                        </div>
+                      </Link>
+                    )}
                   </div>
                 </div>
               );
@@ -179,6 +201,16 @@ const ConsultingoEvents = ({
           </div>
         )}
       </div>
+      <LoginPopUp
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        redirectTo={redirectPath}
+        colors={{
+          primaryColor: primaryColor,
+          secondaryColor: secondaryColor,
+          textcolor: secondaryColor,
+        }}
+      />
     </section>
   );
 };
