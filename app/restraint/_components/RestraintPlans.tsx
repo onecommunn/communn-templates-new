@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, LockKeyhole } from "lucide-react";
+import { ArrowUpRight, LockKeyhole, LoaderCircle } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -34,30 +34,59 @@ import { toast } from "sonner";
 import { useRequests } from "@/hooks/useRequests";
 import { PlansSection } from "@/models/templates/restraint/restraint-home-model";
 
+import { usePayment } from "@/hooks/usePayments";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
+import LoginPopUp from "@/app/default/_components/LoginPopUp";
+
 const MUTED = "#747B70";
 
-/* -------------------- Display & helpers -------------------- */
-type DisplayPlan = {
-  id?: string;
+enum PaymentStatus {
+  SUCCESS = "SUCCESS",
+  FAILED = "FAILED",
+  PENDING = "PENDING",
+}
+
+export type DisplayPlan = {
+  id: string;
   name: string;
   price: number | string;
   image?: string;
-  features: string[];
+
   periodLabel: string;
-  subscribers?: Array<{ _id?: string; id?: string }>;
   initialPayment: string | number;
+
+  // raw plan fields needed for logic
+  subscribers?: Array<{ _id?: string; id?: string }>;
+  nextDue?: string | "forever" | null;
+
+  isSequencePlan: boolean;
+  isActive: boolean;
+  isExpired: boolean;
+
+  features: string[];
 };
 
 function formatPeriodLabel(interval?: number, duration?: string) {
   if (!interval || !duration) return "Per Month";
-  const unit = duration.toLowerCase(); // week | month | year
+  const unit = duration.toLowerCase();
   const cap = unit.charAt(0).toUpperCase() + unit.slice(1);
   if (interval === 1) return `Per ${cap}`;
   const plural = unit.endsWith("s") ? unit : unit + "s";
   return `For ${interval} ${cap === unit ? plural : cap + "s"}`;
 }
 
-/* -------------------- Component -------------------- */
+const formatDate = (date: string | Date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function RestraintPlans({
   primaryColor,
   secondaryColor,
@@ -70,16 +99,51 @@ export default function RestraintPlans({
   const source = content?.content;
   const [api, setApi] = React.useState<CarouselApi | null>(null);
 
-  const { getPlansList, getCommunityPlansListAuth } = usePlans();
+  const {
+    getPlansList,
+    getCommunityPlansListAuth,
+    joinToPublicCommunity,
+    createSubscriptionSequencesByPlanAndCommunityId,
+    getSequencesById,
+  } = usePlans();
+
+  const { initiatePaymentByIds, getPaymentStatusById } = usePayment();
+  const { SendCommunityRequest } = useRequests();
+
+  const auth = React.useContext(AuthContext);
+  const isLoggedIn = !!(auth as any)?.isAuthenticated;
+  const userId: string | undefined =
+    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+
+  const { communityId, communityData } = useCommunity();
+  const isPrivate = communityData?.community?.type === "PRIVATE";
+
+  const [joinedCommunityLocal, setJoinedCommunityLocal] = React.useState(false);
+
   const [plans, setPlans] = React.useState<TrainingPlan[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  const auth = React.useContext(AuthContext);
-  const isLoggedIn = !!auth?.isAuthenticated;
+  // login popup
+  const [isLoginOpen, setIsLoginOpen] = React.useState(false);
 
-  const { communityId, communityData } = useCommunity();
+  // per-plan processing
+  const [processingPlanId, setProcessingPlanId] = React.useState<string | null>(
+    null,
+  );
 
-  const [joinedCommunityLocal, setJoinedCommunityLocal] = React.useState(false);
+  // payment dialogs
+  const [timer, setTimer] = React.useState(5);
+  const [successOpen, setSuccessOpen] = React.useState(false);
+  const [failureOpen, setFailureOpen] = React.useState(false);
+  const [transaction, setTransaction] = React.useState<any>(null);
+
+  const isSubscribedCommunity = React.useMemo(() => {
+    const members = communityData?.community?.members || [];
+    return (
+      joinedCommunityLocal ||
+      members?.some((m: any) => (m?.user?._id ?? m?.user?.id) === userId)
+    );
+  }, [joinedCommunityLocal, communityData, userId]);
 
   const fetchPlans = async () => {
     if (!communityId) return;
@@ -89,13 +153,10 @@ export default function RestraintPlans({
         ? await getCommunityPlansListAuth(communityId)
         : await getPlansList(communityId);
 
-      if (Array.isArray(resp)) {
-        setPlans(resp as TrainingPlan[]);
-      } else if (resp && typeof resp === "object" && "myPlans" in resp) {
+      if (Array.isArray(resp)) setPlans(resp as TrainingPlan[]);
+      else if (resp && typeof resp === "object" && "myPlans" in resp)
         setPlans((resp as any).myPlans as TrainingPlan[]);
-      } else {
-        setPlans([]);
-      }
+      else setPlans([]);
     } catch (e) {
       console.error("Failed to fetch plans:", e);
       setPlans([]);
@@ -103,50 +164,225 @@ export default function RestraintPlans({
       setIsLoading(false);
     }
   };
+
   React.useEffect(() => {
     fetchPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isLoggedIn]);
 
-  // Normalize API plans
-  const normalizedFromApi: DisplayPlan[] = React.useMemo(() => {
+  const handleJoinPublic = async () => {
+    if (!communityId) return;
+    try {
+      await joinToPublicCommunity(communityId);
+      setJoinedCommunityLocal(true);
+      toast.success("Successfully joined the community");
+      fetchPlans();
+    } catch (error) {
+      toast.error("Could not join the community.");
+    }
+  };
+
+  const handleRequestPrivate = async () => {
+    if (!communityId) return;
+    try {
+      const fd = new FormData();
+      fd.append("community", communityId);
+      fd.append("Message", "Request to join the community.");
+      const res = await SendCommunityRequest(fd);
+      if (res?.status === 201) toast.success("Request sent to admin.");
+      else toast.success("Request sent.");
+    } catch (e) {
+      toast.error("Could not send request.");
+    }
+  };
+
+  const handleSuccessClose = () => {
+    setTimer(5);
+    setSuccessOpen(false);
+    fetchPlans();
+  };
+
+  const handleFailureClose = () => {
+    setTimer(5);
+    setFailureOpen(false);
+  };
+
+  const openPaymentAndTrack = async (payRes: any) => {
+    const url = payRes?.url ?? payRes?.data?.url;
+    const transactionId = payRes?.transactionId ?? payRes?.data?.transactionId;
+    const txn = payRes?.transaction ?? payRes?.data?.transaction;
+
+    if (txn) setTransaction(txn);
+
+    if (!url || !transactionId) {
+      toast.error("Payment URL not received");
+      return;
+    }
+
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    const width = Math.min(1000, screenWidth);
+    const height = Math.min(1000, screenHeight);
+    const left = (screenWidth - width) / 2;
+    const top = (screenHeight - height) / 2;
+
+    const windowRef = window.open(
+      url,
+      "paymentWindow",
+      `width=${width},height=${height},left=${left},top=${top},resizable=no`,
+    );
+
+    const intervalRef = setInterval(async () => {
+      try {
+        const statusRes: any = await getPaymentStatusById(transactionId);
+
+        const status =
+          statusRes?.[0]?.status ??
+          statusRes?.status ??
+          statusRes?.data?.[0]?.status ??
+          statusRes?.data?.status;
+
+        if (!status) return;
+        if (status === PaymentStatus.PENDING) return;
+
+        clearInterval(intervalRef);
+        windowRef?.close();
+
+        if (status === PaymentStatus.SUCCESS) setSuccessOpen(true);
+        else setFailureOpen(true);
+      } catch (err) {
+        console.error("Error fetching payment status:", err);
+      }
+    }, 1000);
+  };
+
+  // ✅ Non-sequence pay flow (Pay & Join / Pay to Renew)
+  const handleNonSequencePayNow = async (
+    plan: TrainingPlan,
+    isFirstTime: boolean,
+  ) => {
+    if (!plan?._id || !communityId) {
+      toast.error("Missing required data");
+      return;
+    }
+
+    if (!isLoggedIn || !userId) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    setProcessingPlanId(plan._id);
+
+    try {
+      const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
+        userId,
+        communityId,
+        plan._id,
+      );
+
+      const subscriptionId = res?.subscription?._id;
+      if (!subscriptionId) {
+        toast.error("Subscription creation failed");
+        return;
+      }
+
+      const seqRes: any = await getSequencesById(subscriptionId, userId);
+      const sequences = seqRes?.sequences || [];
+
+      const firstPayable = sequences.find(
+        (s: any) =>
+          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
+          !s?.isnonPayable,
+      );
+
+      if (!firstPayable?._id) {
+        toast.error("No payable sequence found");
+        return;
+      }
+
+      // base plan amount
+      const baseAmount =
+        Number(seqRes?.pricing ?? 0) ||
+        Number((plan as any)?.pricing ?? 0) ||
+        Number((plan as any)?.totalPlanValue ?? 0);
+
+      if (!baseAmount || baseAmount <= 0) {
+        toast.error("Invalid amount");
+        return;
+      }
+
+      // ✅ add initial fee ONLY on first subscribe
+      const initialFee = Number((plan as any)?.initialPayment ?? 0);
+      const finalAmount =
+        isFirstTime && initialFee > 0 ? baseAmount + initialFee : baseAmount;
+
+      const payRes: any = await initiatePaymentByIds(
+        userId,
+        plan._id,
+        [firstPayable._id],
+        String(finalAmount),
+      );
+
+      toast.success("Redirecting to payment...");
+      await openPaymentAndTrack(payRes);
+    } catch (err) {
+      console.error(err);
+      toast.error("Payment initiation failed");
+    } finally {
+      setProcessingPlanId(null);
+    }
+  };
+
+  // Normalize API plans to display + logic fields
+  const data: DisplayPlan[] = React.useMemo(() => {
     return plans.map((p) => {
-      const period = `${p.interval} ${capitalizeWords(p.duration)}`;
+      const periodRaw = `${p.interval} ${capitalizeWords(p.duration)}`;
+      const nextDue = (p as any)?.nextDueDate as any;
+
+      const isActive =
+        !!nextDue && (nextDue === "forever" || new Date(nextDue) >= new Date());
+
+      const isExpired =
+        !!nextDue && nextDue !== "forever" && new Date(nextDue) < new Date();
+
+      const isSequencePlan =
+        !!(p as any)?.isSequenceAvailable &&
+        Number((p as any)?.totalSequences ?? 0) > 0;
+
       return {
-        id: p._id,
+        id: p._id as any,
         name: p.name,
-        price: p.pricing || p.totalPlanValue || 0,
-        image: p?.image?.value,
-        features: [
-          `Duration: ${period}`,
-          `Subscribers: ${p.subscribers?.length ?? 0}`,
-          `Next Due: ${p.nextDueDate ? p.nextDueDate : "No Dues"}`,
-          `Status: ${
-            !p.nextDueDate
-              ? "Not Subscribed"
-              : new Date(p.nextDueDate) >= new Date()
-              ? "Active"
-              : "Expired"
-          }`,
-        ],
+        price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
+        image: (p as any)?.image?.value,
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
-        // carry raw subscribers for per-user detection
-        subscribers: (p.subscribers as any[]) || [],
-        initialPayment: p?.initialPayment,
+        initialPayment: (p as any)?.initialPayment ?? 0,
+        subscribers: ((p as any)?.subscribers as any[]) || [],
+        nextDue: nextDue ?? null,
+
+        isSequencePlan,
+        isActive,
+        isExpired,
+
+        features: [
+          `Duration: ${periodRaw}`,
+          `Subscribers: ${(p as any)?.subscribers?.length ?? 0}`,
+          `Next Due: ${
+            nextDue
+              ? nextDue === "forever"
+                ? "No Expiry"
+                : isExpired
+                  ? `Expired on ${formatDate(nextDue)}`
+                  : formatDate(nextDue)
+              : "No Dues"
+          }`,
+          `Status: ${!nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"}`,
+        ],
       };
     });
   }, [plans]);
 
-  // Pick dataset: fetched
-  const data: DisplayPlan[] = normalizedFromApi;
-
-  const userId: string | undefined =
-    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
-
-  const isSubscribedCommunity =
-    joinedCommunityLocal ||
-    communityData?.community?.members?.some(
-      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
-    );
+  const ctaBase =
+    "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 h-14 font-medium transition";
 
   return (
     <section
@@ -209,9 +445,6 @@ export default function RestraintPlans({
             <CarouselContent className="-ml-4">
               {data.map((plan, idx) => {
                 const isFeatured = (idx + 1) % 2 === 0;
-                const planId =
-                  (plans[idx]?._id as string | undefined) ||
-                  `${plan.name}-${idx}`;
                 const coverImage =
                   plan.image || "/assets/restraint-plans-image-1.jpg";
                 const color = isFeatured ? secondaryColor : primaryColor;
@@ -219,30 +452,35 @@ export default function RestraintPlans({
                 const isSubscribed =
                   !!isLoggedIn &&
                   !!plan.subscribers?.some(
-                    (sub: { _id?: string; id?: string }) =>
-                      (sub?._id ?? sub?.id) === userId
+                    (sub) => (sub?._id ?? sub?.id) === userId,
                   );
+
+                const isProcessing = processingPlanId === plan.id;
 
                 return (
                   <CarouselItem
-                    key={planId}
+                    key={plan.id}
                     className="pl-4 md:basis-1/2 lg:basis-1/3"
                   >
                     <PlanCard
                       plan={plan}
                       isFeatured={isFeatured}
-                      periodLabel={plan.periodLabel}
-                      isLoggedIn={isLoggedIn}
-                      isPrivate={communityData?.community?.type === "PRIVATE"}
-                      isSubscribedCommunity={isSubscribedCommunity}
-                      isSubscribed={isSubscribed}
-                      communityId={communityId}
-                      planId={planId}
                       coverImage={coverImage}
                       color={color}
-                      fetchPlans={fetchPlans}
-                      initialPayment={plan?.initialPayment}
-                      onJoinedCommunity={() => setJoinedCommunityLocal(true)}
+                      isLoggedIn={isLoggedIn}
+                      isPrivate={isPrivate}
+                      isSubscribedCommunity={!!isSubscribedCommunity}
+                      isSubscribed={isSubscribed}
+                      isProcessing={isProcessing}
+                      communityId={communityId}
+                      ctaBase={ctaBase}
+                      // actions
+                      onLogin={() => setIsLoginOpen(true)}
+                      onJoinCommunity={handleJoinPublic}
+                      onRequestPrivate={handleRequestPrivate}
+                      onNonSequencePayNow={() =>
+                        handleNonSequencePayNow(plans[idx], !isSubscribed)
+                      }
                     />
                   </CarouselItem>
                 );
@@ -254,6 +492,7 @@ export default function RestraintPlans({
           </Carousel>
         )}
       </div>
+
       {!(data.length === 0) && (
         <div className="mt-2 flex w-full items-center justify-center">
           <Link href={"/plans"}>
@@ -269,6 +508,34 @@ export default function RestraintPlans({
           </Link>
         </div>
       )}
+
+      {/* ✅ LoginPopUp (same as our logic) */}
+      <LoginPopUp
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        redirectTo={"/#plans"}
+        colors={{
+          primaryColor,
+          secondaryColor,
+          textcolor: secondaryColor, // keep as your design needs
+        }}
+      />
+
+      {/* ✅ Payment dialogs */}
+      <PaymentSuccess
+        txnid={transaction?.txnid || ""}
+        open={successOpen}
+        amount={transaction?.amount || ""}
+        timer={timer}
+        onClose={handleSuccessClose}
+      />
+      <PaymentFailure
+        open={failureOpen}
+        onClose={handleFailureClose}
+        amount={transaction?.amount || ""}
+        txnid={transaction?.txnid || ""}
+        timer={timer}
+      />
     </section>
   );
 }
@@ -277,78 +544,44 @@ export default function RestraintPlans({
 export function PlanCard({
   plan,
   isFeatured,
-  periodLabel,
+  coverImage,
+  color,
   isLoggedIn,
   isPrivate,
   isSubscribedCommunity,
   isSubscribed,
+  isProcessing,
   communityId,
-  planId,
-  coverImage,
-  color,
-  fetchPlans,
-  initialPayment,
-  onJoinedCommunity,
+  ctaBase,
+  onLogin,
+  onJoinCommunity,
+  onRequestPrivate,
+  onNonSequencePayNow,
 }: {
   plan: DisplayPlan;
   isFeatured: boolean;
-  periodLabel: string;
-  isLoggedIn: boolean;
-  isPrivate: boolean;
-  isSubscribedCommunity?: boolean;
-  isSubscribed: boolean;
-  communityId?: string;
-  planId: string;
   coverImage: string;
   color: string;
-  fetchPlans?: () => void;
-  initialPayment: string | number;
-  onJoinedCommunity?: () => void;
+  isLoggedIn: boolean;
+  isPrivate: boolean;
+  isSubscribedCommunity: boolean;
+  isSubscribed: boolean;
+  isProcessing: boolean;
+  communityId?: string;
+  ctaBase: string;
+
+  onLogin: () => void;
+  onJoinCommunity: () => void;
+  onRequestPrivate: () => void;
+  onNonSequencePayNow: () => void;
 }) {
-  const { joinToPublicCommunity } = usePlans();
-  const { SendCommunityRequest } = useRequests();
+  const hrefSub = `/subscriptions/?planid=${encodeURIComponent(
+    plan.id,
+  )}&communityid=${encodeURIComponent(communityId || "")}`;
 
-  // Accept optional ids and guard to fix TS2345 + runtime safety
-  const handleClickJoin = async (id?: string) => {
-    if (!id) {
-      toast.error("Missing community id");
-      return;
-    }
-    try {
-      await joinToPublicCommunity(id);
-
-      onJoinedCommunity?.();
-
-      fetchPlans?.();
-      toast.success("Successfully joined the community");
-    } catch (error) {
-      console.error("Error joining community:", error);
-      toast.error("Could not join the community. Please try again.");
-    }
-  };
-
-  const handleClickSendRequest = async (
-    community?: string,
-    message?: string
-  ) => {
-    if (!community) {
-      toast.error("Missing community id");
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append("community", community);
-      formData.append("Message", message || "Request to join the community.");
-      const response = await SendCommunityRequest(formData);
-      if (response && response.status === 201) {
-        fetchPlans?.();
-        toast.success("Request sent to the admin.");
-      }
-    } catch (error) {
-      console.error("Error while sending community request:", error);
-      toast.error("Could not send the request. Please try again.");
-    }
-  };
+  // CTA label logic (same as our plans logic)
+  const showSubscribedDisabled = isSubscribed && plan.isActive;
+  const showExpired = isSubscribed && plan.isExpired;
 
   return (
     <article
@@ -388,17 +621,37 @@ export function PlanCard({
             className="mt-1 text-xs"
             style={{ color: isFeatured ? "rgba(255,255,255,.8)" : MUTED }}
           >
-            {periodLabel}
+            {plan.periodLabel}
           </div>
+
           <div
             className="text-xs font-normal mt-1"
             style={{ color: isFeatured ? "rgba(255,255,255,.8)" : MUTED }}
           >
-            {Number(initialPayment) > 0 &&
-              ` + One Time Fee :  ₹ ${initialPayment}`}
+            {Number(plan.initialPayment) > 0 &&
+              ` + One Time Fee :  ₹ ${plan.initialPayment}`}
           </div>
+
+          {/* ✅ show ONE chip: next due / expired */}
+          {isLoggedIn &&
+            isSubscribed &&
+            plan.nextDue &&
+            plan.nextDue !== "forever" && (
+              <div className="mt-3">
+                {plan.isExpired ? (
+                  <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                    Expired on {formatDate(plan.nextDue)}
+                  </span>
+                ) : (
+                  <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    Next due: {formatDate(plan.nextDue)}
+                  </span>
+                )}
+              </div>
+            )}
         </div>
       </div>
+
       <h3 className="my-1 px-4 text-center font-marcellus text-xl">
         {capitalizeWords(plan.name)}
       </h3>
@@ -428,183 +681,166 @@ export function PlanCard({
           ))}
         </ul>
 
-        {/* CTA area — conditional rendering */}
+        {/* CTA */}
         <div className="mt-6" style={{ ["--color" as any]: color }}>
+          {/* 1) Not logged in -> LoginPopUp */}
           {!isLoggedIn ? (
-            <Link
-              href={"/login"}
+            <button
+              type="button"
+              onClick={onLogin}
               className={[
-                "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
+                ctaBase,
+                "text-[15px]",
                 isFeatured
                   ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
                   : "bg-[var(--pri)] text-white hover:opacity-95",
               ].join(" ")}
             >
-              <span className="relative z-[1] flex items-center gap-2 text-[15px] font-medium">
-                {isPrivate && (
-                  <span>
-                    <LockKeyhole size={20} strokeWidth={1.5} />
-                  </span>
-                )}
+              <span className="inline-flex items-center gap-2">
+                {isPrivate && <LockKeyhole size={20} strokeWidth={1.5} />}
                 Login to Subscribe
               </span>
-              <span
-                className={[
-                  isFeatured
-                    ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                    : "bg-[var(--pri)] text-white hover:opacity-95",
-                ].join(" ")}
-              >
-                <ArrowUpRight className="h-6 w-6" />
-              </span>
-            </Link>
-          ) : !isSubscribedCommunity ? (
-            !isPrivate ? (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <div
-                    className={[
-                      "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
-                      isFeatured
-                        ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                        : "bg-[var(--pri)] text-white hover:opacity-95",
-                    ].join(" ")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <span className="relative z-[1] flex items-center gap-2 text-[15px] font-medium">
-                      {isPrivate && (
-                        <span>
-                          <LockKeyhole size={20} strokeWidth={1.5} />
-                        </span>
-                      )}
-                      Join Community
-                    </span>
-                    <span
-                      className={[
-                        isFeatured
-                          ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                          : "bg-[var(--pri)] text-white hover:opacity-95",
-                      ].join(" ")}
-                    >
-                      <ArrowUpRight className="h-6 w-6" />
-                    </span>
-                  </div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogTitle>Join Community</DialogTitle>
-                  <DialogDescription>
-                    You're not a member of this community yet. Would you like to
-                    join now?
-                  </DialogDescription>
-                  <div className="mt-4 flex justify-end">
-                    <DialogClose asChild>
-                      <Button
-                        onClick={() => handleClickJoin(communityId)}
-                        disabled={isSubscribed}
-                      >
-                        Confirm Join
-                      </Button>
-                    </DialogClose>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            ) : (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <div
-                    className={[
-                      "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition",
-                      isFeatured
-                        ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                        : "bg-[var(--pri)] text-white hover:opacity-95",
-                    ].join(" ")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <span className="relative z-[1] flex items-center gap-2 text-[15px] font-medium">
-                      {isPrivate && (
-                        <span>
-                          <LockKeyhole size={20} strokeWidth={1.5} />
-                        </span>
-                      )}
-                      Send Join Request
-                    </span>
-                    <span
-                      className={[
-                        isFeatured
-                          ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                          : "bg-[var(--pri)] text-white hover:opacity-95",
-                      ].join(" ")}
-                    >
-                      <ArrowUpRight className="h-6 w-6" />
-                    </span>
-                  </div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogTitle>Send Join Request</DialogTitle>
-                  <DialogDescription>
-                    This is a private community. Your request will be sent to
-                    the admin. You can proceed with payment once approved.
-                  </DialogDescription>
-                  <div className="mt-4 flex justify-end">
-                    <Button
-                      onClick={() =>
-                        handleClickSendRequest(
-                          communityId,
-                          "Request to join the community."
-                        )
-                      }
-                      disabled={isSubscribed}
-                      className="cursor-pointer"
-                    >
-                      Send Request
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            )
+              <ArrowUpRight className="h-5 w-5" />
+            </button>
           ) : (
-            <ChooseButton
-              text={isSubscribed ? "Subscribed" : "Subscribe"}
-              href={`/subscriptions/?planid=${encodeURIComponent(
-                planId
-              )}&communityid=${encodeURIComponent(communityId || "")}`}
-              color={color}
-              isSubscribed={isSubscribed}
-            />
+            <>
+              {/* 2) Logged in but not joined community -> join/request */}
+              {!isSubscribedCommunity ? (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      type="button"
+                      className={[
+                        ctaBase,
+                        "text-[15px]",
+                        isFeatured
+                          ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
+                          : "bg-[var(--pri)] text-white hover:opacity-95",
+                      ].join(" ")}
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        {isPrivate && (
+                          <LockKeyhole size={20} strokeWidth={1.5} />
+                        )}
+                        {isPrivate ? "Request to Join" : "Join Community"}
+                      </span>
+                      <ArrowUpRight className="h-5 w-5" />
+                    </button>
+                  </DialogTrigger>
+
+                  <DialogContent>
+                    <DialogTitle>Community Membership Required</DialogTitle>
+                    <DialogDescription>
+                      {isPrivate
+                        ? "This is a private community. Send a request to the admin to get access to plans."
+                        : "You need to join the community before subscribing to a plan."}
+                    </DialogDescription>
+
+                    <div className="mt-4 flex justify-end gap-3">
+                      <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DialogClose>
+
+                      <DialogClose asChild>
+                        <Button
+                          onClick={
+                            isPrivate ? onRequestPrivate : onJoinCommunity
+                          }
+                        >
+                          Confirm
+                        </Button>
+                      </DialogClose>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ) : showSubscribedDisabled ? (
+                /* 3) Subscribed + Active */
+                <Button
+                  variant="outline"
+                  className="w-full h-14 !py-0 rounded-xl font-semibold"
+                  disabled
+                >
+                  Subscribed
+                </Button>
+              ) : showExpired ? (
+                /* 4) Subscribed + Expired -> sequence vs non-sequence */
+                plan.isSequencePlan ? (
+                  <Link
+                    href={hrefSub}
+                    className={[
+                      ctaBase,
+                      "text-[15px]",
+                      isFeatured
+                        ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
+                        : "bg-[var(--pri)] text-white hover:opacity-95",
+                      isProcessing ? "opacity-60 pointer-events-none" : "",
+                    ].join(" ")}
+                  >
+                    {isProcessing ? "Processing..." : "Renew & Pay"}
+                    <ArrowUpRight className="h-5 w-5" />
+                  </Link>
+                ) : (
+                  <Button
+                    onClick={onNonSequencePayNow}
+                    className={[
+                      "w-full h-14 !py-0 rounded-xl font-semibold",
+                      isFeatured
+                        ? "bg-[var(--sec)] text-[var(--pri)]"
+                        : "bg-[var(--pri)] text-white",
+                    ].join(" ")}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? (
+                      <span className="inline-flex items-center gap-2">
+                        <LoaderCircle className="w-4 h-4 animate-spin" />
+                        Starting payment...
+                      </span>
+                    ) : (
+                      "Pay to Renew"
+                    )}
+                  </Button>
+                )
+              ) : /* 5) Not subscribed yet -> sequence vs non-sequence */
+              plan.isSequencePlan ? (
+                <Link
+                  href={hrefSub}
+                  className={[
+                    ctaBase,
+                    "text-[15px]",
+                    isFeatured
+                      ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
+                      : "bg-[var(--pri)] text-white hover:opacity-95",
+                    isProcessing ? "opacity-60 pointer-events-none" : "",
+                  ].join(" ")}
+                >
+                  {isSubscribed ? "Subscribed" : "Subscribe"}
+                  <ArrowUpRight className="h-5 w-5" />
+                </Link>
+              ) : (
+                <Button
+                  onClick={onNonSequencePayNow}
+                  className={[
+                    "w-full h-14 cursor-pointer disabled:cursor-not-allowed hover:brightness-95 !py-0 rounded-xl font-semibold",
+                    isFeatured
+                      ? "bg-[var(--sec)] hover:bg-[var(-sec)]/90  text-[var(--pri)]"
+                      : "bg-[var(--pri)] hover:bg-[var(-sec)]/90 text-white",
+                  ].join(" ")}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? (
+                    <span className="inline-flex items-center gap-2">
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                      Starting payment...
+                    </span>
+                  ) : (
+                    "Pay & Join"
+                  )}
+                </Button>
+              )}
+            </>
           )}
         </div>
       </div>
     </article>
-  );
-}
-
-/* -------------------- Local ChooseButton -------------------- */
-function ChooseButton({
-  text,
-  href,
-  color,
-  isSubscribed,
-}: {
-  text: string;
-  href: string;
-  color: string;
-  isSubscribed: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium ${
-        isSubscribed
-          ? "text-[var(--color)] border border-[var(--color)] bg-none"
-          : "text-white bg-[var(--color)]"
-      } transition`}
-      style={
-        {
-          "--color": color,
-        } as React.CSSProperties
-      }
-    >
-      {text} <ArrowUpRight className="h-4 w-4" />
-    </Link>
   );
 }
