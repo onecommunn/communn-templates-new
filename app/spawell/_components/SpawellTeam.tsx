@@ -32,7 +32,7 @@ const Card: React.FC<Member> = ({
       </div>
       <div className="relative mt-4 h-56 md:h-80">
         <Image
-          src={media}
+          src={media ?? "/"}
           alt={title}
           fill
           className="object-contain object-bottom transition-transform duration-300 group-hover:scale-[1.03]"
