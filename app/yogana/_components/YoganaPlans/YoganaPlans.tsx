@@ -1,9 +1,9 @@
+// ✅ YoganaPlans.tsx (UPDATED to use the hook)
 "use client";
 import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
 import { TrainingPlan } from "@/models/plan.model";
-import { getCommunityData } from "@/services/communityService";
 import YoganaPlanCard from "./YoganaPlanCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -18,6 +18,19 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
 import { capitalizeWords } from "@/utils/StringFunctions";
+import LoginPopUp from "@/app/default/_components/LoginPopUp";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
+
+import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow"; // ✅ path as you saved
 
 function Dots({
   api,
@@ -40,7 +53,6 @@ function Dots({
       setSelected(api.selectedScrollSnap());
     };
 
-    // initialize
     setCount(api.scrollSnapList().length);
     setSelected(api.selectedScrollSnap());
 
@@ -70,7 +82,7 @@ function Dots({
             className={[
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
-                ? `w-6 bg-[${primaryColor}] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]`
+                ? "w-6 shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
                 : "bg-gray-300 hover:bg-gray-400 cursor-pointer",
             ].join(" ")}
           />
@@ -94,36 +106,31 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   neutralColor,
 }) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
-  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
-  const { communityId, communityData } = useCommunity();
 
-  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
+  const { communityId, communityData } = useCommunity();
 
   const userId =
     (authContext as any)?.user?._id ??
     (authContext as any)?.user?.id ??
     undefined;
 
-  const isSubscribedCommunity =
-    joinedCommunityLocal ||
-    communityData?.community?.members?.some(
-      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
-    );
+  const isLoggedIn = !!(isAuthenticated && userId);
 
+  // Autoplay
   const autoplay = useRef(
     Autoplay({
-      delay: 2000,
+      delay: 3000,
       stopOnInteraction: true,
       stopOnMouseEnter: true,
     })
   );
 
-  // Embla API refs (one for each carousel instance)
   const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
     undefined
   );
@@ -131,59 +138,21 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     undefined
   );
 
-  useEffect(() => {
-    const api = apiMain;
-    if (!api) return;
-
-    const maybeRestartAtEnd = () => {
-      const lastIndex = api.scrollSnapList().length;
-      if (api.selectedScrollSnap() === lastIndex) {
-        // Jump back to the first slide and keep autoplay ticking
-        // (omit the second arg to animate; pass `true` to jump instantly)
-        api.scrollTo(0);
-        // Reset the autoplay timer so it continues naturally
-        // (safe-optional chaining in case reset isn't present)
-        autoplay.current?.reset?.();
-      }
-    };
-
-    // run once and on every selection/reInit
-    maybeRestartAtEnd();
-    api.on("select", maybeRestartAtEnd);
-    api.on("reInit", maybeRestartAtEnd);
-
-    return () => {
-      api.off("select", maybeRestartAtEnd);
-      api.off("reInit", maybeRestartAtEnd);
-    };
-  }, [apiMain]);
-
   const fetchPlans = async () => {
     if (!communityId) return;
     setIsLoading(true);
     try {
-      let response;
-      if (isAuthenticated) {
-        response = await getCommunityPlansListAuth(communityId);
-      } else {
-        response = await getPlansList(communityId);
-      }
+      const response: any = isAuthenticated
+        ? await getCommunityPlansListAuth(communityId)
+        : await getPlansList(communityId);
 
-      if (Array.isArray(response)) {
-        setPlans(response as TrainingPlan[]);
-      } else if (
-        response &&
-        typeof response === "object" &&
-        "myPlans" in response &&
-        Array.isArray((response as any).myPlans)
-      ) {
+      if (Array.isArray(response)) setPlans(response as TrainingPlan[]);
+      else if (response && typeof response === "object" && "myPlans" in response)
         setPlans((response as any).myPlans as TrainingPlan[]);
-        setIsSubscribed((response as any).isSubscribedCommunity);
-      } else {
-        setPlans([]);
-      }
+      else setPlans([]);
     } catch (error) {
       console.error("Failed to fetch plans:", error);
+      setPlans([]);
     } finally {
       setIsLoading(false);
     }
@@ -194,21 +163,27 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isAuthenticated]);
 
+  // ✅ Hook
+  const flow = usePlanSubscribeFlow({
+    communityId: communityId as any,
+    communityData,
+    isLoggedIn,
+    userId,
+    plans,
+    refetchPlans: fetchPlans,
+  });
+
   const Header = () => (
     <div className="relative z-10 text-center md:mb-16 mb-6">
       <p
-        style={{
-          color: primaryColor,
-        }}
+        style={{ color: primaryColor }}
         className="font-alex-brush text-2xl md:text-4xl"
       >
         {data?.content?.heading}
       </p>
       <h2
-        style={{
-          color: secondaryColor,
-        }}
-        className={`text-[#000] font-cormorant text-[28px] md:text-[60px] font-semibold`}
+        style={{ color: secondaryColor }}
+        className="text-[#000] font-cormorant text-[28px] md:text-[60px] font-semibold"
       >
         {data?.content?.subHeading}
       </h2>
@@ -216,14 +191,10 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   );
 
   if (isLoading) {
-    // Skeleton with dots
     return (
       <section
         id="plans"
         className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-        // style={{
-        //   backgroundColor: `${primaryColor}1A`,
-        // }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <Header />
@@ -240,9 +211,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 >
                   <Skeleton
                     className="h-[420px] w-full bg-gray-300 rounded-[30px]"
-                    style={{
-                      backgroundColor: primaryColor,
-                    }}
+                    style={{ backgroundColor: primaryColor }}
                   />
                 </CarouselItem>
               ))}
@@ -258,7 +227,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
 
   const isRequested = Boolean(
     communityData?.community?.requests?.some(
-      (req: any) => req.createdBy?._id === authContext?.user?.id
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
     )
   );
 
@@ -266,9 +235,6 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     <section
       id="plans"
       className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <Header />
@@ -278,10 +244,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         ) : (
           <>
             <Carousel
-              opts={{
-                align: "start",
-                loop: false,
-              }}
+              opts={{ align: "start", loop: false }}
               plugins={[autoplay.current]}
               className="w-full"
               setApi={setApiMain}
@@ -294,31 +257,42 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                   >
                     <div className="h-full">
                       <YoganaPlanCard
-                        coupons={plan.coupons}
+                        coupons={(plan as any)?.coupons ?? []}
                         index={index + 1}
                         title={plan.name}
-                        description={plan.description || plan.summary}
-                        subscribers={plan?.subscribers}
+                        description={plan.description || (plan as any)?.summary}
+                        subscribers={(plan as any)?.subscribers ?? []}
                         fetchPlans={fetchPlans}
-                        isSubscribedCommunity={isSubscribedCommunity}
-                        planId={plan._id}
-                        communityId={communityId}
+                        isSubscribedCommunity={!!flow.isSubscribedCommunity}
+                        planId={String(plan._id)}
+                        communityId={String(communityId)}
                         primaryColor={primaryColor}
                         secondaryColor={secondaryColor}
                         neutralColor={neutralColor}
-                        price={plan.pricing || `${plan.totalPlanValue}`}
-                        period={`${plan.interval} ${capitalizeWords(
-                          plan.duration
-                        )}`}
+                        price={String(
+                          (plan as any)?.pricing ??
+                            (plan as any)?.totalPlanValue ??
+                            ""
+                        )}
+                        period={
+                          plan.interval && plan.duration
+                            ? `${plan.interval} ${capitalizeWords(plan.duration)}`
+                            : ""
+                        }
                         coverImage={
-                          plan?.image?.value ||
+                          (plan as any)?.image?.value ||
                           "/assets/creatorCoursesPlaceHolderImage.jpg"
                         }
-                        isPrivate={communityData?.community?.type === "PRIVATE"}
+                        isPrivate={flow.isPrivate}
                         isRequested={!!isRequested}
-                        initialPayment={plan?.initialPayment}
-                        // ✅ NEW: let the card tell parent “join succeeded”
-                        onJoinedCommunity={() => setJoinedCommunityLocal(true)}
+                        initialPayment={(plan as any)?.initialPayment ?? 0}
+                        onJoinedCommunity={() => flow.setJoinedCommunityLocal(true)}
+                        // ✅ flow
+                        isLoggedIn={isLoggedIn}
+                        onStartFlow={() => flow.startSubscribeFlow(String(plan._id))}
+                        isProcessing={flow.processingPlanId === String(plan._id)}
+                        // ✅ meta for button text
+                        planMeta={flow.getPlanMeta(String(plan._id))}
                       />
                     </div>
                   </CarouselItem>
@@ -328,47 +302,153 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
               <CarouselPrevious
                 aria-label="Previous plans"
                 className="hidden sm:flex size-10 cursor-pointer"
-                style={{
-                  color: primaryColor,
-                  backgroundColor: "#fff",
-                }}
+                style={{ color: primaryColor, backgroundColor: "#fff" }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor =
                     primaryColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor =
-                    "#fff";
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
               />
 
               <CarouselNext
                 className="hidden sm:flex size-10 cursor-pointer"
-                style={{
-                  color: primaryColor,
-                  backgroundColor: "#fff",
-                }}
+                style={{ color: primaryColor, backgroundColor: "#fff" }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor =
                     primaryColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor =
-                    "#fff";
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
                 aria-label="Next plans"
               />
             </Carousel>
 
-            {/* Dot indicators (will stay on last dot at the end) */}
             <Dots api={apiMain} primaryColor={primaryColor} />
           </>
         )}
       </div>
+
+      {/* ✅ Login Popup */}
+      <LoginPopUp
+        isOpen={flow.isLoginOpen}
+        onClose={() => flow.setIsLoginOpen(false)}
+        redirectTo={"/#plans"}
+        colors={{
+          primaryColor,
+          secondaryColor,
+          textcolor: secondaryColor,
+        }}
+      />
+
+      {/* ✅ Private Request Dialog (optional global one; card already has request UI.
+          If you want ONLY hook dialog, remove request UI from card and use this.)
+      */}
+      <Dialog open={flow.joinDialogOpen} onOpenChange={flow.setJoinDialogOpen}>
+        <DialogContent>
+          <DialogTitle style={{ color: primaryColor }}>Request Access</DialogTitle>
+          <DialogDescription style={{ color: neutralColor }}>
+            This is a private community. Send a request to the admin to get access
+            to plans.
+          </DialogDescription>
+          <div className="mt-4 flex justify-end gap-3">
+            <Button variant="outline" onClick={() => flow.setJoinDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              style={{ backgroundColor: primaryColor, color: "#fff" }}
+              onClick={async () => {
+                const ok = await flow.handleRequestPrivate();
+                if (!ok) return;
+                flow.setJoinDialogOpen(false);
+              }}
+            >
+              Send Request
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ✅ Non-seq Confirm dialog after login */}
+      <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogTitle style={{ color: primaryColor }}>Choose a Plan</DialogTitle>
+          <DialogDescription style={{ color: neutralColor }}>
+            You’re ready to subscribe. Please confirm your plan below.
+          </DialogDescription>
+
+          {flow.selectedPlanId && (() => {
+            const meta = flow.getPlanMeta(flow.selectedPlanId);
+            if (!meta?.plan) return null;
+
+            const p = meta.plan;
+            const already = meta.isSubscribed;
+            const amount =
+              (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
+            const initFee = Number((p as any)?.initialPayment ?? 0);
+
+            return (
+              <div className="mt-4 rounded-xl border p-4">
+                <div className="text-lg font-semibold" style={{ color: primaryColor }}>
+                  {capitalizeWords(p.name)}
+                </div>
+                <div className="mt-1 text-sm text-slate-500">
+                  ₹{amount} •{" "}
+                  {p.interval && p.duration
+                    ? `${p.interval} ${capitalizeWords(p.duration)}`
+                    : ""}
+                </div>
+
+                {initFee > 0 && !already && (
+                  <div className="mt-1 text-xs text-slate-500">
+                    + One Time Fee: ₹{initFee}
+                  </div>
+                )}
+
+                <div className="mt-4 flex justify-end gap-3">
+                  <Button variant="outline" onClick={() => flow.setPlanDialogOpen(false)}>
+                    Cancel
+                  </Button>
+
+                  <Button
+                    style={{ backgroundColor: primaryColor, color: "#fff" }}
+                    disabled={flow.processingPlanId === flow.selectedPlanId}
+                    onClick={async () => {
+                      const pid = flow.selectedPlanId!;
+                      flow.setPlanDialogOpen(false);
+                      await flow.startNonSequencePayment(pid);
+                    }}
+                  >
+                    {already ? "Pay to Renew" : "Pay & Join"}
+                  </Button>
+                </div>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
+
+      {/* ✅ Payment dialogs */}
+      <PaymentSuccess
+        txnid={flow.transaction?.txnid || ""}
+        open={flow.successOpen}
+        amount={flow.transaction?.amount || ""}
+        timer={flow.timer}
+        onClose={flow.handleSuccessClose}
+      />
+      <PaymentFailure
+        open={flow.failureOpen}
+        onClose={flow.handleFailureClose}
+        amount={flow.transaction?.amount || ""}
+        txnid={flow.transaction?.txnid || ""}
+        timer={flow.timer}
+      />
     </section>
   );
 };

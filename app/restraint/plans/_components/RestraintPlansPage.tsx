@@ -399,11 +399,11 @@ export default function RestraintPlansPage({
 
   const continueSubscribeFlow = async (planId: string, fromLogin: boolean) => {
     if (!isSubscribedCommunity) {
-      if (isPrivate) {
-        setJoinDialogPlanId(planId);
-        setJoinDialogOpen(true);
-        return;
-      }
+      // if (isPrivate) {
+      //   setJoinDialogPlanId(planId);
+      //   setJoinDialogOpen(true);
+      //   return;
+      // }
       const ok = await handleJoinPublic();
       if (!ok) return;
     }
