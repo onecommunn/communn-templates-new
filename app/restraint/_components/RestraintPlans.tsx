@@ -917,7 +917,7 @@ export function PlanCard({
                 <Button
                   variant="outline"
                   className="w-full h-14 !py-0 rounded-xl font-semibold"
-                  disabled
+                  disabled={!plan.isSequencePlan}
                 >
                   Subscribed
                 </Button>
