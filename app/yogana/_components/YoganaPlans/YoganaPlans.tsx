@@ -412,9 +412,9 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 )}
 
                 <div className="mt-4 flex justify-end gap-3">
-                  <Button variant="outline" onClick={() => flow.setPlanDialogOpen(false)}>
+                  {/* <Button variant="outline" onClick={() => flow.setPlanDialogOpen(false)}>
                     Cancel
-                  </Button>
+                  </Button> */}
 
                   <Button
                     style={{ backgroundColor: primaryColor, color: "#fff" }}
@@ -425,7 +425,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                       await flow.startNonSequencePayment(pid);
                     }}
                   >
-                    {already ? "Pay to Renew" : "Pay & Join"}
+                    {already ? "Pay to Renew" : "Subscribe"}
                   </Button>
                 </div>
               </div>
