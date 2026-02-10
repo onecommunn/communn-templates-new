@@ -1,21 +1,9 @@
-// ✅ YoganaPlanCard.tsx (UPDATED: button labels same as Restraint + uses hook meta)
 "use client";
+
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { capitalizeWords } from "@/utils/StringFunctions";
-import { AuthContext } from "@/contexts/Auth.context";
-import { usePlans } from "@/hooks/usePlan";
-import { useRequests } from "@/hooks/useRequests";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
+import React, { useEffect, useState } from "react";
 
 type PlanMeta = null | {
   plan: any;
@@ -30,10 +18,7 @@ interface YoganaPlanCardProps {
   index: number;
   title: string;
   description: string;
-  subscribers: { _id: string }[];
-  fetchPlans?: () => void;
-  isSubscribedCommunity?: boolean;
-  onJoinedCommunity?: () => void;
+  subscribers: { _id?: string; id?: string }[];
   planId: string;
   communityId: string;
   primaryColor: string;
@@ -42,9 +27,8 @@ interface YoganaPlanCardProps {
   price: string;
   period: string;
   coverImage: string;
-  isPrivate: boolean;
-  isRequested: boolean;
   initialPayment: string | number;
+
   coupons: {
     _id: string;
     couponCode: string;
@@ -57,8 +41,9 @@ interface YoganaPlanCardProps {
     usedRedemptions: number;
   }[];
 
-  // ✅ flow props
+  // ✅ flow props (ONLY)
   isLoggedIn: boolean;
+  isSubscribedCommunity: boolean;
   onStartFlow: () => void;
 
   // ✅ from hook
@@ -70,91 +55,44 @@ const YoganaPlanCard = ({
   index,
   title,
   description,
-  subscribers,
-  fetchPlans,
   isSubscribedCommunity,
-  planId,
-  communityId,
   primaryColor,
   secondaryColor,
   neutralColor,
   price,
   period,
-  coverImage,
-  isPrivate,
-  isRequested,
   initialPayment,
   coupons,
-  onJoinedCommunity,
-
   isLoggedIn,
   onStartFlow,
-
   planMeta,
   isProcessing = false,
 }: YoganaPlanCardProps) => {
-  const authContext = useContext(AuthContext);
-  const userId =
-    (authContext as any)?.user?._id ?? (authContext as any)?.user?.id;
-
-  const { joinToPublicCommunity } = usePlans();
-  const { SendCommunityRequest } = useRequests();
-
   const [mounted, setMounted] = useState(false);
-
-  const isSubscribed =
-    !!isLoggedIn &&
-    subscribers?.some((sub: any) => (sub?._id ?? sub?.id) === userId);
-
   useEffect(() => setMounted(true), []);
 
-  const handleClickJoin = async (id: string) => {
-    try {
-      await joinToPublicCommunity(id);
-      onJoinedCommunity?.();
-      fetchPlans?.();
-      toast.success("Successfully joined the community");
-    } catch (error) {
-      console.error("Error joining community:", error);
-      toast.error("Could not join the community. Please try again.");
-    }
-  };
+  if (!mounted) return null;
 
-  const handleClickSendRequest = async (community: string, message: string) => {
-    try {
-      const formData = new FormData();
-      formData.append("community", community);
-      formData.append("Message", message || "Request to join the community.");
-      const response = await SendCommunityRequest(formData);
-      if (response && response.status === 201) fetchPlans?.();
-    } catch (error) {
-      console.error("Error while sending community request:", error);
-      toast.error("Could not send the request. Please try again.");
-    }
-  };
+  // ✅ Meta-based states
+  const isSeq = !!planMeta?.isSequencePlan;
+  const isActiveSub = !!planMeta?.isSubscribed && !!planMeta?.isActive;
+  const isExpiredSub = !!planMeta?.isSubscribed && !!planMeta?.isExpired;
 
-  if (authContext?.loading || !mounted) return null;
+  // ✅ Hide one-time fee on renewals (if already subscribed)
+  const showOneTimeFee = Number(initialPayment) > 0 && !planMeta?.isSubscribed;
 
-  // ✅ Hide one-time fee on renewals
-  const showOneTimeFee = Number(initialPayment) > 0 && !isSubscribed;
-
-  // ✅ CTA text like Restraint
-  const showSubscribedDisabled = !!planMeta?.isSubscribed && !!planMeta?.isActive;
-  const showExpired = !!planMeta?.isSubscribed && !!planMeta?.isExpired;
-
-  const getCTA = () => {
-    if (!isLoggedIn) return "Login to Subscribe";
-    if (!isSubscribedCommunity) return isPrivate ? "Send Join Request" : "Join Community";
-    if (showSubscribedDisabled) return "Subscribed";
-    if (showExpired) {
-      if (planMeta?.isSequencePlan) return "Renew";
-      return "Pay to Renew";
-    }
-    // not subscribed yet
-    return planMeta?.isSequencePlan ? "Subscribe" : "Subscribe";
-  };
-
-  const ctaText = getCTA();
+  // ✅ CTA text EXACTLY like Restraint flow intent
+  const ctaText = !isLoggedIn
+    ? "Login to Subscribe"
+    : !isSubscribedCommunity
+    ? "Join & Subscribe"
+    : isActiveSub
+    ? "Subscribed"
+    : isExpiredSub
+    ? isSeq
+      ? "Renew & Pay"
+      : "Pay to Renew"
+    : "Subscribe";
 
   return (
     <div
@@ -168,6 +106,7 @@ const YoganaPlanCard = ({
       }
     >
       <div className="bg-white rounded-[30px] p-2 relative h-full">
+        {/* Background decals */}
         <div className="absolute z-0">
           <Image
             src={"/assets/yogana-plans-card-bg-image-1.png"}
@@ -191,6 +130,7 @@ const YoganaPlanCard = ({
           style={{ borderColor: primaryColor }}
           className="z-10 h-full border gap-6 border-dashed rounded-[30px] py-10 px-6 flex flex-col items-center justify-center"
         >
+          {/* Number badge */}
           <div
             style={{
               backgroundImage: "url('/assets/yogana-plans-card-bg-image-3.png')",
@@ -221,6 +161,7 @@ const YoganaPlanCard = ({
             {description}
           </p>
 
+          {/* Price */}
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-baseline space-x-2">
               <span
@@ -247,6 +188,7 @@ const YoganaPlanCard = ({
             )}
           </div>
 
+          {/* Offers */}
           {coupons?.length > 0 && (
             <p
               className="font-plus-jakarta text-xs font-medium px-3 py-1 rounded-full border"
@@ -258,134 +200,30 @@ const YoganaPlanCard = ({
             </p>
           )}
 
-          {/* ✅ CTA */}
-          {!isLoggedIn ? (
-            <Button
-              className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer hover:rounded-full"
-              style={{
-                backgroundColor: primaryColor,
-                color: "#fff",
-                border: `1px solid ${primaryColor}`,
-                transition: "all 0.3s ease",
-              }}
-              onClick={onStartFlow}
-              disabled={isProcessing}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor =
-                  secondaryColor;
-                (e.currentTarget as HTMLElement).style.color = primaryColor;
-                (e.currentTarget as HTMLElement).style.borderColor = primaryColor;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor =
-                  primaryColor;
-                (e.currentTarget as HTMLElement).style.color = "#fff";
-                (e.currentTarget as HTMLElement).style.borderColor = primaryColor;
-              }}
-            >
-              {ctaText}
-            </Button>
-          ) : !isSubscribedCommunity ? (
-            !isPrivate ? (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer transition-all duration-300 hover:rounded-full"
-                    style={{
-                      backgroundColor: primaryColor,
-                      color: "#fff",
-                      border: `1px solid transparent`,
-                    }}
-                  >
-                    {ctaText}
-                  </Button>
-                </DialogTrigger>
-
-                <DialogContent style={{ color: primaryColor }}>
-                  <DialogTitle>Join Community</DialogTitle>
-                  <DialogDescription
-                    className="text-gray-700"
-                    style={{ color: neutralColor }}
-                  >
-                    You're not a member of this community yet. Would you like to
-                    join now?
-                  </DialogDescription>
-                  <div className="mt-4 flex justify-end">
-                    <DialogClose asChild>
-                      <Button
-                        onClick={() => handleClickJoin(communityId)}
-                        style={{ backgroundColor: primaryColor, color: "#fff" }}
-                      >
-                        Confirm Join
-                      </Button>
-                    </DialogClose>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            ) : isRequested ? (
-              <div className="mt-4 inline-flex flex-col items-center text-[var(--pri)] gap-2 text-[16px] font-bold">
-                <h5>Already Requested</h5>
-                <p
-                  className="font-normal text-sm text-center"
-                  style={{ color: secondaryColor }}
-                >
-                  * Your request will be sent to the admin. You can proceed with
-                  payment once approved.
-                </p>
-              </div>
-            ) : (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer transition-all duration-300 hover:rounded-full"
-                    style={{
-                      backgroundColor: primaryColor,
-                      color: "#fff",
-                      border: `1px solid transparent`,
-                    }}
-                  >
-                    {ctaText}
-                  </Button>
-                </DialogTrigger>
-
-                <DialogContent>
-                  <DialogTitle style={{ color: primaryColor }}>
-                    Send Join Request
-                  </DialogTitle>
-                  <DialogDescription style={{ color: secondaryColor }}>
-                    This is a private community. Your request will be sent to
-                    the admin. You can proceed with payment once approved.
-                  </DialogDescription>
-                  <div className="mt-4 flex justify-end">
-                    <Button
-                      onClick={() =>
-                        handleClickSendRequest(
-                          communityId,
-                          "Request to join the community."
-                        )
-                      }
-                      style={{
-                        backgroundColor: primaryColor,
-                        color: secondaryColor,
-                      }}
-                      className="cursor-pointer"
-                    >
-                      Send Request
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            )
-          ) : (
-            <Button
-              className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer hover:rounded-full"
-              style={{ backgroundColor: primaryColor, color: "#fff" }}
-              onClick={onStartFlow}
-              disabled={isProcessing || showSubscribedDisabled}
-            >
-              {isProcessing ? "Processing..." : ctaText}
-            </Button>
-          )}
+          {/* ✅ Single CTA (hook handles everything) */}
+          <Button
+            className="group rounded-full font-plus-jakarta font-semibold text-sm cursor-pointer hover:rounded-full"
+            style={{
+              backgroundColor: primaryColor,
+              color: "#fff",
+              border: `1px solid ${primaryColor}`,
+              transition: "all 0.3s ease",
+            }}
+            onClick={onStartFlow}
+            disabled={isProcessing || isActiveSub}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = secondaryColor;
+              (e.currentTarget as HTMLElement).style.color = primaryColor;
+              (e.currentTarget as HTMLElement).style.borderColor = primaryColor;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = primaryColor;
+              (e.currentTarget as HTMLElement).style.color = "#fff";
+              (e.currentTarget as HTMLElement).style.borderColor = primaryColor;
+            }}
+          >
+            {isProcessing ? "Processing..." : ctaText}
+          </Button>
         </div>
       </div>
     </div>

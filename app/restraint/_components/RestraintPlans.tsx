@@ -1,8 +1,10 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, LockKeyhole, LoaderCircle } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
@@ -11,43 +13,26 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
-import * as React from "react";
-import Autoplay from "embla-carousel-autoplay";
-
-// hooks/models/ctx
-import { usePlans } from "@/hooks/usePlan";
-import { TrainingPlan } from "@/models/plan.model";
-import { AuthContext } from "@/contexts/Auth.context";
-import { useCommunity } from "@/hooks/useCommunity";
-import { capitalizeWords } from "@/utils/StringFunctions";
 import { toast } from "sonner";
-import { useRequests } from "@/hooks/useRequests";
-import { PlansSection } from "@/models/templates/restraint/restraint-home-model";
 
-import { usePayment } from "@/hooks/usePayments";
+import { usePlans } from "@/hooks/usePlan";
+import { useCommunity } from "@/hooks/useCommunity";
+import { AuthContext } from "@/contexts/Auth.context";
+import type { TrainingPlan } from "@/models/plan.model";
+import { capitalizeWords } from "@/utils/StringFunctions";
+import LoginPopUp from "@/app/default/_components/LoginPopUp";
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
-import LoginPopUp from "@/app/default/_components/LoginPopUp";
-import { useRouter } from "next/navigation";
+import { PlansSection } from "@/models/templates/restraint/restraint-home-model";
+
+import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow";
 
 const MUTED = "#747B70";
 
-enum PaymentStatus {
-  SUCCESS = "SUCCESS",
-  FAILED = "FAILED",
-  PENDING = "PENDING",
-}
-
 export type DisplayPlan = {
-  id: string; // ✅ ALWAYS plan._id
+  id: string;
   name: string;
   price: number | string;
   image?: string;
@@ -85,14 +70,6 @@ const formatDate = (date: string | Date) => {
   });
 };
 
-type PendingAction =
-  | null
-  | {
-      type: "START_SUBSCRIBE";
-      planId: string; // ✅ plan._id
-      fromLogin: boolean;
-    };
-
 export default function RestraintPlans({
   primaryColor,
   secondaryColor,
@@ -102,71 +79,19 @@ export default function RestraintPlans({
   secondaryColor: string;
   content: PlansSection;
 }) {
-  const router = useRouter();
   const source = content?.content;
   const [api, setApi] = React.useState<CarouselApi | null>(null);
 
-  const {
-    getPlansList,
-    getCommunityPlansListAuth,
-    joinToPublicCommunity,
-    createSubscriptionSequencesByPlanAndCommunityId,
-    getSequencesById,
-  } = usePlans();
-
-  const { initiatePaymentByIds, getPaymentStatusById } = usePayment();
-  const { SendCommunityRequest } = useRequests();
+  const { getPlansList, getCommunityPlansListAuth } = usePlans();
+  const { communityId, communityData } = useCommunity();
 
   const auth = React.useContext(AuthContext);
   const isLoggedIn = !!(auth as any)?.isAuthenticated;
   const userId: string | undefined =
     (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
 
-  const { communityId, communityData } = useCommunity();
-  const isPrivate = communityData?.community?.type === "PRIVATE";
-
-  const [joinedCommunityLocal, setJoinedCommunityLocal] = React.useState(false);
-
   const [plans, setPlans] = React.useState<TrainingPlan[]>([]);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
-  // login popup
-  const [isLoginOpen, setIsLoginOpen] = React.useState(false);
-
-  // per-plan processing (plan._id)
-  const [processingPlanId, setProcessingPlanId] = React.useState<string | null>(
-    null,
-  );
-
-  // payment dialogs
-  const [timer, setTimer] = React.useState(5);
-  const [successOpen, setSuccessOpen] = React.useState(false);
-  const [failureOpen, setFailureOpen] = React.useState(false);
-  const [transaction, setTransaction] = React.useState<any>(null);
-
-  // flow state
-  const [pendingAction, setPendingAction] =
-    React.useState<PendingAction>(null);
-
-  // private join request dialog (same flow)
-  const [joinDialogOpen, setJoinDialogOpen] = React.useState(false);
-  const [joinDialogPlanId, setJoinDialogPlanId] = React.useState<string | null>(
-    null,
-  );
-
-  // plans popup ONLY after login for NON-SEQUENCE
-  const [plansPopupOpen, setPlansPopupOpen] = React.useState(false);
-  const [selectedPlanId, setSelectedPlanId] = React.useState<string | null>(
-    null,
-  );
-
-  const isSubscribedCommunity = React.useMemo(() => {
-    const members = communityData?.community?.members || [];
-    return (
-      joinedCommunityLocal ||
-      members?.some((m: any) => (m?.user?._id ?? m?.user?.id) === userId)
-    );
-  }, [joinedCommunityLocal, communityData, userId]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const fetchPlans = async () => {
     if (!communityId) return;
@@ -181,7 +106,7 @@ export default function RestraintPlans({
         setPlans((resp as any).myPlans as TrainingPlan[]);
       else setPlans([]);
     } catch (e) {
-      console.error("Failed to fetch plans:", e);
+      console.error(e);
       setPlans([]);
     } finally {
       setIsLoading(false);
@@ -193,173 +118,17 @@ export default function RestraintPlans({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isLoggedIn]);
 
-  const handleJoinPublic = async () => {
-    if (!communityId) return false;
-    try {
-      await joinToPublicCommunity(communityId);
-      setJoinedCommunityLocal(true);
-      toast.success("Successfully joined the community");
-      await fetchPlans();
-      return true;
-    } catch (error) {
-      toast.error("Could not join the community.");
-      return false;
-    }
-  };
+  // ✅ Hook drives the whole flow now
+  const flow = usePlanSubscribeFlow({
+    communityId,
+    communityData,
+    isLoggedIn,
+    userId,
+    plans,
+    refetchPlans: fetchPlans,
+  });
 
-  const handleRequestPrivate = async () => {
-    if (!communityId) return false;
-    try {
-      const fd = new FormData();
-      fd.append("community", communityId);
-      fd.append("Message", "Request to join the community.");
-      const res = await SendCommunityRequest(fd);
-      if (res?.status === 201) toast.success("Request sent to admin.");
-      else toast.success("Request sent.");
-      return true;
-    } catch (e) {
-      toast.error("Could not send request.");
-      return false;
-    }
-  };
-
-  const handleSuccessClose = () => {
-    setTimer(5);
-    setSuccessOpen(false);
-    fetchPlans();
-  };
-
-  const handleFailureClose = () => {
-    setTimer(5);
-    setFailureOpen(false);
-  };
-
-  const openPaymentAndTrack = async (payRes: any) => {
-    const url = payRes?.url ?? payRes?.data?.url;
-    const transactionId = payRes?.transactionId ?? payRes?.data?.transactionId;
-    const txn = payRes?.transaction ?? payRes?.data?.transaction;
-
-    if (txn) setTransaction(txn);
-
-    if (!url || !transactionId) {
-      toast.error("Payment URL not received");
-      return;
-    }
-
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
-    const width = Math.min(1000, screenWidth);
-    const height = Math.min(1000, screenHeight);
-    const left = (screenWidth - width) / 2;
-    const top = (screenHeight - height) / 2;
-
-    const windowRef = window.open(
-      url,
-      "paymentWindow",
-      `width=${width},height=${height},left=${left},top=${top},resizable=no`,
-    );
-
-    const intervalRef = setInterval(async () => {
-      try {
-        const statusRes: any = await getPaymentStatusById(transactionId);
-
-        const status =
-          statusRes?.[0]?.status ??
-          statusRes?.status ??
-          statusRes?.data?.[0]?.status ??
-          statusRes?.data?.status;
-
-        if (!status) return;
-        if (status === PaymentStatus.PENDING) return;
-
-        clearInterval(intervalRef);
-        windowRef?.close();
-
-        if (status === PaymentStatus.SUCCESS) setSuccessOpen(true);
-        else setFailureOpen(true);
-      } catch (err) {
-        console.error("Error fetching payment status:", err);
-      }
-    }, 1000);
-  };
-
-  // ✅ Non-sequence pay flow (Pay & Join / Pay to Renew)
-  const handleNonSequencePayNow = async (
-    plan: TrainingPlan,
-    isFirstTime: boolean,
-  ) => {
-    if (!plan?._id || !communityId) {
-      toast.error("Missing required data");
-      return;
-    }
-
-    if (!isLoggedIn || !userId) {
-      setIsLoginOpen(true);
-      return;
-    }
-
-    setProcessingPlanId(String(plan._id));
-
-    try {
-      const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
-        userId,
-        communityId,
-        plan._id,
-      );
-
-      const subscriptionId = res?.subscription?._id;
-      if (!subscriptionId) {
-        toast.error("Subscription creation failed");
-        return;
-      }
-
-      const seqRes: any = await getSequencesById(subscriptionId, userId);
-      const sequences = seqRes?.sequences || [];
-
-      const firstPayable = sequences.find(
-        (s: any) =>
-          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
-          !s?.isnonPayable,
-      );
-
-      if (!firstPayable?._id) {
-        toast.error("No payable sequence found");
-        return;
-      }
-
-      const baseAmount =
-        Number(seqRes?.pricing ?? 0) ||
-        Number((plan as any)?.pricing ?? 0) ||
-        Number((plan as any)?.totalPlanValue ?? 0);
-
-      if (!baseAmount || baseAmount <= 0) {
-        toast.error("Invalid amount");
-        return;
-      }
-
-      // ✅ add initial fee ONLY on first subscribe
-      const initialFee = Number((plan as any)?.initialPayment ?? 0);
-      const finalAmount =
-        isFirstTime && initialFee > 0 ? baseAmount + initialFee : baseAmount;
-
-      const payRes: any = await initiatePaymentByIds(
-        userId,
-        plan._id,
-        [firstPayable._id],
-        String(finalAmount),
-      );
-
-      toast.success("Redirecting to payment...");
-      await openPaymentAndTrack(payRes);
-    } catch (err) {
-      console.error(err);
-      toast.error("Payment initiation failed");
-    } finally {
-      setProcessingPlanId(null);
-    }
-  };
-
-  // Normalize API plans to display + logic fields
+  // ✅ Display mapping (same as your working code)
   const data: DisplayPlan[] = React.useMemo(() => {
     return plans.map((p) => {
       const periodRaw = `${p.interval} ${capitalizeWords(p.duration)}`;
@@ -375,21 +144,17 @@ export default function RestraintPlans({
         Number((p as any)?.totalSequences ?? 0) > 0;
 
       return {
-        id: String((p as any)?._id ?? ""), // ✅  plan._id
+        id: String((p as any)?._id ?? ""),
         name: p.name,
         price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
         image: (p as any)?.image?.value,
-
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
         initialPayment: (p as any)?.initialPayment ?? 0,
-
         subscribers: ((p as any)?.subscribers as any[]) || [],
         nextDue: nextDue ?? null,
-
         isSequencePlan,
         isActive,
         isExpired,
-
         features: [
           `Duration: ${periodRaw}`,
           `Subscribers: ${(p as any)?.subscribers?.length ?? 0}`,
@@ -413,91 +178,6 @@ export default function RestraintPlans({
   const ctaBase =
     "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 h-14 font-medium transition";
 
-  // -------------------- ✅ FLOW HELPERS (NO INDEX) --------------------
-  const isAlreadySubscribedToPlan = (planId: string) => {
-    if (!userId) return false;
-    const p = data.find((x) => String(x.id) === String(planId));
-    if (!p) return false;
-
-    return !!p.subscribers?.some((s) => (s?._id ?? s?.id) === userId);
-  };
-
-  const goToSequenceSubscribePage = (planId: string) => {
-    router.push(
-      `/subscriptions/?planid=${encodeURIComponent(planId)}&communityid=${encodeURIComponent(
-        communityId || "",
-      )}`,
-    );
-  };
-
-  const startNonSequencePayment = async (planId: string) => {
-    const planObj = plans.find((p) => String(p?._id) === String(planId));
-    if (!planObj) {
-      toast.error("Plan not found");
-      return;
-    }
-
-    const alreadySub = isAlreadySubscribedToPlan(planId);
-    await handleNonSequencePayNow(planObj, !alreadySub);
-  };
-
-  const continueSubscribeFlow = async (planId: string, fromLogin: boolean) => {
-    // ✅ private community flow SAME: show request dialog (don't auto-join)
-    if (!isSubscribedCommunity) {
-      // if (isPrivate) {
-      //   setJoinDialogPlanId(planId);
-      //   setJoinDialogOpen(true);
-      //   return;
-      // }
-
-      const ok = await handleJoinPublic();
-      if (!ok) return;
-    }
-
-    const selected = data.find((x) => String(x.id) === String(planId));
-    if (!selected) return;
-
-    // ✅ seq => redirect always
-    if (selected.isSequencePlan) {
-      goToSequenceSubscribePage(planId);
-      return;
-    }
-
-    // ✅ non-seq:
-    // - after login => show plan dialog
-    // - already logged in => direct payment
-    if (fromLogin) {
-      setSelectedPlanId(planId);
-      setPlansPopupOpen(true);
-      return;
-    }
-
-    await startNonSequencePayment(planId);
-  };
-
-  // ✅ start subscribe button handler (NO INDEX)
-  const startSubscribeFlow = async (planId: string) => {
-    if (!isLoggedIn || !userId) {
-      setPendingAction({ type: "START_SUBSCRIBE", planId, fromLogin: true });
-      setIsLoginOpen(true);
-      return;
-    }
-
-    await continueSubscribeFlow(planId, false);
-  };
-
-  // ✅ resume after login
-  React.useEffect(() => {
-    if (!isLoggedIn || !userId) return;
-    if (!pendingAction || pendingAction.type !== "START_SUBSCRIBE") return;
-
-    const { planId, fromLogin } = pendingAction;
-    setPendingAction(null); // prevent double trigger
-    continueSubscribeFlow(planId, fromLogin);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn, userId]);
-
-  // -------------------- UI --------------------
   return (
     <section
       className="bg-[var(--sec)]/15 font-sora py-10"
@@ -510,7 +190,7 @@ export default function RestraintPlans({
       }
     >
       <div className="mx-auto container px-6 md:px-20">
-        {/* Section header */}
+        {/* header */}
         <div className="mb-6">
           <p className="mb-2 text-sm font-normal uppercase tracking-[4.2px] text-black">
             OUR PLANS
@@ -518,9 +198,7 @@ export default function RestraintPlans({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_1fr]">
             <h2 className="font-marcellus text-4xl leading-tight text-black md:text-5xl">
               {source?.heading}{" "}
-              <span style={{ color: secondaryColor }}>
-                {source?.subHeading}
-              </span>
+              <span style={{ color: secondaryColor }}>{source?.subHeading}</span>
             </h2>
             <p className="max-w-xl text-[16px] leading-7 text-[#9C9C9C]">
               {source?.description}
@@ -539,9 +217,7 @@ export default function RestraintPlans({
           </div>
         ) : data.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <h3 className="text-xl font-semibold text-gray-400">
-              No Plans Available
-            </h3>
+            <h3 className="text-xl font-semibold text-gray-400">No Plans Available</h3>
           </div>
         ) : (
           <Carousel
@@ -558,38 +234,30 @@ export default function RestraintPlans({
           >
             <CarouselContent className="-ml-4">
               {data.map((plan) => {
-                const isFeatured = (Number(plan.id?.slice(-1)) + 1) % 2 === 0; // purely visual; NOT used for logic
-                const coverImage =
-                  plan.image || "/assets/restraint-plans-image-1.jpg";
+                const meta = flow.getPlanMeta(plan.id);
+                const isSubscribed = !!meta?.isSubscribed;
+                const isProcessing = flow.processingPlanId === plan.id;
+
+                const isFeatured = (Number(plan.id?.slice(-1)) + 1) % 2 === 0;
+                const coverImage = plan.image || "/assets/restraint-plans-image-1.jpg";
                 const color = isFeatured ? secondaryColor : primaryColor;
 
-                const isSubscribed =
-                  !!isLoggedIn &&
-                  !!plan.subscribers?.some(
-                    (sub) => (sub?._id ?? sub?.id) === userId,
-                  );
-
-                const isProcessing = processingPlanId === String(plan.id);
-
                 return (
-                  <CarouselItem
-                    key={plan.id}
-                    className="pl-4 md:basis-1/2 lg:basis-1/3"
-                  >
+                  <CarouselItem key={plan.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
                     <PlanCard
                       plan={plan}
                       isFeatured={isFeatured}
                       coverImage={coverImage}
                       color={color}
                       isLoggedIn={isLoggedIn}
-                      isPrivate={!!isPrivate}
-                      isSubscribedCommunity={!!isSubscribedCommunity}
+                      // ✅ these two come from hook
+                      isSubscribedCommunity={flow.isSubscribedCommunity}
                       isSubscribed={isSubscribed}
                       isProcessing={isProcessing}
                       communityId={communityId}
                       ctaBase={ctaBase}
-                      onStartFlow={() => startSubscribeFlow(plan.id)} // ✅ plan._id
-                      onNonSequencePayNow={() => startNonSequencePayment(plan.id)} // ✅ plan._id
+                      onStartFlow={() => flow.startSubscribeFlow(plan.id)}
+                      onNonSequencePayNow={() => flow.startNonSequencePayment(plan.id)}
                     />
                   </CarouselItem>
                 );
@@ -602,111 +270,68 @@ export default function RestraintPlans({
         )}
       </div>
 
-      {!(data.length === 0) && (
+      {/* ✅ View all */}
+      {data.length > 0 && (
         <div className="mt-2 flex w-full items-center justify-center">
           <Link href={"/plans"}>
             <button className="group relative mt-2 cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
               <span className="relative z-10 inline-flex items-center gap-2">
                 View All
-                <ArrowUpRight
-                  className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
-                  strokeWidth={2}
-                />
+                <ArrowUpRight className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1" strokeWidth={2} />
               </span>
             </button>
           </Link>
         </div>
       )}
 
-      {/* ✅ LoginPopUp */}
+      {/* ✅ Login popup from hook */}
       <LoginPopUp
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
+        isOpen={flow.isLoginOpen}
+        onClose={() => flow.setIsLoginOpen(false)}
         redirectTo={"/#plans"}
-        colors={{
-          primaryColor,
-          secondaryColor,
-          textcolor: secondaryColor,
-        }}
+        colors={{ primaryColor, secondaryColor, textcolor: secondaryColor }}
       />
 
-      {/* ✅ Private community: request dialog (same behavior) */}
-      <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
-        <DialogContent>
-          <DialogTitle>Request Access</DialogTitle>
-          <DialogDescription>
-            This is a private community. Send a request to the admin to get
-            access to plans.
-          </DialogDescription>
-
-          <div className="mt-4 flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setJoinDialogOpen(false)}>
-              Cancel
-            </Button>
-
-            <Button
-              onClick={async () => {
-                const ok = await handleRequestPrivate();
-                if (!ok) return;
-
-                setJoinDialogOpen(false);
-                setJoinDialogPlanId(null);
-              }}
-            >
-              Send Request
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* ✅ Plan dialog ONLY after login for NON-SEQUENCE plans */}
-      <Dialog open={plansPopupOpen} onOpenChange={setPlansPopupOpen}>
+      {/* ✅ Non-seq confirm dialog (after login only) */}
+      <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
         <DialogContent className="max-w-xl">
           <DialogTitle>Choose a Plan</DialogTitle>
           <DialogDescription>
             You’re ready to subscribe. Please confirm your plan below.
           </DialogDescription>
 
-          {selectedPlanId &&
+          {flow.selectedPlanId &&
             (() => {
-              const selectedPlan = data.find(
-                (x) => String(x.id) === String(selectedPlanId),
-              );
-              if (!selectedPlan) return null;
+              const meta = flow.getPlanMeta(flow.selectedPlanId);
+              if (!meta?.plan) return null;
 
-              const isAlreadySub = isAlreadySubscribedToPlan(selectedPlanId);
+              const p = meta.plan;
+              const already = meta.isSubscribed;
+              const amount = (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
+              const initFee = Number((p as any)?.initialPayment ?? 0);
 
               return (
                 <div className="mt-4 rounded-xl border p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="text-lg font-semibold">
-                        {capitalizeWords(selectedPlan.name)}
-                      </div>
-                      <div className="mt-1 text-sm text-slate-500">
-                        ₹{selectedPlan.price} • {selectedPlan.periodLabel}
-                      </div>
-
-                      {/* ✅ Hide one-time fee on renewals */}
-                      {Number(selectedPlan.initialPayment) > 0 &&
-                        !isAlreadySub && (
-                          <div className="mt-1 text-xs text-slate-500">
-                            + One Time Fee: ₹{selectedPlan.initialPayment}
-                          </div>
-                        )}
-                    </div>
+                  <div className="text-lg font-semibold">{capitalizeWords(p.name)}</div>
+                  <div className="mt-1 text-sm text-slate-500">
+                    ₹{amount} •{" "}
+                    {p.interval && p.duration ? `${p.interval} ${capitalizeWords(p.duration)}` : ""}
                   </div>
+
+                  {initFee > 0 && !already && (
+                    <div className="mt-1 text-xs text-slate-500">+ One Time Fee: ₹{initFee}</div>
+                  )}
 
                   <div className="mt-4">
                     <Button
                       className="w-full h-12 rounded-xl font-semibold"
                       onClick={async () => {
-                        const pid = selectedPlanId;
-                        setPlansPopupOpen(false);
-                        await startNonSequencePayment(pid);
+                        const pid = flow.selectedPlanId!;
+                        flow.setPlanDialogOpen(false);
+                        await flow.startNonSequencePayment(pid);
                       }}
                     >
-                      {isAlreadySub ? "Pay to Renew" : "Subscribe"}
+                      {already ? "Pay to Renew" : "Subscribe"}
                       <ArrowUpRight className="ml-2 h-5 w-5" />
                     </Button>
                   </div>
@@ -716,24 +341,25 @@ export default function RestraintPlans({
         </DialogContent>
       </Dialog>
 
-      {/* ✅ Payment dialogs */}
+      {/* ✅ Payment dialogs from hook */}
       <PaymentSuccess
-        txnid={transaction?.txnid || ""}
-        open={successOpen}
-        amount={transaction?.amount || ""}
-        timer={timer}
-        onClose={handleSuccessClose}
+        txnid={flow.transaction?.txnid || ""}
+        open={flow.successOpen}
+        amount={flow.transaction?.amount || ""}
+        timer={flow.timer}
+        onClose={flow.handleSuccessClose}
       />
       <PaymentFailure
-        open={failureOpen}
-        onClose={handleFailureClose}
-        amount={transaction?.amount || ""}
-        txnid={transaction?.txnid || ""}
-        timer={timer}
+        open={flow.failureOpen}
+        onClose={flow.handleFailureClose}
+        amount={flow.transaction?.amount || ""}
+        txnid={flow.transaction?.txnid || ""}
+        timer={flow.timer}
       />
     </section>
   );
 }
+
 
 /* -------------------- Card -------------------- */
 export function PlanCard({
@@ -742,7 +368,6 @@ export function PlanCard({
   coverImage,
   color,
   isLoggedIn,
-  isPrivate,
   isSubscribedCommunity,
   isSubscribed,
   isProcessing,
@@ -756,7 +381,6 @@ export function PlanCard({
   coverImage: string;
   color: string;
   isLoggedIn: boolean;
-  isPrivate: boolean;
   isSubscribedCommunity: boolean;
   isSubscribed: boolean;
   isProcessing: boolean;
@@ -888,7 +512,6 @@ export function PlanCard({
               ].join(" ")}
             >
               <span className="inline-flex items-center gap-2">
-                {isPrivate && <LockKeyhole size={20} strokeWidth={1.5} />}
                 Login to Subscribe
               </span>
               <ArrowUpRight className="h-5 w-5" />
@@ -908,8 +531,7 @@ export function PlanCard({
                   ].join(" ")}
                 >
                   <span className="inline-flex items-center gap-2">
-                    {isPrivate && <LockKeyhole size={20} strokeWidth={1.5} />}
-                    {isPrivate ? "Request to Join" : "Join & Subscribe"}
+                   "Join & Subscribe"
                   </span>
                   <ArrowUpRight className="h-5 w-5" />
                 </button>

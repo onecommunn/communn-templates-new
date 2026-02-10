@@ -1,45 +1,47 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, LockKeyhole } from "lucide-react";
+import { toast } from "sonner";
+
 import { WavyStroke } from "./Icons/WavyStroke";
-import { usePlans } from "@/hooks/usePlan";
-import { TrainingPlan } from "@/models/plan.model";
-import { AuthContext } from "@/contexts/Auth.context";
-import { useCommunity } from "@/hooks/useCommunity";
 import { capitalizeWords } from "@/utils/StringFunctions";
+
+import { usePlans } from "@/hooks/usePlan";
+import { useCommunity } from "@/hooks/useCommunity";
+import { AuthContext } from "@/contexts/Auth.context";
+
+import { TrainingPlan } from "@/models/plan.model";
+import { PlansSection } from "@/models/templates/martivo/martivo-home-model";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { useRequests } from "@/hooks/useRequests";
-import { PlansSection } from "@/models/templates/martivo/martivo-home-model";
+
+import LoginPopUp from "@/app/default/_components/LoginPopUp";
+import PaymentSuccess from "@/utils/PaymentSuccess";
+import PaymentFailure from "@/utils/PaymentFailure";
+
+import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow";
 
 /* ---------- tiny helpers ---------- */
 
 type Feature = { text: string; available?: boolean };
 
-const Check: React.FC<{ muted?: boolean; color: string }> = ({
-  muted,
-  color,
-}) => (
+const Check: React.FC<{ muted?: boolean; color: string }> = ({ muted, color }) => (
   <span
     className={[
       "mt-1 grid h-4 w-4 place-items-center rounded-full",
       muted ? "bg-[var(--sec)]/30" : "bg-[var(--color)]",
     ].join(" ")}
     aria-hidden
-    style={
-      {
-        "--color": color,
-      } as React.CSSProperties
-    }
+    style={{ "--color": color } as React.CSSProperties}
   >
     <svg viewBox="0 0 16 16" width="10" height="10" fill="none">
       <path
@@ -76,30 +78,24 @@ const FeatureItem = ({
   </li>
 );
 
-/* Orange CTA with dashed inset */
+/* CTA button */
 const ChooseButton: React.FC<{
-  href?: string;
   text: string;
   color: string;
-  isSubscribed: boolean;
-}> = ({ href = "/", text, color, isSubscribed }) => (
-  <Link
-    href={href || "/"}
-    className={`group relative inline-flex items-center gap-3 rounded-full ${
-      isSubscribed ? "bg-[var(--pri)]" : "bg-[var(--pri)]"
-    } px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2`}
-    style={
-      {
-        "--color": color,
-      } as React.CSSProperties
-    }
+  onClick: () => void;
+}> = ({ text, color, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+    style={{ "--color": color } as React.CSSProperties}
   >
     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
     <span className="relative z-[1] text-[15px] font-medium">{text}</span>
     <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
       <ArrowRight size={18} />
     </span>
-  </Link>
+  </button>
 );
 
 /* ---------- Card ---------- */
@@ -109,18 +105,21 @@ type CardProps = {
   price: string | number;
   period: string;
   features: Feature[];
-  featured?: boolean; // gives orange outline like the mock's middle card
-  isPrivate: boolean;
-  isSubscribedCommunity?: boolean;
-  subscribers: { _id?: string; id?: string }[];
-  fetchPlans?: () => void;
-  communityId?: string;
-  coverImage: string;
-  planId: string;
+  featured?: boolean;
   color: string;
+
+  // flow flags
+  isLoggedIn: boolean;
+  isPrivate: boolean;
+  isSubscribedCommunity: boolean;
+  isRequested: boolean;
+  isSubscribedToPlan: boolean;
+
+  // meta
   initialPayment?: string | number;
-  // notify parent when join succeeds
-  onJoinedCommunity?: () => void;
+
+  // action
+  onStartFlow: () => void;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -129,81 +128,20 @@ const Card: React.FC<CardProps> = ({
   period,
   features,
   featured,
+  color,
+  isLoggedIn,
   isPrivate,
   isSubscribedCommunity,
-  subscribers,
-  fetchPlans,
-  communityId,
-  coverImage,
-  planId,
-  color,
+  isRequested,
+  isSubscribedToPlan,
   initialPayment,
-  onJoinedCommunity,
+  onStartFlow,
 }) => {
-  // split features into two columns (balanced)
   const mid = Math.ceil(features.length / 2);
   const left = features.slice(0, mid);
   const right = features.slice(mid);
 
-  const authContext = useContext(AuthContext);
-  const userId =
-    (authContext as any)?.user?._id ??
-    (authContext as any)?.user?.id ??
-    undefined;
-  const isLoggedIn = !!userId;
-
-  const isSubscribed =
-    isLoggedIn &&
-    subscribers?.some(
-      (sub) => (sub?._id ?? sub?.id) === userId
-    );
-
-  const { joinToPublicCommunity } = usePlans();
-  const { SendCommunityRequest } = useRequests();
-
-  const handleClickJoin = async (id?: string) => {
-    if (!id) {
-      toast.error("Community not found.");
-      return;
-    }
-    try {
-      await joinToPublicCommunity(id);
-
-      // flip local parent state so UI reacts immediately
-      onJoinedCommunity?.();
-
-      // optional: refresh plans
-      fetchPlans?.();
-
-      toast.success("Successfully joined the community");
-    } catch (error) {
-      console.error("Error joining community:", error);
-      toast.error("Could not join the community. Please try again.");
-    }
-  };
-
-  const handleClickSendRequest = async (community?: string, message?: string) => {
-    if (!community) {
-      toast.error("Community not found.");
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append("community", community);
-      // Keeping the existing capitalized key since your backend expects it this way
-      formData.append("Message", message || "Request to join the community.");
-      const response = await SendCommunityRequest(formData);
-      if (response && response.status === 201) {
-        fetchPlans?.();
-        // toast.success("Request sent to the admin.");
-      } else {
-        // toast.info("Your request has been recorded.");
-      }
-    } catch (error) {
-      console.error("Error while sending community request:", error);
-      toast.error("Could not send the request. Please try again.");
-    }
-  };
+  const showOneTimeFee = Number(initialPayment) > 0 && !isSubscribedToPlan;
 
   return (
     <article
@@ -213,11 +151,7 @@ const Card: React.FC<CardProps> = ({
           ? "border border-[var(--color)] ring-1 ring-[var(--color)]"
           : "border border-[#E6E8EE]",
       ].join(" ")}
-      style={
-        {
-          "--color": color,
-        } as React.CSSProperties
-      }
+      style={{ "--color": color } as React.CSSProperties}
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4 md:gap-8 items-center">
         {/* Title */}
@@ -252,118 +186,41 @@ const Card: React.FC<CardProps> = ({
                 / {period}
               </span>
             </div>
-            <div>
-              {Number(initialPayment) > 0 &&
-                ` + One Time Fee :  ₹ ${initialPayment}`}
-            </div>
+
+            {showOneTimeFee && (
+              <div className="text-sm text-slate-600">
+                + One Time Fee : ₹ {initialPayment}
+              </div>
+            )}
           </div>
+
+          {/* CTA rules */}
           {!isLoggedIn ? (
-            <Link
-              href={"/login"}
-              className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
-            >
-              <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
-              <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
-                {isPrivate && (
-                  <span>
-                    <LockKeyhole size={20} strokeWidth={1.5} />
-                  </span>
-                )}
-                Login to Subscribe
-              </span>
-              <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
-                <ArrowRight size={18} />
-              </span>
-            </Link>
-          ) : !isSubscribedCommunity ? (
-            !isPrivate ? (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <div
-                    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
-                      {isPrivate && (
-                        <span>
-                          <LockKeyhole size={20} strokeWidth={1.5} />
-                        </span>
-                      )}
-                      Join Community
-                    </span>
-                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--pri)] transition-transform duration-200 group-hover:translate-x-0.5">
-                      <ArrowRight size={18} />
-                    </span>
-                  </div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogTitle>Join Community</DialogTitle>
-                  <DialogDescription>
-                    You're not a member of this community yet. Would you like to
-                    join now?
-                  </DialogDescription>
-                  <div className="mt-4 flex justify-end">
-                    <DialogClose asChild>
-                      <Button
-                        onClick={() => handleClickJoin(communityId)}
-                        disabled={isSubscribed}
-                      >
-                        Confirm Join
-                      </Button>
-                    </DialogClose>
-                  </div>
-                </DialogContent>
-              </Dialog>
+            <ChooseButton
+              text={isPrivate ? "Login to Subscribe" : "Login to Subscribe"}
+              color={color}
+              onClick={onStartFlow}
+            />
+          ) : isPrivate && !isSubscribedCommunity ? (
+            // Private: show "Already Requested" text, else open request dialog via onStartFlow
+            isRequested ? (
+              <div className="text-right">
+                <div className="text-[14px] font-semibold text-[var(--pri)]">
+                  Already Requested
+                </div>
+                <div className="mt-1 text-xs text-slate-500">
+                  You can subscribe once admin approves.
+                </div>
+              </div>
             ) : (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <div
-                    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--color)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
-                    <span className="relative z-[1] text-[15px] font-medium flex items-center gap-2">
-                      {isPrivate && (
-                        <span>
-                          <LockKeyhole size={20} strokeWidth={1.5} />
-                        </span>
-                      )}
-                      Send Join Request
-                    </span>
-                    <span className="relative z-[1] grid h-8 w-8 place-items-center rounded-full bg-white text-[var(--color)] transition-transform duration-200 group-hover:translate-x-0.5">
-                      <ArrowRight size={18} />
-                    </span>
-                  </div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogTitle>Send Join Request</DialogTitle>
-                  <DialogDescription>
-                    This is a private community. Your request will be sent to
-                    the admin. You can proceed with payment once approved.
-                  </DialogDescription>
-                  <div className="mt-4 flex justify-end">
-                    <Button
-                      onClick={() =>
-                        handleClickSendRequest(
-                          communityId,
-                          "Request to join the community."
-                        )
-                      }
-                      disabled={isSubscribed}
-                      className="cursor-pointer"
-                    >
-                      Send Request
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <ChooseButton text="Send Join Request" color={color} onClick={onStartFlow} />
             )
           ) : (
+            // Public + joined OR Private + already member
             <ChooseButton
-              text={isSubscribed ? "Subscribed" : "Subscribe"}
-              href={`/subscriptions/?planid=${planId}&communityid=${communityId}`}
+              text={isSubscribedToPlan ? "Subscribed" : "Subscribe"}
               color={color}
-              isSubscribed={isSubscribed}
+              onClick={onStartFlow}
             />
           )}
         </div>
@@ -385,30 +242,22 @@ const MartivoPlans = ({
 }) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const content = data?.content;
+
   const auth = useContext(AuthContext);
   const { communityId, communityData } = useCommunity();
-  const isAuthenticated = !!auth?.isAuthenticated;
-
-  // local "I just joined" flag to avoid waiting for context to refresh
-  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
 
   const userId =
     (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+  const isLoggedIn = !!((auth as any)?.isAuthenticated && userId);
 
-  const isSubscribedCommunity =
-    joinedCommunityLocal ||
-    communityData?.community?.members?.some(
-      (m: any) => (m?.user?._id ?? m?.user?.id) === userId
-    );
-
-  const fetchPlans = async () => {
+  const refetchPlans = async () => {
     if (!communityId) return;
     setIsLoading(true);
     try {
-      const resp = isAuthenticated
+      const resp: any = isLoggedIn
         ? await getCommunityPlansListAuth(communityId)
         : await getPlansList(communityId);
 
@@ -425,44 +274,81 @@ const MartivoPlans = ({
   };
 
   useEffect(() => {
-    fetchPlans();
+    refetchPlans();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [communityId, isAuthenticated]);
+  }, [communityId, isLoggedIn]);
 
-  const normalized = plans.map((p, idx) => {
-    const period = `${p.interval} ${capitalizeWords(p.duration)}`;
-    const subs = p.subscribers?.length ?? 0;
-
-    const features: Feature[] = [
-      { text: `Duration: ${period}` },
-      { text: `Subscribers: ${subs}` },
-      {
-        text: `Next Due: ${p.nextDueDate ? p.nextDueDate : "No Dues"}`,
-      },
-      {
-        text: `Status: ${
-          !p.nextDueDate
-            ? "Not Subscribed"
-            : new Date(p.nextDueDate) >= new Date()
-            ? "Active"
-            : "Expired"
-        }`,
-      },
-    ];
-
-    return {
-      id: p._id,
-      title: p.name,
-      price: p.pricing || p.totalPlanValue || 0,
-      period,
-      features,
-      // visually highlight the middle plan if there are exactly 3.
-      featured: plans.length === 3 ? idx === 1 : false,
-      subscribers: p.subscribers ?? [],
-      image: p?.image?.value,
-      initialPayment: p?.initialPayment || 0,
-    };
+  // ✅ your hook
+  const flow = usePlanSubscribeFlow({
+    communityId,
+    communityData,
+    isLoggedIn,
+    userId,
+    plans,
+    refetchPlans,
   });
+
+  // private request state for Martivo (because your hook has private branch commented)
+  const [privateRequestOpen, setPrivateRequestOpen] = useState(false);
+  const [privateRequestPlanId, setPrivateRequestPlanId] = useState<string | null>(null);
+
+  const isRequested = Boolean(
+    communityData?.community?.requests?.some(
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId,
+    ),
+  );
+
+  const normalized = useMemo(() => {
+    return plans.map((p, idx) => {
+      const planId = String((p as any)._id);
+      const meta = flow.getPlanMeta(planId);
+
+      const period = p.interval && p.duration
+        ? `${p.interval} ${capitalizeWords(p.duration)}`
+        : "";
+
+      const subs = (p as any)?.subscribers?.length ?? 0;
+
+      const features: Feature[] = [
+        { text: `Duration: ${period || "—"}` },
+        { text: `Subscribers: ${subs}` },
+        { text: `Next Due: ${meta?.nextDue ? String(meta.nextDue) : "No Dues"}` },
+        {
+          text: `Status: ${
+            !meta?.nextDue ? "Not Subscribed" : meta.isActive ? "Active" : "Expired"
+          }`,
+        },
+      ];
+
+      return {
+        planId,
+        title: p.name,
+        price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
+        period: period || "—",
+        features,
+        featured: plans.length === 3 ? idx === 1 : false,
+        initialPayment: (p as any)?.initialPayment ?? 0,
+        isSubscribedToPlan: !!meta?.isSubscribed,
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plans, userId, communityId, flow.isSubscribedCommunity]);
+
+  const handleStartFlow = (planId: string) => {
+    // ✅ If private + not joined -> show request dialog (since hook private branch is commented)
+    if (flow.isPrivate && !flow.isSubscribedCommunity) {
+      if (isRequested) {
+        toast.info("Request already sent. Please wait for admin approval.");
+        return;
+      }
+      setPrivateRequestPlanId(planId);
+      setPrivateRequestOpen(true);
+      return;
+    }
+
+    // ✅ otherwise normal hook flow (login -> auto join public -> seq redirect / non-seq payment)
+    flow.startSubscribeFlow(planId);
+  };
 
   return (
     <section
@@ -491,12 +377,11 @@ const MartivoPlans = ({
 
         {/* Content */}
         {isLoading ? (
-          /* skeletons */
           <div className="space-y-6">
             {[0, 1, 2].map((k) => (
               <div
                 key={k}
-                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-[var(--sec)]"
+                className="h-36 animate-pulse rounded-2xl border border-[#E6E8EE] bg-[var(--sec)]/10"
               />
             ))}
           </div>
@@ -508,27 +393,146 @@ const MartivoPlans = ({
           <div className="space-y-6">
             {normalized.map((p) => (
               <Card
-                key={p.id}
-                communityId={communityId}
+                key={p.planId}
                 title={p.title}
                 price={p.price}
                 period={p.period}
                 features={p.features}
                 featured={p.featured}
-                isPrivate={communityData?.community?.type === "PRIVATE"}
-                isSubscribedCommunity={isSubscribedCommunity}
-                subscribers={p?.subscribers ?? []}
-                coverImage={p?.image || "/assets/spawell-plans-image-1.jpg"}
-                planId={p.id}
                 color={secondaryColor}
-                initialPayment={p?.initialPayment}
-                fetchPlans={fetchPlans}
-                onJoinedCommunity={() => setJoinedCommunityLocal(true)}
+                initialPayment={p.initialPayment}
+                isLoggedIn={isLoggedIn}
+                isPrivate={flow.isPrivate}
+                isSubscribedCommunity={flow.isSubscribedCommunity}
+                isRequested={isRequested}
+                isSubscribedToPlan={p.isSubscribedToPlan}
+                onStartFlow={() => flow.startSubscribeFlow(p.planId)}
               />
             ))}
           </div>
         )}
       </div>
+
+      {/* ✅ Login Popup controlled by hook */}
+      <LoginPopUp
+        isOpen={flow.isLoginOpen}
+        onClose={() => flow.setIsLoginOpen(false)}
+        redirectTo={"/#plans"}
+        colors={{
+          primaryColor,
+          secondaryColor,
+          textcolor: secondaryColor,
+        }}
+      />
+
+      {/* ✅ Private Request dialog (Martivo-level) */}
+      <Dialog open={privateRequestOpen} onOpenChange={setPrivateRequestOpen}>
+        <DialogContent className="max-w-md">
+          <DialogTitle style={{ color: primaryColor }}>
+            Request Access
+          </DialogTitle>
+          <DialogDescription className="text-slate-600">
+            This is a private community. Send a request to the admin to get access to plans.
+          </DialogDescription>
+
+          <div className="mt-5 flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setPrivateRequestOpen(false)}>
+              Cancel
+            </Button>
+
+            <Button
+              style={{ backgroundColor: primaryColor, color: "#fff" }}
+              onClick={async () => {
+                const ok = await flow.handleRequestPrivate();
+                if (!ok) return;
+                setPrivateRequestOpen(false);
+                setPrivateRequestPlanId(null);
+                await refetchPlans();
+              }}
+            >
+              Send Request
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ✅ Non-seq confirm dialog (from hook) */}
+      <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogTitle style={{ color: primaryColor }}>
+            Choose a Plan
+          </DialogTitle>
+          <DialogDescription className="text-slate-600">
+            You’re ready to subscribe. Please confirm your plan below.
+          </DialogDescription>
+
+          {flow.selectedPlanId &&
+            (() => {
+              const meta = flow.getPlanMeta(flow.selectedPlanId);
+              if (!meta?.plan) return null;
+
+              const p = meta.plan as any;
+              const already = meta.isSubscribed;
+
+              const amount = p?.pricing ?? p?.totalPlanValue ?? 0;
+              const initFee = Number(p?.initialPayment ?? 0);
+
+              return (
+                <div className="mt-4 rounded-xl border p-4">
+                  <div className="text-lg font-semibold" style={{ color: primaryColor }}>
+                    {capitalizeWords(p.name)}
+                  </div>
+
+                  <div className="mt-1 text-sm text-slate-500">
+                    ₹{amount} •{" "}
+                    {p.interval && p.duration
+                      ? `${p.interval} ${capitalizeWords(p.duration)}`
+                      : ""}
+                  </div>
+
+                  {initFee > 0 && !already && (
+                    <div className="mt-1 text-xs text-slate-500">
+                      + One Time Fee: ₹{initFee}
+                    </div>
+                  )}
+
+                  <div className="mt-4 flex justify-end gap-3">
+                    <Button variant="outline" onClick={() => flow.setPlanDialogOpen(false)}>
+                      Cancel
+                    </Button>
+
+                    <Button
+                      style={{ backgroundColor: primaryColor, color: "#fff" }}
+                      onClick={async () => {
+                        const pid = flow.selectedPlanId!;
+                        flow.setPlanDialogOpen(false);
+                        await flow.startNonSequencePayment(pid);
+                      }}
+                    >
+                      {already ? "Pay to Renew" : "Pay & Join"}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()}
+        </DialogContent>
+      </Dialog>
+
+      {/* ✅ Payment dialogs (hook-controlled) */}
+      <PaymentSuccess
+        txnid={flow.transaction?.txnid || ""}
+        open={flow.successOpen}
+        amount={flow.transaction?.amount || ""}
+        timer={flow.timer}
+        onClose={flow.handleSuccessClose}
+      />
+      <PaymentFailure
+        open={flow.failureOpen}
+        onClose={flow.handleFailureClose}
+        amount={flow.transaction?.amount || ""}
+        txnid={flow.transaction?.txnid || ""}
+        timer={flow.timer}
+      />
     </section>
   );
 };

@@ -1,9 +1,21 @@
+// ✅ ConsultingoPlans.tsx (UPDATED - unified Restraint/Yogana flow via hook)
+// What changed:
+// ✅ Uses usePlanSubscribeFlow (handles: login popup, public auto-join, private request dialog, non-seq confirm dialog AFTER login, payment tracking, processingPlanId)
+// ✅ Removes duplicate join/request/payment polling logic from this file
+// ✅ CTA text/behavior matches your latest standard:
+//    - Login to Subscribe
+//    - Public: Join & Subscribe (auto-join, no join dialog)
+//    - Private: Request to Join (global dialog) / Already Requested
+//    - Subscribed (active) disabled
+//    - Expired: Renew & Pay (sequence) / Pay to Renew (non-seq)
+//    - Subscribe (not subscribed yet)
+// ✅ One-time fee hidden on renewals (shown only if NOT subscribed)
+
 "use client";
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Autoplay from "embla-carousel-autoplay";
-import { toast } from "sonner";
 import { Check, MoveUpRight, LockKeyhole, LoaderCircle } from "lucide-react";
 
 import {
@@ -15,11 +27,9 @@ import {
 } from "@/components/ui/carousel";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -28,8 +38,6 @@ import { PlansSection } from "@/models/templates/consultingo/consultingo-home-mo
 
 import { usePlans } from "@/hooks/usePlan";
 import { useCommunity } from "@/hooks/useCommunity";
-import { useRequests } from "@/hooks/useRequests";
-import { usePayment } from "@/hooks/usePayments";
 import { AuthContext } from "@/contexts/Auth.context";
 import { capitalizeWords } from "@/utils/StringFunctions";
 
@@ -37,11 +45,7 @@ import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 import LoginPopUp from "@/app/default/_components/LoginPopUp";
 
-enum PaymentStatus {
-  SUCCESS = "SUCCESS",
-  FAILED = "FAILED",
-  PENDING = "PENDING",
-}
+import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow";
 
 const formatDate = (date: string | Date) => {
   if (!date) return "";
@@ -67,54 +71,32 @@ const ConsultingoPlans = ({
 }) => {
   const content = data?.content;
 
-  const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: false }));
+  const plugin = useRef(
+    Autoplay({
+      delay: 3000,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    }),
+  );
 
-  const {
-    getPlansList,
-    getCommunityPlansListAuth,
-    joinToPublicCommunity,
-    createSubscriptionSequencesByPlanAndCommunityId,
-    getSequencesById,
-  } = usePlans();
-
-  const { SendCommunityRequest } = useRequests();
-  const { initiatePaymentByIds, getPaymentStatusById } = usePayment();
+  const { getPlansList, getCommunityPlansListAuth } = usePlans();
 
   const { communityId, communityData } = useCommunity();
   const auth = useContext(AuthContext);
 
+  const isAuthenticated = !!(auth as any)?.isAuthenticated;
+  const userId: string | undefined =
+    (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
+  const isLoggedIn = !!(isAuthenticated && userId);
+
   const [plans, setPlans] = useState<TrainingPlan[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [joinedCommunityLocal, setJoinedCommunityLocal] = useState(false);
-
-  // ✅ Login popup
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-
-  // ✅ per-plan processing
-  const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
-
-  // ✅ payment dialogs
-  const [timer, setTimer] = useState(5);
-  const [successOpen, setSuccessOpen] = useState(false);
-  const [failureOpen, setFailureOpen] = useState(false);
-  const [transaction, setTransaction] = useState<any>(null);
-
-  const isLoggedIn = !!(auth as any)?.isAuthenticated;
-  const userId = (auth as any)?.user?._id ?? (auth as any)?.user?.id;
-
-  const isSubscribedCommunity = useMemo(() => {
-    const members = communityData?.community?.members || [];
-    return (
-      joinedCommunityLocal ||
-      members?.some((m: any) => (m?.user?._id ?? m?.user?.id) === userId)
-    );
-  }, [joinedCommunityLocal, communityData, userId]);
 
   const fetchPlans = async () => {
     if (!communityId) return;
     setIsLoading(true);
     try {
-      const resp = isLoggedIn
+      const resp: any = isAuthenticated
         ? await getCommunityPlansListAuth(communityId)
         : await getPlansList(communityId);
 
@@ -133,163 +115,23 @@ const ConsultingoPlans = ({
   useEffect(() => {
     fetchPlans();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [communityId, isLoggedIn]);
+  }, [communityId, isAuthenticated]);
 
-  const handleJoinPublic = async () => {
-    try {
-      await joinToPublicCommunity(communityId!);
-      setJoinedCommunityLocal(true);
-      toast.success("Successfully joined the community!");
-      fetchPlans();
-    } catch (err) {
-      toast.error("Failed to join community");
-    }
-  };
+  // ✅ unified flow hook
+  const flow = usePlanSubscribeFlow({
+    communityId: communityId as any,
+    communityData,
+    isLoggedIn,
+    userId,
+    plans,
+    refetchPlans: fetchPlans,
+  });
 
-  const handleRequestPrivate = async () => {
-    try {
-      if (!communityId) return;
-      const fd = new FormData();
-      fd.append("community", communityId);
-      fd.append("Message", "Request to join the community.");
-      const res = await SendCommunityRequest(fd);
-      if (res?.status === 201) toast.success("Request sent to admin.");
-      else toast.success("Request sent.");
-    } catch (e) {
-      toast.error("Could not send request.");
-    }
-  };
-
-  const handleSuccessClose = () => {
-    setTimer(5);
-    setSuccessOpen(false);
-    fetchPlans(); // refresh plan status after payment
-  };
-
-  const handleFailureClose = () => {
-    setTimer(5);
-    setFailureOpen(false);
-  };
-
-  const openPaymentAndTrack = async (payRes: any) => {
-    const url = payRes?.url ?? payRes?.data?.url;
-    const transactionId = payRes?.transactionId ?? payRes?.data?.transactionId;
-    const txn = payRes?.transaction ?? payRes?.data?.transaction;
-
-    if (txn) setTransaction(txn);
-
-    if (!url || !transactionId) {
-      toast.error("Payment URL not received");
-      return;
-    }
-
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
-    const width = Math.min(1000, screenWidth);
-    const height = Math.min(1000, screenHeight);
-    const left = (screenWidth - width) / 2;
-    const top = (screenHeight - height) / 2;
-
-    const windowRef = window.open(
-      url,
-      "paymentWindow",
-      `width=${width},height=${height},left=${left},top=${top},resizable=no`,
-    );
-
-    const intervalRef = setInterval(async () => {
-      try {
-        const statusRes: any = await getPaymentStatusById(transactionId);
-
-        const status =
-          statusRes?.[0]?.status ??
-          statusRes?.status ??
-          statusRes?.data?.[0]?.status ??
-          statusRes?.data?.status;
-
-        if (!status) return;
-        if (status === PaymentStatus.PENDING) return;
-
-        clearInterval(intervalRef);
-        windowRef?.close();
-
-        if (status === PaymentStatus.SUCCESS) setSuccessOpen(true);
-        else setFailureOpen(true);
-      } catch (err) {
-        console.error("Error fetching payment status:", err);
-      }
-    }, 1000);
-  };
-
-  const handleNonSequencePayNow = async (plan: TrainingPlan) => {
-    if (!plan?._id || !communityId) {
-      toast.error("Missing required data");
-      return;
-    }
-
-    if (!isLoggedIn || !userId) {
-      setIsLoginOpen(true);
-      return;
-    }
-
-    setProcessingPlanId(plan._id);
-    try {
-      // 1) create subscription + sequences
-      const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
-        userId,
-        communityId,
-        plan._id,
-      );
-
-      const subscriptionId = res?.subscription?._id;
-      if (!subscriptionId) {
-        toast.error("Subscription creation failed");
-        return;
-      }
-
-      // 2) fetch sequences
-      const seqRes: any = await getSequencesById(subscriptionId, userId);
-      const sequences = seqRes?.sequences || [];
-
-      // 3) first payable
-      const firstPayable = sequences.find(
-        (s: any) =>
-          !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
-          !s?.isnonPayable,
-      );
-
-      if (!firstPayable?._id) {
-        toast.error("No payable sequence found");
-        return;
-      }
-
-      // 4) amount
-      const amount =
-        Number(seqRes?.pricing ?? 0) ||
-        Number((plan as any)?.pricing ?? 0) ||
-        Number((plan as any)?.totalPlanValue ?? 0);
-
-      if (!amount || amount <= 0) {
-        toast.error("Invalid amount");
-        return;
-      }
-
-      // 5) initiate payment
-      const payRes: any = await initiatePaymentByIds(
-        userId,
-        plan._id,
-        [firstPayable._id],
-        String(amount),
-      );
-
-      toast.success("Redirecting to payment...");
-      await openPaymentAndTrack(payRes);
-    } catch (err) {
-      console.error(err);
-      toast.error("Payment initiation failed");
-    } finally {
-      setProcessingPlanId(null);
-    }
-  };
+  const isRequested = Boolean(
+    communityData?.community?.requests?.some(
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId,
+    ),
+  );
 
   if (isLoading) {
     return (
@@ -360,45 +202,33 @@ const ConsultingoPlans = ({
           >
             <CarouselContent>
               {plans.map((plan, index) => {
-                const userSubscribedToPlan =
-                  !!isLoggedIn &&
-                  plan.subscribers?.some(
-                    (sub: any) => (sub?._id ?? sub?.id) === userId,
-                  );
+                const planId = String((plan as any)?._id ?? "");
+                const meta = flow.getPlanMeta(planId);
 
-                const isSequencePlan =
-                  !!(plan as any)?.isSequenceAvailable &&
-                  Number((plan as any)?.totalSequences ?? 0) > 0;
+                const userSubscribedToPlan = !!meta?.isSubscribed;
+                const isSequencePlan = !!meta?.isSequencePlan;
+                const isActivePlan = !!meta?.isActive;
+                const isExpiredPlan = !!meta?.isExpired;
+                const nextDue = meta?.nextDue ?? null;
 
-                const isProcessing = processingPlanId === plan._id;
+                const isProcessing = flow.processingPlanId === planId;
 
                 const period = `${
-                  plan.duration == "ONE_TIME" ? "" : plan.interval
-                } ${capitalizeWords(plan.duration)}`;
+                  plan.duration === "ONE_TIME" ? "" : plan.interval
+                } ${capitalizeWords(plan.duration)}`.trim();
 
-                const subsCount = plan.subscribers?.length ?? 0;
-
-                const nextDue = (plan as any)?.nextDueDate;
-
-                const isActivePlan =
-                  !!nextDue &&
-                  (nextDue === "forever" || new Date(nextDue) >= new Date());
-
-                const isExpiredPlan =
-                  !!nextDue &&
-                  nextDue !== "forever" &&
-                  new Date(nextDue) < new Date();
+                const subsCount = (plan as any)?.subscribers?.length ?? 0;
 
                 const dynamicFeatures = [
-                  { text: `Duration: ${period}` },
+                  { text: `Duration: ${period || "-"}` },
                   { text: `Subscribers: ${subsCount}` },
                   {
                     text: nextDue
                       ? nextDue === "forever"
                         ? `Next Due: No Expiry`
                         : isExpiredPlan
-                          ? `Expired on: ${formatDate(nextDue)}`
-                          : `Next Due: ${formatDate(nextDue)}`
+                          ? `Expired on: ${formatDate(String(nextDue))}`
+                          : `Next Due: ${formatDate(String(nextDue))}`
                       : `Next Due: No Dues`,
                   },
                   {
@@ -412,21 +242,50 @@ const ConsultingoPlans = ({
                   },
                 ];
 
+                const amount =
+                  (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0;
+
+                const initFee = Number((plan as any)?.initialPayment ?? 0);
+                const showOneTimeFee = initFee > 0 && !userSubscribedToPlan;
+
+                const cardIsDark = index % 2 !== 0;
+
+                // ✅ CTA label (standard)
+                const ctaText = (() => {
+                  if (!isLoggedIn) return "Login to Subscribe";
+
+                  if (!flow.isSubscribedCommunity) {
+                    if (flow.isPrivate)
+                      return isRequested
+                        ? "Already Requested"
+                        : "Request to Join";
+                    return "Join & Subscribe";
+                  }
+
+                  if (userSubscribedToPlan && isActivePlan) return "Subscribed";
+
+                  if (userSubscribedToPlan && isExpiredPlan) {
+                    return isSequencePlan ? "Renew & Pay" : "Pay to Renew";
+                  }
+
+                  return "Subscribe";
+                })();
+
                 return (
                   <CarouselItem
-                    key={plan._id ?? index}
+                    key={planId || index}
                     className="md:basis-1/2 lg:basis-1/3"
                   >
                     <div
                       className={`relative h-[650px] rounded-[60px] p-10 flex flex-col items-center text-center transition-all duration-300 ${
-                        index % 2 !== 0
+                        cardIsDark
                           ? "bg-[var(--pri)] text-white"
                           : "bg-white border border-[var(--neu)]"
                       }`}
                     >
                       <h3
                         className={`text-2xl font-fraunces capitalize my-4 ${
-                          index % 2 !== 0 ? "text-white" : "text-[var(--pri)]"
+                          cardIsDark ? "text-white" : "text-[var(--pri)]"
                         }`}
                       >
                         {plan.name}
@@ -434,22 +293,27 @@ const ConsultingoPlans = ({
 
                       <p
                         className={`text-sm mb-6 line-clamp-4 ${
-                          index % 2 !== 0
-                            ? "text-white/80"
-                            : "text-[var(--sec)]/70"
+                          cardIsDark ? "text-white/80" : "text-[var(--sec)]/70"
                         }`}
                       >
                         {plan.description}
                       </p>
 
-                      <div className="flex items-baseline gap-1 mb-10">
-                        <span className="text-5xl font-fraunces">
-                          ₹
-                          {(plan as any)?.pricing ??
-                            (plan as any)?.totalPlanValue ??
-                            0}
-                        </span>
-                        <span className="text-sm opacity-70">/{period}</span>
+                      <div className="flex flex-col items-center gap-1 mb-8">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-5xl font-fraunces">
+                            ₹{amount}
+                          </span>
+                          <span className="text-sm opacity-70">/{period}</span>
+                        </div>
+
+                        {showOneTimeFee && (
+                          <div
+                            className={`text-xs font-semibold ${cardIsDark ? "text-white/90" : "text-[var(--pri)]"}`}
+                          >
+                            + One Time Fee : ₹ {initFee}
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex-1 w-full text-left space-y-4 mb-10">
@@ -457,7 +321,7 @@ const ConsultingoPlans = ({
                           <div key={i} className="flex items-center gap-3">
                             <div
                               className={`rounded-full p-0.5 border ${
-                                index % 2 !== 0
+                                cardIsDark
                                   ? "border-white"
                                   : "border-[var(--sec)]"
                               }`}
@@ -471,146 +335,184 @@ const ConsultingoPlans = ({
                         ))}
                       </div>
 
-                      {/* ✅ CTA with isSequencePlan flow */}
+                      {/* ✅ CTA (hook-driven) */}
                       <div className="w-full mt-auto pt-6">
+                        {/* Logged out */}
                         {!isLoggedIn ? (
                           <button
                             type="button"
-                            onClick={() => setIsLoginOpen(true)}
+                            onClick={() => flow.startSubscribeFlow(planId)}
                             className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
-                              index % 2 !== 0
+                              cardIsDark
                                 ? "bg-white text-[var(--pri)]"
                                 : "bg-[var(--pri)] text-white"
-                            }`}
+                            } ${isProcessing ? "opacity-70 pointer-events-none" : ""}`}
                           >
-                            {communityData?.community?.type === "PRIVATE" && (
-                              <LockKeyhole size={18} />
-                            )}
-                            Login to Subscribe
-                            <MoveUpRight size={16} />
-                          </button>
-                        ) : !isSubscribedCommunity ? (
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <button
-                                type="button"
-                                className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
-                                  index % 2 !== 0
-                                    ? "bg-white text-[var(--pri)]"
-                                    : "bg-[var(--pri)] text-white"
-                                }`}
-                              >
-                                {communityData?.community?.type ===
-                                  "PRIVATE" && <LockKeyhole size={18} />}
-                                {communityData?.community?.type === "PRIVATE"
-                                  ? "Request to Join"
-                                  : "Join Community"}
-                                <MoveUpRight size={16} />
-                              </button>
-                            </DialogTrigger>
-
-                            <DialogContent>
-                              <DialogTitle>
-                                Community Membership Required
-                              </DialogTitle>
-                              <DialogDescription>
-                                {communityData?.community?.type === "PRIVATE"
-                                  ? "This is a private community. Send a request to the admin to get access to plans."
-                                  : "You need to join the community before subscribing to a plan."}
-                              </DialogDescription>
-
-                              <div className="flex justify-end gap-3 mt-4">
-                                <DialogClose asChild>
-                                  <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-
-                                <DialogClose asChild>
-                                  <Button
-                                    onClick={
-                                      communityData?.community?.type ===
-                                      "PRIVATE"
-                                        ? handleRequestPrivate
-                                        : handleJoinPublic
-                                    }
-                                  >
-                                    Confirm
-                                  </Button>
-                                </DialogClose>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        ) : userSubscribedToPlan && isActivePlan ? (
-                          <Button
-                            variant="outline"
-                            className="w-full py-4 rounded-full font-bold"
-                            disabled
-                          >
-                            Subscribed
-                          </Button>
-                        ) : userSubscribedToPlan && isExpiredPlan ? (
-                          isSequencePlan ? (
-                            <Link
-                              href={`/subscriptions/?planid=${plan._id}&communityid=${communityId}`}
-                              className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
-                                index % 2 !== 0
-                                  ? "bg-white text-[var(--pri)]"
-                                  : "bg-[var(--pri)] text-white"
-                              } ${isProcessing ? "opacity-60 pointer-events-none" : ""}`}
-                            >
-                              {isProcessing ? "Processing..." : "Renew & Pay"}
-                              <MoveUpRight size={16} />
-                            </Link>
-                          ) : (
-                            <Button
-                              onClick={() => handleNonSequencePayNow(plan)}
-                              className={`w-full py-4 rounded-full font-bold ${
-                                index % 2 !== 0
-                                  ? "bg-white text-[var(--pri)]"
-                                  : "bg-[var(--pri)] text-white"
-                              }`}
-                              disabled={isProcessing}
-                            >
-                              {isProcessing ? (
-                                <span className="inline-flex items-center gap-2">
-                                  <LoaderCircle className="w-4 h-4 animate-spin" />
-                                  Starting payment...
-                                </span>
-                              ) : (
-                                "Pay to Renew"
-                              )}
-                            </Button>
-                          )
-                        ) : isSequencePlan ? (
-                          <Link
-                            href={`/subscriptions/?planid=${plan._id}&communityid=${communityId}`}
-                            className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
-                              index % 2 !== 0
-                                ? "bg-white text-[var(--pri)]"
-                                : "bg-[var(--pri)] text-white"
-                            } ${isProcessing ? "opacity-60 pointer-events-none" : ""}`}
-                          >
-                            {isProcessing ? "Processing..." : "Subscribe"}
-                            <MoveUpRight size={16} />
-                          </Link>
-                        ) : (
-                          <Button
-                            onClick={() => handleNonSequencePayNow(plan)}
-                            className={`w-full h-14 !py-0 rounded-full font-bold ${
-                              index % 2 !== 0
-                                ? "bg-white text-[var(--pri)]"
-                                : "bg-[var(--pri)] text-white"
-                            }`}
-                            disabled={isProcessing}
-                          >
+                            {flow.isPrivate && <LockKeyhole size={18} />}
                             {isProcessing ? (
                               <span className="inline-flex items-center gap-2">
                                 <LoaderCircle className="w-4 h-4 animate-spin" />
-                                Starting payment...
+                                Starting...
                               </span>
                             ) : (
-                              "Pay & Join"
+                              ctaText
                             )}
-                          </Button>
+                            <MoveUpRight size={16} />
+                          </button>
+                        ) : (
+                          <>
+                            {/* Not in community */}
+                            {!flow.isSubscribedCommunity ? (
+                              flow.isPrivate ? (
+                                isRequested ? (
+                                  <div className="mt-2 inline-flex flex-col items-center gap-2 text-[16px] font-bold">
+                                    <h5>Already Requested</h5>
+                                    <p
+                                      className={`font-normal text-sm text-center ${
+                                        cardIsDark
+                                          ? "text-white/80"
+                                          : "text-[var(--sec)]/70"
+                                      }`}
+                                    >
+                                      * Your request will be sent to the admin.
+                                      You can proceed with payment once
+                                      approved.
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      flow.startSubscribeFlow(planId)
+                                    }
+                                    className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
+                                      cardIsDark
+                                        ? "bg-white text-[var(--pri)]"
+                                        : "bg-[var(--pri)] text-white"
+                                    } ${isProcessing ? "opacity-70 pointer-events-none" : ""}`}
+                                  >
+                                    <LockKeyhole size={18} />
+                                    {isProcessing ? (
+                                      <span className="inline-flex items-center gap-2">
+                                        <LoaderCircle className="w-4 h-4 animate-spin" />
+                                        Starting...
+                                      </span>
+                                    ) : (
+                                      "Request to Join"
+                                    )}
+                                    <MoveUpRight size={16} />
+                                  </button>
+                                )
+                              ) : (
+                                // ✅ Public => auto-join + continue
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    flow.startSubscribeFlow(planId)
+                                  }
+                                  className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
+                                    cardIsDark
+                                      ? "bg-white text-[var(--pri)]"
+                                      : "bg-[var(--pri)] text-white"
+                                  } ${isProcessing ? "opacity-70 pointer-events-none" : ""}`}
+                                >
+                                  {isProcessing ? (
+                                    <span className="inline-flex items-center gap-2">
+                                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                                      Joining...
+                                    </span>
+                                  ) : (
+                                    "Join & Subscribe"
+                                  )}
+                                  <MoveUpRight size={16} />
+                                </button>
+                              )
+                            ) : userSubscribedToPlan && isActivePlan ? (
+                              <Button
+                                variant="outline"
+                                className="w-full py-4 rounded-full font-bold"
+                                disabled
+                              >
+                                Subscribed
+                              </Button>
+                            ) : userSubscribedToPlan && isExpiredPlan ? (
+                              isSequencePlan ? (
+                                <Link
+                                  href={`/subscriptions/?planid=${encodeURIComponent(
+                                    planId,
+                                  )}&communityid=${encodeURIComponent(
+                                    communityId || "",
+                                  )}`}
+                                  className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
+                                    cardIsDark
+                                      ? "bg-white text-[var(--pri)]"
+                                      : "bg-[var(--pri)] text-white"
+                                  } ${isProcessing ? "opacity-60 pointer-events-none" : ""}`}
+                                >
+                                  {isProcessing
+                                    ? "Processing..."
+                                    : "Renew & Pay"}
+                                  <MoveUpRight size={16} />
+                                </Link>
+                              ) : (
+                                <Button
+                                  onClick={() =>
+                                    flow.startNonSequencePayment(planId)
+                                  }
+                                  className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
+                                    cardIsDark
+                                      ? "bg-white text-[var(--pri)]"
+                                      : "bg-[var(--pri)] text-white"
+                                  } ${isProcessing ? "opacity-60 pointer-events-none" : ""}`}
+                                  disabled={isProcessing}
+                                >
+                                  {isProcessing ? (
+                                    <span className="inline-flex items-center gap-2">
+                                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                                      Starting payment...
+                                    </span>
+                                  ) : (
+                                    "Pay to Renew"
+                                  )}
+                                </Button>
+                              )
+                            ) : isSequencePlan ? (
+                              <Link
+                                href={`/subscriptions/?planid=${encodeURIComponent(
+                                  planId,
+                                )}&communityid=${encodeURIComponent(
+                                  communityId || "",
+                                )}`}
+                                className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
+                                  cardIsDark
+                                    ? "bg-white text-[var(--pri)]"
+                                    : "bg-[var(--pri)] text-white"
+                                } ${isProcessing ? "opacity-60 pointer-events-none" : ""}`}
+                              >
+                                {isProcessing ? "Processing..." : "Subscribe"}
+                                <MoveUpRight size={16} />
+                              </Link>
+                            ) : (
+                              <button
+                                onClick={() => flow.startSubscribeFlow(planId)}
+                                className={`w-full py-4 rounded-full flex items-center justify-center gap-2 font-bold ${
+                                  cardIsDark
+                                    ? "bg-white text-[var(--pri)]"
+                                    : "bg-[var(--pri)] text-white"
+                                } ${isProcessing ? "opacity-60 pointer-events-none" : ""}`}
+                                disabled={isProcessing}
+                              >
+                                {isProcessing ? (
+                                  <span className="inline-flex items-center gap-2">
+                                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                                    Starting...
+                                  </span>
+                                ) : (
+                                  "Subscribe"
+                                )}
+                              </button>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
@@ -629,10 +531,10 @@ const ConsultingoPlans = ({
         )}
       </div>
 
-      {/* ✅ LoginPopUp */}
+      {/* ✅ LoginPopUp (hook controlled) */}
       <LoginPopUp
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
+        isOpen={flow.isLoginOpen}
+        onClose={() => flow.setIsLoginOpen(false)}
         redirectTo={"/#plans"}
         colors={{
           primaryColor,
@@ -641,20 +543,116 @@ const ConsultingoPlans = ({
         }}
       />
 
+      {/* ✅ Private Request dialog (hook controlled) */}
+      <Dialog open={flow.joinDialogOpen} onOpenChange={flow.setJoinDialogOpen}>
+        <DialogContent>
+          <DialogTitle style={{ color: primaryColor }}>
+            Request Access
+          </DialogTitle>
+          <DialogDescription style={{ color: neutralColor }}>
+            This is a private community. Send a request to the admin to get
+            access to plans.
+          </DialogDescription>
+
+          <div className="mt-4 flex justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={() => flow.setJoinDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              style={{ backgroundColor: primaryColor, color: "#fff" }}
+              onClick={async () => {
+                const ok = await flow.handleRequestPrivate();
+                if (!ok) return;
+                flow.setJoinDialogOpen(false);
+              }}
+            >
+              Send Request
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ✅ Non-seq confirm dialog after login */}
+      <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogTitle style={{ color: primaryColor }}>
+            Confirm Plan
+          </DialogTitle>
+          <DialogDescription style={{ color: primaryColor }}>
+            You’re ready to subscribe. Please confirm your plan below.
+          </DialogDescription>
+
+          {flow.selectedPlanId &&
+            (() => {
+              const meta = flow.getPlanMeta(flow.selectedPlanId);
+              if (!meta?.plan) return null;
+
+              const p = meta.plan;
+              const already = meta.isSubscribed;
+
+              const amount =
+                (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
+              const initFee = Number((p as any)?.initialPayment ?? 0);
+
+              return (
+                <div className="mt-4 rounded-xl border p-4">
+                  <div
+                    className="text-lg font-semibold"
+                    style={{ color: primaryColor }}
+                  >
+                    {capitalizeWords(p.name)}
+                  </div>
+
+                  <div className="mt-1 text-sm text-slate-500">
+                    ₹{amount} •{" "}
+                    {p.interval && p.duration
+                      ? `${p.interval} ${capitalizeWords(p.duration)}`
+                      : ""}
+                  </div>
+
+                  {/* hide one-time fee on renew */}
+                  {initFee > 0 && !already && (
+                    <div className="mt-1 text-xs text-slate-500">
+                      + One Time Fee: ₹{initFee}
+                    </div>
+                  )}
+
+                  <div className="mt-4 flex justify-end">
+                    <Button
+                      style={{ backgroundColor: primaryColor, color: "#fff" }}
+                      disabled={flow.processingPlanId === flow.selectedPlanId}
+                      onClick={async () => {
+                        const pid = flow.selectedPlanId!;
+                        flow.setPlanDialogOpen(false);
+                        await flow.startNonSequencePayment(pid);
+                      }}
+                    >
+                      {already ? "Pay to Renew" : "Subscribe"}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()}
+        </DialogContent>
+      </Dialog>
+
       {/* ✅ Payment dialogs */}
       <PaymentSuccess
-        txnid={transaction?.txnid || ""}
-        open={successOpen}
-        amount={transaction?.amount || ""}
-        timer={timer}
-        onClose={handleSuccessClose}
+        txnid={flow.transaction?.txnid || ""}
+        open={flow.successOpen}
+        amount={flow.transaction?.amount || ""}
+        timer={flow.timer}
+        onClose={flow.handleSuccessClose}
       />
       <PaymentFailure
-        open={failureOpen}
-        onClose={handleFailureClose}
-        amount={transaction?.amount || ""}
-        txnid={transaction?.txnid || ""}
-        timer={timer}
+        open={flow.failureOpen}
+        onClose={flow.handleFailureClose}
+        amount={flow.transaction?.amount || ""}
+        txnid={flow.transaction?.txnid || ""}
+        timer={flow.timer}
       />
     </section>
   );

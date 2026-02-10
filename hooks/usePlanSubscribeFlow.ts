@@ -17,13 +17,11 @@ enum PaymentStatus {
   PENDING = "PENDING",
 }
 
-type PendingAction =
-  | null
-  | {
-      type: "START_SUBSCRIBE";
-      planId: string;
-      fromLogin: boolean;
-    };
+type PendingAction = null | {
+  type: "START_SUBSCRIBE";
+  planId: string;
+  fromLogin: boolean;
+};
 
 export function usePlanSubscribeFlow({
   communityId,
@@ -100,7 +98,7 @@ export function usePlanSubscribeFlow({
     const isSubscribed =
       !!userId &&
       !!(plan as any)?.subscribers?.some(
-        (s: any) => (s?._id ?? s?.id) === userId
+        (s: any) => (s?._id ?? s?.id) === userId,
       );
 
     return { plan, nextDue, isActive, isExpired, isSequencePlan, isSubscribed };
@@ -110,8 +108,8 @@ export function usePlanSubscribeFlow({
     if (!communityId) return;
     router.push(
       `/subscriptions/?planid=${encodeURIComponent(
-        planId
-      )}&communityid=${encodeURIComponent(communityId)}`
+        planId,
+      )}&communityid=${encodeURIComponent(communityId)}`,
     );
   };
 
@@ -167,7 +165,7 @@ export function usePlanSubscribeFlow({
     const windowRef = window.open(
       url,
       "paymentWindow",
-      `width=${width},height=${height},left=${left},top=${top},resizable=no`
+      `width=${width},height=${height},left=${left},top=${top},resizable=no`,
     );
 
     const intervalRef = setInterval(async () => {
@@ -212,7 +210,7 @@ export function usePlanSubscribeFlow({
       const res: any = await createSubscriptionSequencesByPlanAndCommunityId(
         userId,
         communityId,
-        (meta.plan as any)._id
+        (meta.plan as any)._id,
       );
 
       const subscriptionId = res?.subscription?._id;
@@ -227,7 +225,7 @@ export function usePlanSubscribeFlow({
       const firstPayable = sequences.find(
         (s: any) =>
           !["PAID", "PAID_BY_CASH", "NA"].includes(s?.status) &&
-          !s?.isnonPayable
+          !s?.isnonPayable,
       );
 
       if (!firstPayable?._id) {
@@ -253,7 +251,7 @@ export function usePlanSubscribeFlow({
         userId,
         (meta.plan as any)._id,
         [firstPayable._id],
-        String(finalAmount)
+        String(finalAmount),
       );
 
       toast.success("Redirecting to payment...");
@@ -270,24 +268,21 @@ export function usePlanSubscribeFlow({
     const meta = getPlanMeta(planId);
     if (!meta) return;
 
-    // must join community first
+    // ✅ ALWAYS auto-join if not joined (no private checks, no dialogs)
     if (!isSubscribedCommunity) {
-    //   if (isPrivate) {
-    //     setJoinDialogPlanId(planId);
-    //     setJoinDialogOpen(true);
-    //     return;
-    //   }
       const ok = await handleJoinPublic();
       if (!ok) return;
     }
 
-    // seq => redirect
+    // ✅ sequence => redirect
     if (meta.isSequencePlan) {
       goToSubscriptions(planId);
       return;
     }
 
-    // non-seq => after login open confirm dialog; otherwise direct pay
+    // ✅ non-sequence:
+    // - after login => open confirm dialog
+    // - otherwise => direct pay
     if (fromLogin) {
       setSelectedPlanId(planId);
       setPlanDialogOpen(true);

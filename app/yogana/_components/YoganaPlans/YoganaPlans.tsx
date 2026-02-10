@@ -1,5 +1,5 @@
-// ✅ YoganaPlans.tsx (UPDATED to use the hook)
 "use client";
+
 import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/contexts/Auth.context";
 import { usePlans } from "@/hooks/usePlan";
@@ -17,20 +17,14 @@ import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
-import { capitalizeWords } from "@/utils/StringFunctions";
 import LoginPopUp from "@/app/default/_components/LoginPopUp";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 
-import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow"; // ✅ path as you saved
+import { capitalizeWords } from "@/utils/StringFunctions";
+import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow"; // ✅ your hook
 
 function Dots({
   api,
@@ -76,9 +70,7 @@ function Dots({
             key={i}
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => api.scrollTo(i)}
-            style={{
-              backgroundColor: isActive ? primaryColor : "",
-            }}
+            style={{ backgroundColor: isActive ? primaryColor : "" }}
             className={[
               "h-2.5 w-2.5 rounded-full transition-all",
               isActive
@@ -106,14 +98,10 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
   neutralColor,
 }) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [plans, setPlans] = useState<TrainingPlan[]>([]);
+  const { communityId, communityData } = useCommunity();
 
   const authContext = useContext(AuthContext);
-  const isAuthenticated = authContext?.isAuthenticated;
-
-  const { communityId, communityData } = useCommunity();
+  const isAuthenticated = !!authContext?.isAuthenticated;
 
   const userId =
     (authContext as any)?.user?._id ??
@@ -121,6 +109,9 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     undefined;
 
   const isLoggedIn = !!(isAuthenticated && userId);
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [plans, setPlans] = useState<TrainingPlan[]>([]);
 
   // Autoplay
   const autoplay = useRef(
@@ -131,12 +122,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     })
   );
 
-  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
-    undefined
-  );
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
-    undefined
-  );
+  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(undefined);
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
 
   const fetchPlans = async () => {
     if (!communityId) return;
@@ -163,7 +150,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isAuthenticated]);
 
-  // ✅ Hook
+  // ✅ Hook-only flow (auto-join if not joined; no private/request checks here)
   const flow = usePlanSubscribeFlow({
     communityId: communityId as any,
     communityData,
@@ -198,11 +185,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <Header />
-          <Carousel
-            opts={{ align: "start", loop: false }}
-            className="w-full"
-            setApi={setApiLoading}
-          >
+          <Carousel opts={{ align: "start", loop: false }} className="w-full" setApi={setApiLoading}>
             <CarouselContent>
               {Array.from({ length: 8 }).map((_, i) => (
                 <CarouselItem
@@ -225,12 +208,6 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     );
   }
 
-  const isRequested = Boolean(
-    communityData?.community?.requests?.some(
-      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
-    )
-  );
-
   return (
     <section
       id="plans"
@@ -252,7 +229,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
               <CarouselContent>
                 {plans.map((plan, index) => (
                   <CarouselItem
-                    key={plan._id ?? index}
+                    key={String(plan._id ?? index)}
                     className="basis-full md:basis-1/3"
                   >
                     <div className="h-full">
@@ -260,10 +237,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         coupons={(plan as any)?.coupons ?? []}
                         index={index + 1}
                         title={plan.name}
-                        description={plan.description || (plan as any)?.summary}
+                        description={plan.description || (plan as any)?.summary || ""}
                         subscribers={(plan as any)?.subscribers ?? []}
-                        fetchPlans={fetchPlans}
-                        isSubscribedCommunity={!!flow.isSubscribedCommunity}
                         planId={String(plan._id)}
                         communityId={String(communityId)}
                         primaryColor={primaryColor}
@@ -272,7 +247,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         price={String(
                           (plan as any)?.pricing ??
                             (plan as any)?.totalPlanValue ??
-                            ""
+                            0
                         )}
                         period={
                           plan.interval && plan.duration
@@ -283,16 +258,13 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                           (plan as any)?.image?.value ||
                           "/assets/creatorCoursesPlaceHolderImage.jpg"
                         }
-                        isPrivate={flow.isPrivate}
-                        isRequested={!!isRequested}
                         initialPayment={(plan as any)?.initialPayment ?? 0}
-                        onJoinedCommunity={() => flow.setJoinedCommunityLocal(true)}
-                        // ✅ flow
+                        // ✅ hook-driven props
                         isLoggedIn={isLoggedIn}
-                        onStartFlow={() => flow.startSubscribeFlow(String(plan._id))}
+                        isSubscribedCommunity={!!flow.isSubscribedCommunity}
                         isProcessing={flow.processingPlanId === String(plan._id)}
-                        // ✅ meta for button text
                         planMeta={flow.getPlanMeta(String(plan._id))}
+                        onStartFlow={() => flow.startSubscribeFlow(String(plan._id))}
                       />
                     </div>
                   </CarouselItem>
@@ -304,8 +276,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 className="hidden sm:flex size-10 cursor-pointer"
                 style={{ color: primaryColor, backgroundColor: "#fff" }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor =
-                    primaryColor;
+                  (e.currentTarget as HTMLElement).style.backgroundColor = primaryColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
@@ -315,18 +286,17 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
               />
 
               <CarouselNext
+                aria-label="Next plans"
                 className="hidden sm:flex size-10 cursor-pointer"
                 style={{ color: primaryColor, backgroundColor: "#fff" }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor =
-                    primaryColor;
+                  (e.currentTarget as HTMLElement).style.backgroundColor = primaryColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
-                aria-label="Next plans"
               />
             </Carousel>
 
@@ -347,35 +317,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         }}
       />
 
-      {/* ✅ Private Request Dialog (optional global one; card already has request UI.
-          If you want ONLY hook dialog, remove request UI from card and use this.)
-      */}
-      <Dialog open={flow.joinDialogOpen} onOpenChange={flow.setJoinDialogOpen}>
-        <DialogContent>
-          <DialogTitle style={{ color: primaryColor }}>Request Access</DialogTitle>
-          <DialogDescription style={{ color: neutralColor }}>
-            This is a private community. Send a request to the admin to get access
-            to plans.
-          </DialogDescription>
-          <div className="mt-4 flex justify-end gap-3">
-            <Button variant="outline" onClick={() => flow.setJoinDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              style={{ backgroundColor: primaryColor, color: "#fff" }}
-              onClick={async () => {
-                const ok = await flow.handleRequestPrivate();
-                if (!ok) return;
-                flow.setJoinDialogOpen(false);
-              }}
-            >
-              Send Request
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* ✅ Non-seq Confirm dialog after login */}
+      {/* ✅ Non-seq confirm dialog after login */}
       <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
         <DialogContent className="max-w-xl">
           <DialogTitle style={{ color: primaryColor }}>Choose a Plan</DialogTitle>
@@ -383,54 +325,54 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
             You’re ready to subscribe. Please confirm your plan below.
           </DialogDescription>
 
-          {flow.selectedPlanId && (() => {
-            const meta = flow.getPlanMeta(flow.selectedPlanId);
-            if (!meta?.plan) return null;
+          {flow.selectedPlanId &&
+            (() => {
+              const meta = flow.getPlanMeta(flow.selectedPlanId);
+              if (!meta?.plan) return null;
 
-            const p = meta.plan;
-            const already = meta.isSubscribed;
-            const amount =
-              (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
-            const initFee = Number((p as any)?.initialPayment ?? 0);
+              const p = meta.plan;
+              const already = meta.isSubscribed;
 
-            return (
-              <div className="mt-4 rounded-xl border p-4">
-                <div className="text-lg font-semibold" style={{ color: primaryColor }}>
-                  {capitalizeWords(p.name)}
-                </div>
-                <div className="mt-1 text-sm text-slate-500">
-                  ₹{amount} •{" "}
-                  {p.interval && p.duration
-                    ? `${p.interval} ${capitalizeWords(p.duration)}`
-                    : ""}
-                </div>
+              const amount =
+                (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
 
-                {initFee > 0 && !already && (
-                  <div className="mt-1 text-xs text-slate-500">
-                    + One Time Fee: ₹{initFee}
+              const initFee = Number((p as any)?.initialPayment ?? 0);
+
+              return (
+                <div className="mt-4 rounded-xl border p-4">
+                  <div className="text-lg font-semibold" style={{ color: primaryColor }}>
+                    {capitalizeWords(p.name)}
                   </div>
-                )}
 
-                <div className="mt-4 flex justify-end gap-3">
-                  {/* <Button variant="outline" onClick={() => flow.setPlanDialogOpen(false)}>
-                    Cancel
-                  </Button> */}
+                  <div className="mt-1 text-sm text-slate-500">
+                    ₹{amount} •{" "}
+                    {p.interval && p.duration
+                      ? `${p.interval} ${capitalizeWords(p.duration)}`
+                      : ""}
+                  </div>
 
-                  <Button
-                    style={{ backgroundColor: primaryColor, color: "#fff" }}
-                    disabled={flow.processingPlanId === flow.selectedPlanId}
-                    onClick={async () => {
-                      const pid = flow.selectedPlanId!;
-                      flow.setPlanDialogOpen(false);
-                      await flow.startNonSequencePayment(pid);
-                    }}
-                  >
-                    {already ? "Pay to Renew" : "Subscribe"}
-                  </Button>
+                  {initFee > 0 && !already && (
+                    <div className="mt-1 text-xs text-slate-500">
+                      + One Time Fee: ₹{initFee}
+                    </div>
+                  )}
+
+                  <div className="mt-4 flex justify-end">
+                    <Button
+                      style={{ backgroundColor: primaryColor, color: "#fff" }}
+                      disabled={flow.processingPlanId === flow.selectedPlanId}
+                      onClick={async () => {
+                        const pid = flow.selectedPlanId!;
+                        flow.setPlanDialogOpen(false);
+                        await flow.startNonSequencePayment(pid);
+                      }}
+                    >
+                      {already ? "Pay to Renew" : "Subscribe"}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            );
-          })()}
+              );
+            })()}
         </DialogContent>
       </Dialog>
 
