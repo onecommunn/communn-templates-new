@@ -17,6 +17,7 @@ import React, { FC } from "react";
 import {
   ContactDetails,
   FooterSection,
+  Header,
   SocialMediaLink,
 } from "@/models/templates/yogana/yogana-home-model";
 import { formatUrl } from "@/utils/StringFunctions";
@@ -24,6 +25,7 @@ import { formatUrl } from "@/utils/StringFunctions";
 interface YoganaFooterProps {
   data: FooterSection;
   contactData: ContactDetails;
+  headerData:Header
 }
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -33,7 +35,7 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
   dribbble: Dribbble,
 };
 
-const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
+const YoganaFooter: FC<YoganaFooterProps> = ({ data,headerData, contactData }) => {
   const normalize = (s?: string) => (s ?? "").trim();
 
   // console.log(data, "data");
@@ -82,7 +84,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, contactData }) => {
                 className="inline-flex items-center"
               >
                 <img
-                  src={data?.content?.logo || "/logo/yogana_Light_Logo.png"}
+                  src={data?.content?.logo || headerData?.content?.media?.[0] || "/logo/yogana_Light_Logo.png"}
                   alt="Yogana"
                   className="w-28 h-auto object-contain"
                 />

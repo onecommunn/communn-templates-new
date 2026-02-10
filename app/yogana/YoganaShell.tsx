@@ -29,38 +29,39 @@ export default async function YoganaShell({
   const source = bundle?.home ?? dummyData;
 
   const headerData = source?.sections?.find(
-    (s: HomeSection): s is Header => s.sectionName === "headerSection"
+    (s: HomeSection): s is Header => s.sectionName === "headerSection",
   );
 
   const footerData = source?.sections?.find(
-    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection"
+    (s: HomeSection): s is FooterSection => s.sectionName === "footerSection",
   );
 
   const contactData = source?.sections?.find(
-    (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection"
+    (s: HomeSection): s is ContactDetails => s.sectionName === "contactSection",
   );
 
   const CTAsection = source?.sections?.find(
-    (s: HomeSection): s is CTASection => s.sectionName === "whatsappSection"
+    (s: HomeSection): s is CTASection => s.sectionName === "whatsappSection",
   );
 
   const servicesSection = source?.sections?.find(
     (s: HomeSection): s is ServiceSection =>
-      s.sectionName === "serviceSection" && s.isActive
+      s.sectionName === "serviceSection" && s.isActive,
   );
 
   const plansSection = source?.sections?.find(
     (s: HomeSection): s is Plans =>
-      s.sectionName === "plansSection" && s.isActive
+      s.sectionName === "plansSection" && s.isActive,
   );
 
   const eventsSection = source?.sections?.find(
     (s: HomeSection): s is Events =>
-      s.sectionName === "eventsSection" && s.isActive
+      s.sectionName === "eventsSection" && s.isActive,
   );
 
   const whatsappWidgetData = source?.sections?.find(
-    (s: HomeSection): s is WhatsappWidgetSection => s.sectionName === "whatsappWidgetSection"
+    (s: HomeSection): s is WhatsappWidgetSection =>
+      s.sectionName === "whatsappWidgetSection",
   );
 
   const initialLoading = !bundle?.home || source;
@@ -143,7 +144,11 @@ export default async function YoganaShell({
           neutralColor={neutralColor}
         />
       )}
-      <YoganaFooter data={footerData} contactData={contactData} />
+      <YoganaFooter
+        data={footerData}
+        contactData={contactData}
+        headerData={headerData}
+      />
     </>
   );
 }
