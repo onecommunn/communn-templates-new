@@ -1,4 +1,5 @@
 import AnimatedContent from "@/components/CustomComponents/AnimatedContent";
+import { useCommunity } from "@/hooks/useCommunity";
 import Image from "next/image";
 import React from "react";
 
@@ -23,6 +24,8 @@ const YoganaServiceContent = ({
   neutralColor,
   secondaryColor,
 }: YoganaServiceContentProps) => {
+  const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
   return (
     <section
       className="relative overflow-hidden py-10 md:py-16 font-cormorant"
@@ -54,7 +57,7 @@ const YoganaServiceContent = ({
               delay={0.3}
             >
               {tag && (
-                <p className="font-alex-brush text-2xl md:text-4xl text-[var(--pri)]">
+                <p className={` ${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl md:text-4xl text-[var(--pri)]`}>
                   {tag}
                 </p>
               )}

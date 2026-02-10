@@ -1,5 +1,6 @@
 "use client";
 
+import { useCommunity } from "@/hooks/useCommunity";
 import { TestimoniesSection } from "@/models/templates/yogana/yogana-home-model";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -62,6 +63,9 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
     return fromData.length ? fromData : FALLBACKS;
   }, [data]);
 
+  const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
+
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const active = slides[index];
@@ -70,7 +74,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
     if (slides.length <= 1 || autoplayMs <= 0 || paused) return;
     const id = setInterval(
       () => setIndex((i) => (i + 1) % slides.length),
-      autoplayMs
+      autoplayMs,
     );
     return () => clearInterval(id);
   }, [slides.length, autoplayMs, paused]);
@@ -95,7 +99,7 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           style={{
             color: primaryColor,
           }}
-          className="font-alex-brush text-2xl md:text-4xl"
+          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
         >
           Testimonials
         </h4>
@@ -134,9 +138,9 @@ const YoganaTestimonial: React.FC<YoganaTestimonialProps> = ({
           {/* Right Panel */}
           <div
             className="relative flex items-center justify-center bg-[#F7F1E6] px-6 py-12 md:px-14"
-          // style={{
-          //   backgroundColor: `${primaryColor}1A`,
-          // }}
+            // style={{
+            //   backgroundColor: `${primaryColor}1A`,
+            // }}
           >
             <div className="relative z-[1] max-w-xl text-center">
               {/* small script label */}

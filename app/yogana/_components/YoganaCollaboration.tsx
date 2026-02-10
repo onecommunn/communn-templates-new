@@ -4,6 +4,7 @@ import {
   ScrollVelocityRow,
 } from "@/components/CustomComponents/scroll-based-velocity";
 import { Collaboration } from "@/models/templates/yogana/yogana-home-model";
+import { useCommunity } from "@/hooks/useCommunity";
 
 type Props = {
   data: Collaboration;
@@ -37,25 +38,27 @@ const YoganaCollaboration: React.FC<Props> = ({
   direction = 1,
   primaryColor,
   secondaryColor,
-  neutralColor
+  neutralColor,
 }) => {
   const heading = data?.content?.heading ?? "";
-  const logos = (data?.content?.media?.length ? data?.content?.media : FALLBACK_LOGOS).map(
-    normalizeUrl
-  );
+  const logos = (
+    data?.content?.media?.length ? data?.content?.media : FALLBACK_LOGOS
+  ).map(normalizeUrl);
+  const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
 
   return (
     <section
-      className="py-10 font-cormorant bg-[#C2A74E1A]"
-    // style={{
-    //   backgroundColor: `${primaryColor}1A`,
-    // }}
+      className="py-10 font-cormorant bg-[rgba(194,167,78,0.1)]"
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
           <p
             style={{ color: primaryColor }}
-            className={`text-[#C2A74E] font-alex-brush text-3xl`}
+            className={`text-[#C2A74E] text-3xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
           >
             Our Clients
           </p>
@@ -65,7 +68,6 @@ const YoganaCollaboration: React.FC<Props> = ({
           >
             {heading}
           </h2>
-
         </div>
 
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-15">

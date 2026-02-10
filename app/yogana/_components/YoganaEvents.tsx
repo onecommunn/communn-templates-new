@@ -1,10 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  capitalizeWords,
-  formatDate,
-} from "@/utils/StringFunctions";
+import { capitalizeWords, formatDate } from "@/utils/StringFunctions";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Event } from "@/models/event.model";
 import { getEvents } from "@/services/eventService";
@@ -65,7 +62,9 @@ function Dots({
   if (!api || count <= 1) return null;
 
   return (
-    <div className={`mt-10 flex items-center justify-center gap-2 ${className}`}>
+    <div
+      className={`mt-10 flex items-center justify-center gap-2 ${className}`}
+    >
       {Array.from({ length: count }).map((_, i) => {
         const isActive = i === selected;
         return (
@@ -73,10 +72,11 @@ function Dots({
             key={i}
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => api.scrollTo(i)}
-            className={`h-2.5 rounded-full transition-all ${isActive
-              ? "w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
-              : "w-2.5 bg-gray-300 hover:bg-gray-400 cursor-pointer"
-              }`}
+            className={`h-2.5 rounded-full transition-all ${
+              isActive
+                ? "w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
+                : "w-2.5 bg-gray-300 hover:bg-gray-400 cursor-pointer"
+            }`}
           />
         );
       })}
@@ -100,12 +100,13 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
 
   const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>();
   const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>();
 
   const autoplay = useRef(
-    Autoplay({ delay: 2500, stopOnInteraction: true, stopOnMouseEnter: true })
+    Autoplay({ delay: 2500, stopOnInteraction: true, stopOnMouseEnter: true }),
   );
 
   useEffect(() => {
@@ -147,7 +148,7 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
     <div className="text-center mb-10 md:mb-10 space-y-3">
       <p
         style={{ color: primaryColor }}
-        className="font-alex-brush text-2xl md:text-4xl"
+        className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl md:text-4xl`}
       >
         Events
       </p>
@@ -261,11 +262,11 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                             style={{ color: neutralColor }}
                           >
                             {`${formatDate(
-                              event?.availability[0]?.day
+                              event?.availability[0]?.day,
                             )} - ${formatDate(
                               event?.availability[
                                 event?.availability.length - 1
-                              ]?.day
+                              ]?.day,
                             )}`}
                           </p>
 
@@ -281,7 +282,7 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
                                   0,
                                   0,
                                   0,
-                                  0
+                                  0,
                                 );
                                 return today <= endDate;
                               })();

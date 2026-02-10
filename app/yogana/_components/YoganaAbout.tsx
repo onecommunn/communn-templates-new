@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useCommunity } from "@/hooks/useCommunity";
 import { Aboutus } from "@/models/templates/yogana/yogana-home-model";
 import { Check } from "lucide-react";
 import Image from "next/image";
@@ -17,13 +18,15 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
   secondaryColor,
   neutralColor,
 }) => {
+  const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
   return (
     <section
       id="about-us"
       className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-    // style={{
-    //   backgroundColor: `${primaryColor}1A`,
-    // }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       <div className="absolute inset-0 pointer-events-none">
         <Image
@@ -38,14 +41,18 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
           <div className="relative mx-auto px-10 md:px-10">
             <Image
-              src={data?.content?.media?.[0] || "/assets/yogana-about-image-1.jpg"}
+              src={
+                data?.content?.media?.[0] || "/assets/yogana-about-image-1.jpg"
+              }
               alt="yogana-about-image-1"
               width={526}
               height={636}
               unoptimized
             />
             <Image
-              src={data?.content?.media?.[1] || "/assets/yogana-about-image-2.jpg"}
+              src={
+                data?.content?.media?.[1] || "/assets/yogana-about-image-2.jpg"
+              }
               alt="yogana-about-image-2"
               width={197}
               height={226}
@@ -59,12 +66,11 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
               height={227}
               className="rounded-3xl absolute -top-10 left-0 md:-left-0 w-30 md:w-[236px]"
             /> */}
-
           </div>
           <div className="my-auto">
             <div>
               <p
-                className="text-[#C2A74E] font-alex-brush text-2xl md:text-4xl"
+                className={`text-[#C2A74E]  text-2xl md:text-4xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
                 style={{
                   color: primaryColor,
                 }}

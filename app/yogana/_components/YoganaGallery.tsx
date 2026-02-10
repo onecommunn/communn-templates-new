@@ -1,4 +1,5 @@
 import { Marquee } from "@/components/CustomComponents/marquee";
+import { useCommunity } from "@/hooks/useCommunity";
 import {
   Gallery,
   YoganaHomePage,
@@ -37,17 +38,22 @@ interface YoganaGalleryProps {
   data: Gallery;
   primaryColor: string;
   secondaryColor: string;
-  neutralColor: string
-
-
+  neutralColor: string;
 }
-const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryColor, neutralColor }) => {
+const YoganaGallery: FC<YoganaGalleryProps> = ({
+  data,
+  primaryColor,
+  secondaryColor,
+  neutralColor,
+}) => {
+  const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
   return (
     <section
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-    // style={{
-    //   backgroundColor: `${primaryColor}1A`,
-    // }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       <div
         className="absolute inset-0 -z-10 pointer-events-none select-none"
@@ -84,7 +90,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
           style={{
             color: primaryColor,
           }}
-          className="font-alex-brush text-2xl md:text-4xl"
+          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "" :"font-alex-brush"}`}
         >
           Gallery
         </h4>
@@ -96,11 +102,9 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
         >
           {data?.content?.heading}
         </h4>
-
       </div>
 
       <div className="flex items-center justify-center gap-6 md:px-10">
-
         <div className="h-px w-full bg-neutral-200/80" />
         <p
           style={{ color: neutralColor }}
@@ -129,9 +133,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({ data, primaryColor, secondaryCo
             </div>
           ))}
         </Marquee>
-
       </div>
-
     </section>
   );
 };

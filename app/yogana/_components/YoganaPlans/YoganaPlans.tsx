@@ -18,7 +18,12 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { useCommunity } from "@/hooks/useCommunity";
 import { Plans } from "@/models/templates/yogana/yogana-home-model";
 import LoginPopUp from "@/app/default/_components/LoginPopUp";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
@@ -99,7 +104,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
 }) => {
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
   const { communityId, communityData } = useCommunity();
-
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
   const authContext = useContext(AuthContext);
   const isAuthenticated = !!authContext?.isAuthenticated;
 
@@ -119,11 +124,15 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
       delay: 3000,
       stopOnInteraction: true,
       stopOnMouseEnter: true,
-    })
+    }),
   );
 
-  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(undefined);
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
+  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
+    undefined,
+  );
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
+    undefined,
+  );
 
   const fetchPlans = async () => {
     if (!communityId) return;
@@ -134,7 +143,11 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
         : await getPlansList(communityId);
 
       if (Array.isArray(response)) setPlans(response as TrainingPlan[]);
-      else if (response && typeof response === "object" && "myPlans" in response)
+      else if (
+        response &&
+        typeof response === "object" &&
+        "myPlans" in response
+      )
         setPlans((response as any).myPlans as TrainingPlan[]);
       else setPlans([]);
     } catch (error) {
@@ -164,7 +177,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     <div className="relative z-10 text-center md:mb-16 mb-6">
       <p
         style={{ color: primaryColor }}
-        className="font-alex-brush text-2xl md:text-4xl"
+        className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl md:text-4xl`}
       >
         {data?.content?.heading}
       </p>
@@ -185,7 +198,11 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <Header />
-          <Carousel opts={{ align: "start", loop: false }} className="w-full" setApi={setApiLoading}>
+          <Carousel
+            opts={{ align: "start", loop: false }}
+            className="w-full"
+            setApi={setApiLoading}
+          >
             <CarouselContent>
               {Array.from({ length: 8 }).map((_, i) => (
                 <CarouselItem
@@ -237,7 +254,9 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         coupons={(plan as any)?.coupons ?? []}
                         index={index + 1}
                         title={plan.name}
-                        description={plan.description || (plan as any)?.summary || ""}
+                        description={
+                          plan.description || (plan as any)?.summary || ""
+                        }
                         subscribers={(plan as any)?.subscribers ?? []}
                         planId={String(plan._id)}
                         communityId={String(communityId)}
@@ -247,7 +266,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         price={String(
                           (plan as any)?.pricing ??
                             (plan as any)?.totalPlanValue ??
-                            0
+                            0,
                         )}
                         period={
                           plan.interval && plan.duration
@@ -262,9 +281,13 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         // ✅ hook-driven props
                         isLoggedIn={isLoggedIn}
                         isSubscribedCommunity={!!flow.isSubscribedCommunity}
-                        isProcessing={flow.processingPlanId === String(plan._id)}
+                        isProcessing={
+                          flow.processingPlanId === String(plan._id)
+                        }
                         planMeta={flow.getPlanMeta(String(plan._id))}
-                        onStartFlow={() => flow.startSubscribeFlow(String(plan._id))}
+                        onStartFlow={() =>
+                          flow.startSubscribeFlow(String(plan._id))
+                        }
                       />
                     </div>
                   </CarouselItem>
@@ -276,11 +299,13 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 className="hidden sm:flex size-10 cursor-pointer"
                 style={{ color: primaryColor, backgroundColor: "#fff" }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = primaryColor;
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    primaryColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
               />
@@ -290,11 +315,13 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                 className="hidden sm:flex size-10 cursor-pointer"
                 style={{ color: primaryColor, backgroundColor: "#fff" }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = primaryColor;
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    primaryColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "#fff";
+                  (e.currentTarget as HTMLElement).style.backgroundColor =
+                    "#fff";
                   (e.currentTarget as HTMLElement).style.color = primaryColor;
                 }}
               />
@@ -320,7 +347,9 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
       {/* ✅ Non-seq confirm dialog after login */}
       <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
         <DialogContent className="max-w-xl">
-          <DialogTitle style={{ color: primaryColor }}>Choose a Plan</DialogTitle>
+          <DialogTitle style={{ color: primaryColor }}>
+            Choose a Plan
+          </DialogTitle>
           <DialogDescription style={{ color: neutralColor }}>
             You’re ready to subscribe. Please confirm your plan below.
           </DialogDescription>
@@ -340,7 +369,10 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
 
               return (
                 <div className="mt-4 rounded-xl border p-4">
-                  <div className="text-lg font-semibold" style={{ color: primaryColor }}>
+                  <div
+                    className="text-lg font-semibold"
+                    style={{ color: primaryColor }}
+                  >
                     {capitalizeWords(p.name)}
                   </div>
 

@@ -20,6 +20,7 @@ import {
 } from "@/models/templates/yogana/yogana-home-model";
 import { underscoreToSpace } from "@/utils/StringFunctions";
 import Link from "next/link";
+import { useCommunity } from "@/hooks/useCommunity";
 
 const hexToRgba = (hex: string, alpha: number) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -105,8 +106,10 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
   neutralColor,
 }) => {
   const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
-    undefined
+    undefined,
   );
+  const { communityId } = useCommunity();
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
 
   // Autoplay
   const autoplay = useRef(
@@ -114,7 +117,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
       delay: 2500,
       stopOnInteraction: true,
       stopOnMouseEnter: true,
-    })
+    }),
   );
 
   // On last snap, jump to first (no visible loop; continuous autoplay)
@@ -172,7 +175,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
 
       <div className="relative z-10 text-center md:mb-16 mb-6">
         <p
-          className="font-alex-brush text-2xl md:text-4xl"
+          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
           style={{
             color: primaryColor,
           }}

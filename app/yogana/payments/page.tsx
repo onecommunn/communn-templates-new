@@ -13,6 +13,7 @@ import { dummyData } from "../dummyData";
 const YoganaPaymentsRoot = () => {
   const authContext = useContext(AuthContext);
   const { communityId } = authContext || {};
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
   const { data: paymentsList = [], isLoading: paymentsLoading } =
     useUserPaymentTransactionsQuery(communityId || "");
 
@@ -22,7 +23,7 @@ const YoganaPaymentsRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: YoganaHomePage | undefined = !isLoading
-    ? (home as YoganaHomePage | undefined) ?? dummyData
+    ? ((home as YoganaHomePage | undefined) ?? dummyData)
     : undefined;
 
   const primaryColor = source?.color?.primary || "#C2A74E";
@@ -43,7 +44,7 @@ const YoganaPaymentsRoot = () => {
       <div className="container mx-auto space-y-8">
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-xl md:text-5xl font-bold font-alex-brush tracking-wider text-[var(--pri)]">
+          <h1 className={`text-xl md:text-5xl font-bold ${isSandeepyogatherapy ? "" : "font-alex-brush"}  tracking-wider text-[var(--pri)]`}>
             Payments
           </h1>
           <p className="text-sm md:text-lg text-gray-600">

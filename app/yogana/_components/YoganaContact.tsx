@@ -7,6 +7,7 @@ import { ContactForm } from "@/models/contact.model";
 import { sendNotification } from "@/services/contactService";
 import { toast } from "sonner";
 import { AuthContext } from "@/contexts/Auth.context";
+import { useCommunity } from "@/hooks/useCommunity";
 
 interface YoganaContactProps {
   data: ContactDetails;
@@ -22,7 +23,8 @@ const YoganaContact: FC<YoganaContactProps> = ({
   neutralColor,
 }) => {
   const auth = useContext(AuthContext);
-  const { communityId } = auth;
+  const {communityId} = useCommunity()
+   const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41"
   const [form, setForm] = useState<ContactForm>({
     name: "",
     email: "",
@@ -81,7 +83,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
           {/* Left: Form */}
           <div>
             <p
-              className="font-alex-brush text-2xl"
+              className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl`}
               style={{ color: primaryColor }}
             >
               Send us email
@@ -218,7 +220,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
           <div>
             <p
               style={{ color: primaryColor }}
-              className="font-alex-brush text-2xl"
+              className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl`}
             >
               Need any help?
             </p>
