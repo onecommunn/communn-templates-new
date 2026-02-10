@@ -337,7 +337,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
 
                           <p className="text-sm md:text-md text-[var(--pri)] font-bold my-2">
                             {Number(course?.amount) > 0 &&
-                            course?.plan?.length > 0
+                              course?.plan?.length > 0
                               ? `₹ ${course?.amount} + Plan`
                               : Number(course?.amount) > 0
                                 ? `₹ ${course?.amount}`
@@ -373,7 +373,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             </span>
                           </div>
 
-                          <div className="mt-5 cursor-pointer w-full rounded-2xl px-4 py-3 flex items-center justify-between text-xs md:text-sm font-semibold bg-[var(--pri)] text-white">
+                          <div className="mt-5 cursor-pointer w-full rounded-2xl px-4 py-3 flex items-center justify-between text-xs md:text-sm font-semibold bg-[var(--sec)] text-white">
                             <span>
                               {loadingCourseId === course?._id
                                 ? "Processing..."
