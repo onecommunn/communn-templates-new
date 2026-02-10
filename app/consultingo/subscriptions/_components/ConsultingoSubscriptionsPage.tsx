@@ -389,16 +389,15 @@ const ConsultingoSubscriptionsPage = ({
     updateSequencesPaymentStatus,
   } = usePayment();
 
-  useEffect(() => {}, [
+  useEffect(() => {
+    getPlanDataById();
+  }, [
+    planID,
     authContext?.user,
     authContext?.isAuthenticated,
     authContext?.loading,
     authContext?.user?.id,
   ]);
-
-  useEffect(() => {
-    getPlanDataById();
-  }, [planID, authContext]);
 
   const getPlanDataById = async () => {
     try {
@@ -453,20 +452,62 @@ const ConsultingoSubscriptionsPage = ({
 
   useEffect(() => {
     if (
-      authContext?.isAuthenticated &&
-      !authContext?.loading &&
-      userId &&
-      communityId &&
-      planID
-    ) {
-      handleCreateSubscription();
-    }
+      authContext?.loading ||
+      !authContext?.isAuthenticated ||
+      !userId ||
+      !planID ||
+      !communityId
+    )
+      return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        setIsLoading(true);
+
+        // 1) Create subscription
+        const response: any =
+          await createSubscriptionSequencesByPlanAndCommunityId(
+            userId,
+            communityId,
+            planID,
+          );
+
+        if (cancelled) return;
+
+        const sub = response?.subscription;
+        const subId = sub?._id;
+
+        setPlan(sub?.plan);
+        setSubscriptionId(subId);
+        setSubscriptionData(sub);
+
+        // 2) Immediately fetch sequences using returned subId (don’t wait for state)
+        if (subId) {
+          const seqRes: any = await getSequencesById(subId, userId);
+          if (cancelled) return;
+
+          setPlacePrice(seqRes?.pricing || "0");
+          setSequencesList(seqRes?.sequences || []);
+          setSubscriptions(seqRes);
+        }
+      } catch (e) {
+        console.error("Bootstrap failed:", e);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [
-    userId,
-    communityId,
-    planID,
-    authContext?.isAuthenticated,
     authContext?.loading,
+    authContext?.isAuthenticated,
+    userId,
+    planID,
+    communityId,
   ]);
 
   useEffect(() => {
