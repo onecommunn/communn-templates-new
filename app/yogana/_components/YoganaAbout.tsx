@@ -39,34 +39,63 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-20 z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
-          <div className="relative mx-auto px-10 md:px-10">
-            <Image
-              src={
-                data?.content?.media?.[0] || "/assets/yogana-about-image-1.jpg"
-              }
-              alt="yogana-about-image-1"
-              width={526}
-              height={636}
-              unoptimized
-            />
-            <Image
-              src={
-                data?.content?.media?.[1] || "/assets/yogana-about-image-2.jpg"
-              }
-              alt="yogana-about-image-2"
-              width={197}
-              height={226}
-              className="rounded-3xl absolute bottom-10 md:-right-14 right-0 w-30 md:w-[226px]"
-              unoptimized
-            />
-            {/* <Image
+          {isSandeepyogatherapy ? (
+            <div className="relative grid grid-cols-[2fr_1fr] gap-2 items-end mx-auto">
+              <Image
+                src={
+                  data?.content?.media?.[0] ||
+                  "/assets/yogana-about-image-1.jpg"
+                }
+                alt="yogana-about-image-1"
+                width={526}
+                height={636}
+                unoptimized
+              />
+              <Image
+                src={
+                  data?.content?.media?.[1] ||
+                  "/assets/yogana-about-image-2.jpg"
+                }
+                alt="yogana-about-image-2"
+                width={197}
+                height={226}
+                className="rounded-3xl  w-30 md:w-[226px]"
+                unoptimized
+              />
+            </div>
+          ) : (
+            <div className="relative mx-auto px-10 md:px-10">
+              <Image
+                src={
+                  data?.content?.media?.[0] ||
+                  "/assets/yogana-about-image-1.jpg"
+                }
+                alt="yogana-about-image-1"
+                width={526}
+                height={636}
+                unoptimized
+              />
+              <Image
+                src={
+                  data?.content?.media?.[1] ||
+                  "/assets/yogana-about-image-2.jpg"
+                }
+                alt="yogana-about-image-2"
+                width={197}
+                height={226}
+                className="rounded-3xl absolute bottom-10 md:-right-14 right-0 w-30 md:w-[226px]"
+                unoptimized
+              />
+              {/* <Image
               src={"/assets/yogana-about-image-3.png"}
               alt="yogana-about-image-2"
               width={236}
               height={227}
               className="rounded-3xl absolute -top-10 left-0 md:-left-0 w-30 md:w-[236px]"
             /> */}
-          </div>
+            </div>
+          )}
+
           <div className="my-auto">
             <div>
               <p
