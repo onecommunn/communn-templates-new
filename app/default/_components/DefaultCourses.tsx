@@ -373,7 +373,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             </span>
                           </div>
 
-                          <div className="mt-5 cursor-pointer w-full rounded-2xl px-4 py-3 flex items-center justify-between text-xs md:text-sm font-semibold bg-[var(--sec)] text-white">
+                          <div className="mt-5 cursor-pointer w-full rounded-2xl px-4 py-3 flex items-center justify-between text-xs md:text-sm font-semibold bg-[var(--sec)] text-black">
                             <span>
                               {loadingCourseId === course?._id
                                 ? "Processing..."
