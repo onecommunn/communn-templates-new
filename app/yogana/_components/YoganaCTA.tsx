@@ -1,4 +1,5 @@
 import { CTASection } from "@/models/templates/yogana/yogana-home-model";
+import { Instagram } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FC } from "react";
@@ -17,7 +18,16 @@ const YoganaCTA: FC<YoganaCTAProps> = ({
   neutralColor,
 }) => {
   return (
-    <section className="relative py-10 font-cormorant bg-white overflow-hidden">
+    <section
+      className="relative py-10 font-cormorant bg-white overflow-hidden"
+      style={
+        {
+          "--pri": primaryColor,
+          "--sec": secondaryColor,
+          "--neu": neutralColor,
+        } as React.CSSProperties
+      }
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div
           className="relative overflow-hidden rounded-3xl border border-dashed border-[#C2A74E] p-10"
@@ -46,6 +56,7 @@ const YoganaCTA: FC<YoganaCTAProps> = ({
 
           {/* Content above */}
           <div className="relative z-10 mx-auto flex flex-col items-center justify-center gap-4">
+            <Instagram className="text-[var(--pri)] w-14 h-14"/>
             <h4
               className="text-center text-3xl font-semibold text-[#C2A74E]"
               style={{ color: primaryColor }}
