@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { ArrowRight, LockKeyhole } from "lucide-react";
 import { toast } from "sonner";
 
@@ -18,7 +17,6 @@ import { PlansSection } from "@/models/templates/martivo/martivo-home-model";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -33,6 +31,17 @@ import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow";
 /* ---------- tiny helpers ---------- */
 
 type Feature = { text: string; available?: boolean };
+
+const formatDate = (date: string | Date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const Check: React.FC<{ muted?: boolean; color: string }> = ({ muted, color }) => (
   <span
@@ -78,16 +87,21 @@ const FeatureItem = ({
   </li>
 );
 
-/* CTA button */
 const ChooseButton: React.FC<{
   text: string;
   color: string;
   onClick: () => void;
-}> = ({ text, color, onClick }) => (
+  disabled?: boolean;
+}> = ({ text, color, onClick, disabled }) => (
   <button
     type="button"
     onClick={onClick}
-    className="group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2"
+    disabled={disabled}
+    className={[
+      "group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5",
+      "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2",
+      disabled ? "opacity-60 cursor-not-allowed pointer-events-none" : "",
+    ].join(" ")}
     style={{ "--color": color } as React.CSSProperties}
   >
     <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-white" />
@@ -113,13 +127,18 @@ type CardProps = {
   isPrivate: boolean;
   isSubscribedCommunity: boolean;
   isRequested: boolean;
-  isSubscribedToPlan: boolean;
 
-  // meta
+  // plan flags
+  isSubscribedToPlan: boolean;
+  isSequencePlan: boolean;
+  isActive: boolean;
+  isExpired: boolean;
+  nextDue: string | "forever" | null;
+
   initialPayment?: string | number;
 
-  // action
   onStartFlow: () => void;
+  onNonSeqPayNow: () => void;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -134,14 +153,43 @@ const Card: React.FC<CardProps> = ({
   isSubscribedCommunity,
   isRequested,
   isSubscribedToPlan,
+  isSequencePlan,
+  isActive,
+  isExpired,
+  nextDue,
   initialPayment,
   onStartFlow,
+  onNonSeqPayNow,
 }) => {
   const mid = Math.ceil(features.length / 2);
   const left = features.slice(0, mid);
   const right = features.slice(mid);
 
   const showOneTimeFee = Number(initialPayment) > 0 && !isSubscribedToPlan;
+
+  // ✅ correct CTA like other templates
+  const cta = (() => {
+    if (!isLoggedIn) return { text: "Login to Subscribe", onClick: onStartFlow, disabled: false };
+
+    if (!isSubscribedCommunity) {
+      if (isPrivate) {
+        if (isRequested) return { text: "Already Requested", onClick: () => {}, disabled: true };
+        return { text: "Send Join Request", onClick: onStartFlow, disabled: false };
+      }
+      return { text: "Join & Subscribe", onClick: onStartFlow, disabled: false };
+    }
+
+    if (isSubscribedToPlan && isActive) return { text: "Subscribed", onClick: () => {}, disabled: true };
+
+    if (isSubscribedToPlan && isExpired) {
+      if (isSequencePlan) return { text: "Renew & Pay", onClick: onStartFlow, disabled: false };
+      return { text: "Pay to Renew", onClick: onNonSeqPayNow, disabled: false };
+    }
+
+    // not subscribed
+    if (isSequencePlan) return { text: "Subscribe", onClick: onStartFlow, disabled: false };
+    return { text: "Subscribe", onClick: onStartFlow, disabled: false };
+  })();
 
   return (
     <article
@@ -159,6 +207,21 @@ const Card: React.FC<CardProps> = ({
           <h3 className="text-base font-semibold text-slate-900 md:text-[18px] break-words">
             {title}
           </h3>
+
+          {/* ✅ show nextDue chip if subscribed */}
+          {isLoggedIn && isSubscribedToPlan && nextDue && nextDue !== "forever" && (
+            <div className="mt-2">
+              {isExpired ? (
+                <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                  Expired on {formatDate(nextDue)}
+                </span>
+              ) : (
+                <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Next due: {formatDate(nextDue)}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Features */}
@@ -194,34 +257,13 @@ const Card: React.FC<CardProps> = ({
             )}
           </div>
 
-          {/* CTA rules */}
-          {!isLoggedIn ? (
-            <ChooseButton
-              text={isPrivate ? "Login to Subscribe" : "Login to Subscribe"}
-              color={color}
-              onClick={onStartFlow}
-            />
-          ) : isPrivate && !isSubscribedCommunity ? (
-            // Private: show "Already Requested" text, else open request dialog via onStartFlow
-            isRequested ? (
-              <div className="text-right">
-                <div className="text-[14px] font-semibold text-[var(--pri)]">
-                  Already Requested
-                </div>
-                <div className="mt-1 text-xs text-slate-500">
-                  You can subscribe once admin approves.
-                </div>
-              </div>
-            ) : (
-              <ChooseButton text="Send Join Request" color={color} onClick={onStartFlow} />
-            )
-          ) : (
-            // Public + joined OR Private + already member
-            <ChooseButton
-              text={isSubscribedToPlan ? "Subscribed" : "Subscribe"}
-              color={color}
-              onClick={onStartFlow}
-            />
+          <ChooseButton text={cta.text} color={color} onClick={cta.onClick} disabled={cta.disabled} />
+
+          {/* show lock icon hint for private when logged out */}
+          {!isLoggedIn && isPrivate && (
+            <div className="text-xs text-slate-500 inline-flex items-center gap-2">
+              <LockKeyhole size={14} /> Private community
+            </div>
           )}
         </div>
       </div>
@@ -249,7 +291,7 @@ const MartivoPlans = ({
   const auth = useContext(AuthContext);
   const { communityId, communityData } = useCommunity();
 
-  const userId =
+  const userId: string | undefined =
     (auth as any)?.user?._id ?? (auth as any)?.user?.id ?? undefined;
   const isLoggedIn = !!((auth as any)?.isAuthenticated && userId);
 
@@ -278,7 +320,6 @@ const MartivoPlans = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId, isLoggedIn]);
 
-  // ✅ your hook
   const flow = usePlanSubscribeFlow({
     communityId,
     communityData,
@@ -288,34 +329,60 @@ const MartivoPlans = ({
     refetchPlans,
   });
 
-  // private request state for Martivo (because your hook has private branch commented)
+  const isRequested = Boolean(
+    communityData?.community?.requests?.some(
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
+    )
+  );
+
+  // private request modal (if your hook private join path is disabled)
   const [privateRequestOpen, setPrivateRequestOpen] = useState(false);
   const [privateRequestPlanId, setPrivateRequestPlanId] = useState<string | null>(null);
 
-  const isRequested = Boolean(
-    communityData?.community?.requests?.some(
-      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId,
-    ),
-  );
-
   const normalized = useMemo(() => {
     return plans.map((p, idx) => {
-      const planId = String((p as any)._id);
-      const meta = flow.getPlanMeta(planId);
+      const planId = String((p as any)?._id ?? "");
 
-      const period = p.interval && p.duration
-        ? `${p.interval} ${capitalizeWords(p.duration)}`
-        : "";
+      // ✅ IMPORTANT: compute subscribed from subscribers (source of truth)
+      const subscribers = ((p as any)?.subscribers as any[]) || [];
+      const isSubscribedToPlan =
+        !!userId &&
+        subscribers.some((s) => (s?._id ?? s?.id) === userId);
 
-      const subs = (p as any)?.subscribers?.length ?? 0;
+      const nextDue = ((p as any)?.nextDueDate as any) ?? null;
+
+      const isActive =
+        !!nextDue && (nextDue === "forever" || new Date(nextDue) >= new Date());
+
+      const isExpired =
+        !!nextDue && nextDue !== "forever" && new Date(nextDue) < new Date();
+
+      const isSequencePlan =
+        !!(p as any)?.isSequenceAvailable &&
+        Number((p as any)?.totalSequences ?? 0) > 0;
+
+      const period =
+        p.interval && p.duration
+          ? `${p.interval} ${capitalizeWords(p.duration)}`
+          : "—";
+
+      const subsCount = subscribers.length ?? 0;
 
       const features: Feature[] = [
-        { text: `Duration: ${period || "—"}` },
-        { text: `Subscribers: ${subs}` },
-        { text: `Next Due: ${meta?.nextDue ? String(meta.nextDue) : "No Dues"}` },
+        { text: `Duration: ${period}` },
+        { text: `Subscribers: ${subsCount}` },
+        {
+          text: nextDue
+            ? nextDue === "forever"
+              ? "Next Due: No Expiry"
+              : isExpired
+              ? `Expired on: ${formatDate(nextDue)}`
+              : `Next Due: ${formatDate(nextDue)}`
+            : "Next Due: No Dues",
+        },
         {
           text: `Status: ${
-            !meta?.nextDue ? "Not Subscribed" : meta.isActive ? "Active" : "Expired"
+            !nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
           }`,
         },
       ];
@@ -324,18 +391,20 @@ const MartivoPlans = ({
         planId,
         title: p.name,
         price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
-        period: period || "—",
+        period,
         features,
         featured: plans.length === 3 ? idx === 1 : false,
         initialPayment: (p as any)?.initialPayment ?? 0,
-        isSubscribedToPlan: !!meta?.isSubscribed,
+        isSubscribedToPlan,
+        isSequencePlan,
+        isActive,
+        isExpired,
+        nextDue,
       };
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plans, userId, communityId, flow.isSubscribedCommunity]);
+  }, [plans, userId]);
 
-  const handleStartFlow = (planId: string) => {
-    // ✅ If private + not joined -> show request dialog (since hook private branch is commented)
+  const startFlow = (planId: string) => {
     if (flow.isPrivate && !flow.isSubscribedCommunity) {
       if (isRequested) {
         toast.info("Request already sent. Please wait for admin approval.");
@@ -345,8 +414,6 @@ const MartivoPlans = ({
       setPrivateRequestOpen(true);
       return;
     }
-
-    // ✅ otherwise normal hook flow (login -> auto join public -> seq redirect / non-seq payment)
     flow.startSubscribeFlow(planId);
   };
 
@@ -375,7 +442,6 @@ const MartivoPlans = ({
           </div>
         </div>
 
-        {/* Content */}
         {isLoading ? (
           <div className="space-y-6">
             {[0, 1, 2].map((k) => (
@@ -406,14 +472,19 @@ const MartivoPlans = ({
                 isSubscribedCommunity={flow.isSubscribedCommunity}
                 isRequested={isRequested}
                 isSubscribedToPlan={p.isSubscribedToPlan}
-                onStartFlow={() => flow.startSubscribeFlow(p.planId)}
+                isSequencePlan={p.isSequencePlan}
+                isActive={p.isActive}
+                isExpired={p.isExpired}
+                nextDue={p.nextDue}
+                onStartFlow={() => startFlow(p.planId)}
+                onNonSeqPayNow={() => flow.startNonSequencePayment(p.planId)}
               />
             ))}
           </div>
         )}
       </div>
 
-      {/* ✅ Login Popup controlled by hook */}
+      {/* ✅ Login Popup (hook-controlled) */}
       <LoginPopUp
         isOpen={flow.isLoginOpen}
         onClose={() => flow.setIsLoginOpen(false)}
@@ -425,12 +496,10 @@ const MartivoPlans = ({
         }}
       />
 
-      {/* ✅ Private Request dialog (Martivo-level) */}
+      {/* ✅ Private Request dialog */}
       <Dialog open={privateRequestOpen} onOpenChange={setPrivateRequestOpen}>
         <DialogContent className="max-w-md">
-          <DialogTitle style={{ color: primaryColor }}>
-            Request Access
-          </DialogTitle>
+          <DialogTitle style={{ color: primaryColor }}>Request Access</DialogTitle>
           <DialogDescription className="text-slate-600">
             This is a private community. Send a request to the admin to get access to plans.
           </DialogDescription>
@@ -453,68 +522,6 @@ const MartivoPlans = ({
               Send Request
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* ✅ Non-seq confirm dialog (from hook) */}
-      <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
-        <DialogContent className="max-w-xl">
-          <DialogTitle style={{ color: primaryColor }}>
-            Choose a Plan
-          </DialogTitle>
-          <DialogDescription className="text-slate-600">
-            You’re ready to subscribe. Please confirm your plan below.
-          </DialogDescription>
-
-          {flow.selectedPlanId &&
-            (() => {
-              const meta = flow.getPlanMeta(flow.selectedPlanId);
-              if (!meta?.plan) return null;
-
-              const p = meta.plan as any;
-              const already = meta.isSubscribed;
-
-              const amount = p?.pricing ?? p?.totalPlanValue ?? 0;
-              const initFee = Number(p?.initialPayment ?? 0);
-
-              return (
-                <div className="mt-4 rounded-xl border p-4">
-                  <div className="text-lg font-semibold" style={{ color: primaryColor }}>
-                    {capitalizeWords(p.name)}
-                  </div>
-
-                  <div className="mt-1 text-sm text-slate-500">
-                    ₹{amount} •{" "}
-                    {p.interval && p.duration
-                      ? `${p.interval} ${capitalizeWords(p.duration)}`
-                      : ""}
-                  </div>
-
-                  {initFee > 0 && !already && (
-                    <div className="mt-1 text-xs text-slate-500">
-                      + One Time Fee: ₹{initFee}
-                    </div>
-                  )}
-
-                  <div className="mt-4 flex justify-end gap-3">
-                    <Button variant="outline" onClick={() => flow.setPlanDialogOpen(false)}>
-                      Cancel
-                    </Button>
-
-                    <Button
-                      style={{ backgroundColor: primaryColor, color: "#fff" }}
-                      onClick={async () => {
-                        const pid = flow.selectedPlanId!;
-                        flow.setPlanDialogOpen(false);
-                        await flow.startNonSequencePayment(pid);
-                      }}
-                    >
-                      {already ? "Pay to Renew" : "Pay & Join"}
-                    </Button>
-                  </div>
-                </div>
-              );
-            })()}
         </DialogContent>
       </Dialog>
 
