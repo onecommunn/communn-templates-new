@@ -50,10 +50,10 @@ const formatDate = (date: string | Date) => {
 type PendingAction =
   | null
   | {
-      type: "START_SUBSCRIBE";
-      planId: string; // ✅ plan._id
-      fromLogin: boolean;
-    };
+    type: "START_SUBSCRIBE";
+    planId: string; // ✅ plan._id
+    fromLogin: boolean;
+  };
 
 export default function RestraintPlansPage({
   primaryColor,
@@ -354,17 +354,15 @@ export default function RestraintPlansPage({
         features: [
           `Duration: ${periodRaw}`,
           `Subscribers: ${(p as any)?.subscribers?.length ?? 0}`,
-          `Next Due: ${
-            nextDue
-              ? nextDue === "forever"
-                ? "No Expiry"
-                : isExpired
-                  ? `Expired on ${formatDate(nextDue)}`
-                  : formatDate(nextDue)
-              : "No Dues"
+          `Next Due: ${nextDue
+            ? nextDue === "forever"
+              ? "No Expiry"
+              : isExpired
+                ? `Expired on ${formatDate(nextDue)}`
+                : formatDate(nextDue)
+            : "No Dues"
           }`,
-          `Status: ${
-            !nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
+          `Status: ${!nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
           }`,
         ],
       };
@@ -507,7 +505,7 @@ export default function RestraintPlansPage({
                   coverImage={coverImage}
                   color={color}
                   isLoggedIn={isLoggedIn}
-                  isPrivate={!!isPrivate}
+                  // isPrivate={!!isPrivate}
                   isSubscribedCommunity={!!isSubscribedCommunity}
                   isSubscribed={isSubscribed}
                   isProcessing={isProcessing}

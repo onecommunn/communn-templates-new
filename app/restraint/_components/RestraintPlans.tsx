@@ -158,17 +158,15 @@ export default function RestraintPlans({
         features: [
           `Duration: ${periodRaw}`,
           `Subscribers: ${(p as any)?.subscribers?.length ?? 0}`,
-          `Next Due: ${
-            nextDue
-              ? nextDue === "forever"
-                ? "No Expiry"
-                : isExpired
-                  ? `Expired on ${formatDate(nextDue)}`
-                  : formatDate(nextDue)
-              : "No Dues"
+          `Next Due: ${nextDue
+            ? nextDue === "forever"
+              ? "No Expiry"
+              : isExpired
+                ? `Expired on ${formatDate(nextDue)}`
+                : formatDate(nextDue)
+            : "No Dues"
           }`,
-          `Status: ${
-            !nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
+          `Status: ${!nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
           }`,
         ],
       };
@@ -531,7 +529,7 @@ export function PlanCard({
                   ].join(" ")}
                 >
                   <span className="inline-flex items-center gap-2">
-                   "Join & Subscribe"
+                    "Join & Subscribe"
                   </span>
                   <ArrowUpRight className="h-5 w-5" />
                 </button>
