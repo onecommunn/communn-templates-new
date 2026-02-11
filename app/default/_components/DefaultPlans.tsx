@@ -238,9 +238,10 @@ const DefaultPlans = ({
                       {capitalizeWords(plan.name)}
                     </h3>
 
-                    <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[var(--pri)] capitalize">
+                    <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[var(--pri)]">
                       <span>
-                        ₹{price} / {plan?.interval} {durationLabel}
+                        {/* ₹/ */}
+                        Rs.{price}  for {plan?.interval} {durationLabel}
                       </span>
                     </div>
 
