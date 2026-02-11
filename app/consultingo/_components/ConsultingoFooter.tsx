@@ -110,16 +110,19 @@ const ConsultingoFooter = ({
             </a>
           </div>
           <div className="flex gap-4 mt-10 md:mt-0">
-            {content?.socialMedia?.map((each: SocialMediaLink, idx: number) => {
-              const key = normalize(each.platform).toLowerCase();
-              const Icon = PLATFORM_ICON[key] ?? Globe;
-              const url = formatUrl(each.url) || "/";
-              return (
-                <Link href={url ?? "/"} key={idx}>
-                  <SocialIcon icon={<Icon />} />
-                </Link>
-              );
-            })}
+            {content?.socialMedia
+              ?.filter((each: SocialMediaLink) => each.url)
+              .map((each: SocialMediaLink, idx: number) => {
+                const key = normalize(each.platform).toLowerCase();
+                const Icon = PLATFORM_ICON[key] ?? Globe;
+                const url = formatUrl(each.url);
+
+                return (
+                  <Link href={url} key={idx}>
+                    <SocialIcon icon={<Icon />} />
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </div>
