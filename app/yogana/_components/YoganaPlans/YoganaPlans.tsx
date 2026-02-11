@@ -177,7 +177,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
     <div className="relative z-10 text-center md:mb-16 mb-6">
       <p
         style={{ color: primaryColor }}
-        className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl md:text-4xl`}
+        className={`${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"} text-2xl md:text-4xl`}
       >
         {data?.content?.heading}
       </p>
@@ -265,8 +265,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         neutralColor={neutralColor}
                         price={String(
                           (plan as any)?.pricing ??
-                            (plan as any)?.totalPlanValue ??
-                            0,
+                          (plan as any)?.totalPlanValue ??
+                          0,
                         )}
                         period={
                           plan.interval && plan.duration

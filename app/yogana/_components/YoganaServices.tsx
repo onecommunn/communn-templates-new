@@ -151,9 +151,9 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
     <section
       id="services"
       className="relative py-10 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       {/* background accents */}
       <div className="absolute inset-0 pointer-events-none">
@@ -175,7 +175,7 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
 
       <div className="relative z-10 text-center md:mb-16 mb-6">
         <p
-          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
+          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
           style={{
             color: primaryColor,
           }}
@@ -207,9 +207,8 @@ const YoganaServices: React.FC<YoganaServicesProps> = ({
                 className="basis-1/1  md:basis-1/3 lg:basis-1/4"
               >
                 <div
-                  className={`flex h-[560px] md:h-[500px] ${
-                    idx % 2 === 0 ? "items-start" : "items-end"
-                  }`}
+                  className={`flex h-[560px] md:h-[500px] ${idx % 2 === 0 ? "items-start" : "items-end"
+                    }`}
                 >
                   {/* Make the whole card tappable on mobile */}
                   <div

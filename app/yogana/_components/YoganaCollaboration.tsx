@@ -50,15 +50,15 @@ const YoganaCollaboration: React.FC<Props> = ({
   return (
     <section
       className="py-10 font-cormorant bg-[rgba(194,167,78,0.1)]"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       <div className="mx-auto w-full">
         <div className="text-center mx-auto px-4 sm:px-6 lg:px-20">
           <p
             style={{ color: primaryColor }}
-            className={`text-[#C2A74E] text-3xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
+            className={`text-[#C2A74E] text-3xl ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
           >
             Our Clients
           </p>

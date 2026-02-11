@@ -72,11 +72,10 @@ function Dots({
             key={i}
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => api.scrollTo(i)}
-            className={`h-2.5 rounded-full transition-all ${
-              isActive
-                ? "w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
-                : "w-2.5 bg-gray-300 hover:bg-gray-400 cursor-pointer"
-            }`}
+            className={`h-2.5 rounded-full transition-all ${isActive
+              ? "w-6 bg-[#C2A74E] shadow-[0_0_0_4px_rgba(194,167,78,0.15)]"
+              : "w-2.5 bg-gray-300 hover:bg-gray-400 cursor-pointer"
+              }`}
           />
         );
       })}
@@ -148,7 +147,7 @@ const YoganaEvents: FC<YoganaEventsProps> = ({
     <div className="text-center mb-10 md:mb-10 space-y-3">
       <p
         style={{ color: primaryColor }}
-        className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl md:text-4xl`}
+        className={`${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"} text-2xl md:text-4xl`}
       >
         Events
       </p>

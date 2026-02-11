@@ -24,9 +24,9 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
     <section
       id="about-us"
       className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       <div className="absolute inset-0 pointer-events-none">
         <Image
@@ -99,7 +99,7 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
           <div className="my-auto">
             <div>
               <p
-                className={`text-[#C2A74E]  text-2xl md:text-4xl ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
+                className={`text-[#C2A74E]  text-2xl md:text-4xl ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
                 style={{
                   color: primaryColor,
                 }}

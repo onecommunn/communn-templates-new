@@ -23,8 +23,8 @@ const YoganaContact: FC<YoganaContactProps> = ({
   neutralColor,
 }) => {
   const auth = useContext(AuthContext);
-  const {communityId} = useCommunity()
-   const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41"
+  const { communityId } = useCommunity()
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41"
   const [form, setForm] = useState<ContactForm>({
     name: "",
     email: "",
@@ -83,7 +83,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
           {/* Left: Form */}
           <div>
             <p
-              className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl`}
+              className={`${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"} text-2xl`}
               style={{ color: primaryColor }}
             >
               Send us email

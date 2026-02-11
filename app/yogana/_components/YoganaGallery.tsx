@@ -51,9 +51,9 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({
   return (
     <section
       className="relative py-20 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       <div
         className="absolute inset-0 -z-10 pointer-events-none select-none"
@@ -90,7 +90,7 @@ const YoganaGallery: FC<YoganaGalleryProps> = ({
           style={{
             color: primaryColor,
           }}
-          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "" :"font-alex-brush"}`}
+          className={`text-2xl md:text-4xl ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
         >
           Gallery
         </h4>

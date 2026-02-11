@@ -24,6 +24,7 @@ import {
   YoganaHomePage,
 } from "@/models/templates/yogana/yogana-home-model";
 import { dummyData } from "./dummyData";
+import { useCommunity } from "@/hooks/useCommunity";
 
 
 
@@ -75,7 +76,8 @@ const YoganaRoot = () => {
   const secondaryColor = source?.color?.secondary || "#000";
   const neutralColor = source?.color?.neutral || "#707070";
 
-
+  const { communityId } = useCommunity()
+  const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41"
 
 
 
@@ -121,15 +123,22 @@ const YoganaRoot = () => {
           neutralColor={neutralColor}
         />
       )}
-
-      {collaborationSection && (
-        <YoganaCollaboration
-          data={collaborationSection}
-          primaryColor={primaryColor}
-          secondaryColor={secondaryColor}
-          neutralColor={neutralColor}
-        />
+      {isSandeepyogatherapy ? (
+        <>
+        </>
+      ) : (
+        <>
+          {collaborationSection && (
+            <YoganaCollaboration
+              data={collaborationSection}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+              neutralColor={neutralColor}
+            />
+          )}
+        </>
       )}
+
       {/* <YoganaCourses /> */}
       {/* <YoganaProducts /> */}
       {testimonialSection && (

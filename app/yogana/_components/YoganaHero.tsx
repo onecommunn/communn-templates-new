@@ -17,14 +17,14 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
   secondaryColor,
   neutralColor,
 }) => {
-  const {communityId} = useCommunity()
+  const { communityId } = useCommunity()
   const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41"
   return (
     <section
       className="relative pb-10 md:pb-0 pt-10 font-cormorant bg-[#f4ede0] md:min-h-screen overflow-hidden"
-      // style={{
-      //   backgroundColor: `${primaryColor}1A`,
-      // }}
+    // style={{
+    //   backgroundColor: `${primaryColor}1A`,
+    // }}
     >
       {/* Background Images */}
       <div className="absolute inset-0">
@@ -66,7 +66,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                 {data?.content?.heading}
               </h1>
               <h3
-                className={`text-[65px]/[30px] text-[#C2A74E] md:text-[90px]/[60px] ${isSandeepyogatherapy ? "" : "font-alex-brush"}`}
+                className={`text-[65px]/[30px] text-[#C2A74E] md:text-[90px]/[60px] ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
                 style={{
                   color: primaryColor,
                 }}
