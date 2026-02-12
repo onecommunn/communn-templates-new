@@ -322,7 +322,7 @@ const DefaultHero = ({
           background:
             "linear-gradient(90deg, rgba(223, 34, 90, 0.1) 9.3%, rgba(59, 155, 127, 0.1) 34.8%, rgba(80, 161, 202, 0.1) 64.3%, rgba(42, 83, 162, 0.1) 95.3%)",
         }}
-        className="mt-10 w-[95%] max-w-6xl bg-white/70 backdrop-blur-md border border-gray-100 rounded-2xl shadow-md grid grid-cols-4 py-4 md:py-6 px-2 md:px-4"
+        className="mt-10 w-[95%] max-w-6xl bg-white/70 backdrop-blur-md border border-gray-100 rounded-2xl shadow-md grid grid-cols-3 py-4 md:py-6 px-2 md:px-4"
       >
         <div className="flex flex-col items-center">
           <span className="text-[12px] md:text-sm text-black mb-1">
@@ -333,14 +333,14 @@ const DefaultHero = ({
           </span>
         </div>
 
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <span className="text-[12px] md:text-sm text-black mb-1">
             No of Posts
           </span>
           <span className="text-xs md:text-2xl font-bold">
             {Number(numberOfPost).toLocaleString()}
           </span>
-        </div>
+        </div> */}
 
         <div className="flex flex-col items-center">
           <span className="text-[12px] md:text-sm text-black mb-1">Access</span>
