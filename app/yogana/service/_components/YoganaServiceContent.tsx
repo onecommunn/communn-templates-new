@@ -12,6 +12,7 @@ export interface YoganaServiceContentProps {
   primaryColor: string;
   secondaryColor: string;
   neutralColor: string;
+  backgroundColor?: string;
 }
 
 const YoganaServiceContent = ({
@@ -23,17 +24,19 @@ const YoganaServiceContent = ({
   primaryColor,
   neutralColor,
   secondaryColor,
+  backgroundColor,
 }: YoganaServiceContentProps) => {
   const { communityId } = useCommunity();
   const isSandeepyogatherapy = communityId === "69439db7f689aa2886339d41";
   return (
     <section
-      className="relative overflow-hidden py-10 md:py-16 font-cormorant"
+      className="relative overflow-hidden py-10 md:py-16 font-cormorant bg-[var(--bg)]"
       style={
         {
           "--pri": primaryColor,
           "--sec": secondaryColor,
           "--neu": neutralColor,
+          "--bg": backgroundColor,
         } as React.CSSProperties
       }
     >
@@ -41,9 +44,8 @@ const YoganaServiceContent = ({
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-20">
           {/* left */}
           <div
-            className={`relative order-1 ${
-              align === "Left" ? "md:order-0" : "md:order-1"
-            }`}
+            className={`relative order-1 ${align === "Left" ? "md:order-0" : "md:order-1"
+              }`}
           >
             <AnimatedContent
               distance={150}
@@ -57,14 +59,14 @@ const YoganaServiceContent = ({
               delay={0.3}
             >
               {tag && (
-                <p className={` ${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl md:text-4xl text-[var(--pri)]`}>
+                <p className={` ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"} text-2xl md:text-4xl text-[var(--pri)]`}>
                   {tag}
                 </p>
               )}
               <h2 className="mb-4 max-w-[35ch] text-2xl font-semibold text-slate-900 md:text-4xl">
                 {title}
               </h2>
-              <p className="font-plus-jakarta font-[500] text-lg italic text-[var(--neu)] my-4">
+              <p className="font-[400] text-lg text-[var(--neu)] my-4">
                 {description}
               </p>
             </AnimatedContent>

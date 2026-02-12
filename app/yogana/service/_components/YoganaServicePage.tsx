@@ -52,9 +52,8 @@ const YoganaServicePage = ({
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={index} className="grid md:grid-cols-2 gap-8 mb-10">
               <div
-                className={`bg-gray-200 rounded-xl shadow border p-6 space-y-4 h-[400px] ${
-                  index % 2 == 0 ? "order-0" : "order-1"
-                }`}
+                className={`bg-gray-200 rounded-xl shadow border p-6 space-y-4 h-[400px] ${index % 2 == 0 ? "order-0" : "order-1"
+                  }`}
               />
 
               <div className="md:col-span-1 space-y-6 flex justify-center flex-col">
@@ -95,6 +94,7 @@ const YoganaServicePage = ({
           description={item?.description}
           align={idx % 2 !== 0 ? "Left" : "Right"}
           neutralColor={neutralColor}
+          backgroundColor={idx % 2 !== 0 ? "#f4ede0" : "#ffffff"}
         />
       ))}
     </main>
