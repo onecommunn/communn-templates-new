@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 interface FitkitCTAprops {
@@ -23,10 +24,10 @@ const FitkitCTA = ({ primaryColor, secondaryColor }: FitkitCTAprops) => {
         </div>
 
         {/* Right Input + Button */}
-        <div className="flex items-center w-full md:w-auto gap-3">
-          <button className="bg-red-600 hover:bg-red-700 transition text-white font-semibold py-3 px-8 rounded-full uppercase">
+        <div className="flex items-center w-full md:w-auto gap-3 z-10">
+          <Link href={'/#contact'} className="bg-red-600 hover:bg-red-700 transition text-white font-semibold py-3 px-8 rounded-full uppercase">
             Get Started
-          </button>
+          </Link>
         </div>
       </div>
     </section>

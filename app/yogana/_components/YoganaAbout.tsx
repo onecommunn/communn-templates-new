@@ -3,6 +3,7 @@ import { useCommunity } from "@/hooks/useCommunity";
 import { Aboutus } from "@/models/templates/yogana/yogana-home-model";
 import { Check } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { FC } from "react";
 
 interface YoganaAboutProps {
@@ -24,9 +25,9 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
     <section
       id="about-us"
       className="relative py-20 md:pb-30 font-cormorant bg-[#C2A74E1A] overflow-hidden"
-    // style={{
-    //   backgroundColor: `${primaryColor}1A`,
-    // }}
+      // style={{
+      //   backgroundColor: `${primaryColor}1A`,
+      // }}
     >
       <div className="absolute inset-0 pointer-events-none">
         <Image
@@ -147,14 +148,15 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                   ))}
               </ul>
             </div>
-            <Button
+            <Link
+              href={data?.content?.buttons?.[0]?.url ?? "/"}
               className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] cursor-pointer font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4"
               style={{
                 backgroundColor: primaryColor,
               }}
             >
-              Know more
-            </Button>
+              {data?.content?.buttons?.[0]?.label}
+            </Link>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ const SpawellCTA = ({
           </p>
         </div>
         {/* Right Input + Button */}
-        <Link href={"/"}>
+        <Link href={"/#contact"}>
           <Button
             className={`${"group cursor-pointer relative overflow-hidden px-[30px] py-[18px] text-[16px] font-bold border transition-all duration-300 ease-out bg-[var(--sec)] text-[var(--pri)] border-[var(--sec)] hover:bg-[var(--pri)] hover:text-[var(--sec)] hover:border-[var(--sec)] hover:-translate-y-0.5 active:translate-y-0"}`}
           >

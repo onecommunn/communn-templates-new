@@ -148,6 +148,8 @@ export default async function YoganaShell({
         data={footerData}
         contactData={contactData}
         headerData={headerData}
+        eventsIsActive={eventsIsActive}
+        plansIsActive={plansIsActive}
       />
     </>
   );

@@ -30,7 +30,7 @@ const MartivoCTA = ({
           </p>
         </div>
         {/* Right Input + Button */}
-        <Link href={"/"} className="cursor-pointer">
+        <Link href={"/#contact"} className="cursor-pointer">
           <button className="cursor-pointer group relative inline-flex items-center gap-4 rounded-full bg-[var(--sec)] px-7 py-3 text-[var(--pri)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pri)] focus-visible:ring-offset-2">
             <span className="pointer-events-none absolute inset-1 rounded-full border-2 border-dashed border-[var(--pri)]" />
             <span className="relative z-[1] text-lg font-medium">

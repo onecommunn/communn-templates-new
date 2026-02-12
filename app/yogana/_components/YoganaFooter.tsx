@@ -25,7 +25,9 @@ import { formatUrl } from "@/utils/StringFunctions";
 interface YoganaFooterProps {
   data: FooterSection;
   contactData: ContactDetails;
-  headerData: Header
+  headerData: Header;
+  eventsIsActive: boolean;
+  plansIsActive: boolean;
 }
 
 const PLATFORM_ICON: Record<string, React.ElementType> = {
@@ -35,7 +37,13 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
   dribbble: Dribbble,
 };
 
-const YoganaFooter: FC<YoganaFooterProps> = ({ data, headerData, contactData }) => {
+const YoganaFooter: FC<YoganaFooterProps> = ({
+  data,
+  headerData,
+  contactData,
+  eventsIsActive,
+  plansIsActive,
+}) => {
   const normalize = (s?: string) => (s ?? "").trim();
 
   // console.log(data, "data");
@@ -84,7 +92,11 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, headerData, contactData }) 
                 className="inline-flex items-center"
               >
                 <img
-                  src={data?.content?.logo || headerData?.content?.media?.[0] || "/logo/yogana_Light_Logo.png"}
+                  src={
+                    data?.content?.logo ||
+                    headerData?.content?.media?.[0] ||
+                    "/logo/yogana_Light_Logo.png"
+                  }
                   alt="Yogana"
                   className="w-28 h-auto object-contain"
                 />
@@ -131,7 +143,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, headerData, contactData }) 
                         <Icon className="w-5 h-5 hover:opacity-80 transition-opacity" />
                       </Link>
                     );
-                  }
+                  },
                 )}
               </div>
             </div>
@@ -147,21 +159,27 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, headerData, contactData }) 
                     About
                   </Link>
                 </li>
-                <li>
-                  <Link href="/#plans" className="hover:text-white">
-                    Plans
-                  </Link>
-                </li>
+                {plansIsActive && (
+                  <li>
+                    <Link href="/#plans" className="hover:text-white">
+                      Plans
+                    </Link>
+                  </li>
+                )}
+
                 <li>
                   <Link href="/#services" className="hover:text-white">
                     Services
                   </Link>
                 </li>
-                <li>
-                  <Link href="/#events" className="hover:text-white">
-                    Events
-                  </Link>
-                </li>
+                {eventsIsActive && (
+                  <li>
+                    <Link href="/#events" className="hover:text-white">
+                      Events
+                    </Link>
+                  </li>
+                )}
+
                 {/* <li>
                   <Link href="#" className="hover:text-white">
                     Shop
@@ -249,7 +267,7 @@ const YoganaFooter: FC<YoganaFooterProps> = ({ data, headerData, contactData }) 
         </div>
         <div className="max-w-7xl py-6 text-center text-sm text-neutral-400">
           <p>
-            Made with ❤️ by {" "}
+            Made with ❤️ by{" "}
             <span className="text-slate-600 font-medium">
               <Link href={"https://communn.io/"}>communn.io</Link>
             </span>
