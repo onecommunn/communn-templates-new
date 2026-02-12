@@ -119,7 +119,7 @@ export default function RestraintServices({
               OUR SERVICES
             </p>
 
-            <Link href={content?.buttons?.[0]?.url || "/"}>
+            {/* <Link href={content?.buttons?.[0]?.url || "/"}>
               <button className="group cursor-pointer relative overflow-hidden px-[20px] py-[10px] rounded-[10px] text-[16px] border transition-all duration-300 ease-out bg-[var(--pri)] text-white border-[var(--pri)] hover:bg-transparent hover:text-[var(--pri)] hover:border-[var(--pri)] hover:-translate-y-0.5 active:translate-y-0">
                 <span className="relative z-10 inline-flex items-center gap-2">
                   {content?.buttons?.[0]?.label}
@@ -129,7 +129,7 @@ export default function RestraintServices({
                   />
                 </span>
               </button>
-            </Link>
+            </Link> */}
           </div>
         </AnimatedContent>
 
@@ -141,7 +141,7 @@ export default function RestraintServices({
           delay={0.05}
           animateOpacity
         >
-          <h2 className="max-w-3xl font-marcellus text-3xl leading-tight text-[#20261E] sm:text-4xl">
+          <h2 className="w-full font-marcellus text-3xl leading-tight text-[#20261E] sm:text-4xl">
             {content?.heading}
             <br />
             <span style={{ color: secondaryColor }}>{content?.subHeading}</span>

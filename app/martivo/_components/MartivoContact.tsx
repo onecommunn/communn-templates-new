@@ -5,7 +5,6 @@ import React, { useMemo, useState } from "react";
 import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
 import { WavyStroke } from "./Icons/WavyStroke";
 import { useCommunity } from "@/hooks/useCommunity";
-import { format as formatDateFns } from "date-fns";
 import { toast } from "sonner";
 import { sendNotification } from "@/services/contactService";
 import { ContactForm } from "@/models/contact.model";
@@ -20,54 +19,56 @@ export default function MartivoContact({
   secondaryColor: string;
   data: ContactSection;
 }) {
-  // left column is static, right column is the form
   const { communityId } = useCommunity();
-
   const content = data?.content;
 
-  // form state
+  // form state (ONLY existing fields)
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [service, setService] = useState("");
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [service, setService] = useState(""); // message
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailOk = useMemo(
     () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()),
     [email]
   );
+
+  // ✅ Phone is optional (matches UI). Name + Email(valid) + Message required.
   const canSubmit = useMemo(() => {
-    return first && email && phone && !isSubmitting;
-  }, [first, email, phone, isSubmitting]);
+    return (
+      first.trim().length > 0 &&
+      emailOk &&
+      service.trim().length > 0 &&
+      !isSubmitting
+    );
+  }, [first, emailOk, service, isSubmitting]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit || !date) return;
+    if (!canSubmit) return;
 
     try {
       setIsSubmitting(true);
+
       const payload: ContactForm = {
         name: `${first.trim()} ${last.trim()}`.trim(),
         email: email.trim(),
-        subject: "Appointment Request",
-        phoneNumber: phone.trim(),
-        message: `Service: ${service}\nPreferred date: ${formatDateFns(
-          date,
-          "dd-MM-yyyy"
-        )}`,
+        subject: "Contact Request",
+        phoneNumber: phone.trim(), // optional
+        message: service.trim(),
         communityId,
       };
 
       await sendNotification(payload);
+
       toast.success("Request submitted! We’ll contact you shortly.");
       setFirst("");
       setLast("");
       setEmail("");
       setPhone("");
       setService("");
-      setDate(undefined);
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
@@ -119,7 +120,9 @@ export default function MartivoContact({
                 </span>
                 <div>
                   <p className="text-[16px] text-slate-900">Address</p>
-                  <p className="text-slate-600 text-[15px]">{content?.contact?.address}</p>
+                  <p className="text-slate-600 text-[15px]">
+                    {content?.contact?.address}
+                  </p>
                 </div>
               </li>
 
@@ -130,7 +133,11 @@ export default function MartivoContact({
                 <div>
                   <p className="text-[16px] text-slate-900">Phone</p>
                   <a
-                    href="tel:+9856554544"
+                    href={
+                      content?.contact?.phoneNumber
+                        ? `tel:${content.contact.phoneNumber}`
+                        : undefined
+                    }
                     className="text-slate-600 text-[15px] hover:text-slate-800"
                   >
                     {content?.contact?.phoneNumber}
@@ -145,7 +152,11 @@ export default function MartivoContact({
                 <div>
                   <p className="text-[16px] text-slate-900">Email</p>
                   <a
-                    href="mailto:support@example.com"
+                    href={
+                      content?.contact?.email
+                        ? `mailto:${content.contact.email}`
+                        : undefined
+                    }
                     className="text-[15px] text-slate-600 hover:text-slate-800"
                   >
                     {content?.contact?.email}
@@ -159,17 +170,16 @@ export default function MartivoContact({
                 </span>
                 <div>
                   <p className="text-[16px] text-slate-900">Hours</p>
-                  <p className="text-[15px] text-slate-600">{content?.availableTimings}</p>
+                  <p className="text-[15px] text-slate-600">
+                    {content?.availableTimings}
+                  </p>
                 </div>
               </li>
             </ul>
           </div>
 
           {/* Right: form */}
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 gap-4"
-          >
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
             <div>
               <label className="mb-1 block text-[15px] text-slate-700">
                 Name *
@@ -196,6 +206,11 @@ export default function MartivoContact({
                 placeholder="you@example.com"
                 className="w-full rounded-lg border border-[#E6E8EE] bg-white px-3.5 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-[#CBD3E3]"
               />
+              {!emailOk && email.trim().length > 0 && (
+                <p className="mt-1 text-[12px] text-red-600">
+                  Please enter a valid email.
+                </p>
+              )}
             </div>
 
             <div>
@@ -245,7 +260,6 @@ export default function MartivoContact({
               </button>
             </div>
           </form>
-
         </div>
       </div>
 

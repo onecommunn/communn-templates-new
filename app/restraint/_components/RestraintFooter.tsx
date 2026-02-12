@@ -125,7 +125,7 @@ export default function RestraintFooter({
                 { label: "Home", href: "/" },
                 { label: "About us", href: "/about" },
                 { label: "Services", href: "/services" },
-                { label: "Blogs", href: "/blog" },
+                // { label: "Blogs", href: "/blog" },
               ].map((i) => (
                 <li key={i.label}>
                   <Link

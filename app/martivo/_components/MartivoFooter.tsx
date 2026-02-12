@@ -31,9 +31,13 @@ const PLATFORM_ICON: Record<string, React.ElementType> = {
 export default function MartivoFooter({
   primaryColor,
   secondaryColor,
+  eventsIsActive,
+  plansIsActive,
   data,
 }: {
   primaryColor: string;
+  eventsIsActive: boolean;
+  plansIsActive: boolean;
   secondaryColor: string;
   data: FooterSection;
 }) {
@@ -105,7 +109,7 @@ export default function MartivoFooter({
                       <Icon size={16} />
                     </Link>
                   );
-                }
+                },
               )}
             </div>
           </div>
@@ -117,27 +121,47 @@ export default function MartivoFooter({
             </h4>
             <ul className="space-y-3 text-white/80">
               <li>
-                <Link href="/#about-us" className=" text-[15px] transition hover:text-white">
+                <Link
+                  href="/#about-us"
+                  className=" text-[15px] transition hover:text-white"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="text-[15px] transition hover:text-white">
+                <Link
+                  href="/#services"
+                  className="text-[15px] transition hover:text-white"
+                >
                   Services
                 </Link>
               </li>
+              {eventsIsActive && (
+                <li>
+                  <Link
+                    href="/#events"
+                    className="text-[15px] transition hover:text-white"
+                  >
+                    Events
+                  </Link>
+                </li>
+              )}
+              {plansIsActive && (
+                <li>
+                  <Link
+                    href="/#plans"
+                    className="text-[15px] transition hover:text-white"
+                  >
+                    Plans
+                  </Link>
+                </li>
+              )}
+
               <li>
-                <Link href="/#events" className="text-[15px] transition hover:text-white">
-                  Events
-                </Link>
-              </li>
-              <li>
-                <Link href="/#plans" className="text-[15px] transition hover:text-white">
-                  Plans
-                </Link>
-              </li>
-              <li>
-                <Link href="/#contact" className="text-[15px] transition hover:text-white">
+                <Link
+                  href="/#contact"
+                  className="text-[15px] transition hover:text-white"
+                >
                   Contact Us
                 </Link>
               </li>
@@ -155,11 +179,16 @@ export default function MartivoFooter({
                 <span className="mt-0.5 text-[var(--accent,#ff8a1f)]">
                   <MapPin size={16} color={secondaryColor} />
                 </span>
-                <p className="text-[15px] break-words">{content?.contact?.address}</p>
+                <p className="text-[15px] break-words">
+                  {content?.contact?.address}
+                </p>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} color={secondaryColor} />
-                <a href="tel:+9856554544" className="text-[15px] hover:text-white">
+                <a
+                  href="tel:+9856554544"
+                  className="text-[15px] hover:text-white"
+                >
                   {content?.contact?.phoneNumber}
                 </a>
               </li>
@@ -186,7 +215,7 @@ export default function MartivoFooter({
           </div>
           <div className="py-4 text-center text-[15px] text-white/70">
             <p>
-              Made with ❤️ by {" "}
+              Made with ❤️ by{" "}
               <span className="text-slate-600 font-medium">
                 <Link href={"https://communn.io/"}>communn.io</Link>
               </span>

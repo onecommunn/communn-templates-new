@@ -129,6 +129,8 @@ export default async function MartivoShell({
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
         data={footerData}
+        eventsIsActive={eventsIsActive}
+        plansIsActive={plansIsActive}
       />
     </>
   );
