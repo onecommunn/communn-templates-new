@@ -102,6 +102,7 @@ import MadivalaNewsPageRoot from "./app/madivala/news/page";
 import ConsultingoCourseDetailsRoot from "./app/consultingo/course-details/page";
 import ConsultingoAppointmentDetailsPageRoot from "./app/consultingo/appointment-detail/page";
 import ConsultingoProfilePage from "./app/consultingo/profile/_components/ConsultingoProfilePage";
+import YoganaContactPage from "./app/yogana/contact/page";
 
 export const templateLayouts: Record<
   string,
@@ -156,6 +157,7 @@ export const templates: Record<
     "/profile": YoganaProfileRoot,
     "/payments": YoganaPaymentsRoot,
     "/auto-login": AutoLogin,
+    "/contact": YoganaContactPage, // shared page
   },
   spawell: {
     "/": SpawellRoot,

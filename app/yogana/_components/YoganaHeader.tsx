@@ -270,7 +270,7 @@ const YoganaHeader = ({
               </Link>
             )}
 
-            <Link href="/#contact" className={"font-inter hover:font-semibold"}>
+            <Link href="/contact" className={"font-inter hover:font-semibold"}>
               Contact
             </Link>
           </nav>
@@ -340,7 +340,7 @@ const YoganaHeader = ({
                           className="w-full font-medium text-[16px] text-[var(--pri)]/70 hover:bg-[var(--pri)]/10 py-2 px-4 rounded-md  cursor-pointer flex justify-start items-center gap-2"
                         >
                           <UserRoundPen strokeWidth={1.5} />
-                          Account 
+                          Account
                         </Link>
                         <Link
                           href={`/payments`}
@@ -466,9 +466,8 @@ const YoganaHeader = ({
                     >
                       <span>Services</span>
                       <ChevronDown
-                        className={`h-4 w-4 transition-transform ${
-                          isMobileServicesOpen ? "rotate-180" : ""
-                        }`}
+                        className={`h-4 w-4 transition-transform ${isMobileServicesOpen ? "rotate-180" : ""
+                          }`}
                       />
                     </button>
 
@@ -532,9 +531,8 @@ const YoganaHeader = ({
                           strokeWidth={1.5}
                         />
                         <a
-                          href={`tel:${
-                            contactData?.content?.call?.value ?? ""
-                          }`}
+                          href={`tel:${contactData?.content?.call?.value ?? ""
+                            }`}
                           className="text-md text-white hover:underline"
                         >
                           {contactData?.content?.call?.value}
@@ -548,9 +546,8 @@ const YoganaHeader = ({
                           strokeWidth={1.5}
                         />
                         <a
-                          href={`mailto:${
-                            contactData?.content?.email?.value ?? ""
-                          }`}
+                          href={`mailto:${contactData?.content?.email?.value ?? ""
+                            }`}
                           className="text-md text-white underline hover:no-underline"
                         >
                           {contactData?.content?.email?.value}
