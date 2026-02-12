@@ -4,37 +4,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 import { TestimonialSection } from "@/models/templates/consultingo/consultingo-home-model";
 
-interface Testimonial {
-  id: number;
-  rating: number;
-  quote: string;
-  author: string;
-  role: string;
-  image: string;
-}
-
-const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    rating: 5,
-    quote:
-      "Absolutely blown away by the superior sound quality. It's transformed the way I experience music and control my smart home. Couldn't be happier!",
-    author: "Bryan Knight",
-    role: "Creative Director",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
-  },
-  {
-    id: 2,
-    rating: 4,
-    quote:
-      "The experience has been smooth and premium. Setup was easy and the product feels very high quality. Totally worth it.",
-    author: "Ava Morgan",
-    role: "Product Manager",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces",
-  },
-];
 
 const AUTOPLAY_MS = 4500;
 
@@ -53,9 +22,9 @@ const ConsultingoTestimonial = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const total = testimonials.length;
+  const total = content?.testimonials.length;
 
-  const current = useMemo(() => testimonials[currentIndex], [currentIndex]);
+  const current = useMemo(() => content?.testimonials[currentIndex], [currentIndex]);
 
   // Keep a ref so we can reset autoplay after manual navigation
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);

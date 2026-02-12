@@ -98,6 +98,7 @@ const ConsultingoFeatures = ({
               src={successHighlight?.backgroundImage ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"}
               alt="Client Success"
               fill
+              unoptimized
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent flex flex-col justify-end p-8">
