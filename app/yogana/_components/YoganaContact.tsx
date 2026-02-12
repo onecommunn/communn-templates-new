@@ -220,7 +220,7 @@ const YoganaContact: FC<YoganaContactProps> = ({
           <div>
             <p
               style={{ color: primaryColor }}
-              className={`${isSandeepyogatherapy ? "" : "font-alex-brush"} text-2xl`}
+              className={`${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"} text-2xl`}
             >
               Need any help?
             </p>
