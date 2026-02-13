@@ -57,7 +57,7 @@ const DefaultPlans = ({
   };
 }) => {
   const plugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })
+    Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }),
   );
 
   const { getPlansList, getCommunityPlansListAuth } = usePlans();
@@ -110,8 +110,8 @@ const DefaultPlans = ({
 
   const isRequested = Boolean(
     communityData?.community?.requests?.some(
-      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
-    )
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId,
+    ),
   );
 
   return (
@@ -138,177 +138,201 @@ const DefaultPlans = ({
         <CarouselContent>
           {isLoading
             ? [1, 2, 3].map((i) => (
-              <CarouselItem
-                key={i}
-                className="pl-6 md:basis-1/2 lg:basis-1/3"
-              >
-                <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-[2.5rem]" />
-              </CarouselItem>
-            ))
-            : plans?.map((plan) => {
-              const planId = String((plan as any)?._id ?? "");
-              const meta = flow.getPlanMeta(planId);
-
-              const userSubscribedToPlan = !!meta?.isSubscribed;
-              const isSequencePlan = !!meta?.isSequencePlan;
-              const isActivePlan = !!meta?.isActive;
-              const isExpiredPlan = !!meta?.isExpired;
-              const nextDue = meta?.nextDue ?? null;
-
-              const isProcessing = flow.processingPlanId === planId;
-
-              const planImage =
-                (plan as any)?.image?.value ??
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Planss.png";
-
-              const price =
-                (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0;
-
-              const durationLabel =
-                (plan as any)?.duration?.toLowerCase?.() ?? "";
-
-              const initialPayment = Number((plan as any)?.initialPayment ?? 0);
-              const showOneTimeFee = initialPayment > 0 && !userSubscribedToPlan;
-
-              // ✅ CTA text (same pattern as Restraint)
-              const ctaText = (() => {
-                if (!isLoggedIn) return "Login to Subscribe";
-                if (!flow.isSubscribedCommunity)
-                  return flow.isPrivate
-                    ? isRequested
-                      ? "Already Requested"
-                      : "Request to Join"
-                    : "Join & Subscribe";
-                if (userSubscribedToPlan && isActivePlan) return "Subscribed";
-                if (userSubscribedToPlan && isExpiredPlan)
-                  return isSequencePlan ? "Renew & Pay" : "Pay to Renew";
-                return "Subscribe";
-              })();
-
-              return (
                 <CarouselItem
-                  key={planId}
-                  className="md:basis-1/2 lg:basis-1/3"
+                  key={i}
+                  className="pl-6 md:basis-1/2 lg:basis-1/3"
                 >
-                  <div
-                    className={cn(
-                      "relative rounded-[20px] flex flex-col h-full p-4 pt-4 border transition-all duration-300",
-                      "bg-white border-gray-200",
-                      `${userSubscribedToPlan && isExpiredPlan ? "border-red-500" : ""}`
-                    )}
+                  <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-[2.5rem]" />
+                </CarouselItem>
+              ))
+            : plans?.map((plan) => {
+                const planId = String((plan as any)?._id ?? "");
+                const meta = flow.getPlanMeta(planId);
+
+                const userSubscribedToPlan = !!meta?.isSubscribed;
+                const isSequencePlan = !!meta?.isSequencePlan;
+                const isActivePlan = !!meta?.isActive;
+                const isExpiredPlan = !!meta?.isExpired;
+                const nextDue = meta?.nextDue ?? null;
+
+                const isProcessing = flow.processingPlanId === planId;
+
+                const planImage =
+                  (plan as any)?.image?.value ??
+                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Planss.png";
+
+                const price =
+                  (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0;
+
+                const durationLabel =
+                  (plan as any)?.duration?.toLowerCase?.() ?? "";
+
+                const initialPayment = Number(
+                  (plan as any)?.initialPayment ?? 0,
+                );
+                const showOneTimeFee =
+                  initialPayment > 0 && !userSubscribedToPlan;
+
+                // ✅ CTA text (same pattern as Restraint)
+                const ctaText = (() => {
+                  if (!isLoggedIn) return "Login to Subscribe";
+                  if (!flow.isSubscribedCommunity)
+                    return flow.isPrivate
+                      ? isRequested
+                        ? "Already Requested"
+                        : "Request to Join"
+                      : "Join & Subscribe";
+                  if (userSubscribedToPlan && isActivePlan) return "Subscribed";
+                  if (userSubscribedToPlan && isExpiredPlan)
+                    return isSequencePlan ? "Renew & Pay" : "Pay to Renew";
+                  return "Subscribe";
+                })();
+
+                return (
+                  <CarouselItem
+                    key={planId}
+                    className="md:basis-1/2 lg:basis-1/3"
                   >
-                    {/* Image + Due chip */}
-                    <div className="mb-6 flex justify-between items-start">
-                      <div
-                        className={cn(
-                          "relative w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center",
-                          "bg-[#A7F3D0] text-[#065F46]"
-                        )}
-                      >
-                        <Image
-                          src={planImage}
-                          alt={plan.name ?? "Plan image"}
-                          fill
-                          className="object-cover"
-                          sizes="80px"
-                          unoptimized
-                        />
+                    <div
+                      className={cn(
+                        "relative rounded-[20px] flex flex-col h-full p-4 pt-4 border transition-all duration-300",
+                        "bg-white border-gray-200",
+                        `${userSubscribedToPlan && isExpiredPlan ? "border-red-500" : ""}`,
+                      )}
+                    >
+                      {/* Image + Due chip */}
+                      <div className="mb-6 flex justify-between items-start">
+                        <div
+                          className={cn(
+                            "relative w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center",
+                            "bg-[#A7F3D0] text-[#065F46]",
+                          )}
+                        >
+                          <Image
+                            src={planImage}
+                            alt={plan.name ?? "Plan image"}
+                            fill
+                            className="object-cover"
+                            sizes="80px"
+                            unoptimized
+                          />
+                        </div>
+
+                        {/* Next Due / Expired chip */}
+                        {isLoggedIn &&
+                          userSubscribedToPlan &&
+                          nextDue &&
+                          nextDue !== "forever" && (
+                            <div className="mt-2 text-sm font-medium">
+                              {isExpiredPlan ? (
+                                <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                                  Expired on {formatDate(String(nextDue))}
+                                </span>
+                              ) : (
+                                <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                  Next due: {formatDate(String(nextDue))}
+                                </span>
+                              )}
+                            </div>
+                          )}
                       </div>
 
-                      {/* Next Due / Expired chip */}
-                      {isLoggedIn &&
-                        userSubscribedToPlan &&
-                        nextDue &&
-                        nextDue !== "forever" && (
-                          <div className="mt-2 text-sm font-medium">
-                            {isExpiredPlan ? (
-                              <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
-                                Expired on {formatDate(String(nextDue))}
+                      <h3 className="text-lg md:text-xl font-bold text-black">
+                        {capitalizeWords(plan.name)}
+                      </h3>
+
+                      <div className="my-2 text-sm md:text-md font-bold text-[var(--pri)]">
+                        {/* ₹/ */}
+                        ₹ {price} {"per"}{" "}
+                        <span>{Number(plan?.interval) > 1 ? plan?.interval : ""}{" "}</span>
+                        <span className="capitalize">
+                          {Number(plan?.interval) > 1
+                            ? `${durationLabel}s`
+                            : durationLabel}
+                        </span>
+                      </div>
+
+                      {showOneTimeFee && (
+                        <div className="text-xs font-semibold text-[var(--pri)]">
+                          + One Time Fee : ₹ {initialPayment}
+                        </div>
+                      )}
+
+                      {(plan as any)?.description && (
+                        <div className="flex items-start gap-3 text-xs md:text-sm mb-4 mt-2 text-gray-600">
+                          {(plan as any)?.description.includes("/") ? (
+                            <ul className="space-y-4">
+                              {(plan as any)?.description
+                                .split("/")
+                                .map((t: string) => t.trim())
+                                .filter(Boolean)
+                                .map((text: string, idx: number) => (
+                                  <li
+                                    className="flex items-center gap-3 text-xs md:text-sm text-gray-500"
+                                    key={idx}
+                                  >
+                                    <Check size={18} className="text-black" />
+                                    <span>{text}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          ) : (
+                            <span className="line-clamp-3">
+                              {(plan as any)?.description}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* CTA */}
+                      <div className="mt-auto">
+                        {!isLoggedIn ? (
+                          <Button
+                            onClick={() => flow.startSubscribeFlow(planId)}
+                            className="flex items-center gap-2 w-full py-6 rounded-xl bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
+                            disabled={isProcessing}
+                          >
+                            {flow.isPrivate && <LockKeyhole size={18} />}
+                            {isProcessing ? (
+                              <span className="inline-flex items-center gap-2">
+                                <LoaderCircle className="w-4 h-4 animate-spin" />
+                                Starting...
                               </span>
                             ) : (
-                              <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                Next due: {formatDate(String(nextDue))}
-                              </span>
+                              ctaText
                             )}
-                          </div>
-                        )}
-                    </div>
-
-                    <h3 className="text-lg md:text-xl font-bold text-black">
-                      {capitalizeWords(plan.name)}
-                    </h3>
-
-                    <div className="flex items-center gap-3 my-2 text-sm md:text-md font-bold text-[var(--pri)]">
-                      <span>
-                        {/* ₹/ */}
-                        Rs.{price}  for {plan?.interval} {durationLabel}
-                      </span>
-                    </div>
-
-                    {showOneTimeFee && (
-                      <div className="text-xs font-semibold text-[var(--pri)]">
-                        + One Time Fee : ₹ {initialPayment}
-                      </div>
-                    )}
-
-                    {(plan as any)?.description && (
-                      <div className="flex items-start gap-3 text-xs md:text-sm mb-4 mt-2 text-gray-600">
-                        {(plan as any)?.description.includes("/") ? (
-                          <ul className="space-y-4">
-                            {(plan as any)?.description
-                              .split("/")
-                              .map((t: string) => t.trim())
-                              .filter(Boolean)
-                              .map((text: string, idx: number) => (
-                                <li
-                                  className="flex items-center gap-3 text-xs md:text-sm text-gray-500"
-                                  key={idx}
+                          </Button>
+                        ) : !flow.isSubscribedCommunity ? (
+                          flow.isPrivate ? (
+                            isRequested ? (
+                              <div className="mt-2 inline-flex flex-col items-center text-[var(--pri)] gap-2 text-[16px] font-bold">
+                                <h5>Already Requested</h5>
+                                <p
+                                  className="font-normal text-sm text-center"
+                                  style={{ color: colors?.secondaryColor }}
                                 >
-                                  <Check size={18} className="text-black" />
-                                  <span>{text}</span>
-                                </li>
-                              ))}
-                          </ul>
-                        ) : (
-                          <span className="line-clamp-3">
-                            {(plan as any)?.description}
-                          </span>
-                        )}
-                      </div>
-                    )}
-
-                    {/* CTA */}
-                    <div className="mt-auto">
-                      {!isLoggedIn ? (
-                        <Button
-                          onClick={() => flow.startSubscribeFlow(planId)}
-                          className="flex items-center gap-2 w-full py-6 rounded-xl bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
-                          disabled={isProcessing}
-                        >
-                          {flow.isPrivate && <LockKeyhole size={18} />}
-                          {isProcessing ? (
-                            <span className="inline-flex items-center gap-2">
-                              <LoaderCircle className="w-4 h-4 animate-spin" />
-                              Starting...
-                            </span>
-                          ) : (
-                            ctaText
-                          )}
-                        </Button>
-                      ) : !flow.isSubscribedCommunity ? (
-                        flow.isPrivate ? (
-                          isRequested ? (
-                            <div className="mt-2 inline-flex flex-col items-center text-[var(--pri)] gap-2 text-[16px] font-bold">
-                              <h5>Already Requested</h5>
-                              <p
-                                className="font-normal text-sm text-center"
-                                style={{ color: colors?.secondaryColor }}
+                                  * Your request will be sent to the admin. You
+                                  can proceed with payment once approved.
+                                </p>
+                              </div>
+                            ) : (
+                              <Button
+                                onClick={() => flow.startSubscribeFlow(planId)}
+                                className="w-full py-6 rounded-xl font-bold bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
+                                disabled={isProcessing}
                               >
-                                * Your request will be sent to the admin. You
-                                can proceed with payment once approved.
-                              </p>
-                            </div>
+                                {isProcessing ? (
+                                  <span className="inline-flex items-center gap-2">
+                                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                                    Starting...
+                                  </span>
+                                ) : (
+                                  ctaText
+                                )}
+                              </Button>
+                            )
                           ) : (
+                            // ✅ PUBLIC: no dialog, unified flow auto-joins then proceeds
                             <Button
                               onClick={() => flow.startSubscribeFlow(planId)}
                               className="w-full py-6 rounded-xl font-bold bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
@@ -317,110 +341,95 @@ const DefaultPlans = ({
                               {isProcessing ? (
                                 <span className="inline-flex items-center gap-2">
                                   <LoaderCircle className="w-4 h-4 animate-spin" />
-                                  Starting...
+                                  Joining...
                                 </span>
                               ) : (
                                 ctaText
                               )}
                             </Button>
                           )
-                        ) : (
-                          // ✅ PUBLIC: no dialog, unified flow auto-joins then proceeds
+                        ) : userSubscribedToPlan && isActivePlan ? (
                           <Button
-                            onClick={() => flow.startSubscribeFlow(planId)}
-                            className="w-full py-6 rounded-xl font-bold bg-[var(--pri)] hover:bg-[var(--pri)] cursor-pointer"
-                            disabled={isProcessing}
-                          >
-                            {isProcessing ? (
-                              <span className="inline-flex items-center gap-2">
-                                <LoaderCircle className="w-4 h-4 animate-spin" />
-                                Joining...
-                              </span>
-                            ) : (
-                              ctaText
-                            )}
-                          </Button>
-                        )
-                      ) : userSubscribedToPlan && isActivePlan ? (
-                        <Button
-                          variant="outline"
-                          className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
-                          disabled
-                        >
-                          Subscribed
-                        </Button>
-                      ) : userSubscribedToPlan && isExpiredPlan ? (
-                        isSequencePlan ? (
-                          <Button
-                            asChild
                             variant="outline"
                             className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
+                            disabled
+                          >
+                            Subscribed
+                          </Button>
+                        ) : userSubscribedToPlan && isExpiredPlan ? (
+                          isSequencePlan ? (
+                            <Button
+                              asChild
+                              variant="outline"
+                              className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
+                              disabled={isProcessing}
+                            >
+                              <Link
+                                href={`/subscriptions/?planid=${encodeURIComponent(
+                                  planId,
+                                )}&communityid=${encodeURIComponent(
+                                  communityId || "",
+                                )}`}
+                              >
+                                {isProcessing ? "Processing..." : "Renew & Pay"}
+                              </Link>
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() =>
+                                flow.startNonSequencePayment(planId)
+                              }
+                              variant="outline"
+                              className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
+                              disabled={isProcessing}
+                            >
+                              {isProcessing ? (
+                                <span className="inline-flex items-center gap-2">
+                                  <LoaderCircle className="w-4 h-4 animate-spin" />
+                                  Starting payment...
+                                </span>
+                              ) : (
+                                "Pay to Renew"
+                              )}
+                            </Button>
+                          )
+                        ) : isSequencePlan ? (
+                          <Button
+                            asChild
+                            className="w-full py-6 rounded-xl font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
                             disabled={isProcessing}
                           >
                             <Link
                               href={`/subscriptions/?planid=${encodeURIComponent(
-                                planId
+                                planId,
                               )}&communityid=${encodeURIComponent(
-                                communityId || ""
+                                communityId || "",
                               )}`}
                             >
-                              {isProcessing ? "Processing..." : "Renew & Pay"}
+                              {isProcessing ? "Processing..." : "Subscribe"}
                             </Link>
                           </Button>
                         ) : (
                           <Button
-                            onClick={() => flow.startNonSequencePayment(planId)}
-                            variant="outline"
-                            className="w-full py-6 rounded-xl font-bold text-[var(--pri)] border-[var(--pri)]"
+                            onClick={() => flow.startSubscribeFlow(planId)}
+                            className="w-full py-6 rounded-xl font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
                             disabled={isProcessing}
                           >
                             {isProcessing ? (
                               <span className="inline-flex items-center gap-2">
                                 <LoaderCircle className="w-4 h-4 animate-spin" />
-                                Starting payment...
+                                Starting...
                               </span>
                             ) : (
-                              "Pay to Renew"
+                              "Subscribe"
                             )}
                           </Button>
-                        )
-                      ) : isSequencePlan ? (
-                        <Button
-                          asChild
-                          className="w-full py-6 rounded-xl font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
-                          disabled={isProcessing}
-                        >
-                          <Link
-                            href={`/subscriptions/?planid=${encodeURIComponent(
-                              planId
-                            )}&communityid=${encodeURIComponent(
-                              communityId || ""
-                            )}`}
-                          >
-                            {isProcessing ? "Processing..." : "Subscribe"}
-                          </Link>
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={() => flow.startSubscribeFlow(planId)}
-                          className="w-full py-6 rounded-xl font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
-                          disabled={isProcessing}
-                        >
-                          {isProcessing ? (
-                            <span className="inline-flex items-center gap-2">
-                              <LoaderCircle className="w-4 h-4 animate-spin" />
-                              Starting...
-                            </span>
-                          ) : (
-                            "Subscribe"
-                          )}
-                        </Button>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </CarouselItem>
-              );
-            })}
+                  </CarouselItem>
+                );
+              })}
         </CarouselContent>
 
         <CarouselPrevious className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />
@@ -451,7 +460,10 @@ const DefaultPlans = ({
           </DialogDescription>
 
           <div className="mt-4 flex justify-end gap-3">
-            <Button variant="outline" onClick={() => flow.setJoinDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => flow.setJoinDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button
