@@ -4,23 +4,44 @@ import React, { useMemo } from "react";
 import CustomVideoPlayer from "./CustomVideoPlayer";
 import YouTubePlayer from "./YouTubePlayer";
 
+function isValidHttpUrl(url?: string) {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function isYouTubeUrl(url?: string) {
   if (!url) return false;
   return /(^https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//.test(url);
 }
 
-// ✅ Your helper (slightly extended but same logic)
 const isGoogleDriveUrl = (url?: string) => {
   if (!url) return false;
   try {
     const { hostname } = new URL(url);
-    return hostname.includes("drive.google.com") || hostname.includes("docs.google.com");
+    return (
+      hostname.includes("drive.google.com") ||
+      hostname.includes("docs.google.com")
+    );
   } catch {
     return false;
   }
 };
 
-// Converts "file/d/<id>/view" -> "file/d/<id>/preview"
+function isDirectVideo(url?: string) {
+  if (!url) return false;
+  return (
+    url.endsWith(".mp4") ||
+    url.endsWith(".webm") ||
+    url.endsWith(".ogg") ||
+    url.includes(".m3u8")
+  );
+}
+
 function toDrivePreview(url: string) {
   const match = url.match(/\/file\/d\/([^/]+)/);
   if (!match) return url;
@@ -28,9 +49,10 @@ function toDrivePreview(url: string) {
   return `https://drive.google.com/file/d/${fileId}/preview`;
 }
 
-// Optional fallback for google docs viewer (for non-drive direct pdf links)
 function toGoogleViewer(url: string) {
-  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
+  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(
+    url
+  )}`;
 }
 
 export default function CourseContentPlayer({
@@ -48,9 +70,11 @@ export default function CourseContentPlayer({
 }) {
   const mode = useMemo(() => {
     if (!url) return "empty";
+    if (!isValidHttpUrl(url)) return "invalid";
     if (isYouTubeUrl(url)) return "youtube";
     if (isGoogleDriveUrl(url)) return "drive";
-    return "native";
+    if (isDirectVideo(url)) return "native";
+    return "iframe"; // 🔥 Anything else goes iframe
   }, [url]);
 
   if (mode === "empty") {
@@ -61,13 +85,18 @@ export default function CourseContentPlayer({
     );
   }
 
-  // ✅ YouTube
+  if (mode === "invalid") {
+    return (
+      <div className="rounded-2xl border bg-background p-6 text-sm text-red-500">
+        Invalid video URL.
+      </div>
+    );
+  }
+
   if (mode === "youtube") {
     return <YouTubePlayer url={url} title={title} />;
   }
 
-  // ✅ Google Drive/Docs (PDF or Drive-hosted video)
-  // Best reliability: iframe preview
   if (mode === "drive") {
     const iframeSrc =
       url.includes("/file/d/") ? toDrivePreview(url) : toGoogleViewer(url);
@@ -80,19 +109,39 @@ export default function CourseContentPlayer({
             className="w-full h-full"
             title={title || "Google Drive content"}
             allow="autoplay; fullscreen"
+            allowFullScreen
           />
         </div>
       </div>
     );
   }
 
-  // ✅ MP4 / HLS / normal direct video URLs
+  if (mode === "native") {
+    return (
+      <CustomVideoPlayer
+        src={url}
+        poster={
+          poster ||
+          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default Courses.png"
+        }
+        onProgress={onProgress}
+        onEnded={onEnded}
+      />
+    );
+  }
+
+  // ✅ Fallback → iframe
   return (
-    <CustomVideoPlayer
-      src={url}
-      poster={poster || "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default Courses.png"}
-      onProgress={onProgress}
-      onEnded={onEnded}
-    />
+    <div className="rounded-2xl border bg-black overflow-hidden">
+      <div className="aspect-video w-full">
+        <iframe
+          src={url}
+          className="w-full h-full"
+          title={title || "Embedded content"}
+          allow="autoplay; fullscreen"
+          allowFullScreen
+        />
+      </div>
+    </div>
   );
 }

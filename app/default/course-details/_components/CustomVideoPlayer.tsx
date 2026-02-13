@@ -1,7 +1,13 @@
 "use client";
 
 import Hls from "hls.js";
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import {
   Pause,
   Play,
@@ -34,7 +40,12 @@ function formatTime(sec: number) {
 
 const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: Props) {
+export default function CustomVideoPlayer({
+  src,
+  poster,
+  onProgress,
+  onEnded,
+}: Props) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -170,7 +181,7 @@ export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: 
       if (!v) return;
       v.currentTime = clamp(t, 0, duration || 0);
     },
-    [duration]
+    [duration],
   );
 
   const toggleFullscreen = useCallback(async () => {
@@ -240,6 +251,7 @@ export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: 
         playsInline
         preload="metadata"
         onClick={togglePlay}
+        onContextMenu={(e) => e.preventDefault()}
       />
 
       {/* top fade */}
@@ -270,7 +282,10 @@ export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: 
         {/* progress bar */}
         <div className="relative mb-3">
           <div className="h-2 w-full rounded-full bg-white/15 overflow-hidden">
-            <div className="h-full bg-white/20" style={{ width: `${bufferedPct}%` }} />
+            <div
+              className="h-full bg-white/20"
+              style={{ width: `${bufferedPct}%` }}
+            />
           </div>
           <div
             className="absolute top-0 left-0 h-2 rounded-full bg-white"
@@ -301,14 +316,21 @@ export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: 
         <div className="flex items-center justify-between gap-3 text-white">
           <div className="flex items-center gap-2">
             <IconButton onClick={togglePlay} label={playing ? "Pause" : "Play"}>
-              {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+              {playing ? (
+                <Pause className="h-5 w-5" />
+              ) : (
+                <Play className="h-5 w-5" />
+              )}
             </IconButton>
 
             <IconButton onClick={restart} label="Restart">
               <RotateCcw className="h-5 w-5" />
             </IconButton>
 
-            <IconButton onClick={() => setMuted((p) => !p)} label={muted ? "Unmute" : "Mute"}>
+            <IconButton
+              onClick={() => setMuted((p) => !p)}
+              label={muted ? "Unmute" : "Mute"}
+            >
               {muted || volume === 0 ? (
                 <VolumeX className="h-5 w-5" />
               ) : (
@@ -342,7 +364,10 @@ export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: 
           <div className="flex items-center gap-2">
             {/* settings menu */}
             <div className="relative">
-              <IconButton onClick={() => setShowMenu((p) => !p)} label="Settings">
+              <IconButton
+                onClick={() => setShowMenu((p) => !p)}
+                label="Settings"
+              >
                 <Settings className="h-5 w-5" />
               </IconButton>
 
@@ -382,7 +407,11 @@ export default function CustomVideoPlayer({ src, poster, onProgress, onEnded }: 
             </div>
 
             <IconButton onClick={toggleFullscreen} label="Fullscreen">
-              {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+              {isFullscreen ? (
+                <Minimize className="h-5 w-5" />
+              ) : (
+                <Maximize className="h-5 w-5" />
+              )}
             </IconButton>
           </div>
         </div>

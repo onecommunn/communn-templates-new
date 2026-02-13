@@ -245,7 +245,6 @@ export default function CourseDetailsPage() {
     return <CoursePlayerSkeleton />;
   }
 
-  // if API returned empty / wrong courseId / no content
   if (!course || !hasAnyContent) {
     return (
       <CourseEmptyState
