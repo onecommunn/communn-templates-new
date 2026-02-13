@@ -30,10 +30,7 @@ export default function CourseDetailsPage() {
   const searchParams = useSearchParams();
   // const courseId = searchParams.get("id") || "6840233f4d710a4b951a1c86";
 
-  const courseId = useMemo(
-    () => searchParams.get("id") ?? "",
-    [searchParams]
-  );
+  const courseId = useMemo(() => searchParams.get("id") ?? "", [searchParams]);
 
   const auth = useContext(AuthContext);
 
@@ -41,19 +38,20 @@ export default function CourseDetailsPage() {
 
   const [course, setCourse] = useState<Course | null>(null);
   const [sections, setSections] = useState<Section[]>([]);
-  const [isCourseDataLoading, setCourseDataLoading] = useState(false);
+  const [isCourseDataLoading, setCourseDataLoading] = useState(true);
 
   // Selection
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [selectedType, setSelectedType] = useState<LessonType>("video");
   const [activeLessonId, setActiveLessonId] = useState<string>("");
+  const [hasFetched, setHasFetched] = useState(false);
 
   // Fetch course
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         if (!auth.isAuthenticated) {
-          return
+          return;
         }
         setCourseDataLoading(true);
 
@@ -95,6 +93,7 @@ export default function CourseDetailsPage() {
         console.error("Error fetching course:", error);
       } finally {
         setCourseDataLoading(false);
+        setHasFetched(true);
       }
     };
 
@@ -245,7 +244,7 @@ export default function CourseDetailsPage() {
     return <CoursePlayerSkeleton />;
   }
 
-  if (!course || !hasAnyContent) {
+  if (hasFetched && (!course || !hasAnyContent)) {
     return (
       <CourseEmptyState
         title={!course ? "Course not found" : "No lessons yet"}
