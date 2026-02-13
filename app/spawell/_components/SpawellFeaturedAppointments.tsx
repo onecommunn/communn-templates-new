@@ -76,9 +76,9 @@ const SpawellFeaturedAppointments = ({
                 ? getLucideIcon(item?.media)
                 : null;
               return (
-                <Link
+                <button
                   key={idx}
-                  href={"/"}
+                  // href={"/"}
                   className="group relative block rounded-3xl bg-white p-6 shadow-sm ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
                   aria-label={item?.description}
                 >
@@ -102,10 +102,10 @@ const SpawellFeaturedAppointments = ({
                     </span>
                   </div>
 
-                  <h3 className="mt-2 text-xl font-bold leading-6 text-[var(--pri)]">
+                  <h3 className="mt-2 text-xl text-left font-bold leading-6 text-[var(--pri)]">
                     {item.description}
                   </h3>
-                </Link>
+                </button>
               );
             })}
           </div>

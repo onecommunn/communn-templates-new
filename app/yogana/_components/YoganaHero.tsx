@@ -66,7 +66,7 @@ const YoganaHero: React.FC<YoganaHeroProps> = ({
                 {data?.content?.heading}
               </h1>
               <h3
-                className={`text-[65px]/[30px] text-[#C2A74E] md:text-[90px]/[60px] ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
+                className={`text-[65px]/[55px] text-[#C2A74E] md:text-[90px]/[80px] ${isSandeepyogatherapy ? "font-alex-brush" : "font-alex-brush"}`}
                 style={{
                   color: primaryColor,
                 }}

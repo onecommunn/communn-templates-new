@@ -84,7 +84,7 @@ const FitkitFooter = ({
               className="
       flex flex-wrap justify-center
       gap-x-8 gap-y-4
-      md:grid md:grid-cols-6 md:divide-x md:divide-[#1D2229]
+      md:divide-x md:divide-[#1D2229]
     "
             >
               <Link
@@ -109,18 +109,24 @@ const FitkitFooter = ({
               </Link>
 
               <Link
-                href="/#gallery"
+                href="/#events"
                 className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
               >
-                Gallery
+                Events
+              </Link>
+              <Link
+                href="/#plans"
+                className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
+              >
+                Plans
               </Link>
 
-              <Link
+              {/* <Link
                 href="/#blog"
                 className="font-medium text-[13px] md:text-[16px] uppercase py-3 px-2 text-center md:w-[160px]"
               >
                 Blog
-              </Link>
+              </Link> */}
 
               <Link
                 href="/#contact"

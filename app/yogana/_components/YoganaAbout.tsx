@@ -148,14 +148,15 @@ const YoganaAbout: FC<YoganaAboutProps> = ({
                   ))}
               </ul>
             </div>
-            <Link
-              href={data?.content?.buttons?.[0]?.url ?? "/"}
-              className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] cursor-pointer font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4"
-              style={{
-                backgroundColor: primaryColor,
-              }}
-            >
-              {data?.content?.buttons?.[0]?.label}
+            <Link href={data?.content?.buttons?.[0]?.url ?? "/"}>
+              <Button
+                className="bg-[#C2A74E] text-white font-plus-jakarta rounded-[3px] cursor-pointer font-semibold text-sm py-[22px] px-[37px] w-full sm:w-auto mt-4"
+                style={{
+                  backgroundColor: primaryColor,
+                }}
+              >
+                {data?.content?.buttons?.[0]?.label}
+              </Button>
             </Link>
           </div>
         </div>

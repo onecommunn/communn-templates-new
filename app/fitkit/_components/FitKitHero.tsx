@@ -70,7 +70,7 @@ const FitKitHero = ({
         {/* subtle vignette */}
         {/* <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_40%,transparent_0,rgba(0,0,0,.65)_70%)]" /> */}
       </div>
-      <div className="relative container px-6 md:px-20 mx-auto py-20 md:py-0 z-10 font-kanit h-full">
+      <div className="relative container px-6 md:px-26 mx-auto py-20 md:py-0 z-10 font-kanit h-full">
         <div className="grid items-center gap-6 md:grid-cols-[1.05fr_.95fr] h-full">
           <div className="text-white md:ml-2">
             {/* tag line */}
@@ -89,7 +89,7 @@ const FitKitHero = ({
             </p>
             <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
               <Link href={active?.buttons?.[0]?.url || "/"}>
-                <button className="bg-[var(--sec)] px-8 py-4 text-sm font-bold font-archivo tracking-wide text-white shadow-[0_10px_30px_rgba(220,38,38,0.35)] transition hover:bg-red-500">
+                <button className="bg-[var(--sec)] cursor-pointer px-8 py-4 text-sm font-bold font-archivo tracking-wide text-white shadow-[0_10px_30px_rgba(220,38,38,0.35)] transition hover:bg-[var(--sec)]/90">
                   {active?.buttons?.[0]?.label}
                 </button>
               </Link>
