@@ -109,7 +109,7 @@ const SpawellFooter = ({
           </div>
 
           {/* Links columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:pl-8 md:border-l md:border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:pl-8 md:border-l md:border-white/10">
             <div>
               <h4 className="text-sm font-semibold">Our Charity</h4>
               <ul className="mt-3 space-y-2 text-sm text-[var(--sec)]/80">
@@ -166,7 +166,7 @@ const SpawellFooter = ({
               </ul>
             </div>
 
-            <div>
+            {/* <div>
               <h4 className="text-sm font-semibold">Support</h4>
               <ul className="mt-3 space-y-2 text-sm text-[var(--sec)]/80">
                 <li>
@@ -190,7 +190,7 @@ const SpawellFooter = ({
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@ const SpawellFooter = ({
           <div className="py-4 text-center text-xs text-[var(--sec)]/80">
             <p>
               Made with ❤️ by {" "}
-              <span className="text-slate-600 font-medium">
+              <span className="text-[var(--sec)] font-medium">
                 <Link href={"https://communn.io/"}>communn.io</Link>
               </span>
             </p>

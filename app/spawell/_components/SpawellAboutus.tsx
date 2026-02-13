@@ -134,7 +134,7 @@ const SpawellAboutus = ({
 
               {/* Bullets + Button */}
               <AnimatedContent distance={50} direction="vertical" delay={0.4}>
-                <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] mt-6 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr] mt-6 gap-4">
                   {/* Left: Bullets + CTA */}
                   <div>
                     <ul className="mt-6 space-y-3 text-[15px] text-[var(--pri)]">
@@ -178,8 +178,8 @@ const SpawellAboutus = ({
                     direction="vertical"
                     delay={0.6}
                   >
-                    <div className="flex flex-wrap items-center mt-4 md:mt-0 w-full md:justify-end gap-6">
-                      <div className="flex flex-col items-center w-full md:w-fit gap-4 rounded-xl bg-[var(--neu)] p-8">
+                    <div className="flex flex-wrap items-center mt-4 md:mt-0 w-full md:justify-end gap-6 flex-shrink-0">
+                      <div className="flex flex-col items-center w-full md:w-fit gap-4 rounded-xl flex-shrink-0 bg-[var(--neu)] p-8">
                         <div className="flex h-12 w-12 items-center justify-center">
                           <UsersRound
                             strokeWidth={1}
@@ -187,7 +187,7 @@ const SpawellAboutus = ({
                           />
                         </div>
                         <div>
-                          <div className="text-5xl font-semibold text-[var(--pri)] text-center font-lora">
+                          <div className="text-5xl min-w-fit shrink-0 font-semibold text-[var(--pri)] text-center font-lora">
                             {source?.teamCount} <span className="text-5xl">+</span>
                           </div>
                           <p className="text-[16px] text-[var(--pri)] text-center">

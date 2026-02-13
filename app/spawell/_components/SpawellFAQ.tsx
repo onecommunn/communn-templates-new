@@ -97,7 +97,7 @@ const SpawellFAQ = ({
                     key={idx}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="mt-0.5 flex p-1 items-center justify-center rounded-full bg-[var(--pri)] text-white">
+                      <div className="mt-0.5 flex p-1 flex-shrink-0 items-center justify-center rounded-full bg-[var(--pri)] text-white">
                         {LucideIcon ? (
                           <LucideIcon
                             strokeWidth={1}
