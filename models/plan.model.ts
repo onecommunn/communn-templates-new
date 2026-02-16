@@ -20,6 +20,7 @@ export interface TrainingPlan {
   _id: string;
   name: string;
   duration: string; // e.g., "MONTH"
+  discountAmount?:string
   interval: string; // typically a number string
   startDate: string; // ISO string
   endDate: string; // ISO string

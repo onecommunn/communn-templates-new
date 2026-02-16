@@ -233,19 +233,28 @@ export function usePlanSubscribeFlow({
         return;
       }
 
-      const baseAmount =
-        Number(seqRes?.pricing ?? 0) ||
+      // --- base recurring price ---
+      const planPricing =
         Number((meta.plan as any)?.pricing ?? 0) ||
-        Number((meta.plan as any)?.totalPlanValue ?? 0);
+        Number((meta.plan as any)?.totalPlanValue ?? 0) ||
+        Number(seqRes?.pricing ?? 0); // keep as fallback
 
-      if (!baseAmount || baseAmount <= 0) {
+      const discountAmount = Number((meta.plan as any)?.discountAmount ?? 0);
+
+      // ✅ final recurring amount after discount
+      const discountedRecurring = Math.max(0, planPricing - discountAmount);
+
+      if (!discountedRecurring || discountedRecurring <= 0) {
         toast.error("Invalid amount");
         return;
       }
 
+      // ✅ add one-time fee only for first-time subscribe
       const initialFee = Number((meta.plan as any)?.initialPayment ?? 0);
       const finalAmount =
-        isFirstTime && initialFee > 0 ? baseAmount + initialFee : baseAmount;
+        isFirstTime && initialFee > 0
+          ? discountedRecurring + initialFee
+          : discountedRecurring;
 
       const payRes: any = await initiatePaymentByIds(
         userId,
