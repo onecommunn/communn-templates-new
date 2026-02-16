@@ -67,10 +67,10 @@ const RestraintOurTeam = ({
             {team.map((member, index) => (
               <CarouselItem
                 key={index}
-                className="pl-4 md:basis-1/2 lg:basis-1/3"
+                className="pl-4 md:basis-1/2 lg:basis-1/4"
               >
                 {/* Image Container */}
-                <div className="relative aspect-[4/5] overflow-hidden rounded-4xl mb-6 border-2 border-[var(--sec)]">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-4xl mb-4 border-2 border-[var(--sec)]">
                   <Image
                     src={member.imageUrl}
                     alt={member.name}
