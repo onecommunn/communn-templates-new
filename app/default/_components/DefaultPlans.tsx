@@ -282,23 +282,17 @@ const DefaultPlans = ({
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-[22px] font-extrabold text-slate-900">
-                                ₹{finalRecurringAmount}
-                              </span>
-
                               {discountValue > 0 && (
-                                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700">
-                                  Save ₹{discountValue}
-                                </span>
-                              )}
-                            </div>
-
-                            <div className="mt-1 flex items-center gap-2 text-[12px] text-slate-600">
-                              {discountValue > 0 && (
-                                <span className="text-slate-400 line-through">
+                                <span className="text-slate-400 line-through text-[20px] font-bold">
                                   ₹{basePrice}
                                 </span>
                               )}
+                              <span className="text-[20px] font-extrabold text-slate-900">
+                                ₹{finalRecurringAmount}
+                              </span>
+                            </div>
+
+                            <div className="mt-1 flex items-center gap-2 text-[12px] text-slate-600">
                               <span>
                                 per{" "}
                                 {Number(plan?.interval) > 1 ? (
@@ -314,6 +308,11 @@ const DefaultPlans = ({
                                   </span>
                                 )}
                               </span>
+                              {discountValue > 0 && (
+                                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-1 py-px text-[9px] font-semibold text-emerald-700">
+                                  Save ₹{discountValue}
+                                </span>
+                              )}
                             </div>
                           </div>
 
