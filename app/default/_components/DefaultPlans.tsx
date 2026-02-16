@@ -294,18 +294,20 @@ const DefaultPlans = ({
 
                             <div className="mt-1 flex items-center gap-2 text-[12px] text-slate-600">
                               <span>
-                                per{" "}
                                 {Number(plan?.interval) > 1 ? (
                                   <>
-                                    {plan?.interval}{" "}
+                                    for {plan?.interval}{" "}
                                     <span className="capitalize">
                                       {durationLabel}s
                                     </span>
                                   </>
                                 ) : (
-                                  <span className="capitalize">
-                                    {durationLabel}
-                                  </span>
+                                  <>
+                                    /{" "}
+                                    <span className="capitalize">
+                                      {durationLabel}
+                                    </span>
+                                  </>
                                 )}
                               </span>
                               {discountValue > 0 && (
