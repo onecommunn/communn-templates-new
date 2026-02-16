@@ -430,6 +430,49 @@ export const dummyData: RestarintHomePage = {
       isActive: true,
     },
     {
+      sectionName: "teamSection",
+      content: {
+        title: "The Guiding Souls",
+        heading: "Meet the experts behind your transformation",
+        team: [
+          {
+            name: "Elena Rossi",
+            role: "Lead Yoga Instructor",
+            description:
+              "Specializing in Vinyasa and Mindfulness with over 12 years of experience.",
+            imageUrl:
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-0-1764072597928.jpg", // Replace with your actual image paths
+          },
+          {
+            name: "Marcus Chen",
+            role: "Meditation Guide",
+            description:
+              "Helping practitioners find inner stillness through ancient breathing techniques.",
+            imageUrl:
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-1-1764072634201.jpg",
+          },
+          {
+            name: "Sarah Jenkins",
+            role: "Holistic Wellness Coach",
+            description:
+              "Integrating physical movement with nutritional wisdom for total balance.",
+            imageUrl:
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-2-1764072667712.jpg",
+          },
+          {
+            name: "Darlene Robertson",
+            role: "Holistic Wellness Coach",
+            description:
+              "Integrating physical movement with nutritional wisdom for total balance.",
+            imageUrl:
+              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-3-1764072691541.jpg",
+          },
+        ],
+      },
+      order: 13,
+      isActive: true,
+    },
+    {
       sectionName: "faqSection",
       content: {
         heading: "Answers to common yoga",

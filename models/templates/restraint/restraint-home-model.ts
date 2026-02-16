@@ -157,6 +157,20 @@ export interface TestimoniesSection extends SectionBase {
   };
 }
 
+export interface TeamSection extends SectionBase {
+  sectionName: "teamSection";
+  content: {
+    title: string;
+    heading: string;
+    team: {
+      name: string;
+      role: string;
+      description: string;
+      imageUrl: string;
+    }[];
+  };
+}
+
 export interface FaqSection extends SectionBase {
   sectionName: "faqSection";
   content: {
@@ -221,7 +235,8 @@ export type HomeSection =
   | ContactSection
   | FooterSection
   | FeaturesSection
-  | WhatsappWidgetSection;
+  | WhatsappWidgetSection
+  | TeamSection;
 
 export interface Button {
   label: string;

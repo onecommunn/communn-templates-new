@@ -25,17 +25,19 @@ import {
   PlansSection,
   RestarintHomePage,
   ServiceSection,
+  TeamSection,
   TestimoniesSection,
   WhatWeDoSection,
 } from "@/models/templates/restraint/restraint-home-model";
 import { dummyData } from "./DummyData";
 import RestraintFeatures from "./_components/RestraintFeatures";
+import RestraintOurTeam from "./_components/RestraintOurTeam";
 
 const RestraintRoot = () => {
   const { home } = useCMS();
   const isLoading = home === undefined;
   const source: RestarintHomePage | undefined = !isLoading
-    ? (home as RestarintHomePage | undefined) ?? dummyData
+    ? ((home as RestarintHomePage | undefined) ?? dummyData)
     : undefined;
 
   const primaryColor = source?.color?.primary || "#3D493A";
@@ -43,62 +45,67 @@ const RestraintRoot = () => {
 
   const heroSectionData = source?.sections?.find(
     (s: HomeSection): s is HeroSection =>
-      s.sectionName === "heroSection" && s.isActive
+      s.sectionName === "heroSection" && s.isActive,
   );
 
   const aboutSectionData = source?.sections?.find(
     (s: HomeSection): s is AboutSection =>
-      s.sectionName == "aboutSection" && s.isActive
+      s.sectionName == "aboutSection" && s.isActive,
   );
 
   const eventSectionData = source?.sections?.find(
     (s: HomeSection): s is EventsSection =>
-      s.sectionName == "eventsSection" && s.isActive
+      s.sectionName == "eventsSection" && s.isActive,
   );
 
   const whatWeDoSectionData = source?.sections?.find(
     (s: HomeSection): s is WhatWeDoSection =>
-      s.sectionName == "whatWeDoSection" && s.isActive
+      s.sectionName == "whatWeDoSection" && s.isActive,
   );
 
   const serviceSectionData = source?.sections?.find(
     (s: HomeSection): s is ServiceSection =>
-      s.sectionName == "serviceSection" && s.isActive
+      s.sectionName == "serviceSection" && s.isActive,
   );
 
   const howItWorkSection = source?.sections?.find(
     (s: HomeSection): s is HowItWorkSection =>
-      s.sectionName == "howItWorkSection" && s.isActive
+      s.sectionName == "howItWorkSection" && s.isActive,
   );
 
   const plansSectionData = source?.sections?.find(
     (s: HomeSection): s is PlansSection =>
-      s.sectionName == "plansSection" && s.isActive
+      s.sectionName == "plansSection" && s.isActive,
   );
 
   const gallerySectionData = source?.sections?.find(
     (s: HomeSection): s is GallerySection =>
-      s.sectionName == "gallerySection" && s.isActive
+      s.sectionName == "gallerySection" && s.isActive,
   );
 
   const testimoniesSectionData = source?.sections?.find(
     (s: HomeSection): s is TestimoniesSection =>
-      s.sectionName == "testimoniesSection" && s.isActive
+      s.sectionName == "testimoniesSection" && s.isActive,
   );
 
   const faqSectionData = source?.sections?.find(
     (s: HomeSection): s is FaqSection =>
-      s.sectionName == "faqSection" && s.isActive
+      s.sectionName == "faqSection" && s.isActive,
   );
 
   const contactSectionData = source?.sections?.find(
     (s: HomeSection): s is ContactSection =>
-      s.sectionName == "contactSection" && s.isActive
+      s.sectionName == "contactSection" && s.isActive,
   );
 
   const featuresSectionData = source?.sections?.find(
     (s: HomeSection): s is FeaturesSection =>
-      s.sectionName == "featuresSection" && s.isActive
+      s.sectionName == "featuresSection" && s.isActive,
+  );
+
+  const teamSectionData = source?.sections?.find(
+    (s: HomeSection): s is TeamSection =>
+      s.sectionName == "teamSection" && s.isActive,
   );
 
   return (
@@ -173,6 +180,14 @@ const RestraintRoot = () => {
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           data={testimoniesSectionData}
+        />
+      )}
+
+      {teamSectionData && (
+        <RestraintOurTeam
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          data={teamSectionData}
         />
       )}
 
