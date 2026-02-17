@@ -1,16 +1,3 @@
-// ✅ ConsultingoPlans.tsx (UPDATED - unified Restraint/Yogana flow via hook)
-// What changed:
-// ✅ Uses usePlanSubscribeFlow (handles: login popup, public auto-join, private request dialog, non-seq confirm dialog AFTER login, payment tracking, processingPlanId)
-// ✅ Removes duplicate join/request/payment polling logic from this file
-// ✅ CTA text/behavior matches your latest standard:
-//    - Login to Subscribe
-//    - Public: Join & Subscribe (auto-join, no join dialog)
-//    - Private: Request to Join (global dialog) / Already Requested
-//    - Subscribed (active) disabled
-//    - Expired: Renew & Pay (sequence) / Pay to Renew (non-seq)
-//    - Subscribe (not subscribed yet)
-// ✅ One-time fee hidden on renewals (shown only if NOT subscribed)
-
 "use client";
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -242,8 +229,25 @@ const ConsultingoPlans = ({
                   },
                 ];
 
-                const amount =
-                  (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0;
+                const originalPrice = Number(
+                  (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0,
+                );
+
+                const rawDiscount = Number((plan as any)?.discountAmount ?? 0);
+
+                // ✅ CRITICAL: only apply discount for NON-sequence plans
+                const discountAmount =
+                  rawDiscount > 0 && !isSequencePlan ? rawDiscount : 0;
+
+                const finalPrice =
+                  discountAmount > 0
+                    ? Math.max(originalPrice - discountAmount, 0)
+                    : originalPrice;
+
+                const discountPercent =
+                  discountAmount > 0
+                    ? Math.round((discountAmount / originalPrice) * 100)
+                    : 0;
 
                 const initFee = Number((plan as any)?.initialPayment ?? 0);
                 const showOneTimeFee = initFee > 0 && !userSubscribedToPlan;
@@ -299,11 +303,37 @@ const ConsultingoPlans = ({
                         {plan.description}
                       </p>
 
-                      <div className="flex flex-col items-center gap-1 mb-8">
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-5xl font-fraunces">
-                            ₹{amount}
+                      <div className="flex flex-col items-center gap-2 mb-8">
+                        {/* Discount Badge */}
+                        {discountAmount > 0 && !userSubscribedToPlan && (
+                          <span
+                            className={`text-[11px] font-semibold px-3 py-1 rounded-full border ${
+                              cardIsDark
+                                ? "bg-white/20 text-white border-white/40"
+                                : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            }`}
+                          >
+                            {discountPercent}% OFF
                           </span>
+                        )}
+
+                        <div className="flex items-baseline gap-3">
+                          {/* Final Price */}
+                          <span className="text-5xl font-fraunces">
+                            ₹{finalPrice}
+                          </span>
+
+                          {/* Original Price */}
+                          {discountAmount > 0 && !userSubscribedToPlan && (
+                            <span
+                              className={`text-lg line-through ${
+                                cardIsDark ? "text-white/70" : "text-gray-400"
+                              }`}
+                            >
+                              ₹{originalPrice}
+                            </span>
+                          )}
+
                           <span className="text-sm opacity-70">/{period}</span>
                         </div>
 
@@ -593,8 +623,21 @@ const ConsultingoPlans = ({
               const p = meta.plan;
               const already = meta.isSubscribed;
 
-              const amount =
-                (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
+              const originalPrice = Number(
+                (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0,
+              );
+
+              const rawDiscount = Number((p as any)?.discountAmount ?? 0);
+              const isSeq = !!meta.isSequencePlan;
+
+              const discountAmount =
+                rawDiscount > 0 && !isSeq ? rawDiscount : 0;
+
+              const finalAmount =
+                discountAmount > 0
+                  ? Math.max(originalPrice - discountAmount, 0)
+                  : originalPrice;
+
               const initFee = Number((p as any)?.initialPayment ?? 0);
 
               return (
@@ -607,10 +650,13 @@ const ConsultingoPlans = ({
                   </div>
 
                   <div className="mt-1 text-sm text-slate-500">
-                    ₹{amount} •{" "}
-                    {p.interval && p.duration
-                      ? `${p.interval} ${capitalizeWords(p.duration)}`
-                      : ""}
+                    ₹{finalAmount}
+                    {discountAmount > 0 && !already && (
+                      <span className="ml-2 text-sm text-gray-400 line-through">
+                        ₹{originalPrice}
+                      </span>
+                    )}{" "}
+                    •
                   </div>
 
                   {/* hide one-time fee on renew */}
