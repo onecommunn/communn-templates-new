@@ -13,7 +13,12 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -42,7 +47,8 @@ export type DisplayPlan = {
 
   subscribers?: Array<{ _id?: string; id?: string }>;
   nextDue?: string | "forever" | null;
-
+  discountAmount?: number;
+  discountPercent?: number;
   isSequencePlan: boolean;
   isActive: boolean;
   isExpired: boolean;
@@ -133,20 +139,39 @@ export default function RestraintPlans({
     return plans.map((p) => {
       const periodRaw = `${p.interval} ${capitalizeWords(p.duration)}`;
       const nextDue = (p as any)?.nextDueDate as any;
+      const originalPrice =
+        (p as any)?.pricing || (p as any)?.totalPlanValue || 0;
+      const isSequencePlan =
+        !!(p as any)?.isSequenceAvailable &&
+        Number((p as any)?.totalSequences ?? 0) > 0;
+
+      const rawDiscount = Number((p as any)?.discountAmount ?? 0);
+
+      // only apply discount on NON-sequence plans
+      const discountAmount =
+        rawDiscount > 0 && !isSequencePlan ? rawDiscount : 0;
+
+      const finalPrice =
+        discountAmount > 0
+          ? Math.max(originalPrice - discountAmount, 0)
+          : originalPrice;
+
+      const discountPercent =
+        discountAmount > 0
+          ? Math.round((discountAmount / originalPrice) * 100)
+          : 0;
 
       const isActive =
         !!nextDue && (nextDue === "forever" || new Date(nextDue) >= new Date());
       const isExpired =
         !!nextDue && nextDue !== "forever" && new Date(nextDue) < new Date();
 
-      const isSequencePlan =
-        !!(p as any)?.isSequenceAvailable &&
-        Number((p as any)?.totalSequences ?? 0) > 0;
-
       return {
         id: String((p as any)?._id ?? ""),
         name: p.name,
-        price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
+        price: finalPrice,
+        discountAmount,
+        discountPercent,
         image: (p as any)?.image?.value,
         periodLabel: formatPeriodLabel(p.interval as any, p.duration as any),
         initialPayment: (p as any)?.initialPayment ?? 0,
@@ -158,15 +183,17 @@ export default function RestraintPlans({
         features: [
           `Duration: ${periodRaw}`,
           `Subscribers: ${(p as any)?.subscribers?.length ?? 0}`,
-          `Next Due: ${nextDue
-            ? nextDue === "forever"
-              ? "No Expiry"
-              : isExpired
-                ? `Expired on ${formatDate(nextDue)}`
-                : formatDate(nextDue)
-            : "No Dues"
+          `Next Due: ${
+            nextDue
+              ? nextDue === "forever"
+                ? "No Expiry"
+                : isExpired
+                  ? `Expired on ${formatDate(nextDue)}`
+                  : formatDate(nextDue)
+              : "No Dues"
           }`,
-          `Status: ${!nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
+          `Status: ${
+            !nextDue ? "Not Subscribed" : isActive ? "Active" : "Expired"
           }`,
         ],
       };
@@ -196,7 +223,9 @@ export default function RestraintPlans({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.2fr_1fr]">
             <h2 className="font-marcellus text-4xl leading-tight text-black md:text-5xl">
               {source?.heading}{" "}
-              <span style={{ color: secondaryColor }}>{source?.subHeading}</span>
+              <span style={{ color: secondaryColor }}>
+                {source?.subHeading}
+              </span>
             </h2>
             <p className="max-w-xl text-[16px] leading-7 text-[#9C9C9C]">
               {source?.description}
@@ -215,7 +244,9 @@ export default function RestraintPlans({
           </div>
         ) : data.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <h3 className="text-xl font-semibold text-gray-400">No Plans Available</h3>
+            <h3 className="text-xl font-semibold text-gray-400">
+              No Plans Available
+            </h3>
           </div>
         ) : (
           <Carousel
@@ -231,17 +262,21 @@ export default function RestraintPlans({
             ]}
           >
             <CarouselContent className="-ml-4">
-              {data.map((plan) => {
+              {data.map((plan,idx) => {
                 const meta = flow.getPlanMeta(plan.id);
                 const isSubscribed = !!meta?.isSubscribed;
                 const isProcessing = flow.processingPlanId === plan.id;
 
-                const isFeatured = (Number(plan.id?.slice(-1)) + 1) % 2 === 0;
-                const coverImage = plan.image || "/assets/restraint-plans-image-1.jpg";
+                const isFeatured = idx % 2 === 0;
+                const coverImage =
+                  plan.image || "/assets/restraint-plans-image-1.jpg";
                 const color = isFeatured ? secondaryColor : primaryColor;
 
                 return (
-                  <CarouselItem key={plan.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <CarouselItem
+                    key={plan.id}
+                    className="pl-4 md:basis-1/2 lg:basis-1/3"
+                  >
                     <PlanCard
                       plan={plan}
                       isFeatured={isFeatured}
@@ -255,7 +290,9 @@ export default function RestraintPlans({
                       communityId={communityId}
                       ctaBase={ctaBase}
                       onStartFlow={() => flow.startSubscribeFlow(plan.id)}
-                      onNonSequencePayNow={() => flow.startNonSequencePayment(plan.id)}
+                      onNonSequencePayNow={() =>
+                        flow.startNonSequencePayment(plan.id)
+                      }
                     />
                   </CarouselItem>
                 );
@@ -275,7 +312,10 @@ export default function RestraintPlans({
             <button className="group relative mt-2 cursor-pointer overflow-hidden rounded-[10px] border border-[var(--pri)] bg-[var(--pri)] px-[20px] py-[10px] text-[16px] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--pri)] active:translate-y-0">
               <span className="relative z-10 inline-flex items-center gap-2">
                 View All
-                <ArrowUpRight className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1" strokeWidth={2} />
+                <ArrowUpRight
+                  className="h-6 w-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
+                  strokeWidth={2}
+                />
               </span>
             </button>
           </Link>
@@ -305,19 +345,26 @@ export default function RestraintPlans({
 
               const p = meta.plan;
               const already = meta.isSubscribed;
-              const amount = (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
+              const amount =
+                (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0;
               const initFee = Number((p as any)?.initialPayment ?? 0);
 
               return (
                 <div className="mt-4 rounded-xl border p-4">
-                  <div className="text-lg font-semibold">{capitalizeWords(p.name)}</div>
+                  <div className="text-lg font-semibold">
+                    {capitalizeWords(p.name)}
+                  </div>
                   <div className="mt-1 text-sm text-slate-500">
                     ₹{amount} •{" "}
-                    {p.interval && p.duration ? `${p.interval} ${capitalizeWords(p.duration)}` : ""}
+                    {p.interval && p.duration
+                      ? `${p.interval} ${capitalizeWords(p.duration)}`
+                      : ""}
                   </div>
 
                   {initFee > 0 && !already && (
-                    <div className="mt-1 text-xs text-slate-500">+ One Time Fee: ₹{initFee}</div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      + One Time Fee: ₹{initFee}
+                    </div>
                   )}
 
                   <div className="mt-4">
@@ -357,7 +404,6 @@ export default function RestraintPlans({
     </section>
   );
 }
-
 
 /* -------------------- Card -------------------- */
 export function PlanCard({
@@ -410,7 +456,9 @@ export function PlanCard({
       {/* Image */}
       <div className="relative h-40 w-full overflow-hidden md:h-48">
         <Image
-          src={plan.image || coverImage || "/assets/restraint-plans-image-1.jpg"}
+          src={
+            plan.image || coverImage || "/assets/restraint-plans-image-1.jpg"
+          }
           alt={plan.name}
           fill
           className="object-cover"
@@ -427,7 +475,39 @@ export function PlanCard({
         ].join(" ")}
       >
         <div className="text-center">
-          <div className="font-marcellus text-4xl">₹{plan.price}</div>
+          <div className="flex flex-col items-center">
+            {/* Discount badge (non-sequence only, automatically) */}
+            {Number(plan.discountAmount) > 0 && !isSubscribed && (
+              <span
+                className={[
+                  "mb-2 text-[11px] font-semibold px-3 py-1 rounded-full",
+                  isFeatured
+                    ? "bg-white/25 text-white"
+                    : "bg-emerald-50 text-emerald-700 border border-emerald-200",
+                ].join(" ")}
+              >
+                {plan.discountPercent}% OFF
+              </span>
+            )}
+
+            {/* Price row */}
+            <div className="flex items-end gap-2">
+              {/* Final Price */}
+              <div className="font-marcellus text-4xl">₹{plan.price}</div>
+
+              {/* Original Price (only when discount applies) */}
+              {Number(plan.discountAmount) > 0 && !isSubscribed && (
+                <div
+                  className="text-sm line-through opacity-70"
+                  style={{
+                    color: isFeatured ? "rgba(255,255,255,.7)" : "#8B8F87",
+                  }}
+                >
+                  ₹{Number(plan.price) + Number(plan.discountAmount)}
+                </div>
+              )}
+            </div>
+          </div>
 
           <div
             className="mt-1 text-xs"
