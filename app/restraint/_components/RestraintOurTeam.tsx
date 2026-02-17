@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Carousel,
   CarouselContent,
@@ -27,10 +29,11 @@ const RestraintOurTeam = ({
   data: TeamSection;
 }) => {
   const content = data?.content;
-  const team: TeamMember[] = content?.team;
+  const team: TeamMember[] = content?.team || [];
+
   return (
     <section
-      className="bg-[var(--sec)]/10 py-20 px-6 md:px-12 lg:px-24"
+      className="relative py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-white to-[var(--sec)]/5"
       style={
         {
           "--pri": primaryColor,
@@ -38,20 +41,18 @@ const RestraintOurTeam = ({
         } as React.CSSProperties
       }
     >
-      <div className="mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-6 gap-6">
-          <div className="w-full">
-            <span className="text-[var(--pri)] font-medium tracking-widest uppercase text-sm mb-4 block">
-              {content?.title}
-            </span>
-            <h2 className="text-3xl md:text-5xl font-marcellus text-[#1a1a1a] leading-tight">
-              {content?.heading}
-            </h2>
-          </div>
+        <div className="mb-14 text-center md:text-left">
+          <span className="text-[var(--pri)] font-semibold tracking-[0.2em] uppercase text-xs mb-4 block">
+            {content?.title}
+          </span>
+          <h2 className="text-3xl md:text-5xl font-marcellus text-gray-900 leading-tight max-w-2xl">
+            {content?.heading}
+          </h2>
         </div>
 
-        {/* Team Grid */}
+        {/* Carousel */}
         <Carousel
           opts={{ align: "start", loop: false, dragFree: true }}
           className="relative"
@@ -63,39 +64,45 @@ const RestraintOurTeam = ({
             }),
           ]}
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="-ml-6">
             {team.map((member, index) => (
               <CarouselItem
                 key={index}
-                className="pl-4 md:basis-1/2 lg:basis-1/4"
+                className="pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
-                {/* Image Container */}
-                <div className="relative aspect-[4/5] overflow-hidden rounded-4xl mb-4 border-2 border-[var(--sec)]">
-                  <Image
-                    src={member.imageUrl}
-                    alt={member.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                <div className="group bg-white rounded-3xl p-5 border border-gray-300 hover:border-[var(--sec)] transition-all duration-500 h-full flex flex-col">
+                  {/* Image */}
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-6">
+                    <Image
+                      src={member.imageUrl}
+                      alt={member.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
 
-                {/* Text Content */}
-                <div className="text-center md:text-left">
-                  <h3 className="text-2xl font-marcellus text-[#1a1a1a]">
-                    {member.name}
-                  </h3>
-                  <p className="text-[var(--sec)] font-medium text-sm mb-1">
-                    {member.role}
-                  </p>
-                  <p className="text-gray-600 leading-relaxed text-sm pr-2">
-                    {member.description}
-                  </p>
+                  {/* Content */}
+                  <div className="flex flex-col flex-grow text-center md:text-left">
+                    <h3 className="text-xl font-marcellus text-gray-900">
+                      {member.name}
+                    </h3>
+
+                    <p className="text-[var(--sec)] font-medium text-sm mt-1 mb-3 tracking-wide">
+                      {member.role}
+                    </p>
+
+                    <p className="text-gray-600 text-sm leading-relaxed flex-grow">
+                      {member.description}
+                    </p>
+                  </div>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden cursor-pointer border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:flex" />
-          <CarouselNext className="hidden cursor-pointer border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:flex" />
+
+          {/* Navigation Buttons */}
+          <CarouselPrevious className="hidden md:flex  border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 shadow-md" />
+          <CarouselNext className="hidden md:flex  border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 shadow-md" />
         </Carousel>
       </div>
     </section>
