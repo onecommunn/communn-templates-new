@@ -43,7 +43,10 @@ const formatDate = (date: string | Date) => {
   });
 };
 
-const Check: React.FC<{ muted?: boolean; color: string }> = ({ muted, color }) => (
+const Check: React.FC<{ muted?: boolean; color: string }> = ({
+  muted,
+  color,
+}) => (
   <span
     className={[
       "mt-1 grid h-4 w-4 place-items-center rounded-full",
@@ -98,7 +101,7 @@ const ChooseButton: React.FC<{
     onClick={onClick}
     disabled={disabled}
     className={[
-      "group relative inline-flex items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5",
+      "group relative inline-flex cursor-pointer items-center gap-3 rounded-full bg-[var(--pri)] px-5 py-3 text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5",
       "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color)] focus-visible:ring-offset-2",
       disabled ? "opacity-60 cursor-not-allowed pointer-events-none" : "",
     ].join(" ")}
@@ -117,6 +120,9 @@ const ChooseButton: React.FC<{
 type CardProps = {
   title: string;
   price: string | number;
+  originalPrice?: number;
+  discountAmount?: number;
+  discountPercent?: number;
   period: string;
   features: Feature[];
   featured?: boolean;
@@ -146,6 +152,9 @@ const Card: React.FC<CardProps> = ({
   price,
   period,
   features,
+  originalPrice,
+  discountAmount,
+  discountPercent,
   featured,
   color,
   isLoggedIn,
@@ -169,25 +178,46 @@ const Card: React.FC<CardProps> = ({
 
   // ✅ correct CTA like other templates
   const cta = (() => {
-    if (!isLoggedIn) return { text: "Login to Subscribe", onClick: onStartFlow, disabled: false };
+    if (!isLoggedIn)
+      return {
+        text: "Login to Subscribe",
+        onClick: onStartFlow,
+        disabled: false,
+      };
 
     if (!isSubscribedCommunity) {
       if (isPrivate) {
-        if (isRequested) return { text: "Already Requested", onClick: () => {}, disabled: true };
-        return { text: "Send Join Request", onClick: onStartFlow, disabled: false };
+        if (isRequested)
+          return {
+            text: "Already Requested",
+            onClick: () => {},
+            disabled: true,
+          };
+        return {
+          text: "Send Join Request",
+          onClick: onStartFlow,
+          disabled: false,
+        };
       }
-      return { text: "Join & Subscribe", onClick: onStartFlow, disabled: false };
+      return {
+        text: "Join & Subscribe",
+        onClick: onStartFlow,
+        disabled: false,
+      };
     }
 
-    if (isSubscribedToPlan && isActive) return { text: "Subscribed", onClick: () => {}, disabled: true };
+    if (isSubscribedToPlan && isActive)
+      return { text: "Subscribed", onClick: () => {}, disabled: true };
 
     if (isSubscribedToPlan && isExpired) {
-      if (isSequencePlan) return { text: "Renew & Pay", onClick: onStartFlow, disabled: false };
+      if (isSequencePlan)
+        return { text: "Renew & Pay", onClick: onStartFlow, disabled: false };
       return { text: "Pay to Renew", onClick: onNonSeqPayNow, disabled: false };
     }
 
     // not subscribed
-    if (isSequencePlan) return { text: "Subscribe", onClick: onStartFlow, disabled: false };
+    if (isSequencePlan)
+      return { text: "Subscribe", onClick: onStartFlow, disabled: false };
     return { text: "Subscribe", onClick: onStartFlow, disabled: false };
   })();
 
@@ -209,19 +239,22 @@ const Card: React.FC<CardProps> = ({
           </h3>
 
           {/* ✅ show nextDue chip if subscribed */}
-          {isLoggedIn && isSubscribedToPlan && nextDue && nextDue !== "forever" && (
-            <div className="mt-2">
-              {isExpired ? (
-                <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
-                  Expired on {formatDate(nextDue)}
-                </span>
-              ) : (
-                <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Next due: {formatDate(nextDue)}
-                </span>
-              )}
-            </div>
-          )}
+          {isLoggedIn &&
+            isSubscribedToPlan &&
+            nextDue &&
+            nextDue !== "forever" && (
+              <div className="mt-2">
+                {isExpired ? (
+                  <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
+                    Expired on {formatDate(nextDue)}
+                  </span>
+                ) : (
+                  <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    Next due: {formatDate(nextDue)}
+                  </span>
+                )}
+              </div>
+            )}
         </div>
 
         {/* Features */}
@@ -243,11 +276,31 @@ const Card: React.FC<CardProps> = ({
         {/* Price + CTA */}
         <div className="md:col-span-1 flex items-center justify-between flex-col md:items-end md:justify-center gap-4">
           <div className="text-right">
-            <div className="text-xl font-semibold text-slate-900">
-              ₹{price}
-              <span className="ml-1 text-[16px] font-normal text-slate-500">
-                / {period}
-              </span>
+            <div className="text-right">
+              {/* Discount Badge */}
+              {Number(discountAmount) > 0 && !isSubscribedToPlan && (
+                <div className="mb-1">
+                  <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2 py-[2px] text-[11px] font-semibold text-emerald-700">
+                    {discountPercent}% OFF
+                  </span>
+                </div>
+              )}
+
+              <div className="flex items-end justify-end gap-2">
+                {/* Final Price */}
+                <div className="text-xl font-semibold text-slate-900">
+                  ₹{price}
+                </div>
+
+                {/* Original Price */}
+                {Number(discountAmount) > 0 && !isSubscribedToPlan && (
+                  <div className="text-sm text-slate-400 line-through">
+                    ₹{originalPrice}
+                  </div>
+                )}
+              </div>
+
+              <div className="text-[15px] text-slate-500">/ {period}</div>
             </div>
 
             {showOneTimeFee && (
@@ -257,7 +310,12 @@ const Card: React.FC<CardProps> = ({
             )}
           </div>
 
-          <ChooseButton text={cta.text} color={color} onClick={cta.onClick} disabled={cta.disabled} />
+          <ChooseButton
+            text={cta.text}
+            color={color}
+            onClick={cta.onClick}
+            disabled={cta.disabled}
+          />
 
           {/* show lock icon hint for private when logged out */}
           {!isLoggedIn && isPrivate && (
@@ -331,13 +389,15 @@ const MartivoPlans = ({
 
   const isRequested = Boolean(
     communityData?.community?.requests?.some(
-      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId
-    )
+      (req: any) => (req?.createdBy?._id ?? req?.createdBy?.id) === userId,
+    ),
   );
 
   // private request modal (if your hook private join path is disabled)
   const [privateRequestOpen, setPrivateRequestOpen] = useState(false);
-  const [privateRequestPlanId, setPrivateRequestPlanId] = useState<string | null>(null);
+  const [privateRequestPlanId, setPrivateRequestPlanId] = useState<
+    string | null
+  >(null);
 
   const normalized = useMemo(() => {
     return plans.map((p, idx) => {
@@ -346,8 +406,7 @@ const MartivoPlans = ({
       // ✅ IMPORTANT: compute subscribed from subscribers (source of truth)
       const subscribers = ((p as any)?.subscribers as any[]) || [];
       const isSubscribedToPlan =
-        !!userId &&
-        subscribers.some((s) => (s?._id ?? s?.id) === userId);
+        !!userId && subscribers.some((s) => (s?._id ?? s?.id) === userId);
 
       const nextDue = ((p as any)?.nextDueDate as any) ?? null;
 
@@ -367,7 +426,25 @@ const MartivoPlans = ({
           : "—";
 
       const subsCount = subscribers.length ?? 0;
+      const originalPrice = Number(
+        (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0,
+      );
 
+      const rawDiscount = Number((p as any)?.discountAmount ?? 0);
+
+      // ✅ IMPORTANT: discount only for NON-sequence plans
+      const discountAmount =
+        rawDiscount > 0 && !isSequencePlan ? rawDiscount : 0;
+
+      const finalPrice =
+        discountAmount > 0
+          ? Math.max(originalPrice - discountAmount, 0)
+          : originalPrice;
+
+      const discountPercent =
+        discountAmount > 0
+          ? Math.round((discountAmount / originalPrice) * 100)
+          : 0;
       const features: Feature[] = [
         { text: `Duration: ${period}` },
         { text: `Subscribers: ${subsCount}` },
@@ -376,8 +453,8 @@ const MartivoPlans = ({
             ? nextDue === "forever"
               ? "Next Due: No Expiry"
               : isExpired
-              ? `Expired on: ${formatDate(nextDue)}`
-              : `Next Due: ${formatDate(nextDue)}`
+                ? `Expired on: ${formatDate(nextDue)}`
+                : `Next Due: ${formatDate(nextDue)}`
             : "Next Due: No Dues",
         },
         {
@@ -390,7 +467,10 @@ const MartivoPlans = ({
       return {
         planId,
         title: p.name,
-        price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
+        price: finalPrice,
+        originalPrice,
+        discountAmount,
+        discountPercent,
         period,
         features,
         featured: plans.length === 3 ? idx === 1 : false,
@@ -462,6 +542,9 @@ const MartivoPlans = ({
                 key={p.planId}
                 title={p.title}
                 price={p.price}
+                originalPrice={p.originalPrice}
+                discountAmount={p.discountAmount}
+                discountPercent={p.discountPercent}
                 period={p.period}
                 features={p.features}
                 featured={p.featured}
@@ -499,13 +582,19 @@ const MartivoPlans = ({
       {/* ✅ Private Request dialog */}
       <Dialog open={privateRequestOpen} onOpenChange={setPrivateRequestOpen}>
         <DialogContent className="max-w-md">
-          <DialogTitle style={{ color: primaryColor }}>Request Access</DialogTitle>
+          <DialogTitle style={{ color: primaryColor }}>
+            Request Access
+          </DialogTitle>
           <DialogDescription className="text-slate-600">
-            This is a private community. Send a request to the admin to get access to plans.
+            This is a private community. Send a request to the admin to get
+            access to plans.
           </DialogDescription>
 
           <div className="mt-5 flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setPrivateRequestOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setPrivateRequestOpen(false)}
+            >
               Cancel
             </Button>
 
