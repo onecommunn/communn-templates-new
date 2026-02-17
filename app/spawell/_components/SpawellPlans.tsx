@@ -26,7 +26,12 @@ import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 
 import { PlansSection } from "@/models/templates/spawell/spawell-home-model";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
 import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow";
@@ -140,8 +145,32 @@ function Card({
   onStartFlow,
   onNonSequencePayNow,
 }: CardProps) {
+  const isSeq = !!planMeta?.isSequencePlan;
+  const isSubscribed = !!planMeta?.isSubscribed;
+  const isActive = !!planMeta?.isActive;
+  const isExpired = !!planMeta?.isExpired;
+  const nextDue = planMeta?.nextDue ?? null;
+
   const planId = String((plan as any)?._id ?? "");
-  const price = (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? "";
+  const basePrice = Number(
+    (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0,
+  );
+
+  // ✅ discount
+  const discountValue = Number((plan as any)?.discountAmount ?? 0);
+
+  // ✅ discount ONLY for non-sequence plans
+  const hasDiscount = discountValue > 0 && basePrice > 0 && !isSeq;
+
+  const finalRecurringAmount = hasDiscount
+    ? Math.max(0, basePrice - discountValue)
+    : basePrice;
+
+  // optional % label
+  const discountPercent = hasDiscount
+    ? Math.round((discountValue / basePrice) * 100)
+    : 0;
+
   const period =
     plan.interval && plan.duration
       ? `${plan.interval} ${capitalizeWords(plan.duration)}`
@@ -151,12 +180,6 @@ function Card({
   const initialPayment = Number((plan as any)?.initialPayment ?? 0);
 
   const isProcessing = processingPlanId === planId;
-
-  const isSeq = !!planMeta?.isSequencePlan;
-  const isSubscribed = !!planMeta?.isSubscribed;
-  const isActive = !!planMeta?.isActive;
-  const isExpired = !!planMeta?.isExpired;
-  const nextDue = planMeta?.nextDue ?? null;
 
   // ✅ hide one-time fee on renewals
   const showOneTimeFee = initialPayment > 0 && !isSubscribed;
@@ -168,18 +191,18 @@ function Card({
   const ctaText = !isLoggedIn
     ? "Login to Subscribe"
     : !isSubscribedCommunity
-    ? "Join & Subscribe"
-    : showSubscribedDisabled
-    ? "Subscribed"
-    : showExpired
-    ? isSeq
-      ? "Renew & Pay"
-      : "Pay to Renew"
-    : "Subscribe";
+      ? "Join & Subscribe"
+      : showSubscribedDisabled
+        ? "Subscribed"
+        : showExpired
+          ? isSeq
+            ? "Renew & Pay"
+            : "Pay to Renew"
+          : "Subscribe";
 
   return (
     <div
-      className="group block rounded-3xl bg-white p-3 transition-shadow border md:shadow-lg my-6 pb-4"
+      className="group flex flex-col w-full rounded-3xl bg-white p-4 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 my-6"
       aria-label={plan.name}
       style={
         {
@@ -200,11 +223,28 @@ function Card({
             priority
             unoptimized
           />
+
+          {/* ✅ discount badge on image */}
+          {hasDiscount && !isSeq && (
+            <div className="absolute left-3 top-3">
+              <span
+                className="inline-flex items-center rounded-full px-3 py-1 text-[12px] font-semibold shadow-sm bg-white/95 border"
+                style={{ borderColor: primaryColor, color: primaryColor }}
+              >
+                Save ₹{discountValue}
+                {discountPercent > 0 ? (
+                  <span className="ml-1 opacity-70">
+                    ({discountPercent}% off)
+                  </span>
+                ) : null}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Title + price */}
-      <div className="mt-4">
+      <div className="my-4 flex flex-col flex-grow">
         <h3
           className="text-lg font-semibold leading-6"
           style={{ color: primaryColor }}
@@ -212,24 +252,42 @@ function Card({
           {capitalizeWords(plan.name)}
         </h3>
 
-        {String(price).length > 0 && (
-          <p className="mt-1 text-sm" style={{ color: primaryColor }}>
-            <span className="text-lg font-semibold" style={{ color: primaryColor }}>
-              ₹{price}
+        {/* ✅ improved pricing row */}
+        {basePrice > 0 && (
+          <div className="mt-2 flex items-end gap-2">
+            {hasDiscount && (
+              <span className="text-[14px] font-semibold text-slate-400 line-through">
+                ₹{basePrice}
+              </span>
+            )}
+
+            <span
+              className="text-[22px] font-bold leading-none"
+              style={{ color: primaryColor }}
+            >
+              ₹{finalRecurringAmount}
             </span>
-            {period ? `/ ${period}` : null}
-          </p>
+
+            {period ? (
+              <span className="text-[13px] font-medium text-slate-500 pb-[1px]">
+                / {period}
+              </span>
+            ) : null}
+          </div>
         )}
 
         {showOneTimeFee && (
-          <div className="text-xs" style={{ color: primaryColor }}>
-            + One Time Fee : ₹ {initialPayment}
+          <div className="mt-1 text-[12px] font-medium text-slate-500">
+            + Joining fee (one-time):{" "}
+            <span className="font-semibold" style={{ color: primaryColor }}>
+              ₹{initialPayment}
+            </span>
           </div>
         )}
 
         {/* next due / expired chip */}
         {isLoggedIn && isSubscribed && nextDue && nextDue !== "forever" && (
-          <div className="mt-2">
+          <div className="mt-3">
             {isExpired ? (
               <span className="text-[11px] font-medium px-2 py-1 rounded-full bg-red-50 text-red-700 border border-red-200">
                 Expired on {formatDate(nextDue)}
@@ -244,8 +302,7 @@ function Card({
       </div>
 
       {/* CTA */}
-      <div className="mt-4">
-        {/* Login */}
+      <div className="min-mt-6 mt-auto">
         {!isLoggedIn ? (
           <button
             type="button"
@@ -260,11 +317,14 @@ function Card({
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         ) : showSubscribedDisabled ? (
-          <Button variant="outline" className="w-full h-12 rounded-xl font-semibold" disabled>
+          <Button
+            variant="outline"
+            className="w-full h-12 rounded-xl font-semibold"
+            disabled
+          >
             Subscribed
           </Button>
         ) : showExpired && !isSeq ? (
-          // expired + non-seq => direct renew payment
           <Button
             onClick={() => onNonSequencePayNow(planId)}
             className="w-full h-12 rounded-xl font-semibold"
@@ -281,7 +341,6 @@ function Card({
             )}
           </Button>
         ) : (
-          // everything else goes through unified flow
           <Button
             onClick={() => onStartFlow(planId)}
             className="w-full h-12 rounded-xl font-semibold"
@@ -335,8 +394,12 @@ export default function SpawellPlans({
   const [isLoading, setIsLoading] = useState(true);
 
   // carousel api
-  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(undefined);
-  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(undefined);
+  const [apiLoading, setApiLoading] = useState<EmblaCarouselType | undefined>(
+    undefined,
+  );
+  const [apiMain, setApiMain] = useState<EmblaCarouselType | undefined>(
+    undefined,
+  );
 
   // autoplay
   const autoplay = useRef(
@@ -344,7 +407,7 @@ export default function SpawellPlans({
       delay: 2000,
       stopOnInteraction: true,
       stopOnMouseEnter: true,
-    })
+    }),
   );
 
   const fetchPlans = async () => {
@@ -464,7 +527,9 @@ export default function SpawellPlans({
 
         {!plans?.length ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <h3 className="text-xl font-semibold text-gray-400">No Plans Available</h3>
+            <h3 className="text-xl font-semibold text-gray-400">
+              No Plans Available
+            </h3>
           </div>
         ) : (
           <>
@@ -480,7 +545,10 @@ export default function SpawellPlans({
                   const meta = flow.getPlanMeta(planId);
 
                   return (
-                    <CarouselItem key={planId} className="basis-full md:basis-1/3">
+                    <CarouselItem
+                      key={planId}
+                      className="basis-full md:basis-1/3 flex"
+                    >
                       <Card
                         plan={plan}
                         primaryColor={primaryColor}
@@ -490,7 +558,9 @@ export default function SpawellPlans({
                         processingPlanId={flow.processingPlanId}
                         planMeta={meta}
                         onStartFlow={(pid) => flow.startSubscribeFlow(pid)}
-                        onNonSequencePayNow={(pid) => flow.startNonSequencePayment(pid)}
+                        onNonSequencePayNow={(pid) =>
+                          flow.startNonSequencePayment(pid)
+                        }
                       />
                     </CarouselItem>
                   );
@@ -549,7 +619,9 @@ export default function SpawellPlans({
       {/* ✅ Non-seq confirm dialog after login */}
       <Dialog open={flow.planDialogOpen} onOpenChange={flow.setPlanDialogOpen}>
         <DialogContent className="max-w-xl">
-          <DialogTitle style={{ color: primaryColor }}>Confirm Plan</DialogTitle>
+          <DialogTitle style={{ color: primaryColor }}>
+            Confirm Plan
+          </DialogTitle>
           <DialogDescription style={{ color: neutralColor }}>
             You’re ready to subscribe. Please confirm your plan below.
           </DialogDescription>
@@ -569,7 +641,10 @@ export default function SpawellPlans({
 
               return (
                 <div className="mt-4 rounded-xl border p-4">
-                  <div className="text-lg font-semibold" style={{ color: primaryColor }}>
+                  <div
+                    className="text-lg font-semibold"
+                    style={{ color: primaryColor }}
+                  >
                     {capitalizeWords(p.name)}
                   </div>
 
