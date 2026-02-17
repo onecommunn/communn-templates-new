@@ -32,7 +32,6 @@ const DefaultEvents = ({
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false }),
   );
-  console.log(auth,'auth')
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { communityId, communityData } = useCommunity();
