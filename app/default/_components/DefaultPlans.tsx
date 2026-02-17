@@ -184,7 +184,7 @@ const DefaultPlans = ({
                   (plan as any)?.discountAmount ?? 0,
                 );
                 const finalRecurringAmount =
-                  discountValue > 0
+                  discountValue > 0 && !isSequencePlan
                     ? Math.max(0, basePrice - discountValue)
                     : basePrice;
 
@@ -249,7 +249,7 @@ const DefaultPlans = ({
                               {capitalizeWords(plan.name)}
                             </h3>
 
-                            {discountValue > 0 && (
+                            {discountValue > 0 && !isSequencePlan && (
                               <div className="mt-1 inline-flex items-center gap-2 text-[12px] text-emerald-700">
                                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
                                 Discount applied
@@ -282,7 +282,7 @@ const DefaultPlans = ({
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="flex items-center gap-2">
-                              {discountValue > 0 && (
+                              {discountValue > 0 && !isSequencePlan && (
                                 <span className="text-slate-400 line-through text-[20px] font-bold">
                                   ₹{basePrice}
                                 </span>
@@ -310,7 +310,7 @@ const DefaultPlans = ({
                                   </>
                                 )}
                               </span>
-                              {discountValue > 0 && (
+                              {discountValue > 0 && !isSequencePlan && (
                                 <span className="rounded-full border border-emerald-200 bg-emerald-50 px-1 py-px text-[9px] font-semibold text-emerald-700">
                                   Save ₹{discountValue}
                                 </span>
