@@ -7,10 +7,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { TeamSection } from "@/models/templates/restraint/restraint-home-model";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 interface TeamMember {
   name: string;
@@ -31,6 +37,8 @@ const RestraintOurTeam = ({
   const content = data?.content;
   const team: TeamMember[] = content?.team || [];
 
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+
   return (
     <section
       className="relative py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-white to-[var(--sec)]/5"
@@ -42,7 +50,7 @@ const RestraintOurTeam = ({
       }
     >
       <div className="mx-auto max-w-7xl">
-        {/* Section Header */}
+        {/* Header */}
         <div className="mb-14 text-center md:text-left">
           <span className="text-[var(--pri)] font-semibold tracking-[0.2em] uppercase text-xs mb-4 block">
             {content?.title}
@@ -71,6 +79,7 @@ const RestraintOurTeam = ({
                 className="pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
                 <div className="group bg-white rounded-3xl p-5 border border-gray-300 hover:border-[var(--sec)] transition-all duration-500 h-full flex flex-col">
+                  
                   {/* Image */}
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-6">
                     <Image
@@ -78,11 +87,12 @@ const RestraintOurTeam = ({
                       alt={member.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      unoptimized
                     />
                   </div>
 
                   {/* Content */}
-                  <div className="flex flex-col flex-grow text-center md:text-left">
+                  <div className="flex flex-col flex-grow text-center">
                     <h3 className="text-xl font-marcellus text-gray-900">
                       {member.name}
                     </h3>
@@ -91,20 +101,57 @@ const RestraintOurTeam = ({
                       {member.role}
                     </p>
 
-                    <p className="text-gray-600 text-sm leading-relaxed flex-grow">
+                    {/* Description (clamped to 3 lines) */}
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                       {member.description}
                     </p>
+
+                    {/* Read More */}
+                    {member.description.length > 120 && (
+                      <button
+                        onClick={() => setSelectedMember(member)}
+                        className="mt-2 text-sm font-medium text-[var(--pri)] hover:underline cursor-pointer"
+                      >
+                        Read More
+                      </button>
+                    )}
                   </div>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
 
-          {/* Navigation Buttons */}
-          <CarouselPrevious className="hidden md:flex  border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 shadow-md" />
-          <CarouselNext className="hidden md:flex  border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 shadow-md" />
+          <CarouselPrevious className="hidden md:flex border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 shadow-md" />
+          <CarouselNext className="hidden md:flex border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 shadow-md" />
         </Carousel>
       </div>
+
+      {/* Dialog */}
+      <Dialog
+        open={!!selectedMember}
+        onOpenChange={() => setSelectedMember(null)}
+      >
+        <DialogContent className="max-w-lg">
+          {selectedMember && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-marcellus">
+                  {selectedMember.name}
+                </DialogTitle>
+                <p className="text-sm text-[var(--sec)] font-medium">
+                  {selectedMember.role}
+                </p>
+              </DialogHeader>
+
+              <div className="mt-4">
+                <p className="text-gray-700 leading-relaxed">
+                  {selectedMember.description}
+                </p>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
