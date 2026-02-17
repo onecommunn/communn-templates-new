@@ -257,6 +257,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         description={
                           plan.description || (plan as any)?.summary || ""
                         }
+                        discountAmount={plan?.discountAmount}
                         subscribers={(plan as any)?.subscribers ?? []}
                         planId={String(plan._id)}
                         communityId={String(communityId)}

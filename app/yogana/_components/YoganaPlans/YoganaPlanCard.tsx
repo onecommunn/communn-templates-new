@@ -28,6 +28,7 @@ interface YoganaPlanCardProps {
   period: string;
   coverImage: string;
   initialPayment: string | number;
+  discountAmount?: string;
 
   coupons: {
     _id: string;
@@ -65,6 +66,7 @@ const YoganaPlanCard = ({
   coupons,
   isLoggedIn,
   onStartFlow,
+  discountAmount,
   planMeta,
   isProcessing = false,
 }: YoganaPlanCardProps) => {
@@ -79,20 +81,33 @@ const YoganaPlanCard = ({
   const isExpiredSub = !!planMeta?.isSubscribed && !!planMeta?.isExpired;
 
   // ✅ Hide one-time fee on renewals (if already subscribed)
-  const showOneTimeFee = Number(initialPayment) > 0 && !planMeta?.isSubscribed;
+  const basePrice = Number(price || 0);
+  const discountValue = Number(discountAmount ?? 0);
+  // ✅ Apply discount ONLY for non-sequence plans
+  const hasDiscount = discountValue > 0 && basePrice > 0 && !isSeq;
 
+  const finalRecurringAmount = hasDiscount
+    ? Math.max(0, basePrice - discountValue)
+    : basePrice;
+
+  const showJoiningFee = Number(initialPayment) > 0 && !planMeta?.isSubscribed;
+
+  // optional: show % off
+  const discountPercent = hasDiscount
+    ? Math.round((discountValue / basePrice) * 100)
+    : 0;
   // ✅ CTA text EXACTLY like Restraint flow intent
   const ctaText = !isLoggedIn
     ? "Login to Subscribe"
     : !isSubscribedCommunity
-    ? "Join & Subscribe"
-    : isActiveSub
-    ? "Subscribed"
-    : isExpiredSub
-    ? isSeq
-      ? "Renew & Pay"
-      : "Pay to Renew"
-    : "Subscribe";
+      ? "Join & Subscribe"
+      : isActiveSub
+        ? "Subscribed"
+        : isExpiredSub
+          ? isSeq
+            ? "Renew & Pay"
+            : "Pay to Renew"
+          : "Subscribe";
 
   return (
     <div
@@ -133,7 +148,8 @@ const YoganaPlanCard = ({
           {/* Number badge */}
           <div
             style={{
-              backgroundImage: "url('/assets/yogana-plans-card-bg-image-3.png')",
+              backgroundImage:
+                "url('/assets/yogana-plans-card-bg-image-3.png')",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -162,32 +178,56 @@ const YoganaPlanCard = ({
           </p>
 
           {/* Price */}
+          {/* Price */}
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-baseline space-x-2">
+            {/* ✅ Discount pill */}
+            {hasDiscount && (
+              <div
+                className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[12px] font-semibold font-plus-jakarta"
+                style={{ borderColor: primaryColor, color: primaryColor }}
+              >
+                <span>Save ₹{discountValue}</span>
+                {discountPercent > 0 && (
+                  <span className="opacity-70">({discountPercent}% off)</span>
+                )}
+              </div>
+            )}
+
+            <div className="flex items-end justify-center gap-2">
+              {/* original price */}
+              {hasDiscount && (
+                <span className="text-[18px] font-bold font-plus-jakarta text-slate-400 line-through">
+                  ₹{basePrice}
+                </span>
+              )}
+
+              {/* final price */}
               <span
-                className="text-lg font-bold font-plus-jakarta"
+                className="text-[28px] leading-none font-bold font-plus-jakarta"
                 style={{ color: primaryColor }}
               >
-                ₹{price}
+                ₹{finalRecurringAmount}
               </span>
+
+              {/* period */}
               <span
-                className="text-lg font-medium font-plus-jakarta"
+                className="text-[16px] font-medium font-plus-jakarta pb-[2px]"
                 style={{ color: primaryColor }}
               >
                 / {period}
               </span>
             </div>
 
-            {showOneTimeFee && (
+            {/* ✅ Joining fee only for first-time */}
+            {showJoiningFee && (
               <div
-                className="text-sm font-plus-jakarta"
+                className="text-[12px] font-plus-jakarta font-semibold"
                 style={{ color: primaryColor }}
               >
-                + One Time Fee : ₹{initialPayment}
+                + Joining fee (one-time): ₹{Number(initialPayment)}
               </div>
             )}
           </div>
-
           {/* Offers */}
           {coupons?.length > 0 && (
             <p
@@ -212,12 +252,14 @@ const YoganaPlanCard = ({
             onClick={onStartFlow}
             disabled={isProcessing || isActiveSub}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = secondaryColor;
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                secondaryColor;
               (e.currentTarget as HTMLElement).style.color = primaryColor;
               (e.currentTarget as HTMLElement).style.borderColor = primaryColor;
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = primaryColor;
+              (e.currentTarget as HTMLElement).style.backgroundColor =
+                primaryColor;
               (e.currentTarget as HTMLElement).style.color = "#fff";
               (e.currentTarget as HTMLElement).style.borderColor = primaryColor;
             }}
