@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
@@ -36,9 +35,12 @@ import { usePlanSubscribeFlow } from "@/hooks/usePlanSubscribeFlow";
 type Feature = { text: string; available?: boolean };
 
 type NormalizedPlan = {
-  id: string; // plan._id
+  id: string;
   title: string;
   price: number | string;
+  originalPrice?: number;
+  discountAmount?: number;
+  discountPercent?: number;
   period: string;
   features: Feature[];
   featured: boolean;
@@ -148,14 +150,32 @@ const Card: React.FC<CardProps> = ({
           {plan.title}
         </h5>
 
-        <div className="flex items-end gap-2">
-          <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
-            <span className="text-lg md:text-xl mr-1">₹</span>
-            {plan.price}
-          </span>
-          <span className="text-xs md:text-[16px] text-[#6A6A6A] mb-1 font-medium">
-            / {plan.period}
-          </span>
+        <div className="flex flex-col">
+          {/* Discount Badge */}
+          {Number(plan.discountAmount) > 0 && !isSubscribed && (
+            <span className="mb-2 inline-block text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 w-fit">
+              {plan.discountPercent}% OFF
+            </span>
+          )}
+
+          <div className="flex items-end gap-3">
+            {/* Final Price */}
+            <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
+              <span className="text-lg md:text-xl mr-1">₹</span>
+              {plan.price}
+            </span>
+
+            {/* Original Price */}
+            {Number(plan.discountAmount) > 0 && !isSubscribed && (
+              <span className="text-sm text-gray-400 line-through mb-1">
+                ₹{plan.originalPrice}
+              </span>
+            )}
+
+            <span className="text-xs md:text-[16px] text-[#6A6A6A] mb-1 font-medium">
+              / {plan.period}
+            </span>
+          </div>
         </div>
 
         {showOneTimeFee && (
@@ -386,19 +406,52 @@ const FitkitPlans = ({
       const isExpired =
         !!nextDue && nextDue !== "forever" && new Date(nextDue) < new Date();
 
+      const isSequencePlan = !!(p as any)?.isSequencePlan;
+
+      const originalPrice = Number(
+        (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0,
+      );
+
+      const rawDiscount = Number((p as any)?.discountAmount ?? 0);
+
+      // ✅ CRITICAL: discount only for NON-sequence plans
+      const discountAmount =
+        rawDiscount > 0 && !isSequencePlan ? rawDiscount : 0;
+
+      const finalPrice =
+        discountAmount > 0
+          ? Math.max(originalPrice - discountAmount, 0)
+          : originalPrice;
+
+      const discountPercent =
+        discountAmount > 0
+          ? Math.round((discountAmount / originalPrice) * 100)
+          : 0;
+
       const features: Feature[] = [
         { text: `Duration: ${period}` },
         { text: `Subscribers: ${subs}` },
         { text: `Next Due: ${nextDue ? String(nextDue) : "No Dues"}` },
         {
-          text: `Status: ${!nextDue ? "Not Subscribed" : isActive ? "Active" : isExpired ? "Expired" : "Active"}`,
+          text: `Status: ${
+            !nextDue
+              ? "Not Subscribed"
+              : isActive
+                ? "Active"
+                : isExpired
+                  ? "Expired"
+                  : "Active"
+          }`,
         },
       ];
 
       return {
         id: String((p as any)?._id ?? ""),
         title: p.name,
-        price: (p as any)?.pricing ?? (p as any)?.totalPlanValue ?? 0,
+        price: finalPrice,
+        originalPrice,
+        discountAmount,
+        discountPercent,
         period,
         features,
         featured: plans.length === 3 ? idx === 1 : false,

@@ -105,7 +105,7 @@ const FitkitTrainer = ({
                       <div className="relative rounded-full p-2 border border-gray-300 ">
                         <div className="overflow-hidden rounded-full bg-[#141414]">
                           <Image
-                            src={item?.image}
+                            src={item?.image ?? "/"}
                             alt={`${item?.title} photo`}
                             width={320}
                             height={320}
