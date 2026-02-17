@@ -161,7 +161,7 @@ const DefaultEvents = ({
                       {event.title}
                     </h3>
 
-                    <p className="text-xs md:text-sm font-medium line-clamp-3 mb-4">
+                    <p className="text-xs md:text-sm line-clamp-3 mb-4 text-slate-600">
                       {event?.description}
                     </p>
 

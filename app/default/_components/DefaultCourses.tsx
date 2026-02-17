@@ -368,8 +368,8 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
 
                             <span className="text-gray-500">
                               {Array.isArray(course?.attendees)
-                                ? `${course.attendees.length} enrolled`
-                                : "0 enrolled"}
+                                ? `${course.attendees.length} Enrolled`
+                                : "0 Enrolled"}
                             </span>
                           </div>
 
