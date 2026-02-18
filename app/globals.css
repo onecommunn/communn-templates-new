@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -25,7 +24,9 @@
   --font-kalnia: var(--font-kalnia), serif;
   --font-figtree: var(--font-figtree), serif;
   --font-quattrocento: var(--font-quattrocento), serif;
-  --font-hedvig:var(--font-hedvig),serif;
+  --font-hedvig: var(--font-hedvig), serif;
+  --font-display: var(--font-display), serif;
+  --font-raleway: var(--font-raleway), sans-serif;
 }
 
 .font-lora {
