@@ -20,7 +20,7 @@ export interface TrainingPlan {
   _id: string;
   name: string;
   duration: string; // e.g., "MONTH"
-  discountAmount?:string
+  discountAmount?: string;
   interval: string; // typically a number string
   startDate: string; // ISO string
   endDate: string; // ISO string
@@ -50,6 +50,7 @@ export interface TrainingPlan {
   isUserSubscribed: boolean;
   nextDueDate: string; // ISO string
   coupons: Coupons[];
+  discountUsedSubscribers?: string[]; // List of subscribers who have used the discount
 }
 
 interface Coupons {

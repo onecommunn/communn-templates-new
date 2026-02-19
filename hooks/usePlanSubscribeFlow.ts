@@ -192,6 +192,12 @@ export function usePlanSubscribeFlow({
     }, 1000);
   };
 
+  const isDiscountUsed = plans?.some((p) =>
+    p.discountUsedSubscribers?.includes(userId || ""),
+  );
+
+  console.log("isDiscountUsed", isDiscountUsed);
+
   // ✅ non-seq pay (adds initialFee only first time)
   const startNonSequencePayment = async (planId: string) => {
     const meta = getPlanMeta(planId);
@@ -241,20 +247,20 @@ export function usePlanSubscribeFlow({
 
       const discountAmount = Number((meta.plan as any)?.discountAmount ?? 0);
 
-      // ✅ final recurring amount after discount
-      const discountedRecurring = Math.max(0, planPricing - discountAmount);
+      // // ✅ final recurring amount after discount
+      // const discountedRecurring = Math.max(0, planPricing - discountAmount);
 
-      if (!discountedRecurring || discountedRecurring <= 0) {
-        toast.error("Invalid amount");
-        return;
-      }
+      // if (!discountedRecurring || discountedRecurring <= 0) {
+      //   toast.error("Invalid amount");
+      //   return;
+      // }
 
       // ✅ add one-time fee only for first-time subscribe
       const initialFee = Number((meta.plan as any)?.initialPayment ?? 0);
       const finalAmount =
         isFirstTime && initialFee > 0
-          ? discountedRecurring + initialFee
-          : discountedRecurring;
+          ? discountAmount + initialFee
+          : discountAmount;
 
       const payRes: any = await initiatePaymentByIds(
         userId,
