@@ -103,6 +103,13 @@ import ConsultingoCourseDetailsRoot from "./app/consultingo/course-details/page"
 import ConsultingoAppointmentDetailsPageRoot from "./app/consultingo/appointment-detail/page";
 import ConsultingoProfilePage from "./app/consultingo/profile/_components/ConsultingoProfilePage";
 import YoganaContactPage from "./app/yogana/contact/page";
+import PhotographyShell from "./app/photography/PhotographyShell";
+import PhotographyRoot from "./app/photography/page";
+import PhotographyPageRoot from "./app/photography/about/page";
+import PhotographyServicesRoot from "./app/photography/services/page";
+import PhotographyPackageRoot from "./app/photography/packages/page";
+import PhotographyProtfolioRoot from "./app/photography/portfolio/page";
+import PhotographyContactRoot from "./app/photography/contact/page";
 
 export const templateLayouts: Record<
   string,
@@ -119,6 +126,7 @@ export const templateLayouts: Record<
   consultingo: ConsultingoShell,
   collections: CollectionsShell,
   madivala: MadivalaShell,
+  photography: PhotographyShell,
 };
 
 export const templates: Record<
@@ -244,5 +252,13 @@ export const templates: Record<
     "/events": MadivalaEventsPageRoot,
     "/infrastructure": MadivalaInfrastructurePageRoot,
     "/news": MadivalaNewsPageRoot,
+  },
+  photography: {
+    "/": PhotographyRoot,
+    "/about": PhotographyPageRoot,
+    "/services": PhotographyServicesRoot,
+    "/packages": PhotographyPackageRoot,
+    "/portfolio": PhotographyProtfolioRoot,
+    "/contact": PhotographyContactRoot,
   },
 };

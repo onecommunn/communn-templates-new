@@ -18,6 +18,8 @@ import {
   Figtree,
   Quattrocento_Sans,
   Hedvig_Letters_Serif,
+  Playfair_Display,
+  Raleway,
 } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -141,6 +143,22 @@ const hedvig = Hedvig_Letters_Serif({
   style: ["normal"],
   variable: "--font-hedvig",
 });
+
+const display = Playfair_Display({
+  subsets: ["latin", "latin-ext", "cyrillic", "vietnamese"],
+  weight: ["500", "600", "700", "400", "800", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+});
+
+const raleway = Raleway({
+  subsets: ["latin", "latin-ext", "cyrillic", "vietnamese","cyrillic-ext"],
+  weight: ["500", "600", "700", "400", "800", "900","100","200","300"],
+  style: ["normal", "italic"],
+  variable: "--font-raleway",
+});
+
+
 export default function RootLayout({
   children,
 }: {
@@ -149,7 +167,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${quattrocento.variable} ${hedvig?.variable} ${figtree.variable} ${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable} ${kalnia.variable}`}
+      className={`${raleway.variable} ${display.variable} ${quattrocento.variable} ${hedvig?.variable} ${figtree.variable} ${poppins.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable} ${alexBrush.variable} ${plusJakarta.variable} ${lora.variable} ${lato.variable} ${sora.variable} ${marcellus.variable} ${kanit.variable} ${archivo.variable} ${fraunces.variable} ${lexend.variable} ${kalnia.variable}`}
     >
       <body>
         <Providers>{children}</Providers>
