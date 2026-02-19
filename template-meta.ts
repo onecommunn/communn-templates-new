@@ -927,4 +927,67 @@ export const templatePageMeta: Record<string, Record<string, MetaFn>> = {
       icons: getFaviconMeta(community.logo),
     }),
   },
+
+  photography: {
+    "/": async ({ community }) => ({
+      title: `Home - ${community.name}`,
+      description: `${community.description}`,
+      alternates: { canonical: "/" },
+      openGraph: {
+        title: `Home - ${community?.name || ""}`,
+        description: community?.description || "",
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+    "/contact": ({ community }) => ({
+      title: `Contact - ${community.name}`,
+      description: `Contact ${community.name} for enquiries, support, or collaborations.`,
+      alternates: { canonical: "/contact" },
+      openGraph: {
+        title: `Contact - ${community?.name || ""}`,
+        description: `Contact ${community.name} for enquiries, support, or collaborations.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+    "/about": async ({ community }) => ({
+      title: `About - ${community.name}`,
+      description: `Learn more about ${community.name} — our story, mission, and team.`,
+      alternates: { canonical: "/about" },
+      openGraph: {
+        title: `About - ${community?.name || ""}`,
+        description: `Learn more about ${community.name} — our story, mission, and team.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+    "/services": ({ community }) => ({
+      title: `Service - ${community.name} `,
+      description: `Explore services offered by ${community.name}, including details, pricing, and availability.`,
+      alternates: { canonical: "/service" },
+      openGraph: {
+        title: `Service - ${community?.name || ""}`,
+        description: `Explore services offered by ${community.name}, including details, pricing, and availability.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+    "/packages": ({ community }) => ({
+      title: `Packages - ${community.name}`,
+      description: `Discover curated packages offered by ${community.name}, including pricing, features, and availability tailored to your needs.`,
+      alternates: { canonical: "/packages" },
+      openGraph: {
+        title: `Packages - ${community?.name || ""}`,
+        description: `Discover curated packages offered by ${community.name}, including pricing, features, and availability tailored to your needs.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+    "/portfolio": ({ community }) => ({
+      title: `Portfolio - ${community.name}`,
+      description: `Explore the portfolio of ${community.name} showcasing stunning projects, creative work, and professional highlights.`,
+      alternates: { canonical: "/portfolio" },
+      openGraph: {
+        title: `Portfolio - ${community?.name || ""}`,
+        description: `Explore the portfolio of ${community.name} showcasing stunning projects, creative work, and professional highlights.`,
+      },
+      icons: getFaviconMeta(community.logo),
+    }),
+  },
 };
