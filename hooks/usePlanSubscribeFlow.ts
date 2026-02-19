@@ -192,6 +192,12 @@ export function usePlanSubscribeFlow({
     }, 1000);
   };
 
+  const isDiscountUsed = plans?.some((p) =>
+    p.discountUsedSubscribers?.includes(userId || ""),
+  );
+
+  console.log("isDiscountUsed", isDiscountUsed);
+
   // ✅ non-seq pay (adds initialFee only first time)
   const startNonSequencePayment = async (planId: string) => {
     const meta = getPlanMeta(planId);
