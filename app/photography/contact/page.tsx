@@ -1,26 +1,70 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import PhotographyBreadcum from "../_components/PhotographyBreadcum";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { toast } from "sonner";
+import { ContactForm } from "@/models/contact.model";
+import { useCommunity } from "@/hooks/useCommunity";
+import { sendNotification } from "@/services/contactService";
 
 const PhotographyContactRoot = () => {
-  const [form, setForm] = useState({
+  const { communityId } = useCommunity();
+
+  const [loading, setLoading] = useState(false);
+
+  const [form, setForm] = useState<ContactForm>({
     name: "",
     email: "",
-    phone: "",
+    subject: "",
+    phoneNumber: "",
     message: "",
+    communityId: communityId || "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ keep communityId synced
+  useEffect(() => {
+    if (communityId) {
+      setForm((prev) => ({
+        ...prev,
+        communityId,
+      }));
+    }
+  }, [communityId]);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("Message sent!");
-    setForm({ name: "", email: "", phone: "", message: "" });
+    setLoading(true);
+
+    try {
+      const payload: ContactForm = {
+        ...form,
+        communityId: communityId || "",
+      };
+
+      await sendNotification(payload);
+
+      toast.success("Message sent successfully!");
+
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        phoneNumber: "",
+        message: "",
+        communityId: communityId || "",
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <>
       <PhotographyBreadcum
@@ -31,7 +75,7 @@ const PhotographyContactRoot = () => {
 
       <section className="py-20 px-4 bg-[#121212] text-[#EFECE7]">
         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-5xl">
-          {/* Form */}
+          {/* FORM */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -60,11 +104,14 @@ const PhotographyContactRoot = () => {
                 className="bg-[#1A1A1A] py-2 h-auto border-[#2A2A2A] text-[#EFECE7] font-raleway rounded-none"
               />
 
+              {/* ✅ Fixed phone field binding */}
               <Input
                 type="tel"
                 placeholder="Your Phone"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                value={form.phoneNumber}
+                onChange={(e) =>
+                  setForm({ ...form, phoneNumber: e.target.value })
+                }
                 className="bg-[#1A1A1A] py-2 h-auto border-[#2A2A2A] text-[#EFECE7] font-raleway rounded-none"
               />
 
@@ -74,19 +121,18 @@ const PhotographyContactRoot = () => {
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 required
                 rows={10}
-                className="bg-[#1A1A1A] min-h-[80px] border-[#2A2A2A] text-[#EFECE7] font-raleway rounded-none"
+                className="bg-[#1A1A11A] min-h-[80px] border-[#2A2A2A] text-[#EFECE7] font-raleway rounded-none"
               />
 
               <Button
                 type="submit"
+                disabled={loading}
                 className="w-full bg-[#E0A24D] rounded-none text-[#0d0d0d] hover:bg-[#E0A24D]/90 font-raleway uppercase tracking-widest"
               >
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </motion.div>
-
-          {/* Info */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -97,7 +143,6 @@ const PhotographyContactRoot = () => {
             <h2 className="font-display text-3xl font-bold mb-6">
               Contact Information
             </h2>
-
             <div className="space-y-6">
               {/* Phone */}
               <div className="flex items-start gap-4">
@@ -123,7 +168,6 @@ const PhotographyContactRoot = () => {
                   </a>
                 </div>
               </div>
-
               {/* WhatsApp */}
               <div className="flex items-start gap-4">
                 <MessageCircle
@@ -144,7 +188,6 @@ const PhotographyContactRoot = () => {
                   </a>
                 </div>
               </div>
-
               {/* Email */}
               <div className="flex items-start gap-4">
                 <Mail className="text-[#E0A24D] mt-1 flex-shrink-0" size={20} />
@@ -160,7 +203,6 @@ const PhotographyContactRoot = () => {
                   </a>
                 </div>
               </div>
-
               {/* Locations */}
               <div className="flex items-start gap-4">
                 <MapPin
@@ -172,9 +214,8 @@ const PhotographyContactRoot = () => {
                     Main Branch – Chitradurga
                   </p>
                   <p className="text-[#8c8c8c] font-raleway text-sm">
-                    Dharmashala Road, Near Megha Lodge,
-                    <br />
-                    Chitradurga, Karnataka 577501
+                    Dharmashala Road, Near Megha Lodge, <br /> Chitradurga,
+                    Karnataka 577501
                   </p>
                   <a
                     href="https://www.google.com/maps?q=14.451021194458008,75.90921783447266&z=17&hl=en"
@@ -186,7 +227,6 @@ const PhotographyContactRoot = () => {
                   </a>
                 </div>
               </div>
-
               <div className="flex items-start gap-4">
                 <MapPin
                   className="text-[#E0A24D] mt-1 flex-shrink-0"
@@ -197,11 +237,8 @@ const PhotographyContactRoot = () => {
                     Branch – Davanagere
                   </p>
                   <p className="text-[#8c8c8c] font-raleway text-sm">
-                    Near Ayyappa Swamy Temple, B.I.E.T College Road,
-                    <br />
-                    13th Main, 5th Cross, M.C.C. 'B' Block,
-                    <br />
-                    Davanagere 577004
+                    Near Ayyappa Swamy Temple, B.I.E.T College Road, <br /> 13th
+                    Main, 5th Cross, M.C.C. 'B' Block, <br /> Davanagere 577004
                   </p>
                   <a
                     href="https://www.google.com/maps?q=14.222463607788086,76.4011459350586&z=17&hl=en"
@@ -214,9 +251,11 @@ const PhotographyContactRoot = () => {
                 </div>
               </div>
             </div>
-
-            {/* Embedded Maps */}
-            <div className="space-y-4">
+          </motion.div>
+          {/* Embedded Maps */}
+          <div className="col-span-1 md:col-span-2 mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Chitradurga */}
               <div>
                 <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
                   Main Branch – Chitradurga
@@ -232,6 +271,8 @@ const PhotographyContactRoot = () => {
                   />
                 </div>
               </div>
+
+              {/* Davanagere */}
               <div>
                 <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
                   Branch – Davanagere
@@ -243,12 +284,12 @@ const PhotographyContactRoot = () => {
                     height="100%"
                     style={{ border: 0 }}
                     loading="lazy"
-                    title="Chitradurga Office Location"
+                    title="Davanagere Office Location"
                   />
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </>
