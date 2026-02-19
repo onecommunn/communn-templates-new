@@ -115,14 +115,14 @@ const PhotographyFooter = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-[#2e2e2e] flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-[#8c8c8c] font-raleway text-xs tracking-wide">
-            © {new Date().getFullYear()} Vijay Photography. All rights reserved.
+            © 2026 Vijay Photography. All rights reserved.
           </p>
 
           <Link
-            href="/terms"
+            href="https://communn.io/"
             className="text-[#8c8c8c] hover:text-[#E0A24D] transition-colors font-raleway text-xs tracking-wide"
           >
-            Terms & Conditions
+            Made with ❤️ by communn.io
           </Link>
         </div>
       </div>

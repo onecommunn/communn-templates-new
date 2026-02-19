@@ -142,7 +142,7 @@ const PhotographyHero = () => {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#0C1014]/50"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#E9A55C]/50"
       >
         <ArrowDown size={24} />
       </motion.div>

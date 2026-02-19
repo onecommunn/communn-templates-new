@@ -13,13 +13,13 @@ const PhotographyServicespreview = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <p className="text-[#263737] font-raleway text-sm uppercase tracking-[0.3em] mb-3">
+          <p className="text-[#E0A24D] font-raleway text-sm uppercase tracking-[0.3em] mb-3">
             What We Do
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold">
             Our Services
           </h2>
-          <div className="w-20 h-px bg-[#263737] mx-auto mt-6" />
+          <div className="w-20 h-px bg-[#E0A24D] mx-auto mt-6" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
