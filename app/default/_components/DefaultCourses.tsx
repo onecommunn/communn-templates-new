@@ -320,7 +320,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             fill
                             className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
                             unoptimized
-                          />
+                          />                        
                           <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-black/0" />
                         </div>
 
@@ -334,24 +334,31 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                               <ArrowRight size={16} />
                             </span>
                           </div>
-
-                          <p className="text-sm md:text-md text-[var(--pri)] font-bold my-2">
-                            {Number(course?.amount) > 0 &&
+                          <div className="flex items-center justify-between">
+                            {" "}
+                            <p className="text-sm md:text-md text-[var(--pri)] font-bold my-2">
+                              {Number(course?.amount) > 0 &&
                               course?.plan?.length > 0
-                              ? `₹ ${course?.amount} + Plan`
-                              : Number(course?.amount) > 0
-                                ? `₹ ${course?.amount}`
-                                : course?.plan?.length > 0
-                                  ? "Plan"
-                                  : "Free"}
-                            {course?.endDateDuration && (
-                              <>
-                                {" "}
-                                / {course?.endDateDurationCount}{" "}
-                                {getStaticValue(course?.endDateDuration)}
-                              </>
+                                ? `₹ ${course?.amount} + Plan`
+                                : Number(course?.amount) > 0
+                                  ? `₹ ${course?.amount}`
+                                  : course?.plan?.length > 0
+                                    ? "Plan"
+                                    : "Free"}
+                              {course?.endDateDuration && (
+                                <>
+                                  {" "}
+                                  / {course?.endDateDurationCount}{" "}
+                                  {getStaticValue(course?.endDateDuration)}
+                                </>
+                              )}
+                            </p>
+                            {Number(course?.amount) == 0 && (
+                              <span className="rounded-full bg-emerald-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-md">
+                                Free
+                              </span>
                             )}
-                          </p>
+                          </div>
 
                           <p className="mt-2 text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-3 min-h-[3.75rem]">
                             {course?.description}

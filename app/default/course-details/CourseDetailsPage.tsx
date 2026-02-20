@@ -50,13 +50,13 @@ export default function CourseDetailsPage() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        if (!auth.isAuthenticated) {
-          return;
-        }
+        // if (!auth.isAuthenticated) {
+        //   return;
+        // }
         setCourseDataLoading(true);
 
         const data = await getCourseByCourseId(courseId);
-        const c: Course | undefined = data?.courses;
+        const c: Course | undefined = data?.courses?.courseResponse;
         if (!c) return;
 
         setCourse(c);

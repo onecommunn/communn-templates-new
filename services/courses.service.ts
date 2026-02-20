@@ -21,7 +21,7 @@ export const fetchCourseByCommunityId = async (token: string, id: string) => {
 
 export const fetchCourseByCourseId = async (token: string, id: string) => {
   try {
-    const response = await axios.get(`${BASE_URL_V2}/course/${id}`, {
+    const response = await axios.get(`${BASE_URL_V2}/courses/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
