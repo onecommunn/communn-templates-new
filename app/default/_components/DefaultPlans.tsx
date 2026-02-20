@@ -187,7 +187,7 @@ const DefaultPlans = ({
                   p.discountUsedSubscribers?.includes(userId || ""),
                 );
                 const isDiscountAvailable =
-                  discountValue > 0 && !isSequencePlan && !isDiscountUsed;
+                  discountValue > 0 && !isSequencePlan && !isDiscountUsed && !userSubscribedToPlan;
 
                 const finalRecurringAmount = isDiscountAvailable
                   ? Math.max(0, discountValue)
