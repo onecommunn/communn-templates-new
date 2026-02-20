@@ -138,275 +138,298 @@ const DefaultPlans = ({
         <CarouselContent>
           {isLoading
             ? [1, 2, 3].map((i) => (
-              <CarouselItem
-                key={i}
-                className="pl-6 md:basis-1/2 lg:basis-1/3"
-              >
-                <div className="h-[520px] w-full rounded-[24px] border border-slate-100 bg-white p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="h-20 w-20 rounded-2xl bg-slate-100 animate-pulse" />
-                    <div className="h-6 w-32 rounded-full bg-slate-100 animate-pulse" />
+                <CarouselItem
+                  key={i}
+                  className="pl-6 md:basis-1/2 lg:basis-1/3"
+                >
+                  <div className="h-[520px] w-full rounded-[24px] border border-slate-100 bg-white p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="h-20 w-20 rounded-2xl bg-slate-100 animate-pulse" />
+                      <div className="h-6 w-32 rounded-full bg-slate-100 animate-pulse" />
+                    </div>
+
+                    <div className="mt-5 h-6 w-2/3 rounded bg-slate-100 animate-pulse" />
+                    <div className="mt-3 h-20 w-full rounded-2xl bg-slate-100 animate-pulse" />
+
+                    <div className="mt-5 space-y-3">
+                      <div className="h-4 w-11/12 rounded bg-slate-100 animate-pulse" />
+                      <div className="h-4 w-10/12 rounded bg-slate-100 animate-pulse" />
+                      <div className="h-4 w-9/12 rounded bg-slate-100 animate-pulse" />
+                    </div>
+
+                    <div className="mt-6 h-12 w-full rounded-xl bg-slate-100 animate-pulse" />
                   </div>
-
-                  <div className="mt-5 h-6 w-2/3 rounded bg-slate-100 animate-pulse" />
-                  <div className="mt-3 h-20 w-full rounded-2xl bg-slate-100 animate-pulse" />
-
-                  <div className="mt-5 space-y-3">
-                    <div className="h-4 w-11/12 rounded bg-slate-100 animate-pulse" />
-                    <div className="h-4 w-10/12 rounded bg-slate-100 animate-pulse" />
-                    <div className="h-4 w-9/12 rounded bg-slate-100 animate-pulse" />
-                  </div>
-
-                  <div className="mt-6 h-12 w-full rounded-xl bg-slate-100 animate-pulse" />
-                </div>
-              </CarouselItem>
-            ))
+                </CarouselItem>
+              ))
             : plans?.map((plan) => {
-              const planId = String((plan as any)?._id ?? "");
-              const meta = flow.getPlanMeta(planId);
+                const planId = String((plan as any)?._id ?? "");
+                const meta = flow.getPlanMeta(planId);
 
-              const userSubscribedToPlan = !!meta?.isSubscribed;
-              const isSequencePlan = !!meta?.isSequencePlan;
-              const isActivePlan = !!meta?.isActive;
-              const isExpiredPlan = !!meta?.isExpired;
-              const nextDue = meta?.nextDue ?? null;
+                const userSubscribedToPlan = !!meta?.isSubscribed;
+                const isSequencePlan = !!meta?.isSequencePlan;
+                const isActivePlan = !!meta?.isActive;
+                const isExpiredPlan = !!meta?.isExpired;
+                const nextDue = meta?.nextDue ?? null;
 
-              const isProcessing = flow.processingPlanId === planId;
+                const isProcessing = flow.processingPlanId === planId;
 
-              const planImage =
-                (plan as any)?.image?.value ??
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Planss.png";
+                const planImage =
+                  (plan as any)?.image?.value ??
+                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Planss.png";
 
-              const basePrice = Number(
-                (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0,
-              );
-              const discountValue = Number(
-                (plan as any)?.discountAmount ?? 0,
-              );
-              const finalRecurringAmount =
-                discountValue > 0 && !isSequencePlan
+                const basePrice = Number(
+                  (plan as any)?.pricing ?? (plan as any)?.totalPlanValue ?? 0,
+                );
+                const discountValue = Number(
+                  (plan as any)?.discountAmount ?? 0,
+                );
+                const isDiscountUsed = plans?.some((p) =>
+                  p.discountUsedSubscribers?.includes(userId || ""),
+                );
+                const isDiscountAvailable =
+                  discountValue > 0 && !isSequencePlan && !isDiscountUsed;
+
+                const finalRecurringAmount = isDiscountAvailable
                   ? Math.max(0, discountValue)
                   : basePrice;
 
-              const durationLabel =
-                (plan as any)?.duration?.toLowerCase?.() ?? "";
+                const durationLabel =
+                  (plan as any)?.duration?.toLowerCase?.() ?? "";
 
-              const initialPayment = Number(
-                (plan as any)?.initialPayment ?? 0,
-              );
-              const showOneTimeFee =
-                initialPayment > 0 && !userSubscribedToPlan;
+                const initialPayment = Number(
+                  (plan as any)?.initialPayment ?? 0,
+                );
 
-              const payToday = showOneTimeFee
-                ? finalRecurringAmount + initialPayment
-                : finalRecurringAmount;
+                const showOneTimeFee =
+                  initialPayment > 0 && !userSubscribedToPlan;
 
-              // ✅ CTA text (same pattern as Restraint)
-              const ctaText = (() => {
-                if (!isLoggedIn) return "Login to Subscribe";
-                if (!flow.isSubscribedCommunity)
-                  return flow.isPrivate
-                    ? isRequested
-                      ? "Already Requested"
-                      : "Request to Join"
-                    : "Join & Subscribe";
-                if (userSubscribedToPlan && isActivePlan) return "Subscribed";
-                if (userSubscribedToPlan && isExpiredPlan)
-                  return isSequencePlan ? "Renew & Pay" : "Pay to Renew";
-                return "Subscribe";
-              })();
+                const payToday = showOneTimeFee
+                  ? finalRecurringAmount + initialPayment
+                  : finalRecurringAmount;
 
-              return (
-                <CarouselItem
-                  key={planId}
-                  className="md:basis-1/2 lg:basis-1/3"
-                >
-                  <div
-                    className={cn(
-                      "group relative flex h-full flex-col overflow-hidden rounded-[24px] border bg-white p-4 transition-all duration-300",
-                      "border-slate-200 hover:border-slate-400",
-                      userSubscribedToPlan && isExpiredPlan
-                        ? "border-red-300"
-                        : "",
-                    )}
+                // ✅ CTA text (same pattern as Restraint)
+                const ctaText = (() => {
+                  if (!isLoggedIn) return "Login to Subscribe";
+                  if (!flow.isSubscribedCommunity)
+                    return flow.isPrivate
+                      ? isRequested
+                        ? "Already Requested"
+                        : "Request to Join"
+                      : "Join & Subscribe";
+                  if (userSubscribedToPlan && isActivePlan) return "Subscribed";
+                  if (userSubscribedToPlan && isExpiredPlan)
+                    return isSequencePlan ? "Renew & Pay" : "Pay to Renew";
+                  return "Subscribe";
+                })();
+
+                return (
+                  <CarouselItem
+                    key={planId}
+                    className="md:basis-1/2 lg:basis-1/3"
                   >
-                    {/* Image + Due chip */}
-                    <div className="mb-5 flex items-start justify-between gap-3">
-                      <div className="relative flex items-center gap-3">
-                        <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-slate-100 bg-slate-50">
-                          <Image
-                            src={planImage}
-                            alt={plan.name ?? "Plan image"}
-                            fill
-                            className="object-cover"
-                            sizes="80px"
-                            unoptimized
-                          />
+                    <div
+                      className={cn(
+                        "group relative flex h-full flex-col overflow-hidden rounded-[24px] border bg-white p-4 transition-all duration-300",
+                        "border-slate-200 hover:border-slate-400",
+                        userSubscribedToPlan && isExpiredPlan
+                          ? "border-red-300"
+                          : "",
+                      )}
+                    >
+                      {/* Image + Due chip */}
+                      <div className="mb-5 flex flex-col items-start justify-between gap-3">
+                        {/* LEFT SIDE */}
+                        <div className="flex min-w-0 flex-1 items-center gap-3">
+                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-slate-100 bg-slate-50">
+                            <Image
+                              src={planImage}
+                              alt={plan.name ?? "Plan image"}
+                              fill
+                              className="object-cover"
+                              sizes="80px"
+                              unoptimized
+                            />
+                          </div>
+
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-lg font-extrabold text-slate-900 leading-5 break-words line-clamp-2">
+                              {capitalizeWords(plan.name)}
+                            </h3>
+
+                            {isDiscountAvailable && (
+                              <div className="mt-1 inline-flex items-center gap-2 text-[10px] text-emerald-700">
+                                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                                Discount applied
+                              </div>
+                            )}
+                          </div>
                         </div>
 
-                        <div className="min-w-0">
-                          <h3 className="truncate text-lg font-extrabold text-slate-900">
-                            {capitalizeWords(plan.name)}
-                          </h3>
-
-                          {discountValue > 0 && !isSequencePlan && (
-                            <div className="mt-1 inline-flex items-center gap-2 text-[10px] text-emerald-700">
-                              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                              Discount applied
+                        {/* RIGHT SIDE BADGE */}
+                        {isLoggedIn &&
+                          userSubscribedToPlan &&
+                          nextDue &&
+                          nextDue !== "forever" && (
+                            <div className="shrink-0">
+                              {isExpiredPlan ? (
+                                <span className="inline-flex items-center whitespace-nowrap rounded-full border border-red-200 bg-red-50 px-2 py-1 text-[9px] font-semibold text-red-700">
+                                  Expired {formatDate(String(nextDue))}
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center whitespace-nowrap rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[9px] font-semibold text-emerald-700">
+                                  Next due {formatDate(String(nextDue))}
+                                </span>
+                              )}
                             </div>
                           )}
-                        </div>
                       </div>
 
-                      {/* Next Due / Expired chip */}
-                      {isLoggedIn &&
-                        userSubscribedToPlan &&
-                        nextDue &&
-                        nextDue !== "forever" && (
-                          <div className="shrink-0">
-                            {isExpiredPlan ? (
-                              <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-2 py-1 text-[9px] font-semibold text-red-700">
-                                Expired {formatDate(String(nextDue))}
+                      {/* Pricing block */}
+                      <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              {isDiscountAvailable && (
+                                <span className="text-slate-400 line-through text-[20px] font-bold">
+                                  ₹{basePrice}
+                                </span>
+                              )}
+                              <span className="text-[20px] font-extrabold text-slate-900">
+                                ₹{finalRecurringAmount}
                               </span>
-                            ) : (
-                              <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[9px] font-semibold text-emerald-700">
-                                Next due {formatDate(String(nextDue))}
+                            </div>
+
+                            <div className="mt-1 flex items-center gap-2 text-[12px] text-slate-600">
+                              <span>
+                                {Number(plan?.interval) > 1 ? (
+                                  <>
+                                    for {plan?.interval}{" "}
+                                    <span className="capitalize">
+                                      {durationLabel}s
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    /{" "}
+                                    <span className="capitalize">
+                                      {durationLabel}
+                                    </span>
+                                  </>
+                                )}
                               </span>
+                              {isDiscountAvailable && (
+                                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-1 py-px text-[9px] font-semibold text-emerald-700">
+                                  Save ₹{basePrice - discountValue}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="text-right">
+                            <div className="text-[11px] text-slate-500">
+                              Pay today
+                            </div>
+                            <div className="text-[14px] font-extrabold text-[var(--pri)]">
+                              ₹{payToday}
+                            </div>
+                            {showOneTimeFee && (
+                              <div className="mt-1 text-[9px] text-slate-500">
+                                includes One-time ₹{initialPayment} fee
+                              </div>
                             )}
+                          </div>
+                        </div>
+
+                        {showOneTimeFee && (
+                          <div className="mt-2 flex items-center justify-between rounded-xl border border-slate-100 bg-white px-3 py-2 text-[12px]">
+                            <span className="text-slate-600">One-time fee</span>
+                            <span className="font-semibold text-slate-900">
+                              ₹{initialPayment}
+                            </span>
                           </div>
                         )}
-                    </div>
-
-                    {/* Pricing block */}
-                    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            {discountValue > 0 && !isSequencePlan && (
-                              <span className="text-slate-400 line-through text-[20px] font-bold">
-                                ₹{basePrice}
-                              </span>
-                            )}
-                            <span className="text-[20px] font-extrabold text-slate-900">
-                              ₹{finalRecurringAmount}
-                            </span>
-                          </div>
-
-                          <div className="mt-1 flex items-center gap-2 text-[12px] text-slate-600">
-                            <span>
-                              {Number(plan?.interval) > 1 ? (
-                                <>
-                                  for {plan?.interval}{" "}
-                                  <span className="capitalize">
-                                    {durationLabel}s
-                                  </span>
-                                </>
-                              ) : (
-                                <>
-                                  /{" "}
-                                  <span className="capitalize">
-                                    {durationLabel}
-                                  </span>
-                                </>
-                              )}
-                            </span>
-                            {discountValue > 0 && !isSequencePlan && (
-                              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-1 py-px text-[9px] font-semibold text-emerald-700">
-                                Save ₹{basePrice - discountValue}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="text-right">
-                          <div className="text-[11px] text-slate-500">
-                            Pay today
-                          </div>
-                          <div className="text-[14px] font-extrabold text-[var(--pri)]">
-                            ₹{payToday}
-                          </div>
-                          {showOneTimeFee && (
-                            <div className="mt-1 text-[9px] text-slate-500">
-                              includes One-time ₹{initialPayment} fee
-                            </div>
-                          )}
-                        </div>
                       </div>
 
-                      {showOneTimeFee && (
-                        <div className="mt-2 flex items-center justify-between rounded-xl border border-slate-100 bg-white px-3 py-2 text-[12px]">
-                          <span className="text-slate-600">One-time fee</span>
-                          <span className="font-semibold text-slate-900">
-                            ₹{initialPayment}
-                          </span>
+                      {/* Description */}
+                      {(plan as any)?.description && (
+                        <div className="mt-4 text-gray-600">
+                          {(plan as any)?.description.includes("/") ? (
+                            <ul className="space-y-3">
+                              {(plan as any)?.description
+                                .split("/")
+                                .map((t: string) => t.trim())
+                                .filter(Boolean)
+                                .slice(0, 6)
+                                .map((text: string, idx: number) => (
+                                  <li
+                                    className="flex items-start gap-2 text-[13px] text-slate-600"
+                                    key={idx}
+                                  >
+                                    <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/5">
+                                      <Check
+                                        size={14}
+                                        className="text-slate-900"
+                                      />
+                                    </span>
+                                    <span className="leading-5">{text}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          ) : (
+                            <p className="line-clamp-3 text-[13px] leading-5 text-slate-600">
+                              {(plan as any)?.description}
+                            </p>
+                          )}
                         </div>
                       )}
-                    </div>
 
-                    {/* Description */}
-                    {(plan as any)?.description && (
-                      <div className="mt-4 text-gray-600">
-                        {(plan as any)?.description.includes("/") ? (
-                          <ul className="space-y-3">
-                            {(plan as any)?.description
-                              .split("/")
-                              .map((t: string) => t.trim())
-                              .filter(Boolean)
-                              .slice(0, 6)
-                              .map((text: string, idx: number) => (
-                                <li
-                                  className="flex items-start gap-2 text-[13px] text-slate-600"
-                                  key={idx}
+                      {/* CTA */}
+                      <div className="mt-auto pt-5">
+                        {!isLoggedIn ? (
+                          <Button
+                            onClick={() => flow.startSubscribeFlow(planId)}
+                            className="w-full rounded-2xl py-6 font-bold bg-[var(--pri)] hover:bg-[var(--pri)]"
+                            disabled={isProcessing}
+                          >
+                            {flow.isPrivate && <LockKeyhole size={18} />}
+                            {isProcessing ? (
+                              <span className="inline-flex items-center gap-2">
+                                <LoaderCircle className="h-4 w-4 animate-spin" />
+                                Starting...
+                              </span>
+                            ) : (
+                              ctaText
+                            )}
+                          </Button>
+                        ) : !flow.isSubscribedCommunity ? (
+                          flow.isPrivate ? (
+                            isRequested ? (
+                              <div className="mt-2 inline-flex flex-col items-center gap-2 text-[16px] font-bold text-[var(--pri)]">
+                                <h5>Already Requested</h5>
+                                <p
+                                  className="text-center text-sm font-normal"
+                                  style={{ color: colors?.secondaryColor }}
                                 >
-                                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/5">
-                                    <Check
-                                      size={14}
-                                      className="text-slate-900"
-                                    />
-                                  </span>
-                                  <span className="leading-5">{text}</span>
-                                </li>
-                              ))}
-                          </ul>
-                        ) : (
-                          <p className="line-clamp-3 text-[13px] leading-5 text-slate-600">
-                            {(plan as any)?.description}
-                          </p>
-                        )}
-                      </div>
-                    )}
-
-                    {/* CTA */}
-                    <div className="mt-auto pt-5">
-                      {!isLoggedIn ? (
-                        <Button
-                          onClick={() => flow.startSubscribeFlow(planId)}
-                          className="w-full rounded-2xl py-6 font-bold bg-[var(--pri)] hover:bg-[var(--pri)]"
-                          disabled={isProcessing}
-                        >
-                          {flow.isPrivate && <LockKeyhole size={18} />}
-                          {isProcessing ? (
-                            <span className="inline-flex items-center gap-2">
-                              <LoaderCircle className="h-4 w-4 animate-spin" />
-                              Starting...
-                            </span>
-                          ) : (
-                            ctaText
-                          )}
-                        </Button>
-                      ) : !flow.isSubscribedCommunity ? (
-                        flow.isPrivate ? (
-                          isRequested ? (
-                            <div className="mt-2 inline-flex flex-col items-center gap-2 text-[16px] font-bold text-[var(--pri)]">
-                              <h5>Already Requested</h5>
-                              <p
-                                className="text-center text-sm font-normal"
-                                style={{ color: colors?.secondaryColor }}
+                                  * Your request will be sent to the admin. You
+                                  can proceed with payment once approved.
+                                </p>
+                              </div>
+                            ) : (
+                              <Button
+                                onClick={() => flow.startSubscribeFlow(planId)}
+                                className="w-full rounded-2xl py-6 font-bold bg-[var(--pri)] hover:bg-[var(--pri)]"
+                                disabled={isProcessing}
                               >
-                                * Your request will be sent to the admin. You
-                                can proceed with payment once approved.
-                              </p>
-                            </div>
+                                {isProcessing ? (
+                                  <span className="inline-flex items-center gap-2">
+                                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                                    Starting...
+                                  </span>
+                                ) : (
+                                  ctaText
+                                )}
+                              </Button>
+                            )
                           ) : (
                             <Button
                               onClick={() => flow.startSubscribeFlow(planId)}
@@ -416,43 +439,60 @@ const DefaultPlans = ({
                               {isProcessing ? (
                                 <span className="inline-flex items-center gap-2">
                                   <LoaderCircle className="h-4 w-4 animate-spin" />
-                                  Starting...
+                                  Joining...
                                 </span>
                               ) : (
                                 ctaText
                               )}
                             </Button>
                           )
-                        ) : (
+                        ) : userSubscribedToPlan && isActivePlan ? (
                           <Button
-                            onClick={() => flow.startSubscribeFlow(planId)}
-                            className="w-full rounded-2xl py-6 font-bold bg-[var(--pri)] hover:bg-[var(--pri)]"
-                            disabled={isProcessing}
-                          >
-                            {isProcessing ? (
-                              <span className="inline-flex items-center gap-2">
-                                <LoaderCircle className="h-4 w-4 animate-spin" />
-                                Joining...
-                              </span>
-                            ) : (
-                              ctaText
-                            )}
-                          </Button>
-                        )
-                      ) : userSubscribedToPlan && isActivePlan ? (
-                        <Button
-                          variant="outline"
-                          className="w-full rounded-2xl py-6 font-bold text-[var(--pri)] border-[var(--pri)]"
-                          disabled
-                        >
-                          Subscribed
-                        </Button>
-                      ) : userSubscribedToPlan && isExpiredPlan ? (
-                        isSequencePlan ? (
-                          <Button
-                            asChild
                             variant="outline"
                             className="w-full rounded-2xl py-6 font-bold text-[var(--pri)] border-[var(--pri)]"
+                            disabled
+                          >
+                            Subscribed
+                          </Button>
+                        ) : userSubscribedToPlan && isExpiredPlan ? (
+                          isSequencePlan ? (
+                            <Button
+                              asChild
+                              variant="outline"
+                              className="w-full rounded-2xl py-6 font-bold text-[var(--pri)] border-[var(--pri)]"
+                              disabled={isProcessing}
+                            >
+                              <Link
+                                href={`/subscriptions/?planid=${encodeURIComponent(
+                                  planId,
+                                )}&communityid=${encodeURIComponent(communityId || "")}`}
+                              >
+                                {isProcessing ? "Processing..." : "Renew & Pay"}
+                              </Link>
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() =>
+                                flow.startNonSequencePayment(planId)
+                              }
+                              variant="outline"
+                              className="w-full rounded-2xl py-6 font-bold text-[var(--pri)] border-[var(--pri)]"
+                              disabled={isProcessing}
+                            >
+                              {isProcessing ? (
+                                <span className="inline-flex items-center gap-2">
+                                  <LoaderCircle className="h-4 w-4 animate-spin" />
+                                  Starting payment...
+                                </span>
+                              ) : (
+                                "Pay to Renew"
+                              )}
+                            </Button>
+                          )
+                        ) : isSequencePlan ? (
+                          <Button
+                            asChild
+                            className="w-full rounded-2xl py-6 font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
                             disabled={isProcessing}
                           >
                             <Link
@@ -460,63 +500,30 @@ const DefaultPlans = ({
                                 planId,
                               )}&communityid=${encodeURIComponent(communityId || "")}`}
                             >
-                              {isProcessing ? "Processing..." : "Renew & Pay"}
+                              {isProcessing ? "Processing..." : "Subscribe"}
                             </Link>
                           </Button>
                         ) : (
                           <Button
-                            onClick={() =>
-                              flow.startNonSequencePayment(planId)
-                            }
-                            variant="outline"
-                            className="w-full rounded-2xl py-6 font-bold text-[var(--pri)] border-[var(--pri)]"
+                            onClick={() => flow.startSubscribeFlow(planId)}
+                            className="w-full rounded-2xl py-6 font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
                             disabled={isProcessing}
                           >
                             {isProcessing ? (
                               <span className="inline-flex items-center gap-2">
                                 <LoaderCircle className="h-4 w-4 animate-spin" />
-                                Starting payment...
+                                Starting...
                               </span>
                             ) : (
-                              "Pay to Renew"
+                              "Subscribe"
                             )}
                           </Button>
-                        )
-                      ) : isSequencePlan ? (
-                        <Button
-                          asChild
-                          className="w-full rounded-2xl py-6 font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
-                          disabled={isProcessing}
-                        >
-                          <Link
-                            href={`/subscriptions/?planid=${encodeURIComponent(
-                              planId,
-                            )}&communityid=${encodeURIComponent(communityId || "")}`}
-                          >
-                            {isProcessing ? "Processing..." : "Subscribe"}
-                          </Link>
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={() => flow.startSubscribeFlow(planId)}
-                          className="w-full rounded-2xl py-6 font-bold text-white bg-[var(--pri)] hover:bg-[var(--pri)]"
-                          disabled={isProcessing}
-                        >
-                          {isProcessing ? (
-                            <span className="inline-flex items-center gap-2">
-                              <LoaderCircle className="h-4 w-4 animate-spin" />
-                              Starting...
-                            </span>
-                          ) : (
-                            "Subscribe"
-                          )}
-                        </Button>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </CarouselItem>
-              );
-            })}
+                  </CarouselItem>
+                );
+              })}
         </CarouselContent>
 
         <CarouselPrevious className="bg-gray-100 border-none hover:bg-gray-200 size-10 cursor-pointer hidden md:flex" />

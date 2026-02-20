@@ -100,12 +100,23 @@ export default function PlansPopUp({
     }
 
     const baseAmount =
-      Number((selectedPlan as any)?.pricing ?? (selectedPlan as any)?.totalPlanValue ?? 0) || 0;
+      Number(
+        (selectedPlan as any)?.pricing ??
+          (selectedPlan as any)?.totalPlanValue ??
+          0,
+      ) || 0;
 
     const discount = Number((selectedPlan as any)?.discountAmount ?? 0) || 0;
 
-    const recurringAmount =
-      discount > 0 ? Math.max(0, baseAmount - discount) : baseAmount;
+    const isDiscountUsed =
+      !!userId &&
+      (selectedPlan as any)?.discountUsedSubscribers?.includes(userId);
+
+    const isDiscountAvailable = discount > 0 && !isDiscountUsed;
+
+    const recurringAmount = isDiscountAvailable
+      ? Math.max(0, baseAmount - discount)
+      : baseAmount;
 
     const initFee = Number((selectedPlan as any)?.initialPayment ?? 0) || 0;
 
@@ -125,7 +136,7 @@ export default function PlansPopUp({
       payToday,
       showJoiningNote,
     };
-  }, [selectedPlan, alreadySubscribedToSelected]);
+  }, [selectedPlan, alreadySubscribedToSelected, userId]);
 
   const handleSuccessClose = () => {
     setTimer(5);
@@ -240,12 +251,24 @@ export default function PlansPopUp({
         Number((selectedPlan as any)?.totalPlanValue ?? 0);
 
       const discount = Number((selectedPlan as any)?.discountAmount ?? 0) || 0;
-      const recurringAmount = discount > 0 ? Math.max(0, baseAmount - discount) : baseAmount;
+
+      const isDiscountUsed =
+        !!userId &&
+        (selectedPlan as any)?.discountUsedSubscribers?.includes(userId);
+
+      const isDiscountAvailable = discount > 0 && !isDiscountUsed;
+
+      const recurringAmount = isDiscountAvailable
+        ? Math.max(0, baseAmount - discount)
+        : baseAmount;
 
       const initFee = Number((selectedPlan as any)?.initialPayment ?? 0) || 0;
       const isFirstTime = !alreadySubscribedToSelected;
 
-      const finalAmount = isFirstTime && initFee > 0 ? recurringAmount + initFee : recurringAmount;
+      const finalAmount =
+        isFirstTime && initFee > 0
+          ? recurringAmount + initFee
+          : recurringAmount;
 
       if (!finalAmount || finalAmount <= 0) {
         toast.error("Invalid amount");
@@ -316,8 +339,15 @@ export default function PlansPopUp({
               );
 
               const discount = Number((plan as any)?.discountAmount ?? 0) || 0;
-              const recurringAmount =
-                discount > 0 ? Math.max(0, baseAmount - discount) : baseAmount;
+              const isDiscountUsed =
+                !!userId &&
+                (plan as any)?.discountUsedSubscribers?.includes(userId);
+
+              const isDiscountAvailable = discount > 0 && !isDiscountUsed;
+
+              const recurringAmount = isDiscountAvailable
+                ? Math.max(0, baseAmount - discount)
+                : baseAmount;
 
               const initFee = Number((plan as any)?.initialPayment ?? 0) || 0;
 
@@ -328,7 +358,9 @@ export default function PlansPopUp({
                 );
 
               const payToday =
-                !already && initFee > 0 ? recurringAmount + initFee : recurringAmount;
+                !already && initFee > 0
+                  ? recurringAmount + initFee
+                  : recurringAmount;
 
               const showJoiningNote = !already && initFee > 0;
 
@@ -400,7 +432,7 @@ export default function PlansPopUp({
                         Pay today
                         {showJoiningNote ? (
                           <div className="mt-1 text-[10px] text-gray-500">
-                            Included one-time free ₹{money(initFee)}
+                            Included one-time fee ₹{money(initFee)}
                           </div>
                         ) : null}
                       </div>
@@ -461,7 +493,10 @@ export default function PlansPopUp({
               {/* ✅ one clear line only: Pay today */}
               <div className="mt-1 text-sm text-gray-600">
                 Pay today{" "}
-                <span className="font-extrabold" style={{ color: colors?.primaryColor }}>
+                <span
+                  className="font-extrabold"
+                  style={{ color: colors?.primaryColor }}
+                >
                   ₹{money(pricingMeta.payToday)}
                 </span>
                 {pricingMeta.showJoiningNote ? (
