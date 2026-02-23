@@ -241,11 +241,7 @@ export function usePlanSubscribeFlow({
 
       const discountAmount = Number((meta.plan as any)?.discountAmount ?? 0);
 
-      const isDiscountUsed = plans?.some((p) =>
-        p.discountUsedSubscribers?.includes(userId || ""),
-      );
-
-      const isDiscountAvailable = discountAmount > 0 && !isDiscountUsed;
+      const isDiscountAvailable = discountAmount > 0;
 
       const recurringAmount = isDiscountAvailable
         ? discountAmount

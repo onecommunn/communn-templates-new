@@ -36,6 +36,7 @@ type Feature = { text: string; available?: boolean };
 
 type NormalizedPlan = {
   id: string;
+  p: TrainingPlan;
   title: string;
   price: number | string;
   originalPrice?: number;
@@ -138,6 +139,8 @@ const Card: React.FC<CardProps> = ({
             : "Pay to Renew"
           : "Subscribe";
 
+  console.log(plan?.p, plan.p.name);
+
   return (
     <div
       className={`grid p-4 w-full border border-[#D8DDE1] bg-white md:gap-4 md:grid-cols-[minmax(0,1.1fr)_minmax(0,2.2fr)_minmax(0,0.9fr)] ${
@@ -152,26 +155,30 @@ const Card: React.FC<CardProps> = ({
 
         <div className="flex flex-col">
           {/* Discount Badge */}
-          {Number(plan.discountAmount) > 0 && !isSubscribed && (
+          {Number(plan?.p?.discountAmount) > 0 && !isSubscribed && (
             <span className="mb-2 inline-block text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 w-fit">
-              {plan.discountPercent}% OFF
+              {Math.round((Number(plan?.p?.discountAmount) / Number(plan?.p?.pricing)) * 100)}% OFF
             </span>
           )}
 
           <div className="flex items-end gap-3">
-            {/* Final Price */}
-            <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
-              <span className="text-lg md:text-xl mr-1">₹</span>
-              {plan.price}
-            </span>
-
             {/* Original Price */}
-            {Number(plan.discountAmount) > 0 && !isSubscribed && (
-              <span className="text-sm text-gray-400 line-through mb-1">
-                ₹{plan.originalPrice}
+            {Number(plan?.p?.discountAmount) > 0 && !isSubscribed ? (
+              <>
+                <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
+                  <span className="text-lg md:text-xl mr-1">₹</span>
+                  {plan?.p?.discountAmount}
+                </span>
+                <span className="text-sm text-gray-400 line-through mb-1">
+                  ₹{plan?.p?.pricing}
+                </span>
+              </>
+            ) : (
+              <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
+                <span className="text-lg md:text-xl mr-1">₹</span>
+                {plan?.p?.pricing}
               </span>
             )}
-
             <span className="text-xs md:text-[16px] text-[#6A6A6A] mb-1 font-medium">
               / {plan.period}
             </span>
@@ -447,6 +454,7 @@ const FitkitPlans = ({
 
       return {
         id: String((p as any)?._id ?? ""),
+        p: p,
         title: p.name,
         price: finalPrice,
         originalPrice,
