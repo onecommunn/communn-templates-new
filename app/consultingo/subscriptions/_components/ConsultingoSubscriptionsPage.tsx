@@ -144,6 +144,7 @@ interface Plan {
   isPauseUserApprovalRequired?: boolean;
   plan: { _id: string; isPauseUserVisible: boolean };
   coupons: any[];
+  discountAmount?: string;
 }
 
 const StaticValues = {
@@ -858,7 +859,20 @@ const ConsultingoSubscriptionsPage = ({
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-2">
                       <p className="text-sm font-semibold text-slate-900">
-                        ₹{plan?.pricing} / {plan?.interval}{" "}
+                        {Number(plan?.discountAmount) > 0 ? (
+                          <>
+                            <span> ₹{plan?.discountAmount} </span>
+                            <span className="line-through text-gray-400 text-xs">
+                              {" "}
+                              ₹{plan?.pricing}{" "}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span> ₹{plan?.pricing} </span>
+                          </>
+                        )}{" "}
+                        / {plan?.interval}{" "}
                         {(plan?.interval ?? "0") > "1"
                           ? `${getStaticValue(plan?.duration ?? "")}s`
                           : getStaticValue(plan?.duration ?? "")}

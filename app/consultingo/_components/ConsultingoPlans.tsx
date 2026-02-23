@@ -305,7 +305,7 @@ const ConsultingoPlans = ({
 
                       <div className="flex flex-col items-center gap-2 mb-8">
                         {/* Discount Badge */}
-                        {discountAmount > 0 && !userSubscribedToPlan && (
+                        {Number(plan?.discountAmount) > 0 && (
                           <span
                             className={`text-[11px] font-semibold px-3 py-1 rounded-full border ${
                               cardIsDark
@@ -313,25 +313,35 @@ const ConsultingoPlans = ({
                                 : "bg-emerald-50 text-emerald-700 border-emerald-200"
                             }`}
                           >
-                            {discountPercent}% OFF
+                            {Math.round(
+                              (Number(plan?.discountAmount) /
+                                Number(plan?.pricing)) *
+                                100,
+                            )}
+                            % OFF
                           </span>
                         )}
 
                         <div className="flex items-baseline gap-3">
-                          {/* Final Price */}
-                          <span className="text-5xl font-fraunces">
-                            ₹{finalPrice}
-                          </span>
-
-                          {/* Original Price */}
-                          {discountAmount > 0 && !userSubscribedToPlan && (
-                            <span
-                              className={`text-lg line-through ${
-                                cardIsDark ? "text-white/70" : "text-gray-400"
-                              }`}
-                            >
-                              ₹{originalPrice}
-                            </span>
+                          {Number(plan?.discountAmount) > 0? (
+                            <>
+                              <span className="text-5xl font-fraunces">
+                                ₹{plan?.discountAmount}
+                              </span>
+                              <span
+                                className={`text-lg line-through ${
+                                  cardIsDark ? "text-white/70" : "text-gray-400"
+                                }`}
+                              >
+                                ₹{plan?.pricing}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-5xl font-fraunces">
+                                ₹{plan?.pricing}
+                              </span>
+                            </>
                           )}
 
                           <span className="text-sm opacity-70">/{period}</span>
