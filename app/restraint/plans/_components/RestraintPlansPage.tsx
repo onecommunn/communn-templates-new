@@ -337,6 +337,8 @@ export default function RestraintPlansPage({
 
       return {
         id: String((p as any)?._id ?? ""),
+        // include the original plan object as `p` to satisfy DisplayPlan type
+        p: p,
         name: p.name,
         price: (p as any)?.pricing || (p as any)?.totalPlanValue || 0,
         image: (p as any)?.image?.value,
