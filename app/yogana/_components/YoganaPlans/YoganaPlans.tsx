@@ -252,6 +252,7 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                     <div className="h-full">
                       <YoganaPlanCard
                         coupons={(plan as any)?.coupons ?? []}
+                        plan={plan}
                         index={index + 1}
                         title={plan.name}
                         description={
@@ -266,8 +267,8 @@ const YoganaPlans: FC<YoganaPlansProps> = ({
                         neutralColor={neutralColor}
                         price={String(
                           (plan as any)?.pricing ??
-                          (plan as any)?.totalPlanValue ??
-                          0,
+                            (plan as any)?.totalPlanValue ??
+                            0,
                         )}
                         period={
                           plan.interval && plan.duration

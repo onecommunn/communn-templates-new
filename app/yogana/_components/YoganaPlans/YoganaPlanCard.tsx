@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { TrainingPlan } from "@/models/plan.model";
 import { capitalizeWords } from "@/utils/StringFunctions";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ type PlanMeta = null | {
 interface YoganaPlanCardProps {
   index: number;
   title: string;
+  plan: TrainingPlan;
   description: string;
   subscribers: { _id?: string; id?: string }[];
   planId: string;
@@ -55,6 +57,7 @@ interface YoganaPlanCardProps {
 const YoganaPlanCard = ({
   index,
   title,
+  plan,
   description,
   isSubscribedCommunity,
   primaryColor,
@@ -181,34 +184,39 @@ const YoganaPlanCard = ({
           {/* Price */}
           <div className="flex flex-col items-center gap-2">
             {/* ✅ Discount pill */}
-            {hasDiscount && (
+            {Number(plan?.discountAmount) > 0 && (
               <div
                 className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[12px] font-semibold font-plus-jakarta"
                 style={{ borderColor: primaryColor, color: primaryColor }}
               >
-                <span>Save ₹{discountValue}</span>
-                {discountPercent > 0 && (
-                  <span className="opacity-70">({discountPercent}% off)</span>
-                )}
+                <span>
+                  Save ₹{Number(plan?.pricing) - Number(plan?.discountAmount)}
+                </span>
               </div>
             )}
 
             <div className="flex items-end justify-center gap-2">
               {/* original price */}
-              {hasDiscount && (
-                <span className="text-[18px] font-bold font-plus-jakarta text-slate-400 line-through">
-                  ₹{basePrice}
+              {Number(plan?.discountAmount) > 0 ? (
+                <>
+                  <span className="text-[18px] font-bold font-plus-jakarta text-slate-400 line-through">
+                    ₹{plan?.pricing}
+                  </span>
+                  <span
+                    className="text-[28px] leading-none font-bold font-plus-jakarta"
+                    style={{ color: primaryColor }}
+                  >
+                    ₹{plan?.discountAmount}
+                  </span>
+                </>
+              ) : (
+                <span
+                  className="text-[28px] leading-none font-bold font-plus-jakarta"
+                  style={{ color: primaryColor }}
+                >
+                  ₹{plan?.pricing}
                 </span>
               )}
-
-              {/* final price */}
-              <span
-                className="text-[28px] leading-none font-bold font-plus-jakarta"
-                style={{ color: primaryColor }}
-              >
-                ₹{finalRecurringAmount}
-              </span>
-
               {/* period */}
               <span
                 className="text-[16px] font-medium font-plus-jakarta pb-[2px]"
