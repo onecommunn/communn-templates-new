@@ -119,6 +119,7 @@ const ChooseButton: React.FC<{
 
 type CardProps = {
   title: string;
+  plan: TrainingPlan;
   price: string | number;
   originalPrice?: number;
   discountAmount?: number;
@@ -149,6 +150,7 @@ type CardProps = {
 
 const Card: React.FC<CardProps> = ({
   title,
+  plan,
   price,
   period,
   features,
@@ -278,24 +280,28 @@ const Card: React.FC<CardProps> = ({
           <div className="text-right">
             <div className="text-right">
               {/* Discount Badge */}
-              {Number(discountAmount) > 0 && !isSubscribedToPlan && (
+              {Number(plan?.discountAmount) > 0 && (
                 <div className="mb-1">
                   <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2 py-[2px] text-[11px] font-semibold text-emerald-700">
-                    {discountPercent}% OFF
+                    {Math.round((Number(plan?.discountAmount) / Number(plan?.pricing)) * 100)}% OFF
                   </span>
                 </div>
               )}
 
               <div className="flex items-end justify-end gap-2">
                 {/* Final Price */}
-                <div className="text-xl font-semibold text-slate-900">
-                  ₹{price}
-                </div>
-
-                {/* Original Price */}
-                {Number(discountAmount) > 0 && !isSubscribedToPlan && (
-                  <div className="text-sm text-slate-400 line-through">
-                    ₹{originalPrice}
+                {Number(plan?.discountAmount) > 0  ? (
+                  <>
+                    <div className="text-xl font-semibold text-slate-900">
+                      ₹{plan?.discountAmount}
+                    </div>
+                    <div className="text-sm text-slate-400 line-through">
+                      ₹{plan?.pricing}
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-xl font-semibold text-slate-900">
+                    ₹{plan?.pricing}
                   </div>
                 )}
               </div>
@@ -466,6 +472,7 @@ const MartivoPlans = ({
 
       return {
         planId,
+        plan: p,
         title: p.name,
         price: finalPrice,
         originalPrice,
@@ -539,6 +546,7 @@ const MartivoPlans = ({
           <div className="space-y-6">
             {normalized.map((p) => (
               <Card
+                plan={p?.plan}
                 key={p.planId}
                 title={p.title}
                 price={p.price}

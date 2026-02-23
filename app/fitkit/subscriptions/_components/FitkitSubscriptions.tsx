@@ -11,10 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 import { Button } from "@/components/ui/button";
-import {
-  capitalizeWords,
-  formatDate,
-} from "@/utils/StringFunctions";
+import { capitalizeWords, formatDate } from "@/utils/StringFunctions";
 import { CirclePause, Gift, Info, Loader2, Minus, Plus, X } from "lucide-react";
 import {
   Dialog,
@@ -77,8 +74,8 @@ const PaymentScheduleItem = ({
          isDisabled
            ? "opacity-50 cursor-not-allowed border-gray-200"
            : isSelected
-           ? "border-none bg-[var(--pri)]/20 cursor-pointer"
-           : "border-transparent cursor-pointer"
+             ? "border-none bg-[var(--pri)]/20 cursor-pointer"
+             : "border-transparent cursor-pointer"
        }`}
     >
       <div className="text-[12px] md:text-sm text-gray-600">{date}</div>
@@ -88,8 +85,8 @@ const PaymentScheduleItem = ({
           status === "PAID"
             ? "border-green-600 text-green-600"
             : isSelected && !isDisabled
-            ? "border-gray-500 bg-gray-200 text-black-700"
-            : "border-gray-300 bg-white text-gray-600"
+              ? "border-gray-500 bg-gray-200 text-black-700"
+              : "border-gray-300 bg-white text-gray-600"
         }`}
       >
         ₹{amount}
@@ -100,8 +97,8 @@ const PaymentScheduleItem = ({
           status === "PAID"
             ? "text-green-600"
             : isDisabled
-            ? "text-gray-400"
-            : "text-red-500"
+              ? "text-gray-400"
+              : "text-red-500"
         }`}
       >
         {status === "PAID" ? "Paid" : isDisabled ? "Not Payable" : "Not Paid"}
@@ -147,6 +144,7 @@ interface Plan {
   isPauseUserApprovalRequired?: boolean;
   plan: { _id: string; isPauseUserVisible: boolean };
   coupons: any[];
+  discountAmount?: string;
 }
 
 const StaticValues = {
@@ -284,8 +282,8 @@ const FitkitSubscriptions = ({
     const baseStart = startImmediately
       ? new Date()
       : pauseStartDate
-      ? new Date(pauseStartDate)
-      : undefined;
+        ? new Date(pauseStartDate)
+        : undefined;
 
     if (!baseStart) return;
 
@@ -330,14 +328,14 @@ const FitkitSubscriptions = ({
         subscriptionId,
         pauseDuration,
         lastPaidSequence._id,
-        effectiveStartDate
+        effectiveStartDate,
       );
 
       if (res?.data?.status) {
         toast.success(
           plan?.isPauseUserApprovalRequired
             ? "Pause request sent successfully!"
-            : "Subscription paused successfully!"
+            : "Subscription paused successfully!",
         );
       } else {
         toast.info(res?.data?.message);
@@ -424,7 +422,7 @@ const FitkitSubscriptions = ({
         await createSubscriptionSequencesByPlanAndCommunityId(
           userId,
           communityId || "",
-          planID || ""
+          planID || "",
         );
 
       setPlan(response?.subscription?.plan);
@@ -508,7 +506,7 @@ const FitkitSubscriptions = ({
 
   const paymentResponse = async (
     response: any,
-    selectedSequences: string[]
+    selectedSequences: string[],
   ) => {
     try {
       const tnxId = response?.transactionId;
@@ -528,7 +526,7 @@ const FitkitSubscriptions = ({
 
         const windowRef = window.open(
           response.url,
-          `addressbar=no,directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no,resizable=no, width=${width},height=${height},left=${left},top=${top}`
+          `addressbar=no,directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no,resizable=no, width=${width},height=${height},left=${left},top=${top}`,
         );
 
         const intervalRef = setInterval(async () => {
@@ -543,7 +541,7 @@ const FitkitSubscriptions = ({
                 // 1️⃣ Mark sequences as paid in backend
                 await updateSequencesPaymentStatus(
                   communityId || "",
-                  selectedSequences
+                  selectedSequences,
                 );
 
                 // 2️⃣ Immediately re-fetch latest sequences for UI
@@ -578,7 +576,7 @@ const FitkitSubscriptions = ({
         userId,
         planId,
         sequenceId,
-        amount
+        amount,
       );
 
       const sequenceIds = selectedAmounts
@@ -599,7 +597,7 @@ const FitkitSubscriptions = ({
   const handleSelectAmount = (
     id: string,
     amount: number,
-    startDate: string
+    startDate: string,
   ) => {
     setSelectedAmounts((prev) => {
       if (prev.some((item) => item.id === id)) {
@@ -634,7 +632,7 @@ const FitkitSubscriptions = ({
 
   const totalAmount = Math.max(
     0,
-    (baseAmountPerMember - discountPerMember) * count
+    (baseAmountPerMember - discountPerMember) * count,
   );
 
   const handleApplyCoupon = (codeFromButton?: string) => {
@@ -647,7 +645,7 @@ const FitkitSubscriptions = ({
     }
 
     const coupon = planData?.coupons.find(
-      (c) => c.couponCode.toUpperCase() === code
+      (c) => c.couponCode.toUpperCase() === code,
     );
 
     if (!coupon) {
@@ -814,7 +812,18 @@ const FitkitSubscriptions = ({
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-2">
                       <p className="text-sm font-semibold text-slate-900">
-                        ₹{plan?.pricing} / {plan?.interval}{" "}
+                        {Number(plan?.discountAmount) > 0 ? (
+                          <>
+                            <span> ₹{plan?.discountAmount} </span>
+                            <span className="line-through text-gray-400 text-xs">
+                              {" "}
+                              ₹{plan?.pricing}{" "}
+                            </span>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        /{" "}{plan?.interval}{" "}
                         {(plan?.interval ?? "0") > "1"
                           ? `${getStaticValue(plan?.duration ?? "")}s`
                           : getStaticValue(plan?.duration ?? "")}
@@ -855,33 +864,33 @@ const FitkitSubscriptions = ({
                           subscriptionData?.subscription_status === "STOP"
                             ? "#ffa87d1a"
                             : subscriptionData?.subscription_status === "PAUSED"
-                            ? "#f5e58a1a"
-                            : "#10a00d1a",
+                              ? "#f5e58a1a"
+                              : "#10a00d1a",
                         color:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
                           subscriptionData?.subscription_status === "STOP"
                             ? "#ffa87d"
                             : subscriptionData?.subscription_status === "PAUSED"
-                            ? "#d9b300"
-                            : "#10A00D",
+                              ? "#d9b300"
+                              : "#10A00D",
                         border:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
                           subscriptionData?.subscription_status === "STOP"
                             ? "1px solid #ffa87d"
                             : subscriptionData?.subscription_status === "PAUSED"
-                            ? "1px solid #f5e58a"
-                            : "1px solid #10a00d",
+                              ? "1px solid #f5e58a"
+                              : "1px solid #10a00d",
                       }}
                     >
                       {subscriptionData?.subscription_status === "INACTIVE"
                         ? "Inactive"
                         : subscriptionData?.subscription_status === "STOP"
-                        ? "Stopped"
-                        : subscriptionData?.subscription_status === "PAUSED"
-                        ? "Paused"
-                        : "Active"}
+                          ? "Stopped"
+                          : subscriptionData?.subscription_status === "PAUSED"
+                            ? "Paused"
+                            : "Active"}
                     </div>
                     {plan?.isPauseUserVisible &&
                       subscriptionData?.subscription_status === "ACTIVE" && (
@@ -987,7 +996,7 @@ const FitkitSubscriptions = ({
                                     setPauseError(
                                       `Please enter between ${
                                         plan?.minPauseDays ?? 3
-                                      } and ${plan?.maxPauseDays ?? 180} days`
+                                      } and ${plan?.maxPauseDays ?? 180} days`,
                                     );
                                   } else {
                                     setPauseError("");
@@ -1156,7 +1165,7 @@ const FitkitSubscriptions = ({
                     if (!isVisible) return null;
 
                     const basePricing = Number(
-                      subscriptions?.pricing ?? placePrice ?? 0
+                      subscriptions?.pricing ?? placePrice ?? 0,
                     );
 
                     const initialPayment =
@@ -1172,7 +1181,7 @@ const FitkitSubscriptions = ({
                         sequencesList.filter(
                           (p) =>
                             activeTab === "All" ||
-                            p.previousStatus === activeTab
+                            p.previousStatus === activeTab,
                         ).length -
                           1;
                     return (
@@ -1186,21 +1195,21 @@ const FitkitSubscriptions = ({
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric",
-                                }
+                                },
                               )
                             : "N/A"
                         }
                         amount={amount.toString()}
                         status={payment.status}
                         isSelected={selectedAmounts.some(
-                          (item) => item.id === payment._id
+                          (item) => item.id === payment._id,
                         )}
                         isDisabled={isDisabled}
                         onSelect={() =>
                           handleSelectAmount(
                             payment._id,
                             amount,
-                            payment?.startDate
+                            payment?.startDate,
                           )
                         }
                       />

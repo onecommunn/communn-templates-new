@@ -139,8 +139,6 @@ const Card: React.FC<CardProps> = ({
             : "Pay to Renew"
           : "Subscribe";
 
-  console.log(plan?.p, plan.p.name);
-
   return (
     <div
       className={`grid p-4 w-full border border-[#D8DDE1] bg-white md:gap-4 md:grid-cols-[minmax(0,1.1fr)_minmax(0,2.2fr)_minmax(0,0.9fr)] ${
@@ -155,15 +153,19 @@ const Card: React.FC<CardProps> = ({
 
         <div className="flex flex-col">
           {/* Discount Badge */}
-          {Number(plan?.p?.discountAmount) > 0 && !isSubscribed && (
+          {Number(plan?.p?.discountAmount) > 0  && (
             <span className="mb-2 inline-block text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 w-fit">
-              {Math.round((Number(plan?.p?.discountAmount) / Number(plan?.p?.pricing)) * 100)}% OFF
+              {Math.round(
+                (Number(plan?.p?.discountAmount) / Number(plan?.p?.pricing)) *
+                  100,
+              )}
+              % OFF
             </span>
           )}
 
           <div className="flex items-end gap-3">
             {/* Original Price */}
-            {Number(plan?.p?.discountAmount) > 0 && !isSubscribed ? (
+            {Number(plan?.p?.discountAmount) > 0 ? (
               <>
                 <span className="font-kanit text-[var(--sec)] text-[40px]/[40px] md:text-[52px]/[52px] font-semibold flex items-baseline">
                   <span className="text-lg md:text-xl mr-1">₹</span>
