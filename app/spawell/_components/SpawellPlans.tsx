@@ -225,18 +225,13 @@ function Card({
           />
 
           {/* ✅ discount badge on image */}
-          {hasDiscount && !isSeq && (
+          {Number(plan?.discountAmount) > 0 && (
             <div className="absolute left-3 top-3">
               <span
                 className="inline-flex items-center rounded-full px-3 py-1 text-[12px] font-semibold shadow-sm bg-white/95 border"
                 style={{ borderColor: primaryColor, color: primaryColor }}
               >
-                Save ₹{discountValue}
-                {discountPercent > 0 ? (
-                  <span className="ml-1 opacity-70">
-                    ({discountPercent}% off)
-                  </span>
-                ) : null}
+                Save ₹{Number(plan?.pricing) - Number(plan?.discountAmount)}
               </span>
             </div>
           )}
@@ -252,29 +247,37 @@ function Card({
           {capitalizeWords(plan.name)}
         </h3>
 
-        {/* ✅ improved pricing row */}
-        {basePrice > 0 && (
-          <div className="mt-2 flex items-end gap-2">
-            {hasDiscount && (
+        <div className="mt-2 flex items-end gap-2">
+          {Number(plan?.discountAmount) > 0 ? (
+            <>
               <span className="text-[14px] font-semibold text-slate-400 line-through">
-                ₹{basePrice}
+                ₹{plan?.pricing}
               </span>
-            )}
+              <span
+                className="text-[22px] font-bold leading-none"
+                style={{ color: primaryColor }}
+              >
+                ₹{plan?.discountAmount}
+              </span>
+            </>
+          ) : (
+            <>
+              {" "}
+              <span
+                className="text-[22px] font-bold leading-none"
+                style={{ color: primaryColor }}
+              >
+                ₹{plan?.pricing}
+              </span>
+            </>
+          )}
 
-            <span
-              className="text-[22px] font-bold leading-none"
-              style={{ color: primaryColor }}
-            >
-              ₹{finalRecurringAmount}
+          {period ? (
+            <span className="text-[13px] font-medium text-slate-500 pb-[1px]">
+              / {period}
             </span>
-
-            {period ? (
-              <span className="text-[13px] font-medium text-slate-500 pb-[1px]">
-                / {period}
-              </span>
-            ) : null}
-          </div>
-        )}
+          ) : null}
+        </div>
 
         {showOneTimeFee && (
           <div className="mt-1 text-[12px] font-medium text-slate-500">
@@ -319,7 +322,7 @@ function Card({
         ) : showSubscribedDisabled ? (
           <Button
             variant="outline"
-            className="w-full h-12 rounded-xl font-semibold"
+            className="w-full h-12 rounded-xl font-semibold disabled:cursor-not-allowed"
             disabled
           >
             Subscribed
@@ -343,7 +346,7 @@ function Card({
         ) : (
           <Button
             onClick={() => onStartFlow(planId)}
-            className="w-full h-12 rounded-xl font-semibold"
+            className="w-full h-12 rounded-xl font-semibold cursor-pointer"
             style={{ backgroundColor: primaryColor, color: "#fff" }}
             disabled={isProcessing}
           >
