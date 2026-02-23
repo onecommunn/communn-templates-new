@@ -821,9 +821,11 @@ const FitkitSubscriptions = ({
                             </span>
                           </>
                         ) : (
-                          <></>
+                          <>
+                            <span> ₹{plan?.pricing} </span>
+                          </>
                         )}
-                        /{" "}{plan?.interval}{" "}
+                        / {plan?.interval}{" "}
                         {(plan?.interval ?? "0") > "1"
                           ? `${getStaticValue(plan?.duration ?? "")}s`
                           : getStaticValue(plan?.duration ?? "")}

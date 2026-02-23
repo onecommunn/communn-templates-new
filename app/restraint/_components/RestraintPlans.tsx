@@ -39,6 +39,7 @@ const MUTED = "#747B70";
 export type DisplayPlan = {
   id: string;
   name: string;
+  p: TrainingPlan;
   price: number | string;
   image?: string;
 
@@ -170,6 +171,7 @@ export default function RestraintPlans({
         id: String((p as any)?._id ?? ""),
         name: p.name,
         price: finalPrice,
+        p: p,
         discountAmount,
         discountPercent,
         image: (p as any)?.image?.value,
@@ -262,7 +264,7 @@ export default function RestraintPlans({
             ]}
           >
             <CarouselContent className="-ml-4">
-              {data.map((plan,idx) => {
+              {data.map((plan, idx) => {
                 const meta = flow.getPlanMeta(plan.id);
                 const isSubscribed = !!meta?.isSubscribed;
                 const isProcessing = flow.processingPlanId === plan.id;
@@ -477,7 +479,7 @@ export function PlanCard({
         <div className="text-center">
           <div className="flex flex-col items-center">
             {/* Discount badge (non-sequence only, automatically) */}
-            {Number(plan.discountAmount) > 0 && !isSubscribed && (
+            {Number(plan?.p?.discountAmount) > 0 && (
               <span
                 className={[
                   "mb-2 text-[11px] font-semibold px-3 py-1 rounded-full",
@@ -486,25 +488,30 @@ export function PlanCard({
                     : "bg-emerald-50 text-emerald-700 border border-emerald-200",
                 ].join(" ")}
               >
-                {plan.discountPercent}% OFF
+                {Math.round((Number(plan?.p?.discountAmount) / Number(plan?.p?.pricing)) * 100)}% OFF
               </span>
             )}
 
             {/* Price row */}
             <div className="flex items-end gap-2">
               {/* Final Price */}
-              <div className="font-marcellus text-4xl">₹{plan.price}</div>
 
               {/* Original Price (only when discount applies) */}
-              {Number(plan.discountAmount) > 0 && !isSubscribed && (
-                <div
-                  className="text-sm line-through opacity-70"
-                  style={{
-                    color: isFeatured ? "rgba(255,255,255,.7)" : "#8B8F87",
-                  }}
-                >
-                  ₹{Number(plan.price) + Number(plan.discountAmount)}
-                </div>
+              {Number(plan?.p?.discountAmount) > 0 ? (
+                <>
+                  <div className="font-marcellus text-4xl">₹{plan?.p?.discountAmount}</div>
+                  <span
+                    className="text-sm line-through opacity-70"
+                    style={{
+                      color: isFeatured ? "rgba(255,255,255,.7)" : "#8B8F87",
+                    }}
+                  >
+                    ₹
+                    {Number(plan?.p?.pricing)}
+                  </span>
+                </>
+              ) : (
+                <div className="font-marcellus text-4xl">₹{plan?.p?.pricing}</div>
               )}
             </div>
           </div>
@@ -604,8 +611,8 @@ export function PlanCard({
                     ctaBase,
                     "text-[15px]",
                     isFeatured
-                      ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                      : "bg-[var(--pri)] text-white hover:opacity-95",
+                      ? "bg-[var(--sec)] hover:bg-[var(--sec)]/90 text-[var(--pri)] hover:brightness-95"
+                      : "bg-[var(--pri)] hover:bg-[var(--pri)]/90  text-white hover:opacity-95",
                   ].join(" ")}
                 >
                   <span className="inline-flex items-center gap-2">
@@ -616,7 +623,7 @@ export function PlanCard({
               ) : showSubscribedDisabled ? (
                 <Button
                   variant="outline"
-                  className="w-full h-14 !py-0 rounded-xl font-semibold"
+                  className="w-full h-14 !py-0 rounded-xl font-semibold disabled:bg-[var(--pri)]"
                   disabled={!plan.isSequencePlan}
                 >
                   Subscribed
@@ -629,8 +636,8 @@ export function PlanCard({
                       ctaBase,
                       "text-[15px]",
                       isFeatured
-                        ? "bg-[var(--sec)] text-[var(--pri)] hover:brightness-95"
-                        : "bg-[var(--pri)] text-white hover:opacity-95",
+                        ? "bg-[var(--sec)] hover:bg-[var(--sec)]/90 text-[var(--pri)] hover:brightness-95"
+                        : "bg-[var(--pri)] hover:bg-[var(--pri)]/90 text-white hover:opacity-95",
                       isProcessing ? "opacity-60 pointer-events-none" : "",
                     ].join(" ")}
                   >
@@ -643,8 +650,8 @@ export function PlanCard({
                     className={[
                       "w-full h-14 !py-0 rounded-xl font-semibold",
                       isFeatured
-                        ? "bg-[var(--sec)] text-[var(--pri)]"
-                        : "bg-[var(--pri)] text-white",
+                        ? "bg-[var(--sec)] hover:bg-[var(--sec)]/90 text-[var(--pri)]"
+                        : "bg-[var(--pri)] hover:bg-[var(--pri)]/90 text-white",
                     ].join(" ")}
                     disabled={isProcessing}
                   >
@@ -664,8 +671,8 @@ export function PlanCard({
                   className={[
                     "w-full h-14 cursor-pointer disabled:cursor-not-allowed hover:brightness-95 !py-0 rounded-xl font-semibold",
                     isFeatured
-                      ? "bg-[var(--sec)] text-[var(--pri)]"
-                      : "bg-[var(--pri)] text-white",
+                      ? "bg-[var(--sec)] hover:bg-[var(--sec)]/90 text-[var(--pri)]"
+                      : "bg-[var(--pri)] hover:bg-[var(--pri)]/90 text-white",
                   ].join(" ")}
                   disabled={isProcessing}
                 >
