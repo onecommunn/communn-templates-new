@@ -3,7 +3,10 @@ import { CMSProvider } from "./CMSProvider.client";
 
 const EMPTY_BUNDLE = {
   home: null,
-  aboutUs: null,
+  about: null,
+  services: null,
+  packages: null,
+  portfolio: null,
   contact: null,
 };
 

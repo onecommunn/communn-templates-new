@@ -1,8 +1,14 @@
-"use client"
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { ServicespreviewSection } from "@/models/templates/photography/photography-home-model";
 
-const PhotographyServicespreview = () => {
+const PhotographyServicespreview = ({
+  data,
+}: {
+  data: ServicespreviewSection;
+}) => {
+  const content = data?.content;
   return (
     <section className="py-24 px-4 md:px-20 bg-[#121212] text-[#EFECE7]">
       <div className="container mx-auto">
@@ -14,32 +20,16 @@ const PhotographyServicespreview = () => {
           className="text-center mb-16"
         >
           <p className="text-[#E0A24D] font-raleway text-sm uppercase tracking-[0.3em] mb-3">
-            What We Do
+            {content?.badgeText}
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold">
-            Our Services
+            {content?.heading}
           </h2>
           <div className="w-20 h-px bg-[#E0A24D] mx-auto mt-6" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Candid & Traditional Photography",
-              img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
-              desc: "Timeless portraits and authentic moments from your celebration",
-            },
-            {
-              title: "Cinematography & Drone",
-              img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-              desc: "Cinematic wedding films captured from every perspective",
-            },
-            {
-              title: "Pre-Wedding Shoots",
-              img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
-              desc: "Romantic sessions that beautifully narrate your love story",
-            },
-          ].map((service, i) => (
+          {content?.services.map((service, i) => (
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 30 }}
@@ -50,7 +40,7 @@ const PhotographyServicespreview = () => {
             >
               <div className="aspect-[3/4] overflow-hidden">
                 <img
-                  src={service.img}
+                  src={service.image}
                   alt={service.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
@@ -61,7 +51,7 @@ const PhotographyServicespreview = () => {
                   {service.title}
                 </h3>
                 <p className="text-[#8c8c8c] font-raleway text-sm">
-                  {service.desc}
+                  {service.description}
                 </p>
               </div>
             </motion.div>

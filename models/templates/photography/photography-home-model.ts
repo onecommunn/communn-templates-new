@@ -72,7 +72,7 @@ export interface YouTubeShowreelSection extends SectionBase {
 export interface StatscounterSection extends SectionBase {
   sectionName: "statscounterSection";
   content: {
-    stats: { icon: string; value: string; label: string };
+    stats: { icon: string; value: string; label: string }[];
   };
 }
 

@@ -1,21 +1,22 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { MovingcollageSection } from "@/models/templates/photography/photography-home-model";
 
-const collageImages = [
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
-];
+// const collageImages = [
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+// ];
 
 const MarqueeRow = ({
   images,
@@ -52,7 +53,14 @@ const MarqueeRow = ({
   );
 };
 
-const PhotographyMovingcollagesection = () => {
+const PhotographyMovingcollagesection = ({
+  data,
+}: {
+  data: MovingcollageSection;
+}) => {
+  const content = data?.content;
+  const images = content?.images || [];
+  const mid = Math.ceil(images.length / 2);
   return (
     <section className="py-20 overflow-hidden bg-[#121212] text-[#EFECE7]">
       <div className="container mx-auto text-center mb-12 px-4">
@@ -63,25 +71,18 @@ const PhotographyMovingcollagesection = () => {
           transition={{ duration: 0.8 }}
         >
           <p className="text-[#e0a346] font-raleway text-sm uppercase tracking-[0.3em] mb-3">
-            Gallery
+            {content?.badgeText}
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold">
-            A Glimpse of Our Work
+            {content?.heading}
           </h2>
           <div className="w-20 h-px bg-[#e0a346] mx-auto mt-6" />
         </motion.div>
       </div>
       <div className="space-y-3">
-        <MarqueeRow
-          images={collageImages.slice(0, 6)}
-          direction="left"
-          speed={35}
-        />
-        <MarqueeRow
-          images={collageImages.slice(6, 12)}
-          direction="right"
-          speed={40}
-        />
+        <MarqueeRow images={images.slice(0, mid)} direction="left" speed={35} />
+
+        <MarqueeRow images={images.slice(mid)} direction="right" speed={40} />
       </div>
     </section>
   );

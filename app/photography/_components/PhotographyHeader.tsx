@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import { Header } from "@/models/templates/photography/photography-home-model";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -15,10 +15,11 @@ const navLinks = [
   { label: "Contact", path: "/contact" },
 ];
 
-const PhotographyHeader = () => {
+const PhotographyHeader = ({ data }: { data: Header }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const content = data?.content
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +46,7 @@ const PhotographyHeader = () => {
         <Link href="/">
           <img
             src={
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/vijju-logo (1).png"
+             content?.media?.[0]
             }
             alt="Vijay Photography"
             className="h-8 md:h-12"

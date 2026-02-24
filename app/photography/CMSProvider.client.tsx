@@ -10,9 +10,11 @@ import React, {
 
 export type Bundle = {
   home: any | null;
-  aboutUs: any | null;
+  about: any | null;
+  services: any | null;
+  packages: any | null;
+  portfolio: any | null;
   contact: any | null;
-  // add more pages
 };
 
 type CMSContext = Bundle & {
@@ -22,9 +24,11 @@ type CMSContext = Bundle & {
 
 const defaultBundle: Bundle = {
   home: null,
-  aboutUs: null,
+  about: null,
+  services: null,
+  packages: null,
+  portfolio: null,
   contact: null,
-  // add more pages
 };
 
 const CMSCtx = createContext<CMSContext | null>(null);
@@ -56,7 +60,7 @@ export function CMSProvider({
 
   const value = useMemo<CMSContext>(
     () => ({ ...(bundle ?? defaultBundle), loading, refresh }),
-    [bundle, loading, refresh]
+    [bundle, loading, refresh],
   );
 
   return <CMSCtx.Provider value={value}>{children}</CMSCtx.Provider>;

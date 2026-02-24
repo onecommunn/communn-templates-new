@@ -8,19 +8,20 @@ import {
 } from "framer-motion";
 import Link from "next/link";
 import { ArrowDown } from "lucide-react";
+import { HeroSection } from "@/models/templates/photography/photography-home-model";
 
-const heroImages = [
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-ceremony.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-haldi.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-portrait.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
-];
+// const heroImages = [
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-ceremony.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-haldi.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-portrait.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
+//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
+// ];
 
-const PhotographyHero = () => {
+const PhotographyHero = ({ data }: { data: HeroSection }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, 150]);
@@ -28,6 +29,10 @@ const PhotographyHero = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
 
   const [currentHeroImage, setCurrentHeroImage] = useState(0);
+  
+
+  const content = data?.content;
+  const heroImages = content?.images
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -99,7 +104,7 @@ const PhotographyHero = () => {
           transition={{ duration: 0.8 }}
           className="text-[#E9A55C] font-raleway text-sm uppercase tracking-[0.3em] mb-6"
         >
-          Vijay Photography
+          {content?.branding}
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -107,8 +112,11 @@ const PhotographyHero = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6"
         >
-          Your Legacy,
-          <span className="text-[#E9A55C] italic"> Through Our Lens</span>
+          {content?.heading?.main}
+          <span className="text-[#E9A55C] italic">
+            {" "}
+            {content?.heading?.highlight}
+          </span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -116,7 +124,7 @@ const PhotographyHero = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-[#EFECE7]/80 font-raleway text-lg md:text-xl max-w-2xl mx-auto mb-10"
         >
-          Specialized in Wedding Photography | Chitradurga
+          {content?.subtitle}
         </motion.p>
         <motion.div
           initial={{ opacity: 0 }}
@@ -124,18 +132,22 @@ const PhotographyHero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col sm:flex-row justify-center gap-4"
         >
-          <Link
-            href="/portfolio"
-            className="bg-[#E9A55C] text-[#0d0d0d] px-8 py-3 font-raleway text-sm uppercase tracking-widest hover:bg-[#E9A55C]/90 transition-colors"
-          >
-            View Portfolio
-          </Link>
-          <Link
-            href="/contact"
-            className="border border-[#EFECE7]/30 text-[#EFECE7] px-8 py-3 font-raleway text-sm uppercase tracking-widest hover:border-[#E9A55C] hover:text-[#E9A55C] transition-colors"
-          >
-            Get in Touch
-          </Link>
+          {content?.buttons?.primary && (
+            <Link
+              href={content?.buttons?.primary?.href ?? "/"}
+              className="bg-[#E9A55C] text-[#0d0d0d] px-8 py-3 font-raleway text-sm uppercase tracking-widest hover:bg-[#E9A55C]/90 transition-colors"
+            >
+              {content?.buttons?.primary?.label}
+            </Link>
+          )}
+          {content?.buttons?.secondary && (
+            <Link
+              href={content?.buttons?.secondary?.href ?? "/"}
+              className="border border-[#EFECE7]/30 text-[#EFECE7] px-8 py-3 font-raleway text-sm uppercase tracking-widest hover:border-[#E9A55C] hover:text-[#E9A55C] transition-colors"
+            >
+              {content?.buttons?.secondary?.label}
+            </Link>
+          )}
         </motion.div>
       </motion.div>
 
