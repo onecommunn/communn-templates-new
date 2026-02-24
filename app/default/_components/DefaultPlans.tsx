@@ -187,7 +187,10 @@ const DefaultPlans = ({
                   p.discountUsedSubscribers?.includes(userId || ""),
                 );
                 const isDiscountAvailable =
-                  discountValue > 0 && !isSequencePlan && !isDiscountUsed && !userSubscribedToPlan;
+                  discountValue > 0 &&
+                  !isSequencePlan &&
+                  !isDiscountUsed &&
+                  !userSubscribedToPlan;
 
                 const finalRecurringAmount = isDiscountAvailable
                   ? Math.max(0, discountValue)
@@ -289,14 +292,20 @@ const DefaultPlans = ({
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="flex items-center gap-2">
-                              {isDiscountAvailable && (
-                                <span className="text-slate-400 line-through text-[20px] font-bold">
-                                  ₹{basePrice}
+                              {Number(plan?.discountAmount) > 0 ? (
+                                <>
+                                  <span className="text-slate-400 line-through text-[20px] font-bold">
+                                    ₹{plan?.pricing}
+                                  </span>
+                                  <span className="text-[20px] font-extrabold text-slate-900">
+                                    ₹{plan?.discountAmount}
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-[20px] font-extrabold text-slate-900">
+                                  ₹{plan?.pricing}
                                 </span>
                               )}
-                              <span className="text-[20px] font-extrabold text-slate-900">
-                                ₹{finalRecurringAmount}
-                              </span>
                             </div>
 
                             <div className="mt-1 flex items-center gap-2 text-[12px] text-slate-600">

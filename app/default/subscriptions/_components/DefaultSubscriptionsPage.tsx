@@ -11,10 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 import { Button } from "@/components/ui/button";
-import {
-  capitalizeWords,
-  formatDate,
-} from "@/utils/StringFunctions";
+import { capitalizeWords, formatDate } from "@/utils/StringFunctions";
 import { CirclePause, Gift, Info, Loader2, Minus, Plus, X } from "lucide-react";
 import {
   Dialog,
@@ -73,33 +70,36 @@ const PaymentScheduleItem = ({
         if (!isDisabled) onSelect();
       }}
       className={`flex flex-col items-center space-y-2 px-3 py-2 rounded-lg border 
-       ${isDisabled
-          ? "opacity-50 cursor-not-allowed border-gray-200"
-          : isSelected
-            ? "border-none bg-[var(--pri)]/20 cursor-pointer"
-            : "border-transparent cursor-pointer"
-        }`}
+       ${
+         isDisabled
+           ? "opacity-50 cursor-not-allowed border-gray-200"
+           : isSelected
+             ? "border-none bg-[var(--pri)]/20 cursor-pointer"
+             : "border-transparent cursor-pointer"
+       }`}
     >
       <div className="text-[12px] md:text-sm text-gray-600">{date}</div>
 
       <div
-        className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${status === "PAID"
-          ? "border-green-600 text-green-600"
-          : isSelected && !isDisabled
-            ? "border-gray-500 bg-gray-200 text-black-700"
-            : "border-gray-300 bg-white text-gray-600"
-          }`}
+        className={`w-24 md:w-28 h-10 rounded-2xl border-2 flex items-center justify-center text-sm font-medium ${
+          status === "PAID"
+            ? "border-green-600 text-green-600"
+            : isSelected && !isDisabled
+              ? "border-gray-500 bg-gray-200 text-black-700"
+              : "border-gray-300 bg-white text-gray-600"
+        }`}
       >
         ₹{amount}
       </div>
 
       <div
-        className={`text-xs ${status === "PAID"
-          ? "text-green-600"
-          : isDisabled
-            ? "text-gray-400"
-            : "text-red-500"
-          }`}
+        className={`text-xs ${
+          status === "PAID"
+            ? "text-green-600"
+            : isDisabled
+              ? "text-gray-400"
+              : "text-red-500"
+        }`}
       >
         {status === "PAID" ? "Paid" : isDisabled ? "Not Payable" : "Not Paid"}
       </div>
@@ -144,6 +144,7 @@ interface Plan {
   isPauseUserApprovalRequired?: boolean;
   plan: { _id: string; isPauseUserVisible: boolean };
   coupons: any[];
+  discountAmount?: string;
 }
 
 const StaticValues = {
@@ -215,8 +216,8 @@ const getStaticValue = (key: string) => {
 };
 
 const DefaultSubscriptionsPage = () => {
-  const primaryColor = "#2952A2"
-  const secondaryColor = "#fff"
+  const primaryColor = "#2952A2";
+  const secondaryColor = "#fff";
   const [activeTab, setActiveTab] = useState("All");
   const [subscriptionId, setSubscriptionId] = useState<string>("");
   const [placePrice, setPlacePrice] = useState<string>("0");
@@ -324,14 +325,14 @@ const DefaultSubscriptionsPage = () => {
         subscriptionId,
         pauseDuration,
         lastPaidSequence._id,
-        effectiveStartDate
+        effectiveStartDate,
       );
 
       if (res?.data?.status) {
         toast.success(
           plan?.isPauseUserApprovalRequired
             ? "Pause request sent successfully!"
-            : "Subscription paused successfully!"
+            : "Subscription paused successfully!",
         );
       } else {
         toast.info(res?.data?.message);
@@ -383,7 +384,7 @@ const DefaultSubscriptionsPage = () => {
     updateSequencesPaymentStatus,
   } = usePayment();
 
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     authContext?.user,
     authContext?.isAuthenticated,
     authContext?.loading,
@@ -418,7 +419,7 @@ const DefaultSubscriptionsPage = () => {
         await createSubscriptionSequencesByPlanAndCommunityId(
           userId,
           communityId || "",
-          planID || ""
+          planID || "",
         );
 
       setPlan(response?.subscription?.plan);
@@ -504,7 +505,7 @@ const DefaultSubscriptionsPage = () => {
 
   const paymentResponse = async (
     response: any,
-    selectedSequences: string[]
+    selectedSequences: string[],
   ) => {
     try {
       const tnxId = response?.transactionId;
@@ -524,7 +525,7 @@ const DefaultSubscriptionsPage = () => {
 
         const windowRef = window.open(
           response.url,
-          `addressbar=no,directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no,resizable=no, width=${width},height=${height},left=${left},top=${top}`
+          `addressbar=no,directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no,resizable=no, width=${width},height=${height},left=${left},top=${top}`,
         );
 
         const intervalRef = setInterval(async () => {
@@ -539,7 +540,7 @@ const DefaultSubscriptionsPage = () => {
                 // 1️⃣ Mark sequences as paid in backend
                 await updateSequencesPaymentStatus(
                   communityId || "",
-                  selectedSequences
+                  selectedSequences,
                 );
 
                 // 2️⃣ Immediately re-fetch latest sequences for UI
@@ -574,7 +575,7 @@ const DefaultSubscriptionsPage = () => {
         userId,
         planId,
         sequenceId,
-        amount
+        amount,
       );
 
       const sequenceIds = selectedAmounts
@@ -595,7 +596,7 @@ const DefaultSubscriptionsPage = () => {
   const handleSelectAmount = (
     id: string,
     amount: number,
-    startDate: string
+    startDate: string,
   ) => {
     setSelectedAmounts((prev) => {
       if (prev.some((item) => item.id === id)) {
@@ -630,7 +631,7 @@ const DefaultSubscriptionsPage = () => {
 
   const totalAmount = Math.max(
     0,
-    (baseAmountPerMember - discountPerMember) * count
+    (baseAmountPerMember - discountPerMember) * count,
   );
 
   const handleApplyCoupon = (codeFromButton?: string) => {
@@ -643,7 +644,7 @@ const DefaultSubscriptionsPage = () => {
     }
 
     const coupon = planData?.coupons.find(
-      (c) => c.couponCode.toUpperCase() === code
+      (c) => c.couponCode.toUpperCase() === code,
     );
 
     if (!coupon) {
@@ -810,7 +811,20 @@ const DefaultSubscriptionsPage = () => {
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-2">
                       <p className="text-sm font-semibold text-slate-900">
-                        ₹{plan?.pricing} / {plan?.interval}{" "}
+                        {Number(plan?.discountAmount) > 0 ? (
+                          <>
+                            <span> ₹{plan?.discountAmount} </span>
+                            <span className="line-through text-gray-400 text-xs">
+                              {" "}
+                              ₹{plan?.pricing}{" "}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span> ₹{plan?.pricing} </span>
+                          </>
+                        )}{" "}
+                        / {plan?.interval}{" "}
                         {(plan?.interval ?? "0") > "1"
                           ? `${getStaticValue(plan?.duration ?? "")}s`
                           : getStaticValue(plan?.duration ?? "")}
@@ -835,8 +849,8 @@ const DefaultSubscriptionsPage = () => {
                     <p className="mt-1 text-sm font-semibold text-slate-900">
                       {sequencesList?.[0]?.startDate
                         ? new Date(sequencesList[0].startDate)
-                          .toISOString()
-                          .split("T")[0]
+                            .toISOString()
+                            .split("T")[0]
                         : ""}
                     </p>
                   </div>
@@ -848,7 +862,7 @@ const DefaultSubscriptionsPage = () => {
                         backgroundColor:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
-                            subscriptionData?.subscription_status === "STOP"
+                          subscriptionData?.subscription_status === "STOP"
                             ? "#ffa87d1a"
                             : subscriptionData?.subscription_status === "PAUSED"
                               ? "#f5e58a1a"
@@ -856,7 +870,7 @@ const DefaultSubscriptionsPage = () => {
                         color:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
-                            subscriptionData?.subscription_status === "STOP"
+                          subscriptionData?.subscription_status === "STOP"
                             ? "#ffa87d"
                             : subscriptionData?.subscription_status === "PAUSED"
                               ? "#d9b300"
@@ -864,7 +878,7 @@ const DefaultSubscriptionsPage = () => {
                         border:
                           subscriptionData?.subscription_status ===
                             "INACTIVE" ||
-                            subscriptionData?.subscription_status === "STOP"
+                          subscriptionData?.subscription_status === "STOP"
                             ? "1px solid #ffa87d"
                             : subscriptionData?.subscription_status === "PAUSED"
                               ? "1px solid #f5e58a"
@@ -981,8 +995,9 @@ const DefaultSubscriptionsPage = () => {
                                     num > (plan?.maxPauseDays ?? 180)
                                   ) {
                                     setPauseError(
-                                      `Please enter between ${plan?.minPauseDays ?? 3
-                                      } and ${plan?.maxPauseDays ?? 180} days`
+                                      `Please enter between ${
+                                        plan?.minPauseDays ?? 3
+                                      } and ${plan?.maxPauseDays ?? 180} days`,
                                     );
                                   } else {
                                     setPauseError("");
@@ -1000,8 +1015,9 @@ const DefaultSubscriptionsPage = () => {
                                 </p>
                               )}
                               <p className="mt-1 text-xs text-gray-500">
-                                {`Allowed Duration: ${plan?.minPauseDays ?? 3
-                                  } to ${plan?.maxPauseDays ?? 180} days`}
+                                {`Allowed Duration: ${
+                                  plan?.minPauseDays ?? 3
+                                } to ${plan?.maxPauseDays ?? 180} days`}
                               </p>
                             </div>
 
@@ -1061,7 +1077,7 @@ const DefaultSubscriptionsPage = () => {
                               <p className="mt-2 text-xs text-gray-500">
                                 Your subscription will be extended by{" "}
                                 {typeof pauseDuration === "number" &&
-                                  pauseDuration > 0
+                                pauseDuration > 0
                                   ? pauseDuration
                                   : 0}{" "}
                                 days to account for the pause period.
@@ -1130,10 +1146,11 @@ const DefaultSubscriptionsPage = () => {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-8 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${activeTab === tab
-                        ? "bg-[var(--pri)] text-white"
-                        : "text-[var(--pri)] hover:text-[var(--pri)] hover:bg-[var(--sec)]/20"
-                        }`}
+                      className={`px-8 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${
+                        activeTab === tab
+                          ? "bg-[var(--pri)] text-white"
+                          : "text-[var(--pri)] hover:text-[var(--pri)] hover:bg-[var(--sec)]/20"
+                      }`}
                     >
                       {formatStatus(tab)}
                     </button>
@@ -1149,7 +1166,7 @@ const DefaultSubscriptionsPage = () => {
                     if (!isVisible) return null;
 
                     const basePricing = Number(
-                      subscriptions?.pricing ?? placePrice ?? 0
+                      subscriptions?.pricing ?? placePrice ?? 0,
                     );
 
                     const initialPayment =
@@ -1162,38 +1179,38 @@ const DefaultSubscriptionsPage = () => {
                       ["PAID", "PAID_BY_CASH", "NA"].includes(payment.status) ||
                       (payment as any).isnonPayable ||
                       index ===
-                      sequencesList.filter(
-                        (p) =>
-                          activeTab === "All" ||
-                          p.previousStatus === activeTab
-                      ).length -
-                      1;
+                        sequencesList.filter(
+                          (p) =>
+                            activeTab === "All" ||
+                            p.previousStatus === activeTab,
+                        ).length -
+                          1;
                     return (
                       <PaymentScheduleItem
                         key={payment._id}
                         date={
                           payment?.startDate
                             ? new Date(payment.startDate).toLocaleDateString(
-                              "en-GB",
-                              {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              }
-                            )
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )
                             : "N/A"
                         }
                         amount={amount.toString()}
                         status={payment.status}
                         isSelected={selectedAmounts.some(
-                          (item) => item.id === payment._id
+                          (item) => item.id === payment._id,
                         )}
                         isDisabled={isDisabled}
                         onSelect={() =>
                           handleSelectAmount(
                             payment._id,
                             amount,
-                            payment?.startDate
+                            payment?.startDate,
                           )
                         }
                       />
@@ -1315,76 +1332,79 @@ const DefaultSubscriptionsPage = () => {
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-3">
-                    {!((planData?.coupons && planData?.coupons?.length <= 0) ||
-                      !planData?.coupons) && (
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              className="flex items-center gap-2 cursor-pointer"
-                              variant={"outline"}
-                              disabled={
-                                totalAmount === 0 ||
-                                (planData?.coupons &&
-                                  planData?.coupons?.length <= 0) ||
-                                !planData?.coupons
-                              }
-                            >
-                              <span>
-                                <Gift size={24} strokeWidth={1} />
-                              </span>
-                              Add Discount
-                            </Button>
-                          </DialogTrigger>
-
-                          <DialogContent
-                            style={{ color: primaryColor }}
-                            className="w-xl"
+                    {!(
+                      (planData?.coupons && planData?.coupons?.length <= 0) ||
+                      !planData?.coupons
+                    ) && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            className="flex items-center gap-2 cursor-pointer"
+                            variant={"outline"}
+                            disabled={
+                              totalAmount === 0 ||
+                              (planData?.coupons &&
+                                planData?.coupons?.length <= 0) ||
+                              !planData?.coupons
+                            }
                           >
-                            <DialogTitle>Apply Coupon Code</DialogTitle>
-                            <div className="flex items-center gap-2">
-                              <Input
-                                type="text"
-                                placeholder="Enter Coupon"
-                                value={couponInput}
-                                onChange={(e) =>
-                                  setCouponInput(e.target.value.toUpperCase())
-                                }
-                              />
-                              <Button
-                                style={{ backgroundColor: primaryColor }}
-                                onClick={() => handleApplyCoupon()}
-                              >
-                                Apply
-                              </Button>
-                            </div>
+                            <span>
+                              <Gift size={24} strokeWidth={1} />
+                            </span>
+                            Add Discount
+                          </Button>
+                        </DialogTrigger>
 
-                            <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
-                              {planData?.coupons?.map((coupon, idx) => (
-                                <Button
-                                  key={idx}
-                                  variant={"outline"}
-                                  className="cursor-pointer"
-                                  onClick={() =>
-                                    handleApplyCoupon(coupon.couponCode)
-                                  }
-                                >
-                                  {coupon.couponCode}
-                                </Button>
-                              ))}
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      )}
+                        <DialogContent
+                          style={{ color: primaryColor }}
+                          className="w-xl"
+                        >
+                          <DialogTitle>Apply Coupon Code</DialogTitle>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="text"
+                              placeholder="Enter Coupon"
+                              value={couponInput}
+                              onChange={(e) =>
+                                setCouponInput(e.target.value.toUpperCase())
+                              }
+                            />
+                            <Button
+                              style={{ backgroundColor: primaryColor }}
+                              onClick={() => handleApplyCoupon()}
+                            >
+                              Apply
+                            </Button>
+                          </div>
+
+                          <DialogFooter className="sm:justify-start gap-2 flex flex-wrap mt-3">
+                            {planData?.coupons?.map((coupon, idx) => (
+                              <Button
+                                key={idx}
+                                variant={"outline"}
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  handleApplyCoupon(coupon.couponCode)
+                                }
+                              >
+                                {coupon.couponCode}
+                              </Button>
+                            ))}
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    )}
 
                     <Button
                       disabled={totalAmount === 0}
                       onClick={() =>
                         handleClickPay(communityId || "", planID || "")
                       }
-                      className={`${totalAmount === 0
-                        ? "cursor-not-allowed"
-                        : "cursor-pointer"
-                        }`}
+                      className={`${
+                        totalAmount === 0
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
                       style={{
                         backgroundColor: primaryColor,
                         color: "#fff",
