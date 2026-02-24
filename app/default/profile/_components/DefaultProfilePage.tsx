@@ -354,7 +354,7 @@ const DefaultProfilePage = () => {
             </Card>
 
 
-            {/* <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
+            <Card className="rounded-xl shadow-none border border-gray-200 p-3 md:p-6 md:py-[30px] h-fit">
               <CardContent className="p-0 flex flex-col gap-4 w-full">
 
                 <div className="flex items-center justify-between w-full mb-1">
@@ -479,7 +479,7 @@ const DefaultProfilePage = () => {
                   </button>
                 </Link>
               </CardContent>
-            </Card> */}
+            </Card>
           </aside>
 
           {/* RIGHT COLUMN */}

@@ -16,14 +16,18 @@ import {
 import { AuthContext } from "@/contexts/Auth.context";
 
 import LoginPopUp from "./LoginPopUp";
+import PlansPopUp from "./PlansPopUp";
 
 import { useCourses } from "@/hooks/useCourses";
 import { useSnackbar } from "notistack";
 import { usePayment } from "@/hooks/usePayments";
+import { usePlans } from "@/hooks/usePlan";
+import { useCommunity } from "@/hooks/useCommunity";
 
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 import { getStaticValue } from "@/utils/StringFunctions";
+import { TrainingPlan } from "@/models/plan.model";
 
 interface IMultiMedia {
   _id: string;
@@ -69,6 +73,13 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
 
   const userId: string | undefined = auth?.user?.id;
 
+  const { getPlansList, getCommunityPlansListAuth } = usePlans();
+  const { communityId } = useCommunity();
+
+  const [plans, setPlans] = useState<TrainingPlan[]>([]);
+  const [filteredPlans, setFilteredPlans] = useState<TrainingPlan[]>([]);
+  const [isPlansOpen, setIsPlansOpen] = useState(false);
+
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [redirectPath, setRedirectPath] = useState<string>("/");
   const [pendingCourseId, setPendingCourseId] = useState<string | null>(null);
@@ -96,9 +107,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
   };
 
   const hasPlanAmount = (course: any) =>
-    Array.isArray(course?.plan) &&
-    course?.plan?.length > 0 &&
-    Number(course?.plan?.[0]?.pricing) > 0;
+    Array.isArray(course?.plan) && course?.plan?.length > 0;
 
   const hasDirectAmount = (course: any) =>
     course?.isAmountAvailable && Number(course?.amount) > 0;
@@ -107,10 +116,50 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
     return !hasDirectAmount(course) && !hasPlanAmount(course);
   };
 
+  const fetchPlans = async () => {
+    if (!communityId) return;
+    try {
+      const resp: any = isAuthenticated
+        ? await getCommunityPlansListAuth(communityId)
+        : await getPlansList(communityId);
+
+      if (Array.isArray(resp)) setPlans(resp);
+      else if (resp && typeof resp === "object" && "myPlans" in resp)
+        setPlans(resp.myPlans || []);
+      else setPlans([]);
+    } catch (e) {
+      console.error("Failed to fetch plans:", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [communityId, isAuthenticated]);
+
+  const isSubscribedToCoursePlans = (course: any) => {
+    if (!Array.isArray(course?.plan) || course?.plan?.length === 0) return true;
+    if (!isAuthenticated || !userId || !auth?.userData?.subscriptionDetail)
+      return false;
+
+    const subscribedPlanIds = auth.userData.subscriptionDetail.map(
+      (item: any) => String(item?.plan?._id || item?.plan),
+    );
+
+    return course.plan.some((p: any) => {
+      const planId = String(p?._id || p);
+      return subscribedPlanIds.includes(planId);
+    });
+  };
+
   const getActionText = (course: any) => {
     if (isFreeCourse(course)) return "View Course";
 
     if (!isAuthenticated || !userId) return "Login to Continue";
+
+    if (Array.isArray(course?.plan) && course.plan.length > 0 && !isSubscribedToCoursePlans(course))
+      return "Subscribe to Access";
+
     if (canAccessCourseDetails(course)) return "View Course";
     return "Pay to Access";
   };
@@ -222,6 +271,17 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
       return;
     }
 
+    const hasPlans = Array.isArray(course?.plan) && course.plan.length > 0;
+    if (hasPlans && !isSubscribedToCoursePlans(course)) {
+      const coursePlanIds = course.plan.map((p: any) => String(p?._id || p));
+      const relevantPlans = plans.filter((pl) =>
+        coursePlanIds.includes(String(pl._id)),
+      );
+      setFilteredPlans(relevantPlans);
+      setIsPlansOpen(true);
+      return;
+    }
+
     await startPaymentFlow(course);
   };
 
@@ -234,13 +294,24 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
     (async () => {
       if (isFreeCourse(c) || canAccessCourseDetails(c)) {
         router.push(`/course-details?id=${pendingCourseId}`);
+      } else if (
+        Array.isArray(c?.plan) &&
+        c.plan.length > 0 &&
+        !isSubscribedToCoursePlans(c)
+      ) {
+        const coursePlanIds = c.plan.map((p: any) => String(p?._id || p));
+        const relevantPlans = plans.filter((pl) =>
+          coursePlanIds.includes(String(pl._id)),
+        );
+        setFilteredPlans(relevantPlans);
+        setIsPlansOpen(true);
       } else {
         await startPaymentFlow(c);
       }
       setPendingCourseId(null);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, userId, pendingCourseId, publishedCourses]);
+  }, [isAuthenticated, userId, pendingCourseId, publishedCourses, plans]);
 
   const handleSuccessClose = () => {
     setTimer(5);
@@ -353,11 +424,11 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                                 </>
                               )}
                             </p>
-                            {Number(course?.amount) == 0 && (
+                            {/* {Number(course?.amount) == 0 && (
                               <span className="rounded-full bg-emerald-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-md">
                                 Free
                               </span>
-                            )}
+                            )} */}
                           </div>
 
                           <p className="mt-2 text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-3 min-h-[3.75rem]">
@@ -409,6 +480,18 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
           isOpen={isLoginOpen}
           onClose={() => setIsLoginOpen(false)}
           redirectTo={redirectPath}
+          colors={{
+            primaryColor: colors?.primaryColor || "",
+            secondaryColor: colors?.secondaryColor || "",
+            textcolor: colors?.textcolor || "",
+          }}
+        />
+
+        <PlansPopUp
+          isOpen={isPlansOpen}
+          onClose={() => setIsPlansOpen(false)}
+          plans={filteredPlans}
+          communityId={communityId}
           colors={{
             primaryColor: colors?.primaryColor || "",
             secondaryColor: colors?.secondaryColor || "",

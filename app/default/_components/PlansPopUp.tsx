@@ -252,14 +252,10 @@ export default function PlansPopUp({
 
       const discount = Number((selectedPlan as any)?.discountAmount ?? 0) || 0;
 
-      const isDiscountUsed =
-        !!userId &&
-        (selectedPlan as any)?.discountUsedSubscribers?.includes(userId);
-
-      const isDiscountAvailable = discount > 0 && !isDiscountUsed;
+      const isDiscountAvailable = discount > 0;
 
       const recurringAmount = isDiscountAvailable
-        ? Math.max(0, baseAmount - discount)
+        ? Math.max(0,discount)
         : baseAmount;
 
       const initFee = Number((selectedPlan as any)?.initialPayment ?? 0) || 0;
@@ -339,14 +335,11 @@ export default function PlansPopUp({
               );
 
               const discount = Number((plan as any)?.discountAmount ?? 0) || 0;
-              const isDiscountUsed =
-                !!userId &&
-                (plan as any)?.discountUsedSubscribers?.includes(userId);
 
-              const isDiscountAvailable = discount > 0 && !isDiscountUsed;
+              const isDiscountAvailable = discount > 0;
 
               const recurringAmount = isDiscountAvailable
-                ? Math.max(0, baseAmount - discount)
+                ? Math.max(0,discount)
                 : baseAmount;
 
               const initFee = Number((plan as any)?.initialPayment ?? 0) || 0;

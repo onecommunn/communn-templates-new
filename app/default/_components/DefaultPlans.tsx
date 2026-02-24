@@ -292,7 +292,7 @@ const DefaultPlans = ({
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="flex items-center gap-2">
-                              {Number(plan?.discountAmount) > 0 ? (
+                              {isDiscountAvailable ? (
                                 <>
                                   <span className="text-slate-400 line-through text-[20px] font-bold">
                                     ₹{plan?.pricing}
