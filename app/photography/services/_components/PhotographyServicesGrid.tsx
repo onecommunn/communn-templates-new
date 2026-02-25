@@ -1,45 +1,14 @@
-"use client"
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { ServiceSection } from "@/models/templates/photography/photography-services-model";
 
-const services = [
-  {
-    title: "Candid Photography",
-    img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-1.jpg",
-    desc: "Authentic, unscripted moments captured as they unfold — preserving the genuine emotions and spontaneous joy of your celebration.",
-  },
-  {
-    title: "Traditional Photography",
-    img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-4.jpg",
-    desc: "Elegantly composed portraits and group photographs that document every ritual, ceremony, and milestone with classic sophistication.",
-  },
-  {
-    title: "Cinematography",
-    img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-6.jpg",
-    desc: "Cinematic wedding films crafted with professional storytelling, seamlessly blending visuals, music, and emotion into a timeless narrative.",
-  },
-  {
-    title: "Drone Photography",
-    img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-2.jpg",
-    desc: "Stunning aerial perspectives that showcase the scale and beauty of your venue, décor, and celebrations from breathtaking vantage points.",
-  },
-  {
-    title: "Pre-Wedding Shoots",
-    img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
-    desc: "Romantic photo and video sessions at handpicked locations, designed to capture the essence of your love story before the big day.",
-  },
-  {
-    title: "LED Wall Setup",
-    img: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-2.jpg",
-    desc: "Professional large-format LED display installations that create an immersive visual backdrop for your reception and special events.",
-  },
-];
-
-const PhotographyServicesGrid = () => {
+const PhotographyServicesGrid = ({ data }: { data: ServiceSection }) => {
+  const content = data?.content;
   return (
     <section className="py-20 md:px-20 px-4 bg-[#121212] text-[#EFECE7]">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {services.map((service, i) => (
+        {content?.services.map((service, i) => (
           <motion.div
             key={service.title}
             initial={{ opacity: 0, y: 30 }}
@@ -50,7 +19,7 @@ const PhotographyServicesGrid = () => {
           >
             <div className="aspect-[4/3] overflow-hidden mb-4">
               <img
-                src={service.img}
+                src={service.image}
                 alt={service.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 loading="lazy"
@@ -62,7 +31,7 @@ const PhotographyServicesGrid = () => {
             </h3>
 
             <p className="text-[#8c8c8c] font-raleway text-sm leading-relaxed">
-              {service.desc}
+              {service.description}
             </p>
           </motion.div>
         ))}
