@@ -188,7 +188,7 @@ const DefaultPlans = ({
                 );
                 const isDiscountAvailable =
                   discountValue > 0 &&
-                  !isSequencePlan &&
+                  // !isSequencePlan &&
                   !isDiscountUsed &&
                   !userSubscribedToPlan;
 
