@@ -24,7 +24,7 @@ export interface SocialMediaLink {
 export interface HeroSection extends SectionBase {
   sectionName: "heroSection";
   content: {
-    badgeText: string;
+    title: string;
     heading: string;
     image: string;
   };

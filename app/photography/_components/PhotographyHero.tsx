@@ -114,7 +114,6 @@ const PhotographyHero = ({ data }: { data: HeroSection }) => {
         >
           {content?.heading?.main}
           <span className="text-[#E9A55C] italic">
-            {" "}
             {content?.heading?.highlight}
           </span>
         </motion.h1>
