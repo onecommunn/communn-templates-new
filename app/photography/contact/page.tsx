@@ -255,27 +255,12 @@ const PhotographyContactRoot = () => {
           {/* Embedded Maps */}
           <div className="col-span-1 md:col-span-2 mt-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Chitradurga */}
-              <div>
-                <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
-                  Main Branch – Chitradurga
-                </p>
-                <div className="aspect-video border border-[#2A2A2A] overflow-hidden rounded-md">
-                  <iframe
-                    src="https://maps.google.com/maps?q=14.451021194458008,75.90921783447266&z=17&output=embed"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    title="Chitradurga Office Location"
-                  />
-                </div>
-              </div>
+
 
               {/* Davanagere */}
               <div>
                 <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
-                  Branch – Davanagere
+                  Main  Branch – Chitradurga
                 </p>
                 <div className="aspect-video border border-[#2A2A2A] overflow-hidden rounded-md">
                   <iframe
@@ -285,6 +270,23 @@ const PhotographyContactRoot = () => {
                     style={{ border: 0 }}
                     loading="lazy"
                     title="Davanagere Office Location"
+                  />
+                </div>
+              </div>
+
+              {/* Chitradurga */}
+              <div>
+                <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
+                  Branch – Davanagere
+                </p>
+                <div className="aspect-video border border-[#2A2A2A] overflow-hidden rounded-md">
+                  <iframe
+                    src="https://maps.google.com/maps?q=14.451021194458008,75.90921783447266&z=17&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    title="Chitradurga Office Location"
                   />
                 </div>
               </div>
