@@ -12,9 +12,13 @@ interface WeddingPackages {
 export const PackageCard = ({
   pkg,
   i,
+  message,
+  whatsappNumber,
 }: {
   pkg: WeddingPackages;
   i: number;
+  message: string;
+  whatsappNumber: string;
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
@@ -52,7 +56,7 @@ export const PackageCard = ({
     </ul>
 
     <a
-      href="https://wa.me/917022779616?text=Hi%2C%20I%20am%20interested%20in%20your%20photography%20services.%20Can%20we%20discuss%3F"
+      href={`https://wa.me/${whatsappNumber}?text=${message}`}
       target="_blank"
       rel="noopener noreferrer"
       className="w-full"

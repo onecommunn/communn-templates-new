@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { PackageCard } from "./PhotographyPackageCard";
+import { WeddingPackageSection } from "@/models/templates/photography/photography-package-model";
+import { WhatsappWidgetSection } from "@/models/templates/photography/photography-home-model";
 
 const weddingPackages = [
   {
@@ -56,16 +58,30 @@ const weddingPackages = [
   },
 ];
 
-const PhotographyWeddingPackage = () => {
+const PhotographyWeddingPackage = ({
+  data,
+  whatsappWidgetData,
+}: {
+  data: WeddingPackageSection;
+  whatsappWidgetData: WhatsappWidgetSection;
+}) => {
+  const content = data?.content;
+  const whatsapp = whatsappWidgetData?.content;
   return (
     <section className="py-20 px-4 md:px-20 bg-[#262626] text-[#EFECE7]">
       <div className="container mx-auto max-w-6xl">
         <h2 className="font-display text-3xl font-bold text-center mb-12">
-          Wedding Packages
+          {content?.heading}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {weddingPackages.map((pkg, i) => (
-            <PackageCard key={pkg.name} pkg={pkg} i={i} />
+          {content?.weddingPackages?.map((pkg, i) => (
+            <PackageCard
+              key={pkg.name}
+              pkg={pkg}
+              i={i}
+              message={whatsapp?.predefinedMessage}
+              whatsappNumber={whatsapp?.whatsappNumber}
+            />
           ))}
         </div>
       </div>
