@@ -38,4 +38,4 @@ export interface GallerySection extends SectionBase {
   };
 }
 
-export type PortfolioSection = HeroSection;
+export type PortfolioSection = HeroSection | GallerySection;
