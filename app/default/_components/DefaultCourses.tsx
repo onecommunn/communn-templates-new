@@ -145,7 +145,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
     const subscribedPlanIds = auth.userData.subscriptionDetail.map(
       (item: any) => String(item?.plan?._id || item?.plan),
     );
-
+    // console.log("Subscribed Plan IDs:", subscribedPlanIds);
     return course.plan.some((p: any) => {
       const planId = String(p?._id || p);
       return subscribedPlanIds.includes(planId);
@@ -157,10 +157,11 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
 
     if (!isAuthenticated || !userId) return "Login to Continue";
 
-    if (Array.isArray(course?.plan) && course.plan.length > 0 && !isSubscribedToCoursePlans(course))
-      return "Subscribe to Access";
+
 
     if (canAccessCourseDetails(course)) return "View Course";
+    if (Array.isArray(course?.plan) && course.plan.length > 0 && !isSubscribedToCoursePlans(course))
+      return "Subscribe to Access";
     return "Pay to Access";
   };
 
@@ -391,7 +392,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             fill
                             className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
                             unoptimized
-                          />                        
+                          />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-black/0" />
                         </div>
 
@@ -409,7 +410,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
                             {" "}
                             <p className="text-sm md:text-md text-[var(--pri)] font-bold my-2">
                               {Number(course?.amount) > 0 &&
-                              course?.plan?.length > 0
+                                course?.plan?.length > 0
                                 ? `₹ ${course?.amount} + Plan`
                                 : Number(course?.amount) > 0
                                   ? `₹ ${course?.amount}`
