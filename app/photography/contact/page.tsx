@@ -10,9 +10,34 @@ import { toast } from "sonner";
 import { ContactForm } from "@/models/contact.model";
 import { useCommunity } from "@/hooks/useCommunity";
 import { sendNotification } from "@/services/contactService";
+import { useCMS } from "../CMSProvider.client";
+import {
+  PhotograpyContactPage,
+  HeroSection,
+  ContactPageSection,
+  ContactSection,
+} from "@/models/templates/photography/photography-contact-model";
+import { contactDummyData } from "./contact-dummy-data";
 
 const PhotographyContactRoot = () => {
   const { communityId } = useCommunity();
+  const { contact } = useCMS();
+  const isLoading = contact === undefined;
+  const source: PhotograpyContactPage | undefined = !isLoading
+    ? ((contact as PhotograpyContactPage | undefined) ?? contactDummyData)
+    : undefined;
+
+  const heroSectionData: HeroSection | undefined = source?.sections?.find(
+    (s: ContactPageSection): s is HeroSection =>
+      s.sectionName === "heroSection" && s.isActive,
+  );
+
+  const contactSection: ContactSection | undefined = source?.sections?.find(
+    (s: ContactPageSection): s is ContactSection =>
+      s.sectionName === "contactSection" && s.isActive,
+  );
+
+  const contactSectionContent = contactSection?.content;
 
   const [loading, setLoading] = useState(false);
 
@@ -67,11 +92,13 @@ const PhotographyContactRoot = () => {
 
   return (
     <>
-      <PhotographyBreadcum
-        heading="Contact Us"
-        title="Get in Touch"
-        image="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&q=80"
-      />
+      {heroSectionData && (
+        <PhotographyBreadcum
+          heading={heroSectionData?.content?.heading}
+          title={heroSectionData?.content?.title}
+          image={heroSectionData?.content?.image}
+        />
+      )}
 
       <section className="py-20 px-4 bg-[#121212] text-[#EFECE7]">
         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-5xl">
@@ -133,165 +160,135 @@ const PhotographyContactRoot = () => {
               </Button>
             </form>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            <h2 className="font-display text-3xl font-bold mb-6">
-              Contact Information
-            </h2>
-            <div className="space-y-6">
-              {/* Phone */}
-              <div className="flex items-start gap-4">
-                <Phone
-                  className="text-[#E0A24D] mt-1 flex-shrink-0"
-                  size={20}
-                />
-                <div>
-                  <p className="font-raleway font-semibold text-sm mb-1">
-                    Phone
-                  </p>
-                  <a
-                    href="tel:+917022779616"
-                    className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors block"
-                  >
-                    7022779616
-                  </a>
-                  <a
-                    href="tel:+919606177802"
-                    className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors block"
-                  >
-                    9606177802
-                  </a>
+          {contactSectionContent && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="space-y-8"
+              >
+                <h2 className="font-display text-3xl font-bold mb-6">
+                  Contact Information
+                </h2>
+                <div className="space-y-6">
+                  {/* Phone */}
+                  <div className="flex items-start gap-4">
+                    <Phone
+                      className="text-[#E0A24D] mt-1 flex-shrink-0"
+                      size={20}
+                    />
+                    <div>
+                      <p className="font-raleway font-semibold text-sm mb-1">
+                        Phone
+                      </p>
+                      {contactSectionContent?.phoneNumbers?.map((p, idx) => (
+                        <a
+                          key={idx}
+                          href={`tel:${p}`}
+                          className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors block"
+                        >
+                          {p}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                  {/* WhatsApp */}
+                  <div className="flex items-start gap-4">
+                    <MessageCircle
+                      className="text-[#E0A24D] mt-1 flex-shrink-0"
+                      size={20}
+                    />
+                    <div>
+                      <p className="font-raleway font-semibold text-sm mb-1">
+                        WhatsApp
+                      </p>
+                      {contactSectionContent?.whatsappNumber?.map((m, idx) => (
+                        <a
+                          href={`https://wa.me/${m}`}
+                          target="_blank"
+                          key={idx}
+                          rel="noopener noreferrer"
+                          className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors"
+                        >
+                          {m}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Email */}
+                  <div className="flex items-start gap-4">
+                    <Mail
+                      className="text-[#E0A24D] mt-1 flex-shrink-0"
+                      size={20}
+                    />
+                    <div>
+                      <p className="font-raleway font-semibold text-sm mb-1">
+                        Email
+                      </p>
+                      {contactSectionContent?.email?.map((e, idx) => (
+                        <a
+                          href={`mailto:${e}`}
+                          key={idx}
+                          className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors"
+                        >
+                          {e}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Locations */}
+                  {contactSectionContent?.branches?.map((br, idx) => (
+                    <div className="flex items-start gap-4" key={idx}>
+                      <MapPin
+                        className="text-[#E0A24D] mt-1 flex-shrink-0"
+                        size={20}
+                      />
+                      <div>
+                        <p className="font-raleway font-semibold text-sm mb-1">
+                          {br.title}
+                        </p>
+                        <p className="text-[#8c8c8c] font-raleway text-sm">
+                          {br.address}
+                        </p>
+                        <a
+                          href={br?.mapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#E0A24D] font-body text-xs mt-1 inline-block hover:underline"
+                        >
+                          View on Google Maps →
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+              {/* Embedded Maps */}
+              <div className="col-span-1 md:col-span-2 mt-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {contactSectionContent?.branches?.map((br, idx) => (
+                    <div key={idx}>
+                      <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
+                        {br?.title}
+                      </p>
+                      <div className="aspect-video border border-[#2A2A2A] overflow-hidden rounded-md">
+                        <iframe
+                          src={br.embedUrl}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          title="Davanagere Office Location"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              {/* WhatsApp */}
-              <div className="flex items-start gap-4">
-                <MessageCircle
-                  className="text-[#E0A24D] mt-1 flex-shrink-0"
-                  size={20}
-                />
-                <div>
-                  <p className="font-raleway font-semibold text-sm mb-1">
-                    WhatsApp
-                  </p>
-                  <a
-                    href="https://wa.me/917022779616?text=Hi%2C%20I%20am%20interested%20in%20your%20photography%20services.%20Can%20we%20discuss%3F"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors"
-                  >
-                    7022779616
-                  </a>
-                </div>
-              </div>
-              {/* Email */}
-              <div className="flex items-start gap-4">
-                <Mail className="text-[#E0A24D] mt-1 flex-shrink-0" size={20} />
-                <div>
-                  <p className="font-raleway font-semibold text-sm mb-1">
-                    Email
-                  </p>
-                  <a
-                    href="mailto:Vipulvikki07@gmail.com"
-                    className="text-[#8c8c8c] font-raleway text-sm hover:text-[#E0A24D] transition-colors"
-                  >
-                    Vipulvikki07@gmail.com
-                  </a>
-                </div>
-              </div>
-              {/* Locations */}
-              <div className="flex items-start gap-4">
-                <MapPin
-                  className="text-[#E0A24D] mt-1 flex-shrink-0"
-                  size={20}
-                />
-                <div>
-                  <p className="font-raleway font-semibold text-sm mb-1">
-                    Main Branch – Chitradurga
-                  </p>
-                  <p className="text-[#8c8c8c] font-raleway text-sm">
-                    Dharmashala Road, Near Megha Lodge, <br /> Chitradurga,
-                    Karnataka 577501
-                  </p>
-                  <a
-                    href="https://www.google.com/maps?q=14.451021194458008,75.90921783447266&z=17&hl=en"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#E0A24D] font-body text-xs mt-1 inline-block hover:underline"
-                  >
-                    View on Google Maps →
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <MapPin
-                  className="text-[#E0A24D] mt-1 flex-shrink-0"
-                  size={20}
-                />
-                <div>
-                  <p className="font-raleway font-semibold text-sm mb-1">
-                    Branch – Davanagere
-                  </p>
-                  <p className="text-[#8c8c8c] font-raleway text-sm">
-                    Near Ayyappa Swamy Temple, B.I.E.T College Road, <br /> 13th
-                    Main, 5th Cross, M.C.C. 'B' Block, <br /> Davanagere 577004
-                  </p>
-                  <a
-                    href="https://www.google.com/maps?q=14.222463607788086,76.4011459350586&z=17&hl=en"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#E0A24D] font-body text-xs mt-1 inline-block hover:underline"
-                  >
-                    View on Google Maps →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-          {/* Embedded Maps */}
-          <div className="col-span-1 md:col-span-2 mt-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-
-              {/* Davanagere */}
-              <div>
-                <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
-                  Main  Branch – Chitradurga
-                </p>
-                <div className="aspect-video border border-[#2A2A2A] overflow-hidden rounded-md">
-                  <iframe
-                    src="https://maps.google.com/maps?q=14.222463607788086,76.4011459350586&z=17&output=embed"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    title="Davanagere Office Location"
-                  />
-                </div>
-              </div>
-
-              {/* Chitradurga */}
-              <div>
-                <p className="font-raleway text-xs text-[#8c8c8c] mb-2">
-                  Branch – Davanagere
-                </p>
-                <div className="aspect-video border border-[#2A2A2A] overflow-hidden rounded-md">
-                  <iframe
-                    src="https://maps.google.com/maps?q=14.451021194458008,75.90921783447266&z=17&output=embed"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    title="Chitradurga Office Location"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </section>
     </>
