@@ -88,6 +88,7 @@ const marcellus = Marcellus({
   variable: "--font-marcellus",
 });
 
+
 const kanit = Kanit({
   subsets: ["latin", "latin-ext", "thai", "vietnamese"],
   weight: ["400", "100", "200", "300", "500", "600", "700", "800", "900"],
@@ -152,8 +153,8 @@ const display = Playfair_Display({
 });
 
 const raleway = Raleway({
-  subsets: ["latin", "latin-ext", "cyrillic", "vietnamese","cyrillic-ext"],
-  weight: ["500", "600", "700", "400", "800", "900","100","200","300"],
+  subsets: ["latin", "latin-ext", "cyrillic", "vietnamese", "cyrillic-ext"],
+  weight: ["500", "600", "700", "400", "800", "900", "100", "200", "300"],
   style: ["normal", "italic"],
   variable: "--font-raleway",
 });
