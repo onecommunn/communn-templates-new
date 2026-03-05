@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import PaymentSuccess from "@/utils/PaymentSuccess";
 import PaymentFailure from "@/utils/PaymentFailure";
 import { IPaymentList } from "@/models/payment.model";
+import { formatEventDescription } from "@/utils/formatEventDescription";
 
 export enum PaymentStatus {
   SUCCESS = "SUCCESS",
@@ -365,11 +366,11 @@ const RestraintEventDetail = ({
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-marcellus md:text-5xl mb-4 text-[var(--pri)]">
+            <h2 className="text-lg md:text-3xl font-marcellus mb-2 text-[var(--pri)]">
               {eventData?.title}
             </h2>
           </div>
-          <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="max-w-6xl mx-auto px-2 py-2">
             {/* Cover image */}
             {eventData?.coverImage?.value && (
               <div className="rounded-2xl overflow-hidden mb-8">
@@ -393,27 +394,28 @@ const RestraintEventDetail = ({
             <div className="grid md:grid-cols-3 gap-8">
               {/* Left: Event details */}
               <div className="md:col-span-2">
-                <h2
-                  className="md:text-[32px] text-2xl font-marcellus"
+                {/* <h2
+                  className="md:text-[32px] text-lg mb-2 font-marcellus"
                   style={{ color: primaryColor }}
                 >
                   {eventData.title}
-                </h2>
+                </h2> */}
                 <p
-                  className="text-gray-600 text-[16px] mb-6 font-sora"
+                  className="text-gray-500 text-[12px] md:text-[14px] mb-6 font-sora"
                   style={{ color: primaryColor }}
-                >
-                  {eventData.description}
-                </p>
+                  dangerouslySetInnerHTML={{
+                    __html: formatEventDescription(eventData.description),
+                  }}
+                />
 
                 <h3
-                  className="md:text-[32px] text-2xl mb-2 font-marcellus"
+                  className="md:text-[32px] text-lg mb-2 font-marcellus"
                   style={{ color: primaryColor }}
                 >
                   Access Information
                 </h3>
                 <ul
-                  className="space-y-2 text-[#707070] text-[16px] list-disc ml-6 font-sora"
+                  className="space-y-2 text-[#707070] text-[12px] md:text-[16px] list-disc ml-6 font-sora"
                   style={{ color: primaryColor }}
                 >
                   <li>
@@ -422,7 +424,7 @@ const RestraintEventDetail = ({
                       {eventData?.pricing ? `₹${eventData.pricing} /-` : "Free"}
                     </span>
                   </li>
-                  <li className="text-[16px] ">
+                  <li className="text-[12px] md:text-[16px]">
                     {`${formatDate(
                       eventData?.availability[0]?.day
                     )} - ${formatDate(
@@ -440,7 +442,7 @@ const RestraintEventDetail = ({
               </div>
 
               {/* Right: Form */}
-              <div className="rounded-xl  p-6 h-fit">
+              <div className="rounded-xl p-0 md:p-6 h-fit">
                 <h3
                   className="text-3xl mb-4 font-marcellus"
                   style={{ color: primaryColor }}
