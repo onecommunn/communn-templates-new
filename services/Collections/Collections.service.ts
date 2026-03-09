@@ -19,7 +19,6 @@ async function fetchJSON(url: string) {
   }
 }
 
-
 async function fetchCollectionsBundle(
   communityId: string,
 ): Promise<CollectionsCMSBundle> {
@@ -45,17 +44,15 @@ export async function getCollectionsCMSBundle(communityId: string) {
   return fetchCollectionsBundle(communityId);
 }
 
-export const fetchProductsCategory = async (
-  communityId: string,
-) => {
+export const fetchProductsCategory = async (communityId: string) => {
   const response = await axios.get(
-    `${BASE_URL_V2}/product-category/category/community/${communityId}`,
-    {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTYzZTI0NjdjN2I5NTdkZjQ4MDYwYSIsImlhdCI6MTc2OTY4NDk2NSwiZXhwIjoxNzcyMjc2OTY1fQ.Dcdis7-Yl1U1aoD6ujFOOS8iCz53EfVtizCJYgdcSgE`,
-        "Content-Type": "application/json",
-      },
-    },
+    `${BASE_URL_V2}/product-categories/community/${communityId}`,
+    // {
+    //   headers: {
+    //     Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTYzZTI0NjdjN2I5NTdkZjQ4MDYwYSIsImlhdCI6MTc2OTY4NDk2NSwiZXhwIjoxNzcyMjc2OTY1fQ.Dcdis7-Yl1U1aoD6ujFOOS8iCz53EfVtizCJYgdcSgE`,
+    //     "Content-Type": "application/json",
+    //   },
+    // },
   );
 
   return response.data;
