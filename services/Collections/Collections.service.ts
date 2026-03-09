@@ -1,7 +1,7 @@
 import { BASE_URL_V2 } from "@/configurations/url.config";
-import { AuthContext, IAuthContext } from "@/contexts/Auth.context";
+// import { AuthContext, IAuthContext } from "@/contexts/Auth.context";
 import axios from "axios";
-import { useContext } from "react";
+// import { useContext } from "react";
 
 type CollectionsCMSBundle = {
   home: any | null;
