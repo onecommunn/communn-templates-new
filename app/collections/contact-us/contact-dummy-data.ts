@@ -12,7 +12,7 @@ export const ContactdummyData: CollectionsContactPage = {
       content: {
         heading: "Contact Us",
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/89fd1eac478d56fd174ddb3ea12e310db720fa06.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/89fd1eac478d56fd174ddb3ea12e310db720fa06.jpg",
       },
       isActive: true,
       order: 0,
@@ -57,7 +57,7 @@ export const ContactdummyData: CollectionsContactPage = {
           url: "/collections",
         },
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/e8d2b17c3c74b1c59171a29835110696cf358944.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/e8d2b17c3c74b1c59171a29835110696cf358944.jpg",
       },
       isActive: true,
       order: 3,

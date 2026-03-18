@@ -46,7 +46,7 @@ const ConsultingoHero = ({
             <Image
               src={
                 content?.heroImage ??
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/1affd5e7a9471916ccd329b91ab0cd52c75152fd.jpg"
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/1affd5e7a9471916ccd329b91ab0cd52c75152fd.jpg"
               }
               alt="Hero Image"
               fill

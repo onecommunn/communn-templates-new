@@ -11,7 +11,7 @@ export const CollectiondummyData: CollectionsCollectionPage = {
       content: {
         heading: "Our Collections",
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Background.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Background.png",
       },
       isActive: true,
       order: 0,
@@ -24,70 +24,70 @@ export const CollectiondummyData: CollectionsCollectionPage = {
             title: "All sarees",
             price: "4000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link.webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link.webp",
             isfeatured: false,
           },
           {
             title: "Kanjeevaram soft silk Sarees",
             price: "6000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (1).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (1).webp",
             isfeatured: false,
           },
           {
             title: "Pure Kancheepuram Sarees",
             price: "4800",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (2).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (2).webp",
             isfeatured: false,
           },
           {
             title: "Mysore crepe silk sarees",
             price: "8000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (3).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (3).webp",
             isfeatured: false,
           },
           {
             title: "Banarsi sarees",
             price: "4000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Shop Primary Image.webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Shop Primary Image.webp",
             isfeatured: false,
           },
           {
             title: "Semi Kanchi sarees",
             price: "600",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (6).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (6).webp",
             isfeatured: false,
           },
           {
             title: "Cotton sarees",
             price: "4800",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (7).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (7).webp",
             isfeatured: false,
           },
           {
             title: "Embroidered sarees",
             price: "8000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (5).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (5).webp",
             isfeatured: false,
           },
           {
             title: "Sarees with custom order ",
             price: "12000",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link (8).webp",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link (8).webp",
             isfeatured: false,
           },
           // {
           //   title: "Banarasi Silk Wedding Saree",
           //   price: "4800",
           //   media:
-          //     "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
+          //     "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
           //   isfeatured: false,
           // },
         ],

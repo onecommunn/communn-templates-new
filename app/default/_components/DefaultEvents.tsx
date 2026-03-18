@@ -150,7 +150,7 @@ const DefaultEvents = ({
                     <Image
                       src={
                         event?.coverImage?.value ??
-                        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default%20Events.png"
+                        "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/undefined/Default%20Events.png"
                       }
                       alt={event.title}
                       fill

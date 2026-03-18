@@ -95,7 +95,7 @@ const ConsultingoFeatures = ({
           {/* Right Column: Highlighting Success (Vertical Card) */}
           <div className="md:col-span-4 md:row-span-2 relative rounded-[40px] overflow-hidden group">
             <Image
-              src={successHighlight?.backgroundImage ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"}
+              src={successHighlight?.backgroundImage ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"}
               alt="Client Success"
               fill
               unoptimized
@@ -134,7 +134,7 @@ const ConsultingoFeatures = ({
 
             <div className="flex-1 w-full h-full min-h-[250px] relative rounded-[30px] overflow-hidden order-1 md:order-2">
               <Image
-                src={customSolutions?.image ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/d9ae6afefd176c1975ff8849afc32b0c25d318de.jpg"}
+                src={customSolutions?.image ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/d9ae6afefd176c1975ff8849afc32b0c25d318de.jpg"}
                 alt="Working"
                 fill
                 className="object-cover"

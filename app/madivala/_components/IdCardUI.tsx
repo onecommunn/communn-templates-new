@@ -30,7 +30,7 @@ export default function IdCardUI({
     subCaste: "jakeriley@gmail.com",
     address: "127 sdjksajdkjdsey Bangalore.",
     image:
-      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Rfi8Dzlz5SKxegez4irAvX21mk.jpg.png",
+      "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Rfi8Dzlz5SKxegez4irAvX21mk.jpg.png",
   },
 }: {
   primaryColor?: string;

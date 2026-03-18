@@ -42,7 +42,7 @@ const CollectionsFooter = ({ data }: { data: FooterSection }) => {
               <img
                 src={
                   content?.logo ??
-                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 1.svg"
+                  "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group 1.svg"
                 }
                 alt="footer-logo"
                 className="w-fit h-15 object-contain"

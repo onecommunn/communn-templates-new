@@ -36,7 +36,7 @@ const CollectionsCollectionsPageRoot = () => {
         <Breadcum
           title={heroSection?.content?.heading}
           bannerImage={
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Background.png"
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Background.png"
           }
           breadcrumb={[{ label: "Home", href: "/" }, { label: "Collections" }]}
         />

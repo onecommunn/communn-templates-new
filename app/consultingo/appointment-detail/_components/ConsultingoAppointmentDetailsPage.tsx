@@ -278,7 +278,7 @@ export default function ConsultingoAppointmentDetailsPage({
       >
         <div className="w-full h-[400px] lg:h-[550px] relative rounded-[30px] overflow-hidden group">
           <Image
-            src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"
+            src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"
             alt="Client Success"
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"

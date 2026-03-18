@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "upload-community-files-new.s3.ap-south-1.amazonaws.com",
+        hostname: "upload-community-files-1614.s3.ap-south-1.amazonaws.com",
       },
       {
         protocol: "https",

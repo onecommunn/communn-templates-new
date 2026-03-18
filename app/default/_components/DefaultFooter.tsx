@@ -49,7 +49,7 @@ const DefaultFooter = ({
           <Image
             src={
               logo ??
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
             }
             alt="One Communn Logo"
             width={100}
@@ -84,7 +84,7 @@ const DefaultFooter = ({
             <div className="flex items-center gap-2">
               {/* Replace with your actual small horizontal logo path */}
               <Image
-                src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+                src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
                 alt="Logo"
                 width={24}
                 height={24}

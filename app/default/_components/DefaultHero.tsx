@@ -277,7 +277,7 @@ const DefaultHero = ({
         <Image
           src={
             banner ??
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/0bd20f5258772df219803cab7a887485d34a2e70.jpg"
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/0bd20f5258772df219803cab7a887485d34a2e70.jpg"
           }
           alt="Community Banner"
           fill
@@ -293,7 +293,7 @@ const DefaultHero = ({
           <Image
             src={
               logo ??
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group 238944.svg"
             }
             alt="Community Logo"
             height={95}

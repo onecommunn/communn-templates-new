@@ -13,7 +13,7 @@ const ShoppingBanner = ({
   const content = data?.content;
   const heroBanner =
     content?.media ??
-    "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/e8d2b17c3c74b1c59171a29835110696cf358944.jpg";
+    "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/e8d2b17c3c74b1c59171a29835110696cf358944.jpg";
 
   return (
     <section

@@ -12,7 +12,7 @@
         sectionName: "headerSection",
         content: {
           media: [
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivoLogo.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivoLogo.png",
           ],
         },
         order: 0,
@@ -32,8 +32,8 @@
             },
           ],
           media: [
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martvo-hero-image.png",
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-hero-bg-image.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martvo-hero-image.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-hero-bg-image.png",
           ],
         },
         order: 1,
@@ -78,13 +78,13 @@
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
             },
             {
-              icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-service-image-1.svg",
+              icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-service-image-1.svg",
               title: "Kickboxing",
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
             },
             {
-              icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-service-image-2.svg",
+              icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-service-image-2.svg",
               title: "Self Defense",
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet.",
@@ -97,7 +97,7 @@
             },
           ],
           media: [
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-event-image-1.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-event-image-1.png",
           ],
         },
         order: 2,
@@ -111,7 +111,7 @@
             {
               serviceName: "dojo_training",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-1.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-1.png",
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet tortor sodales vulputate",
               sections: [
@@ -144,7 +144,7 @@
             {
               serviceName: "kata_techniques",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-2.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-2.png",
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet tortor sodales vulputate",
               sections: [
@@ -177,7 +177,7 @@
             {
               serviceName: "bushido_spirit",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-3.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-3.png",
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet tortor sodales vulputate",
               sections: [
@@ -210,7 +210,7 @@
             {
               serviceName: "kumite_sessions",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-3.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-courses-image-3.png",
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet tortor sodales vulputate",
               sections: [
@@ -272,25 +272,25 @@
             {
               name: "Sara Lee",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-1.jpg",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-1.jpg",
               role: "SR. MARTIAL ARTS",
             },
             {
               name: "Savanna Hahn",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-2.jpg",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-2.jpg",
               role: "STRENGTH TRAINERS",
             },
             {
               name: "Mike Johnson",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-3.jpg",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-3.jpg",
               role: "SELF DEFENSE EXPERT",
             },
             {
               name: "Leilani Smitham",
               media:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-4.jpg",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Martivo-team-image-4.jpg",
               role: "PUNCHING EXPERTS",
             },
           ],
@@ -303,13 +303,13 @@
         content: {
           heading: "Start your martial arts journey with us!",
           media:
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-bg-image.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-bg-image.png",
           testimonies: [
             {
               name: "Sarah Taylor",
               designation: "Student",
               avatar:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-1.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-1.png",
               message:
                 "Sed rutrum leo ante, vel lobortis odio pellentesque. Suspendisse faucibus elementum pharetra. Aenean quis vehicula dolor. Sed condimentum interdum convallis.",
             },
@@ -317,7 +317,7 @@
               name: "John Carter",
               designation: "Black Belt Trainer",
               avatar:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-2.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-2.png",
               message:
                 "Duis aliquet nulla vel tellus rhoncus, et malesuada purus pharetra. Integer eu sem felis.",
             },
@@ -325,7 +325,7 @@
               name: "Emily Chen",
               designation: "Karate Champion",
               avatar:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-3.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-3.png",
               message:
                 "Quisque volutpat, ipsum id ullamcorper cursus, lectus justo iaculis lacus.",
             },
@@ -333,7 +333,7 @@
               name: "Hiro Tanaka",
               designation: "Dojo Instructor",
               avatar:
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-4.png",
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-testimonials-image-4.png",
               message:
                 "Maecenas eget sagittis libero. Ut cursus magna ut tincidunt fermentum.",
             },
@@ -364,10 +364,10 @@
         sectionName: "gallerySection",
         content: {
           media: [
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-1.png",
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-2.png",
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-3.png",
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-4.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-1.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-2.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-3.png",
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivo-gallery-image-4.png",
           ],
         },
         order: 8,
@@ -393,7 +393,7 @@
       {
         sectionName: "footerSection",
         content: {
-          logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/martivoLogo.png",
+          logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/martivoLogo.png",
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis imperdiet titor sodales vulputate",
           socialMedia: [

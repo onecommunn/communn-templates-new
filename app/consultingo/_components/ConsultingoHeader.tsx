@@ -92,7 +92,7 @@ const ConsultingoHeader = ({
               <img
                 src={
                   content?.media?.[0] ||
-                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg"
+                  "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg"
                 }
                 alt="logo"
                 className="w-32 h-15 object-contain"
@@ -410,7 +410,7 @@ const ConsultingoHeader = ({
                       >
                         <img
                           src={
-                            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg"
+                            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg"
                           }
                           alt="Logo"
                           className="w-25 h-15 object-contain"

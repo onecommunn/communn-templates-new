@@ -54,7 +54,7 @@ const ConsultingoAboutusFounder = ({
               }}
             >
               <img
-                src={content?.media ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/38cd91882db3abc591bbc3a1903984f920d5abc6.jpg"}
+                src={content?.media ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/38cd91882db3abc591bbc3a1903984f920d5abc6.jpg"}
                 alt={content?.founderName}
                 className="w-full h-full object-cover scale-110"
               />

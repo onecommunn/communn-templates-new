@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 const image =
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/8f68bfdc4ae00eeb7c7d81d120aae2f08f742580.png-2026-01-29T10-31-43-944Z.png";
+  "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/8f68bfdc4ae00eeb7c7d81d120aae2f08f742580.png-2026-01-29T10-31-43-944Z.png";
 
 const MadivalaContactPage = () => {
   const [form, setForm] = useState({

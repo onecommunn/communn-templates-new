@@ -12,7 +12,7 @@ export const dummyData: FitkitHomePage = {
       sectionName: "headerSection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-logo.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-logo.svg",
         ],
       },
       order: 0,
@@ -24,10 +24,10 @@ export const dummyData: FitkitHomePage = {
         carouse: [
           {
             bgMedia: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-bg-image02.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-bg-image02.png",
             ],
             media: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-image-1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-image-1.png",
             ],
             tagline: "KEEP YOUR BODY FITNESS WITH WORKOUTS",
             line1: "YOUR FITNESS",
@@ -45,10 +45,10 @@ export const dummyData: FitkitHomePage = {
           },
           {
             bgMedia: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-bg-image02.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-hero-bg-image02.png",
             ],
             media: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-upload-1763706734538.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-upload-1763706734538.png",
             ],
             tagline: "TRANSFORM YOUR BODY, TRANSFORM YOUR LIFE",
             line1: "STRONGER",
@@ -82,8 +82,8 @@ export const dummyData: FitkitHomePage = {
           },
         ],
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-about-us-image2.png",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-about-us-image1.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-about-us-image2.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-about-us-image1.png",
         ],
         bulletes: [
           "Over 15 years of experience",
@@ -101,7 +101,7 @@ export const dummyData: FitkitHomePage = {
         services: [
           {
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image1.png",
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
@@ -134,7 +134,7 @@ export const dummyData: FitkitHomePage = {
           },
           {
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image2.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image2.png",
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
@@ -167,7 +167,7 @@ export const dummyData: FitkitHomePage = {
           },
           {
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image3.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image3.png",
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
@@ -200,7 +200,7 @@ export const dummyData: FitkitHomePage = {
           },
           {
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-services-image1.png",
             serviceName: "Service Name",
             description:
               "Many gyms offer tools and resources to track progress, such as fitness apps, workout logs, or integrated gym software.",
@@ -243,25 +243,25 @@ export const dummyData: FitkitHomePage = {
         features: [
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-1.png",
             title: "Henry Joseph",
             description: "Gym Trainer",
           },
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-2.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-2.png",
             title: "Esa Elizabed",
             description: "Fitness Trainer",
           },
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-3.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-3.png",
             title: "Henry Carlose",
             description: "Gym Trainer",
           },
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-4.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-team-image-4.png",
             title: "Jhon Williams",
             description: "Fitness Trainer",
           },
@@ -303,7 +303,7 @@ export const dummyData: FitkitHomePage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-why-choose-us-image.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-why-choose-us-image.png",
       },
       order: 5,
       isActive: true,
@@ -312,10 +312,10 @@ export const dummyData: FitkitHomePage = {
       sectionName: "gallerySection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-2.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-4.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-4.jpg",
         ],
       },
       order: 8,
@@ -337,10 +337,10 @@ export const dummyData: FitkitHomePage = {
             name: "What Our Clients Say?",
             designation: "Student – Brooklyn Simmons",
             media: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-image-1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-image-1.png",
             ],
             bgMedia: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-bg-image-1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-bg-image-1.png",
             ],
             message:
               "The team at Baroque is incredibly dedicated, knowledgeable, and supportive. The final result was amazing and worth every penny. I would absolutely recommend Baroque for weight loss, fitness improvement, or enhanced athletic performance.",
@@ -350,10 +350,10 @@ export const dummyData: FitkitHomePage = {
             name: "Stronger, Fitter, Happier.",
             designation: "Courtney Henry",
             media: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-image-2.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-image-2.png",
             ],
             bgMedia: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-bg-image-1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-Testimonials-bg-image-1.png",
             ],
             message:
               "“I’ve never felt more confident in a gym. The trainers push you, but in the best way. My strength and stamina have gone to the next level.”",
@@ -384,7 +384,7 @@ export const dummyData: FitkitHomePage = {
     {
       sectionName: "footerSection",
       content: {
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fitkit-logo.svg",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fitkit-logo.svg",
         description:
           "Treadmills, stationary bikes, and elliptical machines are commonly used for cardiovascular workouts, helping to improve endurance, burn calories, and enhance heart health.",
         socialMedia: [

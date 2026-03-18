@@ -13,7 +13,7 @@ export const homedummyData: PhotographyHomePage = {
       sectionName: "headerSection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/vijju-logo (1).png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/vijju-logo (1).png",
         ],
       },
       order: 0,
@@ -23,14 +23,14 @@ export const homedummyData: PhotographyHomePage = {
       sectionName: "heroSection",
       content: {
         images: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-ceremony.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-haldi.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-portrait.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-ceremony.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-haldi.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-portrait.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
         ],
         branding: " Vijay Photography",
         heading: {
@@ -58,18 +58,18 @@ export const homedummyData: PhotographyHomePage = {
         badgeText: "Gallery",
         heading: "A Glimpse of Our Work",
         images: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
         ],
       },
       order: 3,
@@ -131,21 +131,21 @@ export const homedummyData: PhotographyHomePage = {
           {
             title: "Candid & Traditional Photography",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
             description:
               "Timeless portraits and authentic moments from your celebration",
           },
           {
             title: "Cinematography & Drone",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
             description:
               "Cinematic wedding films captured from every perspective",
           },
           {
             title: "Pre-Wedding Shoots",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
             description:
               "Romantic sessions that beautifully narrate your love story",
           },
@@ -169,10 +169,10 @@ export const homedummyData: PhotographyHomePage = {
           link: "/about",
         },
         images: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-7.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-7.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
         ],
         bgImage:
           "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1920&q=80",
@@ -218,7 +218,7 @@ export const homedummyData: PhotographyHomePage = {
         description:
           "Let's discuss your vision and bring it to life through stunning photography.",
         bgImage:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
         button: {
           label: "Book a Session",
           link: "/contact",
@@ -230,7 +230,7 @@ export const homedummyData: PhotographyHomePage = {
     {
       sectionName: "footerSection",
       content: {
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/vijju-logo (1).png",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/vijju-logo (1).png",
         description: " Your Legacy, Through Our Lens",
         addresses: [
           "Main Branch: Dharmashala Road, Near Megha Lodge, Chitradurga 577501",

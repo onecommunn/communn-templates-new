@@ -41,7 +41,7 @@ const PhotographyPageRoot = () => {
         <PhotographyBreadcum
           image={
             heroSectionData?.content?.image ??
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-2.jpg"
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-2.jpg"
           }
           title={heroSectionData?.content?.title}
           heading={heroSectionData?.content?.heading}

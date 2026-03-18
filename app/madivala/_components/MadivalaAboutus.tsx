@@ -90,7 +90,7 @@ const MadivalaAboutus = ({
             <div className="relative">
               <div className="relative w-full h-[360px] md:h-[460px] lg:h-[520px]">
                 <Image
-                  src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/8711393c-19e9-4267-a63b-db61c9c1d1c1.png"
+                  src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/8711393c-19e9-4267-a63b-db61c9c1d1c1.png"
                   alt="MadivalaAboutusImage pose"
                   className="rounded-[24px] object-cover"
                   fill

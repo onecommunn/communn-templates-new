@@ -37,7 +37,7 @@ const ConsultingoServiceContent = ({
                   <img
                     src={
                       item?.image ??
-                      "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/0b73cf6935b7661393ba40dee83e635a4b6f0bb8.png"
+                      "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/0b73cf6935b7661393ba40dee83e635a4b6f0bb8.png"
                     }
                     alt="image"
                     className="w-full h-full object-cover"

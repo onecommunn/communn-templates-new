@@ -14,7 +14,7 @@ const CardSkeleton = () => {
 type ApiState = "loading" | "success" | "not_found" | "error";
 
 const FALLBACK_IMAGE =
-  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/95eacd45-1680-493c-bd7a-32feb5afb50d.png";
+  "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/95eacd45-1680-493c-bd7a-32feb5afb50d.png";
 
 const MemberShipCardPage = () => {
   const router = useRouter();

@@ -14,7 +14,7 @@ export const homedummyData: ConsultingoHomePage = {
       sectionName: "headerSection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg",
         ],
       },
       order: 0,
@@ -28,7 +28,7 @@ export const homedummyData: ConsultingoHomePage = {
         description:
           "Enhance your business with tailored consulting services for growth & scalability. We offer innovative solutions & expert guidance to optimize operations & seize opportunities.",
         heroImage:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/1affd5e7a9471916ccd329b91ab0cd52c75152fd.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/1affd5e7a9471916ccd329b91ab0cd52c75152fd.jpg",
         floatingCards: {
           sessionCard: {
             date: "28",
@@ -63,10 +63,10 @@ export const homedummyData: ConsultingoHomePage = {
       content: {
         heading: "Trusted by 130+ companies",
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/668b9c808b6e4d158329ae6d_05.svg fill.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/668b9b1b9b28ad74d16ed10b_04.svg fill.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/668b9c80330799edcae36b23_03.svg fill.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/fdsgfdfdfgdfgd.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/668b9c808b6e4d158329ae6d_05.svg fill.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/668b9b1b9b28ad74d16ed10b_04.svg fill.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/668b9c80330799edcae36b23_03.svg fill.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/fdsgfdfdfgdfgd.svg",
         ],
       },
       order: 2,
@@ -94,11 +94,11 @@ export const homedummyData: ConsultingoHomePage = {
             description:
               "Partnering with exceptional clients to achieve remarkable results.",
             avatars: [
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/d46ef06dbc51b2ff6eaf044b1e8b174ec1d341d3.jpg",
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/1f8043c4934d4a5ba231ea7ed277e7dd187174c9.jpg",
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ea45bef46dcd540ac37c3eca04f08b5931f1c0d1.jpg",
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/c0bfd0e460b271cc6fc957defa07a02bf6ee62c7.jpg",
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/927160e115b909516c07c870e79cfb1f394f9372.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/d46ef06dbc51b2ff6eaf044b1e8b174ec1d341d3.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/1f8043c4934d4a5ba231ea7ed277e7dd187174c9.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/ea45bef46dcd540ac37c3eca04f08b5931f1c0d1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/c0bfd0e460b271cc6fc957defa07a02bf6ee62c7.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/927160e115b909516c07c870e79cfb1f394f9372.jpg",
             ],
           },
           successHighlight: {
@@ -106,7 +106,7 @@ export const homedummyData: ConsultingoHomePage = {
             description:
               "Showcasing the achievements and growth of our valued clients.",
             backgroundImage:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg",
             cta: {
               label: "Explore Services",
               url: "/services",
@@ -117,7 +117,7 @@ export const homedummyData: ConsultingoHomePage = {
             description:
               "Tailored solutions designed to meet your unique business needs and goals.",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/d9ae6afefd176c1975ff8849afc32b0c25d318de.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/d9ae6afefd176c1975ff8849afc32b0c25d318de.jpg",
           },
         },
       },
@@ -134,8 +134,8 @@ export const homedummyData: ConsultingoHomePage = {
           label: "Years Of Experience",
         },
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/19f8aef3de92d452f912a8ab8e16372ea1390101.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/5390886f0214160e877c040aab7182c66242a2a2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/19f8aef3de92d452f912a8ab8e16372ea1390101.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/5390886f0214160e877c040aab7182c66242a2a2.jpg",
         ],
         accordionData: [
           {
@@ -270,7 +270,7 @@ export const homedummyData: ConsultingoHomePage = {
     {
       sectionName: "footerSection",
       content: {
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Link - home.svg",
         description:
           "Explore our comprehensive consultancy services designed to empower your business growth towards sustainable success.",
         socialMedia: [

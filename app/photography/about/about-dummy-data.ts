@@ -13,7 +13,7 @@ export const aboutDummyData: PhotographyAboutPage = {
       sectionName: "heroSection",
       content: {
         image:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-2.jpg",
         title: "About Us",
         heading: "Our Story",
       },
@@ -29,7 +29,7 @@ export const aboutDummyData: PhotographyAboutPage = {
         description:
           "I'm a visual storyteller who perceives the world through light, shadow, and emotion. For me, photography goes far beyond capturing images — it's about preserving feelings, energy, and the connections between people. I find joy in transforming everyday moments into timeless works of art. With a deep specialisation in wedding photography, we deliver our finest services across India from our studio in Chitradurga, Karnataka Every celebration we cover is an opportunity to tell a unique love story through our lens.",
         image:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/vijay-portrait.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/vijay-portrait.png",
         contacts: [
           {
             type: "location",

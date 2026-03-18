@@ -38,7 +38,7 @@ const ConsultingoServiceHero = ({
         <div className="relative w-full aspect-[16/8] mt-6 md:mt-12">
           <div className="relative w-full h-full rounded-full overflow-hidden border-8 border-transparent">
             <Image
-              src={data?.image ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/1affd5e7a9471916ccd329b91ab0cd52c75152fd.jpg"}
+              src={data?.image ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/1affd5e7a9471916ccd329b91ab0cd52c75152fd.jpg"}
               alt="Hero Image"
               fill
               className="object-cover"

@@ -8,12 +8,12 @@ const CreateHero = () => {
       <div className="relative bg-[#F8F9FB] rounded-[24px] overflow-hidden p-6 md:p-16 flex items-center">
         {/* Background Decorative Ellipses */}
         <img
-          src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Ellipse 4071 (Stroke).svg"
+          src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Ellipse 4071 (Stroke).svg"
           alt=""
           className="absolute bottom-0 left-0 opacity-60"
         />
         <img
-          src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Ellipse 4071 (Stroke).svg"
+          src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Ellipse 4071 (Stroke).svg"
           alt=""
           className="absolute top-0 right-0 rotate-180 opacity-60"
         />
@@ -48,7 +48,7 @@ const CreateHero = () => {
             <div className="relative flex justify-center">
               <div className="relative w-full max-w-[580px] border-[6px] border-white rounded-[20px] overflow-hidden bg-white">
                 <img
-                  src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Map.svg"
+                  src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Map.svg"
                   alt="Recommendations Map"
                   className="w-full h-auto"
                 />

@@ -12,7 +12,7 @@ export const dummyData: RestarintHomePage = {
       sectionName: "headerSection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-logo.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-logo.png",
         ],
       },
       order: 0,
@@ -32,7 +32,7 @@ export const dummyData: RestarintHomePage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-hero-bg-image.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-hero-bg-image.png",
       },
       order: 1,
       isActive: true,
@@ -46,13 +46,13 @@ export const dummyData: RestarintHomePage = {
           "Discover inner peace and well-being through yoga Our practice combines physical movement, mindfulness, and breathing techniques to help you achieve balance, reduce stress, and foster personal growth.",
         features: [
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-about-image01.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-about-image01.svg",
             title: "Community Support and Encouragement",
             description:
               "Foster a sense of belonging with our supportive community. Share your journey, exchange experiences.",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-about-image02.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-about-image02.svg",
             title: "Enhanced Physical Flexibility and Strength",
             description:
               "Foster a sense of belonging with our supportive community. Share your journey, exchange experiences.",
@@ -65,7 +65,7 @@ export const dummyData: RestarintHomePage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-about-image-1.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-about-image-1.png",
       },
       order: 2,
       isActive: true,
@@ -86,22 +86,22 @@ export const dummyData: RestarintHomePage = {
       content: {
         features: [
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-2.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-2.svg",
             title: "25 +",
             description: "Years Of Experience",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-1.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-1.svg",
             title: "150 K+",
             description: "Satisfied Clients",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-3.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-3.svg",
             title: "30 +",
             description: "Countries Reached",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-4.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-event-icon-4.svg",
             title: "2 k+",
             description: "Classes Conducted",
           },
@@ -125,25 +125,25 @@ export const dummyData: RestarintHomePage = {
         ],
         features: [
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image02.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image02.svg",
             title: "Holistic Wellness Programs",
             description:
               "Experience an approach to well-being with programs that combine.",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image03.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image03.svg",
             title: "Group Meditation Sessions",
             description:
               "Experience an approach to well-being with programs that combine.",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image04.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image04.svg",
             title: "Relaxation Techniques",
             description:
               "Experience an approach to well-being with programs that combine.",
           },
           {
-            icon: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image05.svg",
+            icon: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-whatWeDo-image05.svg",
             title: "Breathwork Practices",
             description:
               "Experience an approach to well-being with programs that combine.",
@@ -156,8 +156,8 @@ export const dummyData: RestarintHomePage = {
           },
         ],
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-whatwedo-image-1.png",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-whatwedo-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-whatwedo-image-1.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-whatwedo-image-2.jpg",
         ],
       },
       order: 4,
@@ -175,7 +175,7 @@ export const dummyData: RestarintHomePage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-services-images-1.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-services-images-1.png",
         services: [
           {
             serviceName: "service_name",
@@ -344,7 +344,7 @@ export const dummyData: RestarintHomePage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-how-it-work-image-1.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-how-it-work-image-1.png",
       },
       order: 6,
       isActive: true,
@@ -364,10 +364,10 @@ export const dummyData: RestarintHomePage = {
       sectionName: "gallerySection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-2.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-4.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-4.jpg",
         ],
         bulletes: ["Harmony Practice", "Inner Balance", "Calm Breathing"],
       },
@@ -380,13 +380,13 @@ export const dummyData: RestarintHomePage = {
         heading: "Real stories transformation",
         subHeading: "and growth",
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-testimonials-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-testimonials-image-1.jpg",
         testimonies: [
           {
             name: "Sarah Taylor",
             designation: "Student",
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Sed rutrum leo ante, vel lobortis odio pellentesque. Suspendisse faucibus elementum pharetra. Aenean quis vehicula dolor. Sed condimentum interdum convallis.",
             rating: 5,
@@ -395,7 +395,7 @@ export const dummyData: RestarintHomePage = {
             name: "John Carter",
             designation: "Black Belt Trainer",
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Duis aliquet nulla vel tellus rhoncus, et malesuada purus pharetra. Integer eu sem felis.",
             rating: 5,
@@ -404,7 +404,7 @@ export const dummyData: RestarintHomePage = {
             name: "Emily Chen",
             designation: "Karate Champion",
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Quisque volutpat, ipsum id ullamcorper cursus, lectus justo iaculis lacus.",
             rating: 5,
@@ -413,7 +413,7 @@ export const dummyData: RestarintHomePage = {
             name: "Hiro Tanaka",
             designation: "Dojo Instructor",
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-marquee-image-1.jpg",
             message:
               "Maecenas eget sagittis libero. Ut cursus magna ut tincidunt fermentum.",
             rating: 5,
@@ -441,7 +441,7 @@ export const dummyData: RestarintHomePage = {
             description:
               "Specializing in Vinyasa and Mindfulness with over 12 years of experience.",
             imageUrl:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-0-1764072597928.jpg", // Replace with your actual image paths
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/team-item-0-1764072597928.jpg", // Replace with your actual image paths
           },
           {
             name: "Marcus Chen",
@@ -449,7 +449,7 @@ export const dummyData: RestarintHomePage = {
             description:
               "Helping practitioners find inner stillness through ancient breathing techniques.",
             imageUrl:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-1-1764072634201.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/team-item-1-1764072634201.jpg",
           },
           {
             name: "Sarah Jenkins",
@@ -457,7 +457,7 @@ export const dummyData: RestarintHomePage = {
             description:
               "Integrating physical movement with nutritional wisdom for total balance.",
             imageUrl:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-2-1764072667712.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/team-item-2-1764072667712.jpg",
           },
           {
             name: "Darlene Robertson",
@@ -465,7 +465,7 @@ export const dummyData: RestarintHomePage = {
             description:
               "Integrating physical movement with nutritional wisdom for total balance.",
             imageUrl:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/team-item-3-1764072691541.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/team-item-3-1764072691541.jpg",
           },
         ],
       },
@@ -506,7 +506,7 @@ export const dummyData: RestarintHomePage = {
         ],
         phoneNumber: "9876543210",
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogona-hero-image.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogona-hero-image.jpg",
       },
       order: 10,
       isActive: true,
@@ -532,7 +532,7 @@ export const dummyData: RestarintHomePage = {
     {
       sectionName: "footerSection",
       content: {
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/restraint-logo.png",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/restraint-logo.png",
         description:
           "Holistic practices for inner peace, focus, and overall well-being.",
         socialMedia: [

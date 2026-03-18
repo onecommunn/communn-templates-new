@@ -117,7 +117,7 @@ export default function HeaderSearch(props: {
               <img
                 src={
                   data?.profileImage ??
-                  "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
+                  "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"
                 }
                 className="w-10 h-10 rounded-full object-cover shrink-0"
                 alt="Profile"
@@ -209,7 +209,7 @@ export default function HeaderSearch(props: {
 
           {!isSearchFocused && (
             <img
-              src={data?.profileImage ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"}
+              src={data?.profileImage ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/3fe7ab7f71885262ce7c38490c83135b56235661.jpg"}
               className="w-8 h-8 rounded-full object-cover shrink-0 md:hidden"
               alt="Profile"
             />

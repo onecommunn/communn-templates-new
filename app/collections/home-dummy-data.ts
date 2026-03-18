@@ -14,7 +14,7 @@ export const HomedummyData: CollectionsHomePage = {
       sectionName: "headerSection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group1.svg",
         ],
       },
       isActive: true,
@@ -35,7 +35,7 @@ export const HomedummyData: CollectionsHomePage = {
               url: "/collections",
             },
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg",
           },
           {
             heading: "Timeless traditions woven into every single thread",
@@ -46,7 +46,7 @@ export const HomedummyData: CollectionsHomePage = {
               url: "/collections",
             },
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/e8d2b17c3c74b1c59171a29835110696cf358944.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/e8d2b17c3c74b1c59171a29835110696cf358944.jpg",
           },
         ],
       },
@@ -84,7 +84,7 @@ export const HomedummyData: CollectionsHomePage = {
       sectionName: "featuresSection",
       content: {
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/89fd1eac478d56fd174ddb3ea12e310db720fa06.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/89fd1eac478d56fd174ddb3ea12e310db720fa06.jpg",
         points: [
           "Curated Collections with a Modern Eye",
           "Personalized Styling & Storytelling",
@@ -99,15 +99,15 @@ export const HomedummyData: CollectionsHomePage = {
       sectionName: "gallerySection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9b5e9e2c9a4ab8ec97112aed7b072acba46a197a.png",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ac20c5a29535b4242ec0cdcbc2d211542665e37c.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/28683a34ce4fec00a49cec22115dbb7f426257d7.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/650f35bcb3082d5821188c7ea7ad65bbbbb6caaf.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/330b6b3b09b00a2723d6dfc435eb9f2eeb0f0370.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/7ed8c4ddc9ff11584127fbc7d3687648301cfef9.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/a125603cb16bf58d39bc761d5a4361da4f00ad2b.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/9b5e9e2c9a4ab8ec97112aed7b072acba46a197a.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/b32f303be02e4ae712e911ed15536d84a3325369.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/ac20c5a29535b4242ec0cdcbc2d211542665e37c.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/28683a34ce4fec00a49cec22115dbb7f426257d7.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/650f35bcb3082d5821188c7ea7ad65bbbbb6caaf.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/330b6b3b09b00a2723d6dfc435eb9f2eeb0f0370.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/7ed8c4ddc9ff11584127fbc7d3687648301cfef9.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/58a0acf7987d0c5fea87ef30f5aafb16729065e7.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/a125603cb16bf58d39bc761d5a4361da4f00ad2b.jpg",
         ],
       },
       isActive: true,
@@ -121,27 +121,27 @@ export const HomedummyData: CollectionsHomePage = {
           {
             text: "Safe & Secure Payment",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/SecurePaymentIcon.svg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/SecurePaymentIcon.svg",
           },
           {
             text: "Free Shipping",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/FreeShippingIcon.svg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/FreeShippingIcon.svg",
           },
           {
             text: "Live Shopping",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/LiveShoppingIcon.svg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/LiveShoppingIcon.svg",
           },
           {
             text: "Customer Care Service",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CustomerCareIcon.svg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CustomerCareIcon.svg",
           },
           {
             text: "Stitching Service",
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/StitchingIcon.svg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/StitchingIcon.svg",
           },
         ],
       },
@@ -153,7 +153,7 @@ export const HomedummyData: CollectionsHomePage = {
       sectionName: "ctaSection",
       content: {
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg",
         heading:
           "Discover sarees curated for timeless style and everyday elegance.",
         description:
@@ -176,7 +176,7 @@ export const HomedummyData: CollectionsHomePage = {
         testimonies: [
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/a667f5b5ab637abb7b14f094693a6673a9e5a184.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/a667f5b5ab637abb7b14f094693a6673a9e5a184.jpg",
             quote:
               "Perfect for festive occasions. The saree looked royal and felt extremely comfortable all day.",
             name: "Priya",
@@ -184,7 +184,7 @@ export const HomedummyData: CollectionsHomePage = {
           },
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/ff6155a7c370f9b1c7bb8fd89c143e191175fb00.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/ff6155a7c370f9b1c7bb8fd89c143e191175fb00.jpg",
             quote:
               "It feels special knowing this saree supports traditional artisans.",
             name: "Nithya",
@@ -192,7 +192,7 @@ export const HomedummyData: CollectionsHomePage = {
           },
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9d53821c68fee3c1e58e11b5892e3724b2210106.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/9d53821c68fee3c1e58e11b5892e3724b2210106.jpg",
             quote:
               "The saree quality exceeded my expectations. The fabric, color and finish were exactly as shown. Truly elegant.",
             name: "Ananya",
@@ -200,7 +200,7 @@ export const HomedummyData: CollectionsHomePage = {
           },
           {
             image:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/9c13dbbf6c883c9709971ad364209b4983a67b37.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/9c13dbbf6c883c9709971ad364209b4983a67b37.jpg",
             quote: "It feels special. The handloom work is stunning.",
             name: "Andreya",
             country: "Canada",
@@ -255,7 +255,7 @@ export const HomedummyData: CollectionsHomePage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Container.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Container.png",
       },
       isActive: true,
       order: 9,
@@ -264,7 +264,7 @@ export const HomedummyData: CollectionsHomePage = {
     {
       sectionName: "footerSection",
       content: {
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group 1.svg",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group 1.svg",
         description:
           " Vinutha Saree Verse began as a passionate dream woven from tradition, creativity and a deep love for Indian textiles.",
         contact: {

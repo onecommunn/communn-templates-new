@@ -4,18 +4,18 @@ import { motion } from "framer-motion";
 import { MovingcollageSection } from "@/models/templates/photography/photography-home-model";
 
 // const collageImages = [
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
 // ];
 
 const MarqueeRow = ({

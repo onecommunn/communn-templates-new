@@ -28,7 +28,7 @@ export const dummyData: YoganaHomePage = {
         description:
           "Yoga encompasses various styles, including hatha vinyasa ashtanga bikram kundalini restorative each with its unique approach movement and mindfulness.",
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogona-hero-image.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogona-hero-image.jpg",
         ],
         buttons: [
           {
@@ -52,8 +52,8 @@ export const dummyData: YoganaHomePage = {
         description:
           "Yoga is an ancient practice that combines physical postures, breathing techniques, meditation, and mindfulness to promote overall well-being It aims to create harmony between the body",
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-2.jpg",
         ],
         bulletes: [
           "Velit orci consectetur ligula, eget egestas magner time over",
@@ -83,8 +83,9 @@ export const dummyData: YoganaHomePage = {
             description:
               "Calm the mind with guided breathwork and mindfulness practices designed to reduce stress and improve focus.",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-1.jpg",
-            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-1.jpg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
           {
@@ -92,8 +93,9 @@ export const dummyData: YoganaHomePage = {
             description:
               "Boost digestion and spinal mobility with a sequence of twists that gently detox the body.",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-2.jpg",
-            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-2.jpg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
           {
@@ -101,8 +103,9 @@ export const dummyData: YoganaHomePage = {
             description:
               "Learn foundational and advanced breathing techniques to expand lung capacity and energize the body.",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-3.jpg",
-            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-3.jpg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
           {
@@ -110,8 +113,9 @@ export const dummyData: YoganaHomePage = {
             description:
               "Target tight hips, hamstrings, and shoulders with a restorative flow that lengthens and releases.",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-4.jpg",
-            bgImage: "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-service-image-4.jpg",
+            bgImage:
+              "https://html.awaikenthemes.com/restraint/images/post-1.jpg",
             sections: [],
           },
         ],
@@ -139,13 +143,13 @@ export const dummyData: YoganaHomePage = {
       content: {
         heading: "Our Clients",
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo1.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo2.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo3.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo4.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo5.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo6.svg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo7.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo1.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo2.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo3.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo4.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo5.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo6.svg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/CollaborationLogo7.svg",
         ],
       },
       order: 6,
@@ -163,7 +167,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Customer Integration 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-1.jpg",
             message:
               "The courses on Learly are incredible. I learned digital marketing from scratch and landed a job in just three months. The instructors are amazing, and the platform is so easy to use. Truly life-changing!",
           },
@@ -172,7 +176,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Chief Marketing Consultant 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-2.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-about-image-2.jpg",
             message:
               "Edupro’s UX/UI bootcamp gave me the tools and knowledge to feel confident diving into the world of UX.",
           },
@@ -181,7 +185,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Legacy Markets Agent 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-1.jpg",
             message:
               "The courses on Learly are incredible. I learned digital marketing from scratch and landed a job in just three months. The instructors are amazing, and the platform is so easy to use. Truly life-changing!",
           },
@@ -190,7 +194,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Future Infrastructure Manager 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-2.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-2.jpg",
             message:
               "The courses on Learly are incredible. I learned digital marketing from scratch and landed a job in just three months. The instructors are amazing, and the platform is so easy to use. Truly life-changing!",
           },
@@ -199,7 +203,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Senior Configuration Manager 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-3.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-3.jpg",
             message:
               "The courses on Learly are incredible. I learned digital marketing from scratch and landed a job in just three months. The instructors are amazing, and the platform is so easy to use. Truly life-changing!",
           },
@@ -208,7 +212,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Principal Program Designer 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-4.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-4.jpg",
             message:
               "The courses on Learly are incredible. I learned digital marketing from scratch and landed a job in just three months. The instructors are amazing, and the platform is so easy to use. Truly life-changing!",
           },
@@ -217,7 +221,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Forward Intranet Strategist 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-5.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-5.jpg",
             message:
               "The courses on Learly are incredible. I learned digital marketing from scratch and landed a job in just three months. The instructors are amazing, and the platform is so easy to use. Truly life-changing!",
           },
@@ -226,7 +230,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Customer Metrics Technician 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-6.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-6.jpg",
             message:
               "Edupro’s UX/UI bootcamp gave me the tools and knowledge to feel confident diving into the world of UX.",
           },
@@ -235,7 +239,7 @@ export const dummyData: YoganaHomePage = {
             designation: "Travel Blogger 🇬🇧",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-5.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-5.jpg",
             message:
               "An inspiring group that motivates me to keep exploring. The workshops are top-notch!",
           },
@@ -249,12 +253,12 @@ export const dummyData: YoganaHomePage = {
       content: {
         heading: "Studio Moments",
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-2.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-3.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-4.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-5.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-6.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-3.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-4.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-5.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana-gallery-image-6.jpg",
         ],
       },
       order: 8,
@@ -308,7 +312,7 @@ export const dummyData: YoganaHomePage = {
       content: {
         description:
           "Proin efficitur, mauris vel condimentum pulvinar, velit orci consectetur ligula.",
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/yogana_Light_Logo.png",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/yogana_Light_Logo.png",
         socialMedia: [
           {
             platform: "Instagram",
@@ -343,7 +347,7 @@ export const dummyData: YoganaHomePage = {
       order: 11,
       isActive: true,
       media: [
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/logo.png",
+        "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/logo.png",
       ],
     },
   ],

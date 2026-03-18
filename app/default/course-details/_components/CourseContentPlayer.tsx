@@ -122,7 +122,7 @@ export default function CourseContentPlayer({
         src={url}
         poster={
           poster ||
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default Courses.png"
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/undefined/Default Courses.png"
         }
         onProgress={onProgress}
         onEnded={onEnded}

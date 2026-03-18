@@ -62,7 +62,7 @@ const ConsultingoAboutUsHero = ({
           <div className="lg:col-span-8 relative">
             <div className="aspect-video max-h-[470px] w-full rounded-[32px] overflow-hidden shadow-lg">
               <img
-                src={content?.media ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/c2dcb3f357885afeee0d88dbb044ae158df01429.png"}
+                src={content?.media ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/c2dcb3f357885afeee0d88dbb044ae158df01429.png"}
                 alt="Consultant working late"
                 className="w-full h-full object-cover brightness-75 contrast-125"
               />

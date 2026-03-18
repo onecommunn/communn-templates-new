@@ -506,7 +506,7 @@ const ConsultingoEventDetailsPage = ({
                 <img
                   src={
                     eventData?.coverImage?.value ||
-                    "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/38cd91882db3abc591bbc3a1903984f920d5abc6.jpg"
+                    "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/38cd91882db3abc591bbc3a1903984f920d5abc6.jpg"
                   }
                   alt="Event cover"
                   className="w-full h-full object-cover scale-110"
@@ -577,7 +577,7 @@ const ConsultingoEventDetailsPage = ({
           {/* left */}
           <div className="w-full h-[550px] relative rounded-[30px] overflow-hidden group">
             <Image
-              src="https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"
+              src="https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/66ba7db16f215782d10496851acc046db19a4f89.jpg"
               alt="Client Success"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"

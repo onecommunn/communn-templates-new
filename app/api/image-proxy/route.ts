@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs"; // important (pdf/image fetch is easier on node)
 
 const ALLOWED_HOSTS = new Set([
-  "upload-community-files-new.s3.ap-south-1.amazonaws.com",
+  "upload-community-files-1614.s3.ap-south-1.amazonaws.com",
   // add other allowed hosts if needed
 ]);
 
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
   if (!res.ok) {
     return NextResponse.json(
       { error: "Upstream fetch failed", status: res.status },
-      { status: 502 }
+      { status: 502 },
     );
   }
 

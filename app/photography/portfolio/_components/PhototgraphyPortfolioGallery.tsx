@@ -7,235 +7,235 @@ const categories = ["All", "Pre-Wedding", "Wedding", "Haldi", "Other"];
 
 const photos = [
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-2.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-3.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-4.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-4.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-5.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-6.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-6.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-7.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-7.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-8.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-8.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-9.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-10.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-10.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-11.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-11.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-12.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-12.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-13.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-13.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-14.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-14.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-15.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-15.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-16.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-16.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-17.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-17.jpg",
     category: "Pre-Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-1.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-1.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-2.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-2.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-3.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-4.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-4.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-6.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-6.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-7.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-8.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-9.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-9.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-11.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-11.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-12.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-12.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-13.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-13.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-15.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-15.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-16.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-16.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-17.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-17.jpg",
     category: "Wedding",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-18.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-18.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-1.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-1.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-2.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-2.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-4.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-4.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-5.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-6.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-6.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-7.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-7.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-8.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-8.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-9.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-9.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-10.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-10.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-12.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-12.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-13.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-13.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-14.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-14.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-15.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-15.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-16.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-16.jpg",
     category: "Haldi",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-1.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-2.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-2.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-3.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-4.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-4.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-5.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-5.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-6.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-6.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-7.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-7.jpg",
     category: "Other",
   },
   {
-    src: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/other-8.jpg",
+    src: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/other-8.jpg",
     category: "Other",
   },
 ];

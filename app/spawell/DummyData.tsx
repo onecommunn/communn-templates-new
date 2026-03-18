@@ -13,7 +13,7 @@ export const dummyData: SpawellHomePage = {
       sectionName: "headerSection",
       content: {
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-logo.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-logo.png",
         ],
         heading: "Explore Our Services",
         subHeading: "Our agents work with you to customize policies",
@@ -49,7 +49,7 @@ export const dummyData: SpawellHomePage = {
           },
         ],
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-hero-image.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-hero-image.png",
         ],
       },
       order: 1,
@@ -75,8 +75,8 @@ export const dummyData: SpawellHomePage = {
         ],
         teamCount: 29,
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-aboutus-image-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-aboutus-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-aboutus-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-aboutus-image-2.jpg",
         ],
       },
       order: 2,
@@ -133,7 +133,7 @@ export const dummyData: SpawellHomePage = {
           },
         ],
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-hero-image.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-hero-image.png",
         ],
       },
       order: 4,
@@ -195,7 +195,7 @@ export const dummyData: SpawellHomePage = {
           },
         ],
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-services-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-services-image-1.jpg",
         ],
       },
       order: 5,
@@ -237,8 +237,8 @@ export const dummyData: SpawellHomePage = {
           },
         ],
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-chooseus-image-1.jpg",
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-chooseus-image-2.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-chooseus-image-1.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-chooseus-image-2.jpg",
         ],
         buttons: [
           {
@@ -259,25 +259,25 @@ export const dummyData: SpawellHomePage = {
           {
             title: "Brooklyn Simmons",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-1.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-1.png",
             description: "Spa Director",
           },
           {
             title: "Leslie Alexander",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-2.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-2.png",
             description: "Senior Esthetician",
           },
           {
             title: "Ronald Richards",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-3.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-3.png",
             description: "Facial Expert",
           },
           {
             title: "Darlene Robertson",
             media:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-4.png",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-team-image-4.png",
             description: "Wellness Coach",
           },
         ],
@@ -296,7 +296,7 @@ export const dummyData: SpawellHomePage = {
             designation: "Senior Esthetician",
             rating: 4,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-1.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-1.jpg",
             message:
               "My monthly massage here is my favorite self-care ritual. Their team knows exactly what I need every time.",
           },
@@ -305,7 +305,7 @@ export const dummyData: SpawellHomePage = {
             designation: "IVF Specialist",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-2.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-2.jpg",
             message:
               "Calm ambiance, skilled therapists, and consistent results. I always walk out lighter and happier.",
           },
@@ -314,7 +314,7 @@ export const dummyData: SpawellHomePage = {
             designation: "Wellness Coach",
             rating: 4,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-3.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-3.jpg",
             message:
               "Thoughtful, holistic, and professional. They truly understand mind-body balance and it shows.",
           },
@@ -323,7 +323,7 @@ export const dummyData: SpawellHomePage = {
             designation: "Physio Therapist",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-4.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-4.jpg",
             message:
               "From booking to treatment, everything feels premium and personal. Highly recommended!",
           },
@@ -332,7 +332,7 @@ export const dummyData: SpawellHomePage = {
             designation: "Yoga Instructor",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-5.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-5.jpg",
             message:
               "The therapists listen and tailor each session. My posture and sleep improved a lot.",
           },
@@ -341,7 +341,7 @@ export const dummyData: SpawellHomePage = {
             designation: "Nutritionist",
             rating: 5,
             avatar:
-              "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-3.jpg",
+              "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-Testimonials-image-3.jpg",
             message:
               "Clean space, caring staff, and real results. Exactly what a wellness studio should be.",
           },
@@ -406,7 +406,7 @@ export const dummyData: SpawellHomePage = {
         description:
           "Take a break from the busy and step into serenity. Our expert therapists are ready to guide you on a journey of relaxation, healing,",
         media: [
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-contact-image-1.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-contact-image-1.png",
         ],
         availableTimings: [
           {
@@ -434,7 +434,7 @@ export const dummyData: SpawellHomePage = {
     {
       sectionName: "footerSection",
       content: {
-        logo: "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/spawell-logo-light.png",
+        logo: "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/spawell-logo-light.png",
         socialMedia: [
           {
             platform: "Instagram",

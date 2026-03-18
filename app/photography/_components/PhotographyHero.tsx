@@ -11,14 +11,14 @@ import { ArrowDown } from "lucide-react";
 import { HeroSection } from "@/models/templates/photography/photography-home-model";
 
 // const heroImages = [
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-ceremony.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-haldi.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/hero-portrait.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
-//   "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-ceremony.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-haldi.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/haldi-3.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/hero-portrait.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-10.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/prewedding-1.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-5.jpg",
+//   "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/wedding-14.jpg",
 // ];
 
 const PhotographyHero = ({ data }: { data: HeroSection }) => {

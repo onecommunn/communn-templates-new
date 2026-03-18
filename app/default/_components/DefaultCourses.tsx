@@ -94,7 +94,7 @@ const DefaultCourses = ({ courses, colors }: DefaultCoursesProps) => {
   const getCover = (course: any) => {
     return typeof course?.coverImage === "object" && course?.coverImage
       ? (course?.coverImage as IMultiMedia).value
-      : "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/undefined/Default%20Courses.png";
+      : "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/undefined/Default%20Courses.png";
   };
 
   const canAccessCourseDetails = (course: any) => {

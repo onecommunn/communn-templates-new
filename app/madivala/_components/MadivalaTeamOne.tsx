@@ -27,28 +27,28 @@ export default function MadivalaTeamOne({
       name: "ಶ್ರೀಶ್ರೀಶ್ರೀ\nಶಿವಯೋಗಾನಂದಪ್ಪಜಿ",
       role: "ಸ್ವಾಮೀಜಿ",
       image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/WWbcr9xA8ezJ0nrGh99vBWXbBs.jpg.png",
+        "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/WWbcr9xA8ezJ0nrGh99vBWXbBs.jpg.png",
     },
     {
       id: "2",
       name: "ಶ್ರೀಶ್ರೀಶ್ರೀ\nಮುಕ್ತಾನಂದ",
       role: "ಸ್ವಾಮೀಜಿ",
       image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/tems1.png",
+        "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/tems1.png",
     },
     {
       id: "3",
       name: "ಶ್ರೀಶ್ರೀಶ್ರೀ\nಮಠಾಧೀಶ",
       role: "ಸ್ವಾಮೀಜಿ",
       image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/WWbcr9xA8ezJ0nrGh99vBWXbBs.jpg (2).png",
+        "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/WWbcr9xA8ezJ0nrGh99vBWXbBs.jpg (2).png",
     },
     {
       id: "4",
       name: "ಶ್ರೀಶ್ರೀ\nಬಸವ ರಾಜೇಂದ್ರ",
       role: "ಶರಣ",
       image:
-        "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/tem4.png",
+        "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/tem4.png",
     },
   ],
 }: Props) {

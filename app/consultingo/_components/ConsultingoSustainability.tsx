@@ -88,7 +88,7 @@ const ConsultingoSustainability = ({
           {/* Main Image Container (Pill Shaped) */}
           <div className="relative w-[170px] h-[340px] md:w-[280px] md:h-[555px] rounded-full overflow-hidden">
             <Image
-              src={content?.media?.[0] ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/19f8aef3de92d452f912a8ab8e16372ea1390101.jpg"}
+              src={content?.media?.[0] ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/19f8aef3de92d452f912a8ab8e16372ea1390101.jpg"}
               alt="Team collaboration"
               fill
               className="object-cover"
@@ -96,7 +96,7 @@ const ConsultingoSustainability = ({
           </div>
           <div className="relative w-[170px] h-[340px] md:w-[280px] md:h-[555px] rounded-full overflow-hidden">
             <Image
-              src={content?.media?.[1] ?? "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/5390886f0214160e877c040aab7182c66242a2a2.jpg"}
+              src={content?.media?.[1] ?? "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/5390886f0214160e877c040aab7182c66242a2a2.jpg"}
               alt="Team collaboration"
               fill
               className="object-cover"

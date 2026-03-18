@@ -30,7 +30,7 @@ export const aboutUsData: ConsultingoAboutUsPage = {
           },
         ],
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/c2dcb3f357885afeee0d88dbb044ae158df01429.png",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/c2dcb3f357885afeee0d88dbb044ae158df01429.png",
       },
       order: 0,
       isActive: true,
@@ -97,7 +97,7 @@ export const aboutUsData: ConsultingoAboutUsPage = {
         description:
           "As a consultant with a digital agency, your role is pivotal in developing and implementing strategies that drive impactful results for our clients. Your expertise in industry analysis, project management, and client relations is essential. I believe in fostering collaborative partnerships that lead to exceptional outcomes. By working closely with clients and team members, we ensure tailored solutions that meet and exceed expectations.",
         media:
-          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/38cd91882db3abc591bbc3a1903984f920d5abc6.jpg",
+          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/38cd91882db3abc591bbc3a1903984f920d5abc6.jpg",
       },
       order: 2,
       isActive: true,

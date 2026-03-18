@@ -25,7 +25,7 @@ const CollectionsCTA = ({
         <img
           src={
             content?.media ??
-            "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg"
+            "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/683ba737053456d91557ffd06ed132feb734ff4d.jpg"
           }
           alt="Hero background"
           className="absolute inset-0 h-full w-full object-cover"

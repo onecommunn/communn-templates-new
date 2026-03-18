@@ -166,7 +166,7 @@ const CollectionsHeader: React.FC<{
             <img
               src={
                 content?.media?.[0] ??
-                "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
+                "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
               }
               alt="logo"
             // className="w-fit"
@@ -447,7 +447,7 @@ const CollectionsHeader: React.FC<{
                     >
                       <img
                         src={
-                          "https://upload-community-files-new.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
+                          "https://upload-community-files-1614.s3.ap-south-1.amazonaws.com/uploads/Group1.svg"
                         }
                         alt="Logo"
                       // className="w-25 h-15 object-contain"
